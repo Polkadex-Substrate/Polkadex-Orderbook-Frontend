@@ -16,3 +16,4 @@ export * from "./SignIn";
 export * from "./Trading";
 export * from "./Withdraw";
 export * from "./Deposit";
+export * from "./Landing";

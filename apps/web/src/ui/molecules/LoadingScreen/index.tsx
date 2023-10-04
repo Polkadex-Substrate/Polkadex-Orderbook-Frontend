@@ -2,12 +2,12 @@ import { PolkadexIcon } from "../Logo";
 
 import * as S from "./styles";
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ light = false }) => {
   return (
     <S.Container>
       <S.Main />
       <S.Logo>
-        <PolkadexIcon />
+        <PolkadexIcon light={light} />
       </S.Logo>
     </S.Container>
   );

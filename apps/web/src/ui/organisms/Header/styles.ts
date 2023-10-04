@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
-export const Wrapper = styled.div`
-  ${({ theme }) => css`
+export const Wrapper = styled.div<{ dark?: boolean }>`
+  ${({ theme, dark }) => css`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -11,7 +11,18 @@ export const Wrapper = styled.div`
     flex: 1;
     max-height: 5.5rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    background: ${theme.colors.primaryBackground};
+    backdrop-filter: blur(5px);
+
+    ${!dark
+      ? css`
+          background: ${theme.colors.primaryBackground};
+        `
+      : css`
+          svg {
+            fill: ${theme.colors.white};
+          }
+        `}
+
     z-index: 9;
   `}
 `;
@@ -37,14 +48,15 @@ export const Logo = styled.div<{ borderActive: boolean; hideLogo?: boolean }>`
     align-items: center;
     justify-content: center;
     max-width: 121px;
-    min-height: 24px;
-    /* 121,
-    24 */
 
     ${borderActive &&
     css`
       border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     `}
+    svg {
+      width: 11rem;
+      height: auto;
+    }
   `}
 `;
 

@@ -30,7 +30,13 @@ import * as S from "./styles";
 const languages = avaliableLanguages.map((l) => l.code);
 type Languages = "en";
 
-export const Header = ({ children }: { children?: ReactNode }) => {
+export const Header = ({
+  dark = false,
+  children,
+}: {
+  children?: ReactNode;
+  dark?: boolean;
+}) => {
   const { notifications, language, onChangeLanguage } = useSettingsProvider();
   const allNotifications = selectNotifications(notifications);
   const { allBrowserAccounts } = useTradeWallet();
@@ -43,7 +49,7 @@ export const Header = ({ children }: { children?: ReactNode }) => {
 
   const tradeAccountInfo = useMemo(
     () => getTradeAccount(selectedAccount.tradeAddress, tradingAccounts),
-    [selectedAccount.tradeAddress, tradingAccounts],
+    [selectedAccount.tradeAddress, tradingAccounts]
   );
 
   const walletName = tradeAccountInfo?.meta?.name as string;
@@ -64,10 +70,10 @@ export const Header = ({ children }: { children?: ReactNode }) => {
   const t = (key: string) => translation(`header.${key}`);
 
   return (
-    <S.Wrapper>
+    <S.Wrapper dark={dark}>
       <S.Content>
         <S.Logo borderActive={isValidChild} hideLogo>
-          <Link href={"/trading"}>
+          <Link href="/">
             <PolkadexLogo />
           </Link>
         </S.Logo>
