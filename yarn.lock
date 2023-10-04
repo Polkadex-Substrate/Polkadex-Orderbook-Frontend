@@ -4049,7 +4049,7 @@
     rxjs "^7.8.1"
     tslib "^2.5.3"
 
-"@polkadot/ui-keyring@^3.2.1":
+"@polkadot/ui-keyring@^3.2.1", "@polkadot/ui-keyring@^3.6.3":
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/@polkadot/ui-keyring/-/ui-keyring-3.6.3.tgz#d4a8882d24a04f1ef8ef0944989435012b3e681a"
   integrity sha512-si3cbokevfRzGevtY01KmJ5402xmAyo1j2v6zhXwfDwhdEFkiYgwErkE7jJzZXm0jaITZhNFA7aMnzKFAu8IVw==
