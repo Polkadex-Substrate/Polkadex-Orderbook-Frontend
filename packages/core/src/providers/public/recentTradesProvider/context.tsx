@@ -1,11 +1,18 @@
 import { createContext } from "react";
 
-import { initialState } from "./reducer";
-import { RecentTradesContextProps, RecentTradesProviderProps } from "./types";
+import {
+  RecentTradesContextProps,
+  RecentTradesProviderProps,
+  RecentTradesState,
+} from "./types";
+
+export const initialState: RecentTradesState = {
+  list: [],
+  loading: true,
+};
 
 export const Context = createContext<RecentTradesContextProps>({
   ...initialState,
-  recentTradesFetch: () => {},
   isDecreasing: [],
   quoteUnit: "",
   baseUnit: "",

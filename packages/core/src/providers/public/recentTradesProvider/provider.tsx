@@ -1,55 +1,81 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
 import * as subscriptions from "@orderbook/core/graphql/subscriptions";
 import { getRecentTrades } from "@orderbook/core/graphql/queries";
+import { defaultConfig } from "@orderbook/core/config";
 import {
   fetchFromAppSync,
   decimalPlaces,
   getIsDecreasingArray,
+  sliceArray,
 } from "@orderbook/core/helpers";
-import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
+import { QUERY_KEYS, READ_ONLY_TOKEN } from "@orderbook/core/constants";
 import { Websocket_streamsSubscription } from "@orderbook/core/API";
 
 import { useMarketsProvider, Market } from "../marketsProvider";
 import { useSettingsProvider } from "../settings";
 
-import * as A from "./actions";
 import { Provider } from "./context";
-import { recentTradesReducer, initialState } from "./reducer";
 import * as T from "./types";
 import { PublicTrade } from "./types";
 
 export const RecentTradesProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(recentTradesReducer, initialState);
-
   const { onHandleError } = useSettingsProvider();
+  const { currentMarket } = useMarketsProvider();
 
-  type RawTrades = {
-    m: string;
-    p: string;
-    q: string;
-    t: string;
-  };
-  type RawTradeEvent = {
-    m: string;
-    p: string;
-    q: string;
-    t: number;
-  };
   const fetchRecentTrade = useCallback(
-    async (market: string, limit = 30): Promise<RawTrades[]> => {
+    async (market: string, limit = 30): Promise<T.RawTrades[]> => {
       const { response: res } = await fetchFromAppSync(
         getRecentTrades,
         { m: market, limit },
-        "getRecentTrades",
+        "getRecentTrades"
       );
       return res;
     },
-    [],
+    []
   );
 
-  const { currentMarket } = useMarketsProvider();
+  const onFetchRecentTrades = async (market: Market) => {
+    if (!market) return [];
+
+    const res = await fetchRecentTrade(market.m);
+    const trades: T.PublicTrade[] = res.map((x) => ({
+      market_id: market.m,
+      price: x.p,
+      amount: x.q,
+      timestamp: Number(x.t),
+    }));
+    return trades;
+  };
+
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: QUERY_KEYS.recentTrades(currentMarket?.m as string),
+    enabled: !!currentMarket?.m,
+    queryFn: async () => await onFetchRecentTrades(currentMarket as Market),
+    onError: onHandleError,
+  });
+
+  const [recentTradesList, setRecentTradesList] = useState<T.PublicTrade[]>([]);
+
+  const isDecreasing = getIsDecreasingArray(recentTradesList);
+
+  const getCurrentTradePrice = (): string => {
+    if (!recentTradesList) return "0";
+    return recentTradesList.length > 0 ? recentTradesList[0].price : "0";
+  };
+
+  const getLastTradePrice = () => {
+    if (!recentTradesList) return "0";
+    return recentTradesList.length > 1 ? recentTradesList[1].price : "0";
+  };
+
+  useEffect(() => {
+    const recentTrades = data ?? [];
+    const list = sliceArray(recentTrades, defaultConfig.defaultStorageLimit);
+    setRecentTradesList(list);
+  }, [data]);
 
   useEffect(() => {
     const subscription = API.graphql<
@@ -61,8 +87,8 @@ export const RecentTradesProvider = ({ children }) => {
     }).subscribe({
       next: (data) => {
         if (!data?.value?.data?.websocket_streams?.data) return;
-        const val: RawTradeEvent = JSON.parse(
-          data.value.data.websocket_streams.data,
+        const val: T.RawTradeEvent = JSON.parse(
+          data.value.data.websocket_streams.data
         );
         const trade: PublicTrade = {
           price: val.p,
@@ -70,7 +96,9 @@ export const RecentTradesProvider = ({ children }) => {
           market_id: val.m,
           timestamp: Number(val.t),
         };
-        dispatch(A.recentTradesPush(trade));
+        setRecentTradesList((prev) =>
+          sliceArray([trade, ...prev], defaultConfig.defaultStorageLimit)
+        );
       },
       error: (err) => console.warn(err),
     });
@@ -80,47 +108,13 @@ export const RecentTradesProvider = ({ children }) => {
     };
   }, [currentMarket?.m]);
 
-  const recentTradesFetch = useCallback(
-    async (market: Market) => {
-      dispatch(A.recentTradesFetch(market));
-      try {
-        if (market) {
-          const res = await fetchRecentTrade(market.m);
-          const trades: T.PublicTrade[] = res.map((x) => ({
-            market_id: market.m,
-            price: x.p,
-            amount: x.q,
-            timestamp: Number(x.t),
-          }));
-          dispatch(A.recentTradesData(trades));
-        }
-      } catch (error) {
-        onHandleError(error?.message ?? error);
-        dispatch(A.recentTradesError(error));
-      }
-    },
-    [fetchRecentTrade, onHandleError],
-  );
-
-  useEffect(() => {
-    if (currentMarket?.m) recentTradesFetch(currentMarket);
-  }, [currentMarket?.m, recentTradesFetch, currentMarket]);
-
-  const isDecreasing = getIsDecreasingArray(state.list);
-
-  const getCurrentTradePrice = (): string => {
-    return state.list.length > 0 ? state.list[0].price : "0";
-  };
-
-  const getLastTradePrice = () => {
-    return state.list.length > 1 ? state.list[1].price : "0";
-  };
-
   return (
     <Provider
       value={{
-        ...state,
-        recentTradesFetch,
+        list: recentTradesList ?? [],
+        loading: isLoading || isFetching,
+        currentTrade: recentTradesList.at(0),
+        lastTrade: recentTradesList.at(1),
         isDecreasing,
         quoteUnit: currentMarket?.quote_ticker,
         baseUnit: currentMarket?.base_ticker,
