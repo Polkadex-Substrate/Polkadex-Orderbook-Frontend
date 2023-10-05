@@ -3,9 +3,8 @@ import { fetchBatchFromAppSync, Utils } from "@orderbook/core/helpers";
 import { TRADE_HISTORY_PER_PAGE_LIMIT } from "@orderbook/core/constants";
 
 import * as T from "./types";
-import * as A from "./actions";
 
-export function processTradeData(eventData: A.UserTradeEvent): A.UserTrade {
+export function processTradeData(eventData: T.UserTradeEvent): T.UserTrade {
   const [base, quote] = eventData.m.split("-");
   return {
     market_id: eventData.m,
@@ -24,7 +23,7 @@ export const fetchUserTrades = async (
   dateFrom: Date,
   dateTo: Date,
   tradeHistoryFetchToken: string | null
-): Promise<{ trades: A.UserTrade[]; nextToken: string | null }> => {
+): Promise<{ trades: T.UserTrade[]; nextToken: string | null }> => {
   const dateFromStr = Utils.date.formatDateToISO(dateFrom);
   const dateToStr = Utils.date.formatDateToISO(dateTo);
 
@@ -41,7 +40,7 @@ export const fetchUserTrades = async (
       "listTradesByMainAccount"
     );
 
-  const trades: A.UserTrade[] = tradesRaw.map((trade) => ({
+  const trades: T.UserTrade[] = tradesRaw.map((trade) => ({
     market_id: trade.m,
     price: trade.p,
     qty: trade.q,

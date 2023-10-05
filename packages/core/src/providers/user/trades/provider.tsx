@@ -10,7 +10,6 @@ import { useMarketsProvider } from "../../public/marketsProvider";
 
 import { Provider } from "./context";
 import * as T from "./types";
-import * as A from "./actions";
 import { processTradeData, fetchUserTrades } from "./helper";
 
 export const TradesProvider: T.TradesComponent = ({ children }) => {
@@ -20,7 +19,6 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
   } = useProfile();
   const { onHandleError } = useSettingsProvider();
   const { dateFrom, dateTo } = useSessionProvider();
-
   const { currentMarket } = useMarketsProvider();
 
   const userLoggedIn = tradeAddress !== "";
@@ -69,14 +67,14 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
   };
 
   const onUserTradeUpdate = useCallback(
-    (payload: A.UserTradesUpdateEvent["payload"]) => {
+    (payload: T.UserTradeEvent) => {
       try {
         const trade = processTradeData(payload);
         queryClient.setQueryData(
           QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
           (oldTradeHistory: any) => {
             const payload = {
-              data: [trade as A.UserTrade],
+              data: [trade as T.UserTrade],
               nextToken: null,
             };
             return {
@@ -112,7 +110,6 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
         success: isSuccess,
         loading: isLoading,
         hasNextPage,
-        onUserTradeUpdate,
         onFetchNextPage: fetchNextPage,
       }}
     >
