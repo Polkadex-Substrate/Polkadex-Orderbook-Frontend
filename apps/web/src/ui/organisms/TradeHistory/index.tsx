@@ -119,10 +119,11 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
 const SkeletonLoader = () => {
   return (
     <S.SkeletonWrapper>
-      <Skeleton width={"100%"} height={"6rem"} />
-      <Skeleton width={"100%"} height={"6rem"} />
-      <Skeleton width={"100%"} height={"6rem"} />
-      <Skeleton width={"100%"} height={"6rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
     </S.SkeletonWrapper>
   );
 };
