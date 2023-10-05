@@ -44,9 +44,8 @@ export const Logo = styled.div<{ borderActive: boolean; hideLogo?: boolean }>`
     padding-right: 1rem;
     flex: 1;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: start;
+    gap: 0.5rem;
     max-width: 121px;
 
     ${borderActive &&
@@ -56,6 +55,14 @@ export const Logo = styled.div<{ borderActive: boolean; hideLogo?: boolean }>`
     svg {
       width: 11rem;
       height: auto;
+    }
+    span {
+      font-weight: 500;
+      font-size: 1.2rem;
+      display: inline-block;
+      background: ${theme.colors.primary};
+      padding: 0.2rem 0.3rem;
+      border-radius: 0.2rem;
     }
   `}
 `;
