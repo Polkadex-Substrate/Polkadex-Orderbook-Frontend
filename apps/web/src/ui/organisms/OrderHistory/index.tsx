@@ -1,5 +1,4 @@
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import {
@@ -9,30 +8,23 @@ import {
   Button,
   Skeleton,
 } from "@polkadex/orderbook-ui/molecules";
-import { OrderCommon } from "@orderbook/core/providers/types";
-import { OrderHistoryContextProps } from "@orderbook/core/providers/user/orderHistoryProvider";
+import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
-import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
-import { useProfile } from "@orderbook/core/providers/user/profile";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
+import { useOrderHistory } from "@orderbook/core/index";
 
 import * as S from "./styles";
 
 type Props = {
-  orderHistory: OrderHistoryContextProps;
+  filters: Ifilters;
 };
 
-export const OrderHistory = ({ orderHistory }: Props) => {
-  const {
-    orders: filteredOrderHistory,
-    list: totalOrderHistory,
-    onOrdersHistoryFetch,
-    orderHistoryNextToken,
-    loading,
-    error,
-  } = orderHistory;
+export const OrderHistory = ({ filters }: Props) => {
+  const { hasNextPage, isLoading, onFetchNextPage, orderHistory, error } =
+    useOrderHistory(filters);
+
   const { selectGetAsset } = useAssetsProvider();
   const { currentMarket } = useMarketsProvider();
 
@@ -46,36 +38,14 @@ export const OrderHistory = ({ orderHistory }: Props) => {
 
   const filledQtyPrecision = Math.max(priceFixed, amountFixed);
 
-  const { dateTo, dateFrom } = useSessionProvider();
-  const { selectedAccount } = useProfile();
-
-  useEffect(() => {
-    if (totalOrderHistory.length || orderHistoryNextToken) return;
-    if (selectedAccount.tradeAddress) {
-      onOrdersHistoryFetch({
-        dateFrom,
-        dateTo,
-        tradeAddress: selectedAccount.tradeAddress,
-        orderHistoryNextToken: null,
-      });
-    }
-  }, [
-    selectedAccount.tradeAddress,
-    dateFrom,
-    dateTo,
-    onOrdersHistoryFetch,
-    totalOrderHistory.length,
-    orderHistoryNextToken,
-  ]);
-
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`orderHistory.${key}`);
 
   return (
     <S.Wrapper>
-      {loading ? (
+      {isLoading ? (
         <SkeletonLoader />
-      ) : filteredOrderHistory?.length ? (
+      ) : orderHistory?.length ? (
         <S.Table>
           <S.Thead>
             <S.Tr>
@@ -91,16 +61,11 @@ export const OrderHistory = ({ orderHistory }: Props) => {
           </S.Thead>
           <S.Tbody>
             <InfiniteScroll
-              dataLength={filteredOrderHistory.length}
+              dataLength={orderHistory.length}
               next={() => {
-                onOrdersHistoryFetch({
-                  dateFrom,
-                  dateTo,
-                  orderHistoryNextToken,
-                  tradeAddress: selectedAccount.tradeAddress,
-                });
+                onFetchNextPage();
               }}
-              hasMore={orderHistoryNextToken !== null}
+              hasMore={Boolean(hasNextPage)}
               height={300}
               loader={
                 <S.Loader>
@@ -108,8 +73,8 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                 </S.Loader>
               }
             >
-              {filteredOrderHistory &&
-                filteredOrderHistory.map((order: OrderCommon, i) => {
+              {orderHistory &&
+                orderHistory.map((order: OrderCommon, i) => {
                   const [base, quote] = order.m.split("-");
                   const date = new Date(order.time).toLocaleString();
                   const isSell = order.side === "Ask";
@@ -161,21 +126,10 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                     />
                   );
                 })}
-              {!loading && error && (
+              {!isLoading && error && (
                 <S.ErrorWrapper>
-                  <p>{error.message}</p>
-                  <Button
-                    onClick={() => {
-                      onOrdersHistoryFetch({
-                        dateFrom,
-                        dateTo,
-                        orderHistoryNextToken,
-                        tradeAddress: selectedAccount.tradeAddress,
-                      });
-                    }}
-                  >
-                    {t("tryAgain")}
-                  </Button>
+                  <p>{error}</p>
+                  <Button onClick={onFetchNextPage}>{t("tryAgain")}</Button>
                 </S.ErrorWrapper>
               )}
             </InfiniteScroll>

@@ -1,28 +1,25 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@orderbook/core/constants";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import {
-  fetchAllFromAppSync,
-  fetchFromAppSync,
-  Utils,
   sortOrdersDescendingTime,
   eventHandler,
+  sliceArray,
 } from "@orderbook/core/helpers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import * as queries from "@orderbook/core/graphql/queries";
+import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
+import { defaultConfig } from "@orderbook/core/config";
 
 import { Ifilters, OrderCommon } from "../../types";
 import { UserAccount, useProfile } from "../profile";
 
-import {
-  OrderHistoryFetchResult,
-  orderHistoryQueryResult,
-  OrderHistoryResult,
-  SetOrder,
-} from "./types";
+import { OrderHistoryFetchResult, SetOrder } from "./types";
 import * as A from "./actions";
 import { Provider } from "./context";
 import { initialOrdersHistoryState, ordersHistoryReducer } from "./reducer";
+import { fetchOpenOrders, fetchOrderHistory } from "./helper";
 
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(
@@ -34,37 +31,43 @@ export const OrderHistoryProvider = ({ children }) => {
 
   const { currentMarket } = useMarketsProvider();
   const { selectGetAsset } = useAssetsProvider();
+  const { dateFrom, dateTo } = useSessionProvider();
+
+  const { tradeAddress } = profileState.selectedAccount;
 
   const account: UserAccount = profileState.selectedAccount;
+  const userLoggedIn = tradeAddress !== "";
 
-  const fetchOpenOrders = useCallback(
-    async (tradeAccount: string): Promise<OrderCommon[]> => {
-      const ordersRaw: orderHistoryQueryResult[] = await fetchAllFromAppSync(
-        queries.listOpenOrdersByMainAccount,
-        {
-          main_account: tradeAccount,
-          limit: 25,
-        },
-        "listOpenOrdersByMainAccount"
-      );
-      return ordersRaw.map((order) => ({
-        main_account: tradeAccount,
-        id: order.id,
-        client_order_id: order.cid,
-        time: new Date(Number(order.t)).toISOString(),
-        m: order.m, // marketid
-        side: order.s,
-        order_type: order.ot,
-        status: order.st,
-        price: Number(order.p),
-        qty: Number(order.q),
-        avg_filled_price: order.afp,
-        filled_quantity: order.fq,
-        fee: order.fee,
-      }));
-    },
-    []
+  const shouldFetchOrderHistory = Boolean(
+    userLoggedIn && currentMarket && tradeAddress
   );
+
+  const {
+    data: orderHistoryList,
+    fetchNextPage: fetchNextOrderHistoryPage,
+    isLoading: isOrderHistoryLoading,
+    hasNextPage: hasNextOrderHistoryPage,
+    isSuccess: isOrderHistorySuccess,
+    error: orderHistoryError,
+  } = useInfiniteQuery({
+    queryKey: QUERY_KEYS.orderHistory(dateFrom, dateTo, tradeAddress),
+    enabled: shouldFetchOrderHistory,
+    queryFn: async ({ pageParam = null }) => {
+      return await onOrdersHistoryFetch({
+        dateFrom,
+        dateTo,
+        tradeAddress,
+        orderHistoryNextToken: pageParam,
+      });
+    },
+    getNextPageParam: (lastPage) => {
+      // If the last page contains nextToken as null, don't fetch the next page
+      if (!lastPage.nextToken) {
+        return false;
+      }
+      return lastPage.nextToken;
+    },
+  });
 
   const onOpenOrdersHistoryFetch = useCallback(async () => {
     try {
@@ -79,75 +82,30 @@ export const OrderHistoryProvider = ({ children }) => {
       onHandleError(`Open orders fetch error: ${error?.message ?? error}`);
       dispatch(A.userOpenOrdersHistoryError(error));
     }
-  }, [account.tradeAddress, fetchOpenOrders, onHandleError]);
+  }, [account.tradeAddress, onHandleError]);
 
-  const fetchOrders = useCallback(
-    async (
-      tradeAddress: string,
-      dateFrom: Date,
-      dateTo: Date,
-      nextTokenFetch: string | null
-    ): Promise<{ orders: OrderCommon[]; nextToken: string | null }> => {
-      const dateFromStr = Utils.date.formatDateToISO(dateFrom);
-      const dateToStr = Utils.date.formatDateToISO(dateTo);
-      const { response: ordersRaw, nextToken }: OrderHistoryResult =
-        await fetchFromAppSync(
-          queries.listOrderHistorybyMainAccount,
-          {
-            main_account: tradeAddress,
-            from: dateFromStr,
-            to: dateToStr,
-            limit: 10,
-            nextToken: nextTokenFetch,
-          },
-          "listOrderHistorybyMainAccount"
+  const onOrdersHistoryFetch = async ({
+    dateFrom,
+    dateTo,
+    tradeAddress,
+    orderHistoryNextToken,
+  }) => {
+    if (tradeAddress) {
+      const { orders, nextToken }: OrderHistoryFetchResult =
+        await fetchOrderHistory(
+          tradeAddress,
+          dateFrom,
+          dateTo,
+          orderHistoryNextToken
         );
 
       return {
+        data: sliceArray(orders, defaultConfig.defaultStorageLimit),
         nextToken,
-        orders: ordersRaw.map((order) => ({
-          main_account: tradeAddress,
-          id: order.id,
-          client_order_id: order.cid,
-          time: new Date(Number(order.t)).toISOString(),
-          m: order.m, // marketid
-          side: order.s,
-          order_type: order.ot,
-          status: order.st,
-          price: Number(order.p),
-          qty: Number(order.q),
-          avg_filled_price: order.afp,
-          filled_quantity: order.fq,
-          fee: order.fee,
-          isReverted: order.isReverted,
-        })),
       };
-    },
-    []
-  );
-
-  const onOrdersHistoryFetch = useCallback(
-    async ({ dateFrom, dateTo, tradeAddress, orderHistoryNextToken }) => {
-      dispatch(A.userOrdersHistoryFetch({ tradeAddress, dateFrom, dateTo }));
-      try {
-        if (tradeAddress) {
-          const { orders, nextToken }: OrderHistoryFetchResult =
-            await fetchOrders(
-              tradeAddress,
-              dateFrom,
-              dateTo,
-              orderHistoryNextToken
-            );
-
-          dispatch(A.userOrdersHistoryData({ list: orders, nextToken }));
-        }
-      } catch (error) {
-        onHandleError(`Order history fetch error: ${error?.message ?? error} `);
-        dispatch(A.userOrdersHistoryError(error));
-      }
-    },
-    [fetchOrders, onHandleError]
-  );
+    }
+    return { data: [], nextToken: null };
+  };
 
   function processOrderData(eventData: SetOrder): OrderCommon {
     const base = eventData.pair.base.asset;
@@ -189,25 +147,14 @@ export const OrderHistoryProvider = ({ children }) => {
     [onHandleError]
   );
 
-  const usingAccount = profileState.selectedAccount;
-  const { tradeAddress } = usingAccount;
-  const orderList = state.list;
   const openOrders = state.openOrders;
-  const list = sortOrdersDescendingTime(orderList);
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
-  const userLoggedIn = profileState.selectedAccount.tradeAddress !== "";
-
-  const [updatedList, setUpdatedList] = useState(list);
   const [updatedOpenOrdersSorted, setUpdatedOpenOrdersSorted] =
     useState(openOrdersSorted);
 
   useEffect(() => {
     onOpenOrdersHistoryFetch();
   }, [onOpenOrdersHistoryFetch]);
-
-  useEffect(() => {
-    if (usingAccount.tradeAddress) dispatch(A.userOrdersHistoryReset());
-  }, [usingAccount.tradeAddress]);
 
   const isMarketMatch = useCallback(
     (order: OrderCommon) => {
@@ -224,60 +171,29 @@ export const OrderHistoryProvider = ({ children }) => {
   // TODO: Refactor filter process. Should do it on server rather than client
   const filterOrders = useCallback(
     (filters: Ifilters) => {
-      let orderHistoryList = list.filter((item) => !item.isReverted);
       let openOrdersList = openOrdersSorted;
 
-      if (filters?.showReverted) {
-        orderHistoryList = list.filter((item) => item.isReverted);
-      }
-
       if (filters?.hiddenPairs) {
-        orderHistoryList = orderHistoryList.filter((order) => {
-          return isMarketMatch(order) && order;
-        });
         openOrdersList = openOrdersList.filter((order) => {
           return isMarketMatch(order) && order;
         });
       }
 
-      if (filters?.onlyBuy) {
-        orderHistoryList = orderHistoryList.filter(
-          (data) => data.side?.toUpperCase() === "BID"
-        );
+      if (filters?.onlyBuy && filters.onlySell) {
+        // Nothing to do
+      } else if (filters?.onlyBuy) {
         openOrdersList = openOrdersList.filter(
           (data) => data.side?.toUpperCase() === "BID"
         );
       } else if (filters?.onlySell) {
-        orderHistoryList = orderHistoryList.filter(
-          (data) => data.side.toUpperCase() === "ASK"
-        );
         openOrdersList = openOrdersList.filter(
           (data) => data.side?.toUpperCase() === "ASK"
         );
       }
 
-      const acceptedStatus = {
-        "all transactions": "all",
-        pending: "open",
-        completed: "closed",
-      };
-
-      const status = filters?.status?.toLowerCase();
-      const filterStatus = acceptedStatus[status] ?? status;
-
-      if (filterStatus !== Object.values(acceptedStatus)[0]) {
-        orderHistoryList = orderHistoryList.filter((item) => {
-          return item.status.toLowerCase() === filterStatus;
-        });
-        openOrdersList = openOrdersList.filter((item) => {
-          return item.status.toLowerCase() === filterStatus;
-        });
-      }
-
-      setUpdatedList(orderHistoryList);
       setUpdatedOpenOrdersSorted(openOrdersList);
     },
-    [list, openOrdersSorted, isMarketMatch]
+    [openOrdersSorted, isMarketMatch]
   );
 
   useEffect(() => {
@@ -313,12 +229,17 @@ export const OrderHistoryProvider = ({ children }) => {
       value={{
         ...state,
         onOpenOrdersHistoryFetch,
-        onOrdersHistoryFetch,
         onOrderUpdates,
-        orders: updatedList,
+        orderHistory:
+          orderHistoryList?.pages.flatMap((page) => page.data) ?? [],
         openOrders: updatedOpenOrdersSorted,
         userLoggedIn,
-        filterOrders,
+        hasNextOrderHistoryPage,
+        fetchNextOrderHistoryPage,
+        isOrderHistoryLoading,
+        isOrderHistorySuccess,
+        isMarketMatch,
+        orderHistoryError: orderHistoryError as string,
       }}
     >
       {children}

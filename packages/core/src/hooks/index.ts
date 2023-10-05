@@ -18,3 +18,4 @@ export * from "./useTradeHistory";
 export * from "./useAssets";
 export * from "./useAssetTransfer";
 export * from "./useTransferHistory";
+export * from "./useOrderHistory";

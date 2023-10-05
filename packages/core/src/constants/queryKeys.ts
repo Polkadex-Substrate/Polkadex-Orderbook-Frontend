@@ -18,4 +18,11 @@ export const QUERY_KEYS = {
     dateTo,
     tradeAddress,
   ],
+  orderHistory: (dateFrom: Date, dateTo: Date, tradeAddress: string) => [
+    PREFIX,
+    "orderHistory",
+    dateFrom,
+    dateTo,
+    tradeAddress,
+  ],
 };

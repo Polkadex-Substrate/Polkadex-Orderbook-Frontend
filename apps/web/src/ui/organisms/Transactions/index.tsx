@@ -3,7 +3,7 @@ import {
   RangeKeyDict,
   defaultStaticRanges,
 } from "react-date-range";
-import { useCallback, useMemo, useState, useEffect } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Icon,
@@ -56,7 +56,6 @@ export const Transactions = () => {
     useState(true);
 
   const orderHistory = useOrderHistoryProvider();
-  const { filterOrders } = orderHistory;
   const userSession = useSessionProvider();
   const { dispatchUserSessionData } = userSession;
 
@@ -69,10 +68,6 @@ export const Transactions = () => {
   const handleActionDropdown = (status: string) => {
     setFilters({ ...filters, status: status as Ifilters["status"] });
   };
-
-  useEffect(() => {
-    filterOrders(filters);
-  }, [filterOrders, filters]);
 
   const handleSelect = useCallback(
     ({ selection: { startDate, endDate } }: RangeKeyDict) => {
@@ -206,7 +201,7 @@ export const Transactions = () => {
             />
           </TabContent>
           <TabContent>
-            <OrderHistory orderHistory={orderHistory} />
+            <OrderHistory filters={filters} />
           </TabContent>
           <TabContent>
             <TradeHistory
