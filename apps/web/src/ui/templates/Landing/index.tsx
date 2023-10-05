@@ -516,7 +516,10 @@ export function LandingTemplate() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://t.me/Polkadex" target="_blank">
+                  <Link
+                    href="https://docs.polkadex.trade/orderbookPolkadexFAQWallets"
+                    target="_blank"
+                  >
                     {t("footer.guide")}
                   </Link>
                 </li>
