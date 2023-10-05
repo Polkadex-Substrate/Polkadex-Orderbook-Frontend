@@ -1,13 +1,9 @@
 import { useCallback, useEffect, useReducer } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
-import {
-  sortOrdersDescendingTime,
-  eventHandler,
-  sliceArray,
-} from "@orderbook/core/helpers";
+import { eventHandler, sliceArray } from "@orderbook/core/helpers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { defaultConfig } from "@orderbook/core/config";
@@ -15,11 +11,11 @@ import { defaultConfig } from "@orderbook/core/config";
 import { OrderCommon } from "../../types";
 import { useProfile } from "../profile";
 
-import { OrderHistoryFetchResult, SetOrder } from "./types";
+import { OrderHistoryFetchResult } from "./types";
 import * as A from "./actions";
 import { Provider } from "./context";
 import { initialOrdersHistoryState, ordersHistoryReducer } from "./reducer";
-import { fetchOpenOrders, fetchOrderHistory } from "./helper";
+import { fetchOpenOrders, fetchOrderHistory, processOrderData } from "./helper";
 
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(
@@ -39,6 +35,8 @@ export const OrderHistoryProvider = ({ children }) => {
   const shouldFetchOrderHistory = Boolean(
     userLoggedIn && currentMarket && tradeAddress
   );
+
+  const shouldFetchOpenOrders = shouldFetchOrderHistory;
 
   const {
     data: orderHistoryList,
@@ -67,20 +65,28 @@ export const OrderHistoryProvider = ({ children }) => {
     },
   });
 
-  const onOpenOrdersHistoryFetch = useCallback(async () => {
-    try {
-      if (account.tradeAddress) {
-        const transactions: OrderCommon[] = await fetchOpenOrders(
-          account.tradeAddress
-        );
-        dispatch(A.userOpenOrderHistoryData({ list: transactions }));
-      }
-    } catch (error) {
-      console.error(error);
-      onHandleError(`Open orders fetch error: ${error?.message ?? error}`);
-      dispatch(A.userOpenOrdersHistoryError(error));
+  const { data: openOrders, isLoading: isOpenOrdersLoading } = useQuery({
+    queryKey: QUERY_KEYS.openOrders(tradeAddress),
+    enabled: shouldFetchOpenOrders,
+    queryFn: async () => {
+      return await onOpenOrdersHistoryFetch();
+    },
+    initialData: [],
+    onError: (error) => {
+      const errorMessage = error instanceof Error ? error.message : "";
+      onHandleError(errorMessage);
+    },
+  });
+
+  const onOpenOrdersHistoryFetch = async () => {
+    if (account.tradeAddress) {
+      const transactions: OrderCommon[] = await fetchOpenOrders(
+        account.tradeAddress
+      );
+      return transactions;
     }
-  }, [account.tradeAddress, onHandleError]);
+    return [];
+  };
 
   const onOrdersHistoryFetch = async ({
     dateFrom,
@@ -105,29 +111,6 @@ export const OrderHistoryProvider = ({ children }) => {
     return { data: [], nextToken: null };
   };
 
-  function processOrderData(eventData: SetOrder): OrderCommon {
-    const base = eventData.pair.base.asset;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const quote = eventData.pair.quote.asset;
-
-    return {
-      main_account: eventData.user,
-      id: eventData.id.toString(),
-      client_order_id: eventData.client_order_id,
-      time: new Date(Number(eventData.timestamp)).toISOString(),
-      m: `${base}-${quote}`, // marketid
-      side: eventData.side,
-      order_type: eventData.order_type,
-      status: eventData.status.toUpperCase(),
-      price: Number(eventData.price),
-      qty: Number(eventData.qty),
-      avg_filled_price: eventData.avg_filled_price.toString(),
-      filled_quantity: eventData.filled_quantity.toString(),
-      fee: eventData.fee.toString(),
-    };
-  }
-
   const onOrderUpdates = useCallback(
     (payload: A.OrderUpdateEvent["payload"]) => {
       try {
@@ -145,8 +128,8 @@ export const OrderHistoryProvider = ({ children }) => {
     [onHandleError]
   );
 
-  const openOrders = state.openOrders;
-  const openOrdersSorted = sortOrdersDescendingTime(openOrders);
+  // const openOrders = state.openOrders;
+  // const openOrdersSorted = sortOrdersDescendingTime(openOrders);
 
   const isMarketMatch = useCallback(
     (order: OrderCommon) => {
@@ -189,10 +172,6 @@ export const OrderHistoryProvider = ({ children }) => {
   // );
 
   useEffect(() => {
-    onOpenOrdersHistoryFetch();
-  }, [onOpenOrdersHistoryFetch]);
-
-  useEffect(() => {
     if (tradeAddress?.length) {
       const subscription = eventHandler({
         cb: onOrderUpdates,
@@ -223,18 +202,22 @@ export const OrderHistoryProvider = ({ children }) => {
   return (
     <Provider
       value={{
-        ...state,
-        onOpenOrdersHistoryFetch,
-        onOrderUpdates,
+        /** Order History **/
         orderHistory:
           orderHistoryList?.pages.flatMap((page) => page.data) ?? [],
-        openOrders: openOrdersSorted,
         hasNextOrderHistoryPage,
-        fetchNextOrderHistoryPage,
         isOrderHistoryLoading,
         isOrderHistorySuccess,
-        isMarketMatch,
         orderHistoryError: orderHistoryError as string,
+        fetchNextOrderHistoryPage,
+
+        /** Open Orders **/
+        openOrders: openOrders,
+        isOpenOrdersLoading,
+
+        /** Other functions **/
+        onOrderUpdates,
+        isMarketMatch,
       }}
     >
       {children}

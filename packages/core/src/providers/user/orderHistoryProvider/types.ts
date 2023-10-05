@@ -57,12 +57,11 @@ interface Pair {
 
 export interface OrdersHistoryState {
   openOrders: OrderCommon[];
-  loading: boolean;
   hasNextOrderHistoryPage: boolean | undefined;
-  error: string;
   isOrderHistoryLoading: boolean;
   isOrderHistorySuccess: boolean;
   orderHistoryError?: string;
+  isOpenOrdersLoading: boolean;
 }
 
 export interface onOrdersHistoryFetch {
@@ -73,7 +72,6 @@ export interface onOrdersHistoryFetch {
 }
 
 export type OrderHistoryContextProps = OrdersHistoryState & {
-  onOpenOrdersHistoryFetch: () => void;
   onOrderUpdates: (value: SetOrder) => void;
   orderHistory: OrderCommon[];
   isMarketMatch: (value: OrderCommon) => boolean;

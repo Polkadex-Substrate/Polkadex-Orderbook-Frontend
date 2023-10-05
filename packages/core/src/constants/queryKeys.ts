@@ -25,4 +25,5 @@ export const QUERY_KEYS = {
     dateTo,
     tradeAddress,
   ],
+  openOrders: (tradeAddress: string) => [PREFIX, "openOrders", tradeAddress],
 };

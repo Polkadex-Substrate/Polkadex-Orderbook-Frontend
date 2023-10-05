@@ -20,12 +20,11 @@ const { defaultStorageLimit } = defaultConfig;
 
 export const initialOrdersHistoryState: OrdersHistoryState = {
   openOrders: [],
-  loading: false,
   isOrderHistorySuccess: false,
-  error: "",
   isOrderHistoryLoading: false,
   hasNextOrderHistoryPage: undefined,
   orderHistoryError: undefined,
+  isOpenOrdersLoading: false,
 };
 
 export const ordersHistoryReducer = (
@@ -33,8 +32,8 @@ export const ordersHistoryReducer = (
   action: OrdersHistoryAction
 ): OrdersHistoryState => {
   switch (action.type) {
-    case ORDERS_HISTORY_FETCH:
-      return { ...state, loading: true };
+    // case ORDERS_HISTORY_FETCH:
+    //   return { ...state, loading: true };
     // case ORDERS_HISTORY_DATA:
     //   return {
     //     ...state,

@@ -5,10 +5,9 @@ import { OrderHistoryContextProps, OrderHistoryProviderProps } from "./types";
 
 export const Context = createContext<OrderHistoryContextProps>({
   ...initialOrdersHistoryState,
-  onOpenOrdersHistoryFetch: () => {},
   onOrderUpdates: () => {},
   orderHistory: [],
-  isMarketMatch: () => false,
+  isMarketMatch: () => {},
   openOrders: [],
   fetchNextOrderHistoryPage: () => {},
 });
