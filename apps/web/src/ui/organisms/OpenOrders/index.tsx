@@ -7,12 +7,12 @@ import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvid
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
-import { OrdersHistoryState } from "@orderbook/core/providers/user/orderHistoryProvider";
+import { OrderHistoryContextProps } from "@orderbook/core/providers/user/orderHistoryProvider";
 
 import * as S from "./styles";
 
 type Props = {
-  orderHistory: OrdersHistoryState;
+  orderHistory: OrderHistoryContextProps;
   onHideTransactionDropdown: (v: boolean) => void;
 };
 

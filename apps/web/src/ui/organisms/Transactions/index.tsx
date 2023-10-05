@@ -39,7 +39,7 @@ const initialFilters: Ifilters = {
 };
 
 export const Transactions = () => {
-  const { t: translation } = useTranslation("organisms");
+  const { t: translation, "2": isReady } = useTranslation("organisms");
   const t = (key: string) => translation(`transactions.${key}`);
 
   const initialState = [
@@ -92,6 +92,8 @@ export const Transactions = () => {
       },
     ];
   }, [userSession.dateFrom, userSession.dateTo]);
+
+  if (!isReady) return <></>;
 
   return (
     <S.Section>
@@ -189,8 +191,6 @@ export const Transactions = () => {
                       />
                     </Popover.Content>
                   </Popover>
-
-                  <S.Calendar></S.Calendar>
                 </S.ContainerTransactions>
               </S.Flex>
             </S.WrapperActions>

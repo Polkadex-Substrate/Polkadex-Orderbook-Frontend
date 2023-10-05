@@ -7,6 +7,7 @@ import {
   EmptyData,
   LoadingSpinner,
   Button,
+  Skeleton,
 } from "@polkadex/orderbook-ui/molecules";
 import { OrderCommon } from "@orderbook/core/providers/types";
 import { OrderHistoryContextProps } from "@orderbook/core/providers/user/orderHistoryProvider";
@@ -72,7 +73,9 @@ export const OrderHistory = ({ orderHistory }: Props) => {
 
   return (
     <S.Wrapper>
-      {filteredOrderHistory?.length ? (
+      {loading ? (
+        <SkeletonLoader />
+      ) : filteredOrderHistory?.length ? (
         <S.Table>
           <S.Thead>
             <S.Tr>
@@ -184,5 +187,17 @@ export const OrderHistory = ({ orderHistory }: Props) => {
         </S.EmptyWrapper>
       )}
     </S.Wrapper>
+  );
+};
+
+const SkeletonLoader = () => {
+  return (
+    <S.SkeletonWrapper>
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+    </S.SkeletonWrapper>
   );
 };
