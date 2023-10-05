@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
@@ -23,6 +23,7 @@ import * as T from "./types";
 import { OBIncrementData, OrderbookRawUpdate } from "./types";
 
 export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
+  const queryClient = useQueryClient();
   const { currentMarket } = useMarketsProvider();
   const { onHandleError } = useSettingsProvider();
 
@@ -45,12 +46,6 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
     onError: onHandleError,
   });
 
-  const [orderbookData, setOrderbookData] = useState(data);
-
-  useEffect(() => {
-    setOrderbookData(data);
-  }, [data]);
-
   const onDataIncrement = useCallback(
     (payload: T.OrderbookRawUpdate[]) => {
       if (!data || !currentMarket?.m) return;
@@ -67,37 +62,22 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
             item.side.toLowerCase()
           );
       });
-      const newData = {
-        ...data,
-        asks: _.cloneDeep(book.ask),
-        bids: _.cloneDeep(book.bid),
-      };
 
-      setOrderbookData(newData);
+      queryClient.setQueryData(
+        QUERY_KEYS.orderBook(currentMarket?.m as string),
+        (oldData) => {
+          const oldOrderbookData = oldData as T.OrderBookState["depth"];
+          const newData = {
+            ...oldOrderbookData,
+            asks: _.cloneDeep(book.ask),
+            bids: _.cloneDeep(book.bid),
+          };
+          return newData;
+        }
+      );
     },
-    [currentMarket?.m, data]
+    [currentMarket?.m, data, queryClient]
   );
-
-  useEffect(() => {
-    if (currentMarket?.m) {
-      const subscription = API.graphql<
-        GraphQLSubscription<Websocket_streamsSubscription>
-      >({
-        query: subscriptions.websocket_streams,
-        variables: { name: `${currentMarket.m}-ob-inc` },
-        authToken: READ_ONLY_TOKEN,
-      }).subscribe({
-        next: (resp) => {
-          if (!resp?.value?.data?.websocket_streams) return;
-          const msg = resp.value.data.websocket_streams.data;
-          const data: T.OrderbookRawUpdate[] = formatOrderbookUpdate(msg);
-          onDataIncrement(data);
-        },
-        error: (err) => console.log(err),
-      });
-      return () => subscription.unsubscribe();
-    }
-  }, [currentMarket?.m, onDataIncrement]);
 
   const formatOrderBookData = (
     data: T.OrderBookDbState[]
@@ -131,12 +111,33 @@ export const OrderBookProvider: T.OrderBookComponent = ({ children }) => {
     return [...bids, ...asks];
   };
 
+  useEffect(() => {
+    if (currentMarket?.m) {
+      const subscription = API.graphql<
+        GraphQLSubscription<Websocket_streamsSubscription>
+      >({
+        query: subscriptions.websocket_streams,
+        variables: { name: `${currentMarket.m}-ob-inc` },
+        authToken: READ_ONLY_TOKEN,
+      }).subscribe({
+        next: (resp) => {
+          if (!resp?.value?.data?.websocket_streams) return;
+          const msg = resp.value.data.websocket_streams.data;
+          const data: T.OrderbookRawUpdate[] = formatOrderbookUpdate(msg);
+          onDataIncrement(data);
+        },
+        error: (err) => console.log(err),
+      });
+      return () => subscription.unsubscribe();
+    }
+  }, [currentMarket?.m, onDataIncrement]);
+
   return (
     <Provider
       value={{
         depth: {
-          asks: orderbookData?.asks ?? [],
-          bids: orderbookData?.bids ?? [],
+          asks: data?.asks ?? [],
+          bids: data?.bids ?? [],
           loading: isLoading || isFetching,
         },
       }}

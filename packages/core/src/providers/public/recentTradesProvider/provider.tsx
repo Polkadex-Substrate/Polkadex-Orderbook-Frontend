@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
 import * as subscriptions from "@orderbook/core/graphql/subscriptions";
@@ -22,6 +22,7 @@ import * as T from "./types";
 import { PublicTrade } from "./types";
 
 export const RecentTradesProvider = ({ children }) => {
+  const queryClient = useQueryClient();
   const { onHandleError } = useSettingsProvider();
   const { currentMarket } = useMarketsProvider();
 
@@ -47,17 +48,21 @@ export const RecentTradesProvider = ({ children }) => {
       amount: x.q,
       timestamp: Number(x.t),
     }));
-    return trades;
+
+    return sliceArray(trades, defaultConfig.defaultStorageLimit);
   };
 
-  const { data, isLoading, isFetching } = useQuery({
+  const {
+    data: recentTradesList,
+    isLoading,
+    isFetching,
+  } = useQuery<T.PublicTrade[]>({
     queryKey: QUERY_KEYS.recentTrades(currentMarket?.m as string),
     enabled: !!currentMarket?.m,
     queryFn: async () => await onFetchRecentTrades(currentMarket as Market),
     onError: onHandleError,
+    initialData: [],
   });
-
-  const [recentTradesList, setRecentTradesList] = useState<T.PublicTrade[]>([]);
 
   const isDecreasing = getIsDecreasingArray(recentTradesList);
 
@@ -70,12 +75,6 @@ export const RecentTradesProvider = ({ children }) => {
     if (!recentTradesList) return "0";
     return recentTradesList.length > 1 ? recentTradesList[1].price : "0";
   };
-
-  useEffect(() => {
-    const recentTrades = data ?? [];
-    const list = sliceArray(recentTrades, defaultConfig.defaultStorageLimit);
-    setRecentTradesList(list);
-  }, [data]);
 
   useEffect(() => {
     const subscription = API.graphql<
@@ -96,8 +95,16 @@ export const RecentTradesProvider = ({ children }) => {
           market_id: val.m,
           timestamp: Number(val.t),
         };
-        setRecentTradesList((prev) =>
-          sliceArray([trade, ...prev], defaultConfig.defaultStorageLimit)
+
+        queryClient.setQueryData(
+          QUERY_KEYS.recentTrades(currentMarket?.m as string),
+          (oldData) => {
+            const oldRecentTrades = oldData as T.PublicTrade[];
+            return sliceArray(
+              [trade, ...oldRecentTrades],
+              defaultConfig.defaultStorageLimit
+            );
+          }
         );
       },
       error: (err) => console.warn(err),
@@ -106,12 +113,12 @@ export const RecentTradesProvider = ({ children }) => {
     return () => {
       return subscription.unsubscribe();
     };
-  }, [currentMarket?.m]);
+  }, [currentMarket?.m, queryClient]);
 
   return (
     <Provider
       value={{
-        list: recentTradesList ?? [],
+        list: recentTradesList,
         loading: isLoading || isFetching,
         currentTrade: recentTradesList.at(0),
         lastTrade: recentTradesList.at(1),
