@@ -174,3 +174,4 @@ export * from "./MailFAQ";
 export * from "./Trading";
 export * from "./TokenListing";
 export * from "./Trouble";
+export * from "./PolkadexIcon";
