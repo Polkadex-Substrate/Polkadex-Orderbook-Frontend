@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useCallback, useEffect } from "react";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { eventHandler } from "@orderbook/core/helpers";
 import { QUERY_KEYS } from "@orderbook/core/constants";
@@ -14,58 +14,47 @@ import * as A from "./actions";
 import { processTradeData, fetchUserTrades } from "./helper";
 
 export const TradesProvider: T.TradesComponent = ({ children }) => {
-  const { selectedAccount } = useProfile();
-  const { mainAddress } = selectedAccount;
+  const queryClient = useQueryClient();
+  const {
+    selectedAccount: { tradeAddress },
+  } = useProfile();
   const { onHandleError } = useSettingsProvider();
   const { dateFrom, dateTo } = useSessionProvider();
 
   const { currentMarket } = useMarketsProvider();
 
-  const userLoggedIn = selectedAccount.tradeAddress !== "";
+  const userLoggedIn = tradeAddress !== "";
 
   const shouldFetchTradeHistory = Boolean(
-    userLoggedIn && currentMarket && selectedAccount.tradeAddress
+    userLoggedIn && currentMarket && tradeAddress
   );
 
-  const [tradeHistoryList, setTradeHistoryList] = useState<A.UserTrade[]>([]);
-  const [tradeHistoryFetchToken, setTradeHistoryFetchToken] = useState<
-    string | null
-  >(null);
-
-  const { data, fetchNextPage, isLoading, isSuccess } = useInfiniteQuery({
-    queryKey: QUERY_KEYS.tradeHistory(
-      dateFrom,
-      dateTo,
-      selectedAccount.tradeAddress
-    ),
-    enabled: shouldFetchTradeHistory,
-    queryFn: async ({ pageParam = 0 }) => {
-      return await onFetchTradesData({
-        // dateFrom: "2023-08-31T18:30:00.000Z",
-        // dateTo: "2023-10-03T18:29:59.999Z",
-        // tradeAddress: "esoM2PAAY2RzWcFnWUwXtSG8EWF2gEnxVvx6XAqMF2Agdn4as",
-        dateFrom,
-        dateTo,
-        tradeAddress: selectedAccount.tradeAddress,
-        tradeHistoryFetchToken,
-        pageParam,
-      });
-    },
-    getNextPageParam: (lastPage) => {
-      // If the last page contains nextToken as null, don't fetch the next page
-      if (!lastPage.nextToken) {
-        return false;
-      }
-      return true;
-    },
-  });
+  const { data, fetchNextPage, isLoading, isSuccess, hasNextPage } =
+    useInfiniteQuery({
+      queryKey: QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
+      enabled: shouldFetchTradeHistory,
+      queryFn: async ({ pageParam = null }) => {
+        return await onFetchTradesData({
+          dateFrom,
+          dateTo,
+          tradeAddress,
+          tradeHistoryFetchToken: pageParam,
+        });
+      },
+      getNextPageParam: (lastPage) => {
+        // If the last page contains nextToken as null, don't fetch the next page
+        if (!lastPage.nextToken) {
+          return false;
+        }
+        return lastPage.nextToken;
+      },
+    });
 
   const onFetchTradesData = async ({
     dateFrom,
     dateTo,
     tradeAddress,
     tradeHistoryFetchToken,
-    pageParam,
   }) => {
     if (tradeAddress) {
       const { trades, nextToken } = await fetchUserTrades(
@@ -74,48 +63,55 @@ export const TradesProvider: T.TradesComponent = ({ children }) => {
         dateTo,
         tradeHistoryFetchToken
       );
-      setTradeHistoryFetchToken(nextToken);
-      return { data: [...trades], pageParam, nextToken };
+      return { data: [...trades], nextToken };
     }
-    return { data: [], pageParam, nextToken: null };
+    return { data: [], nextToken: null };
   };
 
   const onUserTradeUpdate = useCallback(
     (payload: A.UserTradesUpdateEvent["payload"]) => {
       try {
         const trade = processTradeData(payload);
-        setTradeHistoryList((prev) => [trade, ...prev]);
+        queryClient.setQueryData(
+          QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
+          (oldTradeHistory: any) => {
+            const payload = {
+              data: [trade as A.UserTrade],
+              nextToken: null,
+            };
+            return {
+              pages: [payload, ...oldTradeHistory.pages],
+              pageParams: [...oldTradeHistory.pageParams],
+            };
+          }
+        );
       } catch (error) {
         onHandleError(`User trades channel error: ${error?.message ?? error}`);
       }
     },
-    [onHandleError]
+    [onHandleError, queryClient, dateFrom, dateTo, tradeAddress]
   );
 
   useEffect(() => {
-    if (mainAddress) {
+    if (tradeAddress) {
       const subscription = eventHandler({
         cb: onUserTradeUpdate,
-        name: mainAddress,
+        name: tradeAddress,
         eventType: "TradeFormat",
       });
       return () => {
         subscription.unsubscribe();
       };
     }
-  }, [mainAddress, onUserTradeUpdate]);
-
-  useEffect(() => {
-    setTradeHistoryList(data?.pages.flatMap((page) => page.data) ?? []);
-  }, [data]);
+  }, [tradeAddress, onUserTradeUpdate]);
 
   return (
     <Provider
       value={{
+        data: data?.pages.flatMap((page) => page.data) ?? [],
         success: isSuccess,
-        data: tradeHistoryList,
         loading: isLoading,
-        tradeHistoryNextToken: tradeHistoryFetchToken,
+        hasNextPage,
         onUserTradeUpdate,
         onFetchNextPage: fetchNextPage,
       }}

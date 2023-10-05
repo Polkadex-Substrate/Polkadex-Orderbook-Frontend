@@ -17,7 +17,7 @@ export interface UserTrade {
   timestamp: number;
   baseAsset: string;
   quoteAsset: string;
-  isReverted?: boolean | null;
+  isReverted: boolean | null;
 }
 
 export interface UserTradeEvent {

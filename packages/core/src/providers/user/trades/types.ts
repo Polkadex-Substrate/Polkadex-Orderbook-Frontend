@@ -9,7 +9,7 @@ export interface TradesState {
   loading: boolean;
   success: boolean;
   data: A.UserTrade[];
-  tradeHistoryNextToken: string | null;
+  hasNextPage?: boolean;
 }
 
 export type TradesQueryResult = {

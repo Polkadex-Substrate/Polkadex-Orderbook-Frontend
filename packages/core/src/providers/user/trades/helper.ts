@@ -15,6 +15,7 @@ export function processTradeData(eventData: A.UserTradeEvent): A.UserTrade {
     quoteAsset: quote,
     timestamp: eventData.t,
     side: "Bid",
+    isReverted: null,
   };
 }
 

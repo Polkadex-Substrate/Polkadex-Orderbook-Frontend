@@ -25,7 +25,7 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
     priceFixed,
     amountFixed,
     trades,
-    tradeHistoryNextToken,
+    hasNextPage,
     error,
     isLoading,
     onFetchNextPage,
@@ -60,7 +60,7 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
               next={() => {
                 onFetchNextPage();
               }}
-              hasMore={tradeHistoryNextToken !== null}
+              hasMore={Boolean(hasNextPage)}
               height={300}
               loader={
                 <S.Loader>

@@ -71,7 +71,7 @@ export function useTradeHistory(filters: Ifilters) {
     amountFixed,
     userLoggedIn,
     isLoading: fetching,
-    tradeHistoryNextToken: tradesState.tradeHistoryNextToken,
+    hasNextPage: tradesState.hasNextPage,
     error: tradesState.error,
     onFetchNextPage,
   };
