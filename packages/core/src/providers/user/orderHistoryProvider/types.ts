@@ -78,7 +78,6 @@ export type OrderHistoryContextProps = OrdersHistoryState & {
   orderHistory: OrderCommon[];
   isMarketMatch: (value: OrderCommon) => boolean;
   openOrders: OrderCommon[];
-  userLoggedIn: boolean;
   fetchNextOrderHistoryPage: () => void;
 };
 

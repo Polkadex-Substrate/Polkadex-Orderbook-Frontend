@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
@@ -12,8 +12,8 @@ import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { defaultConfig } from "@orderbook/core/config";
 
-import { Ifilters, OrderCommon } from "../../types";
-import { UserAccount, useProfile } from "../profile";
+import { OrderCommon } from "../../types";
+import { useProfile } from "../profile";
 
 import { OrderHistoryFetchResult, SetOrder } from "./types";
 import * as A from "./actions";
@@ -26,16 +26,14 @@ export const OrderHistoryProvider = ({ children }) => {
     ordersHistoryReducer,
     initialOrdersHistoryState
   );
-  const profileState = useProfile();
+  const { selectedAccount: account } = useProfile();
   const { onHandleError } = useSettingsProvider();
-
   const { currentMarket } = useMarketsProvider();
   const { selectGetAsset } = useAssetsProvider();
   const { dateFrom, dateTo } = useSessionProvider();
 
-  const { tradeAddress } = profileState.selectedAccount;
+  const { tradeAddress } = account;
 
-  const account: UserAccount = profileState.selectedAccount;
   const userLoggedIn = tradeAddress !== "";
 
   const shouldFetchOrderHistory = Boolean(
@@ -149,12 +147,6 @@ export const OrderHistoryProvider = ({ children }) => {
 
   const openOrders = state.openOrders;
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
-  const [updatedOpenOrdersSorted, setUpdatedOpenOrdersSorted] =
-    useState(openOrdersSorted);
-
-  useEffect(() => {
-    onOpenOrdersHistoryFetch();
-  }, [onOpenOrdersHistoryFetch]);
 
   const isMarketMatch = useCallback(
     (order: OrderCommon) => {
@@ -169,32 +161,36 @@ export const OrderHistoryProvider = ({ children }) => {
   );
 
   // TODO: Refactor filter process. Should do it on server rather than client
-  const filterOrders = useCallback(
-    (filters: Ifilters) => {
-      let openOrdersList = openOrdersSorted;
+  // const filterOrders = useCallback(
+  //   (filters: Ifilters) => {
+  //     let openOrdersList = openOrdersSorted;
 
-      if (filters?.hiddenPairs) {
-        openOrdersList = openOrdersList.filter((order) => {
-          return isMarketMatch(order) && order;
-        });
-      }
+  //     if (filters?.hiddenPairs) {
+  //       openOrdersList = openOrdersList.filter((order) => {
+  //         return isMarketMatch(order) && order;
+  //       });
+  //     }
 
-      if (filters?.onlyBuy && filters.onlySell) {
-        // Nothing to do
-      } else if (filters?.onlyBuy) {
-        openOrdersList = openOrdersList.filter(
-          (data) => data.side?.toUpperCase() === "BID"
-        );
-      } else if (filters?.onlySell) {
-        openOrdersList = openOrdersList.filter(
-          (data) => data.side?.toUpperCase() === "ASK"
-        );
-      }
+  //     if (filters?.onlyBuy && filters.onlySell) {
+  //       // Nothing to do
+  //     } else if (filters?.onlyBuy) {
+  //       openOrdersList = openOrdersList.filter(
+  //         (data) => data.side?.toUpperCase() === "BID"
+  //       );
+  //     } else if (filters?.onlySell) {
+  //       openOrdersList = openOrdersList.filter(
+  //         (data) => data.side?.toUpperCase() === "ASK"
+  //       );
+  //     }
 
-      setUpdatedOpenOrdersSorted(openOrdersList);
-    },
-    [openOrdersSorted, isMarketMatch]
-  );
+  //     setUpdatedOpenOrdersSorted(openOrdersList);
+  //   },
+  //   [openOrdersSorted, isMarketMatch]
+  // );
+
+  useEffect(() => {
+    onOpenOrdersHistoryFetch();
+  }, [onOpenOrdersHistoryFetch]);
 
   useEffect(() => {
     if (tradeAddress?.length) {
@@ -232,8 +228,7 @@ export const OrderHistoryProvider = ({ children }) => {
         onOrderUpdates,
         orderHistory:
           orderHistoryList?.pages.flatMap((page) => page.data) ?? [],
-        openOrders: updatedOpenOrdersSorted,
-        userLoggedIn,
+        openOrders: openOrdersSorted,
         hasNextOrderHistoryPage,
         fetchNextOrderHistoryPage,
         isOrderHistoryLoading,
