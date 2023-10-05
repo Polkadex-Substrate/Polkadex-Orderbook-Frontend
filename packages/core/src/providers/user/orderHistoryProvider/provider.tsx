@@ -17,18 +17,20 @@ import { Provider } from "./context";
 import { initialOrdersHistoryState, ordersHistoryReducer } from "./reducer";
 import { fetchOpenOrders, fetchOrderHistory, processOrderData } from "./helper";
 
+const { defaultStorageLimit } = defaultConfig;
+
 export const OrderHistoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(
     ordersHistoryReducer,
     initialOrdersHistoryState
   );
-  const { selectedAccount: account } = useProfile();
+  const {
+    selectedAccount: { tradeAddress },
+  } = useProfile();
   const { onHandleError } = useSettingsProvider();
   const { currentMarket } = useMarketsProvider();
   const { selectGetAsset } = useAssetsProvider();
   const { dateFrom, dateTo } = useSessionProvider();
-
-  const { tradeAddress } = account;
 
   const userLoggedIn = tradeAddress !== "";
 
@@ -83,11 +85,9 @@ export const OrderHistoryProvider = ({ children }) => {
   });
 
   const onOpenOrdersFetch = async () => {
-    if (account.tradeAddress) {
-      const transactions: OrderCommon[] = await fetchOpenOrders(
-        account.tradeAddress
-      );
-      return transactions;
+    if (tradeAddress) {
+      const transactions: OrderCommon[] = await fetchOpenOrders(tradeAddress);
+      return sliceArray(transactions, defaultStorageLimit);
     }
     return [];
   };
@@ -108,7 +108,7 @@ export const OrderHistoryProvider = ({ children }) => {
         );
 
       return {
-        data: sliceArray(orders, defaultConfig.defaultStorageLimit),
+        data: sliceArray(orders, defaultStorageLimit),
         nextToken,
       };
     }
