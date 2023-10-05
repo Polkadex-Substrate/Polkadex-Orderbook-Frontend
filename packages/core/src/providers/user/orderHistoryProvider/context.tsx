@@ -7,7 +7,7 @@ export const Context = createContext<OrderHistoryContextProps>({
   ...initialOrdersHistoryState,
   onOrderUpdates: () => {},
   orderHistory: [],
-  isMarketMatch: () => {},
+  isMarketMatch: () => false,
   openOrders: [],
   fetchNextOrderHistoryPage: () => {},
 });
