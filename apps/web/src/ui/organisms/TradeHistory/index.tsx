@@ -10,7 +10,7 @@ import {
   Skeleton,
   TradeHistoryCard,
 } from "@polkadex/orderbook-ui/molecules";
-import { Ifilters } from "@polkadex/orderbook-ui/organisms";
+import { Ifilters } from "@orderbook/core/providers/types";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 
 import * as S from "./styles";

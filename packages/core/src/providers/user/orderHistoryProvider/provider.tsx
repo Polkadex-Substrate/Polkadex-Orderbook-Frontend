@@ -240,8 +240,6 @@ export const OrderHistoryProvider = ({ children }) => {
         });
       }
 
-      const { dateFrom, dateTo } = filters;
-
       if (filters?.onlyBuy) {
         orderHistoryList = orderHistoryList.filter(
           (data) => data.side?.toUpperCase() === "BID"
@@ -273,20 +271,6 @@ export const OrderHistoryProvider = ({ children }) => {
         });
         openOrdersList = openOrdersList.filter((item) => {
           return item.status.toLowerCase() === filterStatus;
-        });
-      }
-
-      // Filter by range
-      if (dateFrom && dateTo) {
-        orderHistoryList = orderHistoryList.filter((order) => {
-          return (
-            new Date(order.time) >= dateFrom && new Date(order.time) <= dateTo
-          );
-        });
-        openOrdersList = openOrdersList.filter((order) => {
-          return (
-            new Date(order.time) >= dateFrom && new Date(order.time) <= dateTo
-          );
         });
       }
 

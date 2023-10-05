@@ -26,25 +26,16 @@ import {
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useOrderHistoryProvider } from "@orderbook/core/providers/user/orderHistoryProvider";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
+import { Ifilters } from "@orderbook/core/providers/types";
 
 import * as S from "./styles";
-
-export type Ifilters = {
-  hiddenPairs: boolean;
-  onlyBuy: boolean;
-  onlySell: boolean;
-  showReverted: boolean;
-  status: "All Transactions" | "Pending" | "Completed" | "Cancelled";
-  dateFrom?: Date;
-  dateTo?: Date;
-};
 
 const initialFilters: Ifilters = {
   hiddenPairs: false,
   onlyBuy: false,
   onlySell: false,
   showReverted: false,
-  status: "All Transactions",
+  status: "All Orders",
 };
 
 export const Transactions = () => {
@@ -78,12 +69,6 @@ export const Transactions = () => {
   const handleActionDropdown = (status: string) => {
     setFilters({ ...filters, status: status as Ifilters["status"] });
   };
-  const handleRangeChange = useCallback(
-    (dateFrom: Date, dateTo: Date) => {
-      setFilters((prevFilters) => ({ ...prevFilters, dateFrom, dateTo }));
-    },
-    [setFilters]
-  );
 
   useEffect(() => {
     filterOrders(filters);
@@ -92,11 +77,10 @@ export const Transactions = () => {
   const handleSelect = useCallback(
     ({ selection: { startDate, endDate } }: RangeKeyDict) => {
       if (startDate && endDate) {
-        handleRangeChange(startDate, endDate);
         dispatchUserSessionData({ dateFrom: startDate, dateTo: endDate });
       }
     },
-    [dispatchUserSessionData, handleRangeChange]
+    [dispatchUserSessionData]
   );
 
   const ranges = useMemo(() => {
@@ -214,7 +198,12 @@ export const Transactions = () => {
         </S.Header>
         <S.Content>
           <TabContent>
-            <OpenOrders orderHistory={orderHistory} />
+            <OpenOrders
+              orderHistory={orderHistory}
+              onHideTransactionDropdown={(v: boolean) =>
+                setTransactionDropdownVisible(v)
+              }
+            />
           </TabContent>
           <TabContent>
             <OrderHistory orderHistory={orderHistory} />
