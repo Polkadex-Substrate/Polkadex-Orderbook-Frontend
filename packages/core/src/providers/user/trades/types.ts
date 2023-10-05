@@ -40,7 +40,6 @@ export type TradesProviderProps = PropsWithChildren<{
 export type TradesContextProps = TradesState & {
   onFetchNextPage: () => void;
   onUserTradeUpdate: (value: A.UserTradesUpdateEvent["payload"]) => void;
-  onUserTradesError: (value: A.UserTradesError["error"]) => void;
 };
 
 export interface TradesProps {

@@ -1,5 +1,5 @@
 import * as queries from "@orderbook/core/graphql/queries";
-import { fetchFromAppSync, Utils } from "@orderbook/core/helpers";
+import { fetchBatchFromAppSync, Utils } from "@orderbook/core/helpers";
 import { TRADE_HISTORY_PER_PAGE_LIMIT } from "@orderbook/core/constants";
 
 import * as T from "./types";
@@ -28,7 +28,7 @@ export const fetchUserTrades = async (
   const dateToStr = Utils.date.formatDateToISO(dateTo);
 
   const { response: tradesRaw, nextToken }: T.FetchUserTradesResult =
-    await fetchFromAppSync(
+    await fetchBatchFromAppSync(
       queries.listTradesByMainAccount,
       {
         main_account: proxyAccount,
