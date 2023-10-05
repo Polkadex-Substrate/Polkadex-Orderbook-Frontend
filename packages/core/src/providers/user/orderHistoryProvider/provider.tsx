@@ -65,11 +65,15 @@ export const OrderHistoryProvider = ({ children }) => {
     },
   });
 
-  const { data: openOrders, isLoading: isOpenOrdersLoading } = useQuery({
+  const {
+    data: openOrders,
+    isLoading: isOpenOrdersLoading,
+    isFetching,
+  } = useQuery({
     queryKey: QUERY_KEYS.openOrders(tradeAddress),
     enabled: shouldFetchOpenOrders,
     queryFn: async () => {
-      return await onOpenOrdersHistoryFetch();
+      return await onOpenOrdersFetch();
     },
     initialData: [],
     onError: (error) => {
@@ -78,7 +82,7 @@ export const OrderHistoryProvider = ({ children }) => {
     },
   });
 
-  const onOpenOrdersHistoryFetch = async () => {
+  const onOpenOrdersFetch = async () => {
     if (account.tradeAddress) {
       const transactions: OrderCommon[] = await fetchOpenOrders(
         account.tradeAddress
@@ -128,9 +132,6 @@ export const OrderHistoryProvider = ({ children }) => {
     [onHandleError]
   );
 
-  // const openOrders = state.openOrders;
-  // const openOrdersSorted = sortOrdersDescendingTime(openOrders);
-
   const isMarketMatch = useCallback(
     (order: OrderCommon) => {
       const market = currentMarket?.name;
@@ -142,34 +143,6 @@ export const OrderHistoryProvider = ({ children }) => {
     },
     [selectGetAsset, currentMarket?.name]
   );
-
-  // TODO: Refactor filter process. Should do it on server rather than client
-  // const filterOrders = useCallback(
-  //   (filters: Ifilters) => {
-  //     let openOrdersList = openOrdersSorted;
-
-  //     if (filters?.hiddenPairs) {
-  //       openOrdersList = openOrdersList.filter((order) => {
-  //         return isMarketMatch(order) && order;
-  //       });
-  //     }
-
-  //     if (filters?.onlyBuy && filters.onlySell) {
-  //       // Nothing to do
-  //     } else if (filters?.onlyBuy) {
-  //       openOrdersList = openOrdersList.filter(
-  //         (data) => data.side?.toUpperCase() === "BID"
-  //       );
-  //     } else if (filters?.onlySell) {
-  //       openOrdersList = openOrdersList.filter(
-  //         (data) => data.side?.toUpperCase() === "ASK"
-  //       );
-  //     }
-
-  //     setUpdatedOpenOrdersSorted(openOrdersList);
-  //   },
-  //   [openOrdersSorted, isMarketMatch]
-  // );
 
   useEffect(() => {
     if (tradeAddress?.length) {
@@ -213,7 +186,7 @@ export const OrderHistoryProvider = ({ children }) => {
 
         /** Open Orders **/
         openOrders: openOrders,
-        isOpenOrdersLoading,
+        isOpenOrdersLoading: isOpenOrdersLoading || isFetching,
 
         /** Other functions **/
         onOrderUpdates,

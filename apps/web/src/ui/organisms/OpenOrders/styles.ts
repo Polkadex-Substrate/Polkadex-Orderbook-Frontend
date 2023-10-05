@@ -64,3 +64,9 @@ export const Th = styled.th`
 export const EmptyWrapper = styled.div`
   padding: 10rem 0;
 `;
+
+export const SkeletonWrapper = styled.div`
+  div {
+    margin-block: 1rem;
+  }
+`;

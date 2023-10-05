@@ -24,7 +24,6 @@ import {
   TradeHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useOrderHistoryProvider } from "@orderbook/core/providers/user/orderHistoryProvider";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { Ifilters } from "@orderbook/core/providers/types";
 
@@ -55,7 +54,6 @@ export const Transactions = () => {
   const [isTransactionDropdownVisible, setTransactionDropdownVisible] =
     useState(true);
 
-  const orderHistory = useOrderHistoryProvider();
   const userSession = useSessionProvider();
   const { dispatchUserSessionData } = userSession;
 
@@ -194,7 +192,7 @@ export const Transactions = () => {
         <S.Content>
           <TabContent>
             <OpenOrders
-              orderHistory={orderHistory}
+              filters={filters}
               onHideTransactionDropdown={(v: boolean) =>
                 setTransactionDropdownVisible(v)
               }
