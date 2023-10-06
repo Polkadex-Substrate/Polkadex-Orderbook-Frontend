@@ -50,6 +50,7 @@ export type BalancesContextProps = BalancesState & {
   getFreeProxyBalance: (value: string) => string;
   onBalanceUpdate: (value: BalanceUpdatePayload) => void;
   onBalancesFetch: () => void;
+  onChangeChainBalance: (value: string) => Promise<void>;
 };
 
 export type BalancesProviderProps = PropsWithChildren<{

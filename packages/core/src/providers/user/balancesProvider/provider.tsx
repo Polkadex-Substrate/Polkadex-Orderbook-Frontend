@@ -121,6 +121,29 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     return balance.free_balance;
   };
 
+  const onChangeChainBalance = async (assetId: string) => {
+    const newOnChainBalance = await onFetchChainBalanceForAsset(assetId);
+    dispatch(
+      A.onChangeChainBalance({ assetId, onChainBalance: newOnChainBalance })
+    );
+  };
+
+  const onFetchChainBalanceForAsset = useCallback(
+    async (assetId: string) => {
+      if (api?.isConnected) {
+        await api?.isReady;
+        const chainBalance = await fetchOnChainBalance(
+          api,
+          assetId,
+          mainAddress
+        );
+        return chainBalance.toString();
+      }
+      return "0";
+    },
+    [api, mainAddress]
+  );
+
   const updateBalanceFromEvent = useCallback(
     async (msg: T.BalanceUpdatePayload): Promise<T.Balance> => {
       const assetId = msg.asset.asset;
@@ -133,19 +156,10 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         reserved_balance: msg.reserved,
       };
 
-      if (api?.isConnected) {
-        await api?.isReady;
-        const chainBalance = await fetchOnChainBalance(
-          api,
-          assetId,
-          mainAddress
-        );
-        return { ...payload, onChainBalance: chainBalance.toString() };
-      }
-
-      return { ...payload, onChainBalance: "0" };
+      const onChainBalance = await onFetchChainBalanceForAsset(assetId);
+      return { ...payload, onChainBalance };
     },
-    [selectGetAsset, api, mainAddress]
+    [selectGetAsset, onFetchChainBalanceForAsset]
   );
 
   const onBalanceUpdate = useCallback(
@@ -186,6 +200,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         getFreeProxyBalance,
         onBalanceUpdate,
         onBalancesFetch,
+        onChangeChainBalance,
       }}
     >
       {children}
