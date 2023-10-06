@@ -63,6 +63,7 @@ export const Logo = styled.div<{ borderActive: boolean; hideLogo?: boolean }>`
       background: ${theme.colors.primary};
       padding: 0.2rem 0.3rem;
       border-radius: 0.2rem;
+      color: ${theme.colors.white};
     }
   `}
 `;

@@ -9,7 +9,7 @@ export const Main = styled.main<{ open?: boolean }>`
       opacity 1s ease-in-out,
       visibility 1s ease-in-out;
     position: relative;
-    background: ${theme.colors.primaryBackground};
+    background: #1c1c26;
     color: ${theme.colors.white};
     display: flex;
     min-height: 100vh;
