@@ -10,7 +10,7 @@ import { useState } from "react";
 import classNames from "classnames";
 
 import SpeedImage from "../../../../public/img/speed.webp";
-import FeesImage from "../../../../public/img/fees.webp";
+import PadLock from "../../../../public/img/padlock.webp";
 import MarketImage from "../../../../public/img/market.webp";
 import NonCustodial from "../../../../public/img/nonCustodial.webp";
 
@@ -337,7 +337,7 @@ export function LandingTemplate() {
                       <p>{t("benefits.twoDescription")}</p>
                     </div>
                     <Image
-                      src={FeesImage}
+                      src={PadLock}
                       placeholder="blur"
                       alt={t("benefits.feesAlt")}
                       style={{
