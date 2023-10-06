@@ -37,7 +37,7 @@
     "title": "Trade on the CEXiest decentralized",
     "highlight":"Exchange",
     "nonCustodial": "Non-custodial",
-    "gasFees": "Sub-milisecond latency",
+    "gasFees": "Low latency",
     "performance": "Trading bots"
   },
   "features" :{
@@ -57,7 +57,7 @@
     "keys": "Keys",
     "crypto": "Crypto",
     "exchange": "Exchange",
-    "oneTitle":"High frequency trading",
+    "oneTitle":"Lightening fast trades",
     "oneDescription": "Trade crypto with sub-milisecond latency on a DEX that’s as fast as CEXs.",
     "twoTitle": "Blockchain security",
     "twoDescription": "Secured by a validator set of 200+ network nodes.",

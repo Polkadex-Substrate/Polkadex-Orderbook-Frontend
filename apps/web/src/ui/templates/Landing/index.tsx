@@ -400,7 +400,10 @@ export function LandingTemplate() {
                 <h3>{t("help.faqTitle")}</h3>
                 <p>{t("help.faqDescription")}</p>
               </S.SupportCardHeader>
-              <Link href="/">
+              <Link
+                href="https://docs.polkadex.trade/orderbookPolkadexFAQWallets"
+                target="_blank"
+              >
                 {t("help.faqButton")}
                 <Icons.SingleArrowRight />
               </Link>
