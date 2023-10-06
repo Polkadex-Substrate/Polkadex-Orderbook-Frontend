@@ -12,6 +12,7 @@
 # next.js
 /.next/
 /out/
+build
 
 #code editor
 .idea
@@ -35,6 +36,9 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# turbo
+.turbo
+
 # vercel
 .vercel
 .vscode/settings.json
@@ -52,7 +56,6 @@ amplify/backend/.temp
 build/
 dist/
 node_modules/
-aws-exports.js
 awsconfiguration.json
 amplifyconfiguration.json
 amplifyconfiguration.dart

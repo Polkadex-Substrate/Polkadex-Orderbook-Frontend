@@ -1,0 +1,131 @@
+{
+  "accountOverview": {
+    "noRegisteredAccount": "You have no registered trading account",
+    "chooseYourTradeAccount": "Choose your trade account",
+    "copyToClipboard": "Copy to clipboard",
+    "copied": "Copied",
+    "tradingAccount": "Trading account",
+    "noTradingAccount": "No trading accounts found",
+    "importOrCreateOne": "Import or Create a new one",
+    "fundingAccount": "Funding Account",
+    "balances": "Balances",
+    "wallets": "Wallets",
+    "appearance": "Appearance",
+    "logout": "Log Out"
+  },
+  "appearance": {
+    "title": "Appearance",
+    "darkMode": {
+      "title": "Dark Mode",
+      "description": "Adjust the appearance to reduce  glare and give your eyes a break."
+    },
+    "classicMode": {
+      "title": "Classic Mode",
+      "description": "The layout of the classic version is quite similar to other exchanges."
+    }
+  },
+  "button": {
+    "loading": "Loading"
+  },
+  "createAccountForm": {
+    "selectFundingAccount": "Select your funding account",
+    "registerAccountFirst": "Please register an account first",
+    "fundingAccount": "Funding Account",
+    "tradeAccountName": "Trade account Name",
+    "tradeAccountPlaceholder": "Enter a name for your trading account",
+    "random": "Random",
+    "protectByPassword": "Protect by password",
+    "passwordPlaceholder": "(Optional) Input 5-digit trading password",
+    "cancel": "Cancel"
+  },
+  "footer": {
+    "connected": "Connected",
+    "connecting": "Connecting",
+    "disconnected": "Disconnected"
+  },
+  "importAccountForm": {
+    "title": "Import wallet method",
+    "importAccountMnemonic": {
+      "title": "12-word mnemonic seed",
+      "placeHolder": "Press enter after each word",
+      "clickToPaste": "Click to paste",
+      "walletTitle": "Wallet Name",
+      "walletPlaceHolder": "Enter a wallet name",
+      "random": "Random",
+      "protectByPassword": "Protect by password",
+      "passwordPlaceholder": "(Optional) Input 5-digit trading password",
+      "cancel": "Cancel",
+      "importAccount": "Import Account"
+    },
+    "importAccountJSON": {
+      "title": "Select a Json file to upload",
+      "draganddrop": "or drag and drop it here",
+      "invalid": "Invalid",
+      "protectedByPassword": "Is this wallet protected by password?",
+      "passwordPlaceholder": "(Optional) Enter a password",
+      "cancel": "Cancel",
+      "importAccount": "Import Account"
+    }
+  },
+  "marketOrderAction": {
+    "protectPassword": { "title": "Input 5-digit trading password" },
+    "avaliable": "Available",
+    "priceLabel": "Price",
+    "amountLabel": "Amount",
+    "totalLabel": "Total",
+    "estimatedAmount": "Estimated Amount",
+    "connectTradingAccount": "Connect Trading Account",
+    "signIntoPlaceOrder": "Sign In to Place Order",
+    "waiting": "Waiting",
+    "orderCreated": "Order Created",
+    "errors": {
+      "notEnoughBalance": "Balance not enough",
+      "minMarketPrice": "Minimum price: {{minMarketPrice}}",
+      "maxMarketPrice": "Maximum price: {{maxMarketPrice}}",
+      "minMarketAmount": "Minimum amount: {{minMarketAmount}}",
+      "maxMarketAmount": "Maximum amount: {{maxMarketAmount}}"
+    }
+  },
+  "mnemonic": {
+    "placeholder": "Type mnemonic to restore your proxy account in this browser",
+    "clickToPaste": "Click to paste from the clipboard or",
+    "message": "type each word from the seed phrase and press enter.",
+    "copyToClipboard": "Copy to clipboard",
+    "copied": "Copied"
+  },
+  "notifications": {
+    "title": "Notifications Center",
+    "recent": "Recent",
+    "all": "All",
+    "unread": "Unread",
+    "markAsRead": "Mark as read"
+  },
+  "openOrderCard": {
+    "pair": "Pair",
+    "date": "Date",
+    "type": "Type",
+    "price": "Price",
+    "total": "Total",
+    "filled": "Filled",
+    "actions": "Actions",
+    "cancelOrder": "Cancel Order"
+  },
+  "removeFromBlockchain": {
+    "warningLabel": "Warning: ",
+    "text": "This action is not reversible",
+    "description": "Remove account from the blockchain",
+    "summary": "Don’t worry your funds are safe in your funding account",
+    "inputPlaceholder": "Type here",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "toVerify": "To verify, type ",
+    "deleteAccount": "delete {{name}} account",
+    "below": "below:"
+  },
+  "removeFromDevice": {
+    "title": "Remove this account from your browser?",
+    "description": "Don’t worry your funds are safe in your funding account",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  }
+}
