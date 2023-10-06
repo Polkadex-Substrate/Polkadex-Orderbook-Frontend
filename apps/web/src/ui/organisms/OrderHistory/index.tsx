@@ -87,7 +87,8 @@ export const OrderHistory = ({ filters }: Props) => {
                     "..." +
                     order.id.slice(order.id.length - 4);
                   const status = order.status;
-                  return (
+                  const show = status !== "OPEN";
+                  return show ? (
                     <OrderHistoryCard
                       key={i}
                       id={shortId}
@@ -124,6 +125,8 @@ export const OrderHistory = ({ filters }: Props) => {
                         },
                       ]}
                     />
+                  ) : (
+                    <></>
                   );
                 })}
               {!isLoading && error && (
