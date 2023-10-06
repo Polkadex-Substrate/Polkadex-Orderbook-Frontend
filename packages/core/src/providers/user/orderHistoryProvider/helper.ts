@@ -34,6 +34,7 @@ export const fetchOpenOrders = async (
     avg_filled_price: order.afp,
     filled_quantity: order.fq,
     fee: order.fee,
+    isReverted: order.isReverted,
   }));
 };
 
@@ -99,5 +100,6 @@ export function processOrderData(eventData: SetOrder): OrderCommon {
     avg_filled_price: eventData.avg_filled_price.toString(),
     filled_quantity: eventData.filled_quantity.toString(),
     fee: eventData.fee.toString(),
+    isReverted: null,
   };
 }

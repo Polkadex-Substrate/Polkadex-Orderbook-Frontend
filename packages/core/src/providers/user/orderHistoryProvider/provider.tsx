@@ -1,5 +1,9 @@
-import { useCallback, useEffect, useReducer } from "react";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect } from "react";
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
@@ -14,16 +18,13 @@ import { useProfile } from "../profile";
 import { OrderHistoryFetchResult } from "./types";
 import * as A from "./actions";
 import { Provider } from "./context";
-import { initialOrdersHistoryState, ordersHistoryReducer } from "./reducer";
+import { removeOrderFromList, replaceOrPushOrder } from "./reducer";
 import { fetchOpenOrders, fetchOrderHistory, processOrderData } from "./helper";
 
 const { defaultStorageLimit } = defaultConfig;
 
 export const OrderHistoryProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(
-    ordersHistoryReducer,
-    initialOrdersHistoryState
-  );
+  const queryClient = useQueryClient();
   const {
     selectedAccount: { tradeAddress },
   } = useProfile();
@@ -71,7 +72,7 @@ export const OrderHistoryProvider = ({ children }) => {
     data: openOrders,
     isLoading: isOpenOrdersLoading,
     isFetching,
-  } = useQuery({
+  } = useQuery<OrderCommon[]>({
     queryKey: QUERY_KEYS.openOrders(tradeAddress),
     enabled: shouldFetchOpenOrders,
     queryFn: async () => {
@@ -118,18 +119,71 @@ export const OrderHistoryProvider = ({ children }) => {
   const onOrderUpdates = useCallback(
     (payload: A.OrderUpdateEvent["payload"]) => {
       try {
-        const order = processOrderData(payload);
-        dispatch(A.orderUpdateEventData(order));
+        const newOrder = processOrderData(payload);
+
+        // Update OrderHistory Realtime
+        queryClient.setQueryData(
+          QUERY_KEYS.orderHistory(dateFrom, dateTo, tradeAddress),
+          (oldOrderHistory: typeof orderHistoryList) => {
+            const prevOrderHistory = [
+              ...(oldOrderHistory?.pages.flatMap((page) => page.data) ?? []),
+            ];
+            const oldOrderHistoryLength = oldOrderHistory
+              ? oldOrderHistory?.pages.length
+              : 0;
+
+            const nextToken =
+              oldOrderHistory?.pages?.at(oldOrderHistoryLength - 1)
+                ?.nextToken || null;
+
+            // Add to OrderHistory for all cases
+            const updatedOrderHistory = replaceOrPushOrder(
+              prevOrderHistory,
+              newOrder
+            );
+
+            const newOrderHistory = {
+              pages: [
+                {
+                  data: [...updatedOrderHistory],
+                  nextToken,
+                },
+              ],
+              pageParams: [...(oldOrderHistory?.pageParams ?? [])],
+            };
+
+            return newOrderHistory;
+          }
+        );
+
+        // Update OpenOrders Realtime
+        queryClient.setQueryData(
+          QUERY_KEYS.openOrders(tradeAddress),
+          (oldOpenOrders: typeof openOrders) => {
+            const prevOpenOrders = [...oldOpenOrders];
+
+            let updatedOpenOrders: OrderCommon[] = [];
+            if (newOrder.status === "OPEN") {
+              updatedOpenOrders = replaceOrPushOrder(prevOpenOrders, newOrder);
+            } else {
+              // Remove from Open Orders if it is closed
+              updatedOpenOrders = removeOrderFromList(prevOpenOrders, newOrder);
+            }
+            return updatedOpenOrders;
+          }
+        );
+
+        // dispatch(A.orderUpdateEventData(order));
       } catch (error) {
         console.log(
           error,
           "Something has gone wrong (order updates channel)..."
         );
         onHandleError(`Order updates channel ${error?.message ?? error}`);
-        dispatch(A.orderUpdateEventError(error));
+        // dispatch(A.orderUpdateEventError(error));
       }
     },
-    [onHandleError]
+    [onHandleError, dateFrom, dateTo, queryClient, tradeAddress]
   );
 
   const isMarketMatch = useCallback(
@@ -185,7 +239,7 @@ export const OrderHistoryProvider = ({ children }) => {
         fetchNextOrderHistoryPage,
 
         /** Open Orders **/
-        openOrders: openOrders,
+        openOrders,
         isOpenOrdersLoading: isOpenOrdersLoading || isFetching,
 
         /** Other functions **/
