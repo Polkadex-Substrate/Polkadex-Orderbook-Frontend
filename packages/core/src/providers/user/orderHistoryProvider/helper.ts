@@ -103,3 +103,27 @@ export function processOrderData(eventData: SetOrder): OrderCommon {
     isReverted: null,
   };
 }
+
+// TODO: add test cases for this
+export const replaceOrPushOrder = (
+  orders: OrderCommon[],
+  newOrder: OrderCommon
+): OrderCommon[] => {
+  const index = orders.findIndex((order) => order.id === newOrder.id);
+  if (index === -1) {
+    return [...orders, newOrder];
+  }
+  return [...orders.slice(0, index), newOrder, ...orders.slice(index + 1)];
+};
+
+// TODO: add test cases for this
+export const removeOrderFromList = (
+  orders: OrderCommon[],
+  newOrder: OrderCommon
+): OrderCommon[] => {
+  const index = orders.findIndex((order) => order.id === newOrder.id);
+  if (index === -1) {
+    return orders;
+  }
+  return [...orders.slice(0, index), ...orders.slice(index + 1)];
+};

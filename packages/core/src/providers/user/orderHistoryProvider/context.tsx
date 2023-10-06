@@ -1,7 +1,19 @@
 import { createContext } from "react";
 
-import { initialOrdersHistoryState } from "./reducer";
-import { OrderHistoryContextProps, OrderHistoryProviderProps } from "./types";
+import {
+  OrderHistoryContextProps,
+  OrderHistoryProviderProps,
+  OrdersHistoryState,
+} from "./types";
+
+export const initialOrdersHistoryState: OrdersHistoryState = {
+  openOrders: [],
+  isOrderHistorySuccess: false,
+  isOrderHistoryLoading: false,
+  hasNextOrderHistoryPage: undefined,
+  orderHistoryError: undefined,
+  isOpenOrdersLoading: false,
+};
 
 export const Context = createContext<OrderHistoryContextProps>({
   ...initialOrdersHistoryState,

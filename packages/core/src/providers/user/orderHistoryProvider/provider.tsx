@@ -15,11 +15,15 @@ import { defaultConfig } from "@orderbook/core/config";
 import { OrderCommon } from "../../types";
 import { useProfile } from "../profile";
 
-import { OrderHistoryFetchResult } from "./types";
-import * as A from "./actions";
+import { OrderHistoryFetchResult, SetOrder } from "./types";
 import { Provider } from "./context";
-import { removeOrderFromList, replaceOrPushOrder } from "./reducer";
-import { fetchOpenOrders, fetchOrderHistory, processOrderData } from "./helper";
+import {
+  fetchOpenOrders,
+  fetchOrderHistory,
+  processOrderData,
+  removeOrderFromList,
+  replaceOrPushOrder,
+} from "./helper";
 
 const { defaultStorageLimit } = defaultConfig;
 
@@ -117,7 +121,7 @@ export const OrderHistoryProvider = ({ children }) => {
   };
 
   const onOrderUpdates = useCallback(
-    (payload: A.OrderUpdateEvent["payload"]) => {
+    (payload: SetOrder) => {
       try {
         const newOrder = processOrderData(payload);
 
@@ -172,15 +176,12 @@ export const OrderHistoryProvider = ({ children }) => {
             return updatedOpenOrders;
           }
         );
-
-        // dispatch(A.orderUpdateEventData(order));
       } catch (error) {
         console.log(
           error,
           "Something has gone wrong (order updates channel)..."
         );
         onHandleError(`Order updates channel ${error?.message ?? error}`);
-        // dispatch(A.orderUpdateEventError(error));
       }
     },
     [onHandleError, dateFrom, dateTo, queryClient, tradeAddress]
