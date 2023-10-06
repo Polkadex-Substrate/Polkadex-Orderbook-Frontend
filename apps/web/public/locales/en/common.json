@@ -20,5 +20,6 @@
   "disclaimer": "Disclaimer",
   "dataRetentionPolicy": "Data Retention Policy",
   "excludedJurisdictions": "Excluded Jurisdictions",
-  "max": "MAX"
+  "max": "MAX",
+  "transfer": "Transfer"
 }
