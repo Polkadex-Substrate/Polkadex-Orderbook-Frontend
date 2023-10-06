@@ -31,7 +31,7 @@ const menuItems = {
     },
     {
       title: "thea",
-      link: "http://thea.polkadex.trade",
+      link: "https://thea.polkadex.trade",
     },
   ],
   about: [
@@ -467,7 +467,7 @@ export function LandingTemplate() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="http://thea.polkadex.trade" target="_blank">
+                  <Link href="https://thea.polkadex.trade" target="_blank">
                     {t("header.thea")}
                   </Link>
                 </li>
