@@ -122,29 +122,42 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   };
 
   const updateBalanceFromEvent = useCallback(
-    (msg: T.BalanceUpdatePayload): Omit<T.Balance, "onChainBalance"> => {
+    async (msg: T.BalanceUpdatePayload): Promise<T.Balance> => {
       const assetId = msg.asset.asset;
-      return {
+
+      const payload = {
         name: selectGetAsset(assetId)?.name || "",
         symbol: selectGetAsset(assetId)?.symbol || "",
         assetId: assetId.toString(),
         free_balance: msg.free,
         reserved_balance: msg.reserved,
       };
+
+      if (api?.isConnected) {
+        await api?.isReady;
+        const chainBalance = await fetchOnChainBalance(
+          api,
+          assetId,
+          mainAddress
+        );
+        return { ...payload, onChainBalance: chainBalance.toString() };
+      }
+
+      return { ...payload, onChainBalance: "0" };
     },
-    [selectGetAsset]
+    [selectGetAsset, api, mainAddress]
   );
 
   const onBalanceUpdate = useCallback(
-    (payload: T.BalanceUpdatePayload) => {
+    async (payload: T.BalanceUpdatePayload) => {
       try {
-        const updateBalance = updateBalanceFromEvent(payload);
+        const updateBalance = await updateBalanceFromEvent(payload);
         dispatch(A.balanceUpdateEventData(updateBalance));
       } catch (error) {
         onHandleError("Something has gone wrong while updating balance");
       }
     },
-    [onHandleError, updateBalanceFromEvent]
+    [updateBalanceFromEvent, onHandleError]
   );
 
   useEffect(() => {

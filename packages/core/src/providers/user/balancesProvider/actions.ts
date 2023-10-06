@@ -30,7 +30,7 @@ export interface BalancesUpdateEvent {
 }
 export interface BalanceUpdateEventData {
   type: typeof BALANCES_UPDATE_EVENT_DATA;
-  payload: Omit<T.Balance, "onChainBalance">;
+  payload: T.Balance;
 }
 export type BalancesAction =
   | BalancesFetch
@@ -44,7 +44,7 @@ export const balancesFetch = (): BalancesFetch => ({
 });
 
 export const balancesData = (
-  payload: BalancesData["payload"],
+  payload: BalancesData["payload"]
 ): BalancesData => ({
   type: BALANCES_DATA,
   payload,
@@ -56,14 +56,14 @@ export const balancesError = (error: CommonError): BalancesError => ({
 });
 
 export const balanceUpdateEvent = (
-  payload: BalancesUpdateEvent["payload"],
+  payload: BalancesUpdateEvent["payload"]
 ): BalancesUpdateEvent => ({
   type: BALANCES_UPDATE_EVENT,
   payload,
 });
 
 export const balanceUpdateEventData = (
-  payload: BalanceUpdateEventData["payload"],
+  payload: BalanceUpdateEventData["payload"]
 ): BalanceUpdateEventData => ({
   type: BALANCES_UPDATE_EVENT_DATA,
   payload,
