@@ -6092,6 +6092,11 @@
   resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.45.tgz#005ab29c31502e1b82d2a9c54a4dcc12dd1f0f58"
   integrity sha512-xc8X9FrdZcWoOd4tMhLenYbnmaxCgy2FBt+SOI7xv9Efy/7Jk2V9gBZiufFBLIfDUUvpWY7DN3x4lrdL1I9y0Q==
 
+"@types/google.accounts@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@types/google.accounts/-/google.accounts-0.0.11.tgz#0685500115e28e2f0c93c718f12b60600615d9b4"
+  integrity sha512-/NaSZRkfnEMSRmNlu5G9mCxw81cymH0ugp1nVnk2athboz7kZu3FqLD+ehbfD3CBO5licFhFdR+JAjAT/DaqNQ==
+
 "@types/graceful-fs@^4.1.3":
   version "4.1.7"
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.7.tgz#30443a2e64fd51113bc3e2ba0914d47109695e2a"

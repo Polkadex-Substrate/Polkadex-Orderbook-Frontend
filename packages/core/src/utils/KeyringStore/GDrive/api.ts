@@ -1,5 +1,5 @@
-import { loadGapiInsideDOM, gapi as GapiClient } from "gapi-script";
-import { waitForDocumentReady } from "@orderbook/core/utils";
+import { documentHelpers } from "@orderbook/core/utils";
+import { ScriptLoader } from "@orderbook/core/utils/scriptLoader";
 type GoogleApiOptions = {
   apiKey: string;
   discoveryDocs?: string[];
@@ -7,22 +7,24 @@ type GoogleApiOptions = {
 class GoogleApi {
   private options!: GoogleApiOptions;
   private _ready!: boolean;
-  protected gapi: typeof GapiClient;
+
   public setOptions(options: GoogleApiOptions): void {
     this.options = { ...options };
   }
 
   public async init() {
     if (this._ready) return;
-    await waitForDocumentReady();
-    this.gapi = await loadGapiInsideDOM();
+    await Promise.all([
+      ScriptLoader.load("https://apis.google.com/js/api.js"),
+      documentHelpers(),
+    ]);
     await this.initGapiClient(this.options);
   }
 
   private async initGapiClient(options: GoogleApiOptions) {
     return new Promise<void>((resolve, reject) => {
-      this.gapi.load("client", () => {
-        this.gapi.client
+      gapi.load("client", () => {
+        gapi.client
           .init({ ...options })
           .then(() => {
             this._ready = true;
@@ -41,7 +43,7 @@ export class GoogleDriveApi extends GoogleApi {
   };
 
   public async readFile(fileId: string) {
-    const response = await this.gapi.client.drive.files.get({
+    const response = await gapi.client.drive.files.get({
       fileId,
       alt: "media",
     });
@@ -50,7 +52,7 @@ export class GoogleDriveApi extends GoogleApi {
   }
 
   public async deleteFile(fileId: string) {
-    await this.gapi.client.drive.files.delete({
+    await gapi.client.drive.files.delete({
       fileId,
     });
   }
@@ -71,7 +73,7 @@ export class GoogleDriveApi extends GoogleApi {
   }
 
   public async createFile(metadata: gapi.client.drive.File): Promise<string> {
-    const response = await this.gapi.client.drive.files.create({
+    const response = await gapi.client.drive.files.create({
       resource: metadata,
       fields: "id",
     });

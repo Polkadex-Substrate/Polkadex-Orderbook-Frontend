@@ -2,7 +2,7 @@
   "extends": "@orderbook/tsconfig/nextjs.json",
   "compilerOptions": {
     "lib": ["DOM"],
-    "types": ["gapi", "jest", "gapi.client.drive-v3"],
+    "types": ["gapi", "jest", "gapi.client.drive-v3", "google.accounts"],
     "paths": {
       "@orderbook/core/*": ["./src/*"]
     }
