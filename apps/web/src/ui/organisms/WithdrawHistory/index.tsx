@@ -30,7 +30,7 @@ export const WithdrawHistory = ({
 }) => {
   const { t } = useTranslation("transfer");
 
-  const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(true);
+  const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
 
   const { selectGetAsset } = useAssetsProvider();
   const { allWithdrawals, readyWithdrawals, loading } =
