@@ -21,5 +21,6 @@
   "dataRetentionPolicy": "Data Retention Policy",
   "excludedJurisdictions": "Excluded Jurisdictions",
   "max": "MAX",
-  "transfer": "Transfer"
+  "transfer": "Transfer",
+  "externalLink": "External link"
 }

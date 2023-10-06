@@ -2,7 +2,14 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useFunds } from "@orderbook/core/hooks";
-import { EmptyData, Icon, Table } from "@polkadex/orderbook-ui/molecules";
+import {
+  EmptyData,
+  Icon,
+  Table,
+  Tooltip,
+  TooltipContent,
+  TooltipHeader,
+} from "@polkadex/orderbook-ui/molecules";
 import {
   toCapitalize,
   filterBlockedAssets,
@@ -70,15 +77,44 @@ export const Funds = ({ onHideFilters }) => {
                 </Table.Cell>
                 <Table.Cell>
                   <S.Actions>
-                    <Link href="https://thea.polkadex.trade/" target="_blank">
-                      <S.DepositLink>{tc("deposit")}</S.DepositLink>
-                    </Link>
-                    <Link
-                      href="https://thea.polkadex.trade/withdraw"
-                      target="_blank"
-                    >
-                      <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
-                    </Link>
+                    <Tooltip>
+                      <TooltipHeader>
+                        <Link
+                          href="https://thea.polkadex.trade/"
+                          target="_blank"
+                        >
+                          <S.DepositLink>{tc("deposit")}</S.DepositLink>
+                        </Link>
+                      </TooltipHeader>
+                      <TooltipContent
+                        style={{ transform: "translateY(-0.8rem)" }}
+                        background="text"
+                      >
+                        <S.TooltipMessage>
+                          {tc("externalLink")}
+                        </S.TooltipMessage>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                      <TooltipHeader>
+                        <Link
+                          href="https://thea.polkadex.trade/withdraw"
+                          target="_blank"
+                        >
+                          <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
+                        </Link>
+                      </TooltipHeader>
+                      <TooltipContent
+                        style={{ transform: "translateY(-0.8rem)" }}
+                        background="text"
+                      >
+                        <S.TooltipMessage>
+                          {tc("externalLink")}
+                        </S.TooltipMessage>
+                      </TooltipContent>
+                    </Tooltip>
+
                     <Link href={`/transfer?token=${item.symbol}`}>
                       <S.TransferLink>
                         <S.Icon>

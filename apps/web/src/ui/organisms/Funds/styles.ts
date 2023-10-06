@@ -129,3 +129,10 @@ export const Icon = styled.div`
   vertical-align: middle;
   margin-right: 0.5rem;
 `;
+
+export const TooltipMessage = styled.div`
+  ${({ theme }) => css`
+    white-space: nowrap;
+    color: ${theme.colors.inverse};
+  `}
+`;
