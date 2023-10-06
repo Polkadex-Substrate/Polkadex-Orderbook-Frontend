@@ -5,6 +5,7 @@ import { useFunds } from "@orderbook/core/hooks";
 import {
   EmptyData,
   Icon,
+  Skeleton,
   Table,
   Tooltip,
   TooltipContent,
@@ -21,7 +22,7 @@ import * as S from "./styles";
 import { Icons } from "@/ui/atoms";
 
 export const Funds = ({ onHideFilters }) => {
-  const { balances } = useFunds();
+  const { balances, isLoading } = useFunds();
   const allBalances = filterBlockedAssets(balances);
   useEffect(() => {
     onHideFilters(false);
@@ -31,6 +32,8 @@ export const Funds = ({ onHideFilters }) => {
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`funds.${key}`);
   const { t: tc } = useTranslation("common");
+
+  if (isLoading) return <SkeletonLoader />;
 
   return (
     <S.Wrapper>
@@ -135,5 +138,17 @@ export const Funds = ({ onHideFilters }) => {
         </S.EmptyWrapper>
       )}
     </S.Wrapper>
+  );
+};
+
+export const SkeletonLoader = () => {
+  return (
+    <S.SkeletonWrapper>
+      <Skeleton width="100%" height="5rem" />
+      <Skeleton width="100%" height="5rem" />
+      <Skeleton width="100%" height="5rem" />
+      <Skeleton width="100%" height="5rem" />
+      <Skeleton width="100%" height="5rem" />
+    </S.SkeletonWrapper>
   );
 };

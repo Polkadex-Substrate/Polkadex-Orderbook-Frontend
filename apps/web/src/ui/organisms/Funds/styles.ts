@@ -136,3 +136,9 @@ export const TooltipMessage = styled.div`
     color: ${theme.colors.inverse};
   `}
 `;
+
+export const SkeletonWrapper = styled.div`
+  div {
+    margin-block: 1rem;
+  }
+`;
