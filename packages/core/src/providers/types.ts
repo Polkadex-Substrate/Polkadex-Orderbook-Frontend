@@ -71,7 +71,5 @@ export type Ifilters = {
   onlyBuy: boolean;
   onlySell: boolean;
   showReverted: boolean;
-  status: "All Transactions" | "Pending" | "Completed" | "Cancelled";
-  dateFrom?: Date;
-  dateTo?: Date;
+  status: "All Orders" | "Pending" | "Completed" | "Cancelled";
 };

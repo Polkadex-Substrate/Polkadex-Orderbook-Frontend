@@ -28,7 +28,7 @@ export const Tbody = styled(Grid)`
   font-size: 1.3rem;
 
   ${media.greaterThan("large")`
-    height: 32rem;
+    height: 30rem;
     display: block;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;

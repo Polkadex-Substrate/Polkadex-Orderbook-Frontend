@@ -56,7 +56,7 @@ export function useOrderbook() {
   useEffect(() => {
     const precision = Math.min(
       initialState.length - 1,
-      Math.max(1, pricePrecision - 1),
+      Math.max(1, pricePrecision - 1)
     );
     setSizeState(initialState[precision]);
   }, [pricePrecision, setSizeState]);

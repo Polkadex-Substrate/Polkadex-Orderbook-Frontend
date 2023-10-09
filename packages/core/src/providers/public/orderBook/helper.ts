@@ -2,7 +2,7 @@ import { OrderBookState, OrderBookDbState } from "./types";
 
 // TODO: UNUSED_DELETE
 export function getDepthFromOrderbook(
-  data: OrderBookDbState[],
+  data: OrderBookDbState[]
 ): OrderBookState["depth"] {
   const bids = data
     .filter((data) => data.s === "Bid")
