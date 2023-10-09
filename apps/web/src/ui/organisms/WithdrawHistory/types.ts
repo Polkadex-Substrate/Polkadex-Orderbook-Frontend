@@ -17,6 +17,7 @@ export interface ReadyToClaimProps extends WithdrawGroupItem {
   token: {
     name: string;
     ticker: string;
+    assetId: string;
   };
   wallets: {
     fromWalletName: string;

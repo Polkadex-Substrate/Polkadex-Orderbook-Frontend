@@ -17,6 +17,7 @@ import { useProfile, UserAccount } from "../profile";
 import { useExtensionWallet } from "../extensionWallet";
 import { selectTradeAccount } from "../tradeWallet/helper";
 import { useTradeWallet } from "../tradeWallet";
+import { useBalancesProvider } from "../balancesProvider";
 
 import * as A from "./actions";
 import * as T from "./types";
@@ -25,6 +26,7 @@ import { initialState, withdrawsReducer } from "./reducer";
 
 export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(withdrawsReducer, initialState);
+  const { onChangeChainBalance } = useBalancesProvider();
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
   const settingsState = useSettingsProvider();
@@ -90,6 +92,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
 
   const onFetchClaimWithdraw = async ({
     sid,
+    assetIds,
   }: A.WithdrawsClaimFetch["payload"]) => {
     try {
       const api = nativeApiState.api;
@@ -108,7 +111,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
           message:
             "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
         });
-        dispatch(A.withdrawsClaimFetch({ sid }));
+        dispatch(A.withdrawsClaimFetch({ sid, assetIds }));
 
         const res = await claimWithdrawal(
           api,
@@ -137,6 +140,10 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
       dispatch(A.withdrawClaimCancel(sid));
       settingsState.onHandleError(error?.message ?? error);
       dispatch(A.withdrawsError(error));
+    } finally {
+      for (const assetId of assetIds) {
+        await onChangeChainBalance(assetId);
+      }
     }
   };
 

@@ -114,6 +114,7 @@ export const WithdrawHistory = ({
             token: {
               ticker: token?.symbol,
               name: token?.name,
+              assetId: token?.assetId,
             },
             wallets: {
               fromWalletName: fundingWallet?.account?.meta?.name ?? "",

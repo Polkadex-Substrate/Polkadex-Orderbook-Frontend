@@ -28,6 +28,7 @@ export interface WithdrawsClaimFetch {
   type: typeof WITHDRAWS_CLAIM_FETCH;
   payload: {
     sid: number;
+    assetIds: string[];
   };
 }
 
@@ -63,7 +64,7 @@ export type WithdrawsAction =
   | WithdrawClaimCancel;
 
 export const withdrawsFetch = (
-  payload: WithdrawsFetch["payload"],
+  payload: WithdrawsFetch["payload"]
 ): WithdrawsFetch => ({
   type: WITHDRAWS_FETCH,
   payload,
@@ -79,14 +80,14 @@ export const withdrawsError = (error: string): WithdrawsError => ({
 });
 
 export const withdrawsClaimFetch = (
-  payload: WithdrawsClaimFetch["payload"],
+  payload: WithdrawsClaimFetch["payload"]
 ): WithdrawsClaimFetch => ({
   type: WITHDRAWS_CLAIM_FETCH,
   payload,
 });
 
 export const withdrawsClaimData = (
-  payload: WithdrawsClaimData["payload"],
+  payload: WithdrawsClaimData["payload"]
 ): WithdrawsClaimData => ({
   type: WITHDRAWS_CLAIM_DATA,
   payload,

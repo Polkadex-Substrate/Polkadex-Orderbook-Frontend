@@ -88,7 +88,12 @@ const BatchTable = ({
         <button
           type="button"
           disabled={loading}
-          onClick={async () => await onFetchClaimWithdraw({ sid: batch })}
+          onClick={async () =>
+            await onFetchClaimWithdraw({
+              sid: batch,
+              assetIds: data.map((e) => e.token.assetId),
+            })
+          }
         >
           {loading ? (
             <>
