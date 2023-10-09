@@ -2,16 +2,14 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
-import {
-  EmptyData,
-  OpenOrderCard,
-  Skeleton,
-} from "@polkadex/orderbook-ui/molecules";
+import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 import { useOpenOrders } from "@orderbook/core/index";
+
+import { TransactionsSkeleton } from "../Transactions";
 
 import * as S from "./styles";
 
@@ -43,11 +41,11 @@ export const OpenOrders = ({ filters, onHideTransactionDropdown }: Props) => {
     return () => onHideTransactionDropdown(true);
   }, [onHideTransactionDropdown]);
 
+  if (isLoading) return <TransactionsSkeleton />;
+
   return (
     <S.Wrapper>
-      {isLoading ? (
-        <SkeletonLoader />
-      ) : openOrders?.length ? (
+      {openOrders?.length ? (
         <S.Table>
           <S.Thead>
             <S.Tr>
@@ -118,17 +116,5 @@ export const OpenOrders = ({ filters, onHideTransactionDropdown }: Props) => {
         </S.EmptyWrapper>
       )}
     </S.Wrapper>
-  );
-};
-
-const SkeletonLoader = () => {
-  return (
-    <S.SkeletonWrapper>
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-    </S.SkeletonWrapper>
   );
 };

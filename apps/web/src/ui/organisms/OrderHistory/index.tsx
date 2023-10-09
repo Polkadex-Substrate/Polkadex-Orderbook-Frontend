@@ -6,7 +6,6 @@ import {
   EmptyData,
   LoadingSpinner,
   Button,
-  Skeleton,
 } from "@polkadex/orderbook-ui/molecules";
 import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
@@ -14,6 +13,8 @@ import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProv
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 import { useOrderHistory } from "@orderbook/core/index";
+
+import { TransactionsSkeleton } from "../Transactions";
 
 import * as S from "./styles";
 
@@ -41,11 +42,11 @@ export const OrderHistory = ({ filters }: Props) => {
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`orderHistory.${key}`);
 
+  if (isLoading) return <TransactionsSkeleton />;
+
   return (
     <S.Wrapper>
-      {isLoading ? (
-        <SkeletonLoader />
-      ) : orderHistory?.length ? (
+      {orderHistory?.length ? (
         <S.Table>
           <S.Thead>
             <S.Tr>
@@ -144,17 +145,5 @@ export const OrderHistory = ({ filters }: Props) => {
         </S.EmptyWrapper>
       )}
     </S.Wrapper>
-  );
-};
-
-const SkeletonLoader = () => {
-  return (
-    <S.SkeletonWrapper>
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-    </S.SkeletonWrapper>
   );
 };

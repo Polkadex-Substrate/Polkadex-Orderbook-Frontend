@@ -212,6 +212,15 @@ export const Transactions = () => {
     </S.Section>
   );
 };
-export const TransactionsSkeleton = () => (
-  <Skeleton height="100%" width="100%" minWidth="350px" />
-);
+
+export const TransactionsSkeleton = () => {
+  return (
+    <S.SkeletonWrapper>
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+    </S.SkeletonWrapper>
+  );
+};

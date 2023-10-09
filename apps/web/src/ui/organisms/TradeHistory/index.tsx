@@ -7,11 +7,12 @@ import {
   Button,
   EmptyData,
   LoadingSpinner,
-  Skeleton,
   TradeHistoryCard,
 } from "@polkadex/orderbook-ui/molecules";
 import { Ifilters } from "@orderbook/core/providers/types";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+
+import { TransactionsSkeleton } from "../Transactions";
 
 import * as S from "./styles";
 
@@ -40,11 +41,11 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
     return () => onHideTransactionDropdown(true);
   }, [onHideTransactionDropdown]);
 
+  if (isLoading) return <TransactionsSkeleton />;
+
   return (
     <S.Wrapper>
-      {isLoading ? (
-        <SkeletonLoader />
-      ) : trades.length ? (
+      {trades.length ? (
         <S.Table>
           <S.Thead>
             <S.Tr>
@@ -113,17 +114,5 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
         </S.EmptyWrapper>
       )}
     </S.Wrapper>
-  );
-};
-
-const SkeletonLoader = () => {
-  return (
-    <S.SkeletonWrapper>
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-    </S.SkeletonWrapper>
   );
 };

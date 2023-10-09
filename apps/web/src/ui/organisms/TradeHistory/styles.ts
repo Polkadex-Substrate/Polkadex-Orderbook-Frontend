@@ -73,9 +73,3 @@ export const ErrorWrapper = styled.div`
     }
   `}
 `;
-
-export const SkeletonWrapper = styled.div`
-  div {
-    margin-block: 1rem;
-  }
-`;
