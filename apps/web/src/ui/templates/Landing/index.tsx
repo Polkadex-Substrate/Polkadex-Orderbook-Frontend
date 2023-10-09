@@ -10,7 +10,7 @@ import { useState } from "react";
 import classNames from "classnames";
 
 import SpeedImage from "../../../../public/img/speed.webp";
-import FeesImage from "../../../../public/img/fees.webp";
+import PadLock from "../../../../public/img/padlock.webp";
 import MarketImage from "../../../../public/img/market.webp";
 import NonCustodial from "../../../../public/img/nonCustodial.webp";
 
@@ -27,11 +27,11 @@ const menuItems = {
   products: [
     {
       title: "orderbook",
-      link: "https://polkadex.trade/orderbook",
+      link: "https://orderbook.polkadex.trade/trading",
     },
     {
       title: "thea",
-      link: "http://thea.polkadex.trade",
+      link: "https://thea.polkadex.trade",
     },
   ],
   about: [
@@ -42,10 +42,6 @@ const menuItems = {
     {
       title: "roadmap",
       link: "https://polkadex.trade/roadmap",
-    },
-    {
-      title: "team",
-      link: "https://polkadex.trade/team",
     },
   ],
   resources: [
@@ -119,9 +115,9 @@ export function LandingTemplate() {
                     <ul>
                       {menuItems.products.map((v) => (
                         <li key={v.title}>
-                          <Link href={v.link} target="_blank">
+                          <a href={v.link} target="_blank" rel="noreferrer">
                             {t(`header.${v.title}`)}
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -131,9 +127,9 @@ export function LandingTemplate() {
                     <ul>
                       {menuItems.about.map((v) => (
                         <li key={v.title}>
-                          <Link href={v.link} target="_blank">
+                          <a href={v.link} target="_blank" rel="noreferrer">
                             {t(`header.${v.title}`)}
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -143,9 +139,9 @@ export function LandingTemplate() {
                     <ul>
                       {menuItems.resources.map((v) => (
                         <li key={v.title}>
-                          <Link href={v.link} target="_blank">
+                          <a href={v.link} target="_blank" rel="noreferrer">
                             {t(`header.${v.title}`)}
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -155,9 +151,9 @@ export function LandingTemplate() {
                     <ul>
                       {menuItems.community.map((v) => (
                         <li key={v.title}>
-                          <Link href={v.link} target="_blank">
+                          <a href={v.link} target="_blank" rel="noreferrer">
                             {t(`header.${v.title}`)}
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -168,6 +164,7 @@ export function LandingTemplate() {
           )}
           <S.Logo href="/">
             <OrderbookLogo light />
+            <span>BETA</span>
           </S.Logo>
           <S.Aside>
             <S.Menu>
@@ -340,7 +337,7 @@ export function LandingTemplate() {
                       <p>{t("benefits.twoDescription")}</p>
                     </div>
                     <Image
-                      src={FeesImage}
+                      src={PadLock}
                       placeholder="blur"
                       alt={t("benefits.feesAlt")}
                       style={{
@@ -403,7 +400,10 @@ export function LandingTemplate() {
                 <h3>{t("help.faqTitle")}</h3>
                 <p>{t("help.faqDescription")}</p>
               </S.SupportCardHeader>
-              <Link href="/">
+              <Link
+                href="https://docs.polkadex.trade/orderbookPolkadexFAQWallets"
+                target="_blank"
+              >
                 {t("help.faqButton")}
                 <Icons.SingleArrowRight />
               </Link>
@@ -447,21 +447,8 @@ export function LandingTemplate() {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="https://docs.polkadex.trade/whatispolkadex"
-                    target="_blank"
-                  >
-                    {t("footer.features")}
-                  </Link>
-                </li>
-                <li>
                   <Link href="https://polkadex.trade/roadmap" target="_blank">
                     {t("header.roadmap")}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="https://polkadex.trade/team" target="_blank">
-                    {t("header.team")}
                   </Link>
                 </li>
                 <li>
@@ -483,10 +470,7 @@ export function LandingTemplate() {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="https://polkadex.medium.com/thea-a-better-decentralized-token-bridge-ac2e362a2a2b"
-                    target="_blank"
-                  >
+                  <Link href="https://thea.polkadex.trade" target="_blank">
                     {t("header.thea")}
                   </Link>
                 </li>
@@ -495,11 +479,6 @@ export function LandingTemplate() {
             <div>
               <strong> {t("header.resources")}</strong>
               <ul>
-                <li>
-                  <Link href="https://docs.polkadex.trade/" target="_blank">
-                    {t("footer.docs")}
-                  </Link>
-                </li>
                 <li>
                   <Link
                     href="https://github.com/Polkadex-Substrate"
@@ -540,7 +519,10 @@ export function LandingTemplate() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://t.me/Polkadex" target="_blank">
+                  <Link
+                    href="https://docs.polkadex.trade/orderbookPolkadexFAQWallets"
+                    target="_blank"
+                  >
                     {t("footer.guide")}
                   </Link>
                 </li>
@@ -615,9 +597,9 @@ const MenuDropdown = ({ title, items }) => {
       <Menu.Items className="dropdownContent">
         {items?.map((value, i) => (
           <Menu.Item key={i}>
-            <Link target="_blank" href={value.title}>
+            <a target="_blank" href={value.link} rel="noreferrer">
               {t(`header.${value.title}`)}
-            </Link>
+            </a>
           </Menu.Item>
         ))}
       </Menu.Items>
