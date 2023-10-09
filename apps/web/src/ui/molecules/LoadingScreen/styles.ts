@@ -1,6 +1,7 @@
 import styled, { css, keyframes } from "styled-components";
 
 export const Container = styled.div`
+  position: relative;
   display: grid;
   place-items: center;
   min-height: 100vh;

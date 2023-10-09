@@ -76,6 +76,7 @@ export const Header = ({
           <Link href="/">
             <PolkadexLogo />
           </Link>
+          <span>BETA</span>
         </S.Logo>
         <S.ContentFull>{children}</S.ContentFull>
       </S.Content>
