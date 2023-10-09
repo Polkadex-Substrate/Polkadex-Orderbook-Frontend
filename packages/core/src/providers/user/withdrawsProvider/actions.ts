@@ -28,7 +28,7 @@ export interface WithdrawsClaimFetch {
   type: typeof WITHDRAWS_CLAIM_FETCH;
   payload: {
     sid: number;
-    assetIds: string[];
+    assetIds?: string[];
   };
 }
 

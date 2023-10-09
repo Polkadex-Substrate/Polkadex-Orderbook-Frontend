@@ -92,7 +92,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
 
   const onFetchClaimWithdraw = async ({
     sid,
-    assetIds,
+    assetIds = [],
   }: A.WithdrawsClaimFetch["payload"]) => {
     try {
       const api = nativeApiState.api;
