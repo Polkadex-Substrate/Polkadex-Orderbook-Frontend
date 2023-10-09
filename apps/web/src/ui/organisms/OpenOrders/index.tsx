@@ -1,16 +1,25 @@
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { OrderCommon } from "@orderbook/core/providers/types";
+import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
 import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
+import { useOpenOrders } from "@orderbook/core/index";
+
+import { TransactionsSkeleton } from "../Transactions";
 
 import * as S from "./styles";
 
-export const OpenOrders = ({ orderHistory }) => {
-  const { openOrders } = orderHistory;
+type Props = {
+  filters: Ifilters;
+  onHideTransactionDropdown: (v: boolean) => void;
+};
+
+export const OpenOrders = ({ filters, onHideTransactionDropdown }: Props) => {
+  const { isLoading, openOrders } = useOpenOrders(filters);
   const { currentMarket } = useMarketsProvider();
   const { selectGetAsset } = useAssetsProvider();
 
@@ -26,6 +35,13 @@ export const OpenOrders = ({ orderHistory }) => {
     : MIN_DIGITS_AFTER_DECIMAL;
 
   const filledQtyPrecision = Math.max(priceFixed, amountFixed);
+
+  useEffect(() => {
+    onHideTransactionDropdown(false);
+    return () => onHideTransactionDropdown(true);
+  }, [onHideTransactionDropdown]);
+
+  if (isLoading) return <TransactionsSkeleton />;
 
   return (
     <S.Wrapper>

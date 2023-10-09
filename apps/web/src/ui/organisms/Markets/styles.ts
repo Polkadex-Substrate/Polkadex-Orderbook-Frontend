@@ -42,7 +42,6 @@ export const Header = styled.div`
   grid-gap: 1rem;
   align-items: center;
   cursor: pointer;
-  width: 100%;
 `;
 
 export const HeaderAsideContainer = styled.div<{ background: boolean }>`
@@ -89,7 +88,7 @@ export const HeaderAsideCenter = styled.div`
   height: 4rem;
   min-width: 10rem;
   margin-left: 1rem;
-  @media screen and (max-width: 850px) {
+  @media (min-width: 780px) and (max-width: 850px) {
     display: none;
   }
 `;

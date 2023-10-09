@@ -1,82 +1,116 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect } from "react";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { eventHandler } from "@orderbook/core/helpers";
+import { QUERY_KEYS } from "@orderbook/core/constants";
 
 import { useProfile } from "../profile";
+import { useSessionProvider } from "../sessionProvider";
+import { useMarketsProvider } from "../../public/marketsProvider";
 
 import { Provider } from "./context";
-import { tradesReducer, initialState } from "./reducer";
 import * as T from "./types";
-import * as A from "./actions";
 import { processTradeData, fetchUserTrades } from "./helper";
 
 export const TradesProvider: T.TradesComponent = ({ children }) => {
-  const [state, dispatch] = useReducer(tradesReducer, initialState);
-  const profileState = useProfile();
-  const { mainAddress } = profileState.selectedAccount;
+  const queryClient = useQueryClient();
+  const {
+    selectedAccount: { tradeAddress },
+  } = useProfile();
   const { onHandleError } = useSettingsProvider();
+  const { dateFrom, dateTo } = useSessionProvider();
+  const { currentMarket } = useMarketsProvider();
 
-  // Actions
-  const onFetchTrades = useCallback(
-    async ({ dateFrom, dateTo, tradeAddress, tradeHistoryFetchToken }) => {
-      try {
-        if (tradeAddress) {
-          const { trades, nextToken } = await fetchUserTrades(
-            tradeAddress,
-            dateFrom,
-            dateTo,
-            tradeHistoryFetchToken,
-          );
-          dispatch(A.userTradesData({ trades, nextToken }));
-        }
-      } catch (error) {
-        onHandleError(error?.message ?? error);
-        dispatch(A.userTradesError(error));
-      }
-    },
-    [onHandleError],
+  const userLoggedIn = tradeAddress !== "";
+
+  const shouldFetchTradeHistory = Boolean(
+    userLoggedIn && currentMarket && tradeAddress
   );
 
+  const { data, fetchNextPage, isLoading, isSuccess, hasNextPage } =
+    useInfiniteQuery({
+      queryKey: QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
+      enabled: shouldFetchTradeHistory,
+      queryFn: async ({ pageParam = null }) => {
+        return await onFetchTradesData({
+          dateFrom,
+          dateTo,
+          tradeAddress,
+          tradeHistoryFetchToken: pageParam,
+        });
+      },
+      getNextPageParam: (lastPage) => {
+        // If the last page contains nextToken as null, don't fetch the next page
+        if (!lastPage.nextToken) {
+          return false;
+        }
+        return lastPage.nextToken;
+      },
+    });
+
+  const onFetchTradesData = async ({
+    dateFrom,
+    dateTo,
+    tradeAddress,
+    tradeHistoryFetchToken,
+  }) => {
+    if (tradeAddress) {
+      const { trades, nextToken } = await fetchUserTrades(
+        tradeAddress,
+        dateFrom,
+        dateTo,
+        tradeHistoryFetchToken
+      );
+      return { data: [...trades], nextToken };
+    }
+    return { data: [], nextToken: null };
+  };
+
   const onUserTradeUpdate = useCallback(
-    (payload: A.UserTradesUpdateEvent["payload"]) => {
+    (payload: T.UserTradeEvent) => {
       try {
         const trade = processTradeData(payload);
-        dispatch(A.userTradesUpdateData(trade));
+        queryClient.setQueryData(
+          QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
+          (oldTradeHistory: any) => {
+            const payload = {
+              data: [trade as T.UserTrade],
+              nextToken: null,
+            };
+            return {
+              pages: [payload, ...oldTradeHistory.pages],
+              pageParams: [...oldTradeHistory.pageParams],
+            };
+          }
+        );
       } catch (error) {
         onHandleError(`User trades channel error: ${error?.message ?? error}`);
       }
     },
-    [onHandleError],
+    [onHandleError, queryClient, dateFrom, dateTo, tradeAddress]
   );
 
-  const onUserTradesError = (payload: A.UserTradesError["error"]) => {
-    dispatch(A.userTradesError(payload));
-  };
   useEffect(() => {
-    if (mainAddress) {
+    if (tradeAddress) {
       const subscription = eventHandler({
         cb: onUserTradeUpdate,
-        name: mainAddress,
+        name: tradeAddress,
         eventType: "TradeFormat",
       });
       return () => {
         subscription.unsubscribe();
       };
     }
-  }, [mainAddress, onUserTradeUpdate]);
-
-  useEffect(() => {
-    if (profileState.selectedAccount.tradeAddress)
-      dispatch(A.userTradesReset());
-  }, [profileState.selectedAccount.tradeAddress]);
+  }, [tradeAddress, onUserTradeUpdate]);
 
   return (
     <Provider
       value={{
-        ...state,
-        onFetchTrades,
-        onUserTradeUpdate,
-        onUserTradesError,
+        data: data?.pages.flatMap((page) => page.data) ?? [],
+        success: isSuccess,
+        loading: isLoading,
+        hasNextPage,
+        onFetchNextPage: fetchNextPage,
       }}
     >
       {children}
