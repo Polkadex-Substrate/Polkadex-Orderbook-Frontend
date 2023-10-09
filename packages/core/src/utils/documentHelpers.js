@@ -1,4 +1,4 @@
-export function documentHelpers() {
+export function waitDocumentReady() {
   return new ((resolve) => {
     if (document.readyState === "complete") {
       resolve();
