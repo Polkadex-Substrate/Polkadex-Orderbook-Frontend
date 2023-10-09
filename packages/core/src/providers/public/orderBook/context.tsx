@@ -1,16 +1,12 @@
 import { createContext } from "react";
 
-import {
-  OrderBookContextProps,
-  OrderBookProviderProps,
-  OrderBookState,
-} from "./types";
+import { OrderBookProviderProps, OrderBookState } from "./types";
 
 export const initialOrderBook: OrderBookState = {
   depth: { asks: [], bids: [], loading: true },
 };
 
-export const Context = createContext<OrderBookContextProps>({
+export const Context = createContext<OrderBookState>({
   ...initialOrderBook,
 });
 

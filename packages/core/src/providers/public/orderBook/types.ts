@@ -25,10 +25,8 @@ export interface OrderBookState {
 }
 
 export type OrderBookProviderProps = PropsWithChildren<{
-  value: OrderBookContextProps;
+  value: OrderBookState;
 }>;
-
-export type OrderBookContextProps = OrderBookState;
 
 export interface OrderBookProps {
   onError?: (value: string) => void;

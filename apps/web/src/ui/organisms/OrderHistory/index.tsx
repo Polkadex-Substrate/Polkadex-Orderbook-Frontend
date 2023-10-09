@@ -89,45 +89,45 @@ export const OrderHistory = ({ filters }: Props) => {
                     order.id.slice(order.id.length - 4);
                   const status = order.status;
                   const show = status !== "OPEN";
-                  return show ? (
-                    <OrderHistoryCard
-                      key={i}
-                      id={shortId}
-                      isSell={isSell}
-                      status={status}
-                      orderType={order.order_type}
-                      baseUnit={baseUnit}
-                      quoteUnit={quoteUnit}
-                      data={[
-                        { value: date },
-                        { value: order.order_type },
-                        { value: order.status },
-                        {
-                          value: isMarket
-                            ? "-"
-                            : Decimal.format(order.price, priceFixed, ","),
-                        },
-                        {
-                          value: Decimal.format(order.qty, amountFixed, ","),
-                        },
-                        {
-                          value: Decimal.format(
-                            order.filled_quantity,
-                            filledQtyPrecision,
-                            ","
-                          ),
-                        },
-                        {
-                          value: Decimal.format(
-                            avgPrice,
-                            Number(priceFixed),
-                            ","
-                          ),
-                        },
-                      ]}
-                    />
-                  ) : (
-                    <></>
+                  return (
+                    show && (
+                      <OrderHistoryCard
+                        key={i}
+                        id={shortId}
+                        isSell={isSell}
+                        status={status}
+                        orderType={order.order_type}
+                        baseUnit={baseUnit}
+                        quoteUnit={quoteUnit}
+                        data={[
+                          { value: date },
+                          { value: order.order_type },
+                          { value: order.status },
+                          {
+                            value: isMarket
+                              ? "-"
+                              : Decimal.format(order.price, priceFixed, ","),
+                          },
+                          {
+                            value: Decimal.format(order.qty, amountFixed, ","),
+                          },
+                          {
+                            value: Decimal.format(
+                              order.filled_quantity,
+                              filledQtyPrecision,
+                              ","
+                            ),
+                          },
+                          {
+                            value: Decimal.format(
+                              avgPrice,
+                              Number(priceFixed),
+                              ","
+                            ),
+                          },
+                        ]}
+                      />
+                    )
                   );
                 })}
               {!isLoading && error && (
