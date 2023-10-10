@@ -1,13 +1,5 @@
-import { setToStorage } from "@orderbook/core/helpers";
-import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
-
 import { MarketsAction } from "./actions";
-import {
-  MARKET_TICKER_CHANNEL_DATA,
-  MARKETS_SET_CURRENT_MARKET,
-  MARKETS_SET_CURRENT_MARKET_IFUNSET,
-  MARKETS_SET_CURRENT_TICKER,
-} from "./constants";
+import { MARKET_TICKER_CHANNEL_DATA } from "./constants";
 import { MarketsState, Ticker } from "./types";
 
 export const defaultTickers: Ticker = {
@@ -39,45 +31,6 @@ export const marketsReducer = (
   action: MarketsAction
 ): MarketsState => {
   switch (action.type) {
-    // case MARKETS_SET_CURRENT_MARKET: {
-    //   setToStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET, action.payload.id);
-    //   return {
-    //     ...state,
-    //     currentMarket: action.payload,
-    //   };
-    // }
-    // case MARKETS_SET_CURRENT_TICKER: {
-    //   console.log("came in reducer");
-    //   const tickers = [...state.tickers];
-    //   console.log("came in reducer 1", tickers);
-    //   const currentTicker = tickers?.find((x) => x.m === action.payload);
-    //   if (!currentTicker) {
-    //     return state;
-    //   }
-    //   console.log("set current ticker 2", currentTicker);
-    //   return {
-    //     ...state,
-    //     currentTicker,
-    //   };
-    // }
-    // case MARKETS_SET_CURRENT_MARKET_IFUNSET: {
-    //   if (state.currentMarket) {
-    //     return state;
-    //   }
-    //   const { market: currentMarket, ticker: currentTicker } = action.payload;
-    //   if (!currentTicker) {
-    //     return {
-    //       ...state,
-    //       currentMarket,
-    //     };
-    //   }
-
-    //   return {
-    //     ...state,
-    //     currentMarket,
-    //     currentTicker,
-    //   };
-    // }
     case MARKET_TICKER_CHANNEL_DATA: {
       const update = action.payload;
       const tickers = [...state.tickers];
