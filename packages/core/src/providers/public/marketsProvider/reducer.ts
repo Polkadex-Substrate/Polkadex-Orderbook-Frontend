@@ -4,9 +4,9 @@ import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { MarketsAction } from "./actions";
 import {
   MARKET_TICKER_CHANNEL_DATA,
-  MARKETS_DATA,
-  MARKETS_ERROR,
-  MARKETS_FETCH,
+  // MARKETS_DATA,
+  // MARKETS_ERROR,
+  // MARKETS_FETCH,
   MARKETS_SET_CURRENT_MARKET,
   MARKETS_SET_CURRENT_MARKET_IFUNSET,
   MARKETS_SET_CURRENT_TICKER,
@@ -42,42 +42,42 @@ export const initialMarketsState: MarketsState = {
 
 export const marketsReducer = (
   state = initialMarketsState,
-  action: MarketsAction,
+  action: MarketsAction
 ): MarketsState => {
   switch (action.type) {
-    case MARKETS_FETCH:
-      return {
-        ...state,
-        loading: true,
-        timestamp: Math.floor(Date.now() / 1000),
-      };
-    case MARKETS_DATA: {
-      let filters = {};
+    // case MARKETS_FETCH:
+    //   return {
+    //     ...state,
+    //     loading: true,
+    //     timestamp: Math.floor(Date.now() / 1000),
+    //   };
+    // case MARKETS_DATA: {
+    //   let filters = {};
 
-      if (action.payload) {
-        filters = action.payload.reduce((result, market: Market) => {
-          result[market.id] = result[market.id] || [];
+    //   if (action.payload) {
+    //     filters = action.payload.reduce((result, market: Market) => {
+    //       result[market.id] = result[market.id] || [];
 
-          if (market.filters) {
-            result[market.id] = market.filters.map(buildFilterPrice);
-          }
+    //       if (market.filters) {
+    //         result[market.id] = market.filters.map(buildFilterPrice);
+    //       }
 
-          return result;
-        }, {});
-      }
+    //       return result;
+    //     }, {});
+    //   }
 
-      return {
-        ...state,
-        loading: false,
-        list: action.payload,
-        filters: filters,
-      };
-    }
-    case MARKETS_ERROR:
-      return {
-        ...state,
-        loading: false,
-      };
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     list: action.payload,
+    //     filters: filters,
+    //   };
+    // }
+    // case MARKETS_ERROR:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //   };
     case MARKETS_SET_CURRENT_MARKET: {
       setToStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET, action.payload.id);
       return {

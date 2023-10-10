@@ -1,7 +1,6 @@
 import { FC, PropsWithChildren } from "react";
 import { FilterPrice } from "@orderbook/core/helpers";
 
-import { IPublicAsset } from "../assetsProvider";
 import { CommonState } from "../../types";
 
 export type MarketId = string;
@@ -114,7 +113,6 @@ export type TickerQueryResult = {
 };
 
 export type MarketsContextProps = MarketsState & {
-  onMarketsFetch: (allAssets: IPublicAsset[]) => void;
   onMarketTickersFetch: () => void;
   setCurrentMarket: (market: Market) => void;
   onSetCurrentMarketIfUnset: (market: Market) => void;

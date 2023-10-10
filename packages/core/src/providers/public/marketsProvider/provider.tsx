@@ -1,6 +1,7 @@
 // TODO: Improve this provider, The market should come through the query, there shouldn't be redirection based on the market
 
 import { useCallback, useEffect, useReducer } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { API } from "aws-amplify";
 import _ from "lodash";
 import { useRouter } from "next/router";
@@ -14,10 +15,15 @@ import {
   decimalPlaces,
   convertToTicker,
   isAssetPDEX,
+  buildFilterPrice,
 } from "@orderbook/core/helpers";
 import { sendQueryToAppSync } from "@orderbook/core/helpers/appsync";
 import { getAllMarkets } from "@orderbook/core/graphql/queries";
-import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@orderbook/core/constants";
+import {
+  POLKADEX_ASSET,
+  QUERY_KEYS,
+  READ_ONLY_TOKEN,
+} from "@orderbook/core/constants";
 
 import { useSettingsProvider } from "../settings";
 import { IPublicAsset } from "../assetsProvider";
@@ -40,6 +46,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
   const { onHandleError } = useSettingsProvider();
 
   const router = useRouter();
+  const defaultMarket = router.query.id as string;
 
   const fetchMarkets = useCallback(
     async (assets: IPublicAsset[]): Promise<Market[]> => {
@@ -69,42 +76,95 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
             price_tick_size: Number(pair.price_tick_size),
             qty_step_size: Number(pair.qty_step_size),
           };
-        },
+        }
       );
       return await Promise.all(markets);
     },
-    [],
+    []
   );
 
-  const onMarketsFetch = useCallback(
-    async (allAssets: IPublicAsset[]) => {
-      dispatch(A.marketsFetch());
-      try {
-        if (allAssets.length > 0) {
-          const markets = await fetchMarkets(allAssets);
-          const validMarkets = markets.filter(
-            (market) =>
-              !defaultConfig.blockedAssets.some(
-                (item) => item === market.baseAssetId,
-              ) &&
-              !defaultConfig.blockedAssets.some(
-                (item) => item === market.quoteAssetId,
-              ),
-          );
-          dispatch(A.marketsData(validMarkets));
-        }
-      } catch (error) {
-        console.log(error, "error in fetching markets");
-        onHandleError(error?.message ?? error);
-        dispatch(A.marketsError(error));
+  // const onMarketsFetch = useCallback(
+  //   async (allAssets: IPublicAsset[]) => {
+  //     dispatch(A.marketsFetch());
+  //     try {
+  //       if (allAssets.length > 0) {
+  //         const markets = await fetchMarkets(allAssets);
+  //         const validMarkets = markets.filter(
+  //           (market) =>
+  //             !defaultConfig.blockedAssets.some(
+  //               (item) => item === market.baseAssetId
+  //             ) &&
+  //             !defaultConfig.blockedAssets.some(
+  //               (item) => item === market.quoteAssetId
+  //             )
+  //         );
+  //         dispatch(A.marketsData(validMarkets));
+  //       }
+  //     } catch (error) {
+  //       console.log(error, "error in fetching markets");
+  //       onHandleError(error?.message ?? error);
+  //       dispatch(A.marketsError(error));
+  //     }
+  //   },
+  //   [fetchMarkets, onHandleError]
+  // );
+
+  const onMarketsFetch1 = async (allAssets: IPublicAsset[]) => {
+    if (allAssets.length > 0) {
+      const markets = await fetchMarkets(allAssets);
+      const validMarkets = markets.filter(
+        (market) =>
+          !defaultConfig.blockedAssets.some(
+            (item) => item === market.baseAssetId
+          ) &&
+          !defaultConfig.blockedAssets.some(
+            (item) => item === market.quoteAssetId
+          )
+      );
+      return validMarkets;
+    }
+    return [];
+  };
+
+  const shouldFetchMarkets = Boolean(allAssets.length > 0);
+
+  const { data: markets, isLoading: isMarketsLoading } = useQuery({
+    queryKey: QUERY_KEYS.markets(JSON.stringify(allAssets)),
+    enabled: shouldFetchMarkets,
+    queryFn: async () => await onMarketsFetch1(allAssets),
+    onError: (error) => {
+      const errorMessage =
+        error instanceof Error ? error.message : (error as string);
+      onHandleError(errorMessage);
+    },
+    onSettled: (data) => {
+      if (data?.length && defaultMarket) {
+        const findMarket = data?.find((v) =>
+          v.name
+            .replace(/[^a-zA-Z0-9]/g, "")
+            .toLowerCase()
+            .includes(defaultMarket.toLowerCase())
+        );
+        const defaultMarketSelected = findMarket ?? state.list[0];
+        onSetCurrentMarketIfUnset(defaultMarketSelected);
       }
     },
-    [fetchMarkets, onHandleError],
-  );
+  });
+
+  const filters =
+    markets?.reduce((result, market: Market) => {
+      result[market.id] = result[market.id] || [];
+
+      if (market.filters) {
+        result[market.id] = market.filters.map(buildFilterPrice);
+      }
+
+      return result;
+    }, {}) ?? {};
 
   const findAsset = (
     assets: IPublicAsset[],
-    id: string,
+    id: string
   ): { name: string; ticker: string; assetId: string } => {
     if (isAssetPDEX(id)) {
       const { name, symbol, assetId } = POLKADEX_ASSET;
@@ -130,7 +190,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       const to = new Date().toISOString();
       // tickers are fetched for the last 24 hours
       const from = new Date(
-        new Date().setDate(new Date().getDate() - 1),
+        new Date().setDate(new Date().getDate() - 1)
       ).toISOString();
       const res = await sendQueryToAppSync({
         query: queries.getMarketTickers,
@@ -148,7 +208,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         priceChange24Hr: _.round(priceChange, pricePrecision),
         priceChangePercent24Hr: _.round(
           isNaN(priceChangePercent) ? 0 : priceChangePercent,
-          pricePrecision,
+          pricePrecision
         ),
         open: _.round(Number(item.o), pricePrecision),
         close: _.round(Number(item.c), pricePrecision),
@@ -156,12 +216,12 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         low: _.round(Number(item.l), pricePrecision),
         volumeBase24hr: _.round(
           isNaN(Number(item.vb)) ? 0 : Number(item.vb),
-          quotePrecision,
+          quotePrecision
         ),
         volumeQuote24Hr: _.round(Number(item.vq), quotePrecision),
       };
     },
-    [],
+    []
   );
 
   const onMarketTickersFetch = useCallback(async () => {
@@ -195,12 +255,12 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
           state?.currentMarket?.m
         ) {
           const dataParsed: TickerQueryResult = JSON.parse(
-            data.value.data.websocket_streams.data,
+            data.value.data.websocket_streams.data
           );
 
           const tickerData: Ticker = convertToTicker(
             dataParsed,
-            state.currentMarket.m,
+            state.currentMarket.m
           );
           dispatch(A.marketsTickersChannelData(tickerData));
         }
@@ -223,9 +283,9 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
   };
 
   useEffect(() => {
-    if (allAssets.length > 0 && state.list.length === 0) {
-      onMarketsFetch(allAssets);
-    }
+    // if (allAssets.length > 0 && state.list.length === 0) {
+    //   onMarketsFetch(allAssets);
+    // }
     if (
       state.list.length > 0 &&
       state.tickers.length === 0 &&
@@ -233,14 +293,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     ) {
       onMarketTickersFetch();
     }
-  }, [
-    allAssets,
-    state.list,
-    onMarketsFetch,
-    onMarketTickersFetch,
-    state.tickers,
-    state.tickerLoading,
-  ]);
+  }, [state.list, onMarketTickersFetch, state.tickers, state.tickerLoading]);
 
   // set current ticker on market change
   useEffect(() => {
@@ -254,25 +307,20 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     dispatch(setCurrentTicker(state.currentMarket.m));
   }, [state?.currentMarket?.m, state?.tickers]);
 
-  const defaultMarket = router.query.id as string;
-  useEffect(() => {
-    if (state.list.length && defaultMarket) {
-      const findMarket = state.list?.find((v) =>
-        v.name
-          .replace(/[^a-zA-Z0-9]/g, "")
-          .toLowerCase()
-          .includes(defaultMarket.toLowerCase()),
-      );
-      const defaultMarketSelected = findMarket ?? state.list[0];
-      onSetCurrentMarketIfUnset(defaultMarketSelected);
-    }
-  }, [state.list, router, defaultMarket]);
+  // useEffect(() => {
+
+  // }, [state.list, router, defaultMarket]);
 
   return (
     <Provider
       value={{
         ...state,
-        onMarketsFetch,
+
+        /** Markets **/
+        list: markets ?? [],
+        loading: isMarketsLoading,
+        filters,
+
         onMarketTickersFetch,
         setCurrentMarket,
         onSetCurrentMarketIfUnset,
