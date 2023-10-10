@@ -83,32 +83,6 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     []
   );
 
-  // const onMarketsFetch = useCallback(
-  //   async (allAssets: IPublicAsset[]) => {
-  //     dispatch(A.marketsFetch());
-  //     try {
-  //       if (allAssets.length > 0) {
-  //         const markets = await fetchMarkets(allAssets);
-  //         const validMarkets = markets.filter(
-  //           (market) =>
-  //             !defaultConfig.blockedAssets.some(
-  //               (item) => item === market.baseAssetId
-  //             ) &&
-  //             !defaultConfig.blockedAssets.some(
-  //               (item) => item === market.quoteAssetId
-  //             )
-  //         );
-  //         dispatch(A.marketsData(validMarkets));
-  //       }
-  //     } catch (error) {
-  //       console.log(error, "error in fetching markets");
-  //       onHandleError(error?.message ?? error);
-  //       dispatch(A.marketsError(error));
-  //     }
-  //   },
-  //   [fetchMarkets, onHandleError]
-  // );
-
   const onMarketsFetch = async (allAssets: IPublicAsset[]) => {
     if (allAssets.length > 0) {
       const markets = await fetchMarkets(allAssets);
@@ -247,20 +221,6 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     []
   );
 
-  // const onMarketTickersFetch = useCallback(async () => {
-  //   dispatch(A.marketsTickersFetch());
-  //   const markets = state.list;
-  //   try {
-  //     const tickersPromises = markets.map((m) => fetchMarketTickers(m));
-  //     const tickers = await Promise.all(tickersPromises);
-
-  //     dispatch(A.marketsTickersData(tickers));
-  //   } catch (error) {
-  //     console.error("Market tickers fetch error", error?.errors);
-  //     onHandleError(`Market tickers fetch error`);
-  //   }
-  // }, [state.list, fetchMarketTickers, onHandleError]);
-
   useEffect(() => {
     if (!state?.currentMarket?.m) {
       return;
@@ -305,19 +265,6 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     dispatch(A.setCurrentMarketIfUnset({ market, ticker }));
   };
 
-  // useEffect(() => {
-  // if (allAssets.length > 0 && state.list.length === 0) {
-  //   onMarketsFetch(allAssets);
-  // }
-  // if (
-  //   state.list.length > 0 &&
-  //   state.tickers.length === 0 &&
-  //   !state.tickerLoading
-  // ) {
-  //   onMarketTickersFetch();
-  // }
-  // }, [state.list, state.tickers, state.tickerLoading]);
-
   // set current ticker on market change
   useEffect(() => {
     if (
@@ -329,10 +276,6 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     }
     dispatch(setCurrentTicker(state.currentMarket.m));
   }, [state?.currentMarket?.m, state?.tickers]);
-
-  // useEffect(() => {
-
-  // }, [state.list, router, defaultMarket]);
 
   return (
     <Provider

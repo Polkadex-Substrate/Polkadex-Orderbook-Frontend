@@ -1,19 +1,14 @@
-import { buildFilterPrice, setToStorage } from "@orderbook/core/helpers";
+import { setToStorage } from "@orderbook/core/helpers";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 
 import { MarketsAction } from "./actions";
 import {
   MARKET_TICKER_CHANNEL_DATA,
-  // MARKETS_DATA,
-  // MARKETS_ERROR,
-  // MARKETS_FETCH,
   MARKETS_SET_CURRENT_MARKET,
   MARKETS_SET_CURRENT_MARKET_IFUNSET,
   MARKETS_SET_CURRENT_TICKER,
-  // MARKETS_TICKERS_DATA,
-  // MARKETS_TICKERS_FETCH,
 } from "./constants";
-import { Market, MarketsState, Ticker } from "./types";
+import { MarketsState, Ticker } from "./types";
 
 export const defaultTickers: Ticker = {
   m: "0-0",
@@ -45,39 +40,6 @@ export const marketsReducer = (
   action: MarketsAction
 ): MarketsState => {
   switch (action.type) {
-    // case MARKETS_FETCH:
-    //   return {
-    //     ...state,
-    //     loading: true,
-    //     timestamp: Math.floor(Date.now() / 1000),
-    //   };
-    // case MARKETS_DATA: {
-    //   let filters = {};
-
-    //   if (action.payload) {
-    //     filters = action.payload.reduce((result, market: Market) => {
-    //       result[market.id] = result[market.id] || [];
-
-    //       if (market.filters) {
-    //         result[market.id] = market.filters.map(buildFilterPrice);
-    //       }
-
-    //       return result;
-    //     }, {});
-    //   }
-
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     list: action.payload,
-    //     filters: filters,
-    //   };
-    // }
-    // case MARKETS_ERROR:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //   };
     case MARKETS_SET_CURRENT_MARKET: {
       setToStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET, action.payload.id);
       return {
@@ -114,19 +76,6 @@ export const marketsReducer = (
         currentTicker,
       };
     }
-
-    // case MARKETS_TICKERS_FETCH:
-    //   return {
-    //     ...state,
-    //     tickerLoading: true,
-    //     tickersTimestamp: Math.floor(Date.now() / 1000),
-    //   };
-    // case MARKETS_TICKERS_DATA:
-    //   return {
-    //     ...state,
-    //     tickerLoading: false,
-    //     tickers: action.payload,
-    //   };
     case MARKET_TICKER_CHANNEL_DATA: {
       const update = action.payload;
       const tickers = [...state.tickers];
