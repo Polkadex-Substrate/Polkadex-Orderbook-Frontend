@@ -1,7 +1,7 @@
 // TODO: Improve this provider, The market should come through the query, there shouldn't be redirection based on the market
 
-import { useCallback, useEffect, useMemo, useReducer } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect, useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { API } from "aws-amplify";
 import _ from "lodash";
 import { useRouter } from "next/router";
@@ -30,7 +30,6 @@ import {
 import { useSettingsProvider } from "../settings";
 import { IPublicAsset } from "../assetsProvider";
 
-import { setCurrentTicker } from "./actions";
 import {
   Market,
   MarketQueryResult,
@@ -38,12 +37,11 @@ import {
   Ticker,
   TickerQueryResult,
 } from "./types";
-import { defaultTickers, initialMarketsState, marketsReducer } from "./reducer";
-import * as A from "./actions";
+import { defaultTickers } from "./reducer";
 import { Provider } from "./context";
 
 export const MarketsProvider: MarketsComponent = ({ children }) => {
-  // const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
+  const queryClient = useQueryClient();
   const { list: allAssets } = useAssetsProvider();
   const { onHandleError } = useSettingsProvider();
 
@@ -104,7 +102,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
 
   const shouldFetchMarkets = Boolean(allAssets.length > 0);
 
-  const { data: markets, isLoading: isMarketsLoading } = useQuery({
+  const { data: markets, isLoading: isMarketsLoading } = useQuery<Market[]>({
     queryKey: QUERY_KEYS.markets(JSON.stringify(allAssets)),
     enabled: shouldFetchMarkets,
     queryFn: async () => await onMarketsFetch(allAssets),
@@ -117,10 +115,10 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
 
   const shouldFetchTickers = Boolean(markets && markets?.length > 0);
 
-  const { data: tickers, isLoading: isTickersLoading } = useQuery({
+  const { data: tickers, isLoading: isTickersLoading } = useQuery<Ticker[]>({
     queryKey: QUERY_KEYS.tickers(),
     enabled: shouldFetchTickers,
-    queryFn: async () => await onMarketTickersFetch1(),
+    queryFn: async () => await onMarketTickersFetch(),
     onError: (error) => {
       const errorMessage =
         error instanceof Error ? error.message : (error as string);
@@ -128,7 +126,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     },
   });
 
-  const onMarketTickersFetch1 = async () => {
+  const onMarketTickersFetch = async () => {
     if (!markets || markets?.length === 0) return [];
 
     const tickersPromises = markets.map((m) => fetchMarketTickers(m));
@@ -208,42 +206,6 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     []
   );
 
-  // useEffect(() => {
-  //   if (!state?.currentMarket?.m) {
-  //     return;
-  //   }
-  //   const subscription = API.graphql<
-  //     GraphQLSubscription<Websocket_streamsSubscription>
-  //   >({
-  //     query: subscriptions.websocket_streams,
-  //     variables: { name: state.currentMarket.m + "-ticker" },
-  //     authToken: READ_ONLY_TOKEN,
-  //   }).subscribe({
-  //     next: (data) => {
-  //       if (
-  //         data?.value?.data?.websocket_streams?.data &&
-  //         state?.currentMarket?.m
-  //       ) {
-  //         const dataParsed: TickerQueryResult = JSON.parse(
-  //           data.value.data.websocket_streams.data
-  //         );
-
-  //         const tickerData: Ticker = convertToTicker(
-  //           dataParsed,
-  //           state.currentMarket.m
-  //         );
-  //         dispatch(A.marketsTickersChannelData(tickerData));
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.warn(err);
-  //     },
-  //   });
-  //   return () => {
-  //     subscription.unsubscribe();
-  //   };
-  // }, [state?.currentMarket?.m]);
-
   const currentMarket = useMemo(() => {
     if (markets?.length && defaultMarket) {
       const findMarket = markets?.find((v) =>
@@ -265,6 +227,46 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     );
     return currentTickerSelected ?? defaultTickers;
   }, [currentMarket?.m, tickers]);
+
+  useEffect(() => {
+    if (!currentMarket?.m) {
+      return;
+    }
+    const subscription = API.graphql<
+      GraphQLSubscription<Websocket_streamsSubscription>
+    >({
+      query: subscriptions.websocket_streams,
+      variables: { name: currentMarket.m + "-ticker" },
+      authToken: READ_ONLY_TOKEN,
+    }).subscribe({
+      next: (data) => {
+        if (data?.value?.data?.websocket_streams?.data && currentMarket?.m) {
+          const dataParsed: TickerQueryResult = JSON.parse(
+            data.value.data.websocket_streams.data
+          );
+
+          const newTickerData: Ticker = convertToTicker(
+            dataParsed,
+            currentMarket.m
+          );
+
+          queryClient.setQueryData(QUERY_KEYS.tickers(), (prevData) => {
+            const newTickers = prevData as Ticker[];
+            const idx = newTickers.findIndex((x) => x.m === newTickerData.m);
+            if (idx < 0) newTickers.push(newTickerData);
+            else newTickers[idx] = newTickerData;
+            return newTickers;
+          });
+        }
+      },
+      error: (err) => {
+        console.warn(err);
+      },
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [currentMarket?.m, queryClient]);
 
   return (
     <Provider
