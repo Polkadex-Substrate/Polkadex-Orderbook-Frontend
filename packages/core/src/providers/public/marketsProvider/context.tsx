@@ -5,7 +5,6 @@ import { MarketsContextProps, MarketsProviderProps } from "./types";
 
 export const Context = createContext<MarketsContextProps>({
   ...initialMarketsState,
-  setCurrentMarket: () => {},
 });
 
 export const Provider = ({ value, children }: MarketsProviderProps) => {

@@ -1,11 +1,9 @@
 import { FC, PropsWithChildren } from "react";
 import { FilterPrice } from "@orderbook/core/helpers";
 
-import { CommonState } from "../../types";
-
 export type MarketId = string;
 
-export interface MarketsState extends CommonState {
+export interface MarketsState {
   list: Market[];
   filters: {
     [marketId: string]: FilterPrice;
@@ -17,7 +15,6 @@ export interface MarketsState extends CommonState {
   tickerLoading: boolean;
   tickers: Ticker[];
   loading: boolean;
-  marketPrice: string;
 }
 
 export interface MarketFilterCustomStepRule {
@@ -112,9 +109,7 @@ export type TickerQueryResult = {
   vq: string;
 };
 
-export type MarketsContextProps = MarketsState & {
-  setCurrentMarket: (market: Market) => void;
-};
+export type MarketsContextProps = MarketsState;
 
 export type MarketsProviderProps = PropsWithChildren<{
   value: MarketsContextProps;

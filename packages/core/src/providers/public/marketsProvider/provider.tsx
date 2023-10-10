@@ -1,6 +1,6 @@
 // TODO: Improve this provider, The market should come through the query, there shouldn't be redirection based on the market
 
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useMemo, useReducer } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { API } from "aws-amplify";
 import _ from "lodash";
@@ -16,10 +16,12 @@ import {
   convertToTicker,
   isAssetPDEX,
   buildFilterPrice,
+  setToStorage,
 } from "@orderbook/core/helpers";
 import { sendQueryToAppSync } from "@orderbook/core/helpers/appsync";
 import { getAllMarkets } from "@orderbook/core/graphql/queries";
 import {
+  LOCAL_STORAGE_ID,
   POLKADEX_ASSET,
   QUERY_KEYS,
   READ_ONLY_TOKEN,
@@ -36,12 +38,12 @@ import {
   Ticker,
   TickerQueryResult,
 } from "./types";
-import { initialMarketsState, marketsReducer } from "./reducer";
+import { defaultTickers, initialMarketsState, marketsReducer } from "./reducer";
 import * as A from "./actions";
 import { Provider } from "./context";
 
 export const MarketsProvider: MarketsComponent = ({ children }) => {
-  const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
+  // const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
   const { list: allAssets } = useAssetsProvider();
   const { onHandleError } = useSettingsProvider();
 
@@ -123,21 +125,6 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
       const errorMessage =
         error instanceof Error ? error.message : (error as string);
       onHandleError(errorMessage);
-    },
-    onSettled: (data) => {
-      if (markets?.length && defaultMarket) {
-        const findMarket = markets?.find((v) =>
-          v.name
-            .replace(/[^a-zA-Z0-9]/g, "")
-            .toLowerCase()
-            .includes(defaultMarket.toLowerCase())
-        );
-        const defaultMarketSelected = findMarket ?? markets[0];
-        const currentTickerSelected = data?.find(
-          (x) => x.m === defaultMarketSelected.m
-        );
-        onSetCurrentMarketIfUnset(defaultMarketSelected, currentTickerSelected);
-      }
     },
   });
 
@@ -221,79 +208,79 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     []
   );
 
-  useEffect(() => {
-    if (!state?.currentMarket?.m) {
-      return;
+  // useEffect(() => {
+  //   if (!state?.currentMarket?.m) {
+  //     return;
+  //   }
+  //   const subscription = API.graphql<
+  //     GraphQLSubscription<Websocket_streamsSubscription>
+  //   >({
+  //     query: subscriptions.websocket_streams,
+  //     variables: { name: state.currentMarket.m + "-ticker" },
+  //     authToken: READ_ONLY_TOKEN,
+  //   }).subscribe({
+  //     next: (data) => {
+  //       if (
+  //         data?.value?.data?.websocket_streams?.data &&
+  //         state?.currentMarket?.m
+  //       ) {
+  //         const dataParsed: TickerQueryResult = JSON.parse(
+  //           data.value.data.websocket_streams.data
+  //         );
+
+  //         const tickerData: Ticker = convertToTicker(
+  //           dataParsed,
+  //           state.currentMarket.m
+  //         );
+  //         dispatch(A.marketsTickersChannelData(tickerData));
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.warn(err);
+  //     },
+  //   });
+  //   return () => {
+  //     subscription.unsubscribe();
+  //   };
+  // }, [state?.currentMarket?.m]);
+
+  const currentMarket = useMemo(() => {
+    if (markets?.length && defaultMarket) {
+      const findMarket = markets?.find((v) =>
+        v.name
+          .replace(/[^a-zA-Z0-9]/g, "")
+          .toLowerCase()
+          .includes(defaultMarket.toLowerCase())
+      );
+      const defaultMarketSelected = findMarket ?? markets[0];
+      setToStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET, defaultMarketSelected.m);
+
+      return defaultMarketSelected;
     }
-    const subscription = API.graphql<
-      GraphQLSubscription<Websocket_streamsSubscription>
-    >({
-      query: subscriptions.websocket_streams,
-      variables: { name: state.currentMarket.m + "-ticker" },
-      authToken: READ_ONLY_TOKEN,
-    }).subscribe({
-      next: (data) => {
-        if (
-          data?.value?.data?.websocket_streams?.data &&
-          state?.currentMarket?.m
-        ) {
-          const dataParsed: TickerQueryResult = JSON.parse(
-            data.value.data.websocket_streams.data
-          );
+  }, [defaultMarket, markets]);
 
-          const tickerData: Ticker = convertToTicker(
-            dataParsed,
-            state.currentMarket.m
-          );
-          dispatch(A.marketsTickersChannelData(tickerData));
-        }
-      },
-      error: (err) => {
-        console.warn(err);
-      },
-    });
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [state?.currentMarket?.m]);
-
-  const setCurrentMarket = (market: Market) => {
-    dispatch(A.setCurrentMarket(market));
-  };
-
-  const onSetCurrentMarketIfUnset = (market: Market, ticker?: Ticker) => {
-    dispatch(A.setCurrentMarketIfUnset({ market, ticker }));
-  };
-
-  // set current ticker on market change
-  useEffect(() => {
-    if (
-      !state?.currentMarket?.m ||
-      !state?.tickers ||
-      state?.tickers.length === 0
-    ) {
-      return;
-    }
-    dispatch(setCurrentTicker(state.currentMarket.m));
-  }, [state?.currentMarket?.m, state?.tickers]);
+  const currentTicker = useMemo(() => {
+    const currentTickerSelected = tickers?.find(
+      (x) => x.m === currentMarket?.m
+    );
+    return currentTickerSelected ?? defaultTickers;
+  }, [currentMarket?.m, tickers]);
 
   return (
     <Provider
       value={{
-        ...state,
-
         /** Markets **/
         list: markets ?? [],
         loading: isMarketsLoading,
         filters,
         timestamp: Math.floor(Date.now() / 1000),
+        currentMarket,
 
         /** Tickers **/
         tickers: tickers ?? [],
         tickerLoading: isTickersLoading,
         tickersTimestamp: Math.floor(Date.now() / 1000),
-
-        setCurrentMarket,
+        currentTicker,
       }}
     >
       {children}
