@@ -141,13 +141,16 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
             currentMarket.m
           );
 
-          queryClient.setQueryData(QUERY_KEYS.tickers(), (prevData) => {
-            const newTickers = prevData as Ticker[];
-            const idx = newTickers.findIndex((x) => x.m === newTickerData.m);
-            if (idx < 0) newTickers.push(newTickerData);
-            else newTickers[idx] = newTickerData;
-            return newTickers;
-          });
+          queryClient.setQueryData(
+            QUERY_KEYS.tickers(),
+            (prevData: Ticker[]) => {
+              const newTickers = [...prevData];
+              const idx = newTickers?.findIndex((x) => x.m === newTickerData.m);
+              if (idx < 0) newTickers.push(newTickerData);
+              else newTickers[idx] = newTickerData;
+              return newTickers;
+            }
+          );
         }
       },
       error: (err) => {
