@@ -6,46 +6,46 @@ import { GoogleOauth } from "@orderbook/core/utils/KeyringStore/GDrive/oauth";
 import {
   DRIVE_APPDATA_SCOPE,
   DRIVE_DISCOVERY_DOC,
+  GDriveStorage,
 } from "@orderbook/core/utils/KeyringStore/GDrive/drive";
 
-export default class GDriveAccountsStore implements KeyringStore {
-  protected readonly api!: GoogleDriveApi;
-  protected readonly oauth!: GoogleOauth;
-
-  protected readonly appDataFolder = "appDataFolder";
-  protected readonly backupFolderName = "backupFolder";
-  protected backupFolderId!: string;
-
-  constructor({ api, oauth }: { api: GoogleDriveApi; oauth: GoogleOauth }) {
-    this.api = api;
-    this.oauth = oauth;
+export class GDriveAccountsStore implements KeyringStore {
+  all(cb: (key: string, value: KeyringJson) => void): void {
+    GDriveStorage.getAll().then((files) => {
+      files?.forEach((file) => {
+        file.name;
+      });
+    });
   }
-
-  setOptions(apiKey: string, clientId: string) {
-    this.api.setOptions({ apiKey, discoveryDocs: [DRIVE_DISCOVERY_DOC] });
-    this.oauth.setOptions({ clientId, scope: DRIVE_APPDATA_SCOPE });
-  }
-
-  async init(): Promise<void> {
-    await Promise.all([this.api, this.oauth].map((client) => client.init()));
-  }
-
-  async auth(): Promise<void> {
-    await this.init();
-    await this.oauth.checkToken();
-  }
-
-  all(cb: (key: string, value: KeyringJson) => void): void {}
 
   get(key: string, cb: (value: KeyringJson) => void): void {
-    this.auth().then(() => {
-      this.api.readFile(key).then((file) => {
-        cb(file as KeyringJson);
-      });
+    GDriveStorage.get(key).then((file) => {
+      // eslint-disable-next-line node/no-callback-literal
+      cb(file as KeyringJson);
     });
   }
 
   remove(key: string, cb: (() => void) | undefined): void {}
 
   set(key: string, value: KeyringJson, cb: (() => void) | undefined): void {}
+}
+
+export class TestGdriveStore {
+  constructor({ apiKeys, clientId }: { apiKeys: string; clientId: string }) {
+    GDriveStorage.setOptions(apiKeys, clientId);
+  }
+
+  async write(json: KeyringJson) {
+    const file = {
+      name: json.address,
+      description: json.meta.name || "",
+      json: JSON.stringify(json),
+    };
+    await GDriveStorage.create(file);
+  }
+
+  async getAll() {
+    const files = await GDriveStorage.getAll();
+    return files;
+  }
 }

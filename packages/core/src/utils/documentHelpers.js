@@ -1,5 +1,5 @@
 export function waitDocumentReady() {
-  return new ((resolve) => {
+  return new Promise((resolve, reject) => {
     if (document.readyState === "complete") {
       resolve();
     } else {
