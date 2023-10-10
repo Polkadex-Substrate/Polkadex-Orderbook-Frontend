@@ -10,7 +10,7 @@ export function waitDocumentReady() {
 
       window.addEventListener("load", callback);
     }
-  })();
+  });
 }
 
 export function loadScript(src) {

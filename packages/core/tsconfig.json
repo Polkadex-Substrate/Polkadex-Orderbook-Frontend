@@ -6,7 +6,6 @@
     "paths": {
       "@orderbook/core/*": ["./src/*"]
     },
-    "experimentalDecorators": true,
   },
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]

@@ -1,5 +1,5 @@
 import { ScriptLoader } from "@orderbook/core/utils/scriptLoader";
-import { documentHelpers } from "@orderbook/core/utils";
+import { waitDocumentReady } from "@orderbook/core/utils";
 
 const FIVE_MINUTES = 1000 * 60 * 5;
 
@@ -45,7 +45,7 @@ export class GoogleOauth {
   private async load(): Promise<void> {
     await Promise.all([
       ScriptLoader.load("https://accounts.google.com/gsi/client"),
-      documentHelpers(),
+      waitDocumentReady(),
     ]);
   }
 

@@ -31,14 +31,24 @@ export class GDriveAccountsStore implements KeyringStore {
 }
 
 export class TestGdriveStore {
+  private access: boolean;
   constructor({ apiKeys, clientId }: { apiKeys: string; clientId: string }) {
     GDriveStorage.setOptions(apiKeys, clientId);
+  }
+
+  async enable() {
+    try {
+      await GDriveStorage.auth();
+      this.access = true;
+    } catch {
+      this.access = false;
+    }
   }
 
   async write(json: KeyringJson) {
     const file = {
       name: json.address,
-      description: json.meta.name || "",
+      description: json?.meta?.name || "",
       json: JSON.stringify(json),
     };
     await GDriveStorage.create(file);
