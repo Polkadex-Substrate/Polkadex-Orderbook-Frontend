@@ -386,13 +386,17 @@ Super Form Reset
       :hover {
         background: ${theme.colors.secondaryBackgroundOpacity};
       }
+    }
+
+    .rdrMonthAndYearWrapper {
       :first-child i {
-        border-color: transparent ${theme.colors.text} transparent transparent;
+        border-color: transparent ${theme.colors.text} transparent transparent !important;
       }
       :last-child i {
         border-color: transparent transparent transparent ${theme.colors.text};
       }
     }
+
     .rdrDayToday .rdrDayNumber span::after {
       border: none;
       height: 0;

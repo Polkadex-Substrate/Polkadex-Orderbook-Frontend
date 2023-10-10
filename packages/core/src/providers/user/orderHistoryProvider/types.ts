@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 
-import { CommonError, OrderCommon, Ifilters } from "../../types";
+import { OrderCommon } from "../../types";
 
 export type orderHistoryQueryResult = {
   u: string;
@@ -56,13 +56,12 @@ interface Pair {
 }
 
 export interface OrdersHistoryState {
-  list: OrderCommon[];
   openOrders: OrderCommon[];
-  loading: boolean;
-  pageIndex: number;
-  success: boolean;
-  orderHistoryNextToken: string | null;
-  error?: CommonError;
+  hasNextOrderHistoryPage: boolean | undefined;
+  isOrderHistoryLoading: boolean;
+  isOrderHistorySuccess: boolean;
+  orderHistoryError?: string;
+  isOpenOrdersLoading: boolean;
 }
 
 export interface onOrdersHistoryFetch {
@@ -73,13 +72,11 @@ export interface onOrdersHistoryFetch {
 }
 
 export type OrderHistoryContextProps = OrdersHistoryState & {
-  onOpenOrdersHistoryFetch: () => void;
-  onOrdersHistoryFetch: (value: onOrdersHistoryFetch) => void;
   onOrderUpdates: (value: SetOrder) => void;
-  orders: OrderCommon[];
+  orderHistory: OrderCommon[];
+  isMarketMatch: (value: OrderCommon) => boolean;
   openOrders: OrderCommon[];
-  userLoggedIn: boolean;
-  filterOrders: (value: Ifilters) => void;
+  fetchNextOrderHistoryPage: () => void;
 };
 
 export type OrderHistoryProviderProps = PropsWithChildren<{

@@ -4,6 +4,7 @@ import {
   BALANCES_ERROR,
   BALANCES_FETCH,
   BALANCES_UPDATE_EVENT_DATA,
+  CHAIN_BALANCE_UPDATE,
 } from "./constants";
 import { Balance, BalancesState } from "./types";
 
@@ -39,6 +40,16 @@ export const balancesReducer = (
         success: false,
         error: action.error,
       };
+    case CHAIN_BALANCE_UPDATE: {
+      const { assetId, onChainBalance } = action.payload;
+      const newData = state.balances.map((i) => {
+        if (i.assetId === assetId) {
+          return { ...i, onChainBalance };
+        }
+        return i;
+      });
+      return { ...state, balances: newData };
+    }
     case BALANCES_UPDATE_EVENT_DATA: {
       const update = action.payload;
       const old = state.balances.find(

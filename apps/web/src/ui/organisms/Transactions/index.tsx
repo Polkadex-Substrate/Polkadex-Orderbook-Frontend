@@ -3,7 +3,7 @@ import {
   RangeKeyDict,
   defaultStaticRanges,
 } from "react-date-range";
-import { useCallback, useMemo, useState, useEffect } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Icon,
@@ -24,39 +24,24 @@ import {
   TradeHistory,
 } from "@polkadex/orderbook-ui/organisms";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
-import { useOrderHistoryProvider } from "@orderbook/core/providers/user/orderHistoryProvider";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
+import { Ifilters } from "@orderbook/core/providers/types";
 
 import * as S from "./styles";
-
-export type Ifilters = {
-  hiddenPairs: boolean;
-  onlyBuy: boolean;
-  onlySell: boolean;
-  showReverted: boolean;
-  status: "All Transactions" | "Pending" | "Completed" | "Cancelled";
-  dateFrom?: Date;
-  dateTo?: Date;
-};
 
 const initialFilters: Ifilters = {
   hiddenPairs: false,
   onlyBuy: false,
   onlySell: false,
   showReverted: false,
-  status: "All Transactions",
+  status: "All Orders",
 };
 
 export const Transactions = () => {
-  const { t: translation } = useTranslation("organisms");
+  const { t: translation, "2": isReady } = useTranslation("organisms");
   const t = (key: string) => translation(`transactions.${key}`);
 
-  const initialState = [
-    t("allTransactions"),
-    t("pending"),
-    t("completed"),
-    t("cancelled"),
-  ];
+  const initialState = [t("allTransactions"), t("completed"), t("cancelled")];
 
   const [filters, setFilters] = useState(initialFilters);
   const [trigger, setTrigger] = useState(false);
@@ -64,8 +49,6 @@ export const Transactions = () => {
   const [isTransactionDropdownVisible, setTransactionDropdownVisible] =
     useState(true);
 
-  const orderHistory = useOrderHistoryProvider();
-  const { filterOrders } = orderHistory;
   const userSession = useSessionProvider();
   const { dispatchUserSessionData } = userSession;
 
@@ -78,25 +61,14 @@ export const Transactions = () => {
   const handleActionDropdown = (status: string) => {
     setFilters({ ...filters, status: status as Ifilters["status"] });
   };
-  const handleRangeChange = useCallback(
-    (dateFrom: Date, dateTo: Date) => {
-      setFilters((prevFilters) => ({ ...prevFilters, dateFrom, dateTo }));
-    },
-    [setFilters]
-  );
-
-  useEffect(() => {
-    filterOrders(filters);
-  }, [filterOrders, filters]);
 
   const handleSelect = useCallback(
     ({ selection: { startDate, endDate } }: RangeKeyDict) => {
       if (startDate && endDate) {
-        handleRangeChange(startDate, endDate);
         dispatchUserSessionData({ dateFrom: startDate, dateTo: endDate });
       }
     },
-    [dispatchUserSessionData, handleRangeChange]
+    [dispatchUserSessionData]
   );
 
   const ranges = useMemo(() => {
@@ -108,6 +80,8 @@ export const Transactions = () => {
       },
     ];
   }, [userSession.dateFrom, userSession.dateTo]);
+
+  if (!isReady) return <></>;
 
   return (
     <S.Section>
@@ -205,8 +179,6 @@ export const Transactions = () => {
                       />
                     </Popover.Content>
                   </Popover>
-
-                  <S.Calendar></S.Calendar>
                 </S.ContainerTransactions>
               </S.Flex>
             </S.WrapperActions>
@@ -214,10 +186,15 @@ export const Transactions = () => {
         </S.Header>
         <S.Content>
           <TabContent>
-            <OpenOrders orderHistory={orderHistory} />
+            <OpenOrders
+              filters={filters}
+              onHideTransactionDropdown={(v: boolean) =>
+                setTransactionDropdownVisible(v)
+              }
+            />
           </TabContent>
           <TabContent>
-            <OrderHistory orderHistory={orderHistory} />
+            <OrderHistory filters={filters} />
           </TabContent>
           <TabContent>
             <TradeHistory
@@ -235,6 +212,15 @@ export const Transactions = () => {
     </S.Section>
   );
 };
-export const TransactionsSkeleton = () => (
-  <Skeleton height="100%" width="100%" minWidth="350px" />
-);
+
+export const TransactionsSkeleton = () => {
+  return (
+    <S.SkeletonWrapper>
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={"5rem"} />
+    </S.SkeletonWrapper>
+  );
+};

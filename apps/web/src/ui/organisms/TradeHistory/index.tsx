@@ -9,10 +9,10 @@ import {
   LoadingSpinner,
   TradeHistoryCard,
 } from "@polkadex/orderbook-ui/molecules";
-import { Ifilters } from "@polkadex/orderbook-ui/organisms";
+import { Ifilters } from "@orderbook/core/providers/types";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
-import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
-import { useProfile } from "@orderbook/core/providers/user/profile";
+
+import { TransactionsSkeleton } from "../Transactions";
 
 import * as S from "./styles";
 
@@ -26,14 +26,12 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
     priceFixed,
     amountFixed,
     trades,
-    tradeHistoryNextToken,
-    onFetchTrades,
+    hasNextPage,
     error,
     isLoading,
+    onFetchNextPage,
   } = useTradeHistory(filters);
   const { selectGetAsset } = useAssetsProvider();
-  const { dateFrom, dateTo } = useSessionProvider();
-  const { selectedAccount } = useProfile();
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`tradeHistory.${key}`);
@@ -42,6 +40,8 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
     onHideTransactionDropdown(false);
     return () => onHideTransactionDropdown(true);
   }, [onHideTransactionDropdown]);
+
+  if (isLoading) return <TransactionsSkeleton />;
 
   return (
     <S.Wrapper>
@@ -59,14 +59,9 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
             <InfiniteScroll
               dataLength={trades.length}
               next={() => {
-                onFetchTrades({
-                  dateFrom,
-                  dateTo,
-                  tradeAddress: selectedAccount.tradeAddress,
-                  tradeHistoryFetchToken: tradeHistoryNextToken,
-                });
+                onFetchNextPage();
               }}
-              hasMore={tradeHistoryNextToken !== null}
+              hasMore={Boolean(hasNextPage)}
               height={300}
               loader={
                 <S.Loader>
@@ -107,18 +102,7 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
               {!isLoading && error && (
                 <S.ErrorWrapper>
                   <p>{error.message}</p>
-                  <Button
-                    onClick={() => {
-                      onFetchTrades({
-                        dateFrom,
-                        dateTo,
-                        tradeAddress: selectedAccount.tradeAddress,
-                        tradeHistoryFetchToken: tradeHistoryNextToken,
-                      });
-                    }}
-                  >
-                    {t("tryAgain")}
-                  </Button>
+                  <Button onClick={onFetchNextPage}>{t("tryAgain")}</Button>
                 </S.ErrorWrapper>
               )}
             </InfiniteScroll>

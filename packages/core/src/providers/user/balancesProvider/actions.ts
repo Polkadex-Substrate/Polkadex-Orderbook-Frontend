@@ -7,6 +7,7 @@ import {
   BALANCES_FETCH,
   BALANCES_UPDATE_EVENT,
   BALANCES_UPDATE_EVENT_DATA,
+  CHAIN_BALANCE_UPDATE,
 } from "./constants";
 import { Balance, BalanceUpdatePayload } from "./types";
 
@@ -30,21 +31,28 @@ export interface BalancesUpdateEvent {
 }
 export interface BalanceUpdateEventData {
   type: typeof BALANCES_UPDATE_EVENT_DATA;
-  payload: Omit<T.Balance, "onChainBalance">;
+  payload: T.Balance;
 }
+
+export interface ChainBalanceUpdateEventData {
+  type: typeof CHAIN_BALANCE_UPDATE;
+  payload: { assetId: string; onChainBalance: string };
+}
+
 export type BalancesAction =
   | BalancesFetch
   | BalancesData
   | BalancesError
   | BalancesUpdateEvent
-  | BalanceUpdateEventData;
+  | BalanceUpdateEventData
+  | ChainBalanceUpdateEventData;
 
 export const balancesFetch = (): BalancesFetch => ({
   type: BALANCES_FETCH,
 });
 
 export const balancesData = (
-  payload: BalancesData["payload"],
+  payload: BalancesData["payload"]
 ): BalancesData => ({
   type: BALANCES_DATA,
   payload,
@@ -56,15 +64,22 @@ export const balancesError = (error: CommonError): BalancesError => ({
 });
 
 export const balanceUpdateEvent = (
-  payload: BalancesUpdateEvent["payload"],
+  payload: BalancesUpdateEvent["payload"]
 ): BalancesUpdateEvent => ({
   type: BALANCES_UPDATE_EVENT,
   payload,
 });
 
 export const balanceUpdateEventData = (
-  payload: BalanceUpdateEventData["payload"],
+  payload: BalanceUpdateEventData["payload"]
 ): BalanceUpdateEventData => ({
   type: BALANCES_UPDATE_EVENT_DATA,
+  payload,
+});
+
+export const onChangeChainBalance = (
+  payload: ChainBalanceUpdateEventData["payload"]
+): ChainBalanceUpdateEventData => ({
+  type: CHAIN_BALANCE_UPDATE,
   payload,
 });

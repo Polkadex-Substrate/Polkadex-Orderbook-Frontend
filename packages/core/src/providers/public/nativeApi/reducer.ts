@@ -9,13 +9,13 @@ import { NativeApiState } from "./types";
 
 export const initialState: NativeApiState = {
   connected: false,
-  connecting: false,
+  connecting: true,
   hasExtension: true,
 };
 
 export const nativeApiReducer = (
   state = initialState,
-  action: NativeApiAction,
+  action: NativeApiAction
 ): NativeApiState => {
   switch (action.type) {
     case NATIVEAPI_CONNECT_FETCH:

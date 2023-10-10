@@ -9,7 +9,7 @@ export const Main = styled.main<{ open?: boolean }>`
       opacity 1s ease-in-out,
       visibility 1s ease-in-out;
     position: relative;
-    background: ${theme.colors.primaryBackground};
+    background: #1c1c26;
     color: ${theme.colors.white};
     display: flex;
     min-height: 100vh;
@@ -626,7 +626,22 @@ export const Header = styled.div`
 `;
 
 export const Logo = styled(Link)`
-  max-width: 14rem;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: start;
+    gap: 0.5rem;
+    svg {
+      max-width: 14rem;
+    }
+    span {
+      font-weight: 500;
+      font-size: 1.2rem;
+      display: inline-block;
+      background: ${theme.colors.primary};
+      padding: 0.2rem 0.3rem;
+      border-radius: 0.2rem;
+    }
+  `}
 `;
 
 export const Menu = styled.div`

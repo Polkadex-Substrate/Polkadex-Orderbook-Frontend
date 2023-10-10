@@ -31,7 +31,7 @@ export const TransferHistory = ({
   isLoading: boolean;
   transactions: TransferHistoryProps[];
 }) => {
-  const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(true);
+  const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const { t } = useTranslation("transfer");

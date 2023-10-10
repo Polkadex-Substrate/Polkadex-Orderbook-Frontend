@@ -23,7 +23,7 @@ export const Main = styled.div<{ hasData?: boolean }>`
     border-radius: 0 2rem 2rem 0rem;
     min-width: 28rem;
     width: 100%;
-    max-height: 530px;
+    max-height: 540px;
     height: 50vh;
 
     @media screen and (min-height: 1200px) {

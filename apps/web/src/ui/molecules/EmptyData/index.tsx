@@ -1,7 +1,7 @@
 import * as S from "./styles";
 
 export const EmptyData = ({
-  title = "You don't have any recent transactions",
+  title = "You don't have any recent orders",
   image = "emptyData",
   alt = "Empty Orders",
   ...props
