@@ -19,7 +19,6 @@ function Home() {
     currentMarket,
     list: allMarkets,
     loading: marketLoading,
-    onSetCurrentMarketIfUnset,
   } = useMarketsProvider();
 
   const { loading: assetLoading } = useAssetsProvider();
@@ -40,16 +39,7 @@ function Home() {
         else router.push(`/trading/${defaultConfig.landingPageMarket}`);
       }
     }
-  }, [
-    router,
-    persistedMarket,
-    currentMarket,
-    marketLoading,
-    assetLoading,
-    findMarket,
-    onSetCurrentMarketIfUnset,
-    allMarkets,
-  ]);
+  }, [assetLoading, currentMarket, findMarket, marketLoading, router]);
 
   // Note: This could be used as masking page
   return <LoadingScreen />; // This is a temporary fix. (Showing loading indicator)

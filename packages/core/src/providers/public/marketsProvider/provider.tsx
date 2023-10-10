@@ -109,7 +109,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
   //   [fetchMarkets, onHandleError]
   // );
 
-  const onMarketsFetch1 = async (allAssets: IPublicAsset[]) => {
+  const onMarketsFetch = async (allAssets: IPublicAsset[]) => {
     if (allAssets.length > 0) {
       const markets = await fetchMarkets(allAssets);
       const validMarkets = markets.filter(
@@ -131,25 +131,48 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
   const { data: markets, isLoading: isMarketsLoading } = useQuery({
     queryKey: QUERY_KEYS.markets(JSON.stringify(allAssets)),
     enabled: shouldFetchMarkets,
-    queryFn: async () => await onMarketsFetch1(allAssets),
+    queryFn: async () => await onMarketsFetch(allAssets),
+    onError: (error) => {
+      const errorMessage =
+        error instanceof Error ? error.message : (error as string);
+      onHandleError(errorMessage);
+    },
+  });
+
+  const shouldFetchTickers = Boolean(markets && markets?.length > 0);
+
+  const { data: tickers, isLoading: isTickersLoading } = useQuery({
+    queryKey: QUERY_KEYS.tickers(),
+    enabled: shouldFetchTickers,
+    queryFn: async () => await onMarketTickersFetch1(),
     onError: (error) => {
       const errorMessage =
         error instanceof Error ? error.message : (error as string);
       onHandleError(errorMessage);
     },
     onSettled: (data) => {
-      if (data?.length && defaultMarket) {
-        const findMarket = data?.find((v) =>
+      if (markets?.length && defaultMarket) {
+        const findMarket = markets?.find((v) =>
           v.name
             .replace(/[^a-zA-Z0-9]/g, "")
             .toLowerCase()
             .includes(defaultMarket.toLowerCase())
         );
-        const defaultMarketSelected = findMarket ?? state.list[0];
-        onSetCurrentMarketIfUnset(defaultMarketSelected);
+        const defaultMarketSelected = findMarket ?? markets[0];
+        const currentTickerSelected = data?.find(
+          (x) => x.m === defaultMarketSelected.m
+        );
+        onSetCurrentMarketIfUnset(defaultMarketSelected, currentTickerSelected);
       }
     },
   });
+
+  const onMarketTickersFetch1 = async () => {
+    if (!markets || markets?.length === 0) return [];
+
+    const tickersPromises = markets.map((m) => fetchMarketTickers(m));
+    return await Promise.all(tickersPromises);
+  };
 
   const filters =
     markets?.reduce((result, market: Market) => {
@@ -224,19 +247,19 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     []
   );
 
-  const onMarketTickersFetch = useCallback(async () => {
-    dispatch(A.marketsTickersFetch());
-    const markets = state.list;
-    try {
-      const tickersPromises = markets.map((m) => fetchMarketTickers(m));
-      const tickers = await Promise.all(tickersPromises);
+  // const onMarketTickersFetch = useCallback(async () => {
+  //   dispatch(A.marketsTickersFetch());
+  //   const markets = state.list;
+  //   try {
+  //     const tickersPromises = markets.map((m) => fetchMarketTickers(m));
+  //     const tickers = await Promise.all(tickersPromises);
 
-      dispatch(A.marketsTickersData(tickers));
-    } catch (error) {
-      console.error("Market tickers fetch error", error?.errors);
-      onHandleError(`Market tickers fetch error`);
-    }
-  }, [state.list, fetchMarketTickers, onHandleError]);
+  //     dispatch(A.marketsTickersData(tickers));
+  //   } catch (error) {
+  //     console.error("Market tickers fetch error", error?.errors);
+  //     onHandleError(`Market tickers fetch error`);
+  //   }
+  // }, [state.list, fetchMarketTickers, onHandleError]);
 
   useEffect(() => {
     if (!state?.currentMarket?.m) {
@@ -278,22 +301,22 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     dispatch(A.setCurrentMarket(market));
   };
 
-  const onSetCurrentMarketIfUnset = (market: Market) => {
-    dispatch(A.setCurrentMarketIfUnset(market));
+  const onSetCurrentMarketIfUnset = (market: Market, ticker?: Ticker) => {
+    dispatch(A.setCurrentMarketIfUnset({ market, ticker }));
   };
 
-  useEffect(() => {
-    // if (allAssets.length > 0 && state.list.length === 0) {
-    //   onMarketsFetch(allAssets);
-    // }
-    if (
-      state.list.length > 0 &&
-      state.tickers.length === 0 &&
-      !state.tickerLoading
-    ) {
-      onMarketTickersFetch();
-    }
-  }, [state.list, onMarketTickersFetch, state.tickers, state.tickerLoading]);
+  // useEffect(() => {
+  // if (allAssets.length > 0 && state.list.length === 0) {
+  //   onMarketsFetch(allAssets);
+  // }
+  // if (
+  //   state.list.length > 0 &&
+  //   state.tickers.length === 0 &&
+  //   !state.tickerLoading
+  // ) {
+  //   onMarketTickersFetch();
+  // }
+  // }, [state.list, state.tickers, state.tickerLoading]);
 
   // set current ticker on market change
   useEffect(() => {
@@ -320,10 +343,14 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
         list: markets ?? [],
         loading: isMarketsLoading,
         filters,
+        timestamp: Math.floor(Date.now() / 1000),
 
-        onMarketTickersFetch,
+        /** Tickers **/
+        tickers: tickers ?? [],
+        tickerLoading: isTickersLoading,
+        tickersTimestamp: Math.floor(Date.now() / 1000),
+
         setCurrentMarket,
-        onSetCurrentMarketIfUnset,
       }}
     >
       {children}

@@ -10,8 +10,8 @@ import {
   MARKETS_SET_CURRENT_MARKET,
   MARKETS_SET_CURRENT_MARKET_IFUNSET,
   MARKETS_SET_CURRENT_TICKER,
-  MARKETS_TICKERS_DATA,
-  MARKETS_TICKERS_FETCH,
+  // MARKETS_TICKERS_DATA,
+  // MARKETS_TICKERS_FETCH,
 } from "./constants";
 import { Market, MarketsState, Ticker } from "./types";
 
@@ -100,34 +100,33 @@ export const marketsReducer = (
       if (state.currentMarket) {
         return state;
       }
-      const tickers = [...state.tickers];
-      const currentTicker = tickers?.find((x) => x.m === action.payload.m);
+      const { market: currentMarket, ticker: currentTicker } = action.payload;
       if (!currentTicker) {
         return {
           ...state,
-          currentMarket: action.payload,
+          currentMarket,
         };
       }
 
       return {
         ...state,
-        currentMarket: action.payload,
+        currentMarket,
         currentTicker,
       };
     }
 
-    case MARKETS_TICKERS_FETCH:
-      return {
-        ...state,
-        tickerLoading: true,
-        tickersTimestamp: Math.floor(Date.now() / 1000),
-      };
-    case MARKETS_TICKERS_DATA:
-      return {
-        ...state,
-        tickerLoading: false,
-        tickers: action.payload,
-      };
+    // case MARKETS_TICKERS_FETCH:
+    //   return {
+    //     ...state,
+    //     tickerLoading: true,
+    //     tickersTimestamp: Math.floor(Date.now() / 1000),
+    //   };
+    // case MARKETS_TICKERS_DATA:
+    //   return {
+    //     ...state,
+    //     tickerLoading: false,
+    //     tickers: action.payload,
+    //   };
     case MARKET_TICKER_CHANNEL_DATA: {
       const update = action.payload;
       const tickers = [...state.tickers];

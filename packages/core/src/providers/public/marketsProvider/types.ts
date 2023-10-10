@@ -113,9 +113,7 @@ export type TickerQueryResult = {
 };
 
 export type MarketsContextProps = MarketsState & {
-  onMarketTickersFetch: () => void;
   setCurrentMarket: (market: Market) => void;
-  onSetCurrentMarketIfUnset: (market: Market) => void;
 };
 
 export type MarketsProviderProps = PropsWithChildren<{

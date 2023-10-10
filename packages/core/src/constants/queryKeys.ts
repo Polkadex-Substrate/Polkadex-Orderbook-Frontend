@@ -9,6 +9,7 @@ export const QUERY_KEYS = {
   ],
   assets: () => [PREFIX, "assets"],
   markets: (assets: string) => [PREFIX, "markets", assets],
+  tickers: () => [PREFIX, "tickers"],
   recentTrades: (market: string) => [PREFIX, "recentTrades", market],
   orderBook: (market: string) => [PREFIX, "orderbook", market],
   miniGraph: (market: string) => [PREFIX, `mini-graph-${market}`],

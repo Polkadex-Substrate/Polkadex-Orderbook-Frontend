@@ -6,9 +6,9 @@ import {
   // MARKETS_FETCH,
   MARKETS_SET_CURRENT_MARKET,
   MARKETS_SET_CURRENT_MARKET_IFUNSET,
-  MARKETS_TICKERS_DATA,
-  MARKETS_TICKERS_ERROR,
-  MARKETS_TICKERS_FETCH,
+  // MARKETS_TICKERS_DATA,
+  // MARKETS_TICKERS_ERROR,
+  // MARKETS_TICKERS_FETCH,
   MARKET_TICKER_CHANNEL_DATA,
   MARKETS_SET_CURRENT_TICKER,
 } from "./constants";
@@ -38,22 +38,22 @@ export interface SetCurrentMarket {
 
 export interface SetCurrentMarketIfUnset {
   type: typeof MARKETS_SET_CURRENT_MARKET_IFUNSET;
-  payload: Market;
+  payload: { market: Market; ticker?: Ticker };
 }
 
-export interface MarketsTickersFetch {
-  type: typeof MARKETS_TICKERS_FETCH;
-}
+// export interface MarketsTickersFetch {
+//   type: typeof MARKETS_TICKERS_FETCH;
+// }
 
-export interface MarketsTickersData {
-  type: typeof MARKETS_TICKERS_DATA;
-  payload: Ticker[];
-}
+// export interface MarketsTickersData {
+//   type: typeof MARKETS_TICKERS_DATA;
+//   payload: Ticker[];
+// }
 
-export interface MarketsTickersError {
-  type: typeof MARKETS_TICKERS_ERROR;
-  error: CommonError;
-}
+// export interface MarketsTickersError {
+//   type: typeof MARKETS_TICKERS_ERROR;
+//   error: CommonError;
+// }
 export interface MarketsTickersChannelData {
   type: typeof MARKET_TICKER_CHANNEL_DATA;
   payload: Ticker;
@@ -67,9 +67,9 @@ export type MarketsAction =
   // | MarketsFetch
   // | MarketsData
   // | MarketsError
-  | MarketsTickersFetch
-  | MarketsTickersData
-  | MarketsTickersError
+  // | MarketsTickersFetch
+  // | MarketsTickersData
+  // | MarketsTickersError
   | SetCurrentMarket
   | SetCurrentMarketIfUnset
   | MarketsTickersChannelData
@@ -106,16 +106,16 @@ export const setCurrentMarketIfUnset = (
   payload,
 });
 
-export const marketsTickersFetch = (): MarketsTickersFetch => ({
-  type: MARKETS_TICKERS_FETCH,
-});
+// export const marketsTickersFetch = (): MarketsTickersFetch => ({
+//   type: MARKETS_TICKERS_FETCH,
+// });
 
-export const marketsTickersData = (
-  payload: MarketsTickersData["payload"]
-): MarketsTickersData => ({
-  type: MARKETS_TICKERS_DATA,
-  payload,
-});
+// export const marketsTickersData = (
+//   payload: MarketsTickersData["payload"]
+// ): MarketsTickersData => ({
+//   type: MARKETS_TICKERS_DATA,
+//   payload,
+// });
 
 export const marketsTickersChannelData = (
   payload: MarketsTickersChannelData["payload"]
