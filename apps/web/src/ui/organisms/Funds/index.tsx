@@ -5,7 +5,6 @@ import { useFunds } from "@orderbook/core/hooks";
 import {
   EmptyData,
   Icon,
-  Skeleton,
   Table,
   Tooltip,
   TooltipContent,
@@ -16,6 +15,8 @@ import {
   filterBlockedAssets,
   formatBalances,
 } from "@orderbook/core/helpers";
+
+import { TransactionsSkeleton } from "../Transactions";
 
 import * as S from "./styles";
 
@@ -33,7 +34,7 @@ export const Funds = ({ onHideFilters }) => {
   const t = (key: string) => translation(`funds.${key}`);
   const { t: tc } = useTranslation("common");
 
-  if (isLoading) return <SkeletonLoader />;
+  if (isLoading) return <TransactionsSkeleton />;
 
   return (
     <S.Wrapper>
@@ -138,17 +139,5 @@ export const Funds = ({ onHideFilters }) => {
         </S.EmptyWrapper>
       )}
     </S.Wrapper>
-  );
-};
-
-export const SkeletonLoader = () => {
-  return (
-    <S.SkeletonWrapper>
-      <Skeleton width="100%" height="5rem" />
-      <Skeleton width="100%" height="5rem" />
-      <Skeleton width="100%" height="5rem" />
-      <Skeleton width="100%" height="5rem" />
-      <Skeleton width="100%" height="5rem" />
-    </S.SkeletonWrapper>
   );
 };
