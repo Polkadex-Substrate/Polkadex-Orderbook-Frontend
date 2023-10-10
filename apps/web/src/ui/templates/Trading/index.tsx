@@ -87,7 +87,7 @@ export function Trading() {
       image: "emptyWallet",
       title: tc("connectTradingAccount.title"),
       description: tc("connectTradingAccount.description"),
-      primaryLink: "/createAccount",
+      primaryLink: "/wallets",
       primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
       secondaryLink: "/wallets",
       secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),

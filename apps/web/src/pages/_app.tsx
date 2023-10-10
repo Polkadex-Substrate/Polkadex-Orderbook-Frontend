@@ -4,7 +4,7 @@ import { OverlayProvider } from "@react-aria/overlays";
 import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
 import { ReactNode, useEffect, useMemo } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
@@ -59,7 +59,15 @@ const Maintenance = dynamic(
     ssr: false,
   }
 );
-const queryClient = new QueryClient();
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 const Providers = ({ children }) => {
   return (
     <AuthProvider>
@@ -113,48 +121,50 @@ function App({ Component, pageProps }: AppProps) {
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-
-              gtag('config', '${gtag.GA_TRACKING_ID}', {
-                page_path: window.location.pathname,
-              });
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            
+            gtag('config', '${gtag.GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
             `,
           }}
         />
       </Head>
       <ToastContainer transition={Flip} />
-      <SettingProvider
-        defaultToast={{
-          onError: (e) => toast(e, { type: "error", theme: "colored" }),
-          onSuccess: (e) =>
-            toast(e, {
-              type: "success",
-              theme: "colored",
-              className: "toastBg",
-              pauseOnFocusLoss: false,
-            }),
-        }}
-      >
-        <OverlayProvider>
-          {isActive ? (
-            <TradingPageProvider>
-              <Providers>
-                <ModifiedThemeProvider
-                  Component={Component}
-                  pageProps={pageProps}
-                />
-              </Providers>
-            </TradingPageProvider>
-          ) : (
-            <ModifiedThemeProvider
-              Component={Component}
-              pageProps={pageProps}
-            />
-          )}
-        </OverlayProvider>
-      </SettingProvider>
+      <QueryClientProvider client={queryClient}>
+        <SettingProvider
+          defaultToast={{
+            onError: (e) => toast(e, { type: "error", theme: "colored" }),
+            onSuccess: (e) =>
+              toast(e, {
+                type: "success",
+                theme: "colored",
+                className: "toastBg",
+                pauseOnFocusLoss: false,
+              }),
+          }}
+        >
+          <OverlayProvider>
+            {isActive ? (
+              <TradingPageProvider>
+                <Providers>
+                  <ModifiedThemeProvider
+                    Component={Component}
+                    pageProps={pageProps}
+                  />
+                </Providers>
+              </TradingPageProvider>
+            ) : (
+              <ModifiedThemeProvider
+                Component={Component}
+                pageProps={pageProps}
+              />
+            )}
+          </OverlayProvider>
+        </SettingProvider>
+      </QueryClientProvider>
       {/* // eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
       <style jsx global>{`
         body {
@@ -177,11 +187,9 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
         {defaultConfig.maintenanceMode ? (
           <Maintenance />
         ) : (
-          <QueryClientProvider client={queryClient}>
-            <ThemeWrapper>
-              <Layout Component={Component} pageProps={pageProps} />
-            </ThemeWrapper>
-          </QueryClientProvider>
+          <ThemeWrapper>
+            <Layout Component={Component} pageProps={pageProps} />
+          </ThemeWrapper>
         )}
         <GlobalStyles />
       </ThemeProvider>

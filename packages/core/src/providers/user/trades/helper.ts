@@ -1,12 +1,10 @@
 import * as queries from "@orderbook/core/graphql/queries";
-import { fetchFromAppSync, Utils } from "@orderbook/core/helpers";
+import { fetchBatchFromAppSync, Utils } from "@orderbook/core/helpers";
+import { TRADE_HISTORY_PER_PAGE_LIMIT } from "@orderbook/core/constants";
 
 import * as T from "./types";
-import * as A from "./actions";
 
-const LIMIT = 15;
-
-export function processTradeData(eventData: A.UserTradeEvent): A.UserTrade {
+export function processTradeData(eventData: T.UserTradeEvent): T.UserTrade {
   const [base, quote] = eventData.m.split("-");
   return {
     market_id: eventData.m,
@@ -16,6 +14,7 @@ export function processTradeData(eventData: A.UserTradeEvent): A.UserTrade {
     quoteAsset: quote,
     timestamp: eventData.t,
     side: "Bid",
+    isReverted: null,
   };
 }
 
@@ -24,24 +23,24 @@ export const fetchUserTrades = async (
   dateFrom: Date,
   dateTo: Date,
   tradeHistoryFetchToken: string | null
-): Promise<{ trades: A.UserTrade[]; nextToken: string | null }> => {
+): Promise<{ trades: T.UserTrade[]; nextToken: string | null }> => {
   const dateFromStr = Utils.date.formatDateToISO(dateFrom);
   const dateToStr = Utils.date.formatDateToISO(dateTo);
 
   const { response: tradesRaw, nextToken }: T.FetchUserTradesResult =
-    await fetchFromAppSync(
+    await fetchBatchFromAppSync(
       queries.listTradesByMainAccount,
       {
         main_account: proxyAccount,
         from: dateFromStr,
         to: dateToStr,
-        limit: LIMIT,
+        limit: TRADE_HISTORY_PER_PAGE_LIMIT,
         nextToken: tradeHistoryFetchToken,
       },
       "listTradesByMainAccount"
     );
 
-  const trades: A.UserTrade[] = tradesRaw.map((trade) => ({
+  const trades: T.UserTrade[] = tradesRaw.map((trade) => ({
     market_id: trade.m,
     price: trade.p,
     qty: trade.q,

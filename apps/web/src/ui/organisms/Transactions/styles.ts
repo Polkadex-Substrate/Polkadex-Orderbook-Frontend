@@ -92,3 +92,9 @@ export const Icon = styled.div`
     max-width: 0.8rem;
   }
 `;
+
+export const SkeletonWrapper = styled.div`
+  div {
+    margin-block: 1rem;
+  }
+`;

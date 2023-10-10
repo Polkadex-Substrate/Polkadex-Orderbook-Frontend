@@ -58,7 +58,7 @@
   },
   "markets": {
     "markets": "Markets",
-    "searchPlaceHolder": "Search Menu..",
+    "searchPlaceHolder": "Search Markets..",
     "vol": "Vol:"
   },
   "menu": {
@@ -165,7 +165,7 @@
     "hideOtherPairs": "Hide Other Pairs",
     "buy": "Buy",
     "sell": "Sell",
-    "allTransactions": "All Transactions",
+    "allTransactions": "All Orders",
     "pending": "Pending",
     "completed": "Completed",
     "cancelled": "Cancelled",

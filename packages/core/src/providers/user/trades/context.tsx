@@ -1,13 +1,16 @@
 import { createContext } from "react";
 
-import { initialState } from "./reducer";
-import { TradesContextProps, TradesProviderProps } from "./types";
+import { TradesContextProps, TradesProviderProps, TradesState } from "./types";
+
+export const initialState: TradesState = {
+  loading: false,
+  success: false,
+  data: [],
+};
 
 export const Context = createContext<TradesContextProps>({
   ...initialState,
-  onFetchTrades: () => {},
-  onUserTradeUpdate: () => {},
-  onUserTradesError: () => {},
+  onFetchNextPage: () => {},
 });
 
 export const Provider = ({ value, children }: TradesProviderProps) => {
