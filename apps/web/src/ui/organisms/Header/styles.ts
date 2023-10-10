@@ -53,7 +53,7 @@ export const Logo = styled.div<{ borderActive: boolean; hideLogo?: boolean }>`
       border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     `}
     svg {
-      width: 11rem;
+      width: 13rem;
       height: auto;
     }
     span {

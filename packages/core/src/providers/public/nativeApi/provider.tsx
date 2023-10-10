@@ -15,7 +15,8 @@ const convertMillisecondsToSeconds = Math.floor(RECONNECT_TIME_MS / 1000);
 export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
   const [state, dispatch] = useReducer(nativeApiReducer, initialState);
   const { onHandleError } = useSettingsProvider();
-  const shouldRangerConnect = !state.timestamp && !state.connecting;
+  const shouldRangerConnect =
+    !state.timestamp && !state.connected && !state.api;
 
   const onConnectNativeApi = useCallback(async () => {
     dispatch(A.nativeApiConnectFetch());
@@ -28,7 +29,7 @@ export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
         .disconnect()
         .then(() => setTimeout(() => onConnectNativeApi(), RECONNECT_TIME_MS));
       onHandleError(
-        `Polkadex can't connect to ${defaultConfig.polkadexChain}, reconnecting in ${convertMillisecondsToSeconds} seconds`,
+        `Polkadex can't connect to ${defaultConfig.polkadexChain}, reconnecting in ${convertMillisecondsToSeconds} seconds`
       );
       dispatch(A.nativeApiConnectError());
     };

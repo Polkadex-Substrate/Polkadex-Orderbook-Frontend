@@ -121,30 +121,57 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     return balance.free_balance;
   };
 
+  const onChangeChainBalance = async (assetId: string) => {
+    const newOnChainBalance = await onFetchChainBalanceForAsset(assetId);
+    dispatch(
+      A.onChangeChainBalance({ assetId, onChainBalance: newOnChainBalance })
+    );
+  };
+
+  const onFetchChainBalanceForAsset = useCallback(
+    async (assetId: string) => {
+      if (api?.isConnected) {
+        await api?.isReady;
+        const chainBalance = await fetchOnChainBalance(
+          api,
+          assetId,
+          mainAddress
+        );
+        return chainBalance.toString();
+      }
+      return "0";
+    },
+    [api, mainAddress]
+  );
+
   const updateBalanceFromEvent = useCallback(
-    (msg: T.BalanceUpdatePayload): Omit<T.Balance, "onChainBalance"> => {
+    async (msg: T.BalanceUpdatePayload): Promise<T.Balance> => {
       const assetId = msg.asset.asset;
-      return {
+
+      const payload = {
         name: selectGetAsset(assetId)?.name || "",
         symbol: selectGetAsset(assetId)?.symbol || "",
         assetId: assetId.toString(),
         free_balance: msg.free,
         reserved_balance: msg.reserved,
       };
+
+      const onChainBalance = await onFetchChainBalanceForAsset(assetId);
+      return { ...payload, onChainBalance };
     },
-    [selectGetAsset]
+    [selectGetAsset, onFetchChainBalanceForAsset]
   );
 
   const onBalanceUpdate = useCallback(
-    (payload: T.BalanceUpdatePayload) => {
+    async (payload: T.BalanceUpdatePayload) => {
       try {
-        const updateBalance = updateBalanceFromEvent(payload);
+        const updateBalance = await updateBalanceFromEvent(payload);
         dispatch(A.balanceUpdateEventData(updateBalance));
       } catch (error) {
         onHandleError("Something has gone wrong while updating balance");
       }
     },
-    [onHandleError, updateBalanceFromEvent]
+    [updateBalanceFromEvent, onHandleError]
   );
 
   useEffect(() => {
@@ -173,6 +200,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         getFreeProxyBalance,
         onBalanceUpdate,
         onBalancesFetch,
+        onChangeChainBalance,
       }}
     >
       {children}
