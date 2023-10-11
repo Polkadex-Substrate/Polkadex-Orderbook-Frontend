@@ -3,7 +3,7 @@ import * as queries from "@orderbook/core/graphql/queries";
 
 import * as T from "./types";
 
-export const fetchbalancesAsync = async (
+export const fetchTradingBalancesAsync = async (
   account: string
 ): Promise<T.IBalanceFromDb[]> => {
   const res = await sendQueryToAppSync({

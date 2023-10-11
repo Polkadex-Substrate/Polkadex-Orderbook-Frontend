@@ -1,8 +1,8 @@
 import { BalancesAction } from "./actions";
 import {
-  BALANCES_DATA,
-  BALANCES_ERROR,
-  BALANCES_FETCH,
+  // BALANCES_DATA,
+  // BALANCES_ERROR,
+  // BALANCES_FETCH,
   BALANCES_UPDATE_EVENT_DATA,
   CHAIN_BALANCE_UPDATE,
 } from "./constants";
@@ -19,27 +19,27 @@ export const balancesReducer = (
   action: BalancesAction
 ): BalancesState => {
   switch (action.type) {
-    case BALANCES_FETCH:
-      return {
-        ...state,
-        loading: true,
-        success: false,
-      };
-    case BALANCES_DATA:
-      return {
-        ...state,
-        balances: action.payload.balances,
-        timestamp: action.payload.timestamp,
-        loading: false,
-        success: true,
-      };
-    case BALANCES_ERROR:
-      return {
-        ...state,
-        loading: false,
-        success: false,
-        error: action.error,
-      };
+    // case BALANCES_FETCH:
+    //   return {
+    //     ...state,
+    //     loading: true,
+    //     success: false,
+    //   };
+    // case BALANCES_DATA:
+    //   return {
+    //     ...state,
+    //     balances: action.payload.balances,
+    //     timestamp: action.payload.timestamp,
+    //     loading: false,
+    //     success: true,
+    //   };
+    // case BALANCES_ERROR:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     success: false,
+    //     error: action.error,
+    //   };
     case CHAIN_BALANCE_UPDATE: {
       const { assetId, onChainBalance } = action.payload;
       const newData = state.balances.map((i) => {

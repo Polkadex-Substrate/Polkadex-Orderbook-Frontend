@@ -28,4 +28,14 @@ export const QUERY_KEYS = {
     tradeAddress,
   ],
   openOrders: (tradeAddress: string) => [PREFIX, "openOrders", tradeAddress],
+  tradingBalances: (mainAddress: string) => [
+    PREFIX,
+    "tradingBalances",
+    mainAddress,
+  ],
+  onChainBalances: (accountId: string, ids: string[]) => [
+    "onChainBalances",
+    accountId.toString(),
+    ...ids,
+  ],
 };

@@ -7,7 +7,6 @@ export const Context = createContext<BalancesContextProps>({
   ...initialState,
   getFreeProxyBalance: () => "",
   onBalanceUpdate: () => {},
-  onBalancesFetch: () => {},
   onChangeChainBalance: async () => {
     await new Promise((resolve) => resolve);
   },
