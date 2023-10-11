@@ -6,7 +6,6 @@ import { BalancesContextProps, BalancesProviderProps } from "./types";
 export const Context = createContext<BalancesContextProps>({
   ...initialState,
   getFreeProxyBalance: () => "",
-  onBalanceUpdate: () => {},
   onChangeChainBalance: async () => {
     await new Promise((resolve) => resolve);
   },

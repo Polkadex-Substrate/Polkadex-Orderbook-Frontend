@@ -13,11 +13,19 @@ export const fetchOnChainBalance = async (
   if (!api.isConnected) {
     return 0;
   }
-  const res = await getBalanceQuery(api, assetId, address);
-  const balanceJson: any = res.toJSON();
-  return new BigNumber(balanceJson?.balance || "0")
-    .dividedBy(UNIT_BN)
-    .toNumber();
+  if (isAssetPDEX(assetId)) {
+    const res = await api.query.system.account(address);
+    const balanceJson: BalanceJson = res.toJSON() as BalanceJson;
+    return new BigNumber(balanceJson?.data?.free || 0)
+      .dividedBy(UNIT_BN)
+      .toNumber();
+  } else {
+    const res = await api.query.assets.account(assetId, address);
+    const balanceJson: any = res.toJSON();
+    return new BigNumber(balanceJson?.balance || "0")
+      .dividedBy(UNIT_BN)
+      .toNumber();
+  }
 };
 
 export const fetchOnChainBalances = async (

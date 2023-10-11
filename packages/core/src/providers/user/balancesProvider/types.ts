@@ -48,7 +48,6 @@ export interface BalancesState {
 
 export type BalancesContextProps = BalancesState & {
   getFreeProxyBalance: (value: string) => string;
-  onBalanceUpdate: (value: BalanceUpdatePayload) => void;
   onChangeChainBalance: (value: string) => Promise<void>;
 };
 

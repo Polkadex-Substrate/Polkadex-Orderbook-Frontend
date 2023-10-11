@@ -1,7 +1,7 @@
 // TODO: Check useCalback
 import { useReducer, useEffect, useCallback, useMemo } from "react";
 import { ApiPromise } from "@polkadot/api";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import {
@@ -21,7 +21,8 @@ import * as T from "./types";
 import { fetchTradingBalancesAsync } from "./helper";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
-  const [state, dispatch] = useReducer(balancesReducer, initialState);
+  // const [state, dispatch] = useReducer(balancesReducer, initialState);
+  const queryClient = useQueryClient();
   const {
     selectedAccount: { mainAddress },
   } = useProfile();
@@ -33,7 +34,22 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const { api, connected } = useNativeApi();
   const { onHandleError } = useSettingsProvider();
 
-  const assets = isAssetsFetched ? assetsList.map((a) => a.assetId) : [];
+  const assets = useMemo(
+    () => (isAssetsFetched ? assetsList.map((a) => a.assetId) : []),
+    [isAssetsFetched, assetsList]
+  );
+
+  const shouldFetchTradingBalance = Boolean(
+    isAssetsFetched && mainAddress && mainAddress?.length > 0
+  );
+
+  const shouldFetchChainBalance = Boolean(
+    mainAddress &&
+      mainAddress?.length > 0 &&
+      api?.isConnected &&
+      connected &&
+      isAssetsFetched
+  );
 
   const {
     isLoading: isTradingBalanceLoading,
@@ -42,7 +58,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   } = useQuery<T.IBalanceFromDb[]>({
     queryKey: QUERY_KEYS.tradingBalances(mainAddress),
     queryFn: async () => await fetchTradingBalancesAsync(mainAddress),
-    enabled: Boolean(isAssetsFetched && mainAddress && mainAddress?.length > 0),
+    enabled: shouldFetchTradingBalance,
     onError: onHandleError,
   });
 
@@ -54,13 +70,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     queryKey: QUERY_KEYS.onChainBalances(mainAddress, assets),
     queryFn: async () =>
       await fetchOnChainBalances(api as ApiPromise, assets, mainAddress),
-    enabled: Boolean(
-      mainAddress &&
-        mainAddress?.length > 0 &&
-        api?.isConnected &&
-        connected &&
-        isAssetsFetched
-    ),
+    enabled: shouldFetchChainBalance,
     onError: onHandleError,
   });
 
@@ -156,7 +166,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   // }, [mainAddress, isAssetsFetched, assetsList, onHandleError, api]);
 
   const getFreeProxyBalance = (assetId: string) => {
-    const balance = state.balances?.find(
+    const balance = balances?.find(
       (balance) => balance?.assetId?.toString() === assetId
     );
     if (!balance?.assetId) return "0";
@@ -164,27 +174,24 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   };
 
   const onChangeChainBalance = async (assetId: string) => {
-    const newOnChainBalance = await onFetchChainBalanceForAsset(assetId);
-    dispatch(
-      A.onChangeChainBalance({ assetId, onChainBalance: newOnChainBalance })
-    );
-  };
+    if (api) {
+      const newOnChainBalance = await fetchOnChainBalance(
+        api,
+        assetId,
+        mainAddress
+      );
 
-  const onFetchChainBalanceForAsset = useCallback(
-    async (assetId: string) => {
-      if (api?.isConnected) {
-        await api?.isReady;
-        const chainBalance = await fetchOnChainBalance(
-          api,
-          assetId,
-          mainAddress
-        );
-        return chainBalance.toString();
-      }
-      return "0";
-    },
-    [api, mainAddress]
-  );
+      // Update chain balance
+      queryClient.setQueryData(
+        QUERY_KEYS.onChainBalances(mainAddress, assets),
+        (prevData) => {
+          const oldData = new Map(prevData as Map<string, number>);
+          oldData.set(assetId, Number(newOnChainBalance));
+          return oldData;
+        }
+      );
+    }
+  };
 
   const updateBalanceFromEvent = useCallback(
     async (msg: T.BalanceUpdatePayload): Promise<T.Balance> => {
@@ -198,22 +205,75 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         reserved_balance: msg.reserved,
       };
 
-      const onChainBalance = await onFetchChainBalanceForAsset(assetId);
-      return { ...payload, onChainBalance };
+      if (!api) return { ...payload, onChainBalance: "0" };
+
+      const onChainBalance = await fetchOnChainBalance(
+        api,
+        assetId,
+        mainAddress
+      );
+      return { ...payload, onChainBalance: onChainBalance.toString() };
     },
-    [selectGetAsset, onFetchChainBalanceForAsset]
+    [selectGetAsset, api, mainAddress]
   );
 
   const onBalanceUpdate = useCallback(
     async (payload: T.BalanceUpdatePayload) => {
       try {
-        const updateBalance = await updateBalanceFromEvent(payload);
-        dispatch(A.balanceUpdateEventData(updateBalance));
+        const { onChainBalance, ...updateBalance } =
+          await updateBalanceFromEvent(payload);
+
+        // Update trading balance
+        queryClient.setQueryData(
+          QUERY_KEYS.tradingBalances(mainAddress),
+          (oldData) => {
+            const prevData = [...(oldData as T.IBalanceFromDb[])];
+            const old = prevData.find(
+              (i) =>
+                selectGetAsset(i.asset_type)?.assetId.toString() ===
+                updateBalance.assetId.toString()
+            );
+            if (!old) {
+              return oldData;
+            }
+            const newBalance: T.IBalanceFromDb = {
+              ...old,
+              ...updateBalance,
+            };
+
+            // Filter out old balances from the balance state
+            const balanceFiltered = prevData?.filter(
+              (balance) =>
+                selectGetAsset(balance.asset_type)?.assetId.toString() !==
+                updateBalance.assetId.toString()
+            );
+
+            // Apply updates to the balances in the state
+            return [...balanceFiltered, newBalance];
+          }
+        );
+
+        // Update chain balance
+        queryClient.setQueryData(
+          QUERY_KEYS.onChainBalances(mainAddress, assets),
+          (prevData) => {
+            const oldData = new Map(prevData as Map<string, number>);
+            oldData.set(updateBalance.assetId, Number(onChainBalance));
+            return oldData;
+          }
+        );
       } catch (error) {
         onHandleError("Something has gone wrong while updating balance");
       }
     },
-    [updateBalanceFromEvent, onHandleError]
+    [
+      updateBalanceFromEvent,
+      onHandleError,
+      mainAddress,
+      queryClient,
+      selectGetAsset,
+      assets,
+    ]
   );
 
   // useEffect(() => {
@@ -237,14 +297,13 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   return (
     <Provider
       value={{
-        ...state,
+        // ...state,
         balances,
         loading: isTradingBalanceLoading || isOnChainBalanceLoading,
         success: isTradingBalanceSuccess || isOnChainBalanceSuccess,
         timestamp: new Date().getTime(),
 
         getFreeProxyBalance,
-        onBalanceUpdate,
         onChangeChainBalance,
       }}
     >
