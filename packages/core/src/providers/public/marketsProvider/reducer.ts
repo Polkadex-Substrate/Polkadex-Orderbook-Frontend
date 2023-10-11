@@ -1,5 +1,3 @@
-import { MarketsAction } from "./actions";
-import { MARKET_TICKER_CHANNEL_DATA } from "./constants";
 import { MarketsState, Ticker } from "./types";
 
 export const defaultTickers: Ticker = {
@@ -24,35 +22,4 @@ export const initialMarketsState: MarketsState = {
   tickers: [],
   tickerLoading: false,
   loading: true,
-};
-
-export const marketsReducer = (
-  state = initialMarketsState,
-  action: MarketsAction
-): MarketsState => {
-  switch (action.type) {
-    case MARKET_TICKER_CHANNEL_DATA: {
-      const update = action.payload;
-      const tickers = [...state.tickers];
-      const idx = tickers.findIndex((x) => x.m === update.m);
-      if (idx < 0) tickers.push(update);
-      else tickers[idx] = update;
-      if (
-        state.currentTicker.m === defaultTickers.m ||
-        state.currentTicker.m === update.m
-      ) {
-        return {
-          ...state,
-          currentTicker: update,
-          tickers,
-        };
-      }
-      return {
-        ...state,
-        tickers,
-      };
-    }
-    default:
-      return state;
-  }
 };

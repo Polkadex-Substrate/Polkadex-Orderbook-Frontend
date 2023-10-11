@@ -1,1 +1,0 @@
-export const MARKET_TICKER_CHANNEL_DATA = "markets/TICKER_CHANNEL_DATA";
