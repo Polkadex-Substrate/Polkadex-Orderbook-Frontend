@@ -8,6 +8,9 @@ export const Context = createContext<BalancesContextProps>({
   getFreeProxyBalance: () => "",
   onBalanceUpdate: () => {},
   onBalancesFetch: () => {},
+  onChangeChainBalance: async () => {
+    await new Promise((resolve) => resolve);
+  },
 });
 
 export const Provider = ({ value, children }: BalancesProviderProps) => (

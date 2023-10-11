@@ -44,7 +44,7 @@ export const TransferForm = ({
 
   const { allAccounts } = useExtensionWallet();
   const { selectedAccount, onUserSelectAccount, userData } = useProfile();
-  const { loading } = useBalancesProvider();
+  const { loading, onChangeChainBalance } = useBalancesProvider();
 
   // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
   const { mutateAsync, isLoading } = useAssetTransfer(onRefetch);
@@ -197,6 +197,10 @@ export const TransferForm = ({
       } finally {
         resetForm({ values: initialValues });
         onDisableSwitch();
+        const asset = isPolkadexToken
+          ? "PDEX"
+          : selectedAsset?.assetId || "PDEX";
+        onChangeChainBalance(asset);
       }
     },
   });
