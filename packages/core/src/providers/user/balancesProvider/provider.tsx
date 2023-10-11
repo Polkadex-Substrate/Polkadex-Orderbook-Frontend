@@ -1,13 +1,8 @@
 // TODO: Check useCalback
 import { useReducer, useEffect, useCallback } from "react";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import * as queries from "@orderbook/core/graphql/queries";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
-import {
-  sendQueryToAppSync,
-  fetchOnChainBalance,
-  eventHandler,
-} from "@orderbook/core/helpers";
+import { fetchOnChainBalance, eventHandler } from "@orderbook/core/helpers";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
 import { useProfile } from "../profile";
@@ -16,6 +11,7 @@ import * as A from "./actions";
 import { Provider } from "./context";
 import { balancesReducer, initialState } from "./reducer";
 import * as T from "./types";
+import { fetchbalancesAsync } from "./helper";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const [state, dispatch] = useReducer(balancesReducer, initialState);
@@ -32,28 +28,6 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   const { api } = useNativeApi();
 
   const { onHandleError } = useSettingsProvider();
-
-  const fetchbalancesAsync = useCallback(
-    async (account: string): Promise<T.IBalanceFromDb[]> => {
-      const res = await sendQueryToAppSync({
-        query: queries.getAllBalancesByMainAccount,
-        variables: {
-          main_account: account,
-        },
-      });
-      const balancesRaw: T.BalanceQueryResult[] =
-        res.data.getAllBalancesByMainAccount.items;
-      return balancesRaw?.map((val) => {
-        return {
-          asset_type: val.a,
-          reserved_balance: val.r,
-          free_balance: val.f,
-          pending_withdrawal: val.p,
-        };
-      });
-    },
-    []
-  );
 
   const onBalancesFetch = useCallback(async () => {
     dispatch(A.balancesFetch());
@@ -104,14 +78,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
         dispatch(A.balancesError(error));
       }
     }
-  }, [
-    mainAddress,
-    isAssetData,
-    assetsList,
-    fetchbalancesAsync,
-    onHandleError,
-    api,
-  ]);
+  }, [mainAddress, isAssetData, assetsList, onHandleError, api]);
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = state.balances?.find(
