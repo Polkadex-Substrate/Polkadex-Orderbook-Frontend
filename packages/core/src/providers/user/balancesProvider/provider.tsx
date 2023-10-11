@@ -1,5 +1,4 @@
-// TODO: Check useCalback
-import { useReducer, useEffect, useCallback, useMemo } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { ApiPromise } from "@polkadot/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
@@ -14,14 +13,11 @@ import { QUERY_KEYS } from "@orderbook/core/constants";
 
 import { useProfile } from "../profile";
 
-import * as A from "./actions";
 import { Provider } from "./context";
-import { balancesReducer, initialState } from "./reducer";
 import * as T from "./types";
 import { fetchTradingBalancesAsync } from "./helper";
 
 export const BalancesProvider: T.BalancesComponent = ({ children }) => {
-  // const [state, dispatch] = useReducer(balancesReducer, initialState);
   const queryClient = useQueryClient();
   const {
     selectedAccount: { mainAddress },
@@ -113,57 +109,6 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     onChainBalances,
     assetsList,
   ]);
-
-  // const onBalancesFetch = useCallback(async () => {
-  //   dispatch(A.balancesFetch());
-  //   try {
-  //     if (mainAddress && isAssetsFetched && api?.isConnected) {
-  //       await api.isReady;
-  //       const assetMap = assetsList?.reduce((acc, asset) => {
-  //         acc[asset.assetId] = asset;
-  //         return acc;
-  //       }, {});
-
-  //       const balances = await fetchTradingBalancesAsync(mainAddress);
-
-  //       const list = balances?.map(async (balance: T.IBalanceFromDb) => {
-  //         const asset = assetMap[balance.asset_type];
-  //         const chainBalance = await fetchOnChainBalance(
-  //           api,
-  //           asset.assetId,
-  //           mainAddress
-  //         );
-  //         return {
-  //           assetId: asset.assetId.toString(),
-  //           name: asset.name,
-  //           symbol: asset.symbol,
-  //           reserved_balance: balance.reserved_balance,
-  //           free_balance: balance.free_balance,
-  //           onChainBalance: chainBalance.toString(),
-  //         };
-  //       });
-  //       dispatch(
-  //         A.balancesData({
-  //           balances: await Promise.all(list),
-  //           timestamp: new Date().getTime(),
-  //         })
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     onHandleError(`Balances fetch error: ${error?.message ?? error}`);
-  //     dispatch(A.balancesError(error));
-  //   } finally {
-  //     if (!mainAddress) {
-  //       const error = {
-  //         code: -1,
-  //         message: ["No main address detected"],
-  //       };
-
-  //       dispatch(A.balancesError(error));
-  //     }
-  //   }
-  // }, [mainAddress, isAssetsFetched, assetsList, onHandleError, api]);
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = balances?.find(
@@ -276,10 +221,6 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     ]
   );
 
-  // useEffect(() => {
-  //   if (isAssetsFetched && mainAddress) onBalancesFetch();
-  // }, [onBalancesFetch, isAssetsFetched, mainAddress]);
-
   // balance updates are give to main address
   useEffect(() => {
     if (mainAddress) {
@@ -297,7 +238,6 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
   return (
     <Provider
       value={{
-        // ...state,
         balances,
         loading: isTradingBalanceLoading || isOnChainBalanceLoading,
         success: isTradingBalanceSuccess || isOnChainBalanceSuccess,
