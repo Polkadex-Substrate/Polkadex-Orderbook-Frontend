@@ -56,6 +56,9 @@ export class TestGdriveStore {
 
   async getAll() {
     const files = await GDriveStorage.getAll();
-    return files;
+    const jsons = files?.map((item) => {
+      return GDriveStorage.get(item.id as string);
+    });
+    return jsons ? Promise.all(jsons) : [];
   }
 }

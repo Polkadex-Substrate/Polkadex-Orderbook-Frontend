@@ -1,5 +1,5 @@
 import { ScriptLoader } from "@orderbook/core/utils/scriptLoader";
-import { waitDocumentReady } from "@orderbook/core/utils";
+import { waitDocumentReady } from "@orderbook/core/utils/documentHelpers";
 
 const FIVE_MINUTES = 1000 * 60 * 5;
 

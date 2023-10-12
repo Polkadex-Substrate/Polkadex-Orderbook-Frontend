@@ -1,5 +1,5 @@
 import { ScriptLoader } from "@orderbook/core/utils/scriptLoader";
-import { waitDocumentReady } from "@orderbook/core/utils";
+import { waitDocumentReady } from "@orderbook/core/utils/documentHelpers";
 
 type GoogleApiOptions = {
   apiKey: string;
@@ -139,7 +139,10 @@ ${content}
     return id;
   }
 
-  public async getFiles(spaces: string, q?: string) {
+  public async getFiles(
+    spaces: string,
+    q?: string
+  ): Promise<gapi.client.drive.File[] | undefined> {
     const response = await gapi.client.drive.files.list({
       fields: "files(id,name,description)",
       spaces,
