@@ -239,7 +239,10 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     <Provider
       value={{
         balances,
-        loading: isTradingBalanceLoading || isOnChainBalanceLoading,
+        loading: Boolean(
+          (isTradingBalanceLoading || isOnChainBalanceLoading) &&
+            mainAddress.length
+        ),
         success: isTradingBalanceSuccess || isOnChainBalanceSuccess,
         timestamp: new Date().getTime(),
 
