@@ -27,7 +27,6 @@ export function useMarkets(onClose: () => void) {
   const {
     list: markets,
     currentMarket,
-    setCurrentMarket,
     tickers: allMarketTickers,
   } = useMarketsProvider();
   const favorites = profileState.userMarket.favoriteMarkets;
@@ -83,13 +82,12 @@ export function useMarkets(onClose: () => void) {
           undefined,
           {
             shallow: true,
-          },
+          }
         );
-        setCurrentMarket(marketToSet);
         onClose();
       }
     },
-    [markets, onClose, router, setCurrentMarket],
+    [markets, onClose, router]
   );
 
   /**
@@ -109,7 +107,7 @@ export function useMarkets(onClose: () => void) {
           ticker || defaultTickers
         ).priceChangePercent24Hr?.toString(),
         price_change_percent_num: Number.parseFloat(
-          String((ticker || defaultTickers).priceChangePercent24Hr),
+          String((ticker || defaultTickers).priceChangePercent24Hr)
         ),
         isFavourite: favorites.includes(item.id),
       };
@@ -117,7 +115,7 @@ export function useMarkets(onClose: () => void) {
     const allFavoriteFilters = allTickets.filter((value) =>
       fieldValue.showFavourite
         ? value.isFavourite === fieldValue.showFavourite
-        : value,
+        : value
     );
     return allFavoriteFilters.reduce((pv, cv) => {
       const names = cv.name.toLowerCase().split("/");
@@ -149,7 +147,7 @@ export function useMarkets(onClose: () => void) {
       }
       return pv;
     },
-    ["All"],
+    ["All"]
   );
 
   return {

@@ -1,13 +1,20 @@
 import { createContext } from "react";
 
-import { initialState } from "./reducer";
-import { BalancesContextProps, BalancesProviderProps } from "./types";
+import {
+  BalancesContextProps,
+  BalancesProviderProps,
+  BalancesState,
+} from "./types";
+
+export const initialState: BalancesState = {
+  loading: false,
+  success: false,
+  balances: [],
+};
 
 export const Context = createContext<BalancesContextProps>({
   ...initialState,
   getFreeProxyBalance: () => "",
-  onBalanceUpdate: () => {},
-  onBalancesFetch: () => {},
   onChangeChainBalance: async () => {
     await new Promise((resolve) => resolve);
   },

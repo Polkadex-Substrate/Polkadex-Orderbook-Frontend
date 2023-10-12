@@ -1,208 +1,156 @@
 // TODO: Improve this provider, The market should come through the query, there shouldn't be redirection based on the market
 
-import { useCallback, useEffect, useReducer } from "react";
+import { useEffect, useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { API } from "aws-amplify";
-import _ from "lodash";
 import { useRouter } from "next/router";
 import { GraphQLSubscription } from "@aws-amplify/api";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import * as subscriptions from "@orderbook/core/graphql/subscriptions";
-import * as queries from "@orderbook/core/graphql/queries";
 import { defaultConfig } from "@orderbook/core/config";
 import { Websocket_streamsSubscription } from "@orderbook/core/API";
 import {
-  decimalPlaces,
   convertToTicker,
-  isAssetPDEX,
+  buildFilterPrice,
+  setToStorage,
 } from "@orderbook/core/helpers";
-import { sendQueryToAppSync } from "@orderbook/core/helpers/appsync";
-import { getAllMarkets } from "@orderbook/core/graphql/queries";
-import { POLKADEX_ASSET, READ_ONLY_TOKEN } from "@orderbook/core/constants";
+import {
+  LOCAL_STORAGE_ID,
+  QUERY_KEYS,
+  READ_ONLY_TOKEN,
+} from "@orderbook/core/constants";
 
 import { useSettingsProvider } from "../settings";
 import { IPublicAsset } from "../assetsProvider";
 
-import { setCurrentTicker } from "./actions";
-import {
-  Market,
-  MarketQueryResult,
-  MarketsComponent,
-  Ticker,
-  TickerQueryResult,
-} from "./types";
-import { initialMarketsState, marketsReducer } from "./reducer";
-import * as A from "./actions";
+import { Market, MarketsComponent, Ticker, TickerQueryResult } from "./types";
+import { defaultTickers } from "./reducer";
 import { Provider } from "./context";
+import { fetchMarketTickers, fetchMarkets } from "./helper";
 
 export const MarketsProvider: MarketsComponent = ({ children }) => {
-  const [state, dispatch] = useReducer(marketsReducer, initialMarketsState);
+  const queryClient = useQueryClient();
   const { list: allAssets } = useAssetsProvider();
   const { onHandleError } = useSettingsProvider();
 
   const router = useRouter();
+  const defaultMarket = router.query.id as string;
 
-  const fetchMarkets = useCallback(
-    async (assets: IPublicAsset[]): Promise<Market[]> => {
-      const res = await sendQueryToAppSync({ query: getAllMarkets });
-      const pairs: MarketQueryResult[] = res.data.getAllMarkets.items;
-      const markets = pairs?.map(
-        async (pair: MarketQueryResult): Promise<Market> => {
-          const [baseAsset, quoteAsset] = pair.market.split("-");
-          const { ticker: baseSymbol } = findAsset(assets, baseAsset);
-          const { ticker: quoteSymbol } = findAsset(assets, quoteAsset);
+  const shouldFetchMarkets = Boolean(allAssets.length > 0);
 
-          return {
-            id: pair.market,
-            name: baseSymbol + "/" + quoteSymbol,
-            m: pair.market,
-            base_ticker: baseSymbol,
-            quote_ticker: quoteSymbol,
-            baseAssetId: baseAsset,
-            quoteAssetId: quoteAsset,
-            base_precision: Number(pair.quote_asset_precision),
-            quote_precision: Number(pair.quote_asset_precision),
-            min_price: Number(pair.min_order_price),
-            max_price: Number(pair.max_order_price),
-            min_amount: Number(pair.min_order_qty),
-            max_amount: Number(pair.max_order_qty),
-            tokenTickerName: baseSymbol,
-            price_tick_size: Number(pair.price_tick_size),
-            qty_step_size: Number(pair.qty_step_size),
-          };
-        },
+  const { data: markets, isLoading: isMarketsLoading } = useQuery<Market[]>({
+    queryKey: QUERY_KEYS.markets(JSON.stringify(allAssets)),
+    enabled: shouldFetchMarkets,
+    queryFn: async () => await onMarketsFetch(allAssets),
+    onError: (error) => {
+      const errorMessage =
+        error instanceof Error ? error.message : (error as string);
+      onHandleError(errorMessage);
+    },
+  });
+
+  const shouldFetchTickers = Boolean(markets && markets?.length > 0);
+
+  const { data: tickers, isLoading: isTickersLoading } = useQuery<Ticker[]>({
+    queryKey: QUERY_KEYS.tickers(),
+    enabled: shouldFetchTickers,
+    queryFn: async () => await onMarketTickersFetch(),
+    onError: (error) => {
+      const errorMessage =
+        error instanceof Error ? error.message : (error as string);
+      onHandleError(errorMessage);
+    },
+  });
+
+  const onMarketsFetch = async (allAssets: IPublicAsset[]) => {
+    if (allAssets.length > 0) {
+      const markets = await fetchMarkets(allAssets);
+      const validMarkets = markets.filter(
+        (market) =>
+          !defaultConfig.blockedAssets.some(
+            (item) => item === market.baseAssetId
+          ) &&
+          !defaultConfig.blockedAssets.some(
+            (item) => item === market.quoteAssetId
+          )
       );
-      return await Promise.all(markets);
-    },
-    [],
-  );
-
-  const onMarketsFetch = useCallback(
-    async (allAssets: IPublicAsset[]) => {
-      dispatch(A.marketsFetch());
-      try {
-        if (allAssets.length > 0) {
-          const markets = await fetchMarkets(allAssets);
-          const validMarkets = markets.filter(
-            (market) =>
-              !defaultConfig.blockedAssets.some(
-                (item) => item === market.baseAssetId,
-              ) &&
-              !defaultConfig.blockedAssets.some(
-                (item) => item === market.quoteAssetId,
-              ),
-          );
-          dispatch(A.marketsData(validMarkets));
-        }
-      } catch (error) {
-        console.log(error, "error in fetching markets");
-        onHandleError(error?.message ?? error);
-        dispatch(A.marketsError(error));
-      }
-    },
-    [fetchMarkets, onHandleError],
-  );
-
-  const findAsset = (
-    assets: IPublicAsset[],
-    id: string,
-  ): { name: string; ticker: string; assetId: string } => {
-    if (isAssetPDEX(id)) {
-      const { name, symbol, assetId } = POLKADEX_ASSET;
-      return { name, ticker: symbol, assetId };
+      return validMarkets;
     }
-    const asset = assets?.find(({ assetId }) => assetId === id);
-    if (asset?.name && asset?.symbol && asset?.assetId)
-      return {
-        name: asset.name,
-        ticker: asset.symbol,
-        assetId: asset.assetId,
-      };
-    else throw new Error(`cannot find asset id: ${id}`);
+    return [];
   };
 
-  const fetchMarketTickers = useCallback(
-    async ({
-      m: market,
-      price_tick_size: priceTickSize,
-      qty_step_size: qtyStepSize,
-    }: Market): Promise<Ticker> => {
-      // TODO: check sendQueryToAppSync market variable
-      const to = new Date().toISOString();
-      // tickers are fetched for the last 24 hours
-      const from = new Date(
-        new Date().setDate(new Date().getDate() - 1),
-      ).toISOString();
-      const res = await sendQueryToAppSync({
-        query: queries.getMarketTickers,
-        variables: { market, from, to },
-      });
-      const item: TickerQueryResult = res.data.getMarketTickers.items;
-      const priceChange = Number(item.c) - Number(item.o);
-      const priceChangePercent = (priceChange / Number(item.o)) * 100;
+  const onMarketTickersFetch = async () => {
+    if (!markets || markets?.length === 0) return [];
 
-      const pricePrecision = decimalPlaces(priceTickSize);
-      const quotePrecision = decimalPlaces(qtyStepSize);
+    const tickersPromises = markets.map((m) => fetchMarketTickers(m));
+    return await Promise.all(tickersPromises);
+  };
 
-      return {
-        m: market,
-        priceChange24Hr: _.round(priceChange, pricePrecision),
-        priceChangePercent24Hr: _.round(
-          isNaN(priceChangePercent) ? 0 : priceChangePercent,
-          pricePrecision,
-        ),
-        open: _.round(Number(item.o), pricePrecision),
-        close: _.round(Number(item.c), pricePrecision),
-        high: _.round(Number(item.h), pricePrecision),
-        low: _.round(Number(item.l), pricePrecision),
-        volumeBase24hr: _.round(
-          isNaN(Number(item.vb)) ? 0 : Number(item.vb),
-          quotePrecision,
-        ),
-        volumeQuote24Hr: _.round(Number(item.vq), quotePrecision),
-      };
-    },
-    [],
-  );
+  const filters =
+    markets?.reduce((result, market: Market) => {
+      result[market.id] = result[market.id] || [];
 
-  const onMarketTickersFetch = useCallback(async () => {
-    dispatch(A.marketsTickersFetch());
-    const markets = state.list;
-    try {
-      const tickersPromises = markets.map((m) => fetchMarketTickers(m));
-      const tickers = await Promise.all(tickersPromises);
+      if (market.filters) {
+        result[market.id] = market.filters.map(buildFilterPrice);
+      }
 
-      dispatch(A.marketsTickersData(tickers));
-    } catch (error) {
-      console.error("Market tickers fetch error", error?.errors);
-      onHandleError(`Market tickers fetch error`);
+      return result;
+    }, {}) ?? {};
+
+  const currentMarket = useMemo(() => {
+    if (markets?.length && defaultMarket) {
+      const findMarket = markets?.find((v) =>
+        v.name
+          .replace(/[^a-zA-Z0-9]/g, "")
+          .toLowerCase()
+          .includes(defaultMarket.toLowerCase())
+      );
+      const defaultMarketSelected = findMarket ?? markets[0];
+      setToStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET, defaultMarketSelected.m);
+
+      return defaultMarketSelected;
     }
-  }, [state.list, fetchMarketTickers, onHandleError]);
+  }, [defaultMarket, markets]);
+
+  const currentTicker = useMemo(() => {
+    const currentTickerSelected = tickers?.find(
+      (x) => x.m === currentMarket?.m
+    );
+    return currentTickerSelected ?? defaultTickers;
+  }, [currentMarket?.m, tickers]);
 
   useEffect(() => {
-    if (!state?.currentMarket?.m) {
+    if (!currentMarket?.m) {
       return;
     }
     const subscription = API.graphql<
       GraphQLSubscription<Websocket_streamsSubscription>
     >({
       query: subscriptions.websocket_streams,
-      variables: { name: state.currentMarket.m + "-ticker" },
+      variables: { name: currentMarket.m + "-ticker" },
       authToken: READ_ONLY_TOKEN,
     }).subscribe({
       next: (data) => {
-        if (
-          data?.value?.data?.websocket_streams?.data &&
-          state?.currentMarket?.m
-        ) {
+        if (data?.value?.data?.websocket_streams?.data && currentMarket?.m) {
           const dataParsed: TickerQueryResult = JSON.parse(
-            data.value.data.websocket_streams.data,
+            data.value.data.websocket_streams.data
           );
 
-          const tickerData: Ticker = convertToTicker(
+          const newTickerData: Ticker = convertToTicker(
             dataParsed,
-            state.currentMarket.m,
+            currentMarket.m
           );
-          dispatch(A.marketsTickersChannelData(tickerData));
+
+          queryClient.setQueryData(
+            QUERY_KEYS.tickers(),
+            (prevData: Ticker[]) => {
+              const newTickers = [...prevData];
+              const idx = newTickers?.findIndex((x) => x.m === newTickerData.m);
+              if (idx < 0) newTickers.push(newTickerData);
+              else newTickers[idx] = newTickerData;
+              return newTickers;
+            }
+          );
         }
       },
       error: (err) => {
@@ -212,70 +160,23 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [state?.currentMarket?.m]);
-
-  const setCurrentMarket = (market: Market) => {
-    dispatch(A.setCurrentMarket(market));
-  };
-
-  const onSetCurrentMarketIfUnset = (market: Market) => {
-    dispatch(A.setCurrentMarketIfUnset(market));
-  };
-
-  useEffect(() => {
-    if (allAssets.length > 0 && state.list.length === 0) {
-      onMarketsFetch(allAssets);
-    }
-    if (
-      state.list.length > 0 &&
-      state.tickers.length === 0 &&
-      !state.tickerLoading
-    ) {
-      onMarketTickersFetch();
-    }
-  }, [
-    allAssets,
-    state.list,
-    onMarketsFetch,
-    onMarketTickersFetch,
-    state.tickers,
-    state.tickerLoading,
-  ]);
-
-  // set current ticker on market change
-  useEffect(() => {
-    if (
-      !state?.currentMarket?.m ||
-      !state?.tickers ||
-      state?.tickers.length === 0
-    ) {
-      return;
-    }
-    dispatch(setCurrentTicker(state.currentMarket.m));
-  }, [state?.currentMarket?.m, state?.tickers]);
-
-  const defaultMarket = router.query.id as string;
-  useEffect(() => {
-    if (state.list.length && defaultMarket) {
-      const findMarket = state.list?.find((v) =>
-        v.name
-          .replace(/[^a-zA-Z0-9]/g, "")
-          .toLowerCase()
-          .includes(defaultMarket.toLowerCase()),
-      );
-      const defaultMarketSelected = findMarket ?? state.list[0];
-      onSetCurrentMarketIfUnset(defaultMarketSelected);
-    }
-  }, [state.list, router, defaultMarket]);
+  }, [currentMarket?.m, queryClient]);
 
   return (
     <Provider
       value={{
-        ...state,
-        onMarketsFetch,
-        onMarketTickersFetch,
-        setCurrentMarket,
-        onSetCurrentMarketIfUnset,
+        /** Markets **/
+        list: markets ?? [],
+        loading: isMarketsLoading,
+        filters,
+        timestamp: Math.floor(Date.now() / 1000),
+        currentMarket,
+
+        /** Tickers **/
+        tickers: tickers ?? [],
+        tickerLoading: isTickersLoading,
+        tickersTimestamp: Math.floor(Date.now() / 1000),
+        currentTicker,
       }}
     >
       {children}
