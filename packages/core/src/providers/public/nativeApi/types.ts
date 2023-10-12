@@ -69,8 +69,6 @@ export type NativeApiProviderProps = PropsWithChildren<{
   value: NativeApiContextProps;
 }>;
 
-export type NativeApiContextProps = NativeApiState & {
-  onConnectNativeApi: () => void;
-};
+export type NativeApiContextProps = NativeApiState;
 
 export type NativeApiComponent = FC<PropsWithChildren<NativeApiProps>>;
