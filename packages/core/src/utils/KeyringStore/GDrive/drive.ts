@@ -55,11 +55,11 @@ class GoogleDriveStorage {
     this.backupFolderId = id;
   }
 
-  async get(id: string) {
+  async get<T = undefined>(id: string): Promise<T> {
     await this.auth();
     const file = await this.api.readFile(id);
 
-    return file;
+    return file as T;
   }
 
   async getAll(): Promise<gapi.client.drive.File[] | undefined> {
