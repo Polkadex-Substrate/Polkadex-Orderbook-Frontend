@@ -9,19 +9,23 @@ import { createVersionedAccountStorage } from "@orderbook/core/utils/KeyringStor
 export class GDriveAccountsStore implements KeyringStore {
   private initialized = false;
   private list: GoogleDriveAccount[] = [];
+  private readonly ACCOUNT_PREFIX = "account:";
+
   private async init() {
     this.list = [];
     const files = await GDriveStorage.getAll();
-    const jsons = files?.map(async (file): Promise<GoogleDriveAccount> => {
-      return {
-        id: file.id as string,
-        name: file.name as string,
-        description: file.description as string,
-        data: await GDriveStorage.get<VersionedAccountStorage>(
-          file.id as string
-        ),
-      };
-    });
+    const jsons = files
+      ?.filter((file) => file?.name?.includes(this.ACCOUNT_PREFIX))
+      .map(async (file): Promise<GoogleDriveAccount> => {
+        return {
+          id: file.id as string,
+          name: file.name as string,
+          description: file.description as string,
+          data: await GDriveStorage.get<VersionedAccountStorage>(
+            file.id as string
+          ),
+        };
+      });
     this.list = jsons ? await Promise.all(jsons) : [];
   }
 
@@ -85,8 +89,8 @@ export class GDriveAccountsStore implements KeyringStore {
 
 export class TestGdriveStore {
   private access: boolean;
-  constructor({ apiKeys, clientId }: { apiKeys: string; clientId: string }) {
-    GDriveStorage.setOptions(apiKeys, clientId);
+  constructor(apiKey: string, clientId: string) {
+    GDriveStorage.setOptions(apiKey, clientId);
   }
 
   async enable() {
@@ -98,17 +102,13 @@ export class TestGdriveStore {
     }
   }
 
-  async write(json: KeyringJson) {
-    const file = {
-      name: json.address,
-      description: json?.meta?.name || "",
-      json: JSON.stringify(json),
-    };
+  async write(file: { name: string; description: string; json: string }) {
     await GDriveStorage.create(file);
   }
 
   async getAll() {
     const files = await GDriveStorage.getAll();
+    console.log("get all ", files);
     const jsons = files?.map((item) => {
       return GDriveStorage.get(item.id as string);
     });
