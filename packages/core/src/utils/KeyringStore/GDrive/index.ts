@@ -11,6 +11,10 @@ export class GDriveAccountsStore implements KeyringStore {
   private list: GoogleDriveAccount[] = [];
   private readonly ACCOUNT_PREFIX = "account:";
 
+  constructor(apiKey: string, clientId: string) {
+    GDriveStorage.setOptions(apiKey, clientId);
+  }
+
   private async init() {
     this.list = [];
     const files = await GDriveStorage.getAll();
@@ -89,6 +93,7 @@ export class GDriveAccountsStore implements KeyringStore {
 
 export class TestGdriveStore {
   private access: boolean;
+
   constructor(apiKey: string, clientId: string) {
     GDriveStorage.setOptions(apiKey, clientId);
   }
