@@ -11,7 +11,7 @@ import {
   TourProvider,
   useTour,
 } from "@reactour/tour";
-import { DEFAULTBALANCESINTRONAME } from "@orderbook/core/constants";
+import { DEFAULTWALLETSINTRONAME } from "@orderbook/core/constants";
 
 import * as S from "./styles";
 
@@ -23,59 +23,40 @@ export const Intro = ({
   active,
 }: PropsWithChildren<{ active: boolean }>) => {
   const isClientSide = typeof window !== "undefined";
-
   const initialState =
-    isClientSide && localStorage.getItem(DEFAULTBALANCESINTRONAME) === "true";
+    isClientSide && localStorage.getItem(DEFAULTWALLETSINTRONAME) === "true";
+
   const steps: StepType[] = [
     {
-      selector: ".depositButton",
+      selector: ".fundingAccount",
       content: (
         <S.IntroCard>
-          <span>What is Deposit?</span>
+          <span>What is a Funding Account?</span>
           <p>
-            In this context, Deposit refers to the action of transferring tokens
-            from either a Polkadot Parachain or the Polkadot Relay Chain into
-            the Polkadex network for the purpose of trading.
+            The funding account can be defined as your dedicated blockchain
+            account within the Polkadex network. Put simply, it represents your
+            Polkadot.js account that serves as the gateway to access the
+            Polkadex blockchain.
           </p>
         </S.IntroCard>
       ),
-      position: "bottom",
+      position: "top",
       styles: defaulIntrotStyles,
     },
     {
-      selector: ".withdrawButton",
+      selector: ".tradingAccount",
       content: (
         <S.IntroCard>
-          <span>What is Withdrawal?</span>
+          <span>What is a Trading Account?</span>
           <p>
-            In this context, Withdrawal refers to the action of transferring
-            tokens from the Polkadex network to any other Polkadot Parachain or
-            the Polkadot Relay Chain.
+            The trading account is exclusively intended for conducting trades on
+            the Polkadex Orderbook platform.
+            <br />
+            <br />
+            Its functionality is restricted to executing trades and returning
+            tokens to the associated funding account upon completion of trading
+            activities.
           </p>
-        </S.IntroCard>
-      ),
-      position: "bottom",
-      styles: defaulIntrotStyles,
-    },
-    {
-      selector: ".transferButton",
-      content: (
-        <S.IntroCard>
-          <span>What is Transfer?</span>
-          <div>
-            <p>
-              Transfer refers to the movement of tokens between your Funding
-              Account and your Trading Account within the Polkadex platform.
-              This transfer is primarily conducted to facilitate trading
-              activities, allowing you to allocate funds for trading or move
-              trading proceeds back to your Funding Account.
-            </p>
-            <p>
-              Additionally, you have the option to transfer tokens between
-              different Polkadex accounts, providing flexibility in managing
-              your assets within the Polkadex ecosystem.
-            </p>
-          </div>
         </S.IntroCard>
       ),
       position: "bottom",
@@ -116,9 +97,9 @@ const Actions = ({
 };
 const ContentComponent = (props: PopoverContentProps) => {
   const isClientSide = typeof window !== "undefined";
-
   const initialState =
-    isClientSide && localStorage.getItem(DEFAULTBALANCESINTRONAME) === "true";
+    isClientSide && localStorage.getItem(DEFAULTWALLETSINTRONAME) === "true";
+
   const [state, setState] = useState(!!initialState);
   const content = props.steps[props.currentStep].content;
   const isLastStep = props.currentStep === props.steps.length - 1;
@@ -126,10 +107,7 @@ const ContentComponent = (props: PopoverContentProps) => {
   const handleChangeIntroView = useCallback(
     (state?: boolean) =>
       setState(() => {
-        localStorage.setItem(
-          DEFAULTBALANCESINTRONAME,
-          state ? "true" : "false"
-        );
+        localStorage.setItem(DEFAULTWALLETSINTRONAME, state ? "true" : "false");
         return !!state;
       }),
     []
