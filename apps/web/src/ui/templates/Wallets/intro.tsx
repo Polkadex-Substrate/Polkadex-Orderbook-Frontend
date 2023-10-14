@@ -37,6 +37,10 @@ export const Intro = ({
             account within the Polkadex network. Put simply, it represents your
             Polkadot.js account that serves as the gateway to access the
             Polkadex blockchain.
+            <br />
+            <br />
+            The name is derived from the fact that this account ‘funds’ your
+            Trading Account(s) to trade on the Polkadex Orderbook exchange.
           </p>
         </S.IntroCard>
       ),
@@ -56,6 +60,10 @@ export const Intro = ({
             Its functionality is restricted to executing trades and returning
             tokens to the associated funding account upon completion of trading
             activities.
+            <br />
+            <br />A trading account linked to a specific funding account,
+            possesses the capability to transfer tokens exclusively back to that
+            corresponding funding account alone.
           </p>
         </S.IntroCard>
       ),
