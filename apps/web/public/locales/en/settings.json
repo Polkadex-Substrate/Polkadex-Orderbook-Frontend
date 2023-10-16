@@ -51,5 +51,18 @@
     "title":"Setting up your first trading account",
     "description": "Discover step by step how to create a trading account and start trading on Orderbook.",
     "button": "Explore FAQ"
-  }
+  },
+  "tour": {
+    "card1": {
+      "title": "What is a Funding Account?",
+      "paragraph1": "The funding account can be defined as your dedicated blockchain account within the Polkadex network. Put simply, it represents your Polkadot.js account that serves as the gateway to access the Polkadex blockchain." ,
+      "paragraph2": "The name is derived from the fact that this account `funds` your Trading Account(s) to trade on the Polkadex Orderbook exchange."
+    },
+    "card2": {
+      "title": "What is a Trading Account?",
+      "paragraph1": "The trading account is exclusively intended for conducting trades on the Polkadex Orderbook platform." ,
+      "paragraph2": "Its functionality is restricted to executing trades and returning tokens to the associated funding account upon completion of trading activities.",
+      "paragraph3": "A trading account linked to a specific funding account, possesses the capability to transfer tokens exclusively back to that corresponding funding account alone."
+    }
+    }
 }

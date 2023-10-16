@@ -11,6 +11,7 @@ import {
   TourProvider,
   useTour,
 } from "@reactour/tour";
+import { useTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
@@ -57,7 +58,7 @@ const Actions = ({
   const { setIsOpen } = useTour();
 
   useEffect(() => {
-    if (active) setTimeout(() => setIsOpen(true), 500);
+    if (active) setTimeout(() => setIsOpen(true), 1000);
   }, [active, setIsOpen]);
   return <>{children}</>;
 };
@@ -84,6 +85,7 @@ const ContentComponent = ({
       }),
     [localStorageName]
   );
+  const { t } = useTranslation("common");
 
   return (
     <S.Intro>
@@ -96,12 +98,12 @@ const ContentComponent = ({
         <S.IntroButtons>
           {props.currentStep !== 0 && (
             <button onClick={() => props.setCurrentStep(props.currentStep - 1)}>
-              Back
+              {t("backButton")}
             </button>
           )}
           {!isLastStep ? (
             <button onClick={() => props.setCurrentStep(props.currentStep + 1)}>
-              Next
+              {t("nextButton")}
             </button>
           ) : (
             <button
@@ -111,18 +113,18 @@ const ContentComponent = ({
                 handleChangeIntroView(isLastStep && state);
               }}
             >
-              Done
+              {t("doneButton")}
             </button>
           )}
         </S.IntroButtons>
         <S.IntroSwitch>
           <CheckboxCustom
             checked={state}
-            aria-label="Close tour"
+            aria-label={t("dontShowAria")}
             onChange={() => handleChangeIntroView(!state)}
             labelProps={{ style: { whiteSpace: "nowrap" } }}
           >
-            Don&rsquo;t show again
+            {t("dontShow")}
           </CheckboxCustom>
         </S.IntroSwitch>
       </S.IntroActions>

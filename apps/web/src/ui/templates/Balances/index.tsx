@@ -1,3 +1,4 @@
+// TODO: Verify why the translations are not working correctly
 import Head from "next/head";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
@@ -64,9 +65,9 @@ export const BalancesTemplate = () => {
             <S.IntroCard>
               <span>What is Deposit?</span>
               <p>
-                In this context, Deposit refers to the action of transferring
-                tokens from either a Polkadot Parachain or the Polkadot Relay
-                Chain into the Polkadex network for the purpose of trading.
+                Deposit refers to the action of transferring tokens from either
+                a Polkadot Parachain or the Polkadot Relay Chain into the
+                Polkadex network for the purpose of trading.
               </p>
             </S.IntroCard>
           ),
@@ -79,9 +80,9 @@ export const BalancesTemplate = () => {
             <S.IntroCard>
               <span>What is Withdrawal?</span>
               <p>
-                In this context, Withdrawal refers to the action of transferring
-                tokens from the Polkadex network to any other Polkadot Parachain
-                or the Polkadot Relay Chain.
+                Withdrawal refers to the action of transferring tokens from the
+                Polkadex network to any other Polkadot Parachain or the Polkadot
+                Relay Chain.
               </p>
             </S.IntroCard>
           ),

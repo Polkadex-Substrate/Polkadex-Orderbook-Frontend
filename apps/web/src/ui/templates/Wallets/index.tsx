@@ -102,16 +102,12 @@ export const WalletsTemplate = () => {
           selector: ".fundingAccount",
           content: (
             <S.IntroCard>
-              <span>What is a Funding Account?</span>
+              <span>{t("tour.card1.title")}</span>
               <p>
-                The funding account can be defined as your dedicated blockchain
-                account within the Polkadex network. Put simply, it represents
-                your Polkadot.js account that serves as the gateway to access
-                the Polkadex blockchain.
+                {t("tour.card1.paragraph1")}
                 <br />
                 <br />
-                The name is derived from the fact that this account ‘funds’ your
-                Trading Account(s) to trade on the Polkadex Orderbook exchange.
+                {t("tour.card1.paragraph2")}
               </p>
             </S.IntroCard>
           ),
@@ -122,19 +118,15 @@ export const WalletsTemplate = () => {
           selector: ".tradingAccount",
           content: (
             <S.IntroCard>
-              <span>What is a Trading Account?</span>
+              <span>{t("tour.card2.title")}</span>
               <p>
-                The trading account is exclusively intended for conducting
-                trades on the Polkadex Orderbook platform.
+                {t("tour.card1.paragraph1")}
                 <br />
                 <br />
-                Its functionality is restricted to executing trades and
-                returning tokens to the associated funding account upon
-                completion of trading activities.
+                {t("tour.card1.paragraph2")}
                 <br />
-                <br />A trading account linked to a specific funding account,
-                possesses the capability to transfer tokens exclusively back to
-                that corresponding funding account alone.
+                <br />
+                {t("tour.card1.paragraph2")}
               </p>
             </S.IntroCard>
           ),
