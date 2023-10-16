@@ -46,23 +46,6 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     return [];
   };
 
-  // const onTransactionsFetch1 = useCallback(
-  //   async (mainAddress: string) => {
-  //     try {
-  //       dispatch(A.transactionsFetch());
-  //       if (mainAddress) {
-  //         const transactions = await fetchTransactions(mainAddress, 3, 10);
-  //         dispatch(A.transactionsData(transactions));
-  //       } else {
-  //         onHandleError("No account selected, please select a trading account");
-  //       }
-  //     } catch (error) {
-  //       onHandleError(`Could not fetch transaction history`);
-  //     }
-  //   },
-  //   [onHandleError]
-  // );
-
   const transactionHistory: T.Transaction[] = useMemo(() => {
     const transactionsBydate =
       transactions?.sort(
@@ -108,7 +91,6 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
           queryClient.setQueryData(
             QUERY_KEYS.transactions(mainAddress),
             (oldData) => {
-              console.log(oldData, "old data");
               const transactions = _.cloneDeep(oldData as T.Transaction[]);
               const index = transactions.findIndex(
                 ({ stid }) => Number(stid) === Number(payload.stid)
@@ -118,11 +100,9 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
               } else {
                 transactions.push(data);
               }
-              console.log(transactions, "new data");
               return transactions;
             }
           );
-          // dispatch(A.transactionsUpdateEventData(data));
         }
       } catch (error) {
         onHandleError("Something has gone wrong while updating transactions");
