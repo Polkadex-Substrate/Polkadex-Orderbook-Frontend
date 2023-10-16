@@ -71,6 +71,9 @@ export const Title = styled.div`
       font-weight: normal;
       opacity: 0.5;
     }
+    @media screen and (min-width: 1110px) {
+      padding: 4rem;
+    }
   `}
 `;
 
@@ -108,6 +111,9 @@ export const WalletTitle = styled.div`
       font-size: 1.7rem;
       font-weight: 550;
     }
+    @media screen and (min-width: 1110px) {
+      padding: 1.5rem 4rem;
+    }
   `}
 `;
 
@@ -123,6 +129,9 @@ export const Disclaimer = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackgroundOpacity};
     padding: 2rem;
+    @media screen and (min-width: 1110px) {
+      padding: 2rem 4rem;
+    }
   `}
 `;
 
@@ -134,6 +143,9 @@ export const WalletContent = styled.div`
     max-height: 40rem;
     padding: 0 2rem;
     overflow-y: auto;
+    @media screen and (min-width: 1110px) {
+      padding: 0 4rem;
+    }
     &::-webkit-scrollbar-thumb {
       background: none;
     }
@@ -277,6 +289,9 @@ export const AccountCard = styled.div`
     background: ${theme.colors.tertiaryBackgroundOpacity};
     padding: 2rem;
     gap: 2rem;
+    @media screen and (min-width: 1110px) {
+      padding: 2rem 4rem;
+    }
   `}
 `;
 export const AccountCardWrapper = styled.div`
@@ -398,6 +413,9 @@ export const Header = styled.div`
     margin-bottom: 1.5rem;
     padding: 2rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    @media screen and (min-width: 1110px) {
+      padding: 2rem 4rem;
+    }
   `}
 `;
 
@@ -629,12 +647,13 @@ export const SupportCard = styled.div`
     flex-direction: column;
     justify-content: space-between;
     gap: 2rem;
-    padding: 3rem 2rem;
+    padding: 3rem;
     @media screen and (max-width: 1100px) {
       flex: 1;
     }
     p {
       opacity: 0.6;
+      line-height: 1.5;
     }
     h4 {
       font-size: 1.7rem;
@@ -676,7 +695,7 @@ export const SupportCardContainer = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
     div {
       width: 3rem;
       height: 3rem;

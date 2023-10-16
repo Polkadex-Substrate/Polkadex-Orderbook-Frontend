@@ -149,10 +149,12 @@ export const WalletsTemplate = () => {
                   <h2>{t("subHeading")}</h2>
                 </S.Title>
                 <S.Container>
-                  <S.Wallet className="tradingAccount">
+                  <S.Wallet>
                     <S.WalletTitle>
                       <S.WalletTitleWrapper>
-                        <h2>{t("tradingAccounts")}</h2>
+                        <h2 className="tradingAccount">
+                          {t("tradingAccounts")}
+                        </h2>
                       </S.WalletTitleWrapper>
                       <S.ButtonGroup>
                         <ButtonWallet
@@ -364,10 +366,12 @@ export const WalletsTemplate = () => {
                       )}
                     </S.WalletContainer>
                   </S.Wallet>
-                  <S.Wallet className="fundingAccount">
+                  <S.Wallet>
                     <S.WalletTitle>
                       <S.WalletTitleWrapper>
-                        <h2>{t("fundingAccounts")}</h2>
+                        <h2 className="fundingAccount">
+                          {t("fundingAccounts")}
+                        </h2>
                       </S.WalletTitleWrapper>
                     </S.WalletTitle>
                     <S.WalletContainer>
