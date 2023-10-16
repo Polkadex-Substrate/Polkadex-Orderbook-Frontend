@@ -3,6 +3,7 @@ import React, { Fragment, useRef } from "react";
 import { BigHead } from "@bigheads/core";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import { DEFAULTWALLETSINTRONAME } from "@orderbook/core/constants";
 import {
   Menu,
   PreviewAccount,
@@ -10,6 +11,7 @@ import {
   ChangeAvatar,
   DisclaimerMessage,
   Header,
+  Intro,
 } from "@polkadex/orderbook-ui/organisms";
 import {
   AvailableMessage,
@@ -41,7 +43,8 @@ import Link from "next/link";
 
 import * as T from "./types";
 import * as S from "./styles";
-import { Intro } from "./intro";
+
+import { defaulIntrotStyles } from "@/styles/introStyles";
 
 export const WalletsTemplate = () => {
   const router = useRouter();
@@ -91,7 +94,55 @@ export const WalletsTemplate = () => {
   if (!isTranslationReady) return <></>;
 
   return (
-    <Intro active={isTranslationReady}>
+    <Intro
+      active={isTranslationReady}
+      localStorageName={DEFAULTWALLETSINTRONAME}
+      steps={[
+        {
+          selector: ".fundingAccount",
+          content: (
+            <S.IntroCard>
+              <span>What is a Funding Account?</span>
+              <p>
+                The funding account can be defined as your dedicated blockchain
+                account within the Polkadex network. Put simply, it represents
+                your Polkadot.js account that serves as the gateway to access
+                the Polkadex blockchain.
+                <br />
+                <br />
+                The name is derived from the fact that this account ‘funds’ your
+                Trading Account(s) to trade on the Polkadex Orderbook exchange.
+              </p>
+            </S.IntroCard>
+          ),
+          position: "top",
+          styles: defaulIntrotStyles,
+        },
+        {
+          selector: ".tradingAccount",
+          content: (
+            <S.IntroCard>
+              <span>What is a Trading Account?</span>
+              <p>
+                The trading account is exclusively intended for conducting
+                trades on the Polkadex Orderbook platform.
+                <br />
+                <br />
+                Its functionality is restricted to executing trades and
+                returning tokens to the associated funding account upon
+                completion of trading activities.
+                <br />
+                <br />A trading account linked to a specific funding account,
+                possesses the capability to transfer tokens exclusively back to
+                that corresponding funding account alone.
+              </p>
+            </S.IntroCard>
+          ),
+          position: "bottom",
+          styles: defaulIntrotStyles,
+        },
+      ]}
+    >
       <Modal
         open={isPreviewActive}
         onClose={handleClosePreviewModal}

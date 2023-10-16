@@ -11,77 +11,24 @@ import {
   TourProvider,
   useTour,
 } from "@reactour/tour";
-import { DEFAULTBALANCESINTRONAME } from "@orderbook/core/constants";
 
 import * as S from "./styles";
 
-import { defaulIntrotStyles } from "@/styles/introStyles";
 import { CheckboxCustom } from "@/ui/molecules";
 
 export const Intro = ({
   children,
   active,
-}: PropsWithChildren<{ active: boolean }>) => {
+  localStorageName,
+  steps,
+}: PropsWithChildren<{
+  active: boolean;
+  localStorageName: string;
+  steps: StepType[];
+}>) => {
   const isClientSide = typeof window !== "undefined";
-
   const initialState =
-    isClientSide && localStorage.getItem(DEFAULTBALANCESINTRONAME) === "true";
-  const steps: StepType[] = [
-    {
-      selector: ".depositButton",
-      content: (
-        <S.IntroCard>
-          <span>What is Deposit?</span>
-          <p>
-            In this context, Deposit refers to the action of transferring tokens
-            from either a Polkadot Parachain or the Polkadot Relay Chain into
-            the Polkadex network for the purpose of trading.
-          </p>
-        </S.IntroCard>
-      ),
-      position: "bottom",
-      styles: defaulIntrotStyles,
-    },
-    {
-      selector: ".withdrawButton",
-      content: (
-        <S.IntroCard>
-          <span>What is Withdrawal?</span>
-          <p>
-            In this context, Withdrawal refers to the action of transferring
-            tokens from the Polkadex network to any other Polkadot Parachain or
-            the Polkadot Relay Chain.
-          </p>
-        </S.IntroCard>
-      ),
-      position: "bottom",
-      styles: defaulIntrotStyles,
-    },
-    {
-      selector: ".transferButton",
-      content: (
-        <S.IntroCard>
-          <span>What is Transfer?</span>
-          <div>
-            <p>
-              Transfer refers to the movement of tokens between your Funding
-              Account and your Trading Account within the Polkadex platform.
-              This transfer is primarily conducted to facilitate trading
-              activities, allowing you to allocate funds for trading or move
-              trading proceeds back to your Funding Account.
-            </p>
-            <p>
-              Additionally, you have the option to transfer tokens between
-              different Polkadex accounts, providing flexibility in managing
-              your assets within the Polkadex ecosystem.
-            </p>
-          </div>
-        </S.IntroCard>
-      ),
-      position: "bottom",
-      styles: defaulIntrotStyles,
-    },
-  ];
+    isClientSide && localStorage.getItem(localStorageName) === "true";
 
   return (
     <TourProvider
@@ -90,7 +37,9 @@ export const Intro = ({
       showDots={false}
       showBadge={false}
       defaultOpen={active && !initialState}
-      ContentComponent={ContentComponent}
+      ContentComponent={(props) => (
+        <ContentComponent localStorageName={localStorageName} {...props} />
+      )}
       onClickMask={(e) => {
         e.setCurrentStep(0);
         e.setIsOpen(false);
@@ -114,11 +63,17 @@ const Actions = ({
   }, [active, setIsOpen]);
   return <>{children}</>;
 };
-const ContentComponent = (props: PopoverContentProps) => {
+interface ContentComponentProps extends PopoverContentProps {
+  localStorageName: string;
+}
+const ContentComponent = ({
+  localStorageName,
+  ...props
+}: ContentComponentProps) => {
   const isClientSide = typeof window !== "undefined";
-
   const initialState =
-    isClientSide && localStorage.getItem(DEFAULTBALANCESINTRONAME) === "true";
+    isClientSide && localStorage.getItem(localStorageName) === "true";
+
   const [state, setState] = useState(!!initialState);
   const content = props.steps[props.currentStep].content;
   const isLastStep = props.currentStep === props.steps.length - 1;
@@ -126,13 +81,10 @@ const ContentComponent = (props: PopoverContentProps) => {
   const handleChangeIntroView = useCallback(
     (state?: boolean) =>
       setState(() => {
-        localStorage.setItem(
-          DEFAULTBALANCESINTRONAME,
-          state ? "true" : "false"
-        );
+        localStorage.setItem(localStorageName, state ? "true" : "false");
         return !!state;
       }),
-    []
+    [localStorageName]
   );
 
   return (
