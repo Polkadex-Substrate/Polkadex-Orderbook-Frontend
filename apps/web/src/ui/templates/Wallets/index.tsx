@@ -91,11 +91,11 @@ export const WalletsTemplate = () => {
 
   const { t, "2": isTranslationReady } = useTranslation("settings");
 
-  if (!isTranslationReady) return <></>;
+  if (!isTranslationReady) return <Fragment />;
 
   return (
     <Intro
-      active={isTranslationReady}
+      active={isTranslationReady && !showLoader}
       localStorageName={DEFAULTWALLETSINTRONAME}
       steps={[
         {

@@ -16,7 +16,7 @@
   "actions": "Actions",
   "disclaimerMessage": "Trading accounts will be lost if browser cache is cleared. But do not worry, your funds will not be lost. You can create an other one. Do not transfer funds directly to your Trading address.",
   "fundingAccountToolTip": "Funding account info",
-  "fundingAccounts": "Funding wallets",
+  "fundingAccounts": "Funding accounts",
   "noWalletFoundTitle": "No wallet found",
   "noWalletFoundDescription": "Wallets allow you to create trading accounts and make deposits. Use your Polkadot {.js} extension wallet.",
   "onlyRegisteredAccounts": "Only registered accounts",

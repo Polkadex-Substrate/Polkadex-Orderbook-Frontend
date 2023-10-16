@@ -57,9 +57,7 @@ const Actions = ({
   const { setIsOpen } = useTour();
 
   useEffect(() => {
-    if (active) {
-      setIsOpen(true);
-    }
+    if (active) setTimeout(() => setIsOpen(true), 500);
   }, [active, setIsOpen]);
   return <>{children}</>;
 };
