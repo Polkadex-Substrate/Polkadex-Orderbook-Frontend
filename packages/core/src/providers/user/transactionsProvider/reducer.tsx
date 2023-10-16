@@ -1,12 +1,4 @@
-import _ from "lodash";
-
-import { TransactionsAction } from "./actions";
-import {
-  // TRANSACTIONS_DATA,
-  // TRANSACTIONS_ERROR,
-  // TRANSACTIONS_FETCH,
-  TRANSACTIONS_UPDATE_EVENT_DATA,
-} from "./constants";
+// import { TransactionsAction } from "./actions";
 import { TransactionsState } from "./types";
 
 export const initialState: TransactionsState = {
@@ -15,48 +7,48 @@ export const initialState: TransactionsState = {
   transactions: [],
 };
 
-export const transactionsReducer = (
-  state = initialState,
-  action: TransactionsAction
-) => {
-  switch (action.type) {
-    // case TRANSACTIONS_FETCH:
-    //   return {
-    //     ...state,
-    //     loading: true,
-    //     success: false,
-    //   };
-    // case TRANSACTIONS_DATA:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     success: true,
-    //     transactions: action.payload,
-    //   };
-    // case TRANSACTIONS_ERROR:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     success: false,
-    //     error: action.error,
-    //   };
-    case TRANSACTIONS_UPDATE_EVENT_DATA: {
-      const { payload } = action;
-      const transactions = _.cloneDeep(state.transactions);
-      const index = transactions.findIndex(
-        ({ stid }) => Number(stid) === Number(payload.stid)
-      );
-      if (index !== -1) {
-        transactions[index] = payload;
-      } else {
-        transactions.push(payload);
-      }
-      return {
-        ...state,
-        transactions,
-      };
-    }
-    default:
-      return state;
-  }
-};
+// export const transactionsReducer = (
+//   state = initialState,
+//   action: TransactionsAction
+// ) => {
+//   switch (action.type) {
+// case TRANSACTIONS_FETCH:
+//   return {
+//     ...state,
+//     loading: true,
+//     success: false,
+//   };
+// case TRANSACTIONS_DATA:
+//   return {
+//     ...state,
+//     loading: false,
+//     success: true,
+//     transactions: action.payload,
+//   };
+// case TRANSACTIONS_ERROR:
+//   return {
+//     ...state,
+//     loading: false,
+//     success: false,
+//     error: action.error,
+//   };
+// case TRANSACTIONS_UPDATE_EVENT_DATA: {
+//   const { payload } = action;
+//   const transactions = _.cloneDeep(state.transactions);
+//   const index = transactions.findIndex(
+//     ({ stid }) => Number(stid) === Number(payload.stid)
+//   );
+//   if (index !== -1) {
+//     transactions[index] = payload;
+//   } else {
+//     transactions.push(payload);
+//   }
+//   return {
+//     ...state,
+//     transactions,
+//   };
+// }
+// default:
+//       return state;
+//   }
+// };

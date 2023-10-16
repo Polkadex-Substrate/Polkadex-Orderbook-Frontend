@@ -1,5 +1,6 @@
+import _ from "lodash";
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import {
   groupWithdrawsBySnapShotIds,
@@ -15,6 +16,7 @@ import { DEPOSIT } from "./constants";
 import { formatTransactionData, fetchTransactions } from "./helper";
 
 export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
+  const queryClient = useQueryClient();
   const [filterBy, setFilterBy] = useState({
     type: "all",
     fieldValue: "",
@@ -29,7 +31,7 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     data: transactions,
     isLoading,
     isSuccess,
-  } = useQuery({
+  } = useQuery<T.Transaction[]>({
     queryKey: QUERY_KEYS.transactions(mainAddress),
     queryFn: async () => await onTransactionsFetch(mainAddress),
     enabled: Boolean(mainAddress?.length > 0),
@@ -102,16 +104,33 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     (payload: T.TransactionUpdatePayload) => {
       try {
         if (payload) {
-          console.log("transactionsUpdateSaga", payload);
           const data = formatTransactionData(payload);
+          queryClient.setQueryData(
+            QUERY_KEYS.transactions(mainAddress),
+            (oldData) => {
+              console.log(oldData, "old data");
+              const transactions = _.cloneDeep(oldData as T.Transaction[]);
+              const index = transactions.findIndex(
+                ({ stid }) => Number(stid) === Number(payload.stid)
+              );
+              if (index !== -1) {
+                transactions[index] = data;
+              } else {
+                transactions.push(data);
+              }
+              console.log(transactions, "new data");
+              return transactions;
+            }
+          );
           // dispatch(A.transactionsUpdateEventData(data));
         }
       } catch (error) {
         onHandleError("Something has gone wrong while updating transactions");
       }
     },
-    [onHandleError]
+    [mainAddress, onHandleError, queryClient]
   );
+
   useEffect(() => {
     if (mainAddress) {
       const subscription = eventHandler({
