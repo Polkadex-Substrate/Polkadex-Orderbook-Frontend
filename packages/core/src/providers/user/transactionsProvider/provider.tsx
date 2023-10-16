@@ -1,28 +1,20 @@
-import {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import {
   groupWithdrawsBySnapShotIds,
   eventHandler,
 } from "@orderbook/core/helpers";
+import { QUERY_KEYS } from "@orderbook/core/constants";
 
 import { useProfile } from "../profile";
 
-import * as A from "./actions";
 import { Provider } from "./context";
-import { initialState, transactionsReducer } from "./reducer";
 import * as T from "./types";
 import { DEPOSIT } from "./constants";
 import { formatTransactionData, fetchTransactions } from "./helper";
 
 export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
-  const [state, dispatch] = useReducer(transactionsReducer, initialState);
   const [filterBy, setFilterBy] = useState({
     type: "all",
     fieldValue: "",
@@ -33,46 +25,63 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   } = useProfile();
   const { onHandleError } = useSettingsProvider();
 
-  const onTransactionsFetch = useCallback(
-    async (mainAddress: string) => {
-      try {
-        dispatch(A.transactionsFetch());
-        if (mainAddress) {
-          const transactions = await fetchTransactions(mainAddress, 3, 10);
-          dispatch(A.transactionsData(transactions));
-        } else {
-          onHandleError("No account selected, please select a trading account");
-        }
-      } catch (error) {
-        onHandleError(`Could not fetch transaction history`);
-      }
-    },
-    [onHandleError]
-  );
+  const {
+    data: transactions,
+    isLoading,
+    isSuccess,
+  } = useQuery({
+    queryKey: QUERY_KEYS.transactions(mainAddress),
+    queryFn: async () => await onTransactionsFetch(mainAddress),
+    enabled: Boolean(mainAddress?.length > 0),
+    onError: onHandleError,
+  });
+
+  const onTransactionsFetch = async (mainAddress: string) => {
+    if (mainAddress) {
+      const transactions = await fetchTransactions(mainAddress, 3, 10);
+      return transactions;
+    }
+    return [];
+  };
+
+  // const onTransactionsFetch1 = useCallback(
+  //   async (mainAddress: string) => {
+  //     try {
+  //       dispatch(A.transactionsFetch());
+  //       if (mainAddress) {
+  //         const transactions = await fetchTransactions(mainAddress, 3, 10);
+  //         dispatch(A.transactionsData(transactions));
+  //       } else {
+  //         onHandleError("No account selected, please select a trading account");
+  //       }
+  //     } catch (error) {
+  //       onHandleError(`Could not fetch transaction history`);
+  //     }
+  //   },
+  //   [onHandleError]
+  // );
 
   const transactionHistory: T.Transaction[] = useMemo(() => {
-    const transactionsBydate = state.transactions?.sort(
-      (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
-    );
-    const transactions = transactionsBydate?.reduce(
-      (pv: T.Transaction[], cv) => {
-        if (
-          cv.main_account &&
-          cv.main_account
-            .toLowerCase()
-            .includes(filterBy.fieldValue.toLowerCase()) &&
-          (filterBy.type === "" ||
-            filterBy.type === cv.txn_type.toLowerCase() ||
-            filterBy.type === "all")
-        ) {
-          pv.push(cv);
-        }
-        return pv;
-      },
-      []
-    );
-    return transactions;
-  }, [filterBy, state.transactions]);
+    const transactionsBydate =
+      transactions?.sort(
+        (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+      ) ?? [];
+    const txs = transactionsBydate?.reduce((pv: T.Transaction[], cv) => {
+      if (
+        cv.main_account &&
+        cv.main_account
+          .toLowerCase()
+          .includes(filterBy.fieldValue.toLowerCase()) &&
+        (filterBy.type === "" ||
+          filterBy.type === cv.txn_type.toLowerCase() ||
+          filterBy.type === "all")
+      ) {
+        pv.push(cv);
+      }
+      return pv;
+    }, []);
+    return txs;
+  }, [filterBy, transactions]);
 
   const withdrawalsList = useMemo(
     () => transactionHistory?.filter((txn) => txn.txn_type !== DEPOSIT),
@@ -89,23 +98,13 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     [withdrawalsList]
   );
 
-  useEffect(() => {
-    try {
-      if (mainAddress) {
-        onTransactionsFetch(mainAddress);
-      }
-    } catch (error) {
-      onHandleError(`Transactions error: ${error?.message ?? error}`);
-    }
-  }, [mainAddress, onTransactionsFetch, onHandleError]);
-
   const onTransactionsUpdate = useCallback(
     (payload: T.TransactionUpdatePayload) => {
       try {
         if (payload) {
           console.log("transactionsUpdateSaga", payload);
           const data = formatTransactionData(payload);
-          dispatch(A.transactionsUpdateEventData(data));
+          // dispatch(A.transactionsUpdateEventData(data));
         }
       } catch (error) {
         onHandleError("Something has gone wrong while updating transactions");
@@ -129,7 +128,10 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   return (
     <Provider
       value={{
-        ...state,
+        loading: isLoading,
+        success: isSuccess,
+        transactions: transactions ?? [],
+
         filterByType: filterBy.type,
         onChangeFilterByType: (value: string) =>
           setFilterBy({ ...filterBy, type: value }),

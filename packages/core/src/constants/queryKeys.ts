@@ -34,8 +34,10 @@ export const QUERY_KEYS = {
     mainAddress,
   ],
   onChainBalances: (accountId: string, ids: string[]) => [
+    PREFIX,
     "onChainBalances",
     accountId.toString(),
     ...ids,
   ],
+  transactions: (mainAddress: string) => [PREFIX, "transactions", mainAddress],
 };

@@ -1,27 +1,25 @@
-import { CommonError } from "../../types";
-
 import {
-  TRANSACTIONS_DATA,
-  TRANSACTIONS_ERROR,
-  TRANSACTIONS_FETCH,
+  // TRANSACTIONS_DATA,
+  // TRANSACTIONS_ERROR,
+  // TRANSACTIONS_FETCH,
   TRANSACTIONS_UPDATE_EVENT,
   TRANSACTIONS_UPDATE_EVENT_DATA,
 } from "./constants";
 import { Transaction, TransactionUpdatePayload } from "./types";
 
-export interface TransactionsFetch {
-  type: typeof TRANSACTIONS_FETCH;
-}
+// export interface TransactionsFetch {
+//   type: typeof TRANSACTIONS_FETCH;
+// }
 
-export interface TransactionsError {
-  type: typeof TRANSACTIONS_ERROR;
-  error: CommonError;
-}
+// export interface TransactionsError {
+//   type: typeof TRANSACTIONS_ERROR;
+//   error: CommonError;
+// }
 
-export interface TransactionsData {
-  type: typeof TRANSACTIONS_DATA;
-  payload: Transaction[];
-}
+// export interface TransactionsData {
+//   type: typeof TRANSACTIONS_DATA;
+//   payload: Transaction[];
+// }
 
 export interface TransactionsUpdateEvent {
   type: typeof TRANSACTIONS_UPDATE_EVENT;
@@ -34,34 +32,34 @@ export interface TransactionsUpdateEventData {
 }
 
 export type TransactionsAction =
-  | TransactionsFetch
-  | TransactionsData
-  | TransactionsError
-  | TransactionsUpdateEventData;
+  // | TransactionsFetch
+  // | TransactionsData
+  // | TransactionsError
+  TransactionsUpdateEventData;
 
-export const transactionsFetch = (): TransactionsFetch => ({
-  type: TRANSACTIONS_FETCH,
-});
+// export const transactionsFetch = (): TransactionsFetch => ({
+//   type: TRANSACTIONS_FETCH,
+// });
 
-export const transactionsData = (payload: Transaction[]): TransactionsData => ({
-  type: TRANSACTIONS_DATA,
-  payload,
-});
+// export const transactionsData = (payload: Transaction[]): TransactionsData => ({
+//   type: TRANSACTIONS_DATA,
+//   payload,
+// });
 
-export const transactionsError = (error: CommonError): TransactionsError => ({
-  type: TRANSACTIONS_ERROR,
-  error,
-});
+// export const transactionsError = (error: CommonError): TransactionsError => ({
+//   type: TRANSACTIONS_ERROR,
+//   error,
+// });
 
 export const transactionsUpdateEvent = (
-  payload: TransactionsUpdateEvent["payload"],
+  payload: TransactionsUpdateEvent["payload"]
 ): TransactionsUpdateEvent => ({
   type: TRANSACTIONS_UPDATE_EVENT,
   payload,
 });
 
 export const transactionsUpdateEventData = (
-  payload: TransactionsUpdateEventData["payload"],
+  payload: TransactionsUpdateEventData["payload"]
 ): TransactionsUpdateEventData => ({
   type: TRANSACTIONS_UPDATE_EVENT_DATA,
   payload,
