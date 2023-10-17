@@ -22,5 +22,10 @@
   "excludedJurisdictions": "Excluded Jurisdictions",
   "max": "MAX",
   "transfer": "Transfer",
-  "externalLink": "External link"
+  "externalLink": "External link",
+  "backButton": "Back",
+  "nextButton":"Next",
+  "doneButton":"Done",
+  "dontShow": "  Don't show again",
+  "dontShowAria":"Close tour"
 }

@@ -1,110 +1,72 @@
-import {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from "react";
-import * as queries from "@orderbook/core/graphql/queries";
+import _ from "lodash";
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import {
-  fetchAllFromAppSync,
-  subtractMonthsFromDateOrNow,
   groupWithdrawsBySnapShotIds,
   eventHandler,
 } from "@orderbook/core/helpers";
+import { QUERY_KEYS } from "@orderbook/core/constants";
 
 import { useProfile } from "../profile";
 
-import * as A from "./actions";
 import { Provider } from "./context";
-import { initialState, transactionsReducer } from "./reducer";
 import * as T from "./types";
 import { DEPOSIT } from "./constants";
+import { formatTransactionData, fetchTransactions } from "./helper";
 
 export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
-  const [state, dispatch] = useReducer(transactionsReducer, initialState);
+  const queryClient = useQueryClient();
   const [filterBy, setFilterBy] = useState({
     type: "all",
     fieldValue: "",
   });
 
-  const profileState = useProfile();
-  const { mainAddress } = profileState.selectedAccount;
+  const {
+    selectedAccount: { mainAddress },
+  } = useProfile();
   const { onHandleError } = useSettingsProvider();
 
-  const onTransactionsFetch = useCallback(
-    async (mainAddress: string) => {
-      try {
-        dispatch(A.transactionsFetch());
-        if (mainAddress) {
-          const transactions = await fetchTransactions(mainAddress, 3, 10);
-          dispatch(A.transactionsData(transactions));
-        } else {
-          onHandleError("No account selected, please select a trading account");
-        }
-      } catch (error) {
-        onHandleError(`Could not fetch transaction history`);
-      }
-    },
-    [onHandleError]
-  );
+  const {
+    data: transactions,
+    isLoading,
+    isSuccess,
+  } = useQuery<T.Transaction[]>({
+    queryKey: QUERY_KEYS.transactions(mainAddress),
+    queryFn: async () => await onTransactionsFetch(mainAddress),
+    enabled: Boolean(mainAddress?.length > 0),
+    onError: onHandleError,
+  });
 
-  const fetchTransactions = async (
-    address: string,
-    monthsBefore: number,
-    limit = 100000
-  ): Promise<T.Transaction[]> => {
-    const fromDate = subtractMonthsFromDateOrNow(monthsBefore);
-    const txs: T.TransactionQueryResult[] = await fetchAllFromAppSync(
-      queries.listTransactionsByMainAccount,
-      {
-        main_account: address,
-        from: fromDate.toISOString(),
-        to: new Date().toISOString(),
-        limit,
-      },
-      "listTransactionsByMainAccount"
-    );
-
-    return txs?.map((item) => ({
-      amount: item.q,
-      asset: item.a,
-      stid: item.stid,
-      snapshot_id: item.snapshot_id ?? 0,
-      fee: item.fee,
-      main_account: address,
-      time: new Date(Number(item.t)).toISOString(),
-      status: item.st as T.Transaction["status"],
-      txn_type: item.tt as T.Transaction["txn_type"],
-      isReverted: item.isReverted,
-    }));
+  const onTransactionsFetch = async (mainAddress: string) => {
+    if (mainAddress) {
+      const transactions = await fetchTransactions(mainAddress, 3, 10);
+      return transactions;
+    }
+    return [];
   };
 
   const transactionHistory: T.Transaction[] = useMemo(() => {
-    const transactionsBydate = state.transactions?.sort(
-      (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
-    );
-    const transactions = transactionsBydate?.reduce(
-      (pv: T.Transaction[], cv) => {
-        if (
-          cv.main_account &&
-          cv.main_account
-            .toLowerCase()
-            .includes(filterBy.fieldValue.toLowerCase()) &&
-          (filterBy.type === "" ||
-            filterBy.type === cv.txn_type.toLowerCase() ||
-            filterBy.type === "all")
-        ) {
-          pv.push(cv);
-        }
-        return pv;
-      },
-      []
-    );
-    return transactions;
-  }, [filterBy, state.transactions]);
+    const transactionsBydate =
+      transactions?.sort(
+        (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+      ) ?? [];
+    const txs = transactionsBydate?.reduce((pv: T.Transaction[], cv) => {
+      if (
+        cv.main_account &&
+        cv.main_account
+          .toLowerCase()
+          .includes(filterBy.fieldValue.toLowerCase()) &&
+        (filterBy.type === "" ||
+          filterBy.type === cv.txn_type.toLowerCase() ||
+          filterBy.type === "all")
+      ) {
+        pv.push(cv);
+      }
+      return pv;
+    }, []);
+    return txs;
+  }, [filterBy, transactions]);
 
   const withdrawalsList = useMemo(
     () => transactionHistory?.filter((txn) => txn.txn_type !== DEPOSIT),
@@ -121,64 +83,34 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
     [withdrawalsList]
   );
 
-  useEffect(() => {
-    try {
-      if (profileState?.selectedAccount?.mainAddress) {
-        onTransactionsFetch(profileState.selectedAccount.mainAddress);
-      }
-    } catch (error) {
-      onHandleError(`Transactions error: ${error?.message ?? error}`);
-    }
-  }, [
-    profileState?.selectedAccount?.mainAddress,
-    onTransactionsFetch,
-    onHandleError,
-  ]);
-
-  const formatTransactionData = (
-    data: T.TransactionUpdatePayload
-  ): T.Transaction => {
-    if (data.txn_type === "DEPOSIT") {
-      return {
-        ...data,
-        stid: Number(data.stid),
-        main_account: data.user,
-        fee: data.fee.toString(),
-        amount: data.amount.toString(),
-        asset: data.asset,
-        time: new Date().toISOString(),
-        isReverted: data.isReverted,
-      };
-    } else {
-      return {
-        stid: Number(data.stid),
-        status: data.status,
-        snapshot_id: Number(data?.snapshot_id) || 0,
-        txn_type: "WITHDRAWAL",
-        main_account: data.user,
-        fee: data.fee.toString(),
-        amount: data.amount.toString(),
-        asset: data.asset,
-        time: new Date().toISOString(),
-        isReverted: data.isReverted,
-      };
-    }
-  };
-
   const onTransactionsUpdate = useCallback(
     (payload: T.TransactionUpdatePayload) => {
       try {
         if (payload) {
-          console.log("transactionsUpdateSaga", payload);
           const data = formatTransactionData(payload);
-          dispatch(A.transactionsUpdateEventData(data));
+          queryClient.setQueryData(
+            QUERY_KEYS.transactions(mainAddress),
+            (oldData) => {
+              const transactions = _.cloneDeep(oldData as T.Transaction[]);
+              const index = transactions.findIndex(
+                ({ stid }) => Number(stid) === Number(payload.stid)
+              );
+              if (index !== -1) {
+                transactions[index] = data;
+              } else {
+                transactions.push(data);
+              }
+              return transactions;
+            }
+          );
         }
       } catch (error) {
         onHandleError("Something has gone wrong while updating transactions");
       }
     },
-    [onHandleError]
+    [mainAddress, onHandleError, queryClient]
   );
+
   useEffect(() => {
     if (mainAddress) {
       const subscription = eventHandler({
@@ -195,7 +127,10 @@ export const TransactionsProvider: T.TransactionsComponent = ({ children }) => {
   return (
     <Provider
       value={{
-        ...state,
+        loading: isLoading,
+        success: isSuccess,
+        transactions: transactions ?? [],
+
         filterByType: filterBy.type,
         onChangeFilterByType: (value: string) =>
           setFilterBy({ ...filterBy, type: value }),

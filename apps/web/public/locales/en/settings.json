@@ -1,6 +1,6 @@
 {
   "title": "Wallets | Polkadex Orderbook",
-  "heading": "Wallets.",
+  "heading": "Wallets",
   "subHeading": "General wallet settings.",
   "tradingAccountToolTip": "Trading account info",
   "tradingAccounts": "Trading accounts",
@@ -16,7 +16,7 @@
   "actions": "Actions",
   "disclaimerMessage": "Trading accounts will be lost if browser cache is cleared. But do not worry, your funds will not be lost. You can create an other one. Do not transfer funds directly to your Trading address.",
   "fundingAccountToolTip": "Funding account info",
-  "fundingAccounts": "Funding Accounts",
+  "fundingAccounts": "Funding accounts",
   "noWalletFoundTitle": "No wallet found",
   "noWalletFoundDescription": "Wallets allow you to create trading accounts and make deposits. Use your Polkadot {.js} extension wallet.",
   "onlyRegisteredAccounts": "Only registered accounts",
@@ -41,5 +41,28 @@
   "searchPlaceHolder": "Search",
   "copyToClipBoard": "Copy to clipboard",
   "copied": "Copied",
-  "inUse": "IN USE"
+  "inUse": "IN USE",
+  "intro": {
+    "title": "Funding wallet and trading account differences",
+    "description": "We'll guide you through these new processes on a quick tour.",
+    "button": "Open tour"
+  },
+  "faq": {
+    "title":"Setting up your first trading account",
+    "description": "Discover step by step how to create a trading account and start trading on Orderbook.",
+    "button": "Explore FAQ"
+  },
+  "tour": {
+    "card1": {
+      "title": "What is a Funding Account?",
+      "paragraph1": "The funding account can be defined as your dedicated blockchain account within the Polkadex network. Put simply, it represents your Polkadot.js account that serves as the gateway to access the Polkadex blockchain." ,
+      "paragraph2": "The name is derived from the fact that this account `funds` your Trading Account(s) to trade on the Polkadex Orderbook exchange."
+    },
+    "card2": {
+      "title": "What is a Trading Account?",
+      "paragraph1": "The trading account is exclusively intended for conducting trades on the Polkadex Orderbook platform." ,
+      "paragraph2": "Its functionality is restricted to executing trades and returning tokens to the associated funding account upon completion of trading activities.",
+      "paragraph3": "A trading account linked to a specific funding account, possesses the capability to transfer tokens exclusively back to that corresponding funding account alone."
+    }
+    }
 }
