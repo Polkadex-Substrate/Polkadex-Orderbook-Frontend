@@ -23,11 +23,11 @@
   "intro": {
     "card1": {
       "title": "What is Deposit?",
-      "description": "In this context, Deposit refers to the action of transferring tokens from either a Polkadot Parachain or the Polkadot Relay Chain into the Polkadex network for the purpose of trading."
+      "description": "Deposit refers to the action of transferring tokens from either a Polkadot Parachain or the Polkadot Relay Chain into the Polkadex network for the purpose of trading."
     },
     "card2": {
       "title": "What is Withdrawal?",
-      "description": "In this context, Withdrawal refers to the action of transferring tokens from the Polkadex network to any other Polkadot Parachain or the Polkadot Relay Chain."
+      "description": "Withdrawal refers to the action of transferring tokens from the Polkadex network to any other Polkadot Parachain or the Polkadot Relay Chain."
     },
     "card3": {
       "title": "What is Transfer?",
