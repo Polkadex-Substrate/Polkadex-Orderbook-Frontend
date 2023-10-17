@@ -57,7 +57,6 @@ const nextConfig = {
   },
   generateBuildId: async () => {
     try {
-      // Get the latest Git commit hash using
       const gitCommitHash = execSync("git rev-parse HEAD").toString().trim();
       return gitCommitHash;
     } catch (error) {
