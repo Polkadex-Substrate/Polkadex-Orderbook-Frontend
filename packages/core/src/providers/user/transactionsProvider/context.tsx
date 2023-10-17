@@ -1,7 +1,16 @@
 import { createContext } from "react";
 
-import { initialState } from "./reducer";
-import { TransactionsContextProps, TransactionsProviderProps } from "./types";
+import {
+  TransactionsContextProps,
+  TransactionsProviderProps,
+  TransactionsState,
+} from "./types";
+
+export const initialState: TransactionsState = {
+  loading: false,
+  success: false,
+  transactions: [],
+};
 
 export const Context = createContext<TransactionsContextProps>({
   ...initialState,
