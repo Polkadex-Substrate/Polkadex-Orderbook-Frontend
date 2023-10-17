@@ -37,7 +37,7 @@ export const InputPrimary = ({ label, error, ...props }: T.Props) => (
 export const InputLine = forwardRef(
   (
     { label, error, labelRight, children, ...props }: T.Props,
-    ref: T.ReactRef<HTMLInputElement>,
+    ref: T.ReactRef<HTMLInputElement>
   ) => {
     const inputRef = useRef(null);
     const { ...restProps } = props;
@@ -58,7 +58,7 @@ export const InputLine = forwardRef(
         {error && <S.Error hasMargin={false}>{`${error}`}</S.Error>}
       </S.InputLineWrapper>
     );
-  },
+  }
 );
 
 InputLine.displayName = "InputLine";
@@ -208,7 +208,7 @@ export const PassCode = ({
 
 type TextInputProps = {
   shouldAutoFocus?: boolean;
-  crossOrigin?: any;
+  crossOrigin?: unknown;
   focus?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>;
 
