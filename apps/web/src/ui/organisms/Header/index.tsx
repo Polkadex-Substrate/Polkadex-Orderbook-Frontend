@@ -62,7 +62,6 @@ export const Header = ({
 
   const router = useRouter();
   const { locales, locale } = router;
-  console.log(locales);
   return (
     <S.Wrapper dark={dark}>
       <S.Content>
