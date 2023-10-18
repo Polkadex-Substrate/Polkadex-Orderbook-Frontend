@@ -12,6 +12,7 @@ import {
   IChartingLibraryWidget,
   LibrarySymbolInfo,
   ResolutionString,
+  Timezone,
   widget as Widget,
 } from "../../../../public/static/charting_library";
 
@@ -256,6 +257,12 @@ export const TradingView = () => {
     isReady &&
       tvWidget?.current?.onChartReady &&
       tvWidget?.current?.onChartReady(() => {
+        // Set time zone specific to user
+        const localTime = Intl.DateTimeFormat().resolvedOptions()
+          .timeZone as Timezone;
+
+        tvWidget.current?.activeChart().setTimezone(localTime);
+
         tvWidget?.current
           ?.changeTheme(isDarkTheme ? "Dark" : "Light")
           .then(() => {

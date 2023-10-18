@@ -291,7 +291,7 @@ const ProtectPassword = () => {
                 setFieldValue("showPassword", !values.showPassword)
               }
             >
-              {values.showPassword ? <Icons.Hidden /> : <Icons.Show />}
+              {!values.showPassword ? <Icons.Hidden /> : <Icons.Show />}
             </S.Show>
           </S.ProtectPasswordTitle>
           <S.ProtectPasswordContent>
@@ -301,7 +301,7 @@ const ProtectPassword = () => {
               value={values.password}
               name="password"
               error={errors.password}
-              type={values.showPassword ? "password" : "tel"}
+              type={!values.showPassword ? "password" : "tel"}
             />
           </S.ProtectPasswordContent>
         </S.ProtectPassword>

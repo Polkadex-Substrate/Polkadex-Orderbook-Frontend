@@ -5,10 +5,6 @@ import { MarketsContextProps, MarketsProviderProps } from "./types";
 
 export const Context = createContext<MarketsContextProps>({
   ...initialMarketsState,
-  onMarketsFetch: () => {},
-  onMarketTickersFetch: () => {},
-  setCurrentMarket: () => {},
-  onSetCurrentMarketIfUnset: () => {},
 });
 
 export const Provider = ({ value, children }: MarketsProviderProps) => {

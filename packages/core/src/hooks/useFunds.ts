@@ -9,7 +9,7 @@ export function useFunds() {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setState(e.target.value);
 
-  const { balances: userBalances } = useBalancesProvider();
+  const { balances: userBalances, loading } = useBalancesProvider();
 
   const balances = useMemo(
     () =>
@@ -22,12 +22,13 @@ export function useFunds() {
         }
         return pv;
       }, []),
-    [userBalances, state],
+    [userBalances, state]
   );
 
   return {
     searchState: state,
     handleChange,
     balances,
+    isLoading: loading,
   };
 }

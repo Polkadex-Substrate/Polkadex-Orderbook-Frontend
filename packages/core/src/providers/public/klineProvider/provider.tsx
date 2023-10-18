@@ -23,7 +23,7 @@ export const KlineProvider: KlineComponent = ({ children }) => {
 
   const onHandleKlineFetch = useCallback(
     async (
-      payload: A.KlineFetch["payload"],
+      payload: A.KlineFetch["payload"]
     ): Promise<KlineEvent[] | undefined> => {
       dispatch(A.klineFetch(payload));
       try {
@@ -39,7 +39,7 @@ export const KlineProvider: KlineComponent = ({ children }) => {
         onHandleError("Kline fetch error");
       }
     },
-    [onHandleError],
+    [onHandleError]
   );
   // for testing kline provider , will be integrating with the UI  once trading view purchase is completed
   // const { currentMarket } = useMarketsProvider();
@@ -77,7 +77,8 @@ export const KlineProvider: KlineComponent = ({ children }) => {
   const onFetchKlineChannel = useCallback(
     (payload: A.KlineSubscribe["payload"]) => {
       dispatch(A.klineSubscribe(payload));
-      const { market, interval, onUpdateTradingViewRealTime } = payload;
+      const { market, interval: i, onUpdateTradingViewRealTime } = payload;
+      const interval = getAbsoluteResolution(i);
       const subscription = API.graphql({
         query: subscriptions.websocket_streams,
         variables: { name: `${market}_${interval.toLowerCase()}` },
@@ -93,7 +94,7 @@ export const KlineProvider: KlineComponent = ({ children }) => {
               kline: kline,
               market: dataParsed.m,
               interval,
-            }),
+            })
           );
           onUpdateTradingViewRealTime({
             time: kline.timestamp,
@@ -113,7 +114,7 @@ export const KlineProvider: KlineComponent = ({ children }) => {
         subscription.unsubscribe();
       };
     },
-    [onHandleError],
+    [onHandleError]
   );
 
   return (

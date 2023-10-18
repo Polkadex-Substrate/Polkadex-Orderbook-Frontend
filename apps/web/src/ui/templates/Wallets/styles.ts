@@ -4,10 +4,8 @@ export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
     background: ${theme.colors.primaryBackground};
-    min-width: 100vw;
     height: 100vh;
     display: flex;
-    max-width: 160rem;
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
   `}
@@ -22,35 +20,64 @@ export const Flex = styled.div`
     flex-direction: row;
   }
 `;
+
 export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 1rem;
-  overflow-y: scroll;
-`;
-
-export const ContainerMain = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 2rem;
-  @media screen and (min-width: 590px) {
-    padding: 4rem;
-  }
-  max-width: 90rem;
-`;
-
-export const Title = styled.div`
   ${({ theme }) => css`
-    margin-bottom: 3rem;
-    p {
-      color: ${theme.colors.tertiaryText};
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    flex: 1;
+    border-left: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    @media screen and (min-width: 590px) {
+      margin-left: 2rem;
     }
   `}
 `;
 
 export const Content = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+  `}
+`;
+
+export const ContainerMain = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    width: 100%;
+    max-width: 140rem;
+    border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    @media screen and (max-width: 1100px) {
+      flex-direction: column;
+    }
+  `}
+`;
+
+export const Title = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 2rem;
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 500;
+    }
+    h2 {
+      font-size: ${theme.font.sizes.small};
+      font-weight: normal;
+      opacity: 0.5;
+    }
+    @media screen and (min-width: 1110px) {
+      padding: 4rem;
+    }
+  `}
+`;
+
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 3rem;
@@ -61,15 +88,33 @@ export const Content = styled.div`
 `;
 
 export const Wallet = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  ${({ theme }) => css`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.clearBackgroundOpacity};
+  `}
 `;
 
 export const WalletTitle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    padding: 1.5rem 2rem;
+    h2 {
+      font-size: 1.7rem;
+      font-weight: 550;
+    }
+    @media screen and (min-width: 1110px) {
+      padding: 1.5rem 4rem;
+    }
+  `}
 `;
 
 export const WalletContainer = styled.div`
@@ -78,13 +123,15 @@ export const WalletContainer = styled.div`
     flex-direction: column;
     gap: 2rem;
     background: ${theme.colors.tertiaryBackgroundOpacity};
-    border-radius: 0.5rem;
   `}
 `;
 export const Disclaimer = styled.div`
   ${({ theme }) => css`
-    background: ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.tertiaryBackgroundOpacity};
     padding: 2rem;
+    @media screen and (min-width: 1110px) {
+      padding: 2rem 4rem;
+    }
   `}
 `;
 
@@ -96,6 +143,9 @@ export const WalletContent = styled.div`
     max-height: 40rem;
     padding: 0 2rem;
     overflow-y: auto;
+    @media screen and (min-width: 1110px) {
+      padding: 0 4rem;
+    }
     &::-webkit-scrollbar-thumb {
       background: none;
     }
@@ -216,14 +266,19 @@ export const EmptyBox = styled.div`
 `;
 
 export const Account = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  ${({ theme }) => css`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    background: ${theme.colors.clearBackgroundOpacity};
+  `}
 `;
 export const AccountContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 0.4rem;
 `;
 
 export const AccountCard = styled.div`
@@ -234,6 +289,9 @@ export const AccountCard = styled.div`
     background: ${theme.colors.tertiaryBackgroundOpacity};
     padding: 2rem;
     gap: 2rem;
+    @media screen and (min-width: 1110px) {
+      padding: 2rem 4rem;
+    }
   `}
 `;
 export const AccountCardWrapper = styled.div`
@@ -355,6 +413,9 @@ export const Header = styled.div`
     margin-bottom: 1.5rem;
     padding: 2rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+    @media screen and (min-width: 1110px) {
+      padding: 2rem 4rem;
+    }
   `}
 `;
 
@@ -567,4 +628,101 @@ export const LoadingWrapper = styled.div`
     justify-content: center;
     background: ${theme.colors.tertiaryBackgroundOpacity};
   `}
+`;
+
+export const Support = styled.div`
+  display: flex;
+  @media screen and (min-width: 1100px) {
+    flex-direction: column;
+    max-width: 35rem;
+  }
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
+export const SupportCard = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 3rem;
+    @media screen and (max-width: 1100px) {
+      flex: 1;
+    }
+    p {
+      opacity: 0.6;
+      line-height: 1.5;
+    }
+    h4 {
+      font-size: 1.7rem;
+      font-weight: 500;
+    }
+    a,
+    button {
+      background: ${theme.colors.secondaryBackgroundOpacity};
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.5s ease;
+      white-space: nowrap;
+      width: fit-content;
+      &:disabled {
+        background: gray;
+        cursor: not-allowed;
+      }
+      &:hover:not(:disabled) {
+        background: ${theme.colors.secondaryBackground};
+      }
+      &:active:not(:disabled) {
+        background: ${theme.colors.primary};
+      }
+    }
+    border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+
+    @media screen and (max-width: 600px) {
+      flex-direction: column;
+    }
+    &:first-child {
+      @media screen and (max-width: 1100px) {
+        border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
+      }
+    }
+  `}
+`;
+
+export const SupportCardContainer = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    div {
+      width: 3rem;
+      height: 3rem;
+      padding: 0.6rem;
+      border-radius: 50rem;
+      background: ${theme.colors.secondaryBackgroundOpacity};
+      margin-bottom: 1rem;
+    }
+  `}
+`;
+
+export const IntroCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  span {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+  p {
+    line-height: 1.4;
+    opacity: 0.7;
+    font-size: 1.4rem;
+  }
 `;

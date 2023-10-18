@@ -2,14 +2,31 @@ import { FC, PropsWithChildren } from "react";
 
 import { CommonError } from "../../types";
 
-import * as A from "./actions";
+export interface UserTrade {
+  market_id: string;
+  price: string;
+  qty: string;
+  side: string;
+  timestamp: number;
+  baseAsset: string;
+  quoteAsset: string;
+  isReverted: boolean | null;
+}
+
+export interface UserTradeEvent {
+  m: string;
+  p: string;
+  q: string;
+  t: number;
+  tid: number;
+}
 
 export interface TradesState {
   error?: CommonError;
   loading: boolean;
   success: boolean;
-  data: A.UserTrade[];
-  tradeHistoryNextToken: string | null;
+  data: UserTrade[];
+  hasNextPage?: boolean;
 }
 
 export type TradesQueryResult = {
@@ -38,9 +55,7 @@ export type TradesProviderProps = PropsWithChildren<{
 }>;
 
 export type TradesContextProps = TradesState & {
-  onFetchTrades: (value: onTradeHistoryFetch) => void;
-  onUserTradeUpdate: (value: A.UserTradesUpdateEvent["payload"]) => void;
-  onUserTradesError: (value: A.UserTradesError["error"]) => void;
+  onFetchNextPage: () => void;
 };
 
 export interface TradesProps {

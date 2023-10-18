@@ -38,7 +38,7 @@ export const sendQueryToAppSync = async ({
 export const fetchAllFromAppSync = async (
   query: string,
   variables: Record<string, unknown>,
-  key: string,
+  key: string
 ) => {
   let fullResponse: any[] = [];
   let nextToken = null;
@@ -56,7 +56,7 @@ export const fetchAllFromAppSync = async (
 export const fetchFromAppSync = async (
   query: string,
   variables: Record<string, unknown>,
-  key: string,
+  key: string
 ) => {
   const res = await sendQueryToAppSync({
     query,
@@ -68,4 +68,25 @@ export const fetchFromAppSync = async (
   const nextToken = res.data[key].nextToken;
 
   return { response: fullResponse, nextToken };
+};
+
+const LIST_LIMIT = 15;
+export const fetchBatchFromAppSync = async (
+  query: string,
+  variables: Record<string, any>,
+  key: string
+) => {
+  let nextToken = variables.nextToken;
+  let response: any[] = [];
+  do {
+    const { nextToken: newNextToken, response: newResponse } =
+      await fetchFromAppSync(
+        query,
+        nextToken ? { ...variables, nextToken } : variables,
+        key
+      );
+    response = [...response, ...newResponse];
+    nextToken = newNextToken;
+  } while (response.length < LIST_LIMIT && nextToken);
+  return { response, nextToken };
 };

@@ -148,6 +148,7 @@ export const Actions = styled.div`
         }
       }
       &:nth-child(3) {
+        color: ${theme.colors.white};
         background: ${theme.colors.primary};
         &:hover:not(:disabled) {
           background: ${theme.colors.primaryHover};

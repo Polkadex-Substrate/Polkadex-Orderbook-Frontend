@@ -1,14 +1,21 @@
+// TODO: Verify why the translations are not working correctly
 import Head from "next/head";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useTour } from "@reactour/tour";
-import { BalancesTable, Header, Menu } from "@polkadex/orderbook-ui/organisms";
+import {
+  BalancesTable,
+  Header,
+  Intro,
+  Menu,
+} from "@polkadex/orderbook-ui/organisms";
 import {
   Checkbox,
   EmptyMyAccount,
   Footer,
   Search,
 } from "@polkadex/orderbook-ui/molecules";
+import { DEFAULTBALANCESINTRONAME } from "@orderbook/core/constants";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
@@ -17,7 +24,8 @@ import { useAssets } from "@orderbook/core/hooks";
 
 import * as S from "./styles";
 import { TableSkeleton } from "./skeleton";
-import { Intro } from "./intro";
+
+import { defaulIntrotStyles } from "@/styles/introStyles";
 
 export const BalancesTemplate = () => {
   const { t } = useTranslation("balances");
@@ -32,7 +40,7 @@ export const BalancesTemplate = () => {
     image: "emptyWallet",
     title: tc("connectTradingAccount.title"),
     description: tc("connectTradingAccount.description"),
-    primaryLink: "/createAccount",
+    primaryLink: "/wallets",
     primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
     secondaryLink: "/wallets",
     secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
@@ -47,7 +55,66 @@ export const BalancesTemplate = () => {
   );
 
   return (
-    <Intro active={!showLoader && !!userHasSelectedAccount && !!assets.length}>
+    <Intro
+      active={!showLoader && !!userHasSelectedAccount && !!assets.length}
+      localStorageName={DEFAULTBALANCESINTRONAME}
+      steps={[
+        {
+          selector: ".depositButton",
+          content: (
+            <S.IntroCard>
+              <span>What is Deposit?</span>
+              <p>
+                Deposit refers to the action of transferring tokens from either
+                a Polkadot Parachain or the Polkadot Relay Chain into the
+                Polkadex network for the purpose of trading.
+              </p>
+            </S.IntroCard>
+          ),
+          position: "bottom",
+          styles: defaulIntrotStyles,
+        },
+        {
+          selector: ".withdrawButton",
+          content: (
+            <S.IntroCard>
+              <span>What is Withdrawal?</span>
+              <p>
+                Withdrawal refers to the action of transferring tokens from the
+                Polkadex network to any other Polkadot Parachain or the Polkadot
+                Relay Chain.
+              </p>
+            </S.IntroCard>
+          ),
+          position: "bottom",
+          styles: defaulIntrotStyles,
+        },
+        {
+          selector: ".transferButton",
+          content: (
+            <S.IntroCard>
+              <span>What is Transfer?</span>
+              <div>
+                <p>
+                  Transfer refers to the movement of tokens between your Funding
+                  Account and your Trading Account within the Polkadex platform.
+                  This transfer is primarily conducted to facilitate trading
+                  activities, allowing you to allocate funds for trading or move
+                  trading proceeds back to your Funding Account.
+                </p>
+                <p>
+                  Additionally, you have the option to transfer tokens between
+                  different Polkadex accounts, providing flexibility in managing
+                  your assets within the Polkadex ecosystem.
+                </p>
+              </div>
+            </S.IntroCard>
+          ),
+          position: "bottom",
+          styles: defaulIntrotStyles,
+        },
+      ]}
+    >
       <Head>
         <title>{t("title")}</title>
         <meta name="description" content={t("description")} />

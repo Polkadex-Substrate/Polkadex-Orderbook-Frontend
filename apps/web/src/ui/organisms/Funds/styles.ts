@@ -100,22 +100,45 @@ export const Actions = styled.div`
 `;
 export const Link = styled.div`
   ${({ theme }) => css`
-    border-radius: 0.4rem;
     padding: 0.2rem 0.4rem;
     font-size: 1.3rem;
     transition: background 0.4s ease-in-out;
     border: 1px solid ${theme.colors.secondaryBackground};
     cursor: pointer;
+    padding: 0.5rem 0.8rem;
   `}
 `;
 
 export const WithdrawLink = styled(Link)``;
-export const DepositLink = styled(Link)`
+export const DepositLink = styled(Link)``;
+
+export const TransferLink = styled(Link)`
   ${({ theme }) => css`
-    background: ${theme.colors.green};
+    background: ${theme.colors.primary};
     color: ${theme.colors.white};
     &:hover {
-      background-color: ${theme.colors.green}33;
+      background-color: ${theme.colors.primary}88;
     }
   `}
+`;
+
+export const Icon = styled.div`
+  width: 1.5rem;
+  height: 1.5rem;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+`;
+
+export const TooltipMessage = styled.div`
+  ${({ theme }) => css`
+    white-space: nowrap;
+    color: ${theme.colors.inverse};
+  `}
+`;
+
+export const SkeletonWrapper = styled.div`
+  div {
+    margin-block: 1rem;
+  }
 `;

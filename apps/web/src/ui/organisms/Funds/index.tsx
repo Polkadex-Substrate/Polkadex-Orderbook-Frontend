@@ -2,13 +2,28 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useFunds } from "@orderbook/core/hooks";
-import { EmptyData, Icon, Table } from "@polkadex/orderbook-ui/molecules";
-import { toCapitalize, filterBlockedAssets } from "@orderbook/core/helpers";
+import {
+  EmptyData,
+  Icon,
+  Table,
+  Tooltip,
+  TooltipContent,
+  TooltipHeader,
+} from "@polkadex/orderbook-ui/molecules";
+import {
+  toCapitalize,
+  filterBlockedAssets,
+  formatBalances,
+} from "@orderbook/core/helpers";
+
+import { TransactionsSkeleton } from "../Transactions";
 
 import * as S from "./styles";
 
+import { Icons } from "@/ui/atoms";
+
 export const Funds = ({ onHideFilters }) => {
-  const { balances } = useFunds();
+  const { balances, isLoading } = useFunds();
   const allBalances = filterBlockedAssets(balances);
   useEffect(() => {
     onHideFilters(false);
@@ -18,6 +33,8 @@ export const Funds = ({ onHideFilters }) => {
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`funds.${key}`);
   const { t: tc } = useTranslation("common");
+
+  if (isLoading) return <TransactionsSkeleton />;
 
   return (
     <S.Wrapper>
@@ -54,23 +71,61 @@ export const Funds = ({ onHideFilters }) => {
                 </Table.Cell>
                 <Table.Cell>
                   <S.Cell>
-                    <span>{Number(item?.free_balance || 0).toFixed(8)} </span>
+                    <span>{formatBalances(item?.free_balance)}</span>
                   </S.Cell>
                 </Table.Cell>
                 <Table.Cell>
                   <S.Cell>
-                    <span>
-                      {Number(item?.reserved_balance || 0).toFixed(8)}{" "}
-                    </span>
+                    <span>{formatBalances(item?.reserved_balance)}</span>
                   </S.Cell>
                 </Table.Cell>
                 <Table.Cell>
                   <S.Actions>
-                    <Link href={`/deposit/${item.symbol}`}>
-                      <S.DepositLink>{tc("deposit")}</S.DepositLink>
-                    </Link>
-                    <Link href={`/withdraw/${item.symbol}`}>
-                      <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
+                    <Tooltip>
+                      <TooltipHeader>
+                        <Link
+                          href="https://thea.polkadex.trade/"
+                          target="_blank"
+                        >
+                          <S.DepositLink>{tc("deposit")}</S.DepositLink>
+                        </Link>
+                      </TooltipHeader>
+                      <TooltipContent
+                        style={{ transform: "translateY(-0.8rem)" }}
+                        background="text"
+                      >
+                        <S.TooltipMessage>
+                          {tc("externalLink")}
+                        </S.TooltipMessage>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                      <TooltipHeader>
+                        <Link
+                          href="https://thea.polkadex.trade/withdraw"
+                          target="_blank"
+                        >
+                          <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
+                        </Link>
+                      </TooltipHeader>
+                      <TooltipContent
+                        style={{ transform: "translateY(-0.8rem)" }}
+                        background="text"
+                      >
+                        <S.TooltipMessage>
+                          {tc("externalLink")}
+                        </S.TooltipMessage>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    <Link href={`/transfer?token=${item.symbol}`}>
+                      <S.TransferLink>
+                        <S.Icon>
+                          <Icons.Trading />
+                        </S.Icon>
+                        {tc("transfer")}
+                      </S.TransferLink>
                     </Link>
                   </S.Actions>
                 </Table.Cell>

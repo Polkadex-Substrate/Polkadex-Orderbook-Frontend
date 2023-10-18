@@ -20,5 +20,12 @@
   "disclaimer": "Disclaimer",
   "dataRetentionPolicy": "Data Retention Policy",
   "excludedJurisdictions": "Excluded Jurisdictions",
-  "max": "MAX"
+  "max": "MAX",
+  "transfer": "Transfer",
+  "externalLink": "External link",
+  "backButton": "Back",
+  "nextButton":"Next",
+  "doneButton":"Done",
+  "dontShow": "  Don't show again",
+  "dontShowAria":"Close tour"
 }

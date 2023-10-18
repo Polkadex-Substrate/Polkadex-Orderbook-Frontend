@@ -4,6 +4,7 @@ export const UNIT = BigInt(1000_000_000_000);
 export const UNIT_BN = new BigNumber(UNIT.toString());
 export const DEFAULT_TRADING_VIEW_INTERVAL = "5";
 export const DEFAULTBALANCESINTRONAME = "balancesIntro";
+export const DEFAULTWALLETSINTRONAME = "WalletsIntro";
 
 export const POLKADEX_ASSET = {
   name: "POLKADEX",
@@ -69,3 +70,4 @@ export const TradingView = {
 };
 
 export const SUBSCAN_PER_PAGE_LIMIT = 10;
+export const TRADE_HISTORY_PER_PAGE_LIMIT = 100;

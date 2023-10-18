@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEYS, SUBSCAN_PER_PAGE_LIMIT } from "@orderbook/core/constants";
 import { SUBSCAN_GETTERS } from "@orderbook/core/helpers/subscan";
 

@@ -1,5 +1,4 @@
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import {
@@ -8,30 +7,25 @@ import {
   LoadingSpinner,
   Button,
 } from "@polkadex/orderbook-ui/molecules";
-import { OrderCommon } from "@orderbook/core/providers/types";
-import { OrderHistoryContextProps } from "@orderbook/core/providers/user/orderHistoryProvider";
+import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
-import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
-import { useProfile } from "@orderbook/core/providers/user/profile";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
+import { useOrderHistory } from "@orderbook/core/index";
+
+import { TransactionsSkeleton } from "../Transactions";
 
 import * as S from "./styles";
 
 type Props = {
-  orderHistory: OrderHistoryContextProps;
+  filters: Ifilters;
 };
 
-export const OrderHistory = ({ orderHistory }: Props) => {
-  const {
-    orders: filteredOrderHistory,
-    list: totalOrderHistory,
-    onOrdersHistoryFetch,
-    orderHistoryNextToken,
-    loading,
-    error,
-  } = orderHistory;
+export const OrderHistory = ({ filters }: Props) => {
+  const { hasNextPage, isLoading, onFetchNextPage, orderHistory, error } =
+    useOrderHistory(filters);
+
   const { selectGetAsset } = useAssetsProvider();
   const { currentMarket } = useMarketsProvider();
 
@@ -45,34 +39,14 @@ export const OrderHistory = ({ orderHistory }: Props) => {
 
   const filledQtyPrecision = Math.max(priceFixed, amountFixed);
 
-  const { dateTo, dateFrom } = useSessionProvider();
-  const { selectedAccount } = useProfile();
-
-  useEffect(() => {
-    if (totalOrderHistory.length || orderHistoryNextToken) return;
-    if (selectedAccount.tradeAddress) {
-      onOrdersHistoryFetch({
-        dateFrom,
-        dateTo,
-        tradeAddress: selectedAccount.tradeAddress,
-        orderHistoryNextToken: null,
-      });
-    }
-  }, [
-    selectedAccount.tradeAddress,
-    dateFrom,
-    dateTo,
-    onOrdersHistoryFetch,
-    totalOrderHistory.length,
-    orderHistoryNextToken,
-  ]);
-
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`orderHistory.${key}`);
 
+  if (isLoading) return <TransactionsSkeleton />;
+
   return (
     <S.Wrapper>
-      {filteredOrderHistory?.length ? (
+      {orderHistory?.length ? (
         <S.Table>
           <S.Thead>
             <S.Tr>
@@ -88,16 +62,11 @@ export const OrderHistory = ({ orderHistory }: Props) => {
           </S.Thead>
           <S.Tbody>
             <InfiniteScroll
-              dataLength={filteredOrderHistory.length}
+              dataLength={orderHistory.length}
               next={() => {
-                onOrdersHistoryFetch({
-                  dateFrom,
-                  dateTo,
-                  orderHistoryNextToken,
-                  tradeAddress: selectedAccount.tradeAddress,
-                });
+                onFetchNextPage();
               }}
-              hasMore={orderHistoryNextToken !== null}
+              hasMore={Boolean(hasNextPage)}
               height={300}
               loader={
                 <S.Loader>
@@ -105,8 +74,8 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                 </S.Loader>
               }
             >
-              {filteredOrderHistory &&
-                filteredOrderHistory.map((order: OrderCommon, i) => {
+              {orderHistory &&
+                orderHistory.map((order: OrderCommon, i) => {
                   const [base, quote] = order.m.split("-");
                   const date = new Date(order.time).toLocaleString();
                   const isSell = order.side === "Ask";
@@ -119,60 +88,52 @@ export const OrderHistory = ({ orderHistory }: Props) => {
                     "..." +
                     order.id.slice(order.id.length - 4);
                   const status = order.status;
+                  const show = status !== "OPEN";
                   return (
-                    <OrderHistoryCard
-                      key={i}
-                      id={shortId}
-                      isSell={isSell}
-                      status={status}
-                      orderType={order.order_type}
-                      baseUnit={baseUnit}
-                      quoteUnit={quoteUnit}
-                      data={[
-                        { value: date },
-                        { value: order.order_type },
-                        { value: order.status },
-                        {
-                          value: isMarket
-                            ? "-"
-                            : Decimal.format(order.price, priceFixed, ","),
-                        },
-                        {
-                          value: Decimal.format(order.qty, amountFixed, ","),
-                        },
-                        {
-                          value: Decimal.format(
-                            order.filled_quantity,
-                            filledQtyPrecision,
-                            ","
-                          ),
-                        },
-                        {
-                          value: Decimal.format(
-                            avgPrice,
-                            Number(priceFixed),
-                            ","
-                          ),
-                        },
-                      ]}
-                    />
+                    show && (
+                      <OrderHistoryCard
+                        key={i}
+                        id={shortId}
+                        isSell={isSell}
+                        status={status}
+                        orderType={order.order_type}
+                        baseUnit={baseUnit}
+                        quoteUnit={quoteUnit}
+                        data={[
+                          { value: date },
+                          { value: order.order_type },
+                          { value: order.status },
+                          {
+                            value: isMarket
+                              ? "-"
+                              : Decimal.format(order.price, priceFixed, ","),
+                          },
+                          {
+                            value: Decimal.format(order.qty, amountFixed, ","),
+                          },
+                          {
+                            value: Decimal.format(
+                              order.filled_quantity,
+                              filledQtyPrecision,
+                              ","
+                            ),
+                          },
+                          {
+                            value: Decimal.format(
+                              avgPrice,
+                              Number(priceFixed),
+                              ","
+                            ),
+                          },
+                        ]}
+                      />
+                    )
                   );
                 })}
-              {!loading && error && (
+              {!isLoading && error && (
                 <S.ErrorWrapper>
-                  <p>{error.message}</p>
-                  <Button
-                    onClick={() => {
-                      onOrdersHistoryFetch({
-                        dateFrom,
-                        dateTo,
-                        orderHistoryNextToken,
-                        tradeAddress: selectedAccount.tradeAddress,
-                      });
-                    }}
-                  >
-                    {t("tryAgain")}
-                  </Button>
+                  <p>{error}</p>
+                  <Button onClick={onFetchNextPage}>{t("tryAgain")}</Button>
                 </S.ErrorWrapper>
               )}
             </InfiniteScroll>

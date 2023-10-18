@@ -37,7 +37,7 @@ export const InputPrimary = ({ label, error, ...props }: T.Props) => (
 export const InputLine = forwardRef(
   (
     { label, error, labelRight, children, ...props }: T.Props,
-    ref: T.ReactRef<HTMLInputElement>,
+    ref: T.ReactRef<HTMLInputElement>
   ) => {
     const inputRef = useRef(null);
     const { ...restProps } = props;
@@ -58,7 +58,7 @@ export const InputLine = forwardRef(
         {error && <S.Error hasMargin={false}>{`${error}`}</S.Error>}
       </S.InputLineWrapper>
     );
-  },
+  }
 );
 
 InputLine.displayName = "InputLine";
@@ -129,6 +129,9 @@ export const PassCode = ({
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value && e.target.value.length > 1) {
       e.preventDefault();
+      const newValue = e.target.value.slice(-1); // Limit the input to one character
+      changeCodeAtFocus(newValue);
+      focusNextInput();
       return;
     }
     changeCodeAtFocus(e.target.value);
@@ -208,7 +211,7 @@ export const PassCode = ({
 
 type TextInputProps = {
   shouldAutoFocus?: boolean;
-  crossOrigin?: any;
+  crossOrigin?: unknown;
   focus?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>;
 
@@ -219,14 +222,5 @@ const TextInput = ({ focus, ...props }: TextInputProps) => {
     if (focus) ref?.current?.focus();
   }, [focus]);
 
-  return (
-    <input
-      pattern="[0-9]*"
-      maxLength={1}
-      min={0}
-      max={9}
-      ref={ref}
-      {...restProps}
-    />
-  );
+  return <input pattern="[0-9]*" min={0} max={9} ref={ref} {...restProps} />;
 };

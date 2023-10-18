@@ -5,7 +5,6 @@ import { NativeApiContextProps, NativeApiProviderProps } from "./types";
 
 export const Context = createContext<NativeApiContextProps>({
   ...initialState,
-  onConnectNativeApi: () => {},
 });
 
 export const Provider = ({ value, children }: NativeApiProviderProps) => (
