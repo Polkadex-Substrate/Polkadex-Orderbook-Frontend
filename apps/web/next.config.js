@@ -5,7 +5,10 @@
 const path = require("path");
 const { execSync } = require("child_process");
 
+const { i18n } = require("./next-i18next.config");
+
 const nextConfig = {
+  i18n,
   reactStrictMode: false,
   transpilePackages: ["@orderbook/core"],
   compiler: {

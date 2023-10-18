@@ -2,7 +2,7 @@ import Head from "next/head";
 import React, { Fragment, useRef } from "react";
 import { BigHead } from "@bigheads/core";
 import { useRouter } from "next/router";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { DEFAULTWALLETSINTRONAME } from "@orderbook/core/constants";
 import {
   Menu,

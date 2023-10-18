@@ -13,6 +13,8 @@ import {
 } from "@orderbook/core/providers";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
 
 import { useDisabledPages } from "@/hooks";
 
@@ -70,3 +72,14 @@ const Deposit = () => {
 };
 
 export default Deposit;
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale as string, [
+      "common",
+      "deposit",
+      "organisms",
+      "molecules",
+    ])),
+  },
+});

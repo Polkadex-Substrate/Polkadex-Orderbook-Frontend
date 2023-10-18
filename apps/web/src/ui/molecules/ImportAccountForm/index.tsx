@@ -4,7 +4,7 @@ import { generateUsername } from "friendly-username-generator";
 import { detect } from "detect-browser";
 import { useDropzone } from "react-dropzone";
 import { intlFormat } from "date-fns";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { importAccountJsonValidations } from "@orderbook/core/validations";
 import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";

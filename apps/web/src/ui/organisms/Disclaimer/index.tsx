@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 import * as S from "./styles";

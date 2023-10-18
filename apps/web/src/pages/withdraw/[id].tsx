@@ -13,6 +13,8 @@ import {
   TransactionsProvider,
 } from "@orderbook/core/providers";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
 
 import { useDisabledPages } from "@/hooks";
 
@@ -68,3 +70,14 @@ const Withdraw = () => {
 };
 
 export default Withdraw;
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale as string, [
+      "common",
+      "withdraw",
+      "organisms",
+      "molecules",
+    ])),
+  },
+});

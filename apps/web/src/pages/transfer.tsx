@@ -10,6 +10,7 @@ import {
 } from "@orderbook/core/providers";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { useDisabledPages } from "@/hooks";
 const TransferTemplate = dynamic(
@@ -53,3 +54,15 @@ const Transfer = () => {
 };
 
 export default Transfer;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        "molecules",
+        "organisms",
+        "common",
+        "transfer",
+      ])),
+    },
+  };
+}

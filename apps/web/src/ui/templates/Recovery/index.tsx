@@ -2,7 +2,7 @@
 import { Formik, Form } from "formik";
 import { useState } from "react";
 import Head from "next/head";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { generateUsername } from "friendly-username-generator";
 import { HeaderBack } from "@polkadex/orderbook-ui/organisms";
 import {

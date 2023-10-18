@@ -1,6 +1,7 @@
 import { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
+import { appWithTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
 import { ReactNode, useEffect, useMemo } from "react";
@@ -29,8 +30,6 @@ import awsconfig from "../../aws-exports";
 
 import * as gtag from "@/lib/gtag";
 import { defaultThemes, GlobalStyles } from "@/styles";
-
-import "../../i18n";
 
 const analyticsConfig = {
   AWSPinpoint: {
@@ -222,4 +221,4 @@ const Layout = ({ Component, pageProps }) => {
     return <Component {...pageProps} />;
   }
 };
-export default App;
+export default appWithTranslation(App);

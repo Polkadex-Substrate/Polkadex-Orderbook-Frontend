@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 import { GetServerSideProps } from "next";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useAuth } from "@orderbook/core/providers/user/auth";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { useDisabledPages } from "@/hooks/useDisabledPages";
 
@@ -57,3 +58,15 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   };
 };
 export default CodeVerification;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        "molecules",
+        "organisms",
+        "common",
+        "codeVerification",
+      ])),
+    },
+  };
+}

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "@orderbook/core/providers/user/auth";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { useDisabledPages } from "@/hooks";
 
@@ -34,3 +35,14 @@ const Sign = () => {
 };
 
 export default Sign;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        "organisms",
+        "common",
+        "sign",
+      ])),
+    },
+  };
+}

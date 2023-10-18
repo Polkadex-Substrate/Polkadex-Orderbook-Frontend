@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { useDisabledPages } from "@/hooks";
 
@@ -28,3 +29,16 @@ const Migration = () => {
 };
 
 export default Migration;
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        "molecules",
+        "organisms",
+        "common",
+        "migration",
+      ])),
+    },
+  };
+}

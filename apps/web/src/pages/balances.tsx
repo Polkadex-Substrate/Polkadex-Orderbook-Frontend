@@ -4,6 +4,7 @@ import { AssetsProvider, BalancesProvider } from "@orderbook/core/providers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 import { useEffect } from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { useDisabledPages } from "@/hooks";
 
@@ -41,3 +42,15 @@ const Balances = () => {
 };
 
 export default Balances;
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        "molecules",
+        "organisms",
+        "common",
+        "balances",
+      ])),
+    },
+  };
+}

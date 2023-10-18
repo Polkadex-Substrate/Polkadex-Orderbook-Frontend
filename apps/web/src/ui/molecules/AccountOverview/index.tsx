@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { KeyringPair } from "@polkadot/keyring/types";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import {
   Icon,
   Tooltip,
