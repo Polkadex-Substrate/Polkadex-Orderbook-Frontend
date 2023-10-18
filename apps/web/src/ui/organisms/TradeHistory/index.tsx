@@ -76,7 +76,6 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
                 return (
                   <TradeHistoryCard
                     key={i}
-                    isSell={trade.side === "Ask"}
                     baseUnit={baseUnit}
                     quoteUnit={quoteUnit}
                     data={[
