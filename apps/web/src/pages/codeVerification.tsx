@@ -40,7 +40,10 @@ const CodeVerification = ({ email }: { email?: string }) => {
   return <CodeVerificationTemplate email={email} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+  locale,
+}) => {
   const email = query?.email;
   if (!email)
     return {
@@ -48,20 +51,20 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
         destination: "/trading",
         permanent: true,
       },
-      props: {},
+      props: {
+        ...(await serverSideTranslations(locale as string, [
+          "molecules",
+          "organisms",
+          "common",
+          "codeVerification",
+        ])),
+      },
     };
 
   return {
     props: {
       email,
-    },
-  };
-};
-export default CodeVerification;
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, [
+      ...(await serverSideTranslations(locale as string, [
         "molecules",
         "organisms",
         "common",
@@ -69,4 +72,5 @@ export async function getStaticProps({ locale }) {
       ])),
     },
   };
-}
+};
+export default CodeVerification;
