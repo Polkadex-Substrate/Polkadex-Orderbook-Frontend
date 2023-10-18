@@ -95,7 +95,7 @@ export const WalletsTemplate = () => {
 
   return (
     <Intro
-      active={isTranslationReady && !showLoader}
+      active={isTranslationReady && (isProfileFetching || isAccountsFetching)}
       localStorageName={DEFAULTWALLETSINTRONAME}
       steps={[
         {

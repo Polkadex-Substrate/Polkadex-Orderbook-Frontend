@@ -6,6 +6,7 @@ import {
   Ref,
   useMemo,
 } from "react";
+import QRCode from "easyqrcodejs";
 import { transformAddress } from "@orderbook/core/providers/user/profile";
 
 import * as S from "./styles";
@@ -15,6 +16,7 @@ const PaperWallet = forwardRef(
     {
       mnemonic,
       controllerAddress,
+      mnemoicString,
     }: PropsWithChildren<{
       mnemoicString: string;
       mnemonic: string[];
@@ -27,13 +29,21 @@ const PaperWallet = forwardRef(
 
     useEffect(() => {
       if (!componentRef?.current) return;
+      const opts = {
+        drawer: "svg",
+        width: 150,
+        height: 150,
+        text: mnemoicString,
+        logo: "/img/PolkadexIcon.svg",
+      };
+      const qrcode = new QRCode(componentRef.current, opts);
       const blob = new Blob([componentRef.current.innerHTML], {
         type: "image/svg+xml",
       });
 
       const downloadlink = window.URL.createObjectURL(blob);
       window.URL.revokeObjectURL(downloadlink);
-    }, []);
+    }, [mnemoicString]);
 
     const shortAddress = useMemo(
       () => controllerAddress && transformAddress(controllerAddress, 10),

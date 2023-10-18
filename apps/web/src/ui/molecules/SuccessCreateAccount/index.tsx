@@ -38,7 +38,7 @@ export const SuccessCreateAccount = ({
   const IconComponent = Icons[state ? "Show" : "Hidden"];
   const componentRef = useRef<HTMLDivElement | null>(null);
   const mnemonicArr = useMemo(() => {
-    if (mnemonic) mnemonic?.split(" ");
+    if (mnemonic) return mnemonic?.split(" ");
     return [];
   }, [mnemonic]);
   const {
@@ -108,7 +108,7 @@ export const SuccessCreateAccount = ({
             <span>{account?.address}</span>
           </S.WalletContent>
         </S.Wallet>
-        {!!mnemonicArr && (
+        {!!mnemonicArr?.length && (
           <>
             <S.Words>
               <S.WordsWrapper>
