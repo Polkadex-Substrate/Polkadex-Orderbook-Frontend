@@ -120,13 +120,13 @@ export const WalletsTemplate = () => {
             <S.IntroCard>
               <span>{t("tour.card2.title")}</span>
               <p>
-                {t("tour.card1.paragraph1")}
+                {t("tour.card2.paragraph1")}
                 <br />
                 <br />
-                {t("tour.card1.paragraph2")}
+                {t("tour.card2.paragraph2")}
                 <br />
                 <br />
-                {t("tour.card1.paragraph2")}
+                {t("tour.card2.paragraph3")}
               </p>
             </S.IntroCard>
           ),
