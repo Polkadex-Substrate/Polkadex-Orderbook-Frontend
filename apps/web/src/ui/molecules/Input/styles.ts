@@ -108,7 +108,7 @@ export const LinePassCode = styled.div<{ error?: boolean }>`
       background: ${theme.colors.secondaryBackgroundOpacity};
       width: 4rem;
       height: 5rem;
-      border-width: 2px !important;
+      border: 2px solid ${theme.colors.transparent};
       :-webkit-outer-spin-button,
       :-webkit-inner-spin-button {
         -webkit-appearance: none;
