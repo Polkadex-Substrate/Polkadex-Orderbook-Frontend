@@ -129,6 +129,9 @@ export const PassCode = ({
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value && e.target.value.length > 1) {
       e.preventDefault();
+      const newValue = e.target.value.slice(-1); // Limit the input to one character
+      changeCodeAtFocus(newValue);
+      focusNextInput();
       return;
     }
     changeCodeAtFocus(e.target.value);
@@ -219,14 +222,5 @@ const TextInput = ({ focus, ...props }: TextInputProps) => {
     if (focus) ref?.current?.focus();
   }, [focus]);
 
-  return (
-    <input
-      pattern="[0-9]*"
-      maxLength={1}
-      min={0}
-      max={9}
-      ref={ref}
-      {...restProps}
-    />
-  );
+  return <input pattern="[0-9]*" min={0} max={9} ref={ref} {...restProps} />;
 };
