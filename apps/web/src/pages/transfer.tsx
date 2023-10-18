@@ -10,9 +10,9 @@ import {
 } from "@orderbook/core/providers";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
 
-import { useDisabledPages } from "@/hooks";
+import { getServerSidePropsWithTranslations } from "@/utils";
 const TransferTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Transfer").then(
@@ -26,7 +26,6 @@ const TransferTemplate = dynamic(
 
 const Transfer = () => {
   const router = useRouter();
-  const { disabled } = useDisabledPages();
 
   const {
     authInfo: { isAuthenticated },
@@ -37,7 +36,7 @@ const Transfer = () => {
     if (!isLoading && !isAuthenticated) router?.push("/trading/");
   }, [isLoading, isAuthenticated, router]);
 
-  if (!isAuthenticated || disabled || isLoading) return <div />;
+  if (!isAuthenticated || isLoading) return <div />;
   return (
     <AssetsProvider>
       <BalancesProvider>
@@ -54,15 +53,7 @@ const Transfer = () => {
 };
 
 export default Transfer;
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, [
-        "molecules",
-        "organisms",
-        "common",
-        "transfer",
-      ])),
-    },
-  };
-}
+
+const translations = ["molecules", "organisms", "common", "transfer"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);

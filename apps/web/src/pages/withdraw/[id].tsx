@@ -13,10 +13,9 @@ import {
   TransactionsProvider,
 } from "@orderbook/core/providers";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 
-import { useDisabledPages } from "@/hooks";
+import { getServerSidePropsWithTranslations } from "@/utils";
 
 const WithdrawTemplate = dynamic(
   () =>
@@ -30,7 +29,6 @@ const WithdrawTemplate = dynamic(
 );
 const Withdraw = () => {
   const router = useRouter();
-  const { disabled } = useDisabledPages();
 
   const {
     authInfo: { isAuthenticated: hasUser },
@@ -55,7 +53,7 @@ const Withdraw = () => {
 
   if (!isLoading && !hasUser) router?.push("/trading/");
 
-  if (shouldRedirect || disabled) return <div />;
+  if (shouldRedirect) return <div />;
   return (
     <AssetsProvider>
       <BalancesProvider>
@@ -71,13 +69,6 @@ const Withdraw = () => {
 
 export default Withdraw;
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale as string, [
-      "common",
-      "withdraw",
-      "organisms",
-      "molecules",
-    ])),
-  },
-});
+const translations = ["common", "withdraw", "organisms", "molecules"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);

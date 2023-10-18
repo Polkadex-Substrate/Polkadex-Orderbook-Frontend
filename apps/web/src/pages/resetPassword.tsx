@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
 
-import { useDisabledPages } from "@/hooks";
+import { getServerSidePropsWithTranslations } from "@/utils";
 
 const ResetPasswordTemplate = dynamic(
   () =>
@@ -13,23 +13,11 @@ const ResetPasswordTemplate = dynamic(
   }
 );
 const ResetPassword = () => {
-  const { disabled } = useDisabledPages();
-  if (disabled) return <div />;
-
   return <ResetPasswordTemplate />;
 };
 
 export default ResetPassword;
 
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, [
-        "molecules",
-        "organisms",
-        "common",
-        "resetPassword",
-      ])),
-    },
-  };
-}
+const translations = ["molecules", "organisms", "common", "resetPassword"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);

@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 import { useAuth } from "@orderbook/core/providers/user/auth";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
 
-import { useDisabledPages } from "@/hooks";
+import { getServerSidePropsWithTranslations } from "@/utils";
 
 const SignTemplate = dynamic(
   () =>
@@ -18,7 +18,6 @@ const SignTemplate = dynamic(
   }
 );
 const Sign = () => {
-  const { disabled } = useDisabledPages();
   const router = useRouter();
 
   const {
@@ -29,20 +28,11 @@ const Sign = () => {
 
   if (hasUser && userConfirmed) router.push("/trading");
 
-  if (disabled) return <div />;
-
   return <SignTemplate />;
 };
 
 export default Sign;
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, [
-        "organisms",
-        "common",
-        "sign",
-      ])),
-    },
-  };
-}
+
+const translations = ["organisms", "common", "sign"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);

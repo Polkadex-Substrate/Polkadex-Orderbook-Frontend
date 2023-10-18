@@ -2,7 +2,6 @@ import { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
 import { OverlayProvider } from "@react-aria/overlays";
 import { appWithTranslation } from "next-i18next";
-import dynamic from "next/dynamic";
 import NextNProgress from "nextjs-progressbar";
 import { ReactNode, useEffect, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -48,16 +47,6 @@ const workSans = Work_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
   subsets: ["latin"],
 });
-
-const Maintenance = dynamic(
-  () =>
-    import("@polkadex/orderbook-ui/templates/Maintenance").then(
-      (mod) => mod.Maintenance
-    ),
-  {
-    ssr: false,
-  }
-);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -183,13 +172,9 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
       <ThemeProvider
         theme={theme === "light" ? defaultThemes.light : defaultThemes.dark}
       >
-        {defaultConfig.maintenanceMode ? (
-          <Maintenance />
-        ) : (
-          <ThemeWrapper>
-            <Layout Component={Component} pageProps={pageProps} />
-          </ThemeWrapper>
-        )}
+        <ThemeWrapper>
+          <Layout Component={Component} pageProps={pageProps} />
+        </ThemeWrapper>
         <GlobalStyles />
       </ThemeProvider>
     </>

@@ -5,8 +5,8 @@ import { GetServerSideProps } from "next";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useAuth } from "@orderbook/core/providers/user/auth";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
-import { useDisabledPages } from "@/hooks/useDisabledPages";
+import { defaultConfig } from "@orderbook/core/config";
+import { isPageDisabled } from "@orderbook/core/helpers";
 
 const CodeVerificationTemplate = dynamic(
   () =>
@@ -18,7 +18,6 @@ const CodeVerificationTemplate = dynamic(
   }
 );
 const CodeVerification = ({ email }: { email?: string }) => {
-  const { disabled } = useDisabledPages();
   const router = useRouter();
   const {
     authInfo: { isAuthenticated: hasUser },
@@ -35,42 +34,45 @@ const CodeVerification = ({ email }: { email?: string }) => {
     if (shouldRedirect) router.push("/trading");
   }, [shouldRedirect, router]);
 
-  if (disabled || !email) return <div />;
+  if (!email) return <div />;
 
   return <CodeVerificationTemplate email={email} />;
 };
 
+export default CodeVerification;
+
 export const getServerSideProps: GetServerSideProps = async ({
   query,
+  resolvedUrl,
   locale,
 }) => {
   const email = query?.email;
-  if (!email)
+  const translations = await serverSideTranslations(locale as string, [
+    "molecules",
+    "organisms",
+    "common",
+    "codeVerification",
+  ]);
+
+  const currentUrl = resolvedUrl.replace("/", "");
+  const isUnderMaintenance =  defaultConfig.maintenanceMode;
+  const isDisabled = isPageDisabled(currentUrl, defaultConfig.underMaintenance);
+  if (isDisabled || isUnderMaintenance || !email) {
+    const destination = isUnderMaintenance ? "/maintenance" : "/trading";
     return {
       redirect: {
-        destination: "/trading",
+        destination,
         permanent: true,
       },
       props: {
-        ...(await serverSideTranslations(locale as string, [
-          "molecules",
-          "organisms",
-          "common",
-          "codeVerification",
-        ])),
+        ...translations,
       },
     };
-
+  }
   return {
     props: {
       email,
-      ...(await serverSideTranslations(locale as string, [
-        "molecules",
-        "organisms",
-        "common",
-        "codeVerification",
-      ])),
+      ...translations,
     },
   };
 };
-export default CodeVerification;

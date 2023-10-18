@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
 
-import { useDisabledPages } from "@/hooks";
+import { getServerSidePropsWithTranslations } from "@/utils";
 
 const MigrationTemplate = dynamic(
   () =>
@@ -14,9 +14,6 @@ const MigrationTemplate = dynamic(
 );
 
 const Migration = () => {
-  const { disabled } = useDisabledPages();
-  if (disabled) return <div />;
-
   return (
     <MigrationTemplate
       title="Orderbook v2 migration in progress"
@@ -30,15 +27,6 @@ const Migration = () => {
 
 export default Migration;
 
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, [
-        "molecules",
-        "organisms",
-        "common",
-        "migration",
-      ])),
-    },
-  };
-}
+const translations = ["molecules", "organisms", "common", "migration"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);

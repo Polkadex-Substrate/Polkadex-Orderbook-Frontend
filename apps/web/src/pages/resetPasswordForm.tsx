@@ -2,9 +2,9 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAuth } from "@orderbook/core/providers/user/auth";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
 
-import { useDisabledPages } from "@/hooks";
+import { getServerSidePropsWithTranslations } from "@/utils";
 
 const ResetPasswordFormTemplate = dynamic(
   () =>
@@ -17,7 +17,6 @@ const ResetPasswordFormTemplate = dynamic(
 );
 const ResetPasswordForm = () => {
   const router = useRouter();
-  const { disabled } = useDisabledPages();
   const {
     forgotPassword: { email },
   } = useAuth();
@@ -27,21 +26,12 @@ const ResetPasswordForm = () => {
     if (!hasEmail) router.push("/signIn");
   }, [router, hasEmail]);
 
-  if (!hasEmail || disabled) return <div />;
+  if (!hasEmail) return <div />;
   return <ResetPasswordFormTemplate />;
 };
 
 export default ResetPasswordForm;
 
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, [
-        "molecules",
-        "organisms",
-        "common",
-        "resetPasswordForm",
-      ])),
-    },
-  };
-}
+const translations = ["molecules", "organisms", "common", "resetPasswordForm"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);
