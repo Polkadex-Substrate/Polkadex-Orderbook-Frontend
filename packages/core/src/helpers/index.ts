@@ -38,3 +38,4 @@ export * from "./Utils";
 export * from "./validateChild";
 export * from "./variants";
 export * from "./formatting";
+export * from "./getChainFromTicker";
