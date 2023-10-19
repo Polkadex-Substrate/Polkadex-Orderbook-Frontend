@@ -2,6 +2,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import Link from "next/link";
 import { AssetsProps } from "@orderbook/core/hooks";
 import classNames from "classnames";
+import { getChainFromTicker } from "@orderbook/core/helpers";
 
 import * as S from "./styles";
 
@@ -67,13 +68,19 @@ export const columns = (headers: string[]) => [
         withdraw: classNames({ withdrawButton: e.row.index === 0 }),
         transfer: classNames({ transferButton: e.row.index === 0 }),
       };
+      const chainName = getChainFromTicker(e.getValue().symbol);
 
       return (
         <S.Actions>
           <Tooltip>
             <TooltipHeader>
               <Link
-                href="https://thea.polkadex.trade/"
+                href={{
+                  pathname: "https://thea.polkadex.trade/",
+                  query: chainName && {
+                    chain: encodeURIComponent(chainName),
+                  },
+                }}
                 target="_blank"
                 className={tdClassName.deposit}
               >
@@ -91,7 +98,12 @@ export const columns = (headers: string[]) => [
           <Tooltip>
             <TooltipHeader>
               <Link
-                href="https://thea.polkadex.trade/withdraw"
+                href={{
+                  pathname: "https://thea.polkadex.trade/withdraw",
+                  query: chainName && {
+                    chain: encodeURIComponent(chainName),
+                  },
+                }}
                 target="_blank"
                 className={tdClassName.withdraw}
               >
