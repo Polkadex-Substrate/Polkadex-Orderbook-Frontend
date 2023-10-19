@@ -28,6 +28,7 @@
     "canvas-confetti": "^1.6.0",
     "classnames": "^2.3.2",
     "detect-browser": "^5.3.0",
+    "easyqrcodejs": "^4.5.0",
     "formik": "^2.2.9",
     "friendly-username-generator": "^2.0.4",
     "i18next": "^23.5.1",

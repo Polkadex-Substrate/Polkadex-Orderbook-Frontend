@@ -109,7 +109,7 @@ export const NewAccount = ({
                   ? successData[0].description
                   : successInformation.description
               }
-              mnemonic={tradeInfo?.mnemonic}
+              mnemonic={tradeWalletState?.registerAccountModal?.mnemonic}
               account={tradeInfo?.account}
             />
           ) : (
