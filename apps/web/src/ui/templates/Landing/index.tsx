@@ -8,6 +8,7 @@ import { Menu } from "@headlessui/react";
 import Spline from "@splinetool/react-spline";
 import { useState } from "react";
 import classNames from "classnames";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import SpeedImage from "../../../../public/img/speed.webp";
 import PadLock from "../../../../public/img/padlock.webp";
@@ -92,6 +93,8 @@ export function LandingTemplate() {
   const { t } = useTranslation("landing");
   const [state, setState] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const { onHandleError } = useSettingsProvider();
 
   return (
     <>
@@ -226,6 +229,7 @@ export function LandingTemplate() {
               className={classNames(open && "active", "spline")}
               scene="https://prod.spline.design/d9wfWHuFHYgRRRG2/scene.splinecode"
               onLoad={() => setOpen(true)}
+              onError={() => onHandleError("Error in loading the animation")}
             />
           </S.Spline>
         </S.Hero>
