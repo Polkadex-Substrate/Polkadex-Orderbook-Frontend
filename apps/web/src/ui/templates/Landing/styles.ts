@@ -1,10 +1,8 @@
 import Link from "next/link";
 import styled, { css } from "styled-components";
 
-export const Main = styled.main<{ open?: boolean }>`
-  ${({ theme, open }) => css`
-    visibility: hidden;
-    opacity: 0;
+export const Main = styled.main`
+  ${({ theme }) => css`
     transition:
       opacity 1s ease-in-out,
       visibility 1s ease-in-out;
@@ -15,11 +13,6 @@ export const Main = styled.main<{ open?: boolean }>`
     min-height: 100vh;
     flex-direction: column;
     margin: 0 auto;
-    ${open &&
-    css`
-      visibility: visible;
-      opacity: 100%;
-    `}
   `}
 `;
 

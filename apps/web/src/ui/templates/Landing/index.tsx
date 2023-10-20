@@ -18,7 +18,6 @@ import * as S from "./styles";
 
 import { Icons } from "@/ui/atoms";
 import { OrderbookLogo } from "@/ui/molecules";
-import LoadingScreen from "@/ui/molecules/LoadingScreen";
 
 const outrun = localFont({
   src: "../../../../public/fonts/outrun-future-bold.otf",
@@ -100,8 +99,7 @@ export function LandingTemplate() {
         <title>{t("title")}</title>
         <meta name="description" content={t("description")} />
       </Head>
-      {!open && <LoadingScreen light />}
-      <S.Main open={open}>
+      <S.Main>
         <S.Header>
           {state && (
             <S.MenuWrapper>

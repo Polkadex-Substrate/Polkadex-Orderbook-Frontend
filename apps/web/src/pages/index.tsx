@@ -1,4 +1,7 @@
 import dynamic from "next/dynamic";
+
+import LoadingScreen from "@/ui/molecules/LoadingScreen";
+
 const LandingTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/Landing").then(
@@ -6,6 +9,7 @@ const LandingTemplate = dynamic(
     ),
   {
     ssr: false,
+    loading: () => <LoadingScreen />,
   }
 );
 const Home = () => <LandingTemplate />;
