@@ -11,7 +11,7 @@ import { useFormik } from "formik";
 import { depositValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 
 import * as S from "./styles";

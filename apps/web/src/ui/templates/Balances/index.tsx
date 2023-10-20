@@ -1,7 +1,7 @@
 // TODO: Verify why the translations are not working correctly
 import Head from "next/head";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { useTour } from "@reactour/tour";
 import {
   BalancesTable,

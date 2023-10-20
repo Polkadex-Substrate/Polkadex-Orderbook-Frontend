@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { NavbarItem, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";

@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { useRef } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Button } from "@polkadex/orderbook-ui/molecules";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { FAQHeader } from "@polkadex/orderbook-ui/molecules/FAQHeader";

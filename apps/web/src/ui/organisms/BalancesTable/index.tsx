@@ -8,7 +8,7 @@ import {
 import classNames from "classnames";
 import { useMemo, useState } from "react";
 import { AssetsProps } from "@orderbook/core/hooks";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 
 import * as S from "./styles";
 import { columns as getColumns } from "./columns";

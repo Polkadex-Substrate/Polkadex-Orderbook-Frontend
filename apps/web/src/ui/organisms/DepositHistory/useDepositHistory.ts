@@ -15,7 +15,7 @@ import {
 import { useMemo, useState } from "react";
 import { SortingState } from "@tanstack/react-table";
 import { useTransactionsProvider } from "@orderbook/core/providers/user/transactionsProvider";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { intlFormat } from "date-fns";
 
 import { columns as getColumns } from "./columns";

@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import {
   Loading,

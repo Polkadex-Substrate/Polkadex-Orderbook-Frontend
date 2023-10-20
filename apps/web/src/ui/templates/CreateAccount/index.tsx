@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { generateUsername } from "friendly-username-generator";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Button, InputLine, Loading } from "@polkadex/orderbook-ui/molecules";
 import { createAccountValidations } from "@orderbook/core/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";

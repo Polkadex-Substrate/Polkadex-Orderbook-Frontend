@@ -5,9 +5,10 @@ import {
   OrderBookProvider,
   BalancesProvider,
 } from "@orderbook/core/providers";
+import { GetServerSideProps } from "next";
 
 import LoadingScreen from "@/ui/molecules/LoadingScreen";
-import { useDisabledPages } from "@/hooks";
+import { getServerSidePropsWithTranslations } from "@/utils";
 
 const TradingTemplate = dynamic(
   () =>
@@ -21,10 +22,6 @@ const TradingTemplate = dynamic(
 );
 
 const Trading = () => {
-  const { disabled } = useDisabledPages();
-
-  if (disabled) return <div />;
-
   return (
     <BalancesProvider>
       <OrderBookProvider>
@@ -39,3 +36,7 @@ const Trading = () => {
 };
 
 export default Trading;
+
+const translations = ["common", "trading", "organisms", "molecules"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);

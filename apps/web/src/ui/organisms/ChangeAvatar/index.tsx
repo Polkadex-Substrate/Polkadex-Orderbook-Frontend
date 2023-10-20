@@ -1,6 +1,6 @@
 import { BigHead } from "@bigheads/core";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 

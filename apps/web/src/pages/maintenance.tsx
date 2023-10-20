@@ -2,27 +2,27 @@ import dynamic from "next/dynamic";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-const ErrorTemplate = dynamic(
+const MaintenanceTemplate = dynamic(
   () =>
-    import("@polkadex/orderbook-ui/templates/Error").then(
-      (mod) => mod.ErrorTemplate
+    import("@polkadex/orderbook-ui/templates/Maintenance").then(
+      (mod) => mod.Maintenance
     ),
   {
     ssr: false,
     loading: () => <LoadingScreen />,
   }
 );
-const NotFound = () => <ErrorTemplate />;
+const Maintenance = () => <MaintenanceTemplate />;
 
-export default NotFound;
+export default Maintenance;
+
 export async function getStaticProps({ locale }) {
   return {
     props: {
       ...(await serverSideTranslations(locale, [
-        "molecules",
         "organisms",
         "common",
-        "error",
+        "maintenance",
       ])),
     },
   };

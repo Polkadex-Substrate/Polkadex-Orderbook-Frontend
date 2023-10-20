@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
 import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";

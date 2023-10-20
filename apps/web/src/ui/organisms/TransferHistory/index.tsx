@@ -10,7 +10,7 @@ import classNames from "classnames";
 import { intlFormat } from "date-fns";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { TransferHistory as TransferHistoryProps } from "@orderbook/core/helpers";
 
 import { columns as getColumns } from "./columns";

@@ -2,8 +2,9 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
+import { GetServerSideProps } from "next";
 
-import { useDisabledPages } from "@/hooks";
+import { getServerSidePropsWithTranslations } from "@/utils";
 
 const WalletsTemplate = dynamic(
   () =>
@@ -17,7 +18,6 @@ const WalletsTemplate = dynamic(
 );
 const Wallets = () => {
   const router = useRouter();
-  const { disabled } = useDisabledPages();
 
   const {
     authInfo: { isAuthenticated: hasUser },
@@ -26,8 +26,12 @@ const Wallets = () => {
 
   if (!isLoading && !hasUser) router?.push("/trading/");
 
-  if (!hasUser || disabled) return <div />;
+  if (!hasUser) return <div />;
   return <WalletsTemplate />;
 };
 
 export default Wallets;
+
+const translations = ["molecules", "organisms", "common", "settings"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);

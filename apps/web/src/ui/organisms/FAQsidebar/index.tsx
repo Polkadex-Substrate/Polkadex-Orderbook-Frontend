@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Button, Icon } from "@polkadex/orderbook-ui/molecules";
 import { useClickOutside } from "@orderbook/core/hooks";
 

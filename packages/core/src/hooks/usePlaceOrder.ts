@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { FormikErrors, FormikHelpers } from "formik";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Decimal } from "@orderbook/core/utils";
 import { useOrderBook } from "@orderbook/core/providers/public/orderBook";
 import { useProfile } from "@orderbook/core/providers/user/profile";

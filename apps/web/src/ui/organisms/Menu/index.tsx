@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AnchorHTMLAttributes, PropsWithChildren } from "react";
 import { useRouter } from "next/router";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
