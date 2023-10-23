@@ -11,7 +11,7 @@ export const Main = styled.main<{ open?: boolean }>`
     position: relative;
     background: #1c1c26;
     color: ${theme.colors.white};
-    display: flex;
+    display: none;
     min-height: 100vh;
     flex-direction: column;
     margin: 0 auto;
@@ -19,6 +19,7 @@ export const Main = styled.main<{ open?: boolean }>`
     css`
       visibility: visible;
       opacity: 100%;
+      display: flex;
     `}
   `}
 `;
@@ -791,4 +792,27 @@ export const Spline = styled.div`
   @media screen and (min-width: 1000px) {
     min-height: 50rem;
   }
+`;
+
+export const SplineError = styled.div<{ error: boolean }>`
+  ${({ theme, error }) => css`
+    display: none;
+    ${error &&
+    css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 10rem auto auto auto;
+      font-size: 1.6rem;
+      color: ${theme.colors.red};
+      padding: 1rem 1rem;
+      a {
+        color: white;
+        padding: 0.9rem 1.9rem;
+        font-size: 1.4rem;
+      }
+    `}
+  `}
 `;

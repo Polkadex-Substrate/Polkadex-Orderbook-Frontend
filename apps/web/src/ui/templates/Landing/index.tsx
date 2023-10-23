@@ -1,4 +1,5 @@
 import localFont from "next/font/local";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
@@ -90,9 +91,11 @@ const menuItems = {
   ],
 };
 export function LandingTemplate() {
+  const router = useRouter();
   const { t } = useTranslation("landing");
   const [state, setState] = useState(false);
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
 
   return (
     <>
@@ -228,7 +231,17 @@ export function LandingTemplate() {
               className={classNames(open && "active", "spline")}
               scene="https://prod.spline.design/d9wfWHuFHYgRRRG2/scene.splinecode"
               onLoad={() => setOpen(true)}
+              onError={() => {
+                setOpen(true);
+                setError(true);
+              }}
             />
+            <S.SplineError error={error}>
+              {t("spline.errorDescription")}
+              <S.Button href={"/"} onClick={() => router.reload()}>
+                {t("spline.reload")}
+              </S.Button>
+            </S.SplineError>
           </S.Spline>
         </S.Hero>
         <S.Start>
