@@ -13,8 +13,9 @@ import {
 } from "@orderbook/core/providers";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { GetServerSideProps } from "next";
 
-import { useDisabledPages } from "@/hooks";
+import { getServerSidePropsWithTranslations } from "@/utils";
 
 const DepositTemplate = dynamic(
   () =>
@@ -29,7 +30,6 @@ const DepositTemplate = dynamic(
 
 const Deposit = () => {
   const router = useRouter();
-  const { disabled } = useDisabledPages();
 
   const {
     authInfo: { isAuthenticated: hasUser },
@@ -54,7 +54,7 @@ const Deposit = () => {
 
   if (!isLoading && !hasUser) router?.push("/trading/");
 
-  if (shouldRedirect || disabled) return <div />;
+  if (shouldRedirect) return <div />;
 
   return (
     <AssetsProvider>
@@ -70,3 +70,7 @@ const Deposit = () => {
 };
 
 export default Deposit;
+
+const translations = ["common", "deposit", "organisms", "molecules"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);

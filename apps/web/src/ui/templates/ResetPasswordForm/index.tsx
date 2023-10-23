@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import confetti from "canvas-confetti";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import {
   Button,
   InputLine,

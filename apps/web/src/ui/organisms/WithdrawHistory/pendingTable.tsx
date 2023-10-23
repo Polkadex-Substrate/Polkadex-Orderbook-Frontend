@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 
 import { WithdrawTableProps } from "./types";
 import * as S from "./styles";

@@ -1,6 +1,8 @@
 import dynamic from "next/dynamic";
+import { GetServerSideProps } from "next";
 
 import LoadingScreen from "@/ui/molecules/LoadingScreen";
+import { getServerSidePropsWithTranslations } from "@/utils";
 
 const LandingTemplate = dynamic(
   () =>
@@ -15,3 +17,7 @@ const LandingTemplate = dynamic(
 const Home = () => <LandingTemplate />;
 
 export default Home;
+
+const translations = ["molecules", "organisms", "common", "landing"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);

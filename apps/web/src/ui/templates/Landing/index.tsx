@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { Slide } from "react-reveal";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Menu } from "@headlessui/react";
 import Spline from "@splinetool/react-spline";
 import { useState } from "react";
