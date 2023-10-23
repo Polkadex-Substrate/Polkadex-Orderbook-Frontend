@@ -1,4 +1,5 @@
 import localFont from "next/font/local";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,7 +9,6 @@ import { Menu } from "@headlessui/react";
 import Spline from "@splinetool/react-spline";
 import { useState } from "react";
 import classNames from "classnames";
-import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import SpeedImage from "../../../../public/img/speed.webp";
 import PadLock from "../../../../public/img/padlock.webp";
@@ -19,6 +19,7 @@ import * as S from "./styles";
 
 import { Icons } from "@/ui/atoms";
 import { OrderbookLogo } from "@/ui/molecules";
+import LoadingScreen from "@/ui/molecules/LoadingScreen";
 
 const outrun = localFont({
   src: "../../../../public/fonts/outrun-future-bold.otf",
@@ -90,11 +91,11 @@ const menuItems = {
   ],
 };
 export function LandingTemplate() {
+  const router = useRouter();
   const { t } = useTranslation("landing");
   const [state, setState] = useState(false);
   const [open, setOpen] = useState(false);
-
-  const { onHandleError } = useSettingsProvider();
+  const [error, setError] = useState(false);
 
   return (
     <>
@@ -102,7 +103,8 @@ export function LandingTemplate() {
         <title>{t("title")}</title>
         <meta name="description" content={t("description")} />
       </Head>
-      <S.Main>
+      {!open && <LoadingScreen light />}
+      <S.Main open={open}>
         <S.Header>
           {state && (
             <S.MenuWrapper>
@@ -229,8 +231,17 @@ export function LandingTemplate() {
               className={classNames(open && "active", "spline")}
               scene="https://prod.spline.design/d9wfWHuFHYgRRRG2/scene.splinecode"
               onLoad={() => setOpen(true)}
-              onError={() => onHandleError("Error in loading the animation")}
+              onError={() => {
+                setOpen(true);
+                setError(true);
+              }}
             />
+            <S.SplineError error={error}>
+              {t("spline.errorDescription")}
+              <S.Button href={"/"} onClick={() => router.reload()}>
+                {t("spline.reload")}
+              </S.Button>
+            </S.SplineError>
           </S.Spline>
         </S.Hero>
         <S.Start>
