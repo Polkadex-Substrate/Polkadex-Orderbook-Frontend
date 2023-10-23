@@ -3,6 +3,8 @@ import styled, { css } from "styled-components";
 
 export const Main = styled.main<{ open?: boolean }>`
   ${({ theme, open }) => css`
+    visibility: hidden;
+    opacity: 0;
     transition:
       opacity 1s ease-in-out,
       visibility 1s ease-in-out;
@@ -15,6 +17,8 @@ export const Main = styled.main<{ open?: boolean }>`
     margin: 0 auto;
     ${open &&
     css`
+      visibility: visible;
+      opacity: 100%;
       display: flex;
     `}
   `}
