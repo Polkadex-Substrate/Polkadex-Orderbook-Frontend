@@ -61,8 +61,7 @@ export class DataPulseProvider {
 		}
 
 		this._requestsPending = 0;
-		// eslint-disable-next-line guard-for-in
-		for (const listenerGuid in this._subscribers) {
+		for (const listenerGuid in this._subscribers) { // tslint:disable-line:forin
 			this._requestsPending += 1;
 			this._updateDataForSubscriber(listenerGuid)
 				.then(() => {
@@ -85,15 +84,7 @@ export class DataPulseProvider {
 		// see the explanation below. `10` is the `large enough` value to work around holidays
 		const rangeStartTime = rangeEndTime - periodLengthSeconds(subscriptionRecord.resolution, 10);
 
-		return this._historyProvider.getBars(
-			subscriptionRecord.symbolInfo,
-			subscriptionRecord.resolution,
-			{
-				from: rangeStartTime,
-				to: rangeEndTime,
-				countBack: 2,
-				firstDataRequest: false,
-			})
+		return this._historyProvider.getBars(subscriptionRecord.symbolInfo, subscriptionRecord.resolution, rangeStartTime, rangeEndTime)
 			.then((result: GetBarsResult) => {
 				this._onSubscriberDataReceived(listenerGuid, result);
 			});

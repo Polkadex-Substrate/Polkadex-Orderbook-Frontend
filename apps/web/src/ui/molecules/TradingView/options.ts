@@ -1,4 +1,4 @@
-import { ChartPropertiesOverrides } from "../../../../public/charting_library";
+import { ChartPropertiesOverrides } from "../../../../public/static/charting_library/charting_library";
 
 import { defaultThemes } from "@/styles";
 
