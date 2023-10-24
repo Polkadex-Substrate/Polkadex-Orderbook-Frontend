@@ -1,6 +1,8 @@
 import {
 	LibrarySymbolInfo,
 	SearchSymbolResultItem,
+	ResolutionString,
+	VisiblePlotsSet,
 } from '../../../charting_library/datafeed-api';
 
 import {
@@ -23,6 +25,8 @@ interface ExchangeDataResponseSymbolData {
 	'exchange-traded': string;
 
 	'session-regular': string;
+	'corrections'?: string;
+	'session-holidays'?: string;
 
 	'fractional': boolean;
 
@@ -36,9 +40,7 @@ interface ExchangeDataResponseSymbolData {
 	'minmov'?: number;
 	'minmovement'?: number;
 
-	'force-session-rebuild'?: boolean;
-
-	'supported-resolutions'?: string[];
+	'supported-resolutions'?: ResolutionString[];
 	'intraday-multipliers'?: string[];
 
 	'has-intraday'?: boolean;
@@ -46,6 +48,12 @@ interface ExchangeDataResponseSymbolData {
 	'has-weekly-and-monthly'?: boolean;
 	'has-empty-bars'?: boolean;
 	'has-no-volume'?: boolean;
+	'visible-plots-set'?: VisiblePlotsSet;
+	'currency-code'?: string;
+	'original-currency-code'?: string;
+	'unit-id'?: string;
+	'original-unit-id'?: string;
+	'unit-conversion-types'?: string[];
 
 	'volume-precision'?: number;
 }
@@ -73,10 +81,15 @@ function extractField<Field extends keyof ExchangeDataResponseSymbolData>(data: 
 	const value: ExchangeDataResponse[keyof ExchangeDataResponseSymbolData] = data[field];
 
 	if (Array.isArray(value) && (!valueIsArray || Array.isArray(value[0]))) {
-		return value[arrayIndex];
+		return value[arrayIndex] as ExchangeDataResponseSymbolData[Field];
 	}
 
 	return value as ExchangeDataResponseSymbolData[Field];
+}
+
+function symbolKey(symbol: string, currency?: string, unit?: string): string {
+	// here we're using a separator that quite possible shouldn't be in a real symbol name
+	return symbol + (currency !== undefined ? '_%|#|%_' + currency : '') + (unit !== undefined ? '_%|#|%_' + unit : '');
 }
 
 export class SymbolsStorage {
@@ -85,10 +98,10 @@ export class SymbolsStorage {
 	private readonly _symbolsList: string[] = [];
 	private readonly _datafeedUrl: string;
 	private readonly _readyPromise: Promise<void>;
-	private readonly _datafeedSupportedResolutions: string[];
+	private readonly _datafeedSupportedResolutions: ResolutionString[];
 	private readonly _requester: Requester;
 
-	public constructor(datafeedUrl: string, datafeedSupportedResolutions: string[], requester: Requester) {
+	public constructor(datafeedUrl: string, datafeedSupportedResolutions: ResolutionString[], requester: Requester) {
 		this._datafeedUrl = datafeedUrl;
 		this._datafeedSupportedResolutions = datafeedSupportedResolutions;
 		this._requester = requester;
@@ -101,9 +114,9 @@ export class SymbolsStorage {
 	}
 
 	// BEWARE: this function does not consider symbol's exchange
-	public resolveSymbol(symbolName: string): Promise<LibrarySymbolInfo> {
+	public resolveSymbol(symbolName: string, currencyCode?: string, unitId?: string): Promise<LibrarySymbolInfo> {
 		return this._readyPromise.then(() => {
-			const symbolInfo = this._symbolsInfo[symbolName];
+			const symbolInfo = this._symbolsInfo[symbolKey(symbolName, currencyCode, unitId)];
 			if (symbolInfo === undefined) {
 				return Promise.reject('invalid symbol');
 			}
@@ -202,7 +215,7 @@ export class SymbolsStorage {
 					try {
 						this._onExchangeDataReceived(exchange, response);
 					} catch (error) {
-						reject(error);
+						reject(error instanceof Error ? error : new Error(`SymbolsStorage: Unexpected exception ${error}`));
 						return;
 					}
 
@@ -227,6 +240,8 @@ export class SymbolsStorage {
 				const listedExchange = extractField(data, 'exchange-listed', symbolIndex);
 				const tradedExchange = extractField(data, 'exchange-traded', symbolIndex);
 				const fullName = tradedExchange + ':' + symbolName;
+				const currencyCode = extractField(data, 'currency-code', symbolIndex);
+				const unitId = extractField(data, 'unit-id', symbolIndex);
 
 				const ticker = tickerPresent ? (extractField(data, 'ticker', symbolIndex) as string) : symbolName;
 
@@ -237,18 +252,25 @@ export class SymbolsStorage {
 					full_name: fullName,
 					listed_exchange: listedExchange,
 					exchange: tradedExchange,
+					currency_code: currencyCode,
+					original_currency_code: extractField(data, 'original-currency-code', symbolIndex),
+					unit_id: unitId,
+					original_unit_id: extractField(data, 'original-unit-id', symbolIndex),
+					unit_conversion_types: extractField(data, 'unit-conversion-types', symbolIndex, true),
 					description: extractField(data, 'description', symbolIndex),
 					has_intraday: definedValueOrDefault(extractField(data, 'has-intraday', symbolIndex), false),
-					has_no_volume: definedValueOrDefault(extractField(data, 'has-no-volume', symbolIndex), false),
+					has_no_volume: definedValueOrDefault(extractField(data, 'has-no-volume', symbolIndex), undefined),
+					visible_plots_set: definedValueOrDefault(extractField(data, 'visible-plots-set', symbolIndex), undefined),
 					minmov: extractField(data, 'minmovement', symbolIndex) || extractField(data, 'minmov', symbolIndex) || 0,
 					minmove2: extractField(data, 'minmove2', symbolIndex) || extractField(data, 'minmov2', symbolIndex),
 					fractional: extractField(data, 'fractional', symbolIndex),
 					pricescale: extractField(data, 'pricescale', symbolIndex),
 					type: extractField(data, 'type', symbolIndex),
 					session: extractField(data, 'session-regular', symbolIndex),
+					session_holidays: extractField(data, 'session-holidays', symbolIndex),
+					corrections: extractField(data, 'corrections', symbolIndex),
 					timezone: extractField(data, 'timezone', symbolIndex),
 					supported_resolutions: definedValueOrDefault(extractField(data, 'supported-resolutions', symbolIndex, true), this._datafeedSupportedResolutions),
-					force_session_rebuild: extractField(data, 'force-session-rebuild', symbolIndex),
 					has_daily: definedValueOrDefault(extractField(data, 'has-daily', symbolIndex), true),
 					intraday_multipliers: definedValueOrDefault(extractField(data, 'intraday-multipliers', symbolIndex, true), ['1', '5', '15', '30', '60']),
 					has_weekly_and_monthly: extractField(data, 'has-weekly-and-monthly', symbolIndex),
@@ -260,11 +282,16 @@ export class SymbolsStorage {
 				this._symbolsInfo[ticker] = symbolInfo;
 				this._symbolsInfo[symbolName] = symbolInfo;
 				this._symbolsInfo[fullName] = symbolInfo;
+				if (currencyCode !== undefined || unitId !== undefined) {
+					this._symbolsInfo[symbolKey(ticker, currencyCode, unitId)] = symbolInfo;
+					this._symbolsInfo[symbolKey(symbolName, currencyCode, unitId)] = symbolInfo;
+					this._symbolsInfo[symbolKey(fullName, currencyCode, unitId)] = symbolInfo;
+				}
 
 				this._symbolsList.push(symbolName);
 			}
 		} catch (error) {
-			throw new Error(`SymbolsStorage: API error when processing exchange ${exchange} symbol #${symbolIndex} (${data.symbol[symbolIndex]}): ${error.message}`);
+			throw new Error(`SymbolsStorage: API error when processing exchange ${exchange} symbol #${symbolIndex} (${data.symbol[symbolIndex]}): ${Object(error).message}`);
 		}
 	}
 }

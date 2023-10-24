@@ -3,7 +3,6 @@ import {
 	ErrorCallback,
 	GetMarksCallback,
 	HistoryCallback,
-	HistoryDepth,
 	IDatafeedChartApi,
 	IDatafeedQuotesApi,
 	IExternalDatafeed,
@@ -11,7 +10,6 @@ import {
 	Mark,
 	OnReadyCallback,
 	QuotesCallback,
-	ResolutionBackValues,
 	ResolutionString,
 	ResolveCallback,
 	SearchSymbolResultItem,
@@ -19,6 +17,8 @@ import {
 	ServerTimeCallback,
 	SubscribeBarsCallback,
 	TimescaleMark,
+	SymbolResolveExtension,
+	VisiblePlotsSet,
 } from '../../../charting_library/datafeed-api';
 
 import {
@@ -31,6 +31,8 @@ import {
 import {
 	GetBarsResult,
 	HistoryProvider,
+	LimitedResponseConfiguration,
+	PeriodParamsWithOptionalCountback,
 } from './history-provider';
 
 import { IQuotesProvider } from './iquotes-provider';
@@ -48,6 +50,32 @@ export interface UdfCompatibleConfiguration extends DatafeedConfiguration {
 
 export interface ResolveSymbolResponse extends LibrarySymbolInfo {
 	s: undefined;
+
+	'exchange-listed': string;
+	'exchange-traded': string;
+
+	'currency-code': string;
+	'unit-id': string;
+
+	'original-currency-code': string;
+
+	'original-unit-id': string;
+
+	'unit-conversion-types': string[];
+	'has-intraday': boolean;
+	'has-no-volume': boolean;
+	'visible-plots-set'?: VisiblePlotsSet;
+	minmovement: number;
+	minmovement2?: number;
+	minmov2?: number;
+	'session-regular': string;
+	'session-holidays': string;
+	'supported-resolutions': ResolutionString[];
+	'has-daily': boolean;
+	'intraday-multipliers': string[];
+	'has-weekly-and-monthly'?: boolean;
+	'has-empty-bars'?: boolean;
+	'volume-precision'?: number;
 }
 
 // it is hack to let's TypeScript make code flow analysis
@@ -70,14 +98,14 @@ type UdfDatafeedTimescaleMark = UdfDatafeedMarkType<TimescaleMark>;
 
 function extractField<Field extends keyof Mark>(data: UdfDatafeedMark, field: Field, arrayIndex: number): Mark[Field];
 function extractField<Field extends keyof TimescaleMark>(data: UdfDatafeedTimescaleMark, field: Field, arrayIndex: number): TimescaleMark[Field];
-function extractField<Field extends keyof (TimescaleMark | Mark)>(data: UdfDatafeedMark | UdfDatafeedTimescaleMark, field: Field, arrayIndex: number): (TimescaleMark | Mark)[Field] {
+function extractField<T, TField extends keyof T>(data: T, field: TField, arrayIndex: number): T[TField] {
 	const value = data[field];
 	return Array.isArray(value) ? value[arrayIndex] : value;
 }
 
 /**
  * This class implements interaction with UDF-compatible datafeed.
- * See UDF protocol reference at https://github.com/tradingview/charting_library/wiki/UDF
+ * See [UDF protocol reference](@docs/connecting_data/UDF)
  */
 export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQuotesApi, IDatafeedChartApi {
 	protected _configuration: UdfCompatibleConfiguration = defaultConfiguration();
@@ -94,10 +122,20 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 
 	private readonly _requester: Requester;
 
-	protected constructor(datafeedURL: string, quotesProvider: IQuotesProvider, requester: Requester, updateFrequency: number = 10 * 1000) {
+	protected constructor(
+		datafeedURL: string,
+		quotesProvider: IQuotesProvider,
+		requester: Requester,
+		updateFrequency: number = 10 * 1000,
+		limitedServerResponse?: LimitedResponseConfiguration
+	) {
 		this._datafeedURL = datafeedURL;
 		this._requester = requester;
-		this._historyProvider = new HistoryProvider(datafeedURL, this._requester);
+		this._historyProvider = new HistoryProvider(
+			datafeedURL,
+			this._requester,
+			limitedServerResponse
+		);
 		this._quotesProvider = quotesProvider;
 
 		this._dataPulseProvider = new DataPulseProvider(this._historyProvider, updateFrequency);
@@ -131,10 +169,6 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 		this._quotesPulseProvider.unsubscribeQuotes(listenerGuid);
 	}
 
-	public calculateHistoryDepth(resolution: ResolutionString, resolutionBack: ResolutionBackValues, intervalBack: number): HistoryDepth | undefined {
-		return undefined;
-	}
-
 	public getMarks(symbolInfo: LibrarySymbolInfo, from: number, to: number, onDataCallback: GetMarksCallback<Mark>, resolution: ResolutionString): void {
 		if (!this._configuration.supports_marks) {
 			return;
@@ -160,6 +194,10 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 							label: extractField(response, 'label', i),
 							labelFontColor: extractField(response, 'labelFontColor', i),
 							minSize: extractField(response, 'minSize', i),
+							borderWidth: extractField(response, 'borderWidth', i),
+							hoveredBorderWidth: extractField(response, 'hoveredBorderWidth', i),
+							imageUrl: extractField(response, 'imageUrl', i),
+							showLabelWhenImageLoaded: extractField(response, 'showLabelWhenImageLoaded', i),
 						});
 					}
 
@@ -197,6 +235,8 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 							color: extractField(response, 'color', i),
 							label: extractField(response, 'label', i),
 							tooltip: extractField(response, 'tooltip', i),
+							imageUrl: extractField(response, 'imageUrl', i),
+							showLabelWhenImageLoaded: extractField(response, 'showLabelWhenImageLoaded', i),
 						});
 					}
 
@@ -262,8 +302,11 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 		}
 	}
 
-	public resolveSymbol(symbolName: string, onResolve: ResolveCallback, onError: ErrorCallback): void {
+	public resolveSymbol(symbolName: string, onResolve: ResolveCallback, onError: ErrorCallback, extension?: SymbolResolveExtension): void {
 		logMessage('Resolve requested');
+
+		const currencyCode = extension && extension.currencyCode;
+		const unitId = extension && extension.unitId;
 
 		const resolveRequestStartTime = Date.now();
 		function onResultReady(symbolInfo: LibrarySymbolInfo): void {
@@ -275,13 +318,52 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 			const params: RequestParams = {
 				symbol: symbolName,
 			};
+			if (currencyCode !== undefined) {
+				params.currencyCode = currencyCode;
+			}
+			if (unitId !== undefined) {
+				params.unitId = unitId;
+			}
 
 			this._send<ResolveSymbolResponse | UdfErrorResponse>('symbols', params)
 				.then((response: ResolveSymbolResponse | UdfErrorResponse) => {
 					if (response.s !== undefined) {
 						onError('unknown_symbol');
 					} else {
-						onResultReady(response);
+						const symbol = response.name;
+						const listedExchange = response.listed_exchange ?? response['exchange-listed'];
+						const tradedExchange = response.exchange ?? response['exchange-traded'];
+						const fullName = response.full_name ?? `${tradedExchange}:${symbol}`;
+
+						const result: LibrarySymbolInfo = {
+							...response,
+							name: symbol,
+							base_name: [listedExchange + ':' + symbol],
+							full_name: fullName,
+							listed_exchange: listedExchange,
+							exchange: tradedExchange,
+							currency_code: response.currency_code ?? response['currency-code'],
+							original_currency_code: response.original_currency_code ?? response['original-currency-code'],
+							unit_id: response.unit_id ?? response['unit-id'],
+							original_unit_id: response.original_unit_id ?? response['original-unit-id'],
+							unit_conversion_types: response.unit_conversion_types ?? response['unit-conversion-types'],
+							has_intraday: response.has_intraday ?? response['has-intraday'] ?? false,
+							// eslint-disable-next-line deprecation/deprecation
+							has_no_volume: response.has_no_volume ?? response['has-no-volume'],
+							visible_plots_set: response.visible_plots_set ?? response['visible-plots-set'],
+							minmov: response.minmovement ?? response.minmov ?? 0,
+							minmove2: response.minmovement2 ?? response.minmove2 ?? response.minmov2,
+							session: response.session ?? response['session-regular'],
+							session_holidays: response.session_holidays ?? response['session-holidays'],
+							supported_resolutions: response.supported_resolutions ?? response['supported-resolutions'] ?? this._configuration.supported_resolutions ?? [],
+							has_daily: response.has_daily ?? response['has-daily'] ?? true,
+							intraday_multipliers: response.intraday_multipliers ?? response['intraday-multipliers'] ?? ['1', '5', '15', '30', '60'],
+							has_weekly_and_monthly: response.has_weekly_and_monthly ?? response['has-weekly-and-monthly'],
+							has_empty_bars: response.has_empty_bars ?? response['has-empty-bars'],
+							volume_precision: response.volume_precision ?? response['volume-precision'],
+							format: response.format ?? 'price',
+						};
+						onResultReady(result);
 					}
 				})
 				.catch((reason?: string | Error) => {
@@ -293,19 +375,19 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 				throw new Error('UdfCompatibleDatafeed: inconsistent configuration (symbols storage)');
 			}
 
-			this._symbolsStorage.resolveSymbol(symbolName).then(onResultReady).catch(onError);
+			this._symbolsStorage.resolveSymbol(symbolName, currencyCode, unitId).then(onResultReady).catch(onError);
 		}
 	}
 
-	public getBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, rangeStartDate: number, rangeEndDate: number, onResult: HistoryCallback, onError: ErrorCallback): void {
-		this._historyProvider.getBars(symbolInfo, resolution, rangeStartDate, rangeEndDate)
+	public getBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, periodParams: PeriodParamsWithOptionalCountback, onResult: HistoryCallback, onError: ErrorCallback): void {
+		this._historyProvider.getBars(symbolInfo, resolution, periodParams)
 			.then((result: GetBarsResult) => {
 				onResult(result.bars, result.meta);
 			})
 			.catch(onError);
 	}
 
-	public subscribeBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, onTick: SubscribeBarsCallback, listenerGuid: string, onResetCacheNeededCallback: () => void): void {
+	public subscribeBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, onTick: SubscribeBarsCallback, listenerGuid: string, _onResetCacheNeededCallback: () => void): void {
 		this._dataPulseProvider.subscribeBars(symbolInfo, resolution, onTick, listenerGuid);
 	}
 
@@ -348,7 +430,16 @@ function defaultConfiguration(): UdfCompatibleConfiguration {
 	return {
 		supports_search: false,
 		supports_group_request: true,
-		supported_resolutions: ['1', '5', '15', '30', '60', '1D', '1W', '1M'],
+		supported_resolutions: [
+			'1' as ResolutionString,
+			'5' as ResolutionString,
+			'15' as ResolutionString,
+			'30' as ResolutionString,
+			'60' as ResolutionString,
+			'1D' as ResolutionString,
+			'1W' as ResolutionString,
+			'1M' as ResolutionString,
+		],
 		supports_marks: false,
 		supports_timescale_marks: false,
 	};

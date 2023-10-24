@@ -1,39 +1,56 @@
-import { RequestParams, UdfResponse, UdfErrorResponse, logMessage } from './helpers';
+import { RequestParams, UdfResponse, UdfErrorResponse, logMessage } from "./helpers";
 
 export class Requester {
-	private _headers: HeadersInit | undefined;
+  private _headers: HeadersInit | undefined;
 
-	public constructor(headers?: HeadersInit) {
-		if (headers) {
-			this._headers = headers;
-		}
-	}
+  public constructor(headers?: HeadersInit) {
+    if (headers) {
+      this._headers = headers;
+    }
+  }
 
-	public sendRequest<T extends UdfResponse>(datafeedUrl: string, urlPath: string, params?: RequestParams): Promise<T | UdfErrorResponse>;
-	public sendRequest<T>(datafeedUrl: string, urlPath: string, params?: RequestParams): Promise<T>;
-	public sendRequest<T>(datafeedUrl: string, urlPath: string, params?: RequestParams): Promise<T> {
-		if (params !== undefined) {
-			const paramKeys = Object.keys(params);
-			if (paramKeys.length !== 0) {
-				urlPath += '?';
-			}
+  public sendRequest<T extends UdfResponse>(
+    datafeedUrl: string,
+    urlPath: string,
+    params?: RequestParams
+  ): Promise<T | UdfErrorResponse>;
 
-			urlPath += paramKeys.map((key: string) => {
-				return `${encodeURIComponent(key)}=${encodeURIComponent(params[key].toString())}`;
-			}).join('&');
-		}
+  public sendRequest<T>(
+    datafeedUrl: string,
+    urlPath: string,
+    params?: RequestParams
+  ): Promise<T>;
 
-		logMessage('New request: ' + urlPath);
+  public sendRequest<T>(
+    datafeedUrl: string,
+    urlPath: string,
+    params?: RequestParams
+  ): Promise<T> {
+    if (params !== undefined) {
+      const paramKeys = Object.keys(params);
+      if (paramKeys.length !== 0) {
+        urlPath += "?";
+      }
 
-		// Send user cookies if the URL is on the same origin as the calling script.
-		const options: RequestInit = { credentials: 'same-origin' };
+      urlPath += paramKeys
+        .map((key: string) => {
+          return `${encodeURIComponent(key)}=${encodeURIComponent(params[key].toString())}`;
+        })
+        .join("&");
+    }
 
-		if (this._headers !== undefined) {
-			options.headers = this._headers;
-		}
+    logMessage("New request: " + urlPath);
 
-		return fetch(`${datafeedUrl}/${urlPath}`, options)
-			.then((response: Response) => response.text())
-			.then((responseTest: string) => JSON.parse(responseTest));
-	}
+    // Send user cookies if the URL is on the same origin as the calling script.
+    const options: RequestInit = { credentials: "same-origin" };
+
+    if (this._headers !== undefined) {
+      options.headers = this._headers;
+    }
+
+    // eslint-disable-next-line no-restricted-globals
+    return fetch(`${datafeedUrl}/${urlPath}`, options)
+      .then((response: Response) => response.text())
+      .then((responseTest: string) => JSON.parse(responseTest));
+  }
 }

@@ -14,7 +14,7 @@ import {
   ResolutionString,
   Timezone,
   widget as Widget,
-} from "../../../../public/static/charting_library";
+} from "../../../../public/charting_library";
 
 import * as S from "./styles";
 import { customFontFamily, options } from "./options";
