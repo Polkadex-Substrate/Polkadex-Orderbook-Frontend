@@ -2,8 +2,9 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAuth } from "@orderbook/core/providers/user/auth";
+import { GetServerSideProps } from "next";
 
-import { useDisabledPages } from "@/hooks";
+import { getServerSidePropsWithTranslations } from "@/utils";
 
 const ResetPasswordFormTemplate = dynamic(
   () =>
@@ -16,7 +17,6 @@ const ResetPasswordFormTemplate = dynamic(
 );
 const ResetPasswordForm = () => {
   const router = useRouter();
-  const { disabled } = useDisabledPages();
   const {
     forgotPassword: { email },
   } = useAuth();
@@ -26,8 +26,12 @@ const ResetPasswordForm = () => {
     if (!hasEmail) router.push("/signIn");
   }, [router, hasEmail]);
 
-  if (!hasEmail || disabled) return <div />;
+  if (!hasEmail) return <div />;
   return <ResetPasswordFormTemplate />;
 };
 
 export default ResetPasswordForm;
+
+const translations = ["molecules", "organisms", "common", "resetPasswordForm"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);

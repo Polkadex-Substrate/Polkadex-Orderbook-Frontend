@@ -1,12 +1,10 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { GetServerSideProps } from "next";
+
+import { getServerSidePropsRedirect } from "@/utils";
 
 export default function Deposit() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push("/deposit/PDEX");
-  }, [router]);
-
   return <div />;
 }
+
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsRedirect("/deposit/PDEX");

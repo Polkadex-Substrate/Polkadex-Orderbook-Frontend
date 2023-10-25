@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { detect } from "detect-browser";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { noop } from "@orderbook/core/helpers/noop";
 
 import * as S from "./styles";

@@ -11,7 +11,7 @@ import {
   TourProvider,
   useTour,
 } from "@reactour/tour";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 
 import * as S from "./styles";
 

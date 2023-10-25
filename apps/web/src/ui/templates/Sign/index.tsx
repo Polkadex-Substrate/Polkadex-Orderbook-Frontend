@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { defaultConfig } from "@orderbook/core/config";
 import {
   Button,

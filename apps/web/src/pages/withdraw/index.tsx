@@ -1,12 +1,9 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { GetServerSideProps } from "next";
+
+import { getServerSidePropsRedirect } from "@/utils";
 
 export default function Withdraw() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push("/withdraw/PDEX");
-  }, [router]);
-
   return <div />;
 }
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsRedirect("/withdraw/PDEX");

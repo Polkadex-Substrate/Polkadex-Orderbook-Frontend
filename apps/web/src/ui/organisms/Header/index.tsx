@@ -1,7 +1,6 @@
 import { ReactNode, isValidElement, useMemo } from "react";
 import Link from "next/link";
-import i18next from "i18next";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import {
   Dropdown,
   Icon,
@@ -23,12 +22,9 @@ import {
   getTradeAccount,
   useTradeWallet,
 } from "@orderbook/core/providers/user/tradeWallet";
-import { languages as avaliableLanguages } from "@orderbook/core/utils";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
-
-const languages = avaliableLanguages.map((l) => l.code);
-type Languages = "en";
 
 export const Header = ({
   dark = false,
@@ -37,7 +33,7 @@ export const Header = ({
   children?: ReactNode;
   dark?: boolean;
 }) => {
-  const { notifications, language, onChangeLanguage } = useSettingsProvider();
+  const { notifications } = useSettingsProvider();
   const allNotifications = selectNotifications(notifications);
   const { allBrowserAccounts } = useTradeWallet();
 
@@ -61,14 +57,11 @@ export const Header = ({
 
   const isValidChild = isValidElement(children);
 
-  const handleChangeLanguage = (languageCode: Languages) => {
-    i18next.changeLanguage(languageCode);
-    onChangeLanguage(languageCode);
-  };
-
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`header.${key}`);
 
+  const router = useRouter();
+  const { locales, locale } = router;
   return (
     <S.Wrapper dark={dark}>
       <S.Content>
@@ -85,19 +78,21 @@ export const Header = ({
           <Dropdown>
             <Dropdown.Trigger>
               <S.Flex>
-                <span>{language.toUpperCase()}</span>
+                <span>{locale?.toUpperCase()}</span>
                 <Icon name="ArrowBottom" />
               </S.Flex>
             </Dropdown.Trigger>
             <Dropdown.Menu fill="secondaryBackgroundSolid">
-              {languages.map((value: Languages) => (
-                <Dropdown.Item
-                  onAction={() => handleChangeLanguage(value)}
-                  key={value}
-                >
-                  {value.toUpperCase()}
-                </Dropdown.Item>
-              ))}
+              {(locales as string[])?.map((value) => {
+                const { pathname, query, asPath } = router;
+                return (
+                  <Dropdown.Item key={value}>
+                    <Link href={{ pathname, query }} as={asPath} locale={value}>
+                      {value?.toUpperCase()}
+                    </Link>
+                  </Dropdown.Item>
+                );
+              })}
             </Dropdown.Menu>
           </Dropdown>
         </S.ActionsWrapper>

@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import { generateUsername } from "friendly-username-generator";
 import keyring from "@polkadot/ui-keyring";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { createAccountValidations } from "@orderbook/core/validations";

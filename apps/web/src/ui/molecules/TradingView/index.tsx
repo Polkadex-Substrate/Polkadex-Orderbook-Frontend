@@ -218,6 +218,7 @@ export const TradingView = () => {
         "use_localstorage_for_settings",
         "side_toolbar_in_fullscreen_mode",
         "save_chart_properties_to_local_storage",
+        "iframe_loading_compatibility_mode",
       ],
       symbol: `Polkadex:${currentMarket?.name}`,
       custom_font_family: customFontFamily,

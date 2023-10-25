@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { PropsWithChildren, useState } from "react";
 import { Modal, OrderbookLogo } from "@polkadex/orderbook-ui/molecules";
 
