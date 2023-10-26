@@ -1,5 +1,5 @@
-import { GoogleDriveApi } from "@orderbook/core/utils/KeyringStore/GDrive/api";
-import { GoogleOauth } from "@orderbook/core/utils/KeyringStore/GDrive/oauth";
+import { GoogleDriveApi } from "@orderbook/core/utils/keyringStore/GDrive/api";
+import { GoogleOauth } from "@orderbook/core/utils/keyringStore/GDrive/oauth";
 import { Singleton } from "@orderbook/core/utils/decorators/singleton";
 export const DRIVE_APPDATA_SCOPE =
   "https://www.googleapis.com/auth/drive.appdata";

@@ -13,7 +13,7 @@ interface AssetTransferParams {
   amount: string;
   account: ExtensionAccount;
 }
-
+signAndSendExtrinsic()
 export const useAssetTransfer = (onRefetch: () => Promise<void>) => {
   const { api } = useNativeApi();
   const { onHandleError, onHandleNotification } = useSettingsProvider();

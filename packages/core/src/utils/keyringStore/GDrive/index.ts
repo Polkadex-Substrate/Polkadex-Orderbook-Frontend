@@ -1,10 +1,10 @@
 import { KeyringJson, KeyringStore } from "@polkadot/ui-keyring/types";
-import { GDriveStorage } from "@orderbook/core/utils/KeyringStore/GDrive/drive";
+import { GDriveStorage } from "@orderbook/core/utils/keyringStore/GDrive/drive";
 import {
   GoogleDriveAccount,
   VersionedAccountStorage,
-} from "@orderbook/core/utils/KeyringStore/GDrive/types";
-import { createVersionedAccountStorage } from "@orderbook/core/utils/KeyringStore/GDrive/utils";
+} from "@orderbook/core/utils/keyringStore/GDrive/types";
+import { createVersionedAccountStorage } from "@orderbook/core/utils/keyringStore/GDrive/utils";
 
 export class GDriveAccountsStore implements KeyringStore {
   private initialized = false;

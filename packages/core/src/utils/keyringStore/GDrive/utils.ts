@@ -1,5 +1,5 @@
 import { KeyringJson } from "@polkadot/ui-keyring/types";
-import { VersionedAccountStorage } from "@orderbook/core/utils/KeyringStore/GDrive/types";
+import { VersionedAccountStorage } from "@orderbook/core/utils/keyringStore/GDrive/types";
 
 export function createVersionedAccountStorage(
   key: string,
