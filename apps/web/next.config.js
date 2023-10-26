@@ -27,6 +27,7 @@ const nextConfig = {
       config.externals.push("_http_common");
     }
     config.experiments = { ...config.experiments, ...{ topLevelAwait: true } };
+    config.output = { ...config.output, ...{ path: "/" } };
     return config;
   },
   async headers() {
