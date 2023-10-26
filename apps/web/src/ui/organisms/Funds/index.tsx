@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { useFunds } from "@orderbook/core/hooks";
 import {
   EmptyData,
@@ -14,6 +14,7 @@ import {
   toCapitalize,
   filterBlockedAssets,
   formatBalances,
+  getChainFromTicker,
 } from "@orderbook/core/helpers";
 
 import { TransactionsSkeleton } from "../Transactions";
@@ -54,83 +55,97 @@ export const Funds = ({ onHideFilters }) => {
               <S.Column>{t("actions")}</S.Column>
             </Table.Column>
           </Table.Header>
-          <Table.Body striped>
-            {allBalances.map((item) => (
-              <Table.Row key={item.assetId}>
-                <Table.Cell>
-                  <S.CellFlex>
-                    <S.TokenIcon>
-                      <Icon isToken name={item.symbol} size="extraSmall" />
-                    </S.TokenIcon>
+          <Table.Body striped border="squared">
+            {allBalances.map((item) => {
+              const chainName = getChainFromTicker(item.symbol);
+              return (
+                <Table.Row key={item.assetId}>
+                  <Table.Cell>
+                    <S.CellFlex>
+                      <S.TokenIcon>
+                        <Icon isToken name={item.symbol} size="extraSmall" />
+                      </S.TokenIcon>
+                      <S.Cell>
+                        <span>
+                          {toCapitalize(item.name)}{" "}
+                          <small> {item.symbol}</small>
+                        </span>
+                      </S.Cell>
+                    </S.CellFlex>
+                  </Table.Cell>
+                  <Table.Cell>
                     <S.Cell>
-                      <span>
-                        {toCapitalize(item.name)} <small> {item.symbol}</small>
-                      </span>
+                      <span>{formatBalances(item?.free_balance)}</span>
                     </S.Cell>
-                  </S.CellFlex>
-                </Table.Cell>
-                <Table.Cell>
-                  <S.Cell>
-                    <span>{formatBalances(item?.free_balance)}</span>
-                  </S.Cell>
-                </Table.Cell>
-                <Table.Cell>
-                  <S.Cell>
-                    <span>{formatBalances(item?.reserved_balance)}</span>
-                  </S.Cell>
-                </Table.Cell>
-                <Table.Cell>
-                  <S.Actions>
-                    <Tooltip>
-                      <TooltipHeader>
-                        <Link
-                          href="https://thea.polkadex.trade/"
-                          target="_blank"
+                  </Table.Cell>
+                  <Table.Cell>
+                    <S.Cell>
+                      <span>{formatBalances(item?.reserved_balance)}</span>
+                    </S.Cell>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <S.Actions>
+                      <Tooltip>
+                        <TooltipHeader>
+                          <Link
+                            href={{
+                              pathname: "https://thea.polkadex.trade/",
+                              query: chainName && {
+                                chain: encodeURIComponent(chainName),
+                              },
+                            }}
+                            target="_blank"
+                          >
+                            <S.DepositLink>{tc("deposit")}</S.DepositLink>
+                          </Link>
+                        </TooltipHeader>
+                        <TooltipContent
+                          style={{ transform: "translateY(-0.8rem)" }}
+                          background="text"
                         >
-                          <S.DepositLink>{tc("deposit")}</S.DepositLink>
-                        </Link>
-                      </TooltipHeader>
-                      <TooltipContent
-                        style={{ transform: "translateY(-0.8rem)" }}
-                        background="text"
-                      >
-                        <S.TooltipMessage>
-                          {tc("externalLink")}
-                        </S.TooltipMessage>
-                      </TooltipContent>
-                    </Tooltip>
+                          <S.TooltipMessage>
+                            {tc("externalLink")}
+                          </S.TooltipMessage>
+                        </TooltipContent>
+                      </Tooltip>
 
-                    <Tooltip>
-                      <TooltipHeader>
-                        <Link
-                          href="https://thea.polkadex.trade/withdraw"
-                          target="_blank"
+                      <Tooltip>
+                        <TooltipHeader>
+                          <Link
+                            href={{
+                              pathname: "https://thea.polkadex.trade/withdraw",
+                              query: chainName && {
+                                chain: encodeURIComponent(chainName),
+                              },
+                            }}
+                            target="_blank"
+                          >
+                            <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
+                          </Link>
+                        </TooltipHeader>
+                        <TooltipContent
+                          style={{ transform: "translateY(-0.8rem)" }}
+                          background="text"
                         >
-                          <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
-                        </Link>
-                      </TooltipHeader>
-                      <TooltipContent
-                        style={{ transform: "translateY(-0.8rem)" }}
-                        background="text"
-                      >
-                        <S.TooltipMessage>
-                          {tc("externalLink")}
-                        </S.TooltipMessage>
-                      </TooltipContent>
-                    </Tooltip>
+                          <S.TooltipMessage>
+                            {tc("externalLink")}
+                          </S.TooltipMessage>
+                        </TooltipContent>
+                      </Tooltip>
 
-                    <Link href={`/transfer?token=${item.symbol}`}>
-                      <S.TransferLink>
-                        <S.Icon>
-                          <Icons.Trading />
-                        </S.Icon>
-                        {tc("transfer")}
-                      </S.TransferLink>
-                    </Link>
-                  </S.Actions>
-                </Table.Cell>
-              </Table.Row>
-            ))}
+                      <Link href={`/transfer?token=${item.symbol}`}>
+                        <S.TransferLink>
+                          <S.Icon>
+                            <Icons.Trading />
+                          </S.Icon>
+                          {tc("transfer")}
+                        </S.TransferLink>
+                      </Link>
+                    </S.Actions>
+                  </Table.Cell>
+                </Table.Row>
+              );
+            })}
           </Table.Body>
         </Table>
       ) : (

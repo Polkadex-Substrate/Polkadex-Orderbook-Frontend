@@ -1,8 +1,14 @@
 /** @type {import('next').NextConfig} */
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const path = require("path");
+const { execSync } = require("child_process");
+
+const { i18n } = require("./next-i18next.config");
+
 const nextConfig = {
+  i18n,
   reactStrictMode: false,
   transpilePackages: ["@orderbook/core"],
   compiler: {
@@ -46,11 +52,19 @@ const nextConfig = {
           },
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: "public, max-age=31536000, must-revalidate",
           },
         ],
       },
     ];
+  },
+  generateBuildId: async () => {
+    try {
+      const gitCommitHash = execSync("git rev-parse HEAD").toString().trim();
+      return gitCommitHash;
+    } catch (error) {
+      return "orderbookDefaultId";
+    }
   },
   env: {
     POLKADEX_CHAIN:

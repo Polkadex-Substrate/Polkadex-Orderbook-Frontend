@@ -1,13 +1,14 @@
 import { ApiPromise } from "@polkadot/api";
 import BigNumber from "bignumber.js";
 import { UNIT_BN } from "@orderbook/core/constants";
+import { Codec } from "@polkadot/types/types";
 
 import { isAssetPDEX } from "./isAssetPDEX";
 
 export const fetchOnChainBalance = async (
   api: ApiPromise,
   assetId: string,
-  address: string,
+  address: string
 ): Promise<number> => {
   if (!api.isConnected) {
     return 0;
@@ -25,6 +26,38 @@ export const fetchOnChainBalance = async (
       .dividedBy(UNIT_BN)
       .toNumber();
   }
+};
+
+export const fetchOnChainBalances = async (
+  api: ApiPromise,
+  assetIds: string[],
+  address: string
+): Promise<Map<string, number>> => {
+  const queries = assetIds.map((id) => getBalanceQuery(api, id, address));
+  const rawRes = await Promise.all(queries);
+  const balances = new Map<string, number>();
+  // order is preserved in Promise.all
+  rawRes.forEach((item, index) => {
+    balances.set(assetIds[index], formatBalanceResult(item));
+  });
+  return balances;
+};
+
+const getBalanceQuery = (api: ApiPromise, assetId: string, address: string) => {
+  if (isAssetPDEX(assetId)) {
+    return api.query.system.account(address);
+  } else {
+    return api.query.assets.account(assetId, address);
+  }
+};
+
+const formatBalanceResult = (res: Codec): number => {
+  const balanceJson = res.toJSON();
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return new BigNumber(balanceJson?.balance || balanceJson?.data?.free || "0")
+    .dividedBy(UNIT_BN)
+    .toNumber();
 };
 
 export type BalanceJson = {

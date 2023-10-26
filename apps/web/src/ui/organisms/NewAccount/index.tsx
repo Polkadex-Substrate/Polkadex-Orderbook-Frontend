@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import {
   CreateAccountForm,
@@ -109,7 +109,7 @@ export const NewAccount = ({
                   ? successData[0].description
                   : successInformation.description
               }
-              mnemonic={tradeInfo?.mnemonic}
+              mnemonic={tradeWalletState?.registerAccountModal?.mnemonic}
               account={tradeInfo?.account}
             />
           ) : (

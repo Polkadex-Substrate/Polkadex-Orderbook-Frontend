@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChangeEvent, useMemo } from "react";
 import { useFormik } from "formik";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import {
   Icon,
   ButtonStatus,
@@ -291,7 +291,7 @@ const ProtectPassword = () => {
                 setFieldValue("showPassword", !values.showPassword)
               }
             >
-              {values.showPassword ? <Icons.Hidden /> : <Icons.Show />}
+              {!values.showPassword ? <Icons.Hidden /> : <Icons.Show />}
             </S.Show>
           </S.ProtectPasswordTitle>
           <S.ProtectPasswordContent>
@@ -301,7 +301,7 @@ const ProtectPassword = () => {
               value={values.password}
               name="password"
               error={errors.password}
-              type={values.showPassword ? "password" : "tel"}
+              type={!values.showPassword ? "password" : "tel"}
             />
           </S.ProtectPasswordContent>
         </S.ProtectPassword>

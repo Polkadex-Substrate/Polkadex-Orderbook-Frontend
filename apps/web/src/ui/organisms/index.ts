@@ -35,3 +35,4 @@ export * from "./BalancesTable";
 export * from "./CustomDeposit";
 export * from "./CustomTransfer";
 export * from "./CustomWithdraw";
+export * from "./Intro";

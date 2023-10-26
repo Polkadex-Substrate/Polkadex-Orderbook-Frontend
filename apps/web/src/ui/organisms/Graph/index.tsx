@@ -10,17 +10,14 @@ const TradingView = dynamic(
     import("@polkadex/orderbook-ui/molecules").then((mod) => mod.TradingView),
   {
     ssr: false,
-  },
+  }
 );
 
 export const Graph = () => {
   const { theme } = useSettingsProvider();
   return (
     <>
-      <Script
-        src="/static/datafeeds/udf/dist/bundle.js"
-        strategy="lazyOnload"
-      />
+      <Script src="/datafeeds/udf/dist/bundle.js" strategy="lazyOnload" />
       <S.Wrapper isLightMode={theme === "light"}>
         <S.WrapperGraph>
           <S.ChartWrapper>

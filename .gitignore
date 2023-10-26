@@ -55,6 +55,7 @@ amplify/backend/amplify-meta.json
 amplify/backend/.temp
 build/
 dist/
+!/apps/web/public/datafeeds/udf/dist/
 node_modules/
 awsconfiguration.json
 amplifyconfiguration.json

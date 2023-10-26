@@ -1,5 +1,5 @@
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { useEffect } from "react";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useTradeHistory } from "@orderbook/core/hooks";
@@ -76,7 +76,6 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
                 return (
                   <TradeHistoryCard
                     key={i}
-                    isSell={trade.side === "Ask"}
                     baseUnit={baseUnit}
                     quoteUnit={quoteUnit}
                     data={[

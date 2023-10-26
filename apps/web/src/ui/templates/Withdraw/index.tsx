@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { intlFormat } from "date-fns";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import {
   Button,
   Dropdown,

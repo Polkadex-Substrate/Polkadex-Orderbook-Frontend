@@ -15,6 +15,7 @@ export const Td = styled.td``;
 export const ContainerFlex = styled.div`
   display: flex;
   align-items: center;
+  padding-block: 0.6rem;
 `;
 
 export const Image = styled.div<{ isSell?: boolean }>`

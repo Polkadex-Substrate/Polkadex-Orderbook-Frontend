@@ -1,7 +1,7 @@
 /* eslint-disable new-cap */
 import { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMnemonic } from "@orderbook/core/hooks";
 import { PaperWallet } from "@polkadex/orderbook-ui/organisms";

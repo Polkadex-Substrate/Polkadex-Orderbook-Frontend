@@ -12,7 +12,7 @@ import { depositValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { ExtensionAccount } from "@orderbook/core/providers/types";
 import { useAssetTransfer } from "@orderbook/core/hooks";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { decodeAddress, encodeAddress } from "@polkadot/keyring";
 import { hexToU8a, isHex } from "@polkadot/util";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";

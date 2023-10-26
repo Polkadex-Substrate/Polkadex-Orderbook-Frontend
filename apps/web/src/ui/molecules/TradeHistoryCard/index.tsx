@@ -1,9 +1,6 @@
-import { Icon } from "@polkadex/orderbook-ui/molecules";
-
 import * as S from "./styles";
 
 export const TradeHistoryCard = ({
-  isSell,
   baseUnit,
   quoteUnit,
   data = [] as { value: string }[],
@@ -12,9 +9,6 @@ export const TradeHistoryCard = ({
     <S.Td>
       <S.Tag>Pair</S.Tag>
       <S.ContainerFlex>
-        <S.Image isSell={isSell}>
-          <Icon name={isSell ? "SellOrder" : "BuyOrder"} size="large" />
-        </S.Image>
         <span>
           {baseUnit}/{quoteUnit}
         </span>
