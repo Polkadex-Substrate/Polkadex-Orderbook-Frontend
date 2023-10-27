@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AnchorHTMLAttributes, PropsWithChildren } from "react";
+import { AnchorHTMLAttributes, PropsWithChildren, ReactNode } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
@@ -50,16 +50,36 @@ export const Menu = ({ open = false }) => {
         >
           {t("wallets")}
         </Card>
+        <Help open={open} title={t("help")}>
+          <Link
+            href="https://discord.gg/G4KMw2sGGe"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div>
+              <span>{t("support")}</span>
+            </div>
+          </Link>
+          <Link
+            href="https://docs.polkadex.trade/orderbookPolkadexFAQHowToTradeStep1"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div>
+              <span>{t("guide")}</span>
+            </div>
+          </Link>
+          <Link
+            href="https://docs.polkadex.trade/orderbookPolkadexFAQWallets"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div>
+              <span>{t("faq")}</span>
+            </div>
+          </Link>
+        </Help>
         <Terms open={open} />
-        <Card
-          icon="Question"
-          open={open}
-          href="https://discord.gg/G4KMw2sGGe"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {t("help")}
-        </Card>
       </S.WrapperLinks>
       <S.BottomContainer>
         <S.WrapperIcon onClick={changeTheme} as="button">
@@ -75,6 +95,41 @@ export const Menu = ({ open = false }) => {
   );
 };
 
+const Help = ({
+  open,
+  title,
+  children,
+}: {
+  open: boolean;
+  title: string;
+  children: ReactNode;
+}) => {
+  return (
+    <S.Terms open={open}>
+      <S.WrapperIcon>
+        <S.Flex>
+          <div>
+            <Icon
+              name="Question"
+              background="none"
+              stroke="text"
+              size="large"
+            />
+          </div>
+          {open && (
+            <S.Text>
+              <p>{title}</p>
+              <div>
+                <Icon name="ArrowBottom" />
+              </div>
+            </S.Text>
+          )}
+        </S.Flex>
+        <S.TermsLinks>{children}</S.TermsLinks>
+      </S.WrapperIcon>
+    </S.Terms>
+  );
+};
 const Terms = ({ open }) => {
   const { t: tc } = useTranslation("common");
   return (
@@ -144,7 +199,6 @@ const Terms = ({ open }) => {
     </S.Terms>
   );
 };
-
 interface Props
   extends Pick<
     AnchorHTMLAttributes<HTMLAreaElement>,
