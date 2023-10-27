@@ -199,6 +199,7 @@ const Terms = ({ open }) => {
     </S.Terms>
   );
 };
+
 interface Props
   extends Pick<
     AnchorHTMLAttributes<HTMLAreaElement>,
