@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AnchorHTMLAttributes, PropsWithChildren, ReactNode } from "react";
+import { AnchorHTMLAttributes, PropsWithChildren } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
@@ -99,11 +99,10 @@ const Help = ({
   open,
   title,
   children,
-}: {
+}: PropsWithChildren<{
   open: boolean;
   title: string;
-  children: ReactNode;
-}) => {
+}>) => {
   return (
     <S.Terms open={open}>
       <S.WrapperIcon>
