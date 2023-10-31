@@ -655,5 +655,6 @@ export function usePlaceOrder(
     slider,
     handleSliderClick,
     pricePrecision,
+    qtyPrecision,
   };
 }
