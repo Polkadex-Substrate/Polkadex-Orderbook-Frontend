@@ -7,13 +7,14 @@
  */
 
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
-import { filterBlockedAssets, formatBalances } from "@orderbook/core/helpers";
+import { filterBlockedAssets } from "@orderbook/core/helpers";
 import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useRouter } from "next/router";
+import { BalanceFormatter } from "@orderbook/format";
 
 import * as T from "./types";
 
@@ -22,12 +23,13 @@ const onChangeState = (onCallback: Dispatch<SetStateAction<boolean>>) => {
 };
 
 export function useTransfer() {
+  const { toHuman } = new BalanceFormatter();
   const { list } = useAssetsProvider();
   const { balances } = useBalancesProvider();
   const { loading: depositLoading } = useDepositProvider();
   const { loading: withdrawLoading } = useWithdrawsProvider();
   const { selectedAccount } = useProfile();
-  const { query } = useRouter();
+  const { query, locale } = useRouter();
 
   const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>();
   const [assetsInteraction, setAssetsInteraction] = useState(false);
@@ -62,11 +64,11 @@ export function useTransfer() {
 
         return {
           ...e,
-          free_balance: formatBalances(free_balance),
-          onChainBalance: formatBalances(onChainBalance),
+          free_balance: toHuman(Number(free_balance), 4, locale),
+          onChainBalance: toHuman(Number(onChainBalance), 4, locale),
         } as T.FilteredAssetProps;
       }),
-    [list, balances]
+    [list, balances, locale, toHuman]
   );
 
   /* Select default asset */
