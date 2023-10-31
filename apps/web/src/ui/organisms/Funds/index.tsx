@@ -13,9 +13,10 @@ import {
 import {
   toCapitalize,
   filterBlockedAssets,
-  formatBalances,
   getChainFromTicker,
 } from "@orderbook/core/helpers";
+import { BalanceFormatter } from "@orderbook/format";
+import { useRouter } from "next/router";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -24,6 +25,8 @@ import * as S from "./styles";
 import { Icons } from "@/ui/atoms";
 
 export const Funds = ({ onHideFilters }) => {
+  const formatter = new BalanceFormatter();
+  const { locale } = useRouter();
   const { balances, isLoading } = useFunds();
   const allBalances = filterBlockedAssets(balances);
   useEffect(() => {
@@ -75,12 +78,24 @@ export const Funds = ({ onHideFilters }) => {
                   </Table.Cell>
                   <Table.Cell>
                     <S.Cell>
-                      <span>{formatBalances(item?.free_balance)}</span>
+                      <span>
+                        {formatter.toHuman(
+                          Number(item?.free_balance),
+                          4,
+                          locale || "en"
+                        )}
+                      </span>
                     </S.Cell>
                   </Table.Cell>
                   <Table.Cell>
                     <S.Cell>
-                      <span>{formatBalances(item?.reserved_balance)}</span>
+                      <span>
+                        {formatter.toHuman(
+                          Number(item?.reserved_balance),
+                          4,
+                          locale || "en"
+                        )}
+                      </span>
                     </S.Cell>
                   </Table.Cell>
                   <Table.Cell>

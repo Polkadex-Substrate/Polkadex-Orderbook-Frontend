@@ -10,7 +10,9 @@
   "scripts": {
     "test": "jest"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@polkadot-cloud/utils": "^0.0.23"
+  },
   "devDependencies": {
     "@orderbook/eslint-config": "*",
     "@orderbook/tsconfig": "*",
