@@ -45,7 +45,7 @@ export const depositValidations = (
       .test(
         ErrorMessages.TOO_SMALL,
         ErrorMessages.TOO_SMALL,
-        (value) => Number(value) >= 0.0001
+        (value) => Number(value) >= 0.00001
       )
       .test(
         ErrorMessages.CHECK_BALANCE,
@@ -145,7 +145,7 @@ export const withdrawValidations = (balance: string) => {
       .test(
         ErrorMessages.TOO_SMALL,
         ErrorMessages.TOO_SMALL,
-        (value) => Number(value) >= 0.0001
+        (value) => Number(value) >= 0.00001
       )
       .test(
         ErrorMessages.CHECK_BALANCE,
