@@ -49,7 +49,7 @@ export const TransferFormDeposit = ({
   );
 
   const existentialBalance = useMemo(
-    () => (isPolkadexToken ? 1 : 0.1),
+    () => (isPolkadexToken ? 1 : 0.00001),
     [isPolkadexToken]
   );
 
