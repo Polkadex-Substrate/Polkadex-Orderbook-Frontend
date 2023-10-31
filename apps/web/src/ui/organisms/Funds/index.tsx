@@ -25,7 +25,7 @@ import * as S from "./styles";
 import { Icons } from "@/ui/atoms";
 
 export const Funds = ({ onHideFilters }) => {
-  const formatter = new BalanceFormatter();
+  const { toHuman } = new BalanceFormatter();
   const { locale } = useRouter();
   const { balances, isLoading } = useFunds();
   const allBalances = filterBlockedAssets(balances);
@@ -79,22 +79,14 @@ export const Funds = ({ onHideFilters }) => {
                   <Table.Cell>
                     <S.Cell>
                       <span>
-                        {formatter.toHuman(
-                          Number(item?.free_balance),
-                          4,
-                          locale || "en"
-                        )}
+                        {toHuman(Number(item?.free_balance), 4, locale)}
                       </span>
                     </S.Cell>
                   </Table.Cell>
                   <Table.Cell>
                     <S.Cell>
                       <span>
-                        {formatter.toHuman(
-                          Number(item?.reserved_balance),
-                          4,
-                          locale || "en"
-                        )}
+                        {toHuman(Number(item?.reserved_balance), 4, locale)}
                       </span>
                     </S.Cell>
                   </Table.Cell>

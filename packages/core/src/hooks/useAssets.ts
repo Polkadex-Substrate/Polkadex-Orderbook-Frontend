@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import {
   useAssetsProvider,
   IPublicAsset,
@@ -5,7 +6,7 @@ import {
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { ChangeEvent, useMemo, useState } from "react";
 import { defaultConfig } from "@orderbook/core/config";
-import { formatBalances } from "@orderbook/core/helpers";
+import { BalanceFormatter } from "@orderbook/format";
 
 export interface AssetsProps extends IPublicAsset {
   free_balance: string;
@@ -14,10 +15,13 @@ export interface AssetsProps extends IPublicAsset {
 }
 
 export function useAssets() {
+  const { locale } = useRouter();
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
   const { list, loading } = useAssetsProvider();
   const { balances, loading: balancesLoading } = useBalancesProvider();
+
+  const { toHuman } = new BalanceFormatter();
 
   const assets = useMemo(
     () =>
@@ -43,9 +47,9 @@ export function useAssets() {
 
           return {
             ...e,
-            free_balance: formatBalances(free_balance),
-            onChainBalance: formatBalances(onChainBalance),
-            inOrdersBalance: formatBalances(inOrdersBalance),
+            free_balance: toHuman(Number(free_balance), 4, locale),
+            onChainBalance: toHuman(Number(onChainBalance), 4, locale),
+            inOrdersBalance: toHuman(Number(inOrdersBalance), 4, locale),
           };
         })
         ?.filter((e: AssetsProps) => {
@@ -63,7 +67,7 @@ export function useAssets() {
           );
         })
         ?.sort((a, b) => a.name.localeCompare(b.name)),
-    [filters.search, list, balances, filters.hideZero]
+    [filters.search, list, balances, filters.hideZero, locale, toHuman]
   );
 
   return {
