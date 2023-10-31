@@ -6,6 +6,6 @@
       "@orderbook/format/*": ["./src/*"]
     }
   },
-  "include": ["."],
+  "include": ["./src", "jest.config.ts"],
   "exclude": ["dist", "build", "node_modules"]
 }

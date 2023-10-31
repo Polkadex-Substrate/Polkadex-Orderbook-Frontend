@@ -1,4 +1,4 @@
-import { BalanceFormatter } from "../index";
+import { BalanceFormatter } from "../balances";
 
 describe("Balance Formatter <> toHuman function", () => {
   const formatter = new BalanceFormatter();

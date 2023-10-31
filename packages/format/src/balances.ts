@@ -1,6 +1,8 @@
 import { trimFloat } from "@orderbook/core/helpers";
 
-import { BalanceFormatterAdapter } from "./types";
+export interface BalanceFormatterAdapter {
+  toHuman: (value: bigint | number, decimal: number, locale: string) => string;
+}
 
 export class BalanceFormatter implements BalanceFormatterAdapter {
   toHuman(value: number | bigint, decimal: number, locale: string): string {
@@ -12,7 +14,7 @@ export class BalanceFormatter implements BalanceFormatterAdapter {
 
     let result = formatter.format(value);
 
-    // Trim the value (doesn't round off)
+    // Trim the value (don't round off)
     result = trimFloat({ value: result, digitsAfterDecimal: decimal });
 
     return result;
