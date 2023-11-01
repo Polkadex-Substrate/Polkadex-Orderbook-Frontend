@@ -16,6 +16,7 @@ import { useTranslation } from "next-i18next";
 import { decodeAddress, encodeAddress } from "@polkadot/keyring";
 import { hexToU8a, isHex } from "@polkadot/util";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
+import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
 
 import { CustomAddress } from "../TransferFormWithdraw/types";
 
@@ -72,7 +73,7 @@ export const TransferForm = ({
   );
 
   const existentialBalance = useMemo(
-    () => (isPolkadexToken ? 1 : 0.1),
+    () => (isPolkadexToken ? 1 : OTHER_ASSET_EXISTENTIAL),
     [isPolkadexToken]
   );
 
