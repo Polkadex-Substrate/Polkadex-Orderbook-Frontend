@@ -11,6 +11,7 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { useOrderbookTable, useOrderbook } from "@orderbook/core/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
+import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 
 import * as T from "./types";
 import * as S from "./styles";
@@ -28,6 +29,7 @@ export const OrderBook = () => {
     handleChange,
     handleAction,
     loading,
+    qtyPrecision,
   } = useOrderbook();
 
   return (
@@ -82,7 +84,8 @@ export const OrderBook = () => {
         asks={asks}
         bids={bids}
         lastPriceValue={lastPriceValue}
-        precision={sizeState.length}
+        pricePrecison={sizeState.length}
+        qtyPrecision={qtyPrecision}
         loading={loading}
       />
     </S.Wrapper>
@@ -95,9 +98,10 @@ type TableField = (typeof allowedFields)[number];
 export const OrderbookTable = ({
   isSell = false,
   orders = [],
-  precision = 4,
+  pricePrecision = MAX_DIGITS_AFTER_DECIMAL,
   lightMode,
   loading,
+  qtyPrecision = MAX_DIGITS_AFTER_DECIMAL,
 }: T.Props) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -177,7 +181,7 @@ export const OrderbookTable = ({
                     >
                       <Decimal
                         key={i}
-                        fixed={precision}
+                        fixed={pricePrecision}
                         thousSep=","
                         prevValue={orders[i + 1] ? orders[i + 1][0] : 0}
                       >
@@ -189,7 +193,7 @@ export const OrderbookTable = ({
                     <span
                       onClick={(e) => handleRowClick(allowedFields[1], e, i)}
                     >
-                      <Decimal key={i} fixed={precision} thousSep=",">
+                      <Decimal key={i} fixed={qtyPrecision} thousSep=",">
                         {volume}
                       </Decimal>
                     </span>
@@ -198,7 +202,7 @@ export const OrderbookTable = ({
                     <span
                       onClick={(e) => handleRowClick(allowedFields[2], e, i)}
                     >
-                      <Decimal key={i} fixed={precision} thousSep=",">
+                      <Decimal key={i} fixed={pricePrecision} thousSep=",">
                         {total[i]}
                       </Decimal>
                     </span>
