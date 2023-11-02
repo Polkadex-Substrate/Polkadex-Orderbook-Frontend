@@ -13,6 +13,7 @@ import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useTranslation } from "next-i18next";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
+import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -49,7 +50,7 @@ export const TransferFormDeposit = ({
   );
 
   const existentialBalance = useMemo(
-    () => (isPolkadexToken ? 1 : 0.00001),
+    () => (isPolkadexToken ? 1 : OTHER_ASSET_EXISTENTIAL),
     [isPolkadexToken]
   );
 
