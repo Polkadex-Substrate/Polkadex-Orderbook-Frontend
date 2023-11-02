@@ -66,6 +66,7 @@ export const MarketOrderAction = ({
     slider,
     buttonDisabled,
     pricePrecision,
+    qtyPrecision,
   } = usePlaceOrder(
     isSell,
     isLimit,
@@ -75,7 +76,6 @@ export const MarketOrderAction = ({
     errors,
     setErrors
   );
-
   const { t: translation } = useTranslation("molecules");
   const t = (key: string) => translation(`marketOrderAction.${key}`);
 
@@ -119,7 +119,10 @@ export const MarketOrderAction = ({
                   <AvaliableBalanceSkeleton />
                 ) : (
                   <>
-                    <Decimal fixed={pricePrecision} hasStyle={false}>
+                    <Decimal
+                      fixed={isSell ? qtyPrecision : pricePrecision}
+                      hasStyle={false}
+                    >
                       {availableAmount}
                     </Decimal>{" "}
                     {isSell ? baseTicker : quoteTicker}
