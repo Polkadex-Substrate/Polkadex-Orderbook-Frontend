@@ -78,14 +78,11 @@ export const depositValidations = (
         ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
         ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
         (value) => {
-          const balanceAfterDeposit = Number(
-            chainBalance - Number(value)
-          ).toFixed(MAX_DIGITS_AFTER_DECIMAL);
-
+          const balanceAfterDeposit = Number(chainBalance) - Number(value);
           return !(
             !isPolkadexToken &&
             Number(value) &&
-            Number(balanceAfterDeposit) < existentialBalance
+            balanceAfterDeposit < existentialBalance
           );
         }
       ),

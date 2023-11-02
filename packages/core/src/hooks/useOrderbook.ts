@@ -3,6 +3,7 @@ import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProv
 import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
 import { useOrderBook } from "@orderbook/core/providers/public/orderBook";
 import { decimalPlaces } from "@orderbook/core/helpers";
+import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 
 const initialState = [
   { size: 0.1, length: 1 },
@@ -31,7 +32,10 @@ export function useOrderbook() {
   const { currentMarket } = useMarketsProvider();
   const pricePrecision = currentMarket
     ? decimalPlaces(currentMarket.price_tick_size)
-    : 8;
+    : MAX_DIGITS_AFTER_DECIMAL;
+  const qtyPrecision = currentMarket
+    ? decimalPlaces(currentMarket.qty_step_size)
+    : MAX_DIGITS_AFTER_DECIMAL;
 
   const { getCurrentTradePrice, getLastTradePrice } = useRecentTradesProvider();
   const currentTrade = getCurrentTradePrice();
@@ -63,6 +67,7 @@ export function useOrderbook() {
 
   return {
     isPriceUp,
+    qtyPrecision,
     lastPriceValue: currentPrice,
     hasMarket: !!currentMarket,
     loading,

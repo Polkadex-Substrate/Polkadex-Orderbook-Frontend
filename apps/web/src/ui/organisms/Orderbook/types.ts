@@ -4,6 +4,7 @@ export type Props = {
   isSell?: boolean;
   orders: OrderBookState["depth"]["bids"];
   lightMode?: boolean;
-  precision?: number;
+  pricePrecision?: number;
+  qtyPrecision?: number;
   loading?: boolean;
 };
