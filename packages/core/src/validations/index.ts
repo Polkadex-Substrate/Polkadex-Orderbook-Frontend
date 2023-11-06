@@ -45,7 +45,7 @@ export const depositValidations = (
       .test(
         ErrorMessages.TOO_SMALL,
         ErrorMessages.TOO_SMALL,
-        (value) => Number(value) > 0.0001
+        (value) => Number(value) >= 0.00001
       )
       .test(
         ErrorMessages.CHECK_BALANCE,
@@ -78,14 +78,11 @@ export const depositValidations = (
         ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
         ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
         (value) => {
-          const balanceAfterDeposit = Number(
-            chainBalance - Number(value)
-          ).toFixed(MAX_DIGITS_AFTER_DECIMAL);
-
+          const balanceAfterDeposit = Number(chainBalance) - Number(value);
           return !(
             !isPolkadexToken &&
             Number(value) &&
-            Number(balanceAfterDeposit) < existentialBalance
+            balanceAfterDeposit < existentialBalance
           );
         }
       ),
@@ -145,7 +142,7 @@ export const withdrawValidations = (balance: string) => {
       .test(
         ErrorMessages.TOO_SMALL,
         ErrorMessages.TOO_SMALL,
-        (value) => Number(value) > 0.0001
+        (value) => Number(value) >= 0.00001
       )
       .test(
         ErrorMessages.CHECK_BALANCE,

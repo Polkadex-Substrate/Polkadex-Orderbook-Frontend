@@ -22,10 +22,6 @@ const informationData = [
     id: "json",
     title: "Json file",
   },
-  {
-    id: "ledger",
-    title: "Ledger device",
-  },
 ];
 
 type ImportAccountFormProps = {
