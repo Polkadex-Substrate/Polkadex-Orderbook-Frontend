@@ -27,14 +27,14 @@ import {
 } from "./helpers";
 import * as QUERIES from "./graphql";
 import {
+  FindUserByMainAccountQuery,
+  FindUserByProxyAccountQuery,
   GetAllAssetsQuery,
   GetAllBalancesByMainAccountQuery,
   GetAllMarketsQuery,
   GetKlinesbyMarketIntervalQuery,
   GetMarketTickersQuery,
-  GetOrderbookQuery,
   Order as APIOrder,
-  Orderbook as APIBook,
   SetPriceLevel,
 } from "./API";
 
@@ -283,16 +283,36 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
     return Promise.resolve([]);
   }
 
-  getTradingAddresses(fundingAddress: string): Promise<string[]> {
-    return Promise.resolve([]);
+  async getTradingAddresses(fundingAddress: string): Promise<string[]> {
+    const queryResult = await sendQueryToAppSync<
+      GraphQLResult<FindUserByMainAccountQuery>
+    >({
+      query: QUERIES.findUserByMainAccount,
+      variables: {
+        main_account: fundingAddress,
+      },
+    });
+    return (
+      (queryResult?.data?.findUserByMainAccount?.proxies as string[]) || []
+    );
   }
 
   getTransactions(args: UserHistoryProps): Promise<Transaction[]> {
     return Promise.resolve([]);
   }
 
-  getFundingAddress(tradeAddress: string): Promise<string> {
-    return Promise.resolve("");
+  async getFundingAddress(
+    tradeAddress: string
+  ): Promise<string | null | undefined> {
+    const queryResult = await sendQueryToAppSync<
+      GraphQLResult<FindUserByProxyAccountQuery>
+    >({
+      query: QUERIES.findUserByProxyAccount,
+      variables: {
+        proxy_account: tradeAddress,
+      },
+    });
+    return queryResult?.data?.findUserByProxyAccount?.items?.[0]?.hash_key;
   }
 
   private mapApiOrderToOrder(item: APIOrder, marketList: Market[]): Order {

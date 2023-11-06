@@ -19,7 +19,7 @@ import {
 export interface OrderbookReadStrategy {
   getOrderbook: (market: string) => Promise<Orderbook>;
   getMarkets: () => Promise<Market[]>;
-  getTicker: (market: string) => Promise<Ticket>;
+  getTicker: (market: string) => Promise<Ticker>;
   getAssets: () => Promise<Asset[]>;
   getOpenOrders: (args: OrderHistoryProps) => Promise<Order[]>;
   getOrderHistory: (args: UserHistoryProps) => Promise<Order[]>;
@@ -27,7 +27,9 @@ export interface OrderbookReadStrategy {
   getTrades: (args: UserHistoryProps) => Promise<PublicTrade[]>;
   getBalance: (fundingAddress: string) => Promise<Balance[]>;
   getTradingAddresses: (fundingAddress: string) => Promise<string[]>;
-  getFundingAddress: (tradeAddress: string) => Promise<string>;
+  getFundingAddress: (
+    tradeAddress: string
+  ) => Promise<string | null | undefined>;
   getCandles: (args: KlineHistoryProps) => Promise<Kline[]>;
   getTransactions: (args: UserHistoryProps) => Promise<Transaction[]>;
 }
