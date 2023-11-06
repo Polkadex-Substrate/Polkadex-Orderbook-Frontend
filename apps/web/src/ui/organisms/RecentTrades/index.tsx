@@ -27,10 +27,8 @@ export const RecentTrades = () => {
     amountPrecision,
   } = useRecentTradesProvider();
 
-  const precision = Math.max(
-    pricePrecision || MIN_DIGITS_AFTER_DECIMAL,
-    amountPrecision || MIN_DIGITS_AFTER_DECIMAL
-  );
+  const priceDecimals = pricePrecision || MIN_DIGITS_AFTER_DECIMAL;
+  const qtyDecimals = amountPrecision || MIN_DIGITS_AFTER_DECIMAL;
 
   return (
     <S.MainContainer>
@@ -55,8 +53,8 @@ export const RecentTrades = () => {
                 return (
                   <Card
                     key={i}
-                    price={Decimal.format(order.price, precision, ",")}
-                    amount={Decimal.format(order.amount, precision, ",")}
+                    price={Decimal.format(order.price, priceDecimals, ",")}
+                    amount={Decimal.format(order.amount, qtyDecimals, ",")}
                     date={date}
                     isSell={isDecreasing[i]}
                   />
