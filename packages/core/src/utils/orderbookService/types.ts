@@ -1,14 +1,14 @@
 // number type can be used for all calculations as it supports up to 15 digits after decimal point
 // while max precision of backend is 8 digits after decimal point
 
-export interface Market {
+export interface MarketBase {
   id: string; // eg: "123-231"
   name: string; // eg: "BTC/USDT"
   baseAsset: Asset;
   quoteAsset: Asset;
 }
 
-export interface MarketConfig extends Market {
+export interface Market extends MarketBase {
   minPrice: number;
   maxPrice: number;
   minQty: number;
@@ -26,9 +26,10 @@ export type Asset = {
   decimal: number;
 };
 
+export type BookLevel = { price: number; qty: number };
 export type Orderbook = {
-  bids: Array<[number, number]>;
-  asks: Array<[number, number]>;
+  bids: BookLevel[];
+  asks: BookLevel[];
 };
 
 export type OrderType = "LIMIT" | "MARKET";
@@ -39,7 +40,6 @@ export interface Order {
   orderId: string;
   price: string;
   averagePrice: number;
-  mainAddress: string;
   type: OrderType;
   status: OrderStatus;
   isReverted: boolean;
@@ -73,7 +73,7 @@ export type Ticker = {
   high: number;
   low: number;
   baseVolume: number;
-  QuoteVolume: number;
+  quoteVolume: number;
   currentPrice: number;
 };
 export type Balance = {
@@ -88,6 +88,7 @@ export type Kline = {
   close: number;
   baseVolume: number;
   quoteVolume: number;
+  timestamp: Date;
 };
 
 export type Transaction = {
@@ -117,11 +118,21 @@ export interface UserHistoryProps<T = null> {
   pageParams: T;
   market?: string;
 }
-
+export interface OrderHistoryProps {
+  address: string;
+  limit: number;
+}
 export interface MarketHistoryProps<T = null> {
   market: string;
   from: Date;
   to: Date;
   limit: number;
   pageParams: T;
+}
+
+export interface KlineHistoryProps<T = null> {
+  market: string;
+  from: Date;
+  to: Date;
+  interval: string;
 }

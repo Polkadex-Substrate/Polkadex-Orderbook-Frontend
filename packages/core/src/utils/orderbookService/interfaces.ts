@@ -2,8 +2,6 @@ import {
   Asset,
   Balance,
   Kline,
-  MarketConfig,
-  MarketHistoryProps,
   Order,
   Orderbook,
   Subscription,
@@ -14,22 +12,23 @@ import {
   Transaction,
   PublicTrade,
   PriceLevel,
+  KlineHistoryProps,
+  OrderHistoryProps,
 } from "./types";
 
 export interface OrderbookReadStrategy {
   getOrderbook: (market: string) => Promise<Orderbook>;
   getMarkets: () => Promise<Market[]>;
-  getTickers: () => Promise<Ticker[]>;
+  getTicker: (market: string) => Promise<Ticket>;
   getAssets: () => Promise<Asset[]>;
-  getMarketsConfig: () => Promise<MarketConfig[]>;
-  getOpenOrders: (args: UserHistoryProps) => Promise<Order[]>;
+  getOpenOrders: (args: OrderHistoryProps) => Promise<Order[]>;
   getOrderHistory: (args: UserHistoryProps) => Promise<Order[]>;
   getTradeHistory: (args: UserHistoryProps) => Promise<Trade[]>;
   getTrades: (args: UserHistoryProps) => Promise<PublicTrade[]>;
   getBalance: (fundingAddress: string) => Promise<Balance[]>;
   getTradingAddresses: (fundingAddress: string) => Promise<string[]>;
   getFundingAddress: (tradeAddress: string) => Promise<string>;
-  getCandles: (args: MarketHistoryProps) => Promise<Kline[]>;
+  getCandles: (args: KlineHistoryProps) => Promise<Kline[]>;
   getTransactions: (args: UserHistoryProps) => Promise<Transaction[]>;
 }
 

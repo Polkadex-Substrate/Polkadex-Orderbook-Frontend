@@ -1,6 +1,8 @@
 import { API as amplifyApi } from "aws-amplify";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/auth";
 import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
+import { Maybe } from "@orderbook/core/helpers";
+import { GraphQLResult } from "@aws-amplify/api";
 
 type Props = {
   query: string;
@@ -37,11 +39,11 @@ export async function sendQueryToAppSync<T = any>({
   }
 }
 
-export const fetchAllFromAppSync = async (
+export const fetchFullListFromAppSync = async <T = any>(
   query: string,
   variables: Record<string, unknown>,
   key: string
-) => {
+): Promise<T[]> => {
   let fullResponse: any[] = [];
   let nextToken = null;
   do {
@@ -52,14 +54,14 @@ export const fetchAllFromAppSync = async (
     fullResponse = [...fullResponse, ...res.data[key].items];
     nextToken = res.data[key].nextToken;
   } while (nextToken);
-  return fullResponse;
+  return fullResponse as T[];
 };
 
-export const fetchFromAppSync = async (
+export const fetchListFromAppSync = async <T = any[]>(
   query: string,
   variables: Record<string, unknown>,
   key: string
-) => {
+): Promise<{ response: T; nextToken: Maybe<string> }> => {
   const res = await sendQueryToAppSync({
     query,
     variables,
@@ -73,16 +75,16 @@ export const fetchFromAppSync = async (
 };
 
 const LIST_LIMIT = 15;
-export const fetchBatchFromAppSync = async (
+export const fetchBatchFromAppSync = async <T = any[]>(
   query: string,
   variables: Record<string, any>,
   key: string
-) => {
+): Promise<{ response: any[]; nextToken: Maybe<string> }> => {
   let nextToken = variables.nextToken;
   let response: any[] = [];
   do {
     const { nextToken: newNextToken, response: newResponse } =
-      await fetchFromAppSync(
+      await fetchListFromAppSync(
         query,
         nextToken ? { ...variables, nextToken } : variables,
         key
