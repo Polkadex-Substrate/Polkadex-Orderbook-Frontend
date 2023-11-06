@@ -4,7 +4,6 @@ import { OrderbookReadStrategy } from "./../interfaces";
 import {
   Asset,
   Kline,
-  MarketHistoryProps,
   UserHistoryProps,
   Balance,
   Market,
@@ -19,6 +18,8 @@ import {
   OrderType,
   OrderHistoryProps,
   BookLevel,
+  MaybePaginated,
+  LatestTradesPropsForMarket,
 } from "./../types";
 import {
   fetchBatchFromAppSync,
@@ -35,26 +36,28 @@ import {
   GetKlinesbyMarketIntervalQuery,
   GetMarketTickersQuery,
   Order as APIOrder,
+  Trade as APITrade,
+  Transaction as APITransaction,
   SetPriceLevel,
 } from "./API";
 
 export class AppsyncV1Reader implements OrderbookReadStrategy {
   ready = false;
-  assetsList: Asset[] = [];
-  marketList: Market[] = [];
+  _assetsList: Asset[] = [];
+  _marketList: Market[] = [];
   public isReady(): boolean {
     return this.ready;
   }
 
   public async init(): Promise<void> {
-    this.assetsList = await this.getAssets();
-    this.marketList = await this.getMarkets();
+    this._assetsList = await this.getAssets();
+    this._marketList = await this.getMarkets();
     this.ready = true;
   }
 
   public async getAssets(): Promise<Asset[]> {
     if (this.isReady()) {
-      return this.assetsList;
+      return this._assetsList;
     }
     const allAssets = await sendQueryToAppSync<
       GraphQLResult<GetAllAssetsQuery>
@@ -88,7 +91,7 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
     const balances =
       balancesQueryResult?.data?.getAllBalancesByMainAccount?.items?.map(
         (item): Balance => {
-          const asset = this.assetsList.find((x) => x.id === item?.a);
+          const asset = this._assetsList.find((x) => x.id === item?.a);
           if (!asset) {
             throw new Error(
               `[${this.constructor.name}:getBalance] cannot find asset`
@@ -135,7 +138,7 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
 
   async getMarkets(): Promise<Market[]> {
     if (this.isReady()) {
-      return this.marketList;
+      return this._marketList;
     }
     const assetList = await this.getAssets();
     const marketsQueryResult = await sendQueryToAppSync<
@@ -153,7 +156,7 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
             `[${this.constructor.name}:getMarkets] cannot find base asset`
           );
         }
-        const quoteAsset = this.assetsList.find((x) => x.id === quoteAssetId);
+        const quoteAsset = this._assetsList.find((x) => x.id === quoteAssetId);
         if (!quoteAsset) {
           throw new Error(
             `[${this.constructor.name}:getMarkets] cannot find quote asset`
@@ -194,12 +197,14 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
       "listOpenOrdersByMainAccount"
     );
     const openOrders = openOrderQueryResult?.map((item): Order => {
-      return this.mapApiOrderToOrder(item, this.marketList);
+      return this.mapApiOrderToOrder(item, this._marketList);
     });
     return openOrders || [];
   }
 
-  async getOrderHistory(args: UserHistoryProps): Promise<Order[]> {
+  async getOrderHistory(
+    args: UserHistoryProps
+  ): Promise<MaybePaginated<Order[]>> {
     if (!this.isReady()) {
       await this.init();
     }
@@ -213,12 +218,18 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
       },
       "listOrderHistorybyMainAccount"
     );
+    if (!orderHistoryQueryResult) {
+      return { data: [], nextToken: null };
+    }
     const orderHistory = orderHistoryQueryResult?.response?.map(
       (item): Order => {
-        return this.mapApiOrderToOrder(item, this.marketList);
+        return this.mapApiOrderToOrder(item, this._marketList);
       }
     );
-    return orderHistory || [];
+    return {
+      data: orderHistory || [],
+      nextToken: orderHistoryQueryResult?.nextToken,
+    };
   }
 
   async getOrderbook(market: string): Promise<Orderbook> {
@@ -275,12 +286,58 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
     };
   }
 
-  getTradeHistory(args: UserHistoryProps): Promise<Trade[]> {
-    return Promise.resolve([]);
+  async getTradeHistory(
+    args: UserHistoryProps
+  ): Promise<MaybePaginated<Trade[]>> {
+    const queryResult = await fetchBatchFromAppSync<APITrade>(
+      QUERIES.listTradesByMainAccount,
+      {
+        main_account: args.address,
+        limit: args.limit,
+        from: args.from.toISOString(),
+        to: args.to.toISOString(),
+      },
+      "listTradesByMainAccount"
+    );
+    if (!queryResult) {
+      return { data: [], nextToken: null };
+    }
+    const trades = queryResult.response.map((item: APITrade): Trade => {
+      return {
+        price: Number(item?.p) || 0,
+        qty: Number(item?.q) || 0,
+        isReverted: item?.isReverted || false,
+        timestamp: new Date(item?.t || 0),
+        takerOrderId: item?.t_id || "",
+        makerOrderId: item?.m_id || "",
+        fee: 0,
+      };
+    });
+    return { data: trades, nextToken: queryResult.nextToken };
   }
 
-  getTrades(args: UserHistoryProps): Promise<PublicTrade[]> {
-    return Promise.resolve([]);
+  async getLatestTradesForMarket(
+    args: LatestTradesPropsForMarket
+  ): Promise<PublicTrade[]> {
+    const queryResult = await fetchBatchFromAppSync<APITrade>(
+      QUERIES.getRecentTrades,
+      {
+        m: args.market,
+        limit: args.limit,
+      },
+      "getRecentTrades"
+    );
+    if (!queryResult) {
+      return [];
+    }
+    return queryResult.response.map((item: APITrade): PublicTrade => {
+      return {
+        price: Number(item?.p) || 0,
+        qty: Number(item?.q) || 0,
+        isReverted: item?.isReverted || false,
+        timestamp: new Date(item?.t || 0),
+      };
+    });
   }
 
   async getTradingAddresses(fundingAddress: string): Promise<string[]> {
@@ -297,8 +354,45 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
     );
   }
 
-  getTransactions(args: UserHistoryProps): Promise<Transaction[]> {
-    return Promise.resolve([]);
+  async getTransactions(
+    args: UserHistoryProps
+  ): Promise<MaybePaginated<Transaction[]>> {
+    if (!this.isReady()) {
+      await this.init();
+    }
+    const queryResult = await fetchBatchFromAppSync<APITransaction>(
+      QUERIES.listTransactionsByMainAccount,
+      {
+        main_account: args.address,
+        limit: args.limit,
+        from: args.from.toISOString(),
+        to: args.to.toISOString(),
+      },
+      "listTransactionsByMainAccount"
+    );
+    if (!queryResult) {
+      return { data: [], nextToken: null };
+    }
+    const transactions = queryResult.response.map(
+      (item: APITransaction): Transaction => {
+        const asset = this._assetsList.find((x) => x.id === item?.a);
+        if (!asset) {
+          throw new Error(
+            `[${this.constructor.name}:getTransactions] cannot find asset`
+          );
+        }
+        return {
+          txType: (item?.tt as Transaction["txType"]) || "",
+          amount: Number(item?.a) || 0,
+          fee: Number(item?.fee) || 0,
+          timestamp: new Date(item?.t || 0),
+          isReverted: item?.isReverted || false,
+          status: (item?.st as Transaction["status"]) || "",
+          asset,
+        };
+      }
+    );
+    return { data: transactions, nextToken: queryResult.nextToken };
   }
 
   async getFundingAddress(
@@ -316,7 +410,7 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
   }
 
   private mapApiOrderToOrder(item: APIOrder, marketList: Market[]): Order {
-    const market = this.marketList.find((x) => x.id === item?.m);
+    const market = marketList.find((x) => x.id === item?.m);
     if (!market) {
       throw new Error(
         `[${this.constructor.name}:getOpenOrders] cannot find market`

@@ -47,10 +47,11 @@ export interface Order {
   timestamp: Date;
   market: Market;
 }
-
+export type MaybePaginated<T> = {
+  data: T;
+  nextToken: string | null | undefined;
+};
 export interface Trade {
-  tradeAddress: string;
-  mainAddress: string;
   takerOrderId: string;
   makerOrderId: string;
   price: number;
@@ -61,10 +62,10 @@ export interface Trade {
 }
 
 export interface PublicTrade {
-  tradeAddress: string;
   price: number;
   qty: number;
   isReverted: boolean;
+  timestamp: Date;
 }
 
 export type Ticker = {
@@ -98,6 +99,7 @@ export type Transaction = {
   timestamp: Date;
   status: "PENDING" | "CONFIRMED" | "READY" | "CLAIMED";
   asset: Asset;
+  isReverted: boolean;
 };
 
 export type PriceLevel = {
@@ -129,8 +131,11 @@ export interface MarketHistoryProps<T = null> {
   limit: number;
   pageParams: T;
 }
-
-export interface KlineHistoryProps<T = null> {
+export interface LatestTradesPropsForMarket {
+  market: string;
+  limit: number;
+}
+export interface KlineHistoryProps {
   market: string;
   from: Date;
   to: Date;

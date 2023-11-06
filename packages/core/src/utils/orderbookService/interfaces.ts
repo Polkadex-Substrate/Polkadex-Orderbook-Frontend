@@ -14,6 +14,8 @@ import {
   PriceLevel,
   KlineHistoryProps,
   OrderHistoryProps,
+  MaybePaginated,
+  LatestTradesPropsForMarket,
 } from "./types";
 
 export interface OrderbookReadStrategy {
@@ -22,16 +24,20 @@ export interface OrderbookReadStrategy {
   getTicker: (market: string) => Promise<Ticker>;
   getAssets: () => Promise<Asset[]>;
   getOpenOrders: (args: OrderHistoryProps) => Promise<Order[]>;
-  getOrderHistory: (args: UserHistoryProps) => Promise<Order[]>;
-  getTradeHistory: (args: UserHistoryProps) => Promise<Trade[]>;
-  getTrades: (args: UserHistoryProps) => Promise<PublicTrade[]>;
+  getOrderHistory: (args: UserHistoryProps) => Promise<MaybePaginated<Order[]>>;
+  getTradeHistory: (args: UserHistoryProps) => Promise<MaybePaginated<Trade[]>>;
+  getLatestTradesForMarket: (
+    args: LatestTradesPropsForMarket
+  ) => Promise<PublicTrade[]>;
   getBalance: (fundingAddress: string) => Promise<Balance[]>;
   getTradingAddresses: (fundingAddress: string) => Promise<string[]>;
   getFundingAddress: (
     tradeAddress: string
   ) => Promise<string | null | undefined>;
   getCandles: (args: KlineHistoryProps) => Promise<Kline[]>;
-  getTransactions: (args: UserHistoryProps) => Promise<Transaction[]>;
+  getTransactions: (
+    args: UserHistoryProps
+  ) => Promise<MaybePaginated<Transaction[]>>;
 }
 
 export interface OrderbookSubscriptionStrategy {
