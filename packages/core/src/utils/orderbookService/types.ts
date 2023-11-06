@@ -20,9 +20,10 @@ export interface MarketConfig extends Market {
 }
 
 export type Asset = {
+  id: string;
   ticker: string;
   name: string;
-  decimal: string;
+  decimal: number;
 };
 
 export type Orderbook = {
@@ -76,6 +77,7 @@ export type Ticker = {
   currentPrice: number;
 };
 export type Balance = {
+  asset: Asset;
   free: number;
   reserved: number;
 };

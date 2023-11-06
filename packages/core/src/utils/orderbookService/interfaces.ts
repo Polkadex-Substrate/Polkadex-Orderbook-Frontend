@@ -26,7 +26,7 @@ export interface OrderbookReadStrategy {
   getOrderHistory: (args: UserHistoryProps) => Promise<Order[]>;
   getTradeHistory: (args: UserHistoryProps) => Promise<Trade[]>;
   getTrades: (args: UserHistoryProps) => Promise<PublicTrade[]>;
-  getBalance: () => Promise<Balance[]>;
+  getBalance: (fundingAddress: string) => Promise<Balance[]>;
   getTradingAddresses: (fundingAddress: string) => Promise<string[]>;
   getFundingAddress: (tradeAddress: string) => Promise<string>;
   getCandles: (args: MarketHistoryProps) => Promise<Kline[]>;

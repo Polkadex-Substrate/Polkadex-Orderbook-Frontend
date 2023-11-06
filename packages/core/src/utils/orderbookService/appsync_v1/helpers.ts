@@ -9,22 +9,25 @@ type Props = {
   authMode?: keyof typeof GRAPHQL_AUTH_MODE;
   API?: typeof amplifyApi;
 };
-export const sendQueryToAppSync = async ({
+export async function sendQueryToAppSync<T = any>({
   query,
   variables,
   token,
   authMode = GRAPHQL_AUTH_MODE.AWS_LAMBDA,
   API = amplifyApi,
-}: Props) => {
-  let res: any;
+}: Props): Promise<T> {
   if (authMode === "AWS_LAMBDA") {
-    res = await API.graphql({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return API.graphql({
       query,
       variables,
       authToken: token ?? READ_ONLY_TOKEN,
     });
   } else if (authMode === GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS) {
-    res = await API.graphql({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return API.graphql({
       query,
       variables,
       authMode,
@@ -32,8 +35,7 @@ export const sendQueryToAppSync = async ({
   } else {
     throw new Error("Invalid authentication type.");
   }
-  return res;
-};
+}
 
 export const fetchAllFromAppSync = async (
   query: string,
