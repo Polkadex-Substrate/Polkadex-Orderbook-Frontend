@@ -16,9 +16,14 @@ import {
   OrderHistoryProps,
   MaybePaginated,
   LatestTradesPropsForMarket,
+  AccountUpdateEvent,
 } from "./types";
 
-export interface OrderbookReadStrategy {
+export interface BaseStrategy {
+  init: () => Promise<void>;
+  isReady: () => boolean;
+}
+export interface OrderbookReadStrategy extends BaseStrategy {
   getOrderbook: (market: string) => Promise<Orderbook>;
   getMarkets: () => Promise<Market[]>;
   getTicker: (market: string) => Promise<Ticker>;
@@ -40,13 +45,44 @@ export interface OrderbookReadStrategy {
   ) => Promise<MaybePaginated<Transaction[]>>;
 }
 
-export interface OrderbookSubscriptionStrategy {
-  getOrderbookSubscriber(market: string): Subscription<PriceLevel[]>;
-  getBalancesSubscriber(address: string): Subscription<Balance>;
-  getTradesSubscriber(market: string): Subscription<Trade[]>;
-  getOrdersSubscriber(address: string): Subscription<Order>;
-  getTransactionSubscriber(address: string): Subscription<Transaction>;
-  getKlineSubscriber(market: string): Subscription<Kline>;
+export type SubscriptionCallBack<T> = (data: T) => void;
+export interface OrderbookSubscriptionStrategy extends BaseStrategy {
+  subscribeOrderbook(
+    market: string,
+    onUpdate: SubscriptionCallBack<PriceLevel[]>
+  ): Subscription;
+  subscribeBalances(
+    address: string,
+    onUpdate: SubscriptionCallBack<Balance>
+  ): Subscription;
+  subscribeTicker(
+    market: string,
+    onUpdate: SubscriptionCallBack<Ticker>
+  ): Subscription;
+  subscribeUserTrades(
+    address: string,
+    onUpdate: SubscriptionCallBack<Trade>
+  ): Subscription;
+  subscribeLatestTrades(
+    market: string,
+    onUpdate: SubscriptionCallBack<PublicTrade>
+  ): Subscription;
+  subscribeOrders(
+    address: string,
+    onUpdate: SubscriptionCallBack<Order>
+  ): Subscription;
+  subscribeTransactions(
+    address: string,
+    onUpdate: SubscriptionCallBack<Transaction>
+  ): Subscription;
+  subscribeKLines(
+    market: string,
+    onUpdate: SubscriptionCallBack<Kline>
+  ): Subscription;
+  subscribeAccountUpdate(
+    address: string,
+    onUpdate: SubscriptionCallBack<AccountUpdateEvent>
+  ): Subscription;
 }
 
 export interface OrderbookOperationStrategy {

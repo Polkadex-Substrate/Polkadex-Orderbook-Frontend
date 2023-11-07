@@ -2,7 +2,11 @@ import { API as amplifyApi } from "aws-amplify";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/auth";
 import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
 import { Maybe } from "@orderbook/core/helpers";
-import { GraphQLResult } from "@aws-amplify/api";
+import { GraphQLResult, GraphQLSubscription } from "@aws-amplify/api";
+
+import { Websocket_streamsSubscription } from "./API";
+import { BookUpdateEvent } from "./types";
+import { PriceLevel } from "./../types";
 
 type Props = {
   query: string;
@@ -94,3 +98,36 @@ export const fetchBatchFromAppSync = async <T = any[]>(
   } while (response.length < LIST_LIMIT && nextToken);
   return { response, nextToken };
 };
+
+export const convertBookUpdatesToPriceLevels = (
+  data: BookUpdateEvent
+): PriceLevel[] => {
+  const { b, a } = data;
+  const bids = Object.entries(b).map(
+    ([p, q]): PriceLevel => ({
+      side: "Bid",
+      price: Number(p),
+      qty: Number(q),
+      seqNum: data.i,
+    })
+  );
+  const asks = Object.entries(a).map(
+    ([p, q]): PriceLevel => ({
+      side: "Ask",
+      price: Number(p),
+      qty: Number(q),
+      seqNum: data.i,
+    })
+  );
+  return [...bids, ...asks];
+};
+
+export function filterUserSubscriptionType(
+  data: GraphQLResult<GraphQLSubscription<Websocket_streamsSubscription>>,
+  type: string
+) {
+  return Boolean(
+    data?.data?.websocket_streams?.data &&
+      JSON.parse(data?.data.websocket_streams.data).type === type
+  );
+}

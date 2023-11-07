@@ -38,22 +38,21 @@ export type OrderSide = "Ask" | "Bid";
 export interface Order {
   tradeAddress: string;
   orderId: string;
-  price: string;
+  price: number;
   averagePrice: number;
   type: OrderType;
   status: OrderStatus;
   isReverted: boolean;
   fee: number;
   timestamp: Date;
-  market: Market;
+  market: MarketBase;
 }
 export type MaybePaginated<T> = {
   data: T;
   nextToken: string | null | undefined;
 };
 export interface Trade {
-  takerOrderId: string;
-  makerOrderId: string;
+  tradeId: string;
   price: number;
   qty: number;
   isReverted: boolean;
@@ -82,6 +81,15 @@ export type Balance = {
   free: number;
   reserved: number;
 };
+export type AccountUpdates =
+  | "ADD_TRADE_ACCOUNT"
+  | "REMOVE_TRADE_ACCOUNT"
+  | "ADD_FUNDING_ACCOUNT";
+
+export type AccountUpdateEvent = {
+  address: string;
+  type: AccountUpdates;
+};
 export type Kline = {
   open: number;
   high: number;
@@ -106,9 +114,9 @@ export type PriceLevel = {
   price: number;
   qty: number;
   side: OrderSide;
+  seqNum?: number;
 };
-export interface Subscription<T> {
-  subscribe: (callback: (data: T) => void) => void;
+export interface Subscription {
   unsubscribe: () => void;
 }
 

@@ -308,8 +308,7 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
         qty: Number(item?.q) || 0,
         isReverted: item?.isReverted || false,
         timestamp: new Date(item?.t || 0),
-        takerOrderId: item?.t_id || "",
-        makerOrderId: item?.m_id || "",
+        tradeId: item?.t_id || "",
         fee: 0,
       };
     });
@@ -420,7 +419,7 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
       market,
       tradeAddress: item?.u || "",
       orderId: item?.id || "",
-      price: item?.p || "",
+      price: Number(item?.p) || 0,
       averagePrice: Number(item?.afp) || 0,
       type: (item?.t as OrderType) || "LIMIT",
       status: (item?.s as OrderStatus) || "CLOSED",
