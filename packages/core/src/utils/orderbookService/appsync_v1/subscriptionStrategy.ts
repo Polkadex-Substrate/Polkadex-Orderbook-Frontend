@@ -33,7 +33,9 @@ import {
   BalanceUpdateEvent,
   BookUpdateEvent,
   OrderUpdateEvent,
+  CandleStickUpdateEvent,
   TradeEvent,
+  TransactionUpdateEvent,
   UserTradeEvent,
 } from "./types";
 export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
@@ -151,9 +153,34 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
 
   subscribeKLines(
     market: string,
+    interval: string,
     onUpdate: SubscriptionCallBack<Kline>
   ): Subscription {
-    return undefined;
+    const subscription = API.graphql<
+      GraphQLSubscription<Websocket_streamsSubscription>
+    >({
+      query: SUBS.websocket_streams,
+      variables: {
+        name: `${market}_${interval}`,
+      },
+    });
+    const observable = subscription
+      .filter((data) => Boolean(data?.value?.data?.websocket_streams?.data))
+      .map((data): Kline => {
+        const item = JSON.parse(
+          data?.value?.data?.websocket_streams?.data as unknown as string
+        ) as CandleStickUpdateEvent;
+        return {
+          open: Number(item.o),
+          high: Number(item.h),
+          low: Number(item.l),
+          close: Number(item.c),
+          baseVolume: Number(item.vb),
+          quoteVolume: Number(item.vq),
+          timestamp: new Date(item.t),
+        };
+      });
+    return observable.subscribe(onUpdate);
   }
 
   subscribeLatestTrades(
@@ -202,10 +229,10 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
         const item = JSON.parse(
           data?.value?.data?.websocket_streams?.data as unknown as string
         ) as OrderUpdateEvent;
-        const marketid = item.pair.base.asset + "-" + item.pair.quote.asset;
-        const market = this._marketList.find((item) => item.id === marketid);
+        const marketId = item.pair.base.asset + "-" + item.pair.quote.asset;
+        const market = this._marketList.find((item) => item.id === marketId);
         if (!market) {
-          throw new Error(`${this.constructor.name} ${marketid} not found`);
+          throw new Error(`${this.constructor.name} ${marketId} not found`);
         }
         return {
           tradeAddress: item.user,
@@ -227,20 +254,96 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     market: string,
     onUpdate: SubscriptionCallBack<Ticker>
   ): Subscription {
-    return undefined;
+    const subscription = API.graphql<
+      GraphQLSubscription<Websocket_streamsSubscription>
+    >({
+      query: SUBS.websocket_streams,
+      variables: {
+        name: `${market}-ticker`,
+      },
+    });
+    const observable = subscription
+      .filter((data) => Boolean(data?.value?.data?.websocket_streams?.data))
+      .map((data): Ticker => {
+        const item = JSON.parse(
+          data?.value?.data?.websocket_streams?.data as unknown as string
+        ) as CandleStickUpdateEvent;
+        return {
+          open: Number(item.o),
+          close: Number(item.c),
+          high: Number(item.h),
+          low: Number(item.l),
+          baseVolume: Number(item.vb),
+          quoteVolume: Number(item.vq),
+          currentPrice: Number(item.c),
+        };
+      });
+    return observable.subscribe(onUpdate);
   }
 
   subscribeTransactions(
     address: string,
     onUpdate: SubscriptionCallBack<Transaction>
   ): Subscription {
-    return undefined;
+    const subscription = API.graphql<
+      GraphQLSubscription<Websocket_streamsSubscription>
+    >({
+      query: SUBS.websocket_streams,
+      variables: {
+        name: address,
+      },
+    });
+    const observable = subscription
+      .filter((data) => {
+        return filterUserSubscriptionType(
+          data.value,
+          USER_EVENTS.SetTransaction
+        );
+      })
+      .map((data): Transaction => {
+        const item = JSON.parse(
+          data?.value?.data?.websocket_streams?.data as unknown as string
+        ) as TransactionUpdateEvent;
+        const asset = this._assetList.find((a) => a.id === item.asset);
+        if (!asset) {
+          throw new Error(`Asset ${item.asset} not found`);
+        }
+        return {
+          amount: 0,
+          fee: 0,
+          isReverted: false,
+          status: item.status,
+          timestamp: new Date(item.t),
+          txType: item.txn_type === "DEPOSIT" ? "DEPOSIT" : "WITHDRAW",
+          asset,
+        };
+      });
+    return observable.subscribe(onUpdate);
   }
 
   subscribeAccountUpdate(
     address: string,
     onUpdate: SubscriptionCallBack<AccountUpdateEvent>
   ): Subscription {
-    return undefined;
+    const subscription = API.graphql<
+      GraphQLSubscription<Websocket_streamsSubscription>
+    >({
+      query: SUBS.websocket_streams,
+      variables: {
+        name: address,
+      },
+    });
+    const observable = subscription
+      .filter((data) => Boolean(data?.value?.data?.websocket_streams?.data))
+      .map((data): AccountUpdateEvent => {
+        const item = JSON.parse(
+          data?.value?.data?.websocket_streams?.data as unknown as string
+        ) as AccountUpdateEvent;
+        return {
+          address: item.address,
+          type: item.type,
+        };
+      });
+    return observable.subscribe(onUpdate);
   }
 }

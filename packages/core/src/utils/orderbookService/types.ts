@@ -99,13 +99,14 @@ export type Kline = {
   quoteVolume: number;
   timestamp: Date;
 };
-
+export type TransactionType = "DEPOSIT" | "WITHDRAW";
+export type TransactionStatus = "PENDING" | "CONFIRMED" | "FAILED";
 export type Transaction = {
-  txType: "DEPOSIT" | "WITHDRAW";
+  txType: TransactionType;
   amount: number;
   fee: number;
   timestamp: Date;
-  status: "PENDING" | "CONFIRMED" | "READY" | "CLAIMED";
+  status: TransactionStatus;
   asset: Asset;
   isReverted: boolean;
 };

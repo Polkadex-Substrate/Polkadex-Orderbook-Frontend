@@ -6,6 +6,29 @@ export type BalanceUpdateEvent = {
   pending_withdrawal: string;
   reserved: string;
 };
+export type CandleStickUpdateEvent = {
+  o: string;
+  c: string;
+  h: string;
+  l: string;
+  vb: string;
+  vq: string;
+  t: string;
+};
+
+export type TransactionUpdateEvent = {
+  stid: number;
+  user: string;
+  asset: string;
+  fee: number;
+  amount: number;
+  status: "PENDING" | "CONFIRMED" | "FAILED";
+  txn_type: "DEPOSIT" | "WITHDRAWAL";
+  t: number;
+  // only withdrawals with READY state will have snapshot_id
+  snapshot_id?: number;
+  isReverted: boolean | null;
+};
 export type OrderUpdateEvent = {
   stid: number;
   client_order_id: string;

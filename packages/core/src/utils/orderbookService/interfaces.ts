@@ -77,6 +77,7 @@ export interface OrderbookSubscriptionStrategy extends BaseStrategy {
   ): Subscription;
   subscribeKLines(
     market: string,
+    interval: string,
     onUpdate: SubscriptionCallBack<Kline>
   ): Subscription;
   subscribeAccountUpdate(
