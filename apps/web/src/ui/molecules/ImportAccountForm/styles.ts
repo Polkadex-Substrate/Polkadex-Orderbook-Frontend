@@ -25,7 +25,7 @@ export const Method = styled(Container)`
   div {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 1rem;
     input {
       margin-right: 0.5rem;
     }

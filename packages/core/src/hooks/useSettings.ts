@@ -97,6 +97,7 @@ export const useSettings = () => {
           const { account } = cv;
           const checker = filterTradeAccounts?.toLowerCase();
           const address = account?.address?.toLowerCase();
+          const cvAddress = cv?.address?.toLowerCase();
           const name = String(account?.meta?.name)?.toLowerCase();
           const filterByController =
             filterTradeAccountsByControllerAccount?.toLowerCase();
@@ -107,7 +108,9 @@ export const useSettings = () => {
           );
           if (
             (isLinkedAccount || filterByController?.includes("all")) &&
-            (address?.includes(checker) || name?.includes(checker))
+            (address?.includes(checker) ||
+              name?.includes(checker) ||
+              cvAddress.includes(checker))
           ) {
             pv.push(cv);
           }
