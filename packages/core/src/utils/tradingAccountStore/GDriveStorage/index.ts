@@ -1,16 +1,19 @@
-import { KeyringJson, KeyringStore } from "@polkadot/ui-keyring/types";
 import { KeyringPair$Json } from "@polkadot/keyring/types";
 
-import { GoogleDriveAccount, VersionedAccountStorage } from "./types";
 import { GDriveStorage } from "./GDrive/drive";
-
-export class GDriveAccountsStore implements KeyringStore {
+import { TradingAccountExternalStorage } from "./../types";
+import { GoogleDriveAccount } from "./types";
+export class GDriveAccountsStore implements TradingAccountExternalStorage {
   private initialized = false;
-  private list: GoogleDriveAccount[] = [];
+  private list: GoogleDriveAccount<KeyringPair$Json>[] = [];
   private readonly ACCOUNT_PREFIX = "account:";
 
   constructor(apiKey: string, clientId: string) {
     GDriveStorage.setOptions(apiKey, clientId);
+  }
+
+  isReady(): boolean {
+    return this.initialized;
   }
 
   private async init() {
@@ -18,102 +21,58 @@ export class GDriveAccountsStore implements KeyringStore {
     const files = await GDriveStorage.getAll();
     const jsons = files
       ?.filter((file) => file?.name?.includes(this.ACCOUNT_PREFIX))
-      .map(async (file): Promise<GoogleDriveAccount> => {
+      .map(async (file): Promise<GoogleDriveAccount<KeyringPair$Json>> => {
         return {
           id: file.id as string,
           name: file.name as string,
           description: file.description as string,
-          data: await GDriveStorage.get<VersionedAccountStorage>(
-            file.id as string
-          ),
+          data: await GDriveStorage.get<KeyringPair$Json>(file.id as string),
         };
       });
     this.list = jsons ? await Promise.all(jsons) : [];
   }
 
-  private async getList() {
+  async getFiles() {
     if (this.initialized) return this.list;
     await this.init();
     this.initialized = true;
     return this.list;
   }
 
-  private async createAccount(key: string, value: KeyringPair$Json) {
+  private async createAccount(key: string, json: KeyringPair$Json) {
     const file = {
       name: key,
-      description: value?.meta?.name || "",
-      json: JSON.stringify(value),
+      description: json.meta?.name || "",
+      json: JSON.stringify(json),
     };
     await GDriveStorage.create(file);
     await this.init();
   }
 
-  all(cb: (key: string, value: KeyringJson) => void): void {
-    this.getList().then((accounts) => {
-      accounts.forEach((account) => {
-        cb(account.name, account.data.v1);
+  async getAll(): Promise<KeyringPair$Json[]> {
+    const files = await this.getFiles();
+    return files.map((item) => item.data);
+  }
+
+  async remove(address: string) {
+    const jsons = await this.getFiles();
+    const item = jsons.find((item) => item.data.address === address);
+    if (item) {
+      GDriveStorage.delete(item.id).then(() => {
+        this.list = this.list.filter((item) => item.data.address !== address);
       });
-    });
-  }
-
-  get(key: string, cb: (value: KeyringJson) => void): void {
-    this.getList().then((jsons) => {
-      const item = jsons.find((item) => item.name === key);
-      if (item) cb(item.data.v1);
-    });
-  }
-
-  remove(key: string, cb: (() => void) | undefined): void {
-    this.getList().then((jsons) => {
-      const item = jsons.find((item) => item.name === key);
-      if (item) {
-        GDriveStorage.delete(item.id).then(() => {
-          this.list = this.list.filter((item) => item.name !== key);
-          cb && cb();
-        });
-      } else {
-        cb && cb();
-      }
-    });
-  }
-
-  set(key: string, json: KeyringPair$Json, cb: (() => void) | undefined): void {
-    if (!json) {
-      console.log("set: json is undefined");
-      return;
-    }
-    this.createAccount(key, json)
-      .then(this.getList.bind(this))
-      .then(() => cb && cb());
-  }
-}
-
-export class TestGdriveStore {
-  private access: boolean;
-
-  constructor(apiKey: string, clientId: string) {
-    GDriveStorage.setOptions(apiKey, clientId);
-  }
-
-  async enable() {
-    try {
-      await GDriveStorage.auth();
-      this.access = true;
-    } catch {
-      this.access = false;
     }
   }
 
-  async write(file: { name: string; description: string; json: string }) {
-    await GDriveStorage.create(file);
+  async add(json: KeyringPair$Json): Promise<void> {
+    await this.createAccount(json.address, json);
   }
 
-  async getAll() {
-    const files = await GDriveStorage.getAll();
-    console.log("get all ", files);
-    const jsons = files?.map((item) => {
-      return GDriveStorage.get(item.id as string);
-    });
-    return jsons ? Promise.all(jsons) : [];
+  async get(address: string): Promise<KeyringPair$Json> {
+    const jsons = await this.getFiles();
+    const item = jsons.find((item) => item.data.address === address);
+    if (!item)
+      throw new Error(`[${this.constructor.name}]: Unable to find account`);
+    return item.data;
   }
 }

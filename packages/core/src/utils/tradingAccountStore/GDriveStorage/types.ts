@@ -1,12 +1,6 @@
-import { KeyringJson } from "@polkadot/ui-keyring/types";
-
-export interface VersionedAccountStorage {
-  v1: KeyringJson;
-}
-
-export interface GoogleDriveAccount {
+export interface GoogleDriveAccount<T> {
   id: string;
   name: string;
   description: string;
-  data: VersionedAccountStorage;
+  data: T;
 }
