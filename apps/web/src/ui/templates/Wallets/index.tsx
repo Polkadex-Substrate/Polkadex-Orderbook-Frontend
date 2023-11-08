@@ -89,13 +89,11 @@ export const WalletsTemplate = () => {
   const showLoader =
     tradeWalletState.isFetching || isProfileFetching || isAccountsFetching;
 
-  const { t, "2": isTranslationReady } = useTranslation("settings");
-
-  if (!isTranslationReady) return <Fragment />;
+  const { t } = useTranslation("settings");
 
   return (
     <Intro
-      active={isTranslationReady && (isProfileFetching || isAccountsFetching)}
+      active={isProfileFetching || isAccountsFetching}
       localStorageName={DEFAULTWALLETSINTRONAME}
       steps={[
         {
