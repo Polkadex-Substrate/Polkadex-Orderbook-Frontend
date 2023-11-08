@@ -1,28 +1,29 @@
 import {
+  AccountUpdateEvent,
   Asset,
   Balance,
   Kline,
+  KlineHistoryProps,
+  LatestTradesPropsForMarket,
+  Market,
+  MaybePaginated,
   Order,
   Orderbook,
-  Subscription,
-  Trade,
-  UserHistoryProps,
-  Market,
-  Ticker,
-  Transaction,
-  PublicTrade,
-  PriceLevel,
-  KlineHistoryProps,
   OrderHistoryProps,
-  MaybePaginated,
-  LatestTradesPropsForMarket,
-  AccountUpdateEvent,
+  PriceLevel,
+  PublicTrade,
+  Subscription,
+  Ticker,
+  Trade,
+  Transaction,
+  UserHistoryProps,
 } from "./types";
 
 export interface BaseStrategy {
   init: () => Promise<void>;
   isReady: () => boolean;
 }
+
 export interface OrderbookReadStrategy extends BaseStrategy {
   getOrderbook: (market: string) => Promise<Orderbook>;
   getMarkets: () => Promise<Market[]>;
@@ -46,51 +47,65 @@ export interface OrderbookReadStrategy extends BaseStrategy {
 }
 
 export type SubscriptionCallBack<T> = (data: T) => void;
+
 export interface OrderbookSubscriptionStrategy extends BaseStrategy {
   subscribeOrderbook(
     market: string,
     onUpdate: SubscriptionCallBack<PriceLevel[]>
   ): Subscription;
+
   subscribeBalances(
     address: string,
     onUpdate: SubscriptionCallBack<Balance>
   ): Subscription;
+
   subscribeTicker(
     market: string,
     onUpdate: SubscriptionCallBack<Ticker>
   ): Subscription;
+
   subscribeUserTrades(
     address: string,
     onUpdate: SubscriptionCallBack<Trade>
   ): Subscription;
+
   subscribeLatestTrades(
     market: string,
     onUpdate: SubscriptionCallBack<PublicTrade>
   ): Subscription;
+
   subscribeOrders(
     address: string,
     onUpdate: SubscriptionCallBack<Order>
   ): Subscription;
+
   subscribeTransactions(
     address: string,
     onUpdate: SubscriptionCallBack<Transaction>
   ): Subscription;
+
   subscribeKLines(
     market: string,
     interval: string,
     onUpdate: SubscriptionCallBack<Kline>
   ): Subscription;
+
   subscribeAccountUpdate(
     address: string,
     onUpdate: SubscriptionCallBack<AccountUpdateEvent>
   ): Subscription;
 }
 
+export type ExecuteArgs = {
+  payload: string;
+  token?: string;
+};
 export interface OrderbookOperationStrategy {
-  placeOrder: (order: any) => Promise<any>;
-  cancelOrder: (order: any) => Promise<any>;
-  withdraw: (order: any) => Promise<any>;
+  placeOrder: (args: ExecuteArgs) => Promise<void>;
+  cancelOrder: (args: ExecuteArgs) => Promise<void>;
+  withdraw: (args: ExecuteArgs) => Promise<void>;
 }
+
 export interface OrderbookService {
   query: OrderbookReadStrategy;
   operation: OrderbookOperationStrategy;

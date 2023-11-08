@@ -72,3 +72,16 @@ export type BookUpdateEvent = {
   b: Record<string, string>;
   a: Record<string, string>;
 };
+
+export type PlaceOrderPayload = {
+  user: string;
+  main_account: string;
+  pair: string;
+  side: Record<string, null>;
+  order_type: Record<string, null>;
+  qty: string;
+  quote_order_quantity: string;
+  price: string;
+  timestamp: number;
+  client_order_id: string;
+};
