@@ -79,14 +79,14 @@ export const Funds = ({ onHideFilters }) => {
                   <Table.Cell>
                     <S.Cell>
                       <span>
-                        {toHuman(Number(item?.free_balance), 4, locale)}
+                        {toHuman(Number(item?.free_balance), 8, locale)}
                       </span>
                     </S.Cell>
                   </Table.Cell>
                   <Table.Cell>
                     <S.Cell>
                       <span>
-                        {toHuman(Number(item?.reserved_balance), 4, locale)}
+                        {toHuman(Number(item?.reserved_balance), 8, locale)}
                       </span>
                     </S.Cell>
                   </Table.Cell>

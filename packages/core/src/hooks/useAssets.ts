@@ -47,9 +47,9 @@ export function useAssets() {
 
           return {
             ...e,
-            free_balance: toHuman(Number(free_balance), 4, locale),
-            onChainBalance: toHuman(Number(onChainBalance), 4, locale),
-            inOrdersBalance: toHuman(Number(inOrdersBalance), 4, locale),
+            free_balance: toHuman(Number(free_balance), 8, locale),
+            onChainBalance: toHuman(Number(onChainBalance), 8, locale),
+            inOrdersBalance: toHuman(Number(inOrdersBalance), 8, locale),
           };
         })
         ?.filter((e: AssetsProps) => {

@@ -14,7 +14,7 @@ export const Wrapper = styled.div`
       background: ${theme.colors.tertiaryBackgroundOpacity};
     }
     @media screen and (min-width: 640px) {
-      max-width: 27rem;
+      max-width: 29rem;
     }
   `}
 `;

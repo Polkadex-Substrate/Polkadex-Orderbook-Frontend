@@ -64,8 +64,8 @@ export function useTransfer() {
 
         return {
           ...e,
-          free_balance: toHuman(Number(free_balance), 4, locale),
-          onChainBalance: toHuman(Number(onChainBalance), 4, locale),
+          free_balance: toHuman(Number(free_balance), 8, locale),
+          onChainBalance: toHuman(Number(onChainBalance), 8, locale),
         } as T.FilteredAssetProps;
       }),
     [list, balances, locale, toHuman]
