@@ -65,7 +65,7 @@ export class GDriveAccountsStore implements TradingAccountExternalStorage {
   }
 
   async add(json: KeyringPair$Json): Promise<void> {
-    await this.createAccount(json.address, json);
+    await this.createAccount(this.ACCOUNT_PREFIX + json.address, json);
   }
 
   async get(address: string): Promise<KeyringPair$Json> {
