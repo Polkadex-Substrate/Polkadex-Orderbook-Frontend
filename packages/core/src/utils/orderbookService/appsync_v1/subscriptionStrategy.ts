@@ -360,6 +360,16 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     });
     const observable = subscription
       .filter((data) => Boolean(data?.value?.data?.websocket_streams?.data))
+      .filter((data) => {
+        const item = JSON.parse(
+          data?.value?.data?.websocket_streams?.data as unknown as string
+        ) as AccountUpdateEvent;
+        return (
+          item.type === USER_EVENTS.AddProxy ||
+          item.type === USER_EVENTS.RemoveProxy ||
+          item.type === USER_EVENTS.RegisterAccount
+        );
+      })
       .map((data): AccountUpdateEvent => {
         const item = JSON.parse(
           data?.value?.data?.websocket_streams?.data as unknown as string
