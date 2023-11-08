@@ -1,7 +1,6 @@
-import { appsyncOperations } from "@orderbook/core/utils/orderbookService/appsync_v1/writeStrategy";
-import { appsyncReader } from "@orderbook/core/utils/orderbookService/appsync_v1/readStrategy";
-import { appsyncSubscriptions } from "@orderbook/core/utils/orderbookService/appsync_v1/subscriptionStrategy";
-
+import { appsyncOperations } from "./writeStrategy";
+import { appsyncReader } from "./readStrategy";
+import { appsyncSubscriptions } from "./subscriptionStrategy";
 import {
   OrderbookOperationStrategy,
   OrderbookReadStrategy,
