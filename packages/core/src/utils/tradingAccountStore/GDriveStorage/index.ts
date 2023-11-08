@@ -16,7 +16,7 @@ export class GDriveAccountsStore implements TradingAccountExternalStorage {
     return this.initialized;
   }
 
-  private async init() {
+  async init() {
     this.list = [];
     const files = await GDriveStorage.getAll();
     const jsons = files
