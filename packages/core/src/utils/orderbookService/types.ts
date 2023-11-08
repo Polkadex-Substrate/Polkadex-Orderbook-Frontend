@@ -1,6 +1,8 @@
 // number type can be used for all calculations as it supports up to 15 digits after decimal point
 // while max precision of backend is 8 digits after decimal point
 
+import { USER_EVENTS, UserEvents } from "@orderbook/core/constants";
+
 export interface MarketBase {
   id: string; // eg: "123-231"
   name: string; // eg: "BTC/USDT"
@@ -82,9 +84,9 @@ export type Balance = {
   reserved: number;
 };
 export type AccountUpdates =
-  | "ADD_TRADE_ACCOUNT"
-  | "REMOVE_TRADE_ACCOUNT"
-  | "ADD_FUNDING_ACCOUNT";
+  | typeof USER_EVENTS.AddProxy
+  | typeof USER_EVENTS.RemoveProxy
+  | typeof USER_EVENTS.RegisterAccount;
 
 export type AccountUpdateEvent = {
   address: string;
