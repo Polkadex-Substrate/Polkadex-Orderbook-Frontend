@@ -25,7 +25,7 @@ import * as S from "./styles";
 import { Icons } from "@/ui/atoms";
 
 export const Funds = ({ onHideFilters }) => {
-  const { toHuman } = new BalanceFormatter();
+  const toHuman = BalanceFormatter.toHuman;
   const { locale } = useRouter();
   const { balances, isLoading } = useFunds();
   const allBalances = filterBlockedAssets(balances);

@@ -23,7 +23,7 @@ const onChangeState = (onCallback: Dispatch<SetStateAction<boolean>>) => {
 };
 
 export function useTransfer() {
-  const { toHuman } = new BalanceFormatter();
+  const toHuman = BalanceFormatter.toHuman;
   const { list } = useAssetsProvider();
   const { balances } = useBalancesProvider();
   const { loading: depositLoading } = useDepositProvider();

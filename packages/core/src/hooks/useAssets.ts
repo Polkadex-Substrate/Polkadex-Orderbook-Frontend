@@ -21,7 +21,7 @@ export function useAssets() {
   const { list, loading } = useAssetsProvider();
   const { balances, loading: balancesLoading } = useBalancesProvider();
 
-  const { toHuman } = new BalanceFormatter();
+  const toHuman = BalanceFormatter.toHuman;
 
   const assets = useMemo(
     () =>
