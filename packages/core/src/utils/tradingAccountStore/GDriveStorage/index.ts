@@ -1,10 +1,8 @@
 import { KeyringJson, KeyringStore } from "@polkadot/ui-keyring/types";
-import { GDriveStorage } from "@orderbook/core/utils/keyringStore/GDrive/drive";
-import {
-  GoogleDriveAccount,
-  VersionedAccountStorage,
-} from "@orderbook/core/utils/keyringStore/GDrive/types";
-import { createVersionedAccountStorage } from "@orderbook/core/utils/keyringStore/GDrive/utils";
+import { KeyringPair$Json } from "@polkadot/keyring/types";
+
+import { GoogleDriveAccount, VersionedAccountStorage } from "./types";
+import { GDriveStorage } from "./GDrive/drive";
 
 export class GDriveAccountsStore implements KeyringStore {
   private initialized = false;
@@ -40,10 +38,10 @@ export class GDriveAccountsStore implements KeyringStore {
     return this.list;
   }
 
-  private async createAccount(key: string, value: VersionedAccountStorage) {
+  private async createAccount(key: string, value: KeyringPair$Json) {
     const file = {
       name: key,
-      description: value.v1?.meta?.name || "",
+      description: value?.meta?.name || "",
       json: JSON.stringify(value),
     };
     await GDriveStorage.create(file);
@@ -79,8 +77,7 @@ export class GDriveAccountsStore implements KeyringStore {
     });
   }
 
-  set(key: string, value: KeyringJson, cb: (() => void) | undefined): void {
-    const json = createVersionedAccountStorage(key, value);
+  set(key: string, json: KeyringPair$Json, cb: (() => void) | undefined): void {
     if (!json) {
       console.log("set: json is undefined");
       return;

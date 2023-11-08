@@ -1,5 +1,5 @@
-import { GoogleDriveApi } from "@orderbook/core/utils/keyringStore/GDrive/api";
-import { GoogleOauth } from "@orderbook/core/utils/keyringStore/GDrive/oauth";
+import { GoogleDriveApi } from "@orderbook/core/utils/tradingAccountStore/GDriveStorage/GDrive/api";
+import { GoogleOauth } from "@orderbook/core/utils/tradingAccountStore/GDriveStorage/GDrive/oauth";
 import { Singleton } from "@orderbook/core/utils/decorators/singleton";
 export const DRIVE_APPDATA_SCOPE =
   "https://www.googleapis.com/auth/drive.appdata";
@@ -62,6 +62,8 @@ class GoogleDriveStorage {
     return file as T;
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   async getAll(): Promise<gapi.client.drive.File[] | undefined> {
     await this.auth();
     await this.createBackupFolder();
