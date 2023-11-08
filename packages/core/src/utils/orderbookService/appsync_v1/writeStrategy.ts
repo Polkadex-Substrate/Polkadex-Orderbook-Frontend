@@ -13,7 +13,15 @@ type UserActionLambdaResp = {
   is_success: boolean;
   body: string;
 };
-export class AppsyncV1Operations implements OrderbookOperationStrategy {
+class AppsyncV1Operations implements OrderbookOperationStrategy {
+  init(): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  isReady(): boolean {
+    return true;
+  }
+
   async cancelOrder(data: ExecuteArgs): Promise<void> {
     const result = await sendQueryToAppSync<
       GraphQLResult<Cancel_orderMutation>
@@ -90,3 +98,4 @@ export class AppsyncV1Operations implements OrderbookOperationStrategy {
     }
   }
 }
+export const appsyncOperations = new AppsyncV1Operations();

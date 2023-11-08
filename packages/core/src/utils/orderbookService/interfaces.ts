@@ -100,13 +100,14 @@ export type ExecuteArgs = {
   payload: string;
   token?: string;
 };
-export interface OrderbookOperationStrategy {
+export interface OrderbookOperationStrategy extends BaseStrategy {
   placeOrder: (args: ExecuteArgs) => Promise<void>;
   cancelOrder: (args: ExecuteArgs) => Promise<void>;
   withdraw: (args: ExecuteArgs) => Promise<void>;
 }
 
 export interface OrderbookService {
+  init: () => Promise<void>;
   query: OrderbookReadStrategy;
   operation: OrderbookOperationStrategy;
   subscriber: OrderbookSubscriptionStrategy;

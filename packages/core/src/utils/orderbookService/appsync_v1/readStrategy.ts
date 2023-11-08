@@ -41,7 +41,7 @@ import {
   SetPriceLevel,
 } from "./API";
 
-export class AppsyncV1Reader implements OrderbookReadStrategy {
+class AppsyncV1Reader implements OrderbookReadStrategy {
   ready = false;
   _assetsList: Asset[] = [];
   _marketList: Market[] = [];
@@ -429,3 +429,5 @@ export class AppsyncV1Reader implements OrderbookReadStrategy {
     };
   }
 }
+
+export const appsyncReader = new AppsyncV1Reader();

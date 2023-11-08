@@ -1,6 +1,7 @@
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
 import { READ_ONLY_TOKEN, USER_EVENTS } from "@orderbook/core/constants";
+import { appsyncReader } from "@orderbook/core/utils/orderbookService/appsync_v1/readStrategy";
 
 import {
   AccountUpdateEvent,
@@ -38,7 +39,7 @@ import {
   TransactionUpdateEvent,
   UserTradeEvent,
 } from "./types";
-export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
+class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
   _assetList: Asset[];
   _marketList: MarketBase[];
   _isReady = false;
@@ -62,6 +63,9 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     address: string,
     cb: SubscriptionCallBack<Balance>
   ): Subscription {
+    if (!this._isReady) {
+      throw new Error(`${this.constructor.name}: Not Initialized`);
+    }
     const subscription = API.graphql<
       GraphQLSubscription<Websocket_streamsSubscription>
     >({
@@ -98,6 +102,9 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     market: string,
     cb: SubscriptionCallBack<PriceLevel[]>
   ): Subscription {
+    if (!this._isReady) {
+      throw new Error(`${this.constructor.name}: Not Initialized`);
+    }
     const subscription = API.graphql<
       GraphQLSubscription<Websocket_streamsSubscription>
     >({
@@ -123,6 +130,9 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     market: string,
     cb: SubscriptionCallBack<Trade>
   ): Subscription {
+    if (!this._isReady) {
+      throw new Error(`${this.constructor.name}: Not Initialized`);
+    }
     const subscription = API.graphql<
       GraphQLSubscription<Websocket_streamsSubscription>
     >({
@@ -156,6 +166,9 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     interval: string,
     onUpdate: SubscriptionCallBack<Kline>
   ): Subscription {
+    if (!this._isReady) {
+      throw new Error(`${this.constructor.name}: Not Initialized`);
+    }
     const subscription = API.graphql<
       GraphQLSubscription<Websocket_streamsSubscription>
     >({
@@ -215,6 +228,9 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     address: string,
     onUpdate: SubscriptionCallBack<Order>
   ): Subscription {
+    if (!this._isReady) {
+      throw new Error(`${this.constructor.name}: Not Initialized`);
+    }
     const subscription = API.graphql<
       GraphQLSubscription<Websocket_streamsSubscription>
     >({
@@ -254,6 +270,9 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     market: string,
     onUpdate: SubscriptionCallBack<Ticker>
   ): Subscription {
+    if (!this._isReady) {
+      throw new Error(`${this.constructor.name}: Not Initialized`);
+    }
     const subscription = API.graphql<
       GraphQLSubscription<Websocket_streamsSubscription>
     >({
@@ -285,6 +304,9 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     address: string,
     onUpdate: SubscriptionCallBack<Transaction>
   ): Subscription {
+    if (!this._isReady) {
+      throw new Error(`${this.constructor.name}: Not Initialized`);
+    }
     const subscription = API.graphql<
       GraphQLSubscription<Websocket_streamsSubscription>
     >({
@@ -325,6 +347,9 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     address: string,
     onUpdate: SubscriptionCallBack<AccountUpdateEvent>
   ): Subscription {
+    if (!this._isReady) {
+      throw new Error(`${this.constructor.name}: Not Initialized`);
+    }
     const subscription = API.graphql<
       GraphQLSubscription<Websocket_streamsSubscription>
     >({
@@ -347,3 +372,5 @@ export class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     return observable.subscribe(onUpdate);
   }
 }
+
+export const appsyncSubscriptions = new AppsyncV1Subscriptions(appsyncReader);
