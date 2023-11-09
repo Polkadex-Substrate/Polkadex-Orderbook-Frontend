@@ -19,6 +19,7 @@ import {
   useMarkets,
   useMiniGraph,
 } from "@orderbook/core/hooks";
+import { ORDERBOOK_PRECISION } from "@orderbook/core/constants";
 
 import * as S from "./styles";
 
@@ -181,7 +182,9 @@ const Content: FC<{
             pair={token.name}
             tokenTicker={token.tokenTickerName}
             vol={Decimal.format(Number(token.volume), token.quote_precision)}
-            price={formatNumber(Decimal.format(Number(token.last), 5, ","))}
+            price={formatNumber(
+              Decimal.format(Number(token.last), ORDERBOOK_PRECISION, ",")
+            )}
             change={
               Decimal.format(Number(token.price_change_percent), 2, ",") + "%"
             }
