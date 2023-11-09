@@ -6,6 +6,9 @@ export type OrderbookServiceState = {
   service?: OrderbookService;
 };
 
+export type OrderbookServiceContextProps = OrderbookServiceState & {
+  enable: () => Promise<void>;
+};
 export type OrderbookServiceProviderProps = PropsWithChildren<{
-  value: OrderbookServiceState;
+  value: OrderbookServiceContextProps;
 }>;
