@@ -6,6 +6,7 @@ export const getChainFromTicker = (ticker: string) => {
     ASTR: "Astar Network",
     DOT: "Polkadot",
     IBTC: "Interlay",
+    PHA: "Phala Network",
   };
 
   return chains[ticker];
