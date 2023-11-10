@@ -21,7 +21,7 @@ export function decimalPlaces(num: number | string) {
     // Number of digits right of decimal point.
     (match[1] ? match[1].length : 0) -
       // Adjust for scientific notation.
-      (match[2] ? +match[2] : 0),
+      (match[2] ? +match[2] : 0)
   );
 }
 
@@ -64,7 +64,7 @@ export const trimFloat = ({
   if (decimalIndex !== -1) {
     const numberPart = valueString.substr(
       0,
-      decimalIndex + digitsAfterDecimal + 1,
+      decimalIndex + digitsAfterDecimal + 1
     );
     return formatNumber(parseFloat(numberPart).toFixed(digitsAfterDecimal));
   }
