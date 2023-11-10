@@ -64,6 +64,7 @@ export const ErrorMessages = {
 
 export const MAX_DIGITS_AFTER_DECIMAL = 6;
 export const MIN_DIGITS_AFTER_DECIMAL = 2;
+export const ORDERBOOK_PRECISION = 8;
 
 export const TradingView = {
   lastResolution: "tradingview.chart.lastUsedTimeBasedResolution",
