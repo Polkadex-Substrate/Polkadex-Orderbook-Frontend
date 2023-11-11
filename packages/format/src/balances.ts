@@ -6,16 +6,9 @@ export class BalanceFormatter {
     decimal: number,
     locale?: string
   ): string {
-    const formatter = new Intl.NumberFormat(locale, {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 20,
-      style: "decimal",
-    });
-
-    let result = formatter.format(value);
-
+    let result = value.toString();
     // Trim the value (don't round off)
-    result = trimFloat({ value: result, digitsAfterDecimal: decimal });
+    result = trimFloat({ value: result, digitsAfterDecimal: 8 });
 
     return result;
   }
