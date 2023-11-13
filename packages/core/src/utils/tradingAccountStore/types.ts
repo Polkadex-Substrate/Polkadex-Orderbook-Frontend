@@ -6,6 +6,7 @@ interface Base {
   isReady: () => boolean;
 }
 export interface TradingAccountExternalStorage extends Base {
+  id: string;
   getAll(): Promise<KeyringPair$Json[]>;
   get(address: string): Promise<KeyringPair$Json>;
   add(json: KeyringPair$Json): Promise<void>;

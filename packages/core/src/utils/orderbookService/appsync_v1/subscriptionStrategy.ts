@@ -2,6 +2,7 @@ import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
 import { READ_ONLY_TOKEN, USER_EVENTS } from "@orderbook/core/constants";
 import { appsyncReader } from "@orderbook/core/utils/orderbookService/appsync_v1/readStrategy";
+import { KlineIntervals } from "@orderbook/core/utils/orderbookService/appsync_v1/constants";
 
 import {
   AccountUpdateEvent,
@@ -110,7 +111,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     >({
       query: SUBS.websocket_streams,
       variables: {
-        name: market,
+        name: `${market}-ob-inc`,
       },
     });
     const observable = subscription
@@ -168,6 +169,10 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
   ): Subscription {
     if (!this._isReady) {
       throw new Error(`${this.constructor.name}: Not Initialized`);
+    }
+    // check if interval is valid
+    if (!KlineIntervals.find((item) => item === interval)) {
+      throw new Error(`${this.constructor.name}: Invalid interval`);
     }
     const subscription = API.graphql<
       GraphQLSubscription<Websocket_streamsSubscription>

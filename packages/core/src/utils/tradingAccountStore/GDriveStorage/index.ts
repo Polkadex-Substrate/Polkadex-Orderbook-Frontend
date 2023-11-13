@@ -7,7 +7,7 @@ export class GDriveAccountsStore implements TradingAccountExternalStorage {
   private initialized = false;
   private list: GoogleDriveAccount<KeyringPair$Json>[] = [];
   private readonly ACCOUNT_PREFIX = "account:";
-
+  id = "google-drive";
   constructor(apiKey: string, clientId: string) {
     GDriveStorage.setOptions(apiKey, clientId);
   }
