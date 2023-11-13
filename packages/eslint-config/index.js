@@ -35,6 +35,7 @@ module.exports = {
         trailingComma: "es5",
       },
     ],
+    "standard/no-callback-literal": 0,
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "react-hooks/rules-of-hooks": "error",
