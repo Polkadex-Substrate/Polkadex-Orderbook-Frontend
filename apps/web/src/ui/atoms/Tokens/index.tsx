@@ -20,3 +20,4 @@ export { default as UNKN } from "./Unkn";
 export { default as GLMR } from "./Glmr";
 export { default as ASTR } from "./Astr";
 export { default as IBTC } from "./IBTC";
+export { default as PHA } from "./PHA";

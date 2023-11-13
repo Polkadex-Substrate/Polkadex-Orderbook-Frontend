@@ -9,12 +9,17 @@ import {
   Search,
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { isNegative } from "@orderbook/core/helpers";
+import {
+  formatNumber,
+  getChainFromTicker,
+  isNegative,
+} from "@orderbook/core/helpers";
 import {
   InitialMarkets,
   useMarkets,
   useMiniGraph,
 } from "@orderbook/core/hooks";
+import { ORDERBOOK_PRECISION } from "@orderbook/core/constants";
 
 import * as S from "./styles";
 
@@ -93,6 +98,7 @@ export const HeaderMarket = ({
   const from = subDays(now, 7);
   const to = endOfDay(now);
   const { graphPoints, isIncreasing } = useMiniGraph(id, from, to);
+  const chainName = getChainFromTicker(pairTicker) || pairSymbol;
 
   return (
     <S.Header onClick={onOpenMarkets}>
@@ -108,7 +114,7 @@ export const HeaderMarket = ({
               <S.HeaderInfoContainer>
                 <span>{pair}</span>
               </S.HeaderInfoContainer>
-              <p>{pairSymbol}</p>
+              <p>{chainName}</p>
             </S.HeaderInfo>
           </S.HeaderAsideLeft>
           <S.HeaderAsideCenter>
@@ -176,7 +182,9 @@ const Content: FC<{
             pair={token.name}
             tokenTicker={token.tokenTickerName}
             vol={Decimal.format(Number(token.volume), token.quote_precision)}
-            price={Decimal.format(Number(token.last), token.quote_precision)}
+            price={formatNumber(
+              Decimal.format(Number(token.last), ORDERBOOK_PRECISION, ",")
+            )}
             change={
               Decimal.format(Number(token.price_change_percent), 2, ",") + "%"
             }
