@@ -19,8 +19,7 @@ import {
   NativeApiProvider,
   ExtensionWalletProvider,
   SettingProvider,
-  AssetsProvider,
-  MarketsProvider,
+  OrderbookServiceProvider,
 } from "@orderbook/core/providers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useInit } from "@orderbook/core/hooks";
@@ -62,23 +61,13 @@ const Providers = ({ children }) => {
       <ProfileProvider>
         <NativeApiProvider>
           <TradeWalletProvider>
-            <ExtensionWalletProvider>{children}</ExtensionWalletProvider>
+            <ExtensionWalletProvider>
+              <OrderbookServiceProvider>{children}</OrderbookServiceProvider>
+            </ExtensionWalletProvider>
           </TradeWalletProvider>
         </NativeApiProvider>
       </ProfileProvider>
     </AuthProvider>
-  );
-};
-
-const TradingPageProvider = ({ children }) => {
-  const router = useRouter();
-  const isTradingPage = router.pathname.startsWith("/trading");
-  return isTradingPage ? (
-    <AssetsProvider>
-      <MarketsProvider>{children}</MarketsProvider>
-    </AssetsProvider>
-  ) : (
-    <>{children}</>
   );
 };
 
@@ -136,14 +125,12 @@ function App({ Component, pageProps }: AppProps) {
         >
           <OverlayProvider>
             {isActive ? (
-              <TradingPageProvider>
-                <Providers>
-                  <ModifiedThemeProvider
-                    Component={Component}
-                    pageProps={pageProps}
-                  />
-                </Providers>
-              </TradingPageProvider>
+              <Providers>
+                <ModifiedThemeProvider
+                  Component={Component}
+                  pageProps={pageProps}
+                />
+              </Providers>
             ) : (
               <ModifiedThemeProvider
                 Component={Component}

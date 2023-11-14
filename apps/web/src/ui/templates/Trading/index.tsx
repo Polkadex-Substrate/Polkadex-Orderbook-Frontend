@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import {
@@ -34,7 +33,11 @@ import { ShutdownInteraction } from "../ShutdownInteraction";
 
 import * as S from "./styles";
 
-export function Trading() {
+type Props = {
+  market: string;
+};
+
+export function Trading({ market: id }: Props) {
   const shouldShowDisclaimer = useMemo(
     () =>
       process.browser &&
@@ -55,9 +58,6 @@ export function Trading() {
 
   const [banner, setBanner] = useState(false);
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
-
-  const router = useRouter();
-  const { id } = router?.query;
 
   const { currentMarket: market } = useMarketsProvider();
 
@@ -191,7 +191,7 @@ export function Trading() {
                       </S.GraphEpmty>
                       <S.WrapperRight>
                         <MarketOrder />
-                        <RecentTrades />
+                        <RecentTrades market={id} />
                       </S.WrapperRight>
                     </S.CenterWrapper>
                   </S.WrapperGraph>

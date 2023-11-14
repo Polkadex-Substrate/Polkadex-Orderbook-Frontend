@@ -5,6 +5,7 @@ export { NativeApiProvider } from "./public/nativeApi";
 export { OrderBookProvider } from "./public/orderBook";
 export { RecentTradesProvider } from "./public/recentTradesProvider";
 export { SettingProvider } from "./public/settings";
+export { OrderbookServiceProvider } from "./public/orderbookServiceProvider";
 
 export { AuthProvider } from "./user/auth";
 export { ProfileProvider } from "./user/profile";
