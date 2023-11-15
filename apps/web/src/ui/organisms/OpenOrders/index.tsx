@@ -3,11 +3,10 @@ import { useTranslation } from "next-i18next";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
 import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
-import { useOpenOrders } from "@orderbook/core/index";
+import { useAssetsMetaData, useOpenOrders } from "@orderbook/core/index";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -21,7 +20,7 @@ type Props = {
 export const OpenOrders = ({ filters, onHideTransactionDropdown }: Props) => {
   const { isLoading, openOrders } = useOpenOrders(filters);
   const { currentMarket } = useMarketsProvider();
-  const { selectGetAsset } = useAssetsProvider();
+  const { selectGetAsset } = useAssetsMetaData();
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`openOrders.${key}`);
@@ -65,8 +64,8 @@ export const OpenOrders = ({ filters, onHideTransactionDropdown }: Props) => {
                 const date = new Date(order.time).toLocaleString();
                 const isSell = order.side === "Ask";
                 const isMarket = order.order_type === "MARKET";
-                const baseUnit = selectGetAsset(base)?.symbol;
-                const quoteUnit = selectGetAsset(quote)?.symbol;
+                const baseUnit = selectGetAsset(base)?.ticker;
+                const quoteUnit = selectGetAsset(quote)?.ticker;
                 const avgPrice = order.avg_filled_price;
                 return (
                   <OpenOrderCard

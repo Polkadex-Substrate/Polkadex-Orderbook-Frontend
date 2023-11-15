@@ -8,11 +8,10 @@ import {
   Button,
 } from "@polkadex/orderbook-ui/molecules";
 import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
-import { useOrderHistory } from "@orderbook/core/index";
+import { useAssetsMetaData, useOrderHistory } from "@orderbook/core/index";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -26,7 +25,7 @@ export const OrderHistory = ({ filters }: Props) => {
   const { hasNextPage, isLoading, onFetchNextPage, orderHistory, error } =
     useOrderHistory(filters);
 
-  const { selectGetAsset } = useAssetsProvider();
+  const { selectGetAsset } = useAssetsMetaData();
   const { currentMarket } = useMarketsProvider();
 
   const priceFixed = currentMarket
@@ -80,8 +79,8 @@ export const OrderHistory = ({ filters }: Props) => {
                   const date = new Date(order.time).toLocaleString();
                   const isSell = order.side === "Ask";
                   const isMarket = order.order_type === "MARKET";
-                  const baseUnit = selectGetAsset(base)?.symbol;
-                  const quoteUnit = selectGetAsset(quote)?.symbol;
+                  const baseUnit = selectGetAsset(base)?.ticker;
+                  const quoteUnit = selectGetAsset(quote)?.ticker;
                   const avgPrice = order.avg_filled_price;
                   const shortId =
                     order.id.slice(0, 4) +

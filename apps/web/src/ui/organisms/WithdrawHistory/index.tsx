@@ -4,7 +4,7 @@ import {
   useTransactionsProvider,
   Transaction,
 } from "@orderbook/core/providers/user/transactionsProvider";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useAssetsMetaData } from "@orderbook/core/index";
 import { Tab } from "@headlessui/react";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
@@ -32,7 +32,7 @@ export const WithdrawHistory = ({
 
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
 
-  const { selectGetAsset } = useAssetsProvider();
+  const { selectGetAsset } = useAssetsMetaData();
   const { allWithdrawals, readyWithdrawals, loading } =
     useTransactionsProvider();
   const { selectedAccount } = useProfile();
@@ -65,7 +65,7 @@ export const WithdrawHistory = ({
               { locale: "EN" }
             ),
             token: {
-              ticker: token?.symbol,
+              ticker: token?.ticker,
               name: token?.name,
             },
             wallets: {
@@ -112,9 +112,9 @@ export const WithdrawHistory = ({
               { locale: "EN" }
             ),
             token: {
-              ticker: token?.symbol,
+              ticker: token?.ticker,
               name: token?.name,
-              assetId: token?.assetId,
+              assetId: token?.id,
             },
             wallets: {
               fromWalletName: fundingWallet?.account?.meta?.name ?? "",

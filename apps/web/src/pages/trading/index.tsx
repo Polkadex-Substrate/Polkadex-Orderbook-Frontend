@@ -3,7 +3,7 @@ import { useEffect, useMemo } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useAssetsMetaData } from "@orderbook/core/index";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 
 function Home() {
@@ -21,7 +21,7 @@ function Home() {
     loading: marketLoading,
   } = useMarketsProvider();
 
-  const { loading: assetLoading } = useAssetsProvider();
+  const { loading: assetLoading } = useAssetsMetaData();
 
   const findMarket = allMarkets?.find((market) => market.m === persistedMarket);
 

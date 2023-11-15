@@ -8,8 +8,9 @@ export const DEFAULTWALLETSINTRONAME = "WalletsIntro";
 
 export const POLKADEX_ASSET = {
   name: "POLKADEX",
-  symbol: "PDEX",
-  assetId: "PDEX",
+  ticker: "PDEX",
+  id: "PDEX",
+  decimal: 12,
 };
 
 export const READ_ONLY_TOKEN = process.env.READ_ONLY_TOKEN || "READ_ONLY";

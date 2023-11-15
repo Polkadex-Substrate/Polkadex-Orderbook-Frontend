@@ -8,7 +8,7 @@
 
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { filterBlockedAssets } from "@orderbook/core/helpers";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useAssetsMetaData } from "@orderbook/core/src/hooks/useAssetsMetaData";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
@@ -24,7 +24,7 @@ const onChangeState = (onCallback: Dispatch<SetStateAction<boolean>>) => {
 
 export function useTransfer() {
   const toHuman = BalanceFormatter.toHuman;
-  const { list } = useAssetsProvider();
+  const { list } = useAssetsMetaData();
   const { balances } = useBalancesProvider();
   const { loading: depositLoading } = useDepositProvider();
   const { loading: withdrawLoading } = useWithdrawsProvider();
@@ -49,9 +49,7 @@ export function useTransfer() {
   const filteredNonBlockedAssets = useMemo(
     () =>
       filterBlockedAssets(list)?.map((e) => {
-        const tokenBalance = balances?.find(
-          (value) => value.assetId === e.assetId
-        );
+        const tokenBalance = balances?.find((value) => value.assetId === e.id);
         const free_balance =
           tokenBalance?.free_balance === "0"
             ? "0.00"
@@ -75,13 +73,13 @@ export function useTransfer() {
   useEffect(() => {
     if (!selectedAsset) {
       const foundAsset = filteredNonBlockedAssets?.find(
-        ({ symbol }) => symbol === query?.token
+        ({ ticker }) => ticker === query?.token
       );
       setSelectedAsset(foundAsset ?? filteredNonBlockedAssets?.[0]);
     } else if (selectedAccount && !!selectedAsset)
       setSelectedAsset((prev) => {
         const foundAsset = filteredNonBlockedAssets?.find(
-          ({ assetId }) => assetId === prev?.assetId
+          ({ id }) => id === prev?.id
         );
         return foundAsset || prev;
       });

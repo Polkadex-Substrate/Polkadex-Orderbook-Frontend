@@ -1,14 +1,13 @@
 import { useRouter } from "next/router";
-import {
-  useAssetsProvider,
-  IPublicAsset,
-} from "@orderbook/core/providers/public/assetsProvider";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { ChangeEvent, useMemo, useState } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 import { BalanceFormatter } from "@orderbook/format";
+import { Asset } from "@orderbook/core/utils/orderbookService";
 
-export interface AssetsProps extends IPublicAsset {
+import { useAssetsMetaData } from "./useAssetsMetaData";
+
+export interface AssetsProps extends Asset {
   free_balance: string;
   onChainBalance: string;
   inOrdersBalance: string;
@@ -18,7 +17,7 @@ export function useAssets() {
   const { locale } = useRouter();
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
-  const { list, loading } = useAssetsProvider();
+  const { list, loading } = useAssetsMetaData();
   const { balances, loading: balancesLoading } = useBalancesProvider();
 
   const toHuman = BalanceFormatter.toHuman;
@@ -28,7 +27,7 @@ export function useAssets() {
       list
         ?.map((e: AssetsProps) => {
           const tokenBalance = balances?.find(
-            (value) => value.assetId === e.assetId
+            (value) => value.assetId === e.id
           );
           const free_balance =
             tokenBalance?.free_balance === "0"
@@ -58,12 +57,12 @@ export function useAssets() {
 
           const matchesNameOrTicker =
             e.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-            e.symbol.toLowerCase().includes(filters.search.toLowerCase());
+            e.ticker.toLowerCase().includes(filters.search.toLowerCase());
 
           return (
             matchesNameOrTicker &&
             !hasZeroAmount &&
-            !defaultConfig.blockedAssets?.some((value) => e.assetId === value)
+            !defaultConfig.blockedAssets?.some((value) => e.id === value)
           );
         })
         ?.sort((a, b) => a.name.localeCompare(b.name)),

@@ -1,6 +1,6 @@
-import { IPublicAsset } from "@orderbook/core/providers/public/assetsProvider";
+import { Asset } from "@orderbook/core/utils/orderbookService";
 
-export interface FilteredAssetProps extends IPublicAsset {
+export interface FilteredAssetProps extends Asset {
   free_balance?: string;
   onChainBalance?: string;
 }

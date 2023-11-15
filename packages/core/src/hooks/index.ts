@@ -21,3 +21,4 @@ export * from "./useTransferHistory";
 export * from "./useOrderHistory";
 export * from "./useOpenOrders";
 export * from "./useRecentTrades";
+export * from "./useAssetsMetaData";

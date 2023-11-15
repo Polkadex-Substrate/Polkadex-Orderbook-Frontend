@@ -1,7 +1,7 @@
 import { useTranslation } from "next-i18next";
 import { NavbarItem, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useAssetsMetaData } from "@orderbook/core/index";
 import {
   useMarketsProvider,
   defaultTickers,
@@ -16,7 +16,7 @@ export const Navbar = ({ onOpenMarkets }) => {
   const { getCurrentTradePrice, loading: isRecentTradeFetching } =
     useRecentTradesProvider();
   const currTrade = getCurrentTradePrice();
-  const { selectGetAsset } = useAssetsProvider();
+  const { selectGetAsset } = useAssetsMetaData();
   const {
     currentMarket: currMarket,
     currentTicker,
@@ -73,8 +73,8 @@ export const Navbar = ({ onOpenMarkets }) => {
           ) : (
             <NavbarItem
               label={t("price", {
-                price: quoteAsset?.symbol?.length
-                  ? `(${quoteAsset?.symbol})`
+                price: quoteAsset?.ticker?.length
+                  ? `(${quoteAsset?.ticker})`
                   : "",
               })}
               info={price}
@@ -96,8 +96,8 @@ export const Navbar = ({ onOpenMarkets }) => {
           ) : (
             <NavbarItem
               label={t("volume24hr", {
-                volume: quoteAsset?.symbol?.length
-                  ? `(${quoteAsset?.symbol})`
+                volume: quoteAsset?.ticker?.length
+                  ? `(${quoteAsset?.ticker})`
                   : "",
               })}
               info={formattedVolume}

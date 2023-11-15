@@ -2,7 +2,7 @@ import { useEffect, useCallback, useMemo } from "react";
 import { ApiPromise } from "@polkadot/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useAssetsMetaData } from "@orderbook/core/hooks";
 import {
   fetchOnChainBalance,
   eventHandler,
@@ -26,12 +26,12 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     list: assetsList,
     success: isAssetsFetched,
     selectGetAsset,
-  } = useAssetsProvider();
+  } = useAssetsMetaData();
   const { api, connected } = useNativeApi();
   const { onHandleError } = useSettingsProvider();
 
   const assets = useMemo(
-    () => (isAssetsFetched ? assetsList.map((a) => a.assetId) : []),
+    () => (isAssetsFetched ? assetsList.map((a) => a.id) : []),
     [isAssetsFetched, assetsList]
   );
 
@@ -74,11 +74,13 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
     if (!isAssetsFetched) return [];
 
     return assetsList.map((asset) => {
-      const currentAssetId = asset.assetId;
+      const currentAssetId = asset.id;
 
       // Default Balance Object
       const defaultBalance: T.Balance = {
-        ...asset,
+        assetId: currentAssetId,
+        symbol: asset.ticker,
+        name: asset.name,
         reserved_balance: "0",
         free_balance: "0",
         onChainBalance: "0",
@@ -88,7 +90,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
       const tradingBalance = tradingBalances?.find((balance) => {
         const asset = selectGetAsset(balance.asset_type);
         if (!asset) return {};
-        return asset.assetId === currentAssetId;
+        return asset.id === currentAssetId;
       });
 
       // Get onChain balances for current assetId
@@ -144,7 +146,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
 
       const payload = {
         name: selectGetAsset(assetId)?.name || "",
-        symbol: selectGetAsset(assetId)?.symbol || "",
+        symbol: selectGetAsset(assetId)?.ticker || "",
         assetId: assetId.toString(),
         free_balance: msg.free,
         reserved_balance: msg.reserved,
@@ -175,7 +177,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
             const prevData = [...(oldData as T.IBalanceFromDb[])];
             const old = prevData.find(
               (i) =>
-                selectGetAsset(i.asset_type)?.assetId.toString() ===
+                selectGetAsset(i.asset_type)?.id.toString() ===
                 updateBalance.assetId.toString()
             );
             if (!old) {
@@ -189,7 +191,7 @@ export const BalancesProvider: T.BalancesComponent = ({ children }) => {
             // Filter out old balances from the balance state
             const balanceFiltered = prevData?.filter(
               (balance) =>
-                selectGetAsset(balance.asset_type)?.assetId.toString() !==
+                selectGetAsset(balance.asset_type)?.id.toString() !==
                 updateBalance.assetId.toString()
             );
 

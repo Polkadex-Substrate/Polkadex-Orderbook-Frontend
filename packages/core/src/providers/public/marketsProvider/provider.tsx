@@ -5,7 +5,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { API } from "aws-amplify";
 import { useRouter } from "next/router";
 import { GraphQLSubscription } from "@aws-amplify/api";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 import * as subscriptions from "@orderbook/core/graphql/subscriptions";
 import { defaultConfig } from "@orderbook/core/config";
 import { Websocket_streamsSubscription } from "@orderbook/core/API";
@@ -19,9 +18,10 @@ import {
   QUERY_KEYS,
   READ_ONLY_TOKEN,
 } from "@orderbook/core/constants";
+import { Asset } from "@orderbook/core/utils/orderbookService";
+import { useAssetsMetaData } from "@orderbook/core/hooks";
 
 import { useSettingsProvider } from "../settings";
-import { IPublicAsset } from "../assetsProvider";
 
 import { Market, MarketsComponent, Ticker, TickerQueryResult } from "./types";
 import { defaultTickers } from "./reducer";
@@ -30,7 +30,7 @@ import { fetchMarketTickers, fetchMarkets } from "./helper";
 
 export const MarketsProvider: MarketsComponent = ({ children }) => {
   const queryClient = useQueryClient();
-  const { list: allAssets } = useAssetsProvider();
+  const { list: allAssets } = useAssetsMetaData();
   const { onHandleError } = useSettingsProvider();
 
   const router = useRouter();
@@ -62,7 +62,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
     },
   });
 
-  const onMarketsFetch = async (allAssets: IPublicAsset[]) => {
+  const onMarketsFetch = async (allAssets: Asset[]) => {
     if (allAssets.length > 0) {
       const markets = await fetchMarkets(allAssets);
       const validMarkets = markets.filter(

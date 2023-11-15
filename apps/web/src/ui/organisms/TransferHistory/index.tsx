@@ -8,7 +8,7 @@ import {
 import { useMemo, useState } from "react";
 import classNames from "classnames";
 import { intlFormat } from "date-fns";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useAssetsMetaData } from "@orderbook/core/index";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
 import { useTranslation } from "next-i18next";
 import { TransferHistory as TransferHistoryProps } from "@orderbook/core/helpers";
@@ -36,7 +36,7 @@ export const TransferHistory = ({
 
   const { t } = useTranslation("transfer");
 
-  const { selectGetAsset } = useAssetsProvider();
+  const { selectGetAsset } = useAssetsMetaData();
   const { allAccounts } = useExtensionWallet();
   const columns = useMemo(
     () => getColumns(["Date", "Token", "Amount", "From/To", "Hash"]),
@@ -52,7 +52,7 @@ export const TransferHistory = ({
               .split("standard_assets/")
               .join("");
 
-            return tokenId === selectedAsset?.assetId;
+            return tokenId === selectedAsset?.id;
           }
           return e;
         })
@@ -81,7 +81,7 @@ export const TransferHistory = ({
               { locale: "EN" }
             ),
             token: {
-              ticker: token?.symbol,
+              ticker: token?.ticker,
               name: token?.name,
             },
             wallets: {
@@ -94,7 +94,7 @@ export const TransferHistory = ({
         }),
     [
       selectGetAsset,
-      selectedAsset?.assetId,
+      selectedAsset?.id,
       showSelectedCoins,
       allAccounts,
       transactions,

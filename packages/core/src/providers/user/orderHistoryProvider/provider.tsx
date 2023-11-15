@@ -5,7 +5,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useAssetsMetaData } from "@orderbook/core/hooks";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { eventHandler, sliceArray } from "@orderbook/core/helpers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
@@ -34,7 +34,7 @@ export const OrderHistoryProvider = ({ children }) => {
   } = useProfile();
   const { onHandleError } = useSettingsProvider();
   const { currentMarket } = useMarketsProvider();
-  const { selectGetAsset } = useAssetsProvider();
+  const { selectGetAsset } = useAssetsMetaData();
   const { dateFrom, dateTo } = useSessionProvider();
 
   const userLoggedIn = tradeAddress !== "";
@@ -191,8 +191,8 @@ export const OrderHistoryProvider = ({ children }) => {
     (order: OrderCommon) => {
       const market = currentMarket?.name;
       const [base, quote] = order.m.split("-");
-      const baseUnit = selectGetAsset(base)?.symbol;
-      const quoteUnit = selectGetAsset(quote)?.symbol;
+      const baseUnit = selectGetAsset(base)?.ticker;
+      const quoteUnit = selectGetAsset(quote)?.ticker;
       const marketForOrder = `${baseUnit}/${quoteUnit}`;
       return marketForOrder === market;
     },

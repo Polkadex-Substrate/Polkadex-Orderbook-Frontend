@@ -3,13 +3,14 @@ import { Ifilters } from "@orderbook/core/providers/types";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useTrades } from "@orderbook/core/providers/user/trades";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 
 import { decimalPlaces } from "../helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "../constants";
 
+import { useAssetsMetaData } from "./useAssetsMetaData";
+
 export function useTradeHistory(filters: Ifilters) {
-  const { selectGetAsset } = useAssetsProvider();
+  const { selectGetAsset } = useAssetsMetaData();
   const profileState = useProfile();
   const tradesState = useTrades();
   const { onFetchNextPage } = tradesState;
@@ -46,8 +47,8 @@ export function useTradeHistory(filters: Ifilters) {
 
     if (filters?.hiddenPairs) {
       tradeHistoryList = tradeHistoryList.filter((trade) => {
-        const baseUnit = selectGetAsset(trade.baseAsset)?.symbol || "";
-        const quoteUnit = selectGetAsset(trade.quoteAsset)?.symbol || "";
+        const baseUnit = selectGetAsset(trade.baseAsset)?.ticker || "";
+        const quoteUnit = selectGetAsset(trade.quoteAsset)?.ticker || "";
         const market = currentMarket?.name;
         const marketForTrade = `${baseUnit}/${quoteUnit}`;
         return market === marketForTrade && trade;

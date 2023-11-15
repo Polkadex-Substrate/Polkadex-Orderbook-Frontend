@@ -2,7 +2,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useTranslation } from "next-i18next";
 import { useEffect } from "react";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { useTradeHistory } from "@orderbook/core/hooks";
+import { useAssetsMetaData, useTradeHistory } from "@orderbook/core/hooks";
 import {
   Button,
   EmptyData,
@@ -10,7 +10,6 @@ import {
   TradeHistoryCard,
 } from "@polkadex/orderbook-ui/molecules";
 import { Ifilters } from "@orderbook/core/providers/types";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -31,7 +30,7 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
     isLoading,
     onFetchNextPage,
   } = useTradeHistory(filters);
-  const { selectGetAsset } = useAssetsProvider();
+  const { selectGetAsset } = useAssetsMetaData();
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`tradeHistory.${key}`);
@@ -71,8 +70,8 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
             >
               {trades?.map((trade, i) => {
                 const date = new Date(trade.timestamp).toLocaleString();
-                const baseUnit = selectGetAsset(trade.baseAsset)?.symbol;
-                const quoteUnit = selectGetAsset(trade.quoteAsset)?.symbol;
+                const baseUnit = selectGetAsset(trade.baseAsset)?.ticker;
+                const quoteUnit = selectGetAsset(trade.quoteAsset)?.ticker;
                 return (
                   <TradeHistoryCard
                     key={i}

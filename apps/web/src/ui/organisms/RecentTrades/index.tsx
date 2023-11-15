@@ -7,25 +7,25 @@ import {
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
+import { useRecentTrades } from "@orderbook/core/index";
 
 import * as S from "./styles";
 
 export const filters = ["all", "buy", "sell"];
 
-export const RecentTrades = () => {
+type Props = {
+  market: string;
+};
+
+export const RecentTrades = ({ market }: Props) => {
   const { t: translation } = useTranslation("organisms");
   const t = (key: string, args = {}) =>
     translation(`recentTrades.${key}`, args);
 
-  const {
-    list,
-    loading,
-    isDecreasing,
-    quoteUnit,
-    baseUnit,
-    pricePrecision,
-    amountPrecision,
-  } = useRecentTradesProvider();
+  const { isDecreasing, list, loading } = useRecentTrades(market);
+
+  const { quoteUnit, baseUnit, pricePrecision, amountPrecision } =
+    useRecentTradesProvider();
 
   const priceDecimals = pricePrecision || MIN_DIGITS_AFTER_DECIMAL;
   const qtyDecimals = amountPrecision || MIN_DIGITS_AFTER_DECIMAL;
@@ -54,7 +54,7 @@ export const RecentTrades = () => {
                   <Card
                     key={i}
                     price={Decimal.format(order.price, priceDecimals, ",")}
-                    amount={Decimal.format(order.amount, qtyDecimals, ",")}
+                    amount={Decimal.format(order.qty, qtyDecimals, ",")}
                     date={date}
                     isSell={isDecreasing[i]}
                   />

@@ -4,14 +4,11 @@ import { decimalPlaces, isAssetPDEX } from "@orderbook/core/helpers";
 import { sendQueryToAppSync } from "@orderbook/core/helpers/appsync";
 import { getAllMarkets } from "@orderbook/core/graphql/queries";
 import { POLKADEX_ASSET } from "@orderbook/core/constants";
-
-import { IPublicAsset } from "../assetsProvider";
+import { Asset } from "@orderbook/core/utils/orderbookService";
 
 import { Market, MarketQueryResult, Ticker, TickerQueryResult } from "./types";
 
-export const fetchMarkets = async (
-  assets: IPublicAsset[]
-): Promise<Market[]> => {
+export const fetchMarkets = async (assets: Asset[]): Promise<Market[]> => {
   const res = await sendQueryToAppSync({ query: getAllMarkets });
   const pairs: MarketQueryResult[] = res.data.getAllMarkets.items;
   const markets = pairs?.map(
@@ -44,19 +41,19 @@ export const fetchMarkets = async (
 };
 
 const findAsset = (
-  assets: IPublicAsset[],
+  assets: Asset[],
   id: string
 ): { name: string; ticker: string; assetId: string } => {
   if (isAssetPDEX(id)) {
-    const { name, symbol, assetId } = POLKADEX_ASSET;
+    const { name, ticker: symbol, id: assetId } = POLKADEX_ASSET;
     return { name, ticker: symbol, assetId };
   }
-  const asset = assets?.find(({ assetId }) => assetId === id);
-  if (asset?.name && asset?.symbol && asset?.assetId)
+  const asset = assets?.find(({ id: assetId }) => assetId === id);
+  if (asset?.name && asset?.ticker && asset?.id)
     return {
       name: asset.name,
-      ticker: asset.symbol,
-      assetId: asset.assetId,
+      ticker: asset.ticker,
+      assetId: asset.id,
     };
   else throw new Error(`cannot find asset id: ${id}`);
 };

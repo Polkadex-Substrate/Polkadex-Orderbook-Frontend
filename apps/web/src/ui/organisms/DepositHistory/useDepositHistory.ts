@@ -6,7 +6,7 @@
  * - Retrieve column header text
  */
 
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useAssetsMetaData } from "@orderbook/core/index";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
   useExtensionWallet,
@@ -35,7 +35,7 @@ export function useDepositHistory({
 
   const { selectedAccount } = useProfile();
   const { allAccounts } = useExtensionWallet();
-  const { selectGetAsset } = useAssetsProvider();
+  const { selectGetAsset } = useAssetsMetaData();
   const { deposits, loading } = useTransactionsProvider();
 
   const { mainAddress } = selectedAccount;
@@ -77,7 +77,7 @@ export function useDepositHistory({
             txn_type: e.txn_type,
             isReverted: e.isReverted,
             token: {
-              ticker: token?.symbol,
+              ticker: token?.ticker,
               name: token?.name,
             },
             wallets: {

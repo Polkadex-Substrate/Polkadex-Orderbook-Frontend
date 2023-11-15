@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import {
   RecentTradesProvider,
@@ -22,16 +23,19 @@ const TradingTemplate = dynamic(
 );
 
 const Trading = () => {
+  const router = useRouter();
+  const { id } = router?.query;
+
   return (
-    <BalancesProvider>
-      <OrderBookProvider>
-        <OrdersProvider>
-          <RecentTradesProvider>
-            <TradingTemplate />
-          </RecentTradesProvider>
-        </OrdersProvider>
-      </OrderBookProvider>
-    </BalancesProvider>
+    // <BalancesProvider>
+    //   <OrderBookProvider>
+    //     <OrdersProvider>
+    //       <RecentTradesProvider>
+    <TradingTemplate market={id as string} />
+    //       </RecentTradesProvider>
+    //     </OrdersProvider>
+    //   </OrderBookProvider>
+    // </BalancesProvider>
   );
 };
 
