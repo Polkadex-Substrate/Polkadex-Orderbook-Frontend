@@ -1,20 +1,24 @@
 import { useTranslation } from "next-i18next";
 import { NavbarItem, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
-import { useAssetsMetaData } from "@orderbook/core/index";
+import { useAssetsMetaData, useRecentTrades } from "@orderbook/core/index";
 import {
   useMarketsProvider,
   defaultTickers,
 } from "@orderbook/core/providers/public/marketsProvider";
-import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
 import { hasOnlyZeros } from "@orderbook/core/helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
 import * as S from "./styles";
 
-export const Navbar = ({ onOpenMarkets }) => {
+type Props = {
+  onOpenMarkets: () => void;
+  market: string;
+};
+
+export const Navbar = ({ onOpenMarkets, market }: Props) => {
   const { getCurrentTradePrice, loading: isRecentTradeFetching } =
-    useRecentTradesProvider();
+    useRecentTrades(market);
   const currTrade = getCurrentTradePrice();
   const { selectGetAsset } = useAssetsMetaData();
   const {

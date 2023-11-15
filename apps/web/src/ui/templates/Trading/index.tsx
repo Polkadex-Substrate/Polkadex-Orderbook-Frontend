@@ -174,7 +174,10 @@ export function Trading({ market: id }: Props) {
                     <S.CenterWrapper>
                       <S.GraphEpmty>
                         <KlineProvider>
-                          <Navbar onOpenMarkets={() => setState(!state)} />
+                          <Navbar
+                            onOpenMarkets={() => setState(!state)}
+                            market={id}
+                          />
                           <Graph />
                         </KlineProvider>
                         {hasUser ? (
