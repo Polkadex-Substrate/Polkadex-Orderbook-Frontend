@@ -49,7 +49,7 @@ export interface OrderExecuteError {
 
 export interface OrderCancelFetch {
   type: typeof ORDER_CANCEL_FETCH;
-  payload: OrderCancellation;
+  payload: OrderCancellation[];
 }
 
 export interface OrderCancelData {
@@ -94,7 +94,7 @@ export type OrdersAction =
   | OrderCancelError;
 
 export const orderExecuteFetch = (
-  payload: OrderExecuteFetch["payload"],
+  payload: OrderExecuteFetch["payload"]
 ): OrderExecuteFetch => ({
   type: ORDER_EXECUTE_FETCH,
   payload,
@@ -114,7 +114,7 @@ export const orderExecuteError = (error: CommonError): OrderExecuteError => ({
 });
 
 export const orderCancelFetch = (
-  payload: OrderCancelFetch["payload"],
+  payload: OrderCancelFetch["payload"]
 ): OrderCancelFetch => ({
   type: ORDER_CANCEL_FETCH,
   payload,
@@ -134,7 +134,7 @@ export const orderCancelError = (error: CommonError): OrderCancelError => ({
 });
 
 export const setCurrentPrice = (
-  payload: SetCurrentPrice["payload"],
+  payload: SetCurrentPrice["payload"]
 ): SetCurrentPrice => ({
   type: ORDERS_SET_CURRENT_PRICE,
   payload,
@@ -146,7 +146,7 @@ export const setAmount = (payload: SetAmount["payload"]): SetAmount => ({
 });
 
 export const setOrderType = (
-  payload: SetOrderType["payload"],
+  payload: SetOrderType["payload"]
 ): SetOrderType => ({
   type: ORDERS_SET_ORDER_TYPE,
   payload,

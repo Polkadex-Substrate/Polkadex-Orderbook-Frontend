@@ -107,48 +107,48 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
     }
   };
 
-  const onCancelOrder = async (payload: A.OrderCancelFetch["payload"]) => {
+  const onCancelOrder = async (payloads: A.OrderCancelFetch["payload"]) => {
     try {
-      dispatch(A.orderCancelFetch(payload));
-      const { orderId, base, quote } = payload;
-      const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
-      const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
-      const api = nativeApiState.api;
-      const account: UserAccount = profileState.selectedAccount;
-      const { tradeAddress, mainAddress } = account;
-      const keyringPair = selectTradeAccount(
-        tradeAddress,
-        tradeWalletState.allBrowserAccounts
-      );
-      if (keyringPair?.isLocked)
-        throw new Error("Please unlock your account with password");
-      if (tradeAddress !== "" && keyringPair && api) {
-        const { pair, signature } = createCancelOrderPayloadSigned(
-          api,
-          keyringPair,
-          orderId,
-          baseAsset,
-          quoteAsset
+      dispatch(A.orderCancelFetch(payloads));
+      console.log("payloads", payloads);
+      for (const payload of payloads) {
+        const { orderId, base, quote } = payload;
+        const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
+        const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
+        const api = nativeApiState.api;
+        const account: UserAccount = profileState.selectedAccount;
+        const { tradeAddress, mainAddress } = account;
+        const keyringPair = selectTradeAccount(
+          tradeAddress,
+          tradeWalletState.allBrowserAccounts
         );
-        await executeCancelOrder(
-          [orderId, mainAddress, tradeAddress, pair, signature],
-          tradeAddress
-        );
-        dispatch(A.orderCancelData());
+        if (keyringPair?.isLocked)
+          throw new Error("Please unlock your account with password");
+        if (tradeAddress !== "" && keyringPair && api) {
+          const { pair, signature } = createCancelOrderPayloadSigned(
+            api,
+            keyringPair,
+            orderId,
+            baseAsset,
+            quoteAsset
+          );
+          await executeCancelOrder(
+            [orderId, mainAddress, tradeAddress, pair, signature],
+            tradeAddress
+          );
 
-        settingsState.onHandleNotification({
-          type: "Success",
-          message: `Order cancelled: ${orderId}`,
-        });
-
-        setTimeout(() => {
-          dispatch(A.orderCancelDataDelete());
-        }, 1000);
+          settingsState.onHandleNotification({
+            type: "Success",
+            message: `Order cancelled: ${orderId}`,
+          });
+        }
       }
     } catch (error) {
       settingsState.onHandleError(error?.message ?? error);
       dispatch(A.orderCancelError(error));
     }
+    dispatch(A.orderCancelData());
+    dispatch(A.orderCancelDataDelete());
   };
 
   const onSetCurrentPrice = (payload: A.SetCurrentPrice["payload"]) => {

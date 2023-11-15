@@ -14,6 +14,7 @@ import {
   Checkbox,
   Popover,
   Dropdown,
+  Button,
 } from "@polkadex/orderbook-ui/molecules";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -26,6 +27,8 @@ import {
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { Ifilters } from "@orderbook/core/providers/types";
+import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useOrderHistoryProvider } from "@orderbook/core/providers/user/orderHistoryProvider";
 
 import * as S from "./styles";
 
@@ -51,7 +54,6 @@ export const Transactions = () => {
 
   const userSession = useSessionProvider();
   const { dispatchUserSessionData } = userSession;
-
   // Filters Actions
   const handleChangeHidden = (
     type: "hiddenPairs" | "onlyBuy" | "onlySell" | "showReverted"
@@ -107,6 +109,7 @@ export const Transactions = () => {
           </S.HeaderContent>
           {isVisible && (
             <S.WrapperActions>
+              <CancelAllButton />
               <Checkbox
                 checked={filters.showReverted}
                 onChange={() => handleChangeHidden("showReverted")}
@@ -222,5 +225,34 @@ export const TransactionsSkeleton = () => {
       <Skeleton width={"100%"} height={"5rem"} />
       <Skeleton width={"100%"} height={"5rem"} />
     </S.SkeletonWrapper>
+  );
+};
+
+export const CancelAllButton = () => {
+  const { openOrders, isOpenOrdersLoading } = useOrderHistoryProvider();
+  const { onCancelOrder, cancel } = useOrders();
+  const loading = cancel?.isLoading || isOpenOrdersLoading;
+
+  const cancelAll = () => {
+    if (loading) return;
+    onCancelOrder(
+      openOrders.map((order) => {
+        return {
+          orderId: order.id,
+          base: order.m.split("-")[0],
+          quote: order.m.split("-")[1],
+        };
+      })
+    );
+  };
+  return (
+    <Button
+      isDisabled={isOpenOrdersLoading}
+      isLoading={loading}
+      onClick={cancelAll}
+      size={"small"}
+    >
+      Cancel All
+    </Button>
   );
 };

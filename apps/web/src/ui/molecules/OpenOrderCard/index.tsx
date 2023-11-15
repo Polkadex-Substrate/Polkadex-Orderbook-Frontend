@@ -23,7 +23,7 @@ export const OpenOrderCard = ({
   const handleCancelClick = () => {
     if (!isCancelClicked) {
       setIsCancleClicked(true);
-      ordersState.onCancelOrder({ orderId, base, quote });
+      ordersState.onCancelOrder([{ orderId, base, quote }]);
     }
   };
   useEffect(() => {
