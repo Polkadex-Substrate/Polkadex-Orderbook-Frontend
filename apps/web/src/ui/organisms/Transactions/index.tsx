@@ -247,8 +247,8 @@ export const CancelAllButton = () => {
   };
   return (
     <Button
-      isDisabled={isOpenOrdersLoading}
-      isLoading={loading}
+      disabled={loading}
+      isLoading={cancel?.isLoading}
       onClick={cancelAll}
       size={"small"}
     >
