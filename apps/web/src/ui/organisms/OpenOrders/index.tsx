@@ -3,10 +3,13 @@ import { useTranslation } from "next-i18next";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
 import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
-import { useAssetsMetaData, useOpenOrders } from "@orderbook/core/index";
+import {
+  useAssetsMetaData,
+  useMarketsData,
+  useOpenOrders,
+} from "@orderbook/core/index";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -15,11 +18,16 @@ import * as S from "./styles";
 type Props = {
   filters: Ifilters;
   onHideTransactionDropdown: (v: boolean) => void;
+  market: string;
 };
 
-export const OpenOrders = ({ filters, onHideTransactionDropdown }: Props) => {
+export const OpenOrders = ({
+  filters,
+  onHideTransactionDropdown,
+  market,
+}: Props) => {
   const { isLoading, openOrders } = useOpenOrders(filters);
-  const { currentMarket } = useMarketsProvider();
+  const { currentMarket } = useMarketsData(market);
   const { selectGetAsset } = useAssetsMetaData();
 
   const { t: translation } = useTranslation("organisms");

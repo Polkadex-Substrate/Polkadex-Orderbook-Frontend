@@ -156,7 +156,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
             `[${this.constructor.name}:getMarkets] cannot find base asset`
           );
         }
-        const quoteAsset = this._assetsList.find((x) => x.id === quoteAssetId);
+        const quoteAsset = assetList.find((x) => x.id === quoteAssetId);
         if (!quoteAsset) {
           throw new Error(
             `[${this.constructor.name}:getMarkets] cannot find quote asset`
@@ -178,6 +178,8 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
             Number(item?.max_order_price) * Number(item?.max_order_qty),
           minVolume:
             Number(item?.min_order_price) * Number(item?.min_order_qty),
+          price_tick_size: Number(item?.price_tick_size),
+          qty_step_size: Number(item?.qty_step_size),
         };
       }
     );
@@ -334,7 +336,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         price: Number(item?.p) || 0,
         qty: Number(item?.q) || 0,
         isReverted: item?.isReverted || false,
-        timestamp: new Date(item?.t || 0),
+        timestamp: new Date(Number(item?.t) || 0),
       };
     });
   }

@@ -1,7 +1,7 @@
 // number type can be used for all calculations as it supports up to 15 digits after decimal point
 // while max precision of backend is 8 digits after decimal point
 
-import { USER_EVENTS, UserEvents } from "@orderbook/core/constants";
+import { USER_EVENTS } from "@orderbook/core/constants";
 
 export interface MarketBase {
   id: string; // eg: "123-231"
@@ -19,6 +19,8 @@ export interface Market extends MarketBase {
   minVolume: number;
   basePrecision: number;
   quotePrecision: number;
+  price_tick_size: number;
+  qty_step_size: number;
 }
 
 export type Asset = {

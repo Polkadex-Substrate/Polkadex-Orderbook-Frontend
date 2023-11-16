@@ -14,7 +14,11 @@ export function useAssetsMetaData() {
   const { isLoading, isFetching, isSuccess, data } = useQuery({
     queryKey: QUERY_KEYS.assets(),
     queryFn: () => appsyncOrderbookService.query.getAssets(),
-    onError: onHandleError,
+    onError: (error) => {
+      const errorMessage =
+        error instanceof Error ? error.message : (error as string);
+      onHandleError(errorMessage);
+    },
     initialData: [],
   });
 

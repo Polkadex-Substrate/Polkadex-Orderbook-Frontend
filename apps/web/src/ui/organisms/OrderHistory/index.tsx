@@ -8,10 +8,13 @@ import {
   Button,
 } from "@polkadex/orderbook-ui/molecules";
 import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
-import { useAssetsMetaData, useOrderHistory } from "@orderbook/core/index";
+import {
+  useAssetsMetaData,
+  useMarketsData,
+  useOrderHistory,
+} from "@orderbook/core/index";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -19,14 +22,15 @@ import * as S from "./styles";
 
 type Props = {
   filters: Ifilters;
+  market: string;
 };
 
-export const OrderHistory = ({ filters }: Props) => {
+export const OrderHistory = ({ filters, market }: Props) => {
   const { hasNextPage, isLoading, onFetchNextPage, orderHistory, error } =
     useOrderHistory(filters);
 
   const { selectGetAsset } = useAssetsMetaData();
-  const { currentMarket } = useMarketsProvider();
+  const { currentMarket } = useMarketsData(market);
 
   const priceFixed = currentMarket
     ? decimalPlaces(currentMarket.price_tick_size)

@@ -5,9 +5,12 @@ import {
   Spinner,
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
-import { useRecentTrades } from "@orderbook/core/index";
+import {
+  decimalPlaces,
+  useMarketsData,
+  useRecentTrades,
+} from "@orderbook/core/index";
 
 import * as S from "./styles";
 
@@ -22,10 +25,17 @@ export const RecentTrades = ({ market }: Props) => {
   const t = (key: string, args = {}) =>
     translation(`recentTrades.${key}`, args);
 
-  const { isDecreasing, list, loading } = useRecentTrades(market);
+  const { currentMarket } = useMarketsData(market);
+  const { isDecreasing, list, loading } = useRecentTrades(
+    currentMarket?.id as string
+  );
 
-  const { quoteUnit, baseUnit, pricePrecision, amountPrecision } =
-    useRecentTradesProvider();
+  const pricePrecision = currentMarket
+    ? decimalPlaces(currentMarket.price_tick_size)
+    : undefined;
+  const amountPrecision = currentMarket
+    ? decimalPlaces(currentMarket.qty_step_size)
+    : undefined;
 
   const priceDecimals = pricePrecision || MIN_DIGITS_AFTER_DECIMAL;
   const qtyDecimals = amountPrecision || MIN_DIGITS_AFTER_DECIMAL;
@@ -43,8 +53,12 @@ export const RecentTrades = ({ market }: Props) => {
         ) : list.length ? (
           <>
             <S.Head>
-              <S.CellHead>{t("price", { price: quoteUnit })}</S.CellHead>
-              <S.CellHead>{t("amount", { amount: baseUnit })}</S.CellHead>
+              <S.CellHead>
+                {t("price", { price: currentMarket?.quoteAsset.ticker })}
+              </S.CellHead>
+              <S.CellHead>
+                {t("amount", { amount: currentMarket?.baseAsset.ticker })}
+              </S.CellHead>
               <S.CellHead>{t("time")}</S.CellHead>
             </S.Head>
             <S.Content>

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { useKlineProvider } from "@orderbook/core/providers/public/klineProvider";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
+import { useMarketsData } from "@orderbook/core/index";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { TradingView as TradingViewConstants } from "@orderbook/core/constants";
@@ -45,11 +45,15 @@ const configurationData: DatafeedConfiguration = {
   ],
 };
 
-export const TradingView = () => {
+type Props = {
+  market: string;
+};
+
+export const TradingView = ({ market }: Props) => {
   const [isReady, setIsReady] = useState(false);
 
   const { onHandleKlineFetch, onFetchKlineChannel } = useKlineProvider();
-  const { currentMarket, list: allMarkets } = useMarketsProvider();
+  const { currentMarket, list: allMarkets } = useMarketsData(market);
   const { theme } = useSettingsProvider();
 
   const isDarkTheme = theme === "dark";
@@ -71,11 +75,11 @@ export const TradingView = () => {
   const getData = useCallback(
     async (resolution: ResolutionString, from: number, to: number) => {
       try {
-        if (!currentMarket?.m) return [];
+        if (!currentMarket?.id) return [];
 
         const klines =
           (await onHandleKlineFetch({
-            market: currentMarket?.m,
+            market: currentMarket?.id,
             resolution: resolution,
             from: new Date(from * 1000),
             to: new Date(to * 1000),
@@ -188,9 +192,9 @@ export const TradingView = () => {
           }
         },
         subscribeBars(symbolInfo, resolution, onTick) {
-          if (currentMarket?.m) {
+          if (currentMarket?.id) {
             onFetchKlineChannel({
-              market: currentMarket?.m,
+              market: currentMarket?.id,
               interval: resolution,
               onUpdateTradingViewRealTime: onTick,
             });
@@ -230,7 +234,7 @@ export const TradingView = () => {
       load_last_chart: true,
     };
   }, [
-    currentMarket?.m,
+    currentMarket?.id,
     getAllSymbols,
     getData,
     currentMarket?.name,
@@ -239,7 +243,7 @@ export const TradingView = () => {
   ]);
 
   useEffect(() => {
-    if (!currentMarket?.m) return;
+    if (!currentMarket?.id) return;
 
     setIsReady(false);
     tvWidget.current = new Widget(widgetOptions);
@@ -252,7 +256,7 @@ export const TradingView = () => {
     return () => {
       tvWidget?.current?.remove();
     };
-  }, [currentMarket?.m, widgetOptions]);
+  }, [currentMarket?.id, widgetOptions]);
 
   useEffect(() => {
     isReady &&

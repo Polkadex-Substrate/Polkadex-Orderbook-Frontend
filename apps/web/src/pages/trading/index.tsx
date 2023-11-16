@@ -2,8 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
-import { useAssetsMetaData } from "@orderbook/core/index";
+import { useAssetsMetaData, useMarketsData } from "@orderbook/core/index";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 
 function Home() {
@@ -19,22 +18,28 @@ function Home() {
     currentMarket,
     list: allMarkets,
     loading: marketLoading,
-  } = useMarketsProvider();
+  } = useMarketsData();
 
   const { loading: assetLoading } = useAssetsMetaData();
 
-  const findMarket = allMarkets?.find((market) => market.m === persistedMarket);
+  const findMarket = allMarkets?.find(
+    (market) => market.id === persistedMarket
+  );
 
   useEffect(() => {
     if (!marketLoading && !assetLoading) {
       if (findMarket) {
         router.push(
-          `/trading/${findMarket.base_ticker + findMarket.quote_ticker}`
+          `/trading/${
+            findMarket.baseAsset.ticker + findMarket.quoteAsset.ticker
+          }`
         );
       } else {
         if (currentMarket)
           router.push(
-            `/trading/${currentMarket.base_ticker + currentMarket.quote_ticker}`
+            `/trading/${
+              currentMarket.baseAsset.ticker + currentMarket.quoteAsset.ticker
+            }`
           );
         else router.push(`/trading/${defaultConfig.landingPageMarket}`);
       }

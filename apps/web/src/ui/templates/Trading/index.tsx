@@ -22,12 +22,11 @@ import {
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { OrderHistoryProvider } from "@orderbook/core/providers/user/orderHistoryProvider";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { SessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { KlineProvider } from "@orderbook/core/providers/public/klineProvider";
 import { TradesProvider } from "@orderbook/core/providers/user/trades";
 import { defaultConfig } from "@orderbook/core/config";
-import { useRecentTrades } from "@orderbook/core/index";
+import { useMarketsData, useRecentTrades } from "@orderbook/core/index";
 
 import { ShutdownInteraction } from "../ShutdownInteraction";
 
@@ -59,7 +58,7 @@ export function Trading({ market: id }: Props) {
   const [banner, setBanner] = useState(false);
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
-  const { currentMarket: market } = useMarketsProvider();
+  const { currentMarket: market } = useMarketsData(id);
 
   const {
     authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
@@ -178,13 +177,13 @@ export function Trading({ market: id }: Props) {
                             onOpenMarkets={() => setState(!state)}
                             market={id}
                           />
-                          <Graph />
+                          <Graph market={id} />
                         </KlineProvider>
                         {hasUser ? (
                           <SessionProvider>
                             <TradesProvider>
                               <OrderHistoryProvider>
-                                <Transactions />
+                                <Transactions market={id} />
                               </OrderHistoryProvider>
                             </TradesProvider>
                           </SessionProvider>

@@ -21,7 +21,11 @@ export function useRecentTrades(market: string) {
         market,
         limit: RECENT_TRADES_LIMIT,
       }),
-    onError: onHandleError,
+    onError: (error) => {
+      const errorMessage =
+        error instanceof Error ? error.message : (error as string);
+      onHandleError(errorMessage);
+    },
     initialData: [],
   });
 

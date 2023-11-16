@@ -39,7 +39,7 @@ export const MarketsProvider: MarketsComponent = ({ children }) => {
   const shouldFetchMarkets = Boolean(allAssets.length > 0);
 
   const { data: markets, isLoading: isMarketsLoading } = useQuery<Market[]>({
-    queryKey: QUERY_KEYS.markets(JSON.stringify(allAssets)),
+    queryKey: QUERY_KEYS.markets(),
     enabled: shouldFetchMarkets,
     queryFn: async () => await onMarketsFetch(allAssets),
     onError: (error) => {

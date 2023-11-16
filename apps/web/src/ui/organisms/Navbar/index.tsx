@@ -1,7 +1,11 @@
 import { useTranslation } from "next-i18next";
 import { NavbarItem, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
-import { useAssetsMetaData, useRecentTrades } from "@orderbook/core/index";
+import {
+  useAssetsMetaData,
+  useMarketsData,
+  useRecentTrades,
+} from "@orderbook/core/index";
 import {
   useMarketsProvider,
   defaultTickers,
@@ -21,14 +25,12 @@ export const Navbar = ({ onOpenMarkets, market }: Props) => {
     useRecentTrades(market);
   const currTrade = getCurrentTradePrice();
   const { selectGetAsset } = useAssetsMetaData();
-  const {
-    currentMarket: currMarket,
-    currentTicker,
-    tickerLoading,
-    loading: isMarketFetching,
-  } = useMarketsProvider();
+  const { currentTicker, tickerLoading } = useMarketsProvider();
+  const { currentMarket: currMarket, loading: isMarketFetching } =
+    useMarketsData();
+
   const quoteAsset = currMarket
-    ? selectGetAsset(currMarket.quoteAssetId)
+    ? selectGetAsset(currMarket.quoteAsset.id)
     : undefined;
   const currPrice = currentTicker?.close;
   const priceChangePerCent =
@@ -38,7 +40,7 @@ export const Navbar = ({ onOpenMarkets, market }: Props) => {
   const high = currentTicker?.high;
   const low = currentTicker?.low;
 
-  const quotePrecision = currMarket?.quote_precision || 0;
+  const quotePrecision = currMarket?.quotePrecision || 0;
   const formattedVolume = Decimal.format(Number(volume), quotePrecision, ",");
 
   const price = hasOnlyZeros(currPrice.toString()) ? currTrade : currPrice;
@@ -66,7 +68,7 @@ export const Navbar = ({ onOpenMarkets, market }: Props) => {
           <HeaderMarket
             id={currMarket?.id || ""}
             pair={currMarket?.name || ""}
-            pairTicker={currMarket?.base_ticker || ""}
+            pairTicker={currMarket?.baseAsset.ticker || ""}
             onOpenMarkets={onOpenMarkets}
             isLoading={isLoading}
           />
