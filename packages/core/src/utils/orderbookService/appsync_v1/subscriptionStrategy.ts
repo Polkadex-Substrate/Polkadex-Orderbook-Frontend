@@ -293,6 +293,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
           data?.value?.data?.websocket_streams?.data as unknown as string
         ) as CandleStickUpdateEvent;
         return {
+          market,
           open: Number(item.o),
           close: Number(item.c),
           high: Number(item.h),
