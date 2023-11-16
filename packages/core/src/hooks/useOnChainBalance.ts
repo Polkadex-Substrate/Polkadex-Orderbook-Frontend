@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { fetchOnChainBalance } from "@orderbook/core/helpers";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
+
+import { useFunds } from "./useFunds";
 
 export const useOnChainBalance = (assetId: string) => {
   const profileState = useProfile();
@@ -10,7 +11,7 @@ export const useOnChainBalance = (assetId: string) => {
 
   const api = nativeApiState.api;
   const isApiConnected = nativeApiState.connected;
-  const { balances } = useBalancesProvider();
+  const { balances } = useFunds();
   const currentAccount = profileState?.selectedAccount;
   const mainAddress = currentAccount.mainAddress;
   const [balance, setBalance] = useState<number>(0);

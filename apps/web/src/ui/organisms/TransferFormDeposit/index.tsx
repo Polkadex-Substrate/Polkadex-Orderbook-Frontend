@@ -12,7 +12,7 @@ import { depositValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useTranslation } from "next-i18next";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
+import { useFunds } from "@orderbook/core/index";
 import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
 
 import * as S from "./styles";
@@ -33,7 +33,7 @@ export const TransferFormDeposit = ({
   const { allAccounts } = useExtensionWallet();
   const { loading, onFetchDeposit } = useDepositProvider();
   const { selectedAccount } = useProfile();
-  const { loading: balancesLoading } = useBalancesProvider();
+  const { loading: balancesLoading } = useFunds();
 
   const { mainAddress } = selectedAccount;
 

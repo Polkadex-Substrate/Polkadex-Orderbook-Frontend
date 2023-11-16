@@ -17,8 +17,9 @@ import {
   getAbsoluteNumber,
 } from "@orderbook/core/helpers";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import BigNumber from "bignumber.js";
+
+import { useFunds } from "./useFunds";
 
 type FormValues = {
   priceSell: string;
@@ -70,8 +71,7 @@ export function usePlaceOrder(
 
   const { currentMarket, loading: isMarketFetching } = useMarketsProvider();
 
-  const { getFreeProxyBalance, loading: isBalanceFetching } =
-    useBalancesProvider();
+  const { getFreeProxyBalance, loading: isBalanceFetching } = useFunds();
 
   const bestAskPrice =
     asks.length > 0 ? parseFloat(asks[asks.length - 1][0]) : 0;

@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { ChangeEvent, useMemo, useState } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 import { BalanceFormatter } from "@orderbook/format";
 import { Asset } from "@orderbook/core/utils/orderbookService";
 
 import { useAssetsMetaData } from "./useAssetsMetaData";
+import { useFunds } from "./useFunds";
 
 export interface AssetsProps extends Asset {
   free_balance: string;
@@ -18,7 +18,7 @@ export function useAssets() {
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
   const { list, loading } = useAssetsMetaData();
-  const { balances, loading: balancesLoading } = useBalancesProvider();
+  const { balances, loading: balancesLoading } = useFunds();
 
   const toHuman = BalanceFormatter.toHuman;
 
@@ -27,12 +27,12 @@ export function useAssets() {
       list
         ?.map((e: AssetsProps) => {
           const tokenBalance = balances?.find(
-            (value) => value.assetId === e.id
+            (value) => value.asset.id === e.id
           );
           const free_balance =
-            tokenBalance?.free_balance === "0"
+            tokenBalance?.free.toString() === "0"
               ? "0.00"
-              : tokenBalance?.free_balance || "0.00";
+              : tokenBalance?.free || "0.00";
 
           const onChainBalance =
             tokenBalance?.onChainBalance === "0"
@@ -40,9 +40,9 @@ export function useAssets() {
               : tokenBalance?.onChainBalance || "0.00";
 
           const inOrdersBalance =
-            tokenBalance?.reserved_balance === "0"
+            tokenBalance?.reserved.toString() === "0"
               ? "0.00"
-              : tokenBalance?.reserved_balance || "0.00";
+              : tokenBalance?.reserved.toString() || "0.00";
 
           return {
             ...e,

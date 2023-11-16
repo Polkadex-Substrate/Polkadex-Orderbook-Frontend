@@ -2,7 +2,6 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import {
-  BalancesProvider,
   TransactionsProvider,
   DepositProvider,
   WithdrawsProvider,
@@ -37,15 +36,13 @@ const Transfer = () => {
 
   if (!isAuthenticated || isLoading) return <div />;
   return (
-    <BalancesProvider>
-      <TransactionsProvider>
-        <DepositProvider>
-          <WithdrawsProvider>
-            <TransferTemplate />
-          </WithdrawsProvider>
-        </DepositProvider>
-      </TransactionsProvider>
-    </BalancesProvider>
+    <TransactionsProvider>
+      <DepositProvider>
+        <WithdrawsProvider>
+          <TransferTemplate />
+        </WithdrawsProvider>
+      </DepositProvider>
+    </TransactionsProvider>
   );
 };
 

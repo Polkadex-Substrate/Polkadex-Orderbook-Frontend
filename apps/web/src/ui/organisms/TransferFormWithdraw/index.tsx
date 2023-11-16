@@ -16,9 +16,8 @@ import { useFormik } from "formik";
 import { withdrawValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
-import { useTryUnlockTradeAccount } from "@orderbook/core/index";
+import { useFunds, useTryUnlockTradeAccount } from "@orderbook/core/index";
 import { useTranslation } from "next-i18next";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 
 import { UnlockModal } from "../UnlockModal";
 
@@ -48,7 +47,7 @@ export const TransferFormWithdraw = ({
   const { allBrowserAccounts } = useTradeWallet();
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
   const { selectedAccount } = useProfile();
-  const { loading: balancesLoading } = useBalancesProvider();
+  const { loading: balancesLoading } = useFunds();
 
   const { tradeAddress, mainAddress } = selectedAccount;
 

@@ -11,11 +11,10 @@ import { useFormik } from "formik";
 import { depositValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { ExtensionAccount } from "@orderbook/core/providers/types";
-import { useAssetTransfer } from "@orderbook/core/hooks";
+import { useAssetTransfer, useFunds } from "@orderbook/core/hooks";
 import { useTranslation } from "next-i18next";
 import { decodeAddress, encodeAddress } from "@polkadot/keyring";
 import { hexToU8a, isHex } from "@polkadot/util";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
 
 import { CustomAddress } from "../TransferFormWithdraw/types";
@@ -45,7 +44,7 @@ export const TransferForm = ({
 
   const { allAccounts } = useExtensionWallet();
   const { selectedAccount, onUserSelectAccount, userData } = useProfile();
-  const { loading, onChangeChainBalance } = useBalancesProvider();
+  const { loading, onChangeChainBalance } = useFunds();
 
   // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
   const { mutateAsync, isLoading } = useAssetTransfer(onRefetch);

@@ -23,7 +23,7 @@ import { Icons } from "@/ui/atoms";
 export const Funds = ({ onHideFilters }) => {
   const toHuman = BalanceFormatter.toHuman;
   const { locale } = useRouter();
-  const { balances: allBalances, isLoading } = useFunds();
+  const { balances: allBalances, loading: isLoading } = useFunds();
   useEffect(() => {
     onHideFilters(false);
     return () => onHideFilters(true);
@@ -55,34 +55,34 @@ export const Funds = ({ onHideFilters }) => {
           </Table.Header>
           <Table.Body striped border="squared">
             {allBalances.map((item) => {
-              const chainName = getChainFromTicker(item.symbol);
+              const chainName = getChainFromTicker(item.asset.ticker);
               return (
-                <Table.Row key={item.assetId}>
+                <Table.Row key={item.asset.id}>
                   <Table.Cell>
                     <S.CellFlex>
                       <S.TokenIcon>
-                        <Icon isToken name={item.symbol} size="extraSmall" />
+                        <Icon
+                          isToken
+                          name={item.asset.ticker}
+                          size="extraSmall"
+                        />
                       </S.TokenIcon>
                       <S.Cell>
                         <span>
-                          {toCapitalize(item.name)}{" "}
-                          <small> {item.symbol}</small>
+                          {toCapitalize(item.asset.name)}{" "}
+                          <small> {item.asset.ticker}</small>
                         </span>
                       </S.Cell>
                     </S.CellFlex>
                   </Table.Cell>
                   <Table.Cell>
                     <S.Cell>
-                      <span>
-                        {toHuman(Number(item?.free_balance), 8, locale)}
-                      </span>
+                      <span>{toHuman(Number(item?.free), 8, locale)}</span>
                     </S.Cell>
                   </Table.Cell>
                   <Table.Cell>
                     <S.Cell>
-                      <span>
-                        {toHuman(Number(item?.reserved_balance), 8, locale)}
-                      </span>
+                      <span>{toHuman(Number(item?.reserved), 8, locale)}</span>
                     </S.Cell>
                   </Table.Cell>
                   <Table.Cell>
@@ -135,7 +135,7 @@ export const Funds = ({ onHideFilters }) => {
                         </TooltipContent>
                       </Tooltip>
 
-                      <Link href={`/transfer?token=${item.symbol}`}>
+                      <Link href={`/transfer?token=${item.asset.ticker}`}>
                         <S.TransferLink>
                           <S.Icon>
                             <Icons.Trading />
