@@ -159,7 +159,7 @@ export function Trading({ market: id }: Props) {
         isFullHeight
         isBlur
       >
-        <Markets onClose={() => setState(false)} />
+        <Markets onClose={() => setState(false)} market={id} />
       </Modal>
       <S.Container>
         <S.Wrapper>

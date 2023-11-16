@@ -72,6 +72,7 @@ export interface PublicTrade {
 }
 
 export type Ticker = {
+  market: string;
   open: number;
   close: number;
   high: number;

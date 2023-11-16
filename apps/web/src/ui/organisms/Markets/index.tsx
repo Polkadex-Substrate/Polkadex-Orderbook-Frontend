@@ -25,7 +25,13 @@ import * as S from "./styles";
 
 import { ArrowBottom } from "@/ui/atoms/Icons";
 
-export const Markets = ({ hasMargin = false, onClose }) => {
+type Props = {
+  hasMargin?: boolean;
+  onClose: () => void;
+  market: string;
+};
+
+export const Markets = ({ hasMargin = false, onClose, market }: Props) => {
   const {
     marketTokens,
     marketTickers,
@@ -38,7 +44,7 @@ export const Markets = ({ hasMargin = false, onClose }) => {
     fieldValue,
     handleShowFavourite,
     id,
-  } = useMarkets(onClose);
+  } = useMarkets(onClose, market);
 
   return (
     <S.Main hasMargin={hasMargin}>
@@ -180,8 +186,8 @@ const Content: FC<{
             key={token.id}
             id={token.id}
             pair={token.name}
-            tokenTicker={token.tokenTickerName}
-            vol={Decimal.format(Number(token.volume), token.quote_precision)}
+            tokenTicker={token.baseAsset.ticker}
+            vol={Decimal.format(Number(token.volume), token.quotePrecision)}
             price={formatNumber(
               Decimal.format(Number(token.last), ORDERBOOK_PRECISION, ",")
             )}

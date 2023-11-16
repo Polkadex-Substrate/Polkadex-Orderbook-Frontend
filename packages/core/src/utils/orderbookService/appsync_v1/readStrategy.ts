@@ -278,6 +278,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     });
     const tickerItem = tickersQueryResult?.data?.getMarketTickers?.items;
     return {
+      market,
       open: Number(tickerItem?.o) || 0,
       close: Number(tickerItem?.c) || 0,
       high: Number(tickerItem?.h) || 0,

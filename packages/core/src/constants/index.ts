@@ -13,6 +13,18 @@ export const POLKADEX_ASSET = {
   decimal: 12,
 };
 
+export const defaultTicker = {
+  market: "0-0",
+  open: 0,
+  close: 0,
+  high: 0,
+  low: 0,
+  baseVolume: 0,
+  quoteVolume: 0,
+  currentPrice: 0,
+  priceChangePercent24Hr: 0,
+};
+
 export const READ_ONLY_TOKEN = process.env.READ_ONLY_TOKEN || "READ_ONLY";
 
 export const LOCAL_STORAGE_ID = {

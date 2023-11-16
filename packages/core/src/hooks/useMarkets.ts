@@ -1,11 +1,12 @@
 import { ChangeEvent, useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import {
-  useMarketsProvider,
-  defaultTickers,
-  Market,
-} from "@orderbook/core/providers/public/marketsProvider";
+import { Market } from "@orderbook/core/utils/orderbookService";
+
+import { defaultTicker } from "../constants";
+
+import { useMarketsData } from "./useMarketsData";
+import { useTickers } from "./useTickers";
 
 export type InitialMarkets = {
   last: string | number;
@@ -15,7 +16,7 @@ export type InitialMarkets = {
   isFavourite?: boolean;
 } & Market;
 
-export function useMarkets(onClose: () => void) {
+export function useMarkets(onClose: () => void, market: string) {
   const [fieldValue, setFieldValue] = useState({
     searchFieldValue: "",
     marketsTabsSelected: "All",
@@ -24,11 +25,10 @@ export function useMarkets(onClose: () => void) {
 
   const profileState = useProfile();
   const router = useRouter();
-  const {
-    list: markets,
-    currentMarket,
-    tickers: allMarketTickers,
-  } = useMarketsProvider();
+
+  const { list: markets, currentMarket } = useMarketsData(market);
+  const { tickers: allMarketTickers } = useTickers(market);
+
   const favorites = profileState.userMarket.favoriteMarkets;
 
   /**
@@ -78,7 +78,7 @@ export function useMarkets(onClose: () => void) {
       const marketToSet = markets?.find((el) => el.name === e);
       if (marketToSet) {
         router.push(
-          `${marketToSet.base_ticker + marketToSet.quote_ticker}`,
+          `${marketToSet.baseAsset.ticker + marketToSet.quoteAsset.ticker}`,
           undefined,
           {
             shallow: true,
@@ -98,16 +98,16 @@ export function useMarkets(onClose: () => void) {
   const marketTokens = (): InitialMarkets[] => {
     const initialMarkets: InitialMarkets[] = [];
     const allTickets = markets.map((item) => {
-      const ticker = allMarketTickers.find((val) => val.m === item.m);
+      const ticker = allMarketTickers.find((val) => val.market === item.id);
       return {
         ...item,
-        last: (ticker || defaultTickers).close,
-        volume: (ticker || defaultTickers).volumeQuote24Hr,
+        last: (ticker || defaultTicker).close,
+        volume: (ticker || defaultTicker).quoteVolume,
         price_change_percent: (
-          ticker || defaultTickers
+          ticker || defaultTicker
         ).priceChangePercent24Hr?.toString(),
         price_change_percent_num: Number.parseFloat(
-          String((ticker || defaultTickers).priceChangePercent24Hr)
+          String((ticker || defaultTicker).priceChangePercent24Hr)
         ),
         isFavourite: favorites.includes(item.id),
       };
@@ -160,7 +160,7 @@ export function useMarkets(onClose: () => void) {
     marketTickers,
     fieldValue,
     currentTickerName: currentMarket?.name,
-    currentTickerImg: currentMarket?.tokenTickerName,
+    currentTickerImg: currentMarket?.baseAsset.name,
     id: currentMarket?.id,
   };
 }

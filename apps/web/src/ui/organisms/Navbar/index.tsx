@@ -2,14 +2,12 @@ import { useTranslation } from "next-i18next";
 import { NavbarItem, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
 import {
+  defaultTicker,
   useAssetsMetaData,
   useMarketsData,
   useRecentTrades,
+  useTickers,
 } from "@orderbook/core/index";
-import {
-  useMarketsProvider,
-  defaultTickers,
-} from "@orderbook/core/providers/public/marketsProvider";
 import { hasOnlyZeros } from "@orderbook/core/helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
@@ -25,9 +23,9 @@ export const Navbar = ({ onOpenMarkets, market }: Props) => {
     useRecentTrades(market);
   const currTrade = getCurrentTradePrice();
   const { selectGetAsset } = useAssetsMetaData();
-  const { currentTicker, tickerLoading } = useMarketsProvider();
+  const { currentTicker, tickerLoading } = useTickers(market);
   const { currentMarket: currMarket, loading: isMarketFetching } =
-    useMarketsData();
+    useMarketsData(market);
 
   const quoteAsset = currMarket
     ? selectGetAsset(currMarket.quoteAsset.id)
@@ -36,7 +34,7 @@ export const Navbar = ({ onOpenMarkets, market }: Props) => {
   const priceChangePerCent =
     (currentTicker?.priceChangePercent24Hr).toFixed(2) + "%";
   const isPriceChangeNegative = currentTicker?.priceChange24Hr < 0;
-  const volume = currentTicker?.volumeQuote24Hr;
+  const volume = currentTicker?.quoteVolume;
   const high = currentTicker?.high;
   const low = currentTicker?.low;
 
@@ -53,13 +51,13 @@ export const Navbar = ({ onOpenMarkets, market }: Props) => {
     tickerLoading ||
     isMarketFetching ||
     !currMarket ||
-    currentTicker.m === defaultTickers.m;
+    currentTicker.market === defaultTicker.market;
 
   const isLoading =
     tickerLoading ||
     isMarketFetching ||
     !currMarket ||
-    currentTicker.m === defaultTickers.m;
+    currentTicker.market === defaultTicker.market;
 
   return (
     <S.Wrapper>
