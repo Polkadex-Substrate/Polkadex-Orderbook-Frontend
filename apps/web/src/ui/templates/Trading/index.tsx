@@ -59,6 +59,7 @@ export function Trading({ market: id }: Props) {
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
   const { currentMarket: market } = useMarketsData(id);
+  const { currentTradePrice: currentTrade } = useRecentTrades(market?.id ?? "");
 
   const {
     authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
@@ -66,7 +67,6 @@ export function Trading({ market: id }: Props) {
     onUserChangeInitBanner,
   } = useProfile();
 
-  const currentTrade = useRecentTrades(id).getCurrentTradePrice();
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;

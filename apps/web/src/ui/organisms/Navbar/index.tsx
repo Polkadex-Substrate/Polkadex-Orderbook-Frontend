@@ -19,9 +19,8 @@ type Props = {
 };
 
 export const Navbar = ({ onOpenMarkets, market }: Props) => {
-  const { getCurrentTradePrice, loading: isRecentTradeFetching } =
+  const { currentTradePrice, loading: isRecentTradeFetching } =
     useRecentTrades(market);
-  const currTrade = getCurrentTradePrice();
   const { selectGetAsset } = useAssetsMetaData();
   const { currentTicker, tickerLoading } = useTickers(market);
   const { currentMarket: currMarket, loading: isMarketFetching } =
@@ -41,7 +40,9 @@ export const Navbar = ({ onOpenMarkets, market }: Props) => {
   const quotePrecision = currMarket?.quotePrecision || 0;
   const formattedVolume = Decimal.format(Number(volume), quotePrecision, ",");
 
-  const price = hasOnlyZeros(currPrice.toString()) ? currTrade : currPrice;
+  const price = hasOnlyZeros(currPrice.toString())
+    ? currentTradePrice
+    : currPrice;
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string, args = {}) => translation(`navbar.${key}`, args);
