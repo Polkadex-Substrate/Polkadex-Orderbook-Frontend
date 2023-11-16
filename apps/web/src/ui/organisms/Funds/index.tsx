@@ -10,11 +10,7 @@ import {
   TooltipContent,
   TooltipHeader,
 } from "@polkadex/orderbook-ui/molecules";
-import {
-  toCapitalize,
-  filterBlockedAssets,
-  getChainFromTicker,
-} from "@orderbook/core/helpers";
+import { toCapitalize, getChainFromTicker } from "@orderbook/core/helpers";
 import { BalanceFormatter } from "@orderbook/format";
 import { useRouter } from "next/router";
 
@@ -27,8 +23,7 @@ import { Icons } from "@/ui/atoms";
 export const Funds = ({ onHideFilters }) => {
   const toHuman = BalanceFormatter.toHuman;
   const { locale } = useRouter();
-  const { balances, isLoading } = useFunds();
-  const allBalances = filterBlockedAssets(balances);
+  const { balances: allBalances, isLoading } = useFunds();
   useEffect(() => {
     onHideFilters(false);
     return () => onHideFilters(true);

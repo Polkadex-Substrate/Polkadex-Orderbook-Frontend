@@ -45,8 +45,8 @@ export const TransferFormDeposit = ({
   const amountRef = useRef<HTMLInputElement | null>(null);
 
   const isPolkadexToken = useMemo(
-    () => isAssetPDEX(selectedAsset?.assetId),
-    [selectedAsset?.assetId]
+    () => isAssetPDEX(selectedAsset?.id),
+    [selectedAsset?.id]
   );
 
   const existentialBalance = useMemo(
@@ -98,7 +98,7 @@ export const TransferFormDeposit = ({
 
         const asset: T.GenericAsset = isPolkadexToken
           ? { polkadex: null }
-          : { asset: selectedAsset?.assetId || null };
+          : { asset: selectedAsset?.id || null };
 
         // TODO: Fix types or Handle Error
         if (!address || !fundingWallet) return;
@@ -144,8 +144,8 @@ export const TransferFormDeposit = ({
         </S.Wallets>
         <S.Form>
           <TokenCard
-            tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
-            tokenTicker={selectedAsset?.symbol ?? ""}
+            tokenIcon={(selectedAsset?.ticker as keyof typeof Tokens) ?? ""}
+            tokenTicker={selectedAsset?.ticker ?? ""}
             availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
             onAction={() => onOpenAssets(resetForm)}
             loading={balancesLoading}

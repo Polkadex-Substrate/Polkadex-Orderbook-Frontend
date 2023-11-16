@@ -14,14 +14,14 @@ export const columns = (headers: string[]) => [
   columnHelper.accessor((row) => row, {
     id: "token",
     cell: (e) => {
-      const TokenComponent = Tokens[e.getValue().symbol] || Tokens.UNKN;
+      const TokenComponent = Tokens[e.getValue().ticker] || Tokens.UNKN;
       return (
         <S.Token>
           <div>
             <TokenComponent />
           </div>
           <div>
-            <span>{e.getValue().symbol}</span>
+            <span>{e.getValue().ticker}</span>
             <p> {e.getValue().name}</p>
           </div>
         </S.Token>
@@ -68,7 +68,7 @@ export const columns = (headers: string[]) => [
         withdraw: classNames({ withdrawButton: e.row.index === 0 }),
         transfer: classNames({ transferButton: e.row.index === 0 }),
       };
-      const chainName = getChainFromTicker(e.getValue().symbol);
+      const chainName = getChainFromTicker(e.getValue().ticker);
 
       return (
         <S.Actions>
@@ -120,7 +120,7 @@ export const columns = (headers: string[]) => [
           <Link
             href={{
               pathname: "/transfer",
-              query: { token: e.getValue().symbol },
+              query: { token: e.getValue().ticker },
             }}
             className={tdClassName.transfer}
           >

@@ -8,7 +8,7 @@
 
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { filterBlockedAssets } from "@orderbook/core/helpers";
-import { useAssetsMetaData } from "@orderbook/core/src/hooks/useAssetsMetaData";
+import { useAssetsMetaData } from "@orderbook/core";
 import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";

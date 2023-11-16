@@ -93,9 +93,9 @@ export const TransferFormWithdraw = ({
     onSubmit: async ({ amount }) => {
       if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
       else {
-        const asset = isAssetPDEX(selectedAsset?.assetId)
+        const asset = isAssetPDEX(selectedAsset?.id)
           ? "PDEX"
-          : selectedAsset?.assetId;
+          : selectedAsset?.id;
         if (!asset) return;
         // TODO: Handle Error...
         try {
@@ -154,8 +154,8 @@ export const TransferFormWithdraw = ({
           </S.Wallets>
           <S.Form>
             <TokenCard
-              tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
-              tokenTicker={selectedAsset?.symbol ?? ""}
+              tokenIcon={(selectedAsset?.ticker as keyof typeof Tokens) ?? ""}
+              tokenTicker={selectedAsset?.ticker ?? ""}
               availableAmount={selectedAsset?.free_balance ?? "0.00"}
               onAction={() => onOpenAssets(resetForm)}
               loading={balancesLoading}
