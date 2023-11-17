@@ -192,7 +192,7 @@ export function Trading({ market: id }: Props) {
                         )}
                       </S.GraphEpmty>
                       <S.WrapperRight>
-                        <MarketOrder />
+                        <MarketOrder market={id} />
                         <RecentTrades market={id} />
                       </S.WrapperRight>
                     </S.CenterWrapper>

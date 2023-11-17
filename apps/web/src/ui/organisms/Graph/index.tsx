@@ -28,7 +28,7 @@ export const Graph = ({ market }: Props) => {
             <TradingView market={market} />
           </S.ChartWrapper>
         </S.WrapperGraph>
-        <OrderBook />
+        <OrderBook market={market} />
       </S.Wrapper>
     </>
   );

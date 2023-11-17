@@ -16,7 +16,11 @@ import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 import * as T from "./types";
 import * as S from "./styles";
 
-export const OrderBook = () => {
+type Props = {
+  market: string;
+};
+
+export const OrderBook = ({ market }: Props) => {
   const {
     isPriceUp,
     hasMarket,
@@ -30,7 +34,7 @@ export const OrderBook = () => {
     handleAction,
     loading,
     qtyPrecision,
-  } = useOrderbook();
+  } = useOrderbook(market);
 
   return (
     <S.Wrapper>
@@ -87,6 +91,7 @@ export const OrderBook = () => {
         pricePrecison={sizeState.length}
         qtyPrecision={qtyPrecision}
         loading={loading}
+        market={market}
       />
     </S.Wrapper>
   );
@@ -102,6 +107,7 @@ export const OrderbookTable = ({
   lightMode,
   loading,
   qtyPrecision = MAX_DIGITS_AFTER_DECIMAL,
+  market,
 }: T.Props) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -117,6 +123,7 @@ export const OrderbookTable = ({
     isSell,
     orders: [...orders],
     contentRef: contentRef as MutableRefObject<HTMLDivElement>,
+    market,
   });
 
   const { t: translation } = useTranslation("organisms");

@@ -7,4 +7,5 @@ export type Props = {
   pricePrecision?: number;
   qtyPrecision?: number;
   loading?: boolean;
+  market: string;
 };

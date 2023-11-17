@@ -2,24 +2,25 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { FormikErrors, FormikHelpers } from "formik";
 import { useTranslation } from "next-i18next";
 import { Decimal } from "@orderbook/core/utils";
-import { useOrderBook } from "@orderbook/core/providers/public/orderBook";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
   useTradeWallet,
   selectTradeAccount,
 } from "@orderbook/core/providers/user/tradeWallet";
 import { useOrders } from "@orderbook/core/providers/user/orders";
-import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
 import {
   cleanPositiveFloatInput,
   decimalPlaces,
   precisionRegExp,
   getAbsoluteNumber,
 } from "@orderbook/core/helpers";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import BigNumber from "bignumber.js";
-
-import { useFunds } from "./useFunds";
+import {
+  useFunds,
+  useMarketsData,
+  useRecentTrades,
+  useOrderbookData,
+} from "@orderbook/core";
 
 type FormValues = {
   priceSell: string;
@@ -37,7 +38,8 @@ export function usePlaceOrder(
   formValues: FormValues,
   setFormValues: FormikHelpers<FormValues>["setValues"],
   errors: FormikErrors<FormValues>,
-  setFormErrors: FormikHelpers<FormValues>["setErrors"]
+  setFormErrors: FormikHelpers<FormValues>["setErrors"],
+  market: string
 ) {
   const { t: translation } = useTranslation("molecules");
   const t = useCallback(
@@ -48,10 +50,9 @@ export function usePlaceOrder(
 
   const {
     depth: { asks, bids },
-  } = useOrderBook();
+  } = useOrderbookData(market);
 
-  const { getCurrentTradePrice } = useRecentTradesProvider();
-  const lastPriceValue = getCurrentTradePrice();
+  const { currentTradePrice: lastPriceValue } = useRecentTrades(market);
 
   const { allBrowserAccounts } = useTradeWallet();
 
@@ -69,7 +70,7 @@ export function usePlaceOrder(
     amount: selectedAmountFromOrderbookTable,
   } = useOrders();
 
-  const { currentMarket, loading: isMarketFetching } = useMarketsProvider();
+  const { currentMarket, loading: isMarketFetching } = useMarketsData(market);
 
   const { getFreeProxyBalance, loading: isBalanceFetching } = useFunds();
 
@@ -115,11 +116,11 @@ export function usePlaceOrder(
 
   const [estimatedTotal, setEstimatedTotal] = useState({ buy: 0, sell: 0 });
   const [baseAssetId, quoteAssetId] = currentMarket
-    ? [currentMarket?.baseAssetId, currentMarket?.quoteAssetId]
+    ? [currentMarket?.baseAsset.id, currentMarket?.quoteAsset.id]
     : [-1, -1];
 
-  const basePrecision = currentMarket?.base_precision || 0;
-  const quotePrecision = currentMarket?.quote_precision || 0;
+  const basePrecision = currentMarket?.basePrecision || 0;
+  const quotePrecision = currentMarket?.quotePrecision || 0;
   const pricePrecision = currentMarket
     ? decimalPlaces(currentMarket.price_tick_size)
     : 0;
@@ -141,8 +142,8 @@ export function usePlaceOrder(
   const availableBaseAmount = getFreeProxyBalance(baseAssetId?.toString());
   const availableQuoteAmount = getFreeProxyBalance(quoteAssetId?.toString());
 
-  const quoteTicker = currentMarket?.quote_ticker || "";
-  const baseTicker = currentMarket?.base_ticker || "";
+  const quoteTicker = currentMarket?.quoteAsset?.ticker || "";
+  const baseTicker = currentMarket?.baseAsset?.ticker || "";
 
   // Get estimated total amount
   const getEstimatedTotal = useCallback(
@@ -349,7 +350,7 @@ export function usePlaceOrder(
     }
     onPlaceOrders({
       order_type: isLimit ? "LIMIT" : "MARKET",
-      symbol: [currentMarket.baseAssetId, currentMarket.quoteAssetId],
+      symbol: [currentMarket?.baseAsset?.id, currentMarket?.quoteAsset?.id],
       side: isSell ? "Sell" : "Buy",
       price: isLimit ? Number(formPrice) : 0,
       market: currentMarket.id,
@@ -372,32 +373,32 @@ export function usePlaceOrder(
     const total = isSell ? formValues.totalSell : formValues.totalBuy;
     const absoluteTotal = getAbsoluteNumber(total);
 
-    if (isLimit && +formPrice < Number(currentMarket?.min_price)) {
+    if (isLimit && +formPrice < Number(currentMarket?.minPrice)) {
       setFormErrors({
         ...errors,
         [priceType]: t("minMarketPrice", {
-          minMarketPrice: currentMarket?.min_price,
+          minMarketPrice: currentMarket?.minPrice,
         }),
       });
-    } else if (isLimit && +formPrice > Number(currentMarket?.max_price)) {
+    } else if (isLimit && +formPrice > Number(currentMarket?.maxPrice)) {
       setFormErrors({
         ...errors,
         [priceType]: t("maxMarketPrice", {
-          maxMarketPrice: currentMarket?.max_price,
+          maxMarketPrice: currentMarket?.maxPrice,
         }),
       });
-    } else if (+amount < Number(currentMarket?.min_amount)) {
+    } else if (+amount < Number(currentMarket?.minQty)) {
       setFormErrors({
         ...errors,
         [amountType]: t("minMarketAmount", {
-          minMarketAmount: currentMarket?.min_amount,
+          minMarketAmount: currentMarket?.minQty,
         }),
       });
-    } else if (+amount > Number(currentMarket?.max_amount)) {
+    } else if (+amount > Number(currentMarket?.maxQty)) {
       setFormErrors({
         ...errors,
         [amountType]: t("maxMarketAmount", {
-          maxMarketAmount: currentMarket?.max_amount,
+          maxMarketAmount: currentMarket?.maxQty,
         }),
       });
     } else if (
@@ -412,10 +413,10 @@ export function usePlaceOrder(
   }, [
     availableBaseAmount,
     availableQuoteAmount,
-    currentMarket?.max_amount,
-    currentMarket?.max_price,
-    currentMarket?.min_amount,
-    currentMarket?.min_price,
+    currentMarket?.maxQty,
+    currentMarket?.maxPrice,
+    currentMarket?.minQty,
+    currentMarket?.minPrice,
     formValues,
     isLimit,
     isSell,

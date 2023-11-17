@@ -16,6 +16,7 @@ export const OrderBookTable = ({
   pricePrecison,
   qtyPrecision,
   loading,
+  market,
 }) => {
   return (
     <S.Wrapper filterBy={filterBy}>
@@ -26,6 +27,7 @@ export const OrderBookTable = ({
         isSell
         lightMode={lightMode}
         loading={loading}
+        market={market}
       />
 
       <OrderbookPricing
@@ -42,6 +44,7 @@ export const OrderBookTable = ({
         orders={bids}
         lightMode={lightMode}
         loading={loading}
+        market={market}
       />
     </S.Wrapper>
   );

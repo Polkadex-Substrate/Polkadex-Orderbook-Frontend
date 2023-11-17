@@ -24,3 +24,4 @@ export * from "./useRecentTrades";
 export * from "./useAssetsMetaData";
 export * from "./useMarketsData";
 export * from "./useTickers";
+export * from "./useOrderbookData";

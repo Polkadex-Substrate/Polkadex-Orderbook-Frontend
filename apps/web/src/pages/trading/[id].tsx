@@ -23,9 +23,9 @@ const Trading = () => {
 
   return (
     //   <OrderBookProvider>
-    //     <OrdersProvider>
-    <TradingTemplate market={id as string} />
-    //     </OrdersProvider>
+    <OrdersProvider>
+      <TradingTemplate market={id as string} />
+    </OrdersProvider>
     //   </OrderBookProvider>
   );
 };

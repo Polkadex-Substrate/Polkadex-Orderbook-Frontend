@@ -5,20 +5,25 @@ import {
   calcMaxVolume,
 } from "@orderbook/core/helpers";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
-import {
-  OrderBookState,
-  useOrderBook,
-} from "@orderbook/core/providers/public/orderBook";
+import { OrderBookState } from "@orderbook/core/providers/public/orderBook";
 import { useOrders } from "@orderbook/core/providers/user/orders";
+
+import { useOrderbookData } from "./useOrderbookData";
 
 export type Props = {
   isSell?: boolean;
   orders: OrderBookState["depth"]["bids"];
   contentRef?: MutableRefObject<HTMLDivElement> | null;
+  market: string;
 };
 
-export function useOrderbookTable({ orders, isSell, contentRef }: Props) {
-  const orderBookState = useOrderBook();
+export function useOrderbookTable({
+  orders,
+  isSell,
+  contentRef,
+  market,
+}: Props) {
+  const orderBookState = useOrderbookData(market);
   const { currentPrice, onSetCurrentPrice, onSetCurrentAmount } = useOrders();
 
   const bids = orderBookState.depth.bids;

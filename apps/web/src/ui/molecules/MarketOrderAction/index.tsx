@@ -36,6 +36,7 @@ type Props = {
   orderType: "Limit" | "Market";
   isLimit: boolean;
   formik: ReturnType<typeof useFormik<FormValues>>;
+  market: string;
 };
 
 export const MarketOrderAction = ({
@@ -43,6 +44,7 @@ export const MarketOrderAction = ({
   orderType,
   isLimit,
   formik,
+  market,
 }: Props) => {
   const { values, isValid, dirty, setValues, setErrors, errors } = formik;
 
@@ -74,7 +76,8 @@ export const MarketOrderAction = ({
     values,
     setValues,
     errors,
-    setErrors
+    setErrors,
+    market
   );
   const { t: translation } = useTranslation("molecules");
   const t = (key: string) => translation(`marketOrderAction.${key}`);

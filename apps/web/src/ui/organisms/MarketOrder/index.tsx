@@ -22,7 +22,11 @@ type FormValues = {
   totalSell: string;
 };
 
-export const MarketOrder = () => {
+type Props = {
+  market: string;
+};
+
+export const MarketOrder = ({ market }: Props) => {
   const [isLimit, setIsLimit] = useState(true);
   const handleChangeType = (value: boolean) => setIsLimit(value);
   const orderType = isLimit ? "Limit" : "Market";
@@ -90,6 +94,7 @@ export const MarketOrder = () => {
                 isLimit={isLimit}
                 orderType={orderType}
                 formik={formik}
+                market={market}
               />
             </TabContent>
             <TabContent>
@@ -98,6 +103,7 @@ export const MarketOrder = () => {
                 isLimit={isLimit}
                 orderType={orderType}
                 formik={formik}
+                market={market}
               />
             </TabContent>
           </S.Content>

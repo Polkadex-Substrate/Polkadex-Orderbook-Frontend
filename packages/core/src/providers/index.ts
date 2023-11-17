@@ -1,4 +1,3 @@
-export { AssetsProvider } from "./public/assetsProvider";
 export { KlineProvider } from "./public/klineProvider";
 export { MarketsProvider } from "./public/marketsProvider";
 export { NativeApiProvider } from "./public/nativeApi";

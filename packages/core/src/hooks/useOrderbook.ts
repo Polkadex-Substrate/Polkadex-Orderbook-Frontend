@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
-import { useOrderBook } from "@orderbook/core/providers/public/orderBook";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
+
+import { useOrderbookData } from "./useOrderbookData";
 
 const initialState = [
   { size: 0.1, length: 1 },
@@ -14,12 +15,12 @@ const initialState = [
   { size: 0.000001, length: 6 },
 ];
 
-export function useOrderbook() {
+export function useOrderbook(defaultMarket: string) {
   const [isPriceUp, setIsPriceUp] = useState(true);
   const [prevTradePrice, setPrevTradePrice] = useState(0);
   const [filterState, setFilterState] = useState("Order");
   const [sizeState, setSizeState] = useState(initialState[1]);
-  const orderBookState = useOrderBook();
+  const orderBookState = useOrderbookData(defaultMarket);
 
   const handleChange = (select: string) => setFilterState(select);
   const handleAction = (select: { size: number; length: number }) =>
