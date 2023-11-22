@@ -11,15 +11,15 @@ import * as T from "./types";
 const CheckboxCell = forwardRef(
   (
     { cell, state }: PropsWithChildren<T.CellForwardProps>,
-    _: Ref<HTMLElement>,
+    _: Ref<HTMLElement>
   ) => {
     const componentRef = useRef(null);
 
     const { gridCellProps } = useTableCell({ node: cell }, state, componentRef);
     const { isFocusVisible, focusProps } = useFocusRing();
     const { checkboxProps } = useTableSelectionCheckbox(
-      { key: cell.parentKey as Key },
-      state,
+      { key: cell.parentKey as string },
+      state
     );
     return (
       <S.Cell
@@ -30,7 +30,7 @@ const CheckboxCell = forwardRef(
         <Checkbox {...checkboxProps} />
       </S.Cell>
     );
-  },
+  }
 );
 
 CheckboxCell.displayName = "CheckboxCell";

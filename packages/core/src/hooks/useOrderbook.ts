@@ -50,8 +50,8 @@ export function useOrderbook(defaultMarket: string) {
     currentPrice > lastPrice
       ? true
       : lastPrice === prevTradePrice
-      ? isPriceUp
-      : false;
+        ? isPriceUp
+        : false;
 
   useEffect(() => {
     setIsPriceUp(isPriceUpValue);
