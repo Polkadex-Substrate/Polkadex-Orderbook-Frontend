@@ -22,13 +22,18 @@ export function useMarketsData(defaultMarket?: string) {
 
   const currentMarket = useMemo(() => {
     if (markets?.length && defaultMarket) {
-      const findMarket = markets?.find((v) =>
+      const findMarketByName = markets?.find((v) =>
         v.name
           .replace(/[^a-zA-Z0-9]/g, "")
           .toLowerCase()
           .includes(defaultMarket.toLowerCase())
       );
-      const defaultMarketSelected = findMarket ?? markets[0];
+
+      const findMarketById = markets?.find((v) => v.id === defaultMarket);
+
+      const defaultMarketSelected =
+        findMarketByName || findMarketById || markets[0];
+
       setToStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET, defaultMarketSelected.id);
 
       return defaultMarketSelected;

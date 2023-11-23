@@ -4,11 +4,9 @@ import {
   accumulateVolume,
   calcMaxVolume,
 } from "@orderbook/core/helpers";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { OrderBookState } from "@orderbook/core/providers/public/orderBook";
 import { useOrders } from "@orderbook/core/providers/user/orders";
-
-import { useOrderbookData } from "./useOrderbookData";
+import { useOrderbookData, useMarketsData } from "@orderbook/core/hooks";
 
 export type Props = {
   isSell?: boolean;
@@ -28,7 +26,7 @@ export function useOrderbookTable({
 
   const bids = orderBookState.depth.bids;
   const asks = orderBookState.depth.asks;
-  const { currentMarket } = useMarketsProvider();
+  const { currentMarket } = useMarketsData(market);
 
   /**
    * @description -Get Volume of the orders
@@ -92,14 +90,14 @@ export function useOrderbookTable({
   }, [isSell, contentRef, orders]);
 
   return {
-    quoteUnit: currentMarket?.quote_ticker,
-    baseUnit: currentMarket?.base_ticker,
+    quoteUnit: currentMarket?.quoteAsset.ticker,
+    baseUnit: currentMarket?.baseAsset.ticker,
     valumeData,
     changeMarketPrice,
     changeMarketAmount,
     changeMarketAmountSumClick,
-    priceFixed: currentMarket?.quote_precision || 0,
-    amountFixed: currentMarket?.base_precision || 0,
+    priceFixed: currentMarket?.quotePrecision || 0,
+    amountFixed: currentMarket?.basePrecision || 0,
     total: cumulativeVolume,
   };
 }

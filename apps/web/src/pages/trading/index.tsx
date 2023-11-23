@@ -15,35 +15,21 @@ function Home() {
   );
   const { loading: assetLoading } = useAssetsMetaData();
 
-  const {
-    currentMarket,
-    list: allMarkets,
-    loading: marketLoading,
-  } = useMarketsData();
-
-  const findMarket = allMarkets?.find(
-    (market) => market.id === persistedMarket
+  const { currentMarket, loading: marketLoading } = useMarketsData(
+    persistedMarket as string
   );
 
   useEffect(() => {
     if (!marketLoading && !assetLoading) {
-      if (findMarket) {
+      if (currentMarket)
         router.push(
           `/trading/${
-            findMarket.baseAsset.ticker + findMarket.quoteAsset.ticker
+            currentMarket.baseAsset.ticker + currentMarket.quoteAsset.ticker
           }`
         );
-      } else {
-        if (currentMarket)
-          router.push(
-            `/trading/${
-              currentMarket.baseAsset.ticker + currentMarket.quoteAsset.ticker
-            }`
-          );
-        else router.push(`/trading/${defaultConfig.landingPageMarket}`);
-      }
+      else router.push(`/trading/${defaultConfig.landingPageMarket}`);
     }
-  }, [assetLoading, currentMarket, findMarket, marketLoading, router]);
+  }, [assetLoading, currentMarket, marketLoading, router]);
 
   // Note: This could be used as masking page
   return <LoadingScreen />; // This is a temporary fix. (Showing loading indicator)

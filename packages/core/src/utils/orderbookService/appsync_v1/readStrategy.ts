@@ -236,7 +236,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     const queryResult = await fetchFullListFromAppSync<SetPriceLevel | null>(
       QUERIES.getOrderbook,
       {
-        m: market,
+        market,
       },
       "getOrderbook"
     );

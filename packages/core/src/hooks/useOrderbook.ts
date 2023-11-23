@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
-
-import { useOrderbookData } from "./useOrderbookData";
+import { useOrderbookData, useMarketsData } from "@orderbook/core/hooks";
 
 const initialState = [
   { size: 0.1, length: 1 },
@@ -30,7 +28,7 @@ export function useOrderbook(defaultMarket: string) {
   const asks = orderBookState.depth.asks;
   const loading = orderBookState.depth.loading;
 
-  const { currentMarket } = useMarketsProvider();
+  const { currentMarket } = useMarketsData(defaultMarket);
   const pricePrecision = currentMarket
     ? decimalPlaces(currentMarket.price_tick_size)
     : MAX_DIGITS_AFTER_DECIMAL;

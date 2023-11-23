@@ -10,7 +10,7 @@ import { decimalPlaces } from "../helpers";
 import { useMarketsData } from "./useMarketsData";
 
 export function useTickers(defaultMarket?: string) {
-  const { list: markets, currentMarket } = useMarketsData(defaultMarket);
+  const { list: markets } = useMarketsData(defaultMarket);
   const { onHandleError } = useSettingsProvider();
 
   const shouldFetchTickers = Boolean(markets && markets?.length > 0);
@@ -54,7 +54,7 @@ export function useTickers(defaultMarket?: string) {
 
   const currentTicker = useMemo(() => {
     const currentTickerSelected = tickers?.find(
-      (x) => x.market === currentMarket?.id
+      (x) => x.market === defaultMarket
     );
     return (
       currentTickerSelected ?? {
@@ -63,7 +63,7 @@ export function useTickers(defaultMarket?: string) {
         priceChangePercent24Hr: 0,
       }
     );
-  }, [currentMarket?.id, tickers]);
+  }, [defaultMarket, tickers]);
 
   return {
     tickers: tickers ?? [],

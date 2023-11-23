@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { OrdersProvider, OrderBookProvider } from "@orderbook/core/providers";
 import { GetServerSideProps } from "next";
+import { useMarketsData } from "@orderbook/core/hooks";
 
 import LoadingScreen from "@/ui/molecules/LoadingScreen";
 import { getServerSidePropsWithTranslations } from "@/utils";
@@ -21,10 +22,12 @@ const Trading = () => {
   const router = useRouter();
   const { id } = router?.query;
 
+  const { currentMarket } = useMarketsData(id as string);
+
   return (
     //   <OrderBookProvider>
     <OrdersProvider>
-      <TradingTemplate market={id as string} />
+      <TradingTemplate market={currentMarket?.id as string} />
     </OrdersProvider>
     //   </OrderBookProvider>
   );
