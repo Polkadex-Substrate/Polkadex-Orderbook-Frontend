@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
-import { useAssetsMetaData, useMarketsData } from "@orderbook/core";
+import { useAssetsMetaData, useMarketsData } from "@orderbook/core/hooks";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 
 function Home() {
@@ -13,14 +13,13 @@ function Home() {
       window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_MARKET),
     []
   );
+  const { loading: assetLoading } = useAssetsMetaData();
 
   const {
     currentMarket,
     list: allMarkets,
     loading: marketLoading,
   } = useMarketsData();
-
-  const { loading: assetLoading } = useAssetsMetaData();
 
   const findMarket = allMarkets?.find(
     (market) => market.id === persistedMarket
