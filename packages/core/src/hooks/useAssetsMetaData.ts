@@ -24,6 +24,7 @@ export function useAssetsMetaData() {
   return {
     list: data ?? [],
     loading: !isReady,
+    success: isReady,
     selectGetAsset,
   };
 }
