@@ -1,26 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import {
-  Asset,
-  appsyncOrderbookService,
-} from "@orderbook/core/utils/orderbookService";
+import { Asset } from "@orderbook/core/utils/orderbookService";
 
-import { POLKADEX_ASSET, QUERY_KEYS } from "../constants";
-import { useSettingsProvider } from "../providers/public/settings";
+import { POLKADEX_ASSET } from "../constants";
 import { isAssetPDEX } from "../helpers";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
 export function useAssetsMetaData() {
-  const { onHandleError } = useSettingsProvider();
-
-  const { isLoading, isFetching, isSuccess, data } = useQuery({
-    queryKey: QUERY_KEYS.assets(),
-    queryFn: () => appsyncOrderbookService.query.getAssets(),
-    onError: (error) => {
-      const errorMessage =
-        error instanceof Error ? error.message : (error as string);
-      onHandleError(errorMessage);
-    },
-    initialData: [],
-  });
+  const { assets: data, isReady } = useOrderbookService();
 
   const selectGetAsset = (
     assetId: string | number | Record<string, string>
@@ -38,8 +23,7 @@ export function useAssetsMetaData() {
 
   return {
     list: data ?? [],
-    loading: isLoading || isFetching,
-    success: isSuccess,
+    loading: !isReady,
     selectGetAsset,
   };
 }
