@@ -4,6 +4,8 @@ import { OrderbookServiceProviderProps, OrderbookServiceState } from "./types";
 
 export const initialState: OrderbookServiceState = {
   isReady: false,
+  markets: [],
+  assets: [],
 };
 export const Context = createContext<OrderbookServiceState>({
   ...initialState,

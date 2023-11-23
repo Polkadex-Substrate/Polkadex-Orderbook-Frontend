@@ -1,9 +1,15 @@
 import { PropsWithChildren } from "react";
-import { OrderbookService } from "@orderbook/core/utils/orderbookService";
+import {
+  OrderbookService,
+  Market,
+  Asset,
+} from "@orderbook/core/utils/orderbookService";
 
 export type OrderbookServiceState = {
   isReady: boolean;
   service?: OrderbookService;
+  markets: Market[];
+  assets: Asset[];
 };
 
 export type OrderbookServiceContextProps = OrderbookServiceState & {

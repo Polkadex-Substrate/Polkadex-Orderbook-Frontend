@@ -1,24 +1,12 @@
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { setToStorage } from "@orderbook/core/helpers";
 import { defaultConfig } from "@orderbook/core/config";
 
-import { LOCAL_STORAGE_ID, QUERY_KEYS } from "../constants";
-import { useSettingsProvider } from "../providers/public/settings";
-import { appsyncOrderbookService, Market } from "../utils/orderbookService";
+import { LOCAL_STORAGE_ID } from "../constants";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
 export function useMarketsData(defaultMarket?: string) {
-  const { onHandleError } = useSettingsProvider();
-
-  const { data, isLoading: isMarketsLoading } = useQuery<Market[]>({
-    queryKey: QUERY_KEYS.markets(),
-    queryFn: async () => await appsyncOrderbookService.query.getMarkets(),
-    onError: (error) => {
-      const errorMessage =
-        error instanceof Error ? error.message : (error as string);
-      onHandleError(errorMessage);
-    },
-  });
+  const { markets: data, isReady } = useOrderbookService();
 
   const markets = useMemo(() => {
     return data?.filter(
@@ -48,8 +36,8 @@ export function useMarketsData(defaultMarket?: string) {
   }, [defaultMarket, markets]);
 
   return {
-    list: markets ?? [],
-    loading: isMarketsLoading,
+    list: markets,
+    loading: !isReady,
     currentMarket,
   };
 }
