@@ -2,14 +2,14 @@ import { useTranslation } from "next-i18next";
 import { NavbarItem, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
 import {
-  defaultTicker,
   useAssetsMetaData,
   useMarketsData,
   useRecentTrades,
   useTickers,
-} from "@orderbook/core/index";
+} from "@orderbook/core/hooks";
 import { hasOnlyZeros } from "@orderbook/core/helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
+import { defaultTicker } from "@orderbook/core/constants";
 
 import * as S from "./styles";
 
