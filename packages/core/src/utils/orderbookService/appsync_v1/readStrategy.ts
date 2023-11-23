@@ -146,43 +146,41 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     >({
       query: QUERIES.getAllMarkets,
     });
-    const markets = marketsQueryResult?.data?.getAllMarkets?.items?.map(
-      (item): Market => {
-        const market = item?.market || "";
-        const [baseAssetId, quoteAssetId] = market.split("-");
-        const baseAsset = assetList.find((x) => x.id === baseAssetId);
-        if (!baseAsset) {
-          throw new Error(
-            `[${this.constructor.name}:getMarkets] cannot find base asset`
-          );
-        }
-        const quoteAsset = assetList.find((x) => x.id === quoteAssetId);
-        if (!quoteAsset) {
-          throw new Error(
-            `[${this.constructor.name}:getMarkets] cannot find quote asset`
-          );
-        }
-
-        return {
-          id: market || "",
-          name: `${baseAsset.ticker}/${quoteAsset.ticker}`,
-          baseAsset,
-          quoteAsset,
-          minQty: Number(item?.min_order_qty) || 0,
-          minPrice: Number(item?.min_order_price) || 0,
-          maxPrice: Number(item?.max_order_price) || 0,
-          maxQty: Number(item?.max_order_qty) || 0,
-          basePrecision: Number(item?.base_asset_precision) || 0,
-          quotePrecision: Number(item?.quote_asset_precision) || 0,
-          maxVolume:
-            Number(item?.max_order_price) * Number(item?.max_order_qty),
-          minVolume:
-            Number(item?.min_order_price) * Number(item?.min_order_qty),
-          price_tick_size: Number(item?.price_tick_size),
-          qty_step_size: Number(item?.qty_step_size),
-        };
+    const markets: Market[] = [];
+    marketsQueryResult?.data?.getAllMarkets?.items?.forEach((item) => {
+      const market = item?.market || "";
+      const [baseAssetId, quoteAssetId] = market.split("-");
+      const baseAsset = assetList.find((x) => x.id === baseAssetId);
+      if (!baseAsset) {
+        console.error(
+          `[${this.constructor.name}:getMarkets] cannot find base asset ${baseAssetId}`
+        );
       }
-    );
+      const quoteAsset = assetList.find((x) => x.id === quoteAssetId);
+      if (!quoteAsset) {
+        console.error(
+          `[${this.constructor.name}:getMarkets] cannot find quote asset ${quoteAssetId}`
+        );
+        return;
+      }
+      if (!quoteAsset || !baseAsset) return;
+      markets.push({
+        id: market || "",
+        name: `${baseAsset.ticker}/${quoteAsset.ticker}`,
+        baseAsset,
+        quoteAsset,
+        minQty: Number(item?.min_order_qty) || 0,
+        minPrice: Number(item?.min_order_price) || 0,
+        maxPrice: Number(item?.max_order_price) || 0,
+        maxQty: Number(item?.max_order_qty) || 0,
+        basePrecision: Number(item?.base_asset_precision) || 0,
+        quotePrecision: Number(item?.quote_asset_precision) || 0,
+        maxVolume: Number(item?.max_order_price) * Number(item?.max_order_qty),
+        minVolume: Number(item?.min_order_price) * Number(item?.min_order_qty),
+        price_tick_size: Number(item?.price_tick_size),
+        qty_step_size: Number(item?.qty_step_size),
+      });
+    });
     return markets || [];
   }
 
