@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
-import { useOrderbookData, useMarketsData } from "@orderbook/core/hooks";
+import {
+  useOrderbookData,
+  useMarketsData,
+  useRecentTrades,
+} from "@orderbook/core/hooks";
 
 const initialState = [
   { size: 0.1, length: 1 },
@@ -36,9 +39,8 @@ export function useOrderbook(defaultMarket: string) {
     ? decimalPlaces(currentMarket.qty_step_size)
     : MAX_DIGITS_AFTER_DECIMAL;
 
-  const { getCurrentTradePrice, getLastTradePrice } = useRecentTradesProvider();
-  const currentTrade = getCurrentTradePrice();
-  const lastTrade = getLastTradePrice();
+  const { currentTradePrice: currentTrade, lastTradePrice: lastTrade } =
+    useRecentTrades(defaultMarket);
   const bidsSorted = sortArrayDescending(bids);
   const asksSorted = sortArrayDescending(asks);
 
