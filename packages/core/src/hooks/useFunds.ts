@@ -1,12 +1,12 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useMemo, useState, useEffect, useCallback } from "react";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { ApiPromise } from "@polkadot/api";
 
 import { QUERY_KEYS } from "../constants";
-import { appsyncOrderbookService } from "../utils/orderbookService";
+import { appsyncOrderbookService, Balance } from "../utils/orderbookService";
 import { fetchOnChainBalance, fetchOnChainBalances } from "../helpers";
 
 import { useAssetsMetaData } from "./useAssetsMetaData";
@@ -144,6 +144,92 @@ export function useFunds() {
       );
     }
   };
+
+  const updateBalanceFromEvent = useCallback(
+    async (msg: Balance) => {
+      const assetId = msg.asset.id;
+
+      const payload = {
+        name: selectGetAsset(assetId)?.name || "",
+        symbol: selectGetAsset(assetId)?.ticker || "",
+        assetId: assetId.toString(),
+        free_balance: msg.free,
+        reserved_balance: msg.reserved,
+      };
+
+      if (!api) return { ...payload, onChainBalance: "0" };
+
+      const onChainBalance = await fetchOnChainBalance(
+        api,
+        assetId,
+        mainAddress
+      );
+      return { ...payload, onChainBalance: onChainBalance.toString() };
+    },
+    [selectGetAsset, api, mainAddress]
+  );
+
+  const onBalanceUpdate = useCallback(
+    async (payload: Balance) => {
+      try {
+        const { onChainBalance, ...updateBalance } =
+          await updateBalanceFromEvent(payload);
+
+        // Update trading balance
+        queryClient.setQueryData(
+          QUERY_KEYS.tradingBalances(mainAddress),
+          (oldData) => {
+            const prevData = [...(oldData as Balance[])];
+            const old = prevData.find(
+              (i) => i.asset.id.toString() === updateBalance.assetId.toString()
+            );
+            if (!old) {
+              return oldData;
+            }
+            const newBalance = {
+              ...old,
+              ...updateBalance,
+            };
+
+            // Filter out old balances from the balance state
+            const balanceFiltered = prevData?.filter(
+              (balance) =>
+                balance.asset.id.toString() !== updateBalance.assetId.toString()
+            );
+
+            // Apply updates to the balances in the state
+            return [...balanceFiltered, newBalance];
+          }
+        );
+
+        // Update chain balance
+        queryClient.setQueryData(
+          QUERY_KEYS.onChainBalances(mainAddress, assets),
+          (prevData) => {
+            const oldData = new Map(prevData as Map<string, number>);
+            oldData.set(updateBalance.assetId, Number(onChainBalance));
+            return oldData;
+          }
+        );
+      } catch (error) {
+        onHandleError("Something has gone wrong while updating balance");
+      }
+    },
+    [assets, mainAddress, onHandleError, queryClient, updateBalanceFromEvent]
+  );
+
+  // Balance updates are give to funding address
+  useEffect(() => {
+    if (mainAddress) {
+      const subscription = appsyncOrderbookService.subscriber.subscribeBalances(
+        mainAddress,
+        onBalanceUpdate
+      );
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [mainAddress, onBalanceUpdate]);
 
   return {
     balances,

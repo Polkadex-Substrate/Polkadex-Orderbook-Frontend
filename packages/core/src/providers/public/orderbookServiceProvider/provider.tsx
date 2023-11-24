@@ -28,6 +28,6 @@ export const OrderbookServiceProvider = ({ children }) => {
       isInitialized.current = true;
       enable().then(() => console.log("Initializing orderbook service..."));
     }
-  });
+  }, []);
   return <Provider value={{ ...state, enable }}>{children}</Provider>;
 };
