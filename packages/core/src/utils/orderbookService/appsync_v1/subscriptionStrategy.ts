@@ -276,9 +276,6 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     market: string,
     onUpdate: SubscriptionCallBack<Ticker>
   ): Subscription {
-    if (!this._isReady) {
-      throw new Error(`${this.constructor.name}: Not Initialized`);
-    }
     const subscription = API.graphql<
       GraphQLSubscription<Websocket_streamsSubscription>
     >({
@@ -286,6 +283,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       variables: {
         name: `${market}-ticker`,
       },
+      authToken: READ_ONLY_TOKEN,
     });
     const observable = subscription
       .filter((data) => Boolean(data?.value?.data?.websocket_streams?.data))
