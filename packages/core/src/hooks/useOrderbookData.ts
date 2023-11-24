@@ -1,14 +1,18 @@
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+import _ from "lodash";
 
 import { QUERY_KEYS } from "../constants";
-import { appsyncOrderbookService } from "../utils/orderbookService";
+import { PriceLevel, appsyncOrderbookService } from "../utils/orderbookService";
+import { deleteFromBook, replaceOrAddToBook } from "../helpers";
 
 export function useOrderbookData(market: string) {
+  const queryClient = useQueryClient();
   const { onHandleError } = useSettingsProvider();
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: QUERY_KEYS.orderBook(market as string),
+    queryKey: QUERY_KEYS.orderBook(market),
     queryFn: async () => {
       const orderbook =
         await appsyncOrderbookService.query.getOrderbook(market);
@@ -31,6 +35,46 @@ export function useOrderbookData(market: string) {
       onHandleError(errorMessage);
     },
   });
+
+  useEffect(() => {
+    if (!market) return;
+
+    const subscription = appsyncOrderbookService.subscriber.subscribeOrderbook(
+      market,
+      (payload: PriceLevel[]) => {
+        let book = {
+          ask: [...(data?.asks ?? [])],
+          bid: [...(data?.bids ?? [])],
+        };
+
+        const incrementalData = payload;
+        incrementalData.forEach((item) => {
+          if (Number(item.qty) === 0) {
+            book = deleteFromBook(
+              book,
+              String(item.price),
+              item.side.toLowerCase()
+            );
+          } else
+            book = replaceOrAddToBook(
+              book,
+              String(item.price),
+              String(item.qty),
+              item.side.toLowerCase()
+            );
+        });
+
+        queryClient.setQueryData(QUERY_KEYS.orderBook(market), () => {
+          const newData = {
+            asks: _.cloneDeep(book.ask),
+            bids: _.cloneDeep(book.bid),
+          };
+          return newData;
+        });
+      }
+    );
+    return () => subscription.unsubscribe();
+  }, [data?.asks, data?.bids, queryClient, market]);
 
   return {
     depth: {

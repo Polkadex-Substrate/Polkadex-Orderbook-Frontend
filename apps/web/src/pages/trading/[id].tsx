@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { OrdersProvider, OrderBookProvider } from "@orderbook/core/providers";
+import { OrdersProvider } from "@orderbook/core/providers";
 import { GetServerSideProps } from "next";
 import { useMarketsData } from "@orderbook/core/hooks";
 
@@ -25,11 +25,9 @@ const Trading = () => {
   const { currentMarket } = useMarketsData(id as string);
 
   return (
-    //   <OrderBookProvider>
     <OrdersProvider>
       <TradingTemplate market={currentMarket?.id as string} />
     </OrdersProvider>
-    //   </OrderBookProvider>
   );
 };
 
