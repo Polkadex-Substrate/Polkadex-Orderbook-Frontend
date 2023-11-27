@@ -6,9 +6,11 @@ import _ from "lodash";
 import { QUERY_KEYS } from "../constants";
 import { PriceLevel, appsyncOrderbookService } from "../utils/orderbookService";
 import { deleteFromBook, replaceOrAddToBook } from "../helpers";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
 export function useOrderbookData(market: string) {
   const queryClient = useQueryClient();
+  const { isReady } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
 
   const { data, isLoading, isFetching } = useQuery({
@@ -37,7 +39,7 @@ export function useOrderbookData(market: string) {
   });
 
   useEffect(() => {
-    if (!market) return;
+    if (!market || !isReady) return;
 
     const subscription = appsyncOrderbookService.subscriber.subscribeOrderbook(
       market,
@@ -74,7 +76,7 @@ export function useOrderbookData(market: string) {
       }
     );
     return () => subscription.unsubscribe();
-  }, [data?.asks, data?.bids, queryClient, market]);
+  }, [data?.asks, data?.bids, queryClient, market, isReady]);
 
   return {
     depth: {

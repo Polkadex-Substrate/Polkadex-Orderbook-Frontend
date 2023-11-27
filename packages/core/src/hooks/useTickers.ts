@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { QUERY_KEYS, defaultTicker } from "../constants";
 import { useSettingsProvider } from "../providers/public/settings";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 import { appsyncOrderbookService, Ticker } from "../utils/orderbookService";
 import { decimalPlaces } from "../helpers";
 
@@ -11,6 +12,7 @@ import { useMarketsData } from "./useMarketsData";
 
 export function useTickers(defaultMarket?: string) {
   const queryClient = useQueryClient();
+  const { isReady } = useOrderbookService();
   const { list: markets } = useMarketsData();
   const { onHandleError } = useSettingsProvider();
 
@@ -67,7 +69,7 @@ export function useTickers(defaultMarket?: string) {
   }, [defaultMarket, tickers]);
 
   useEffect(() => {
-    if (!defaultMarket) return;
+    if (!defaultMarket || !isReady) return;
 
     const subscription = appsyncOrderbookService.subscriber.subscribeTicker(
       defaultMarket,
@@ -101,7 +103,7 @@ export function useTickers(defaultMarket?: string) {
     );
 
     return () => subscription.unsubscribe();
-  }, [defaultMarket, queryClient, markets]);
+  }, [defaultMarket, queryClient, markets, isReady]);
 
   return {
     tickers: tickers ?? [],
