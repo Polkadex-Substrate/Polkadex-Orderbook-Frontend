@@ -23,10 +23,8 @@ const Trading = () => {
   const router = useRouter();
   const { id } = router?.query;
 
-  const { loading, list } = useMarketsData();
+  const { list } = useMarketsData();
   const currentMarket = getCurrentMarket(list, id as string);
-
-  console.log(currentMarket, id, loading);
 
   return (
     <OrdersProvider>

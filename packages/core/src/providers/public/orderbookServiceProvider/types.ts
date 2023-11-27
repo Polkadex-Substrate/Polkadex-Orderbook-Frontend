@@ -6,13 +6,13 @@ import {
 } from "@orderbook/core/utils/orderbookService";
 
 export type OrderbookServiceState = {
-  isReady: boolean;
   service?: OrderbookService;
   markets: Market[];
   assets: Asset[];
 };
 
 export type OrderbookServiceContextProps = OrderbookServiceState & {
+  isReady: boolean;
   enable: () => Promise<void>;
 };
 export type OrderbookServiceProviderProps = PropsWithChildren<{

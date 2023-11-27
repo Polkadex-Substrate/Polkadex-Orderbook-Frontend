@@ -16,7 +16,7 @@ import { useFormik } from "formik";
 import { withdrawValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
-import { useFunds, useTryUnlockTradeAccount } from "@orderbook/core/index";
+import { useFunds, useTryUnlockTradeAccount } from "@orderbook/core/hooks";
 import { useTranslation } from "next-i18next";
 
 import { UnlockModal } from "../UnlockModal";

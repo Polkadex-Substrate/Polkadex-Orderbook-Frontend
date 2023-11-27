@@ -8,11 +8,13 @@ import { ApiPromise } from "@polkadot/api";
 import { QUERY_KEYS } from "../constants";
 import { appsyncOrderbookService, Balance } from "../utils/orderbookService";
 import { fetchOnChainBalance, fetchOnChainBalances } from "../helpers";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
 import { useAssetsMetaData } from "./useAssetsMetaData";
 
 export function useFunds() {
   const queryClient = useQueryClient();
+  const { isReady } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
   const {
     selectedAccount: { mainAddress },
@@ -220,7 +222,7 @@ export function useFunds() {
 
   // Balance updates are give to funding address
   useEffect(() => {
-    if (mainAddress) {
+    if (mainAddress && isReady) {
       const subscription = appsyncOrderbookService.subscriber.subscribeBalances(
         mainAddress,
         onBalanceUpdate
@@ -229,7 +231,7 @@ export function useFunds() {
         subscription.unsubscribe();
       };
     }
-  }, [mainAddress, onBalanceUpdate]);
+  }, [mainAddress, onBalanceUpdate, isReady]);
 
   return {
     balances,
