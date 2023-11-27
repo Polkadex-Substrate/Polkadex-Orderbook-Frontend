@@ -1,11 +1,9 @@
 import { useMemo } from "react";
-import { setToStorage } from "@orderbook/core/helpers";
 import { defaultConfig } from "@orderbook/core/config";
 
-import { LOCAL_STORAGE_ID } from "../constants";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
-export function useMarketsData(defaultMarket?: string) {
+export function useMarketsData() {
   const { markets: data, isReady } = useOrderbookService();
 
   const markets = useMemo(() => {
@@ -20,29 +18,8 @@ export function useMarketsData(defaultMarket?: string) {
     );
   }, [data]);
 
-  const currentMarket = useMemo(() => {
-    if (markets?.length && defaultMarket) {
-      const findMarketByName = markets?.find((v) =>
-        v.name
-          .replace(/[^a-zA-Z0-9]/g, "")
-          .toLowerCase()
-          .includes(defaultMarket.toLowerCase())
-      );
-
-      const findMarketById = markets?.find((v) => v.id === defaultMarket);
-
-      const defaultMarketSelected =
-        findMarketByName || findMarketById || markets[0];
-
-      setToStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET, defaultMarketSelected.id);
-
-      return defaultMarketSelected;
-    }
-  }, [defaultMarket, markets]);
-
   return {
     list: markets,
     loading: !isReady,
-    currentMarket,
   };
 }

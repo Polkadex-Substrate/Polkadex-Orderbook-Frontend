@@ -7,7 +7,7 @@ import {
   useRecentTrades,
   useTickers,
 } from "@orderbook/core/hooks";
-import { hasOnlyZeros } from "@orderbook/core/helpers";
+import { getCurrentMarket, hasOnlyZeros } from "@orderbook/core/helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { defaultTicker } from "@orderbook/core/constants";
 
@@ -23,8 +23,8 @@ export const Navbar = ({ onOpenMarkets, market }: Props) => {
     useRecentTrades(market);
   const { selectGetAsset } = useAssetsMetaData();
   const { currentTicker, tickerLoading } = useTickers(market);
-  const { currentMarket: currMarket, loading: isMarketFetching } =
-    useMarketsData(market);
+  const { list, loading: isMarketFetching } = useMarketsData();
+  const currMarket = getCurrentMarket(list, market);
 
   const quoteAsset = currMarket
     ? selectGetAsset(currMarket.quoteAsset.id)

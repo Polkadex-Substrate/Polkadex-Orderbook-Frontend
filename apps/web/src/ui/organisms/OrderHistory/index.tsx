@@ -8,13 +8,13 @@ import {
   Button,
 } from "@polkadex/orderbook-ui/molecules";
 import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
-import { decimalPlaces } from "@orderbook/core/helpers";
+import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 import {
   useAssetsMetaData,
   useMarketsData,
   useOrderHistory,
-} from "@orderbook/core/index";
+} from "@orderbook/core/hooks";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -30,7 +30,8 @@ export const OrderHistory = ({ filters, market }: Props) => {
     useOrderHistory(filters);
 
   const { selectGetAsset } = useAssetsMetaData();
-  const { currentMarket } = useMarketsData(market);
+  const { list } = useMarketsData();
+  const currentMarket = getCurrentMarket(list, market);
 
   const priceFixed = currentMarket
     ? decimalPlaces(currentMarket.price_tick_size)

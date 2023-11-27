@@ -13,6 +13,7 @@ import {
   decimalPlaces,
   precisionRegExp,
   getAbsoluteNumber,
+  getCurrentMarket,
 } from "@orderbook/core/helpers";
 import BigNumber from "bignumber.js";
 import {
@@ -70,7 +71,8 @@ export function usePlaceOrder(
     amount: selectedAmountFromOrderbookTable,
   } = useOrders();
 
-  const { currentMarket, loading: isMarketFetching } = useMarketsData(market);
+  const { loading: isMarketFetching, list } = useMarketsData();
+  const currentMarket = getCurrentMarket(list, market);
 
   const { getFreeProxyBalance, loading: isBalanceFetching } = useFunds();
 

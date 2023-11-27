@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { decimalPlaces } from "@orderbook/core/helpers";
+import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
 import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 import {
   useOrderbookData,
@@ -31,7 +31,8 @@ export function useOrderbook(defaultMarket: string) {
   const asks = orderBookState.depth.asks;
   const loading = orderBookState.depth.loading;
 
-  const { currentMarket } = useMarketsData(defaultMarket);
+  const { list } = useMarketsData();
+  const currentMarket = getCurrentMarket(list, defaultMarket);
   const pricePrecision = currentMarket
     ? decimalPlaces(currentMarket.price_tick_size)
     : MAX_DIGITS_AFTER_DECIMAL;

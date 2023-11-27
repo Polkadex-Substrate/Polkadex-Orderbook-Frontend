@@ -3,6 +3,7 @@ import {
   mapValues,
   accumulateVolume,
   calcMaxVolume,
+  getCurrentMarket,
 } from "@orderbook/core/helpers";
 import { OrderBookState } from "@orderbook/core/providers/public/orderBook";
 import { useOrders } from "@orderbook/core/providers/user/orders";
@@ -26,7 +27,8 @@ export function useOrderbookTable({
 
   const bids = orderBookState.depth.bids;
   const asks = orderBookState.depth.asks;
-  const { currentMarket } = useMarketsData(market);
+  const { list } = useMarketsData();
+  const currentMarket = getCurrentMarket(list, market);
 
   /**
    * @description -Get Volume of the orders

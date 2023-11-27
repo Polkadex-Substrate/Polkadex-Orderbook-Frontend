@@ -11,7 +11,7 @@ import { useMarketsData } from "./useMarketsData";
 
 export function useTickers(defaultMarket?: string) {
   const queryClient = useQueryClient();
-  const { list: markets } = useMarketsData(defaultMarket);
+  const { list: markets } = useMarketsData();
   const { onHandleError } = useSettingsProvider();
 
   const shouldFetchTickers = Boolean(markets && markets?.length > 0);

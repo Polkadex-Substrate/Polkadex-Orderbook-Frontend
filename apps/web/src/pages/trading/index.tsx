@@ -4,6 +4,7 @@ import { defaultConfig } from "@orderbook/core/config";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { useAssetsMetaData, useMarketsData } from "@orderbook/core/hooks";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
+import { getCurrentMarket } from "@orderbook/core/index";
 
 function Home() {
   const router = useRouter();
@@ -15,9 +16,8 @@ function Home() {
   );
   const { loading: assetLoading } = useAssetsMetaData();
 
-  const { currentMarket, loading: marketLoading } = useMarketsData(
-    persistedMarket as string
-  );
+  const { loading: marketLoading, list } = useMarketsData();
+  const currentMarket = getCurrentMarket(list, persistedMarket as string);
 
   useEffect(() => {
     if (!marketLoading && !assetLoading) {

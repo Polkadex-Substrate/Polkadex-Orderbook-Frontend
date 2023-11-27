@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { appsyncOrderbookService } from "@orderbook/core/utils/orderbookService";
+import { usePathname } from "next/navigation";
 
 import * as T from "./types";
 import { initialState, Provider } from "./context";
 export const OrderbookServiceProvider = ({ children }) => {
   const [state, setState] = useState<T.OrderbookServiceState>(initialState);
   const isInitialized = useRef(false);
+  const path = usePathname();
   const enable = async () => {
     if (!appsyncOrderbookService.isReady()) {
       await appsyncOrderbookService.init();
@@ -23,11 +25,14 @@ export const OrderbookServiceProvider = ({ children }) => {
       });
     }
   };
+  console.log(state, isInitialized, "state data");
   useEffect(() => {
     if (!isInitialized.current) {
       isInitialized.current = true;
-      enable().then(() => console.log("Initializing orderbook service..."));
+      enable().then(() =>
+        console.log("Initializing orderbook service...", path)
+      );
     }
-  }, []);
+  }, [path]);
   return <Provider value={{ ...state, enable }}>{children}</Provider>;
 };

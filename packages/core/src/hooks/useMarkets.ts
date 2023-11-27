@@ -2,6 +2,7 @@ import { ChangeEvent, useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { Market } from "@orderbook/core/utils/orderbookService";
+import { getCurrentMarket } from "@orderbook/core/helpers";
 
 import { defaultTicker } from "../constants";
 
@@ -26,7 +27,8 @@ export function useMarkets(onClose: () => void, market: string) {
   const profileState = useProfile();
   const router = useRouter();
 
-  const { list: markets, currentMarket } = useMarketsData(market);
+  const { list: markets } = useMarketsData();
+  const currentMarket = getCurrentMarket(markets, market);
   const { tickers: allMarketTickers } = useTickers(market);
 
   const favorites = profileState.userMarket.favoriteMarkets;

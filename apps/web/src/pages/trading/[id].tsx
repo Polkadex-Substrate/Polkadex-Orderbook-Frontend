@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { OrdersProvider } from "@orderbook/core/providers";
 import { GetServerSideProps } from "next";
 import { useMarketsData } from "@orderbook/core/hooks";
+import { getCurrentMarket } from "@orderbook/core/helpers";
 
 import LoadingScreen from "@/ui/molecules/LoadingScreen";
 import { getServerSidePropsWithTranslations } from "@/utils";
@@ -22,7 +23,10 @@ const Trading = () => {
   const router = useRouter();
   const { id } = router?.query;
 
-  const { currentMarket } = useMarketsData(id as string);
+  const { loading, list } = useMarketsData();
+  const currentMarket = getCurrentMarket(list, id as string);
+
+  console.log(currentMarket, id, loading);
 
   return (
     <OrdersProvider>

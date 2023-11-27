@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { useKlineProvider } from "@orderbook/core/providers/public/klineProvider";
-import { useMarketsData } from "@orderbook/core/index";
+import { getCurrentMarket, useMarketsData } from "@orderbook/core/index";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { decimalPlaces } from "@orderbook/core/helpers";
 import { TradingView as TradingViewConstants } from "@orderbook/core/constants";
@@ -53,7 +53,8 @@ export const TradingView = ({ market }: Props) => {
   const [isReady, setIsReady] = useState(false);
 
   const { onHandleKlineFetch, onFetchKlineChannel } = useKlineProvider();
-  const { currentMarket, list: allMarkets } = useMarketsData(market);
+  const { list: allMarkets } = useMarketsData();
+  const currentMarket = getCurrentMarket(allMarkets, market);
   const { theme } = useSettingsProvider();
 
   const isDarkTheme = theme === "dark";
