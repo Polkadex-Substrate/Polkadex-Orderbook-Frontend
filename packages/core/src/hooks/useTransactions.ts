@@ -1,5 +1,6 @@
-import { ChangeEvent, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import _ from "lodash";
+import { ChangeEvent, useMemo, useState, useEffect, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 
@@ -12,10 +13,13 @@ import {
   groupWithdrawsBySnapShotIds,
   subtractMonthsFromDateOrNow,
 } from "../helpers";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
 const DEPOSIT = "DEPOSIT";
 
 export function useTransactions() {
+  const queryClient = useQueryClient();
+  const { isReady } = useOrderbookService();
   const {
     selectedAccount: { mainAddress },
   } = useProfile();
@@ -75,6 +79,47 @@ export function useTransactions() {
     () => groupWithdrawsBySnapShotIds(withdrawalsList),
     [withdrawalsList]
   );
+
+  const onTransactionsUpdate = useCallback(
+    (payload: Transaction) => {
+      try {
+        if (payload) {
+          queryClient.setQueryData(
+            QUERY_KEYS.transactions(mainAddress),
+            (oldData) => {
+              const transactions = _.cloneDeep(oldData as Transaction[]);
+              const index = transactions.findIndex(
+                ({ stid }) => Number(stid) === Number(payload.stid)
+              );
+              if (index !== -1) {
+                transactions[index] = payload;
+              } else {
+                transactions.push(payload);
+              }
+              return transactions;
+            }
+          );
+        }
+      } catch (error) {
+        onHandleError("Something has gone wrong while updating transactions");
+      }
+    },
+    [mainAddress, onHandleError, queryClient]
+  );
+
+  useEffect(() => {
+    if (mainAddress && isReady) {
+      const subscription =
+        appsyncOrderbookService.subscriber.subscribeTransactions(
+          mainAddress,
+          onTransactionsUpdate
+        );
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [mainAddress, onTransactionsUpdate, isReady]);
 
   return {
     loading: isLoading,
