@@ -56,7 +56,7 @@ export function useDepositHistory({
           return {
             ...e,
             main_account: mainAddress,
-            time: intlFormat(
+            timestamp: intlFormat(
               new Date(e.timestamp),
               {
                 year: "numeric",

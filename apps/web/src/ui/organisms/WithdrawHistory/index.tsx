@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { intlFormat } from "date-fns";
-import { Transaction } from "@orderbook/core/providers/user/transactionsProvider";
+import { Transaction } from "@orderbook/core/utils/orderbookService";
 import { useTransactions } from "@orderbook/core/hooks";
 import { Tab } from "@headlessui/react";
 import { useProfile } from "@orderbook/core/providers/user/profile";

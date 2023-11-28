@@ -15,5 +15,4 @@ export { OrdersProvider } from "./user/orders";
 export { SessionProvider } from "./user/sessionProvider";
 export { TradesProvider } from "./user/trades";
 export { TradeWalletProvider } from "./user/tradeWallet";
-export { TransactionsProvider } from "./user/transactionsProvider";
 export { WithdrawsProvider } from "./user/withdrawsProvider";
