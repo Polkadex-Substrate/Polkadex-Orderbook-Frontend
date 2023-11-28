@@ -6,12 +6,11 @@
  * - Toggle switch between deposit between Polkadex accounts
  */
 
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { filterBlockedAssets } from "@orderbook/core/helpers";
 import { useAssetsMetaData, useFunds } from "@orderbook/core";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
-import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useRouter } from "next/router";
 import { BalanceFormatter } from "@orderbook/format";
 
@@ -27,10 +26,8 @@ export function useTransfer() {
   const { balances } = useFunds();
   const { loading: depositLoading } = useDepositProvider();
   const { loading: withdrawLoading } = useWithdrawsProvider();
-  const { selectedAccount } = useProfile();
-  const { query, locale } = useRouter();
+  const { query, locale, push } = useRouter();
 
-  const [selectedAsset, setSelectedAsset] = useState<T.FilteredAssetProps>();
   const [assetsInteraction, setAssetsInteraction] = useState(false);
   const [switchEnable, setSwitchEnable] = useState(false);
 
@@ -41,7 +38,12 @@ export function useTransfer() {
     onChangeState(setAssetsInteraction);
   };
   const onChangeAsset = (asset: T.FilteredAssetProps) => {
-    setSelectedAsset(asset);
+    push({
+      href: "/transfer",
+      query: {
+        token: asset.name,
+      },
+    });
     onAssetsInteraction();
   };
 
@@ -69,20 +71,13 @@ export function useTransfer() {
   );
 
   /* Select default asset */
-  useEffect(() => {
-    if (!selectedAsset) {
-      const foundAsset = filteredNonBlockedAssets?.find(
-        ({ ticker }) => ticker === query?.token
-      );
-      setSelectedAsset(foundAsset ?? filteredNonBlockedAssets?.[0]);
-    } else if (selectedAccount && !!selectedAsset)
-      setSelectedAsset((prev) => {
-        const foundAsset = filteredNonBlockedAssets?.find(
-          ({ id }) => id === prev?.id
-        );
-        return foundAsset || prev;
-      });
-  }, [selectedAsset, filteredNonBlockedAssets, selectedAccount, query]);
+  const selectedAsset = useMemo(() => {
+    const foundAsset = filteredNonBlockedAssets?.find(
+      ({ ticker }) => ticker === query?.token
+    );
+
+    return foundAsset ?? filteredNonBlockedAssets?.[0];
+  }, [filteredNonBlockedAssets, query?.token]);
 
   return {
     loading: depositLoading || withdrawLoading,
