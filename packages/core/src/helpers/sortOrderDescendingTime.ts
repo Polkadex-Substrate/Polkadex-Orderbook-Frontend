@@ -1,8 +1,8 @@
-import { OrderCommon } from "@orderbook/core/providers/types";
+import { Order } from "@orderbook/core/utils/orderbookService";
 
-export const sortOrdersDescendingTime = (orders: OrderCommon[]) =>
+export const sortOrdersDescendingTime = (orders: Order[]) =>
   orders.sort((a, b) => {
-    const timestampA = new Date(a.time).getTime();
-    const timestampB = new Date(b.time).getTime();
+    const timestampA = new Date(a.timestamp).getTime();
+    const timestampB = new Date(b.timestamp).getTime();
     return timestampB - timestampA;
   });

@@ -50,6 +50,9 @@ export interface Order {
   fee: number;
   timestamp: Date;
   market: MarketBase;
+  side: OrderSide;
+  filledQuantity: string;
+  quantity: string;
 }
 export type MaybePaginated<T> = {
   data: T;

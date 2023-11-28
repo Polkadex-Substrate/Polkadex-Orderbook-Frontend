@@ -19,6 +19,7 @@ import {
   OrderType,
   OrderStatus,
   MarketBase,
+  OrderSide,
 } from "./../types";
 import {
   OrderbookReadStrategy,
@@ -268,6 +269,9 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
           isReverted: false,
           fee: Number(item.fee),
           timestamp: new Date(item.timestamp),
+          side: item.side as OrderSide,
+          filledQuantity: String(item.filled_quantity),
+          quantity: String(item.qty),
         };
       });
     return observable.subscribe(onUpdate);

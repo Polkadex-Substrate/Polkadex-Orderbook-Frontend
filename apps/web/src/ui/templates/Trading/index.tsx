@@ -21,7 +21,6 @@ import {
 } from "@polkadex/orderbook-ui/organisms";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { OrderHistoryProvider } from "@orderbook/core/providers/user/orderHistoryProvider";
 import { SessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { KlineProvider } from "@orderbook/core/providers/public/klineProvider";
 import { TradesProvider } from "@orderbook/core/providers/user/trades";
@@ -184,9 +183,7 @@ export function Trading({ market: id }: Props) {
                         {hasUser ? (
                           <SessionProvider>
                             <TradesProvider>
-                              <OrderHistoryProvider>
-                                <Transactions market={id} />
-                              </OrderHistoryProvider>
+                              <Transactions market={id} />
                             </TradesProvider>
                           </SessionProvider>
                         ) : (

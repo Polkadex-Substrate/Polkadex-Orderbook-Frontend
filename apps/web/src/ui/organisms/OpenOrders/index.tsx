@@ -1,15 +1,12 @@
 import { useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
+import { Ifilters } from "@orderbook/core/providers/types";
 import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";
 import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
-import {
-  useAssetsMetaData,
-  useMarketsData,
-  useOpenOrders,
-} from "@orderbook/core/hooks";
+import { Order } from "@orderbook/core/utils/orderbookService";
+import { useMarketsData, useOpenOrders } from "@orderbook/core/hooks";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -26,10 +23,9 @@ export const OpenOrders = ({
   onHideTransactionDropdown,
   market,
 }: Props) => {
-  const { isLoading, openOrders } = useOpenOrders(filters);
+  const { isLoading, openOrders } = useOpenOrders(filters, market);
   const { list } = useMarketsData();
   const currentMarket = getCurrentMarket(list, market);
-  const { selectGetAsset } = useAssetsMetaData();
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`openOrders.${key}`);
@@ -68,27 +64,27 @@ export const OpenOrders = ({
           </S.Thead>
           <S.Tbody>
             {openOrders &&
-              openOrders.map((order: OrderCommon, i) => {
-                const [base, quote] = order.m.split("-");
-                const date = new Date(order.time).toLocaleString();
+              openOrders.map((order: Order, i) => {
+                const [base, quote] = order.market.id.split("-");
+                const date = new Date(order.timestamp).toLocaleString();
                 const isSell = order.side === "Ask";
-                const isMarket = order.order_type === "MARKET";
-                const baseUnit = selectGetAsset(base)?.ticker;
-                const quoteUnit = selectGetAsset(quote)?.ticker;
-                const avgPrice = order.avg_filled_price;
+                const isMarket = order.type === "MARKET";
+                const baseUnit = order.market?.baseAsset?.ticker;
+                const quoteUnit = order.market?.quoteAsset?.ticker;
+                const avgPrice = order.averagePrice;
                 return (
                   <OpenOrderCard
                     key={i}
                     isSell={isSell}
-                    orderId={order.id}
+                    orderId={order.orderId}
                     base={base}
                     quote={quote}
-                    orderType={order.order_type}
+                    orderType={order.type}
                     baseUnit={baseUnit}
                     quoteUnit={quoteUnit}
                     data={[
                       { value: date },
-                      { value: order.order_type },
+                      { value: order.type },
                       { value: order.status },
                       {
                         value: isMarket
@@ -96,11 +92,11 @@ export const OpenOrders = ({
                           : Decimal.format(order.price, priceFixed, ","),
                       },
                       {
-                        value: Decimal.format(order.qty, amountFixed, ","),
+                        value: Decimal.format(order.quantity, amountFixed, ","),
                       },
                       {
                         value: Decimal.format(
-                          order.filled_quantity,
+                          order.filledQuantity,
                           filledQtyPrecision,
                           ","
                         ),

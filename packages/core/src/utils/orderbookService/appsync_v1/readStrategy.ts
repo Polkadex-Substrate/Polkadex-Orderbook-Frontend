@@ -20,6 +20,7 @@ import {
   BookLevel,
   MaybePaginated,
   LatestTradesPropsForMarket,
+  OrderSide,
 } from "./../types";
 import {
   fetchBatchFromAppSync,
@@ -424,11 +425,14 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       orderId: item?.id || "",
       price: Number(item?.p) || 0,
       averagePrice: Number(item?.afp) || 0,
-      type: (item?.t as OrderType) || "LIMIT",
+      type: (item?.ot as OrderType) || "LIMIT",
       status: (item?.s as OrderStatus) || "CLOSED",
       isReverted: item?.isReverted || false,
       fee: Number(item?.fee) || 0,
-      timestamp: new Date(item?.t || 0),
+      timestamp: new Date(Number(item?.t) || 0),
+      side: item.s as OrderSide,
+      filledQuantity: String(item.fq),
+      quantity: item.q,
     };
   }
 }
