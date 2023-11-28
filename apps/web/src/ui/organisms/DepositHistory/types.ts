@@ -1,4 +1,4 @@
-import { Transaction } from "@orderbook/core/providers/user/transactionsProvider";
+import { Transaction } from "@orderbook/core/utils/orderbookService";
 
 export interface Props extends Omit<Transaction, "asset"> {
   token: {

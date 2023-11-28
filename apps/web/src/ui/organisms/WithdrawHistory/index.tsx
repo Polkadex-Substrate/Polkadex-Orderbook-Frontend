@@ -1,10 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { intlFormat } from "date-fns";
-import {
-  useTransactionsProvider,
-  Transaction,
-} from "@orderbook/core/providers/user/transactionsProvider";
-import { useAssetsMetaData } from "@orderbook/core/index";
+import { Transaction } from "@orderbook/core/providers/user/transactionsProvider";
+import { useTransactions } from "@orderbook/core/hooks";
 import { Tab } from "@headlessui/react";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
@@ -32,9 +29,7 @@ export const WithdrawHistory = ({
 
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
 
-  const { selectGetAsset } = useAssetsMetaData();
-  const { allWithdrawals, readyWithdrawals, loading } =
-    useTransactionsProvider();
+  const { allWithdrawals, readyWithdrawals, loading } = useTransactions();
   const { selectedAccount } = useProfile();
   const { allAccounts } = useExtensionWallet();
 
@@ -46,15 +41,15 @@ export const WithdrawHistory = ({
   );
 
   const selectedWithdraw = useCallback(
-    (status: Transaction["status"]) =>
+    (status: Transaction["status"]): WithdrawTableProps[] =>
       allWithdrawals
         ?.filter((txn) => txn.status === status)
         ?.map((e) => {
-          const token = selectGetAsset(e.asset);
+          const token = e.asset;
           return {
             ...e,
-            time: intlFormat(
-              new Date(e.time),
+            timestamp: intlFormat(
+              new Date(e.timestamp),
               {
                 year: "numeric",
                 month: "short",
@@ -77,7 +72,7 @@ export const WithdrawHistory = ({
         })
         ?.flatMap((withdrawal) => {
           if (showSelectedCoins) {
-            const assetName = selectGetAsset(withdrawal.asset)?.name;
+            const assetName = withdrawal.token?.name;
             return assetName === selectedAsset?.name ? [withdrawal] : [];
           }
           return [withdrawal];
@@ -85,7 +80,6 @@ export const WithdrawHistory = ({
     [
       allWithdrawals,
       showSelectedCoins,
-      selectGetAsset,
       selectedAsset?.name,
       fundingWallet?.account?.address,
       fundingWallet?.account?.meta?.name,
@@ -97,7 +91,7 @@ export const WithdrawHistory = ({
     () =>
       readyWithdrawals.map((e) => {
         const items = e.items?.map((e: WithdrawGroupItem) => {
-          const token = selectGetAsset(e.asset);
+          const token = e.asset;
           return {
             ...e,
             time: intlFormat(
@@ -132,7 +126,6 @@ export const WithdrawHistory = ({
       readyWithdrawals,
       fundingWallet?.account?.meta?.name,
       fundingWallet?.account?.address,
-      selectGetAsset,
       t,
     ]
   );
@@ -142,7 +135,7 @@ export const WithdrawHistory = ({
 
     return readyWithdrawalsData.filter(({ items, id, sid }) => {
       const filteredItems = items.filter((item) => {
-        const assetName = selectGetAsset(item.asset)?.name;
+        const assetName = item.asset?.name;
         return assetName === selectedAsset?.name && item;
       });
       return (
@@ -153,12 +146,7 @@ export const WithdrawHistory = ({
         }
       );
     });
-  }, [
-    readyWithdrawalsData,
-    selectGetAsset,
-    selectedAsset?.name,
-    showSelectedCoins,
-  ]);
+  }, [readyWithdrawalsData, selectedAsset?.name, showSelectedCoins]);
 
   const pendingWithdraws = useMemo(
     () => selectedWithdraw("PENDING"),
@@ -216,7 +204,7 @@ export const WithdrawHistory = ({
             <Tab.Panel className="flex-1">
               <S.Table>
                 <PendingTable
-                  data={pendingWithdraws as WithdrawTableProps[]}
+                  data={pendingWithdraws}
                   loading={loading}
                   hasData={!!pendingWithdraws?.length}
                 />
@@ -234,7 +222,7 @@ export const WithdrawHistory = ({
             <Tab.Panel className="flex-1">
               <S.Table>
                 <ClaimedTable
-                  data={claimedWithdraws as WithdrawTableProps[]}
+                  data={claimedWithdraws}
                   loading={loading}
                   hasData={!!claimedWithdraws?.length}
                 />

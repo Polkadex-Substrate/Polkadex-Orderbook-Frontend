@@ -340,6 +340,8 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
           throw new Error(`Asset ${item.asset} not found`);
         }
         return {
+          stid: Number(item.stid),
+          snapshot_id: Number(item.snapshot_id),
           amount: 0,
           fee: 0,
           isReverted: false,

@@ -382,10 +382,12 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
           );
         }
         return {
+          stid: Number(item.stid),
+          snapshot_id: Number(item.snapshot_id),
           txType: (item?.tt as Transaction["txType"]) || "",
-          amount: Number(item?.a) || 0,
+          amount: Number(item?.q) || 0,
           fee: Number(item?.fee) || 0,
-          timestamp: new Date(item?.t || 0),
+          timestamp: new Date(Number(item?.t) || 0),
           isReverted: item?.isReverted || false,
           status: (item?.st as Transaction["status"]) || "",
           asset,

@@ -6,7 +6,7 @@
  * - Retrieve column header text
  */
 
-import { useAssetsMetaData } from "@orderbook/core/index";
+import { useTransactions } from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
   useExtensionWallet,
@@ -14,7 +14,6 @@ import {
 } from "@orderbook/core/providers/user/extensionWallet";
 import { useMemo, useState } from "react";
 import { SortingState } from "@tanstack/react-table";
-import { useTransactionsProvider } from "@orderbook/core/providers/user/transactionsProvider";
 import { useTranslation } from "next-i18next";
 import { intlFormat } from "date-fns";
 
@@ -35,8 +34,7 @@ export function useDepositHistory({
 
   const { selectedAccount } = useProfile();
   const { allAccounts } = useExtensionWallet();
-  const { selectGetAsset } = useAssetsMetaData();
-  const { deposits, loading } = useTransactionsProvider();
+  const { deposits, loading } = useTransactions();
 
   const { mainAddress } = selectedAccount;
   const fundingWallet = useMemo(
@@ -49,21 +47,17 @@ export function useDepositHistory({
       deposits
         ?.filter((e) => {
           if (showSelectedCoins) {
-            const assetName = selectGetAsset(e.asset)?.name;
+            const assetName = e.asset.name;
             return assetName === selectedAsset?.name;
           }
           return e;
         })
         ?.map((e) => {
-          const token = selectGetAsset(e.asset);
           return {
-            stid: e.stid,
-            snapshot_id: e.snapshot_id,
-            amount: e.amount,
-            fee: e.fee,
-            main_account: e.main_account,
+            ...e,
+            main_account: mainAddress,
             time: intlFormat(
-              new Date(e.time),
+              new Date(e.timestamp),
               {
                 year: "numeric",
                 month: "short",
@@ -73,12 +67,9 @@ export function useDepositHistory({
               },
               { locale: "EN" }
             ),
-            status: e.status,
-            txn_type: e.txn_type,
-            isReverted: e.isReverted,
             token: {
-              ticker: token?.ticker,
-              name: token?.name,
+              ticker: e.asset?.ticker,
+              name: e.asset?.name,
             },
             wallets: {
               fromWalletName: fundingWallet?.account?.meta?.name ?? "",
@@ -89,12 +80,12 @@ export function useDepositHistory({
         }),
     [
       deposits,
-      selectGetAsset,
       fundingWallet?.account?.meta?.name,
       fundingWallet?.account?.address,
       selectedAsset?.name,
       showSelectedCoins,
       t,
+      mainAddress,
     ]
   );
 

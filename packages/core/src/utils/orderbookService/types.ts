@@ -105,7 +105,7 @@ export type Kline = {
   timestamp: Date;
 };
 export type TransactionType = "DEPOSIT" | "WITHDRAW";
-export type TransactionStatus = "PENDING" | "CONFIRMED" | "FAILED";
+export type TransactionStatus = "PENDING" | "CONFIRMED" | "FAILED" | "READY";
 export type Transaction = {
   txType: TransactionType;
   amount: number;
@@ -114,6 +114,8 @@ export type Transaction = {
   status: TransactionStatus;
   asset: Asset;
   isReverted: boolean;
+  stid: number;
+  snapshot_id?: number;
 };
 
 export type PriceLevel = {
