@@ -10,7 +10,6 @@ export { ProfileProvider } from "./user/profile";
 export { BalancesProvider } from "./user/balancesProvider";
 export { DepositProvider } from "./user/depositProvider";
 export { ExtensionWalletProvider } from "./user/extensionWallet";
-export { OrderHistoryProvider } from "./user/orderHistoryProvider";
 export { OrdersProvider } from "./user/orders";
 export { SessionProvider } from "./user/sessionProvider";
 export { TradesProvider } from "./user/trades";

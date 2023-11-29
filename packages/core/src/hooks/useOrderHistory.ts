@@ -9,11 +9,13 @@ import { useSessionProvider } from "../providers/user/sessionProvider";
 import { appsyncOrderbookService, Order } from "../utils/orderbookService";
 import { useSettingsProvider } from "../providers/public/settings";
 import { replaceOrPushOrder } from "../utils/orderbookService/appsync_v1/helpers";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
 import { useMarketsData } from "./useMarketsData";
 
 export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
   const queryClient = useQueryClient();
+  const { isReady } = useOrderbookService();
   const {
     selectedAccount: { tradeAddress },
   } = useProfile();
@@ -163,7 +165,7 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
   );
 
   useEffect(() => {
-    if (tradeAddress?.length) {
+    if (tradeAddress?.length && isReady) {
       const subscription = appsyncOrderbookService.subscriber.subscribeOrders(
         tradeAddress,
         onOrderUpdates
@@ -171,7 +173,7 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
 
       return () => subscription.unsubscribe();
     }
-  }, [tradeAddress, onOrderUpdates]);
+  }, [tradeAddress, onOrderUpdates, isReady]);
 
   return {
     orderHistory: filteredOrderHistory,

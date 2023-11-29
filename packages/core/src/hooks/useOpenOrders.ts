@@ -11,11 +11,13 @@ import {
   removeOrderFromList,
   replaceOrPushOrder,
 } from "../utils/orderbookService/appsync_v1/helpers";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
 import { useMarketsData } from "./useMarketsData";
 
 export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
   const queryClient = useQueryClient();
+  const { isReady } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
   const {
     selectedAccount: { tradeAddress },
@@ -110,7 +112,7 @@ export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
   );
 
   useEffect(() => {
-    if (tradeAddress?.length) {
+    if (tradeAddress?.length && isReady) {
       const subscription = appsyncOrderbookService.subscriber.subscribeOrders(
         tradeAddress,
         onOrderUpdates
@@ -118,7 +120,7 @@ export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
 
       return () => subscription.unsubscribe();
     }
-  }, [tradeAddress, onOrderUpdates]);
+  }, [tradeAddress, onOrderUpdates, isReady]);
 
   return {
     openOrders: filteredOpenOrders,
