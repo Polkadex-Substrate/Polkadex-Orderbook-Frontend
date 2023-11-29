@@ -15,7 +15,7 @@ export const columns = (header: string[]) => [
         <span>
           {e.getValue().isReverted ? <>REVERTED</> : e.getValue().status}
         </span>
-        <p>{e.getValue().time}</p>
+        <p>{e.getValue().timestamp}</p>
       </Date>
     ),
     header: () => <span>{header[0]}</span>,

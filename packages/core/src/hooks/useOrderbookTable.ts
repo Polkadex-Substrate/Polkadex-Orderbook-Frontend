@@ -3,32 +3,25 @@ import {
   mapValues,
   accumulateVolume,
   calcMaxVolume,
-  getCurrentMarket,
 } from "@orderbook/core/helpers";
-import { OrderBookState } from "@orderbook/core/providers/public/orderBook";
 import { useOrders } from "@orderbook/core/providers/user/orders";
-import { useOrderbookData, useMarketsData } from "@orderbook/core/hooks";
 
 export type Props = {
+  asks: string[][];
+  bids: string[][];
   isSell?: boolean;
-  orders: OrderBookState["depth"]["bids"];
+  orders: string[][];
   contentRef?: MutableRefObject<HTMLDivElement> | null;
-  market: string;
 };
 
 export function useOrderbookTable({
   orders,
   isSell,
   contentRef,
-  market,
+  asks,
+  bids,
 }: Props) {
-  const orderBookState = useOrderbookData(market);
   const { currentPrice, onSetCurrentPrice, onSetCurrentAmount } = useOrders();
-
-  const bids = orderBookState.depth.bids;
-  const asks = orderBookState.depth.asks;
-  const { list } = useMarketsData();
-  const currentMarket = getCurrentMarket(list, market);
 
   /**
    * @description -Get Volume of the orders
@@ -84,7 +77,7 @@ export function useOrderbookTable({
    */
   const maxVolume = calcMaxVolume(bids, asks);
 
-  const valumeData = mapValues(maxVolume, cumulativeVolume);
+  const volumeData = mapValues(maxVolume, cumulativeVolume);
   useEffect(() => {
     // Make sure the scroll is always down
     if (isSell && !!contentRef?.current)
@@ -92,14 +85,10 @@ export function useOrderbookTable({
   }, [isSell, contentRef, orders]);
 
   return {
-    quoteUnit: currentMarket?.quoteAsset.ticker,
-    baseUnit: currentMarket?.baseAsset.ticker,
-    valumeData,
+    volumeData,
+    total: cumulativeVolume,
     changeMarketPrice,
     changeMarketAmount,
     changeMarketAmountSumClick,
-    priceFixed: currentMarket?.quotePrecision || 0,
-    amountFixed: currentMarket?.basePrecision || 0,
-    total: cumulativeVolume,
   };
 }

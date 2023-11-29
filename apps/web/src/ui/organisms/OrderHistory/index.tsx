@@ -7,14 +7,11 @@ import {
   LoadingSpinner,
   Button,
 } from "@polkadex/orderbook-ui/molecules";
-import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
+import { Ifilters } from "@orderbook/core/providers/types";
 import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
-import {
-  useAssetsMetaData,
-  useMarketsData,
-  useOrderHistory,
-} from "@orderbook/core/hooks";
+import { Order } from "@orderbook/core/utils/orderbookService";
+import { useMarketsData, useOrderHistory } from "@orderbook/core/hooks";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -27,9 +24,8 @@ type Props = {
 
 export const OrderHistory = ({ filters, market }: Props) => {
   const { hasNextPage, isLoading, onFetchNextPage, orderHistory, error } =
-    useOrderHistory(filters);
+    useOrderHistory(filters, market);
 
-  const { selectGetAsset } = useAssetsMetaData();
   const { list } = useMarketsData();
   const currentMarket = getCurrentMarket(list, market);
 
@@ -79,18 +75,17 @@ export const OrderHistory = ({ filters, market }: Props) => {
               }
             >
               {orderHistory &&
-                orderHistory.map((order: OrderCommon, i) => {
-                  const [base, quote] = order.m.split("-");
-                  const date = new Date(order.time).toLocaleString();
+                orderHistory.map((order: Order, i) => {
+                  const date = new Date(order.timestamp).toLocaleString();
                   const isSell = order.side === "Ask";
-                  const isMarket = order.order_type === "MARKET";
-                  const baseUnit = selectGetAsset(base)?.ticker;
-                  const quoteUnit = selectGetAsset(quote)?.ticker;
-                  const avgPrice = order.avg_filled_price;
+                  const isMarket = order.type === "MARKET";
+                  const baseUnit = order.market?.baseAsset?.ticker;
+                  const quoteUnit = order.market?.quoteAsset?.ticker;
+                  const avgPrice = order.averagePrice;
                   const shortId =
-                    order.id.slice(0, 4) +
+                    order.orderId.slice(0, 4) +
                     "..." +
-                    order.id.slice(order.id.length - 4);
+                    order.orderId.slice(order.orderId.length - 4);
                   const status = order.status;
                   const show = status !== "OPEN";
                   return (
@@ -100,12 +95,12 @@ export const OrderHistory = ({ filters, market }: Props) => {
                         id={shortId}
                         isSell={isSell}
                         status={status}
-                        orderType={order.order_type}
+                        orderType={order.type}
                         baseUnit={baseUnit}
                         quoteUnit={quoteUnit}
                         data={[
                           { value: date },
-                          { value: order.order_type },
+                          { value: order.type },
                           { value: order.status },
                           {
                             value: isMarket
@@ -113,11 +108,15 @@ export const OrderHistory = ({ filters, market }: Props) => {
                               : Decimal.format(order.price, priceFixed, ","),
                           },
                           {
-                            value: Decimal.format(order.qty, amountFixed, ","),
+                            value: Decimal.format(
+                              order.quantity,
+                              amountFixed,
+                              ","
+                            ),
                           },
                           {
                             value: Decimal.format(
-                              order.filled_quantity,
+                              order.filledQuantity,
                               filledQtyPrecision,
                               ","
                             ),
@@ -137,7 +136,9 @@ export const OrderHistory = ({ filters, market }: Props) => {
               {!isLoading && error && (
                 <S.ErrorWrapper>
                   <p>{error}</p>
-                  <Button onClick={onFetchNextPage}>{t("tryAgain")}</Button>
+                  <Button onClick={() => onFetchNextPage()}>
+                    {t("tryAgain")}
+                  </Button>
                 </S.ErrorWrapper>
               )}
             </InfiniteScroll>

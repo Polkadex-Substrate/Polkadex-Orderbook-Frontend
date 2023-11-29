@@ -50,18 +50,24 @@ export interface Order {
   fee: number;
   timestamp: Date;
   market: MarketBase;
+  side: OrderSide;
+  filledQuantity: string;
+  quantity: string;
 }
 export type MaybePaginated<T> = {
   data: T;
   nextToken: string | null | undefined;
 };
 export interface Trade {
+  market: MarketBase;
   tradeId: string;
   price: number;
   qty: number;
   isReverted: boolean;
   fee: number;
   timestamp: Date;
+  side: OrderSide;
+  quantity: string;
 }
 
 export interface PublicTrade {
@@ -105,7 +111,7 @@ export type Kline = {
   timestamp: Date;
 };
 export type TransactionType = "DEPOSIT" | "WITHDRAW";
-export type TransactionStatus = "PENDING" | "CONFIRMED" | "FAILED";
+export type TransactionStatus = "PENDING" | "CONFIRMED" | "FAILED" | "READY";
 export type Transaction = {
   txType: TransactionType;
   amount: number;
@@ -114,6 +120,8 @@ export type Transaction = {
   status: TransactionStatus;
   asset: Asset;
   isReverted: boolean;
+  stid: number;
+  snapshot_id?: number;
 };
 
 export type PriceLevel = {

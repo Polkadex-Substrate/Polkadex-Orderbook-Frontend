@@ -207,6 +207,7 @@ export const Transactions = ({ market }: Props) => {
                 setTransactionDropdownVisible(v)
               }
               filters={filters}
+              market={market}
             />
           </TabContent>
           <TabContent>

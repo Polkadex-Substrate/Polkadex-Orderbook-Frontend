@@ -6,7 +6,7 @@ import { GraphQLResult, GraphQLSubscription } from "@aws-amplify/api";
 
 import { Websocket_streamsSubscription } from "./API";
 import { BookUpdateEvent } from "./types";
-import { PriceLevel } from "./../types";
+import { PriceLevel, Order } from "./../types";
 
 type Props = {
   query: string;
@@ -129,3 +129,25 @@ export function filterUserSubscriptionType(
       JSON.parse(data?.data.websocket_streams.data).type === type
   );
 }
+
+export const replaceOrPushOrder = (
+  orders: Order[],
+  newOrder: Order
+): Order[] => {
+  const index = orders.findIndex((order) => order.orderId === newOrder.orderId);
+  if (index === -1) {
+    return [...orders, newOrder];
+  }
+  return [...orders.slice(0, index), newOrder, ...orders.slice(index + 1)];
+};
+
+export const removeOrderFromList = (
+  orders: Order[],
+  newOrder: Order
+): Order[] => {
+  const index = orders.findIndex((order) => order.orderId === newOrder.orderId);
+  if (index === -1) {
+    return orders;
+  }
+  return [...orders.slice(0, index), ...orders.slice(index + 1)];
+};

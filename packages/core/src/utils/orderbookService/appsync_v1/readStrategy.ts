@@ -20,6 +20,7 @@ import {
   BookLevel,
   MaybePaginated,
   LatestTradesPropsForMarket,
+  OrderSide,
 } from "./../types";
 import {
   fetchBatchFromAppSync,
@@ -215,6 +216,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         limit: args.limit,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
+        nextToken: args.pageParams,
       },
       "listOrderHistorybyMainAccount"
     );
@@ -297,6 +299,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         limit: args.limit,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
+        nextToken: args.pageParams,
       },
       "listTradesByMainAccount"
     );
@@ -304,13 +307,22 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       return { data: [], nextToken: null };
     }
     const trades = queryResult.response.map((item: APITrade): Trade => {
+      const market = this._marketList.find((x) => x.id === item?.m);
+      if (!market) {
+        throw new Error(
+          `[${this.constructor.name}:getTradeHistory] cannot find market`
+        );
+      }
       return {
+        market,
         price: Number(item?.p) || 0,
         qty: Number(item?.q) || 0,
         isReverted: item?.isReverted || false,
-        timestamp: new Date(item?.t || 0),
+        timestamp: new Date(Number(item?.t) || 0),
         tradeId: item?.t_id || "",
         fee: 0,
+        side: item.s as OrderSide,
+        quantity: item.q,
       };
     });
     return { data: trades, nextToken: queryResult.nextToken };
@@ -382,10 +394,12 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
           );
         }
         return {
+          stid: Number(item.stid),
+          snapshot_id: Number(item.snapshot_id),
           txType: (item?.tt as Transaction["txType"]) || "",
-          amount: Number(item?.a) || 0,
+          amount: Number(item?.q) || 0,
           fee: Number(item?.fee) || 0,
-          timestamp: new Date(item?.t || 0),
+          timestamp: new Date(Number(item?.t) || 0),
           isReverted: item?.isReverted || false,
           status: (item?.st as Transaction["status"]) || "",
           asset,
@@ -422,11 +436,14 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       orderId: item?.id || "",
       price: Number(item?.p) || 0,
       averagePrice: Number(item?.afp) || 0,
-      type: (item?.t as OrderType) || "LIMIT",
-      status: (item?.s as OrderStatus) || "CLOSED",
+      type: (item?.ot as OrderType) || "LIMIT",
+      status: (item?.st as OrderStatus) || "CLOSED",
       isReverted: item?.isReverted || false,
       fee: Number(item?.fee) || 0,
-      timestamp: new Date(item?.t || 0),
+      timestamp: new Date(Number(item?.t) || 0),
+      side: item.s as OrderSide,
+      filledQuantity: String(item.fq),
+      quantity: item.q,
     };
   }
 }
