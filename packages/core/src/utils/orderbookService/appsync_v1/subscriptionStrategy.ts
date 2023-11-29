@@ -143,6 +143,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       variables: {
         name: market,
       },
+      authToken: READ_ONLY_TOKEN,
     });
     const observable = subscription
       .filter((data) => {
@@ -152,8 +153,15 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
         const eventData = JSON.parse(
           data?.value?.data?.websocket_streams?.data as unknown as string
         ) as UserTradeEvent;
+        const market = this._marketList.find((x) => x.id === eventData?.m);
+        if (!market) {
+          throw new Error(
+            `[${this.constructor.name}:subscribeUserTrades] cannot find market`
+          );
+        }
         return {
-          tradeId: eventData.tid.toString(),
+          market,
+          tradeId: eventData.trade_id.toString(),
           price: Number(eventData.p),
           qty: Number(eventData.q),
           isReverted: false,
@@ -246,22 +254,23 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       variables: {
         name: address,
       },
+      authToken: READ_ONLY_TOKEN,
     });
     const observable = subscription
-      .filter((data) => Boolean(data?.value?.data?.websocket_streams?.data))
+      .filter((data) => {
+        return filterUserSubscriptionType(data.value, USER_EVENTS.Order);
+      })
       .map((data): Order => {
         const item = JSON.parse(
           data?.value?.data?.websocket_streams?.data as unknown as string
         ) as OrderUpdateEvent;
-        const marketId = item.pair.base.asset + "-" + item.pair.quote.asset;
+        const marketId =
+          item?.pair?.base?.asset + "-" + item?.pair?.quote?.asset;
         const market = this._marketList.find((item) => item.id === marketId);
-        if (!market) {
-          throw new Error(`${this.constructor.name} ${marketId} not found`);
-        }
         return {
           tradeAddress: item.user,
-          market: market,
-          orderId: item.id.toString(),
+          market: market || ({} as MarketBase),
+          orderId: item.id?.toString(),
           price: Number(item.price),
           averagePrice: item.avg_filled_price,
           type: item.order_type as OrderType,

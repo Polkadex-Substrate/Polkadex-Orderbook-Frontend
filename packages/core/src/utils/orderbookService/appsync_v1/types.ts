@@ -58,7 +58,7 @@ export type UserTradeEvent = {
   p: string;
   q: string;
   t: number;
-  tid: number;
+  trade_id: number;
 };
 export type TradeEvent = {
   m: string;
