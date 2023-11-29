@@ -9,7 +9,7 @@ import {
   Dropdown,
   Skeleton,
 } from "@polkadex/orderbook-ui/molecules";
-import { useOrderbookTable, useOrderbook } from "@orderbook/core/hooks";
+import { useOrderbook, useOrderbookTable } from "@orderbook/core/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 
@@ -34,6 +34,8 @@ export const OrderBook = ({ market }: Props) => {
     handleAction,
     loading,
     qtyPrecision,
+    quoteUnit,
+    baseUnit,
   } = useOrderbook(market);
 
   return (
@@ -88,9 +90,11 @@ export const OrderBook = ({ market }: Props) => {
         asks={asks}
         bids={bids}
         lastPriceValue={lastPriceValue}
-        pricePrecison={sizeState.length}
+        pricePrecision={sizeState.length}
         qtyPrecision={qtyPrecision}
         loading={loading}
+        baseUnit={baseUnit}
+        quoteUnit={quoteUnit}
         market={market}
       />
     </S.Wrapper>
@@ -107,28 +111,29 @@ export const OrderbookTable = ({
   lightMode,
   loading,
   qtyPrecision = MAX_DIGITS_AFTER_DECIMAL,
-  market,
+  baseUnit,
+  quoteUnit,
+  asks = [],
+  bids = [],
 }: T.Props) => {
   const contentRef = useRef<HTMLDivElement>(null);
-
-  const {
-    quoteUnit,
-    baseUnit,
-    valumeData,
-    changeMarketPrice,
-    changeMarketAmount,
-    changeMarketAmountSumClick,
-    total,
-  } = useOrderbookTable({
-    isSell,
-    orders: [...orders],
-    contentRef: contentRef as MutableRefObject<HTMLDivElement>,
-    market,
-  });
-
   const { t: translation } = useTranslation("organisms");
   const t = (key: string, args = {}) =>
     translation(`orderBook.table.${key}`, args);
+
+  const {
+    changeMarketAmount,
+    changeMarketAmountSumClick,
+    changeMarketPrice,
+    total,
+    volumeData,
+  } = useOrderbookTable({
+    orders,
+    contentRef: contentRef as MutableRefObject<HTMLDivElement>,
+    isSell,
+    asks,
+    bids,
+  });
 
   const handleRowClick = (
     field: TableField,
@@ -174,7 +179,7 @@ export const OrderbookTable = ({
                * @description -Get Row width based on the volume
                */
               const getRowWidth = (index: number) =>
-                `${valumeData[index]?.value || 1}%`;
+                `${volumeData[index]?.value || 1}%`;
 
               return (
                 <S.Card

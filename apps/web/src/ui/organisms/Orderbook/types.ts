@@ -1,11 +1,13 @@
-import { OrderBookState } from "@orderbook/core/providers/public/orderBook";
-
 export type Props = {
+  market: string;
   isSell?: boolean;
-  orders: OrderBookState["depth"]["bids"];
+  orders: string[][];
   lightMode?: boolean;
   pricePrecision?: number;
   qtyPrecision?: number;
   loading?: boolean;
-  market: string;
+  quoteUnit?: string;
+  baseUnit?: string;
+  bids: string[][];
+  asks: string[][];
 };
