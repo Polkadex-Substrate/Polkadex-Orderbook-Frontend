@@ -216,6 +216,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         limit: args.limit,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
+        nextToken: args.pageParams,
       },
       "listOrderHistorybyMainAccount"
     );
@@ -426,7 +427,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       price: Number(item?.p) || 0,
       averagePrice: Number(item?.afp) || 0,
       type: (item?.ot as OrderType) || "LIMIT",
-      status: (item?.s as OrderStatus) || "CLOSED",
+      status: (item?.st as OrderStatus) || "CLOSED",
       isReverted: item?.isReverted || false,
       fee: Number(item?.fee) || 0,
       timestamp: new Date(Number(item?.t) || 0),
