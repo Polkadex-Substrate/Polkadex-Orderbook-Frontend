@@ -59,12 +59,15 @@ export type MaybePaginated<T> = {
   nextToken: string | null | undefined;
 };
 export interface Trade {
+  market: MarketBase;
   tradeId: string;
   price: number;
   qty: number;
   isReverted: boolean;
   fee: number;
   timestamp: Date;
+  side: OrderSide;
+  quantity: string;
 }
 
 export interface PublicTrade {

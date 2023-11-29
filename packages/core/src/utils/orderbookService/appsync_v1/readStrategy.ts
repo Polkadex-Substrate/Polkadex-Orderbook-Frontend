@@ -306,13 +306,22 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       return { data: [], nextToken: null };
     }
     const trades = queryResult.response.map((item: APITrade): Trade => {
+      const market = this._marketList.find((x) => x.id === item?.m);
+      if (!market) {
+        throw new Error(
+          `[${this.constructor.name}:getTradeHistory] cannot find market`
+        );
+      }
       return {
+        market,
         price: Number(item?.p) || 0,
         qty: Number(item?.q) || 0,
         isReverted: item?.isReverted || false,
-        timestamp: new Date(item?.t || 0),
+        timestamp: new Date(Number(item?.t) || 0),
         tradeId: item?.t_id || "",
         fee: 0,
+        side: item.s as OrderSide,
+        quantity: item.q,
       };
     });
     return { data: trades, nextToken: queryResult.nextToken };

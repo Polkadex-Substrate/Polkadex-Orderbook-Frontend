@@ -23,7 +23,6 @@ import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { SessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { KlineProvider } from "@orderbook/core/providers/public/klineProvider";
-import { TradesProvider } from "@orderbook/core/providers/user/trades";
 import { defaultConfig } from "@orderbook/core/config";
 import { useMarketsData, useRecentTrades } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
@@ -182,9 +181,7 @@ export function Trading({ market: id }: Props) {
                         </KlineProvider>
                         {hasUser ? (
                           <SessionProvider>
-                            <TradesProvider>
-                              <Transactions market={id} />
-                            </TradesProvider>
+                            <Transactions market={id} />
                           </SessionProvider>
                         ) : (
                           <EmptyMyAccount hasLimit {...hasSelectedAccount} />
