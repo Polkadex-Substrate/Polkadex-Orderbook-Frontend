@@ -121,7 +121,7 @@ export function useFunds() {
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = balances?.find(
-      (balance) => balance?.asset.id?.toString() === assetId
+      (balance) => balance?.asset?.id?.toString() === assetId
     );
     if (!balance?.asset.id) return "0";
     return balance.free;
@@ -177,20 +177,26 @@ export function useFunds() {
         const { onChainBalance, ...updateBalance } =
           await updateBalanceFromEvent(payload);
 
-        // Update trading balance
+        // Update trading account balance
         queryClient.setQueryData(
           QUERY_KEYS.tradingBalances(mainAddress),
-          (oldData) => {
+          (oldData): Balance[] => {
             const prevData = [...(oldData as Balance[])];
             const old = prevData.find(
               (i) => i.asset.id.toString() === updateBalance.assetId.toString()
             );
             if (!old) {
-              return oldData;
+              return prevData;
             }
-            const newBalance = {
-              ...old,
-              ...updateBalance,
+            const newBalance: Balance = {
+              asset: {
+                decimal: 8,
+                id: updateBalance.assetId,
+                name: updateBalance.name,
+                ticker: updateBalance.symbol,
+              },
+              free: updateBalance.free_balance,
+              reserved: updateBalance.reserved_balance,
             };
 
             // Filter out old balances from the balance state
