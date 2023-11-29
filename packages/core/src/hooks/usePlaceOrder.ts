@@ -20,8 +20,8 @@ import {
   useFunds,
   useMarketsData,
   useRecentTrades,
-  useOrderbookData,
-} from "@orderbook/core";
+  useOrderbook,
+} from "@orderbook/core/hooks";
 
 type FormValues = {
   priceSell: string;
@@ -49,9 +49,7 @@ export function usePlaceOrder(
     [translation]
   );
 
-  const {
-    depth: { asks, bids },
-  } = useOrderbookData(market);
+  const { asks, bids } = useOrderbook(market);
 
   const { currentTradePrice: lastPriceValue } = useRecentTrades(market);
 

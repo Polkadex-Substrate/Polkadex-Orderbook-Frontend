@@ -1,7 +1,6 @@
 export * from "./useMarketsData";
 export * from "./useAssetsMetaData";
 export * from "./useRecentTrades";
-export * from "./useOrderbookData";
 export * from "./useFunds";
 export * from "./useOpenOrders";
 export * from "./useMnemonic";
