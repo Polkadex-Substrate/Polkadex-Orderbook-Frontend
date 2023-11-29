@@ -116,16 +116,12 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       },
       authToken: READ_ONLY_TOKEN,
     });
-    const observable = subscription
-      .filter((data) => {
-        return filterUserSubscriptionType(data.value, USER_EVENTS.Order);
-      })
-      .map((data) => {
-        const eventData = JSON.parse(
-          data?.value?.data?.websocket_streams?.data as unknown as string
-        ) as BookUpdateEvent;
-        return convertBookUpdatesToPriceLevels(eventData);
-      });
+    const observable = subscription.map((data) => {
+      const eventData = JSON.parse(
+        data?.value?.data?.websocket_streams?.data as unknown as string
+      ) as BookUpdateEvent;
+      return convertBookUpdatesToPriceLevels(eventData);
+    });
     return observable.subscribe(cb);
   }
 
