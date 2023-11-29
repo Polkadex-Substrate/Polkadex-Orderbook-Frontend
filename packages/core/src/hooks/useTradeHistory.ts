@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { Ifilters } from "@orderbook/core/providers/types";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
@@ -60,19 +60,16 @@ export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
     },
   });
 
-  const list = useMemo(
-    () => data?.pages.flatMap((page) => page.data) ?? [],
-    [data?.pages]
-  );
-  const listSorted = useMemo(() => {
-    return list.sort((a, b) => {
-      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+  const list = useMemo(() => {
+    const tradeHistory = data?.pages.flatMap((page) => page.data) ?? [];
+    return tradeHistory.sort((a, b) => {
+      const timestampA = new Date(a.timestamp).getTime();
+      const timestampB = new Date(b.timestamp).getTime();
+      return timestampB - timestampA;
     });
-  }, [list]);
+  }, [data?.pages]);
 
-  const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);
-
-  useEffect(() => {
+  const updatedTradeList = useMemo(() => {
     let tradeHistoryList = list.filter((item) => !item.isReverted);
 
     if (filters?.showReverted) {
@@ -99,8 +96,15 @@ export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
       });
     }
 
-    setUpdatedTradeList(tradeHistoryList);
-  }, [filters, list, currentMarket?.name]);
+    return tradeHistoryList;
+  }, [
+    currentMarket?.name,
+    filters?.hiddenPairs,
+    filters?.onlyBuy,
+    filters?.onlySell,
+    filters?.showReverted,
+    list,
+  ]);
 
   const priceFixed = currentMarket
     ? decimalPlaces(currentMarket.price_tick_size)

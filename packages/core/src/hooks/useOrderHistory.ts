@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Ifilters } from "../providers/types";
@@ -58,18 +58,14 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
   });
 
   const orderHistory = useMemo(
-    () => orderHistoryList?.pages.flatMap((page) => page.data) ?? [],
+    () =>
+      sortOrdersDescendingTime(
+        orderHistoryList?.pages.flatMap((page) => page.data) ?? []
+      ),
     [orderHistoryList?.pages]
   );
 
-  const list = useMemo(
-    () => sortOrdersDescendingTime(orderHistory),
-    [orderHistory]
-  );
-
-  const [filteredOrderHistory, setFilteredOrderHistory] = useState(list);
-
-  useEffect(() => {
+  const filteredOrderHistory = useMemo(() => {
     let orderHistoryList = orderHistory.filter((item) => !item.isReverted);
 
     if (filters?.showReverted) {
@@ -109,7 +105,7 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
       });
     }
 
-    setFilteredOrderHistory(orderHistoryList);
+    return orderHistoryList;
   }, [
     filters?.hiddenPairs,
     filters?.onlyBuy,

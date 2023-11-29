@@ -299,6 +299,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         limit: args.limit,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
+        nextToken: args.pageParams,
       },
       "listTradesByMainAccount"
     );
