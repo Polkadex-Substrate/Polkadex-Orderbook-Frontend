@@ -1,4 +1,4 @@
-import { ReactNode, isValidElement, useMemo } from "react";
+import { Fragment, ReactNode, isValidElement, useMemo, useState } from "react";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import {
@@ -7,7 +7,6 @@ import {
   NotificationsContent,
   PolkadexLogo,
   Popover,
-  Profile,
 } from "@polkadex/orderbook-ui/molecules";
 import {
   useSettingsProvider,
@@ -25,6 +24,9 @@ import {
 import { useRouter } from "next/router";
 
 import * as S from "./styles";
+import { Profile } from "./profile";
+
+import { ConnectWalletInteraction } from "@/ui/templates/ConnectWalletInteraction";
 
 export const Header = ({
   dark = false,
@@ -62,88 +64,68 @@ export const Header = ({
 
   const router = useRouter();
   const { locales, locale } = router;
+  const [state, setState] = useState(false);
+
   return (
-    <S.Wrapper dark={dark}>
-      <S.Content>
-        <S.Logo borderActive={isValidChild} hideLogo>
-          <Link href="/">
-            <PolkadexLogo />
-          </Link>
-          <span>BETA</span>
-        </S.Logo>
-        <S.ContentFull>{children}</S.ContentFull>
-      </S.Content>
-      <S.Actions>
-        <S.ActionsWrapper>
-          <Dropdown>
-            <Dropdown.Trigger>
-              <S.Flex>
-                <span>{locale?.toUpperCase()}</span>
-                <Icon name="ArrowBottom" />
-              </S.Flex>
-            </Dropdown.Trigger>
-            <Dropdown.Menu fill="secondaryBackgroundSolid">
-              {(locales as string[])?.map((value) => {
-                const { pathname, query, asPath } = router;
-                return (
-                  <Dropdown.Item key={value}>
-                    <Link href={{ pathname, query }} as={asPath} locale={value}>
-                      {value?.toUpperCase()}
-                    </Link>
-                  </Dropdown.Item>
-                );
-              })}
-            </Dropdown.Menu>
-          </Dropdown>
-        </S.ActionsWrapper>
-        <S.ActionsWrapper>
-          <Popover>
-            <Popover.Trigger>
-              <S.NotificationsActive
-                isActive={!!notifications?.find((value) => !value.active)}
-              >
-                <Icons.Notifications />
-                <div />
-              </S.NotificationsActive>
-            </Popover.Trigger>
-            <Popover.Content>
-              <NotificationsContent notifications={allNotifications} />
-            </Popover.Content>
-          </Popover>
-        </S.ActionsWrapper>
-        <S.AccountContainer>
-          {isAuthenticated ? (
+    <Fragment>
+      <ConnectWalletInteraction open={state} onChange={setState} />
+      <S.Wrapper dark={dark}>
+        <S.Content>
+          <S.Logo borderActive={isValidChild} hideLogo>
+            <Link href="/">
+              <PolkadexLogo />
+            </Link>
+            <span>BETA</span>
+          </S.Logo>
+          <S.ContentFull>{children}</S.ContentFull>
+        </S.Content>
+        <S.Actions>
+          <S.ActionsWrapper>
+            <Dropdown>
+              <Dropdown.Trigger>
+                <S.Flex>
+                  <span>{locale?.toUpperCase()}</span>
+                  <Icon name="ArrowBottom" />
+                </S.Flex>
+              </Dropdown.Trigger>
+              <Dropdown.Menu fill="secondaryBackgroundSolid">
+                {(locales as string[])?.map((value) => {
+                  const { pathname, query, asPath } = router;
+                  return (
+                    <Dropdown.Item key={value}>
+                      <Link
+                        href={{ pathname, query }}
+                        as={asPath}
+                        locale={value}
+                      >
+                        {value?.toUpperCase()}
+                      </Link>
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
+          </S.ActionsWrapper>
+          <S.ActionsWrapper>
             <Popover>
               <Popover.Trigger>
-                <S.Account>
-                  <S.Avatar>
-                    <Icons.Avatar />
-                  </S.Avatar>
-                  <S.AccountInfo>
-                    {tradeAccountInfo ? (
-                      <p>
-                        {walletName}
-                        <span>{addressName}</span>
-                      </p>
-                    ) : (
-                      <p>{t("noTradeWallet")}</p>
-                    )}
-                  </S.AccountInfo>
-                  <S.AccountMessage>{t("account")}</S.AccountMessage>
-                </S.Account>
+                <S.NotificationsActive
+                  isActive={!!notifications?.find((value) => !value.active)}
+                >
+                  <Icons.Notifications />
+                  <div />
+                </S.NotificationsActive>
               </Popover.Trigger>
               <Popover.Content>
-                <Profile />
+                <NotificationsContent notifications={allNotifications} />
               </Popover.Content>
             </Popover>
-          ) : (
-            <S.UserActions>
-              <Link href="/signIn">{t("login")}</Link>
-              <Link href="/sign">{t("register")}</Link>
-            </S.UserActions>
-          )}
-        </S.AccountContainer>
-      </S.Actions>
-    </S.Wrapper>
+          </S.ActionsWrapper>
+          <S.AccountContainer>
+            <Profile onClick={() => setState(true)} />
+          </S.AccountContainer>
+        </S.Actions>
+      </S.Wrapper>
+    </Fragment>
   );
 };

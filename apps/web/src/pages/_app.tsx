@@ -27,6 +27,7 @@ import { useInit } from "@orderbook/core/hooks";
 
 import awsconfig from "../../aws-exports";
 
+import "@polkadex/ux/dist/index.css";
 import * as gtag from "@/lib/gtag";
 import { defaultThemes, GlobalStyles } from "@/styles";
 
