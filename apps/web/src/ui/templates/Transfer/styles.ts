@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
@@ -28,7 +30,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   flex: 1;
   @media screen and (min-width: 590px) {
-    margin-left: 2rem;
+    margin-left: ${normalizeValue(2)};
   }
   overflow: auto;
 `;
@@ -46,9 +48,9 @@ export const ContainerMain = styled.div`
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 2rem;
-  max-width: 100rem;
+  gap: ${normalizeValue(1)};
+  padding: ${normalizeValue(2)};
+  max-width: ${normalizeValue(100)};
   @media screen and (min-width: 1110px) {
     padding: 4rem;
   }
@@ -57,10 +59,10 @@ export const Header = styled.div`
 export const Title = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   align-self: flex-end;
   span {
-    font-size: 1.5rem;
+    font-size: ${normalizeValue(1.5)};
     font-weight: 500;
   }
 `;
@@ -69,10 +71,10 @@ export const Heading = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: ${normalizeValue(0.6)};
 
     h1 {
-      font-size: 2.5rem;
+      font-size: ${normalizeValue(2.5)};
       font-weight: 500;
     }
     h2 {

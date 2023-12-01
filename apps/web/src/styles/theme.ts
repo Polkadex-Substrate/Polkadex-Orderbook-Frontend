@@ -1,3 +1,5 @@
+import { normalizeValue } from "@/utils/normalize";
+
 const defaultTheme = {
   title: "dark",
   grid: {
@@ -7,7 +9,7 @@ const defaultTheme = {
   border: {
     radius: {
       small: "0.7rem",
-      medium: "1rem",
+      medium: normalizeValue(1),
       large: "1.3rem",
       primary: {
         small: "0 1.5rem 1.5rem 1.5rem",
@@ -22,7 +24,7 @@ const defaultTheme = {
     normal: 400,
     bold: 600,
     sizes: {
-      xxxxsmall: "1rem",
+      xxxxsmall: normalizeValue(1),
       xxxsmall: "1.1rem",
       xxsmall: "1.2rem",
       xsmall: "1.3rem",
@@ -35,7 +37,7 @@ const defaultTheme = {
   },
   icon: {
     sizes: {
-      xxsmall: "1rem",
+      xxsmall: normalizeValue(1),
       xsmall: "1.2rem",
       small: "1.4rem",
       medium: "1.5rem",
@@ -76,7 +78,7 @@ const defaultTheme = {
     red: "#F31260",
   },
   spacings: {
-    xxxsmall: "0.5rem",
+    xxxsmall: normalizeValue(0.5),
     xxsmall: "0.8rem",
     xsmall: "1.6rem",
     small: "2.4rem",
@@ -90,7 +92,7 @@ const defaultTheme = {
     xsmall: "0.2rem",
     small: "0.3rem",
     medium: "0.4rem",
-    large: "0.5rem",
+    large: normalizeValue(0.5),
     xlarge: "0.6rem",
     xxlarge: "0.7rem",
   },

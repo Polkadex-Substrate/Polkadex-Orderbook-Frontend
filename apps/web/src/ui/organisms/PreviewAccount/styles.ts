@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.section`
   ${({ theme }) => css`
     border-radius: 1.5rem 0 0 0;
@@ -8,14 +10,15 @@ export const Main = styled.section`
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     min-width: 90vw;
     min-height: 99vh;
     height: 100%;
-    padding: 3rem 2rem 2rem 2rem;
+    padding: ${normalizeValue(3)} ${normalizeValue(2)} ${normalizeValue(2)}
+      ${normalizeValue(2)};
     @media screen and (min-width: 440px) {
-      min-width: 50rem;
-      max-width: 50rem;
+      min-width: ${normalizeValue(50)};
+      max-width: ${normalizeValue(50)};
     }
     overflow-y: auto;
   `}
@@ -24,8 +27,8 @@ export const Header = styled.button`
   ${({ theme }) => css`
     width: 4rem;
     height: 4rem;
-    padding: 1rem;
-    border-radius: 10rem;
+    padding: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(10)};
     cursor: pointer;
     transition: background-color 0.5s ease-in;
     svg {
@@ -42,26 +45,26 @@ export const Header = styled.button`
 `;
 export const Content = styled.div`
   h2 {
-    font-size: 1.8rem;
+    font-size: ${normalizeValue(1.8)};
     font-weight: 550;
   }
 `;
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  margin-top: 1.5rem;
+  gap: ${normalizeValue(2)};
+  margin-top: ${normalizeValue(1.5)};
 `;
 export const Box = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 export const Button = styled.button`
   ${({ theme }) => css`
-    padding: 1rem;
+    padding: ${normalizeValue(1)};
     width: 100%;
-    border-radius: 0.3rem;
+    border-radius: ${normalizeValue(0.3)};
     font-weight: 500;
     background: ${theme.colors.primary};
     &:disabled {
@@ -73,10 +76,10 @@ export const Button = styled.button`
 export const Card = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
   strong {
     font-weight: normal;
-    font-size: 1.1rem;
+    font-size: ${normalizeValue(1.1)};
     align-self: flex-end;
   }
 `;
@@ -85,8 +88,8 @@ export const CardWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.5rem;
-    border-radius: 0.4rem;
+    padding: ${normalizeValue(1.5)};
+    border-radius: ${normalizeValue(0.4)};
     background: ${theme.colors.tertiaryBackgroundOpacity};
   `}
 `;
@@ -94,10 +97,10 @@ export const CardContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: ${normalizeValue(0.4)};
     flex: 1;
     span {
-      font-size: 1.2rem;
+      font-size: ${normalizeValue(1.2)};
       color: ${theme.colors.tertiaryText};
     }
   `}
@@ -108,10 +111,10 @@ export const Verified = styled.div<{ isActive?: boolean }>`
     align-items: center;
     justify-content: center;
     background: ${isActive ? theme.colors.green : theme.colors.red};
-    width: 1.5rem;
-    height: 1.5rem;
+    width: ${normalizeValue(1.5)};
+    height: ${normalizeValue(1.5)};
     padding: ${isActive ? "0.3rem" : "0.4rem"};
-    border-radius: 10rem;
+    border-radius: ${normalizeValue(10)};
     svg {
       fill: ${theme.colors.text};
       stroke: ${theme.colors.text};
@@ -125,10 +128,10 @@ export const Actions = styled.div<{ isActive?: boolean }>`
       background: ${isActive
         ? theme.colors.primary
         : theme.colors.secondaryBackgroundOpacity};
-      border-radius: 0.3rem;
-      padding: 0.5rem;
+      border-radius: ${normalizeValue(0.3)};
+      padding: ${normalizeValue(0.5)};
       font-weight: 500;
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
       transition: background-color 0.4s ease-in-out;
       &:hover {
         background: ${theme.colors.secondaryBackground};
@@ -140,12 +143,12 @@ export const Actions = styled.div<{ isActive?: boolean }>`
 export const CardBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
 `;
 
 export const Icon = styled.div`
   ${({ theme }) => css`
-    width: 0.8rem;
+    width: ${normalizeValue(0.8)};
     svg {
       fill: ${theme.colors.tertiaryText};
       stroke: ${theme.colors.tertiaryText};
@@ -156,7 +159,7 @@ export const CardInfo = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
 
     svg {
       fill: ${theme.colors.tertiaryText};
@@ -165,7 +168,7 @@ export const CardInfo = styled.div`
 
     small {
       color: ${theme.colors.tertiaryText};
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
     }
     input {
       color: ${theme.colors.text};
@@ -178,14 +181,14 @@ export const Footer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const FooterButton = styled.button`
   height: 100%;
-  border-radius: 0.3rem;
+  border-radius: ${normalizeValue(0.3)};
   font-weight: 500;
-  padding: 1rem;
+  padding: ${normalizeValue(1)};
 `;
 
 export const ExportButton = styled(FooterButton)`
@@ -204,8 +207,8 @@ export const DropdownButton = styled(FooterButton)`
     cursor: pointer;
     div {
       display: inline-block;
-      margin-left: 0.5rem;
-      width: 0.7rem;
+      margin-left: ${normalizeValue(0.5)};
+      width: ${normalizeValue(0.7)};
     }
   `}
 `;

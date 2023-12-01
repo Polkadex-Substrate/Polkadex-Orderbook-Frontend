@@ -1,5 +1,6 @@
 import { createGlobalStyle, css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
 const iconThemingModifier = {
   dark: () => css`
     background-image: url("data:image/svg+xml;utf8,<svg width='9px' height='6px' viewBox='0 0 9 6' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g id='Artboard' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' transform='translate(-636.000000, -171.000000)' fill-opacity='0.368716033'><g id='input' transform='translate(172.000000, 37.000000)' fill='white' fill-rule='nonzero'><g id='Group-9' transform='translate(323.000000, 127.000000)'><path d='M142.280245,7.23952813 C141.987305,6.92353472 141.512432,6.92361662 141.219585,7.23971106 C140.926739,7.5558055 140.926815,8.06821394 141.219755,8.38420735 L145.498801,13 L149.780245,8.38162071 C150.073185,8.0656273 150.073261,7.55321886 149.780415,7.23712442 C149.487568,6.92102998 149.012695,6.92094808 148.719755,7.23694149 L145.498801,10.7113732 L142.280245,7.23952813 Z' id='arrow'></path></g></g></g></svg>");
@@ -22,7 +23,7 @@ ${({ theme }) => css`
     outline: none;
   }
   html {
-    font-size: 62.5%;
+    // font-size: 62.5%;
   }
 
   body {
@@ -66,7 +67,7 @@ ${({ theme }) => css`
 
   @keyframes slideIn {
     0% {
-      transform: translateY(1rem);
+      transform: translateY(0.625rem);
       opacity: 0;
     }
     100% {
@@ -74,7 +75,7 @@ ${({ theme }) => css`
       opacity: 1;
     }
     0% {
-      transform: translateY(1rem);
+      transform: translateY(0.625rem);
       opacity: 0;
     }
   }
@@ -296,17 +297,17 @@ Super Form Reset
   /* Custom Scroll ------------------------------------
 -----------------------------------------------*/
   &::-webkit-scrollbar {
-    width: 0.5rem;
+    width: 0.3125rem;
   }
   /* Track */
   &::-webkit-scrollbar-track {
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 2rem;
+    border-radius: ${normalizeValue(2)};
   }
   /* Handle */
   &::-webkit-scrollbar-thumb {
     background: ${theme.colors.secondaryBackground};
-    border-radius: 2rem;
+    border-radius: ${normalizeValue(2)};
   }
   /* Handle on hover */
   &::-webkit-scrollbar-thumb:hover {
@@ -378,7 +379,7 @@ Super Form Reset
     .rdrMonthPicker,
     .rdrYearPicker {
       background: ${theme.colors.primaryBackgroundOpacity};
-      border-radius: 0.5rem;
+      border-radius: 0.3125rem;
     }
     .rdrNextPrevButton {
       background: ${theme.colors.secondaryBackground};

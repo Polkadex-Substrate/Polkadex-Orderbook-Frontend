@@ -1,18 +1,20 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: ${normalizeValue(1.5)};
 `;
 
 export const Container = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackgroundOpacity};
-    padding: 1.5rem;
-    border-radius: 0.4rem;
+    padding: ${normalizeValue(1.5)};
+    border-radius: ${normalizeValue(0.4)};
     span {
-      font-size: 1.2rem;
+      font-size: ${normalizeValue(1.2)};
       color: ${theme.colors.tertiaryText};
     }
   `}
@@ -21,7 +23,7 @@ export const Container = styled.div`
 export const WalletSelect = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
   small {
     align-self: flex-end;
   }
@@ -37,14 +39,14 @@ export const WalletSelectWrapper = styled(Container)<{ hasError?: boolean }>`
 `;
 
 export const WalletSelectArrow = styled.div`
-  width: 0.8rem;
+  width: ${normalizeValue(0.8)};
 `;
 
 export const DropdownHeader = styled.p`
   ${({ theme }) => css`
     small {
       color: ${theme.colors.tertiaryText};
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
     }
   `}
 `;
@@ -52,19 +54,19 @@ export const DropdownHeader = styled.p`
 export const WalletSelectContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: ${normalizeValue(0.7)};
 `;
 
 export const WalletSelectContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     div {
-      width: 1.3rem;
-      height: 1.3rem;
-      padding: 0.2rem;
-      border-radius: 10rem;
+      width: ${normalizeValue(1.3)};
+      height: ${normalizeValue(1.3)};
+      padding: ${normalizeValue(0.2)};
+      border-radius: ${normalizeValue(10)};
       background: ${theme.colors.secondaryBackgroundOpacity};
       svg {
         stroke: ${theme.colors.tertiaryText};
@@ -77,7 +79,7 @@ export const WalletSelectContent = styled.div`
 export const WalletName = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const WalletNameWrapper = styled(Container)`
@@ -88,7 +90,7 @@ export const WalletNameWrapper = styled(Container)`
     div {
       display: flex;
       flex-direction: column;
-      gap: 0.7rem;
+      gap: ${normalizeValue(0.7)};
       flex: 1;
     }
     input {
@@ -96,10 +98,10 @@ export const WalletNameWrapper = styled(Container)`
     }
     button {
       background: ${theme.colors.secondaryBackgroundOpacity};
-      border-radius: 0.3rem;
-      padding: 0.5rem;
+      border-radius: ${normalizeValue(0.3)};
+      padding: ${normalizeValue(0.5)};
       font-weight: 500;
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
       transition: background-color 0.4s ease-in-out;
       &:hover {
         background: ${theme.colors.secondaryBackground};
@@ -114,7 +116,7 @@ export const WalletError = styled.div<{ isNegative?: boolean }>`
     justify-content: space-between;
     small,
     strong {
-      font-size: 1.2rem;
+      font-size: ${normalizeValue(1.2)};
     }
     small {
       align-self: flex-end;
@@ -132,26 +134,26 @@ export const WalletError = styled.div<{ isNegative?: boolean }>`
 export const Error = styled.p`
   ${({ theme }) => css`
     color: ${theme.colors.red};
-    margin-top: 0.5rem;
+    margin-top: ${normalizeValue(0.5)};
   `}
 `;
 
 export const Password = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
 `;
 
 export const PasswordWrapper = styled(Container)`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: ${normalizeValue(1.5)};
 `;
 export const PasswordHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
 `;
 
 export const PasswordFooter = styled.div`
@@ -164,7 +166,7 @@ export const PasswordFooter = styled.div`
       width: 100%;
     }
     button {
-      width: 1.5rem;
+      width: ${normalizeValue(1.5)};
       svg {
         fill: ${theme.colors.tertiaryText};
         stroke: ${theme.colors.tertiaryText};
@@ -176,11 +178,11 @@ export const PasswordFooter = styled.div`
 export const Footer = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     button {
-      border-radius: 0.3rem;
+      border-radius: ${normalizeValue(0.3)};
       font-weight: 500;
-      padding: 1rem;
+      padding: ${normalizeValue(1)};
       &:first-child {
         background: ${theme.colors.secondaryBackground};
       }

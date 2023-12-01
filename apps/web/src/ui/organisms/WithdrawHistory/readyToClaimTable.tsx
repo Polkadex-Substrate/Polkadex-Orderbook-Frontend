@@ -97,7 +97,7 @@ const BatchTable = ({
         >
           {loading ? (
             <>
-              <LoadingSpinner color="white" style={{ marginRight: "0.5rem" }} />{" "}
+              <LoadingSpinner color="white" style={{ marginRight: normalizeValue(0.5) }} />{" "}
               {t("claimLoading")}
             </>
           ) : (

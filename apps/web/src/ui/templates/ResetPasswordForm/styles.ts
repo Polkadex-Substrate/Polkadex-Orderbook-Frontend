@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
@@ -30,7 +32,7 @@ export const Wrapper = styled.div`
   overflow-y: scroll;
   @media screen and (max-height: 830px) {
     justify-content: flex-start;
-    margin-top: 3rem;
+    margin-top: ${normalizeValue(3)};
   }
 `;
 
@@ -48,7 +50,7 @@ export const Title = styled.div`
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    margin: 0 2rem 1rem 2rem;
+    margin: 0 ${normalizeValue(2)} ${normalizeValue(1)} ${normalizeValue(2)};
     div {
       max-width: 15rem;
       svg {
@@ -65,9 +67,9 @@ export const Card = styled.div`
   ${({ theme }) => css`
     display: grid;
     grid-template-columns: auto 1fr;
-    border-radius: 2rem;
+    border-radius: ${normalizeValue(2)};
     border: 1px solid ${theme.colors.secondaryBackground};
-    margin: 2rem;
+    margin: ${normalizeValue(2)};
     @media screen and (min-width: 880px) {
       min-height: 40rem;
     }
@@ -77,13 +79,13 @@ export const Card = styled.div`
 export const Column = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 2rem;
-    width: 3rem;
+    border-radius: ${normalizeValue(2)};
+    width: ${normalizeValue(3)};
   `}
 `;
 
 export const Box = styled.div`
-  padding: 2rem;
+  padding: ${normalizeValue(2)};
   width: 100%;
   @media screen and (min-width: 880px) {
     max-width: 40rem;
@@ -92,30 +94,30 @@ export const Box = styled.div`
     align-self: center;
   }
   h1 {
-    font-size: 1.8rem;
+    font-size: ${normalizeValue(1.8)};
     font-weight: 550;
   }
   form {
-    margin-top: 2rem;
+    margin-top: ${normalizeValue(2)};
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
   }
 `;
 
 export const BoxTitle = styled.div`
   p {
-    margin-top: 1rem;
+    margin-top: ${normalizeValue(1)};
   }
 `;
 
 export const Show = styled.button`
   ${({ theme }) => css`
-    width: 2.2rem;
-    height: 2.2rem;
-    padding: 0.3rem;
+    width: ${normalizeValue(2.2)};
+    height: ${normalizeValue(2.2)};
+    padding: ${normalizeValue(0.3)};
     transition: background 0.5s ease-in;
-    border-radius: 10rem;
+    border-radius: ${normalizeValue(10)};
     &:hover {
       background: ${theme.colors.secondaryBackground};
     }
@@ -131,11 +133,11 @@ export const Success = styled.div`
     justify-content: center;
     align-items: center;
     text-align: center;
-    gap: 1rem;
-    padding: 8rem 2rem 9rem 2rem;
-    border-radius: 2rem;
+    gap: ${normalizeValue(1)};
+    padding: 8rem ${normalizeValue(2)} 9rem ${normalizeValue(2)};
+    border-radius: ${normalizeValue(2)};
     border: 1px solid ${theme.colors.secondaryBackground};
-    margin: 2rem;
+    margin: ${normalizeValue(2)};
     @media screen and (min-width: 880px) {
       min-height: 40rem;
     }
@@ -146,7 +148,7 @@ export const Success = styled.div`
       }
     }
     p {
-      max-width: 50rem;
+      max-width: ${normalizeValue(50)};
       line-height: 1.5;
     }
     small {

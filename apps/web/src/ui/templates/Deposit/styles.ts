@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
@@ -25,10 +27,10 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 2rem;
+  padding: ${normalizeValue(2)};
   overflow-y: scroll;
   @media screen and (min-width: 590px) {
-    padding: 4rem 4rem 10rem 4rem;
+    padding: 4rem 4rem ${normalizeValue(10)} 4rem;
   }
 `;
 
@@ -41,12 +43,12 @@ export const Title = styled.button`
     div {
       vertical-align: middle;
       display: inline-block;
-      width: 3rem;
-      height: 3rem;
-      padding: 0.8rem;
-      border-radius: 10rem;
+      width: ${normalizeValue(3)};
+      height: ${normalizeValue(3)};
+      padding: ${normalizeValue(0.8)};
+      border-radius: ${normalizeValue(10)};
       border: 1px solid ${theme.colors.secondaryBackground};
-      margin-right: 0.8rem;
+      margin-right: ${normalizeValue(0.8)};
       transition: border 0.5s ease-in;
 
       svg {
@@ -66,7 +68,7 @@ export const Title = styled.button`
 export const Column = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 2rem;
+    border-radius: ${normalizeValue(2)};
     background-image: url("/img/depositHero.svg");
     background-repeat: no-repeat;
     background-size: contain;
@@ -78,9 +80,9 @@ export const Column = styled.div`
       padding: 3.5rem;
     }
     h1 {
-      font-size: 2.2rem;
+      font-size: ${normalizeValue(2.2)};
       font-weight: 550;
-      margin-bottom: 1.5rem;
+      margin-bottom: ${normalizeValue(1.5)};
     }
     p {
       line-height: 1.4;
@@ -90,19 +92,19 @@ export const Column = styled.div`
 
 export const Container = styled.div`
   flex: 1;
-  margin-top: 2rem;
+  margin-top: ${normalizeValue(2)};
   display: grid;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   @media screen and (min-width: 830px) {
     grid-template-columns: minmax(25rem, 30rem) 1fr;
   }
 `;
 
 export const Box = styled.div`
-  margin-top: 2rem;
+  margin-top: ${normalizeValue(2)};
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
   flex: 1;
   @media screen and (min-width: 830px) {
     padding: 8rem 4rem 4rem 4rem;
@@ -114,10 +116,10 @@ export const Form = styled.div`
     max-width: 40rem;
   }
   form {
-    margin-top: 1.5rem;
+    margin-top: ${normalizeValue(1.5)};
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: ${normalizeValue(2.5)};
   }
 `;
 
@@ -136,9 +138,9 @@ export const SelectInput = styled.div`
 export const SelectInputContainer = styled.div`
   ${({ theme }) => css`
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    padding-bottom: 1rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    padding-bottom: ${normalizeValue(1)};
+    margin-top: ${normalizeValue(1)};
+    margin-bottom: ${normalizeValue(1)};
     cursor: pointer;
     input {
       width: 100%;
@@ -151,7 +153,7 @@ export const Available = styled.span`
   ${({ theme }) => css`
     display: block;
     align-self: flex-end;
-    font-size: 1.3rem;
+    font-size: ${normalizeValue(1.3)};
     strong {
       color: ${theme.colors.text};
       font-weight: 500;
@@ -163,13 +165,13 @@ export const MAXButton = styled.button`
   ${({ theme }) => css`
     display: block;
     align-self: flex-end;
-    font-size: 1.2rem;
-    margin-top: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
+    margin-top: ${normalizeValue(1.2)};
     color: white;
     background: ${theme.colors.green};
-    border-radius: 0.3rem;
-    padding: 0.3rem 0.5rem 0.3rem 0.5rem;
-    margin-bottom: -0.5rem;
+    border-radius: ${normalizeValue(0.3)};
+    padding: 0.3rem 0.5rem 0.3rem ${normalizeValue(0.5)};
+    margin-bottom: -${normalizeValue(0.5)};
     transition: background 0.2s ease-in;
     &:hover {
       background: ${theme.colors.green}88;
@@ -180,26 +182,26 @@ export const MAXButton = styled.button`
 export const SelectAccountAvatar = styled.div``;
 export const Success = styled.div`
   h3 {
-    margin-bottom: 1rem;
+    margin-bottom: ${normalizeValue(1)};
   }
 `;
 
 export const SelectAccount = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     align-items: center;
     div {
       &:first-child {
         min-width: 3.5rem;
         min-height: 3.5rem;
-        border-radius: 0.8rem;
-        padding: 0.8rem;
+        border-radius: ${normalizeValue(0.8)};
+        padding: ${normalizeValue(0.8)};
         background: ${theme.colors.secondaryBackgroundOpacity};
       }
       &:last-child {
         strong {
-          font-size: 1.4rem;
+          font-size: ${normalizeValue(1.4)};
           font-weight: 500;
         }
         span {
@@ -218,7 +220,7 @@ export const DropdownHeader = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     justify-content: space-between;
     flex: 1;
     div {
@@ -228,19 +230,19 @@ export const DropdownHeader = styled.div`
       &:first-child {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: ${normalizeValue(0.5)};
         span {
-          width: 2rem;
-          height: 2rem;
-          border-radius: 10rem;
-          padding: 0.4rem;
+          width: ${normalizeValue(2)};
+          height: ${normalizeValue(2)};
+          border-radius: ${normalizeValue(10)};
+          padding: ${normalizeValue(0.4)};
           background: ${theme.colors.secondaryBackgroundOpacity};
         }
       }
       &:last-child {
         span {
-          width: 1rem;
-          height: 1rem;
+          width: ${normalizeValue(1)};
+          height: ${normalizeValue(1)};
           svg {
             stroke: ${theme.colors.secondaryText};
           }
@@ -254,12 +256,12 @@ export const DropdownContent = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 0.8rem;
+    border-radius: ${normalizeValue(0.8)};
     button {
       white-space: nowrap;
-      font-size: 1.3rem;
-      padding: 1.2rem;
-      border-radius: 0.8rem;
+      font-size: ${normalizeValue(1.3)};
+      padding: ${normalizeValue(1.2)};
+      border-radius: ${normalizeValue(0.8)};
       transition: background 0.5s ease-in;
       text-align: left;
       width: 100%;
@@ -278,14 +280,14 @@ export const History = styled.div`
     display: flex;
     flex-direction: column;
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 1rem;
+    border-radius: ${normalizeValue(1)};
     margin-top: 4rem;
-    padding-bottom: 3rem;
+    padding-bottom: ${normalizeValue(3)};
     flex: 1;
     h2 {
-      font-size: 1.8rem;
+      font-size: ${normalizeValue(1.8)};
       font-weight: 500;
-      padding: 2rem 3rem;
+      padding: ${normalizeValue(2)} 3rem;
     }
   `}
 `;
@@ -293,7 +295,7 @@ export const HistoryContent = styled.div`
   ${({ theme }) => css`
     &:not(:last-child) {
       border-bottom: 1px solid ${theme.colors.secondaryBackground};
-      padding-bottom: 1.5rem;
+      padding-bottom: ${normalizeValue(1.5)};
     }
   `}
 `;
@@ -301,9 +303,9 @@ export const Status = styled.span<{ color: string }>`
   ${({ theme, color }) => css`
     background: ${theme.colors[color]};
     color: ${theme.colors.white};
-    font-size: 1.1rem;
-    padding: 0.3rem;
-    border-radius: 0.4rem;
+    font-size: ${normalizeValue(1.1)};
+    padding: ${normalizeValue(0.3)};
+    border-radius: ${normalizeValue(0.4)};
   `}
 `;
 
@@ -314,13 +316,13 @@ export const Cell = styled.div`
 `;
 
 export const CellName = styled(Cell)`
-  padding-left: 1rem;
+  padding-left: ${normalizeValue(1)};
 `;
 
 export const Cellamount = styled(Cell)``;
 export const HeaderColumn = styled.strong`
   ${({ theme }) => css`
-    font-size: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
     font-weight: 500;
     color: ${theme.colors.tertiaryText};
   `}
@@ -333,18 +335,18 @@ export const HistoryTitle = styled.div`
     align-items: center;
     strong {
       font-weight: normal;
-      font-size: 1.5rem;
+      font-size: ${normalizeValue(1.5)};
     }
     button {
       color: ${theme.colors.tertiaryText};
-      font-size: 1.2rem;
-      padding: 0.6rem;
+      font-size: ${normalizeValue(1.2)};
+      padding: ${normalizeValue(0.6)};
       transition:
         background 0.3s ease-in,
         border 0.3s ease-in;
       background: ${theme.colors.primary}22;
       color: ${theme.colors.primary};
-      border-radius: 0.8rem;
+      border-radius: ${normalizeValue(0.8)};
       border: 1px solid;
       border-color: transparent;
       &:hover {
@@ -357,7 +359,7 @@ export const HistoryTitle = styled.div`
 
 export const LoadingWrapper = styled.div`
   width: 100%;
-  height: 10rem;
+  height: ${normalizeValue(10)};
   top: 0;
   display: flex;
   align-items: center;

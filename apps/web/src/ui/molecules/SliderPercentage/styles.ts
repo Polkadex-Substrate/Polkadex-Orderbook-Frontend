@@ -1,12 +1,15 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div<{ isActive: boolean }>`
   ${({ theme, isActive }) => css`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0.2rem 0.2rem 0.5rem 0.2rem;
-    border-radius: 0.5rem;
+    padding: ${normalizeValue(0.2)} ${normalizeValue(0.2)} 0.5rem
+      ${normalizeValue(0.2)};
+    border-radius: ${normalizeValue(0.5)};
     color: ${isActive && theme.colors.white};
     background-color: ${isActive
       ? theme.colors.primary

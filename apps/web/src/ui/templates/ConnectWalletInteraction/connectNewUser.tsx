@@ -18,7 +18,7 @@ export const ConnectNewUser = ({
         <>
           <Multistep.Trigger>
             <NewUser
-              onContinue={() => setContinueAction(true)}
+              onContinue={() => {}}
               onReadMore={() => {}}
               onBack={() => onNext("Connect")}
             />
@@ -26,12 +26,13 @@ export const ConnectNewUser = ({
           <Multistep.Content>
             <NewTradingAccount
               key="NewTradingAccount"
-              onClose={() => setContinueAction(false)}
-              onAction={() => props?.onPage("ProcessingTransaction")}
+              onClose={() => {}}
+              onAction={async () => {}}
+              onRedirect={() => {}}
             />
             <InsufficientBalance
               key="InsufficientBalance"
-              onClose={() => setContinueAction(false)}
+              onClose={() => {}}
               onTryAgain={() => props?.onPage("NewTradingAccount")}
             />
             <ProcessingTransaction
@@ -41,12 +42,7 @@ export const ConnectNewUser = ({
                 await new Promise((resolve) => resolve(console.log("Success")))
               }
               onError={() => window.alert("Error..")}
-              onRedirect={() =>
-                setTimeout(
-                  () => swithProps?.onPage("TradingAccountSuccessfull"),
-                  1500
-                )
-              }
+              onRedirect={() => {}}
             />
           </Multistep.Content>
         </>

@@ -2,9 +2,11 @@ import styled, { css } from "styled-components";
 
 import { NavbarItemPops } from ".";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div``;
 export const Label = styled.span`
-  font-size: 1.1rem;
+  font-size: ${normalizeValue(1.1)};
   color: #8ba1be;
   opacity: 0.7;
   font-weight: 500;

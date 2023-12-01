@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const WrapperIcon = styled.div<{
   isDisabled?: boolean;
   open?: boolean;
@@ -26,14 +28,14 @@ export const WrapperIcon = styled.div<{
         visibility: hidden;
         background: ${theme.colors.text};
         color: ${theme.colors.inverse};
-        border-radius: 0.5rem;
-        padding: 0.5rem 1rem;
-        transform: translateY(1rem);
+        border-radius: ${normalizeValue(0.5)};
+        padding: ${normalizeValue(0.5)} ${normalizeValue(1)};
+        transform: translateY(${normalizeValue(1)});
         @media screen and (min-width: 590px) {
-          left: 3.1rem;
+          left: ${normalizeValue(3.1)};
         }
         @media screen and (max-width: 590px) {
-          top: -4rem;
+          top: ${normalizeValue(-4)};
         }
       }
       &:hover {
@@ -56,14 +58,14 @@ export const WrapperIcon = styled.div<{
           visibility: hidden;
           background: ${theme.colors.text};
           color: ${theme.colors.inverse};
-          border-radius: 0.5rem;
-          padding: 0.5rem 1rem;
-          transform: translateY(1rem);
+          border-radius: ${normalizeValue(0.5)};
+          padding: ${normalizeValue(0.5)} ${normalizeValue(1)};
+          transform: translateY(normalizeValue(1));
           @media screen and (min-width: 590px) {
-            left: 3.1rem;
+            left: ${normalizeValue(3.1)};
           }
           @media screen and (max-width: 590px) {
-            top: -4rem;
+            top: ${normalizeValue(-4)};
           }
         }
       }
@@ -81,7 +83,7 @@ export const WrapperIcon = styled.div<{
     `}
 
     ${Icon} {
-      border-radius: 10rem;
+      border-radius: ${normalizeValue(10)};
     }
     @media screen and (max-width: 590px) {
       flex-direction: column;
@@ -93,7 +95,7 @@ export const Flex = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.8rem;
+  gap: ${normalizeValue(0.8)};
   width: 100%;
 `;
 
@@ -108,15 +110,15 @@ export const Text = styled.div`
 
 export const Span = styled.span`
   ${({ theme }) => css`
-    margin-left: 0.8rem;
-    font-size: 1.3rem;
+    margin-left: ${normalizeValue(0.8)};
+    font-size: ${normalizeValue(1.3)};
     white-space: nowrap;
     transition:
       transform 0.2s ease-out,
       visibility 0.2s ease-in,
       opacity 0.2s ease-in;
     user-select: none;
-    top: 0.5rem;
+    top: ${normalizeValue(0.5)};
   `}
 `;
 export const LineBorder = styled.span`
@@ -139,8 +141,9 @@ export const SpanWrapper = styled.div``;
 export const WrapperLinks = styled.div`
   width: 100%;
   display: flex;
-  border-radius: 0 3rem 3rem 3rem;
-  gap: 2rem;
+  border-radius: 0 ${normalizeValue(3)} ${normalizeValue(3)}
+    ${normalizeValue(3)};
+  gap: ${normalizeValue(2)};
   flex: 1;
   transition-duration: 0.8s;
   transition-timing-function: cubic-bezier(0.075, 0.82, 0.075, 1);
@@ -152,10 +155,10 @@ export const BottomContainer = styled.div``;
 export const Wrapper = styled.nav<{ open?: boolean }>`
   ${({ theme, open }) => css`
     position: sticky;
-    top: 5.5rem;
+    top: ${normalizeValue(5.5)};
     left: 0;
     display: flex;
-    padding: 1rem;
+    padding: ${normalizeValue(1)};
     /* background: ${theme.colors.primaryBackground}; */
     z-index: 2;
     @media screen and (max-width: 590px) {
@@ -164,7 +167,7 @@ export const Wrapper = styled.nav<{ open?: boolean }>`
     ${open
       ? css`
           @media screen and (min-width: 980px) {
-            max-width: 18rem;
+            max-width: ${normalizeValue(18)};
             ${WrapperIcon} {
               justify-content: flex-start;
             }
@@ -173,7 +176,7 @@ export const Wrapper = styled.nav<{ open?: boolean }>`
             }
           }
           @media screen and (min-width: 590px) and (max-width: 980px) {
-            max-width: 3.5rem;
+            max-width: ${normalizeValue(3.5)};
             ${WrapperIcon} {
               justify-content: center;
             }
@@ -183,18 +186,18 @@ export const Wrapper = styled.nav<{ open?: boolean }>`
           }
           @media screen and (max-width: 980px) {
             ${TermsLinks} {
-              margin-left: 1.4rem;
+              margin-left: ${normalizeValue(1.4)};
             }
           }
         `
       : css`
           ${TermsLinks} {
-            margin-left: 1.4rem;
+            margin-left: ${normalizeValue(1.4)};
           }
         `}
 
     @media screen and (min-width: 590px) {
-      max-width: ${open ? "auto" : "3.5rem"};
+      max-width: ${open ? "auto" : normalizeValue(3.5)};
     }
     @media screen and (min-width: 590px) {
       flex: 1;
@@ -233,33 +236,33 @@ export const TermsLinks = styled.div`
     position: absolute;
     display: flex;
     flex-direction: column;
-    gap: 0.1rem;
-    padding: 1rem;
-    border-radius: 0.5rem;
+    gap: ${normalizeValue(0.1)};
+    padding: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(0.5)};
     background: ${theme.colors.text};
     opacity: 0;
     visibility: hidden;
-    transform: translateY(1rem);
+    transform: translateY(normalizeValue(1));
     transition:
       transform 0.2s ease-out,
       visibility 0.2s ease-in,
       opacity 0.2s ease-in;
     @media screen and (min-width: 590px) {
       left: 90%;
-      top: -1.5rem;
+      top: ${normalizeValue(-1.5)};
     }
     @media screen and (max-width: 590px) {
-      bottom: 4.5rem;
-      left: -5rem;
+      bottom: ${normalizeValue(4.5)};
+      left: ${normalizeValue(-5)};
     }
     span {
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
       white-space: nowrap;
       color: ${theme.colors.inverse};
     }
     a {
-      padding: 0.5rem;
-      border-radius: 0.4rem;
+      padding: ${normalizeValue(0.5)};
+      border-radius: ${normalizeValue(0.4)};
       transition: background-color 0.2s ease-in;
       &:hover {
         background: ${theme.colors.secondaryBackground};

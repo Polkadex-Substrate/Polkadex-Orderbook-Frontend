@@ -1,7 +1,9 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
-  min-height: 28rem;
+  min-height: ${normalizeValue(28)}; 
   max-width: 60rem;
   display: flex;
   position: relative;
@@ -12,11 +14,11 @@ export const Close = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    top: 2.5rem;
-    right: 2.5rem;
-    width: 3rem;
-    padding: 1rem;
-    border-radius: 5rem;
+    top: ${normalizeValue(2.5)};
+    right: ${normalizeValue(2.5)};
+    width: ${normalizeValue(3)};
+    padding: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(5)};
     transition: background-color 0.3s ease-in-out;
     &:hover {
       background-color: ${theme.colors.secondaryBackgroundOpacity};
@@ -30,7 +32,7 @@ export const Container = styled.div`
     display: grid;
     align-items: center;
     background: ${theme.colors.primaryBackground};
-    border-radius: 1.2rem;
+    border-radius: ${normalizeValue(1.2)};
     @media screen and (min-width: 620px) {
       grid-template-columns: 1.2fr 1fr;
     }
@@ -55,28 +57,28 @@ export const Content = styled.div`
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
-    padding: 1.5rem;
+    padding: ${normalizeValue(1.5)};
     @media screen and (min-width: 500px) {
-      padding: 3rem;
+      padding: ${normalizeValue(3)};
     }
     div {
       &:first-child {
         h2 {
           font-weight: 550;
-          margin-bottom: 1rem;
+          margin-bottom: ${normalizeValue(1)};
         }
         p: last-child {
-          margin-top: 1rem;
+          margin-top: ${normalizeValue(1)};
         }
       }
       &:last-child {
         display: flex;
         justify-content: flex-end;
-        gap: 2rem;
-        margin-top: 2rem;
+        gap: ${normalizeValue(2)};
+        margin-top: ${normalizeValue(2)};
         a {
-          border-radius: 1rem;
-          padding: 1.2rem;
+          border-radius: ${normalizeValue(1)};
+          padding: ${normalizeValue(1.2)};
           background: ${theme.colors.primary};
           color: ${theme.colors.white};
           transition:

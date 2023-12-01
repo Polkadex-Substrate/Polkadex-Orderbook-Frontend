@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
@@ -30,7 +32,7 @@ export const Wrapper = styled.div`
   overflow-y: scroll;
   @media screen and (max-height: 830px) {
     justify-content: flex-start;
-    margin-top: 3rem;
+    margin-top: ${normalizeValue(3)};
   }
 `;
 
@@ -48,7 +50,7 @@ export const Title = styled.div`
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    margin: 0 2rem 1rem 2rem;
+    margin: 0 ${normalizeValue(2)} ${normalizeValue(1)} ${normalizeValue(2)};
     div {
       max-width: 15rem;
       svg {
@@ -65,9 +67,9 @@ export const Card = styled.div`
   ${({ theme }) => css`
     display: grid;
     grid-template-columns: auto 1fr;
-    border-radius: 2rem;
+    border-radius: ${normalizeValue(2)};
     border: 1px solid ${theme.colors.secondaryBackground};
-    margin: 2rem;
+    margin: ${normalizeValue(2)};
     @media screen and (min-width: 880px) {
       min-height: 40rem;
     }
@@ -77,13 +79,13 @@ export const Card = styled.div`
 export const Column = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 2rem;
-    width: 3rem;
+    border-radius: ${normalizeValue(2)};
+    width: ${normalizeValue(3)};
   `}
 `;
 
 export const Box = styled.div`
-  padding: 2rem;
+  padding: ${normalizeValue(2)};
   width: 100%;
   @media screen and (min-width: 880px) {
     max-width: 40rem;
@@ -92,22 +94,22 @@ export const Box = styled.div`
     align-self: center;
   }
   h1 {
-    font-size: 1.8rem;
+    font-size: ${normalizeValue(1.8)};
     font-weight: 550;
   }
   form {
-    margin-top: 2rem;
+    margin-top: ${normalizeValue(2)};
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
   }
 `;
 export const ResendButton = styled.button`
   ${({ theme }) => css`
-    font-size: 1.2rem;
-    padding: 0.6rem;
-    border-radius: 0.5rem;
-    margin-top: 0.8rem;
+    font-size: ${normalizeValue(1.2)};
+    padding: ${normalizeValue(0.6)};
+    border-radius: ${normalizeValue(0.5)};
+    margin-top: ${normalizeValue(0.8)};
     background: ${theme.colors.primary}22;
     color: ${theme.colors.primary};
     white-space: nowrap;

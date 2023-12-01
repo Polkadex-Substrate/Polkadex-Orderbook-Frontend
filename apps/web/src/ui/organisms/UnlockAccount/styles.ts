@@ -1,15 +1,17 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackgroundOpacity};
-    border-radius: 1.5rem;
-    padding: 3rem;
+    border-radius: ${normalizeValue(1.5)};
+    padding: ${normalizeValue(3)};
     form {
       display: flex;
       flex-direction: column;
       text-align: center;
-      gap: 1rem;
+      gap: ${normalizeValue(1)};
     }
   `}
 `;
@@ -18,11 +20,11 @@ export const Icon = styled.div`
     position: relative;
     width: 4.5rem;
     height: 4.5rem;
-    padding: 1.3rem;
-    border-radius: 10rem;
+    padding: ${normalizeValue(1.3)};
+    border-radius: ${normalizeValue(10)};
     background: ${theme.colors.primaryBackground};
     margin: 0 auto;
-    margin-bottom: 2rem;
+    margin-bottom: ${normalizeValue(2)};
     svg {
       position: relative;
       z-index: 1;
@@ -36,9 +38,9 @@ export const Icon = styled.div`
       position: absolute;
       width: 4.5rem;
       height: 4.5rem;
-      border-radius: 10rem;
+      border-radius: ${normalizeValue(10)};
       transform: scale(1.5);
-      border-radius: 10rem;
+      border-radius: ${normalizeValue(10)};
       background: ${theme.colors.primaryBackground}55;
     }
   `}
@@ -46,28 +48,28 @@ export const Icon = styled.div`
 
 export const Title = styled.div`
   text-align: center;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
+  margin-bottom: ${normalizeValue(2)};
+  padding-bottom: ${normalizeValue(2)};
   h2 {
-    font-size: 2rem;
+    font-size: ${normalizeValue(2)};
     font-weight: 500;
-    margin-bottom: 0.8rem;
+    margin-bottom: ${normalizeValue(0.8)};
   }
 `;
 
 export const Actions = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   align-self: center;
   max-width: 24rem;
-  margin: 2rem auto 0 auto;
+  margin: ${normalizeValue(2)} auto 0 auto;
   width: 100%;
 `;
 export const Span = styled.span<{ color?: string }>`
   ${({ theme, color }) => css`
     display: block;
-    padding: 1.2rem;
-    border-radius: 0.8rem;
+    padding: ${normalizeValue(1.2)};
+    border-radius: ${normalizeValue(0.8)};
     background: ${color ? theme.colors[color] : "transparent"};
     flex: 1;
   `}

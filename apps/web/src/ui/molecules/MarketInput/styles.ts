@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 
 import { InputProps } from ".";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const inputModifier = {
   Flex: () => css`
     display: flex;
@@ -10,7 +12,7 @@ const inputModifier = {
 };
 
 export const Wrapper = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: ${normalizeValue(2)};
 `;
 export const ContainerInput = styled.div`
   display: flex;
@@ -18,20 +20,20 @@ export const ContainerInput = styled.div`
 `;
 export const Label = styled.label`
   ${({ theme }) => css`
-    font-size: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
     color: ${theme.colors.text};
     font-weight: 500;
     svg {
       display: inline-block;
-      width: 1.1rem;
-      height: 1.1rem;
-      margin-right: 0.5rem;
+      width: ${normalizeValue(1.1)};
+      height: ${normalizeValue(1.1)};
+      margin-right: ${normalizeValue(0.5)};
     }
   `}
 `;
 export const Box = styled.div<Partial<InputProps>>`
   ${({ theme, inputInfo, fullWidth, hasError }) => css`
-    padding: 1rem;
+    padding: ${normalizeValue(1)};
     border-bottom: 0.1rem solid ${theme.colors.secondaryBackground};
     width: ${fullWidth ? "100%" : "20rem"};
     transition: border 0.3s ease-in-out;

@@ -31,7 +31,7 @@ export const Button = ({
       {...props}
     >
       {isLoading ? (
-        <LoadingSpinner color="white" style={{ marginRight: "0.5rem" }} />
+        <LoadingSpinner color="white" style={{ marginRight: normalizeValue(0.5) }} />
       ) : (
         !!icon && <Icon {...icon} />
       )}

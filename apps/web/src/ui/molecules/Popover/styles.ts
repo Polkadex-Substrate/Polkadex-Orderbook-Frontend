@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const ContentMain = styled.div`
   ${() => css`
     &.enter ${ContentWrapper} {
@@ -38,9 +40,9 @@ export const ContentMain = styled.div`
 export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 2rem;
+  min-width: ${normalizeValue(2)};
   max-width: calc(100% - 2rem);
-  min-height: 2rem;
+  min-height: ${normalizeValue(2)};
   max-height: calc(100% - 2rem);
   overflow: hidden auto;
 `;

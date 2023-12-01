@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { generateMedia } from "styled-media-query";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const customMedia = generateMedia({
   large: "923px",
 });
@@ -17,10 +19,10 @@ export const Sticker = styled.div`
   right: -8.5rem;
   top: 50%;
   transform: translateY(-50%) rotate(-90deg);
-  padding: 1rem 1.5rem;
+  padding: ${normalizeValue(1)} ${normalizeValue(1.5)};
   background-color: black;
   color: white;
-  font-size: 1.8rem;
+  font-size: ${normalizeValue(1.8)};
   ${customMedia.greaterThan("large")`
   display:none
   `}

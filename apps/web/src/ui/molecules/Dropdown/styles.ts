@@ -4,6 +4,8 @@ import { bgStyleVariants } from "@orderbook/core/helpers";
 
 import * as T from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Item: any = styled("li")<{
   isCloseOnSelect?: boolean;
   isFlex?: boolean;
@@ -68,7 +70,7 @@ export const Item: any = styled("li")<{
 export const Section = styled("li")({});
 
 export const SectionTitle = styled("div")({
-  padding: "0.8rem 1rem 0.4rem 1rem",
+  padding: "0.8rem ${normalizeValue(1)} ${normalizeValue(0.4)} 1rem",
   fontSize: "1.2rem",
   opacity: 0.5,
 });
@@ -89,7 +91,7 @@ export const Command: any = styled("div")(({ theme }) =>
     padding: "0.4rem",
     border: "1px solid",
     borderColor: `${theme.colors.text}44`,
-    fontSize: "1rem",
+    fontSize: normalizeValue(1),
     textTransform: "uppercase",
     opacity: 0.5,
   })
@@ -100,7 +102,7 @@ export const SectionContainer = styled("ul")(() => css({}));
 export const Menu = styled("ul")<T.DropdownMenuProps>(
   ({ theme, fill, itemFill }) => css`
     background: ${fill && theme.colors[fill]};
-    min-width: 20rem;
+    min-width: ${normalizeValue(20)};
     border: 1px solid ${theme.colors.text}11;
     ${Item} {
       transition: background-color 0.2s ease-in-out;
@@ -113,7 +115,7 @@ export const Menu = styled("ul")<T.DropdownMenuProps>(
     prop: "border",
     variants: {
       semiRounded: {
-        borderRadius: "1rem",
+        borderRadius: normalizeValue(1),
         padding: "0.8rem 0.7rem",
         [Item]: {
           borderRadius: "0.7rem",
@@ -126,10 +128,10 @@ export const Menu = styled("ul")<T.DropdownMenuProps>(
         borderRadius: "1.3rem",
         padding: "0.8rem 0.7rem",
         [Item]: {
-          borderRadius: "1rem",
+          borderRadius: normalizeValue(1),
         },
         [Command]: {
-          borderRadius: "0.5rem",
+          borderRadius: normalizeValue(0.5),
         },
       },
       squared: {

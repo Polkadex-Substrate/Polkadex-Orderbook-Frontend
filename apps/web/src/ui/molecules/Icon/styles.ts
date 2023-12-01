@@ -2,30 +2,32 @@ import styled, { css } from "styled-components";
 
 import { Props } from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const sizeModifier = {
   small: () => css`
-    width: 0.8rem;
-    height: 0.8rem;
+    width: ${normalizeValue(0.8)};
+    height: ${normalizeValue(0.8)};
   `,
   extraSmall: (isToken: boolean) => css`
-    width: 1.3rem;
-    height: 1.3rem;
+    width: ${normalizeValue(1.3)};
+    height: ${normalizeValue(1.3)};
     padding: ${isToken ? "0.1rem" : "0.2rem"};
   `,
   medium: (isToken: boolean) => css`
-    width: 1.8rem;
-    height: 1.8rem;
+    width: ${normalizeValue(1.8)};
+    height: ${normalizeValue(1.8)};
     padding: ${isToken ? "0.2rem" : "0.3rem"};
   `,
   extraMedium: (isToken: boolean) => css`
-    width: 2.3rem;
-    height: 2.3rem;
-    padding: ${isToken ? "0.3rem" : "0.5rem"};
+    width: ${normalizeValue(2.3)};
+    height: ${normalizeValue(2.3)};
+    padding: ${isToken ? "0.3rem" : normalizeValue(0.5)};
   `,
   large: (isToken: boolean) => css`
-    width: 2.8rem;
-    height: 2.8rem;
-    padding: ${isToken ? "0.3em" : "0.5rem"};
+    width: ${normalizeValue(2.8)};
+    height: ${normalizeValue(2.8)};
+    padding: ${isToken ? "0.3em" : normalizeValue(0.5)};
   `,
   extraLarge: (isToken: boolean) => css`
     width: 3.5rem;
@@ -38,9 +40,9 @@ const sizeModifier = {
     padding: ${isToken ? "0.8rem" : "0.6rem"};
   `,
   extraGiant: (isToken: boolean) => css`
-    width: 5rem;
-    height: 5rem;
-    padding: ${isToken ? "1rem" : "0.6rem"};
+    width: ${normalizeValue(5)};
+    height: ${normalizeValue(5)};
+    padding: ${isToken ? normalizeValue(1) : "0.6rem"};
   `,
 };
 

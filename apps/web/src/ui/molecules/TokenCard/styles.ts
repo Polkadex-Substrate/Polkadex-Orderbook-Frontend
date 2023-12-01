@@ -1,20 +1,22 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
     cursor: pointer;
     transition: background-color ease-in 0.2s;
-    border-radius: 0.5rem;
+    border-radius: ${normalizeValue(0.5)};
     width: 100%;
     &:hover {
       background: ${theme.colors.tertiaryBackgroundOpacity};
     }
     @media screen and (min-width: 640px) {
-      max-width: 29rem;
+      max-width: ${normalizeValue(29)};
     }
   `}
 `;
@@ -22,25 +24,25 @@ export const Wrapper = styled.div`
 export const AsideLeft = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: ${normalizeValue(0.8)};
 `;
 
 export const TokenWrapper = styled.div`
   ${({ theme }) => css`
-    width: 4.2rem;
-    height: 4.2rem;
-    padding: 0.7rem;
+    width: ${normalizeValue(4.2)};
+    height: ${normalizeValue(4.2)};
+    padding: ${normalizeValue(0.7)};
     border: 1px solid ${theme.colors.secondaryBackground};
-    border-radius: 10rem;
+    border-radius: ${normalizeValue(10)};
   `}
 `;
 
 export const TokenInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: ${normalizeValue(0.4)};
   p {
-    font-size: 1.6rem;
+    font-size: ${normalizeValue(1.6)};
     font-weight: 550;
   }
   span {
@@ -49,5 +51,5 @@ export const TokenInfo = styled.div`
 `;
 
 export const AsideRight = styled.div`
-  width: 1rem;
+  width: ${normalizeValue(1)};
 `;

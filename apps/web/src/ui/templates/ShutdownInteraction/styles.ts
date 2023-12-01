@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.section`
   ${({ theme }) => css`
     display: flex;
@@ -8,11 +10,11 @@ export const Wrapper = styled.section`
     box-shadow: ${theme.shadows.primary};
     max-width: 42rem;
     width: 100%;
-    border-radius: 1.2rem;
+    border-radius: ${normalizeValue(1.2)};
     p,
     a,
     span {
-      font-size: 1.4rem;
+      font-size: ${normalizeValue(1.4)};
     }
   `}
 `;
@@ -22,12 +24,12 @@ export const Header = styled.div`
     position: relative;
     button {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
+      top: ${normalizeValue(1)};
+      right: ${normalizeValue(1)};
       width: 4rem;
       height: 4rem;
       background-color: transparent;
-      border-radius: 100rem;
+      border-radius: ${normalizeValue(100)};
       display: grid;
       place-items: center;
       transition: background-color 0.4s ease;
@@ -41,10 +43,10 @@ export const Content = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    padding: 2rem;
+    gap: ${normalizeValue(2)};
+    padding: ${normalizeValue(2)};
     h2 {
-      font-size: 2.2rem;
+      font-size: ${normalizeValue(2.2)};
       font-weight: 550;
     }
     p {
@@ -69,18 +71,18 @@ export const Footer = styled.div`
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     border-top: 1px solid ${theme.colors.secondaryBackground};
     background: ${theme.colors.tertiaryBackgroundOpacity};
-    border-bottom-left-radius: 1.2rem;
-    border-bottom-right-radius: 1.2rem;
-    padding: 1.5rem 2rem;
+    border-bottom-left-radius: ${normalizeValue(1.2)};
+    border-bottom-right-radius: ${normalizeValue(1.2)};
+    padding: 1.5rem ${normalizeValue(2)};
     p {
       color: ${theme.colors.tertiaryText};
     }
     a {
-      border-radius: 0.6rem;
-      padding: 1rem;
+      border-radius: ${normalizeValue(0.6)};
+      padding: ${normalizeValue(1)};
       background: ${theme.colors.primary};
       transition: background-color 0.4s ease;
       &:hover {

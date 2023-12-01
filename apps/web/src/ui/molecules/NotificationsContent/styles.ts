@@ -1,23 +1,25 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Content = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
-    min-width: 35rem;
+    min-width: ${normalizeValue(35)};
     max-width: 40rem;
-    border-radius: 1rem;
+    border-radius: ${normalizeValue(1)};
     border: 1px solid ${theme.colors.secondaryBackground};
     box-shadow: ${theme.shadows.secondary};
   `}
 `;
 
 export const Title = styled.div`
-  padding: 2rem;
+  padding: ${normalizeValue(2)};
   div {
     justify-content: space-between;
     align-items: center;
     h3 {
-      font-size: 1.6rem;
+      font-size: ${normalizeValue(1.6)};
       font-weight: 550;
     }
   }
@@ -27,12 +29,12 @@ export const RecentTitle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 2rem;
+  padding: 0 ${normalizeValue(2)};
 `;
 
 export const Recent = styled.div`
   h5 {
-    font-size: 1.4rem;
+    font-size: ${normalizeValue(1.4)};
     font-weight: 500;
   }
   ul {
@@ -42,8 +44,8 @@ export const Recent = styled.div`
 export const RecentLi = styled.li<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     display: inline-block;
-    padding: 0.5rem 0.6rem;
-    border-radius: 1rem;
+    padding: ${normalizeValue(0.5)} ${normalizeValue(0.6)};
+    border-radius: ${normalizeValue(1)};
     cursor: pointer;
     background: ${isActive
       ? theme.colors.primary
@@ -51,21 +53,21 @@ export const RecentLi = styled.li<{ isActive?: boolean }>`
     color: ${isActive ? theme.colors.white : theme.colors.text};
     transition: background 0.3s ease-in-out;
     font-weight: 500;
-    font-size: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
     &:hover {
       background: ${isActive
         ? theme.colors.primary
         : theme.colors.secondaryBackgroundOpacity};
     }
     &:not(:last-child) {
-      margin-right: 0.5rem;
+      margin-right: ${normalizeValue(0.5)};
     }
   `}
 `;
 
 export const RecentContent = styled.div<{ isScrollable?: boolean }>`
   ${({ isScrollable }) => css`
-    padding: 0.5rem;
+    padding: ${normalizeValue(0.5)};
     max-height: 33rem;
     overflow-y: ${isScrollable ? "scroll" : "hidden"};
     scrollbar-width: none;
@@ -90,9 +92,9 @@ export const CardAction = styled.div`
     justify-content: center;
     background: ${theme.colors.white};
     border: 1px solid ${theme.colors.secondaryBackground};
-    border-radius: 5rem;
-    width: 3rem;
-    height: 3rem;
+    border-radius: ${normalizeValue(5)};
+    width: ${normalizeValue(3)};
+    height: ${normalizeValue(3)};
 
     transform: translate(-15%, -50%);
 
@@ -108,9 +110,9 @@ export const Card = styled.div<{ isRead?: boolean }>`
     position: relative;
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 1rem;
-    padding: 1rem;
-    border-radius: 1rem;
+    grid-gap: ${normalizeValue(1)};
+    padding: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(1)};
     transition: background 0.3s ease-in-out;
     opacity: ${isRead ? 1 : 0.5};
     cursor: pointer;
@@ -130,8 +132,8 @@ export const CardIcon = styled.div`
     background: ${theme.colors.primaryBackground};
     border-radius: 50%;
     border: 1px solid ${theme.colors.secondaryBackground};
-    width: 3.6rem;
-    height: 3.6rem;
+    width: ${normalizeValue(3.6)};
+    height: ${normalizeValue(3.6)};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -143,8 +145,8 @@ export const Read = styled.div`
     position: absolute;
     top: 0;
     right: 0;
-    width: 1rem;
-    height: 1rem;
+    width: ${normalizeValue(1)};
+    height: ${normalizeValue(1)};
     background: ${theme.colors.primary};
     border-radius: 50%;
   `}
@@ -156,12 +158,12 @@ export const CardContent = styled.div`
     word-break: break-all;
   }
   small {
-    font-size: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
     opacity: 0.6;
     line-height: 2;
   }
   strong {
-    font-size: 1.4rem;
+    font-size: ${normalizeValue(1.4)};
     font-weight: 550;
   }
 `;
@@ -171,18 +173,18 @@ export const Actions = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 1.5rem;
+    margin-top: ${normalizeValue(1.5)};
     small {
       display: block;
-      font-size: 1.2rem;
+      font-size: ${normalizeValue(1.2)};
       color: ${theme.colors.tertiaryText};
     }
     a {
       background: ${theme.colors.primary}33;
       color: ${theme.colors.primary};
-      padding: 0.3rem 0.4rem;
-      border-radius: 0.5rem;
-      font-size: 1.2rem;
+      padding: 0.3rem ${normalizeValue(0.4)};
+      border-radius: ${normalizeValue(0.5)};
+      font-size: ${normalizeValue(1.2)};
       border: 1px solid transparent;
       transition:
         border-color 0.3s ease-in-out,

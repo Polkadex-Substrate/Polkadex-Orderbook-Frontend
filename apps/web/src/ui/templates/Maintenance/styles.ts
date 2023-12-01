@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.section`
   min-height: 100vh;
   display: flex;
@@ -11,9 +13,9 @@ export const Container = styled.div`
   max-width: 1200px;
 
   @media screen and (max-width: 900px) {
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
     grid-template-columns: 1fr;
-    row-gap: 3rem;
+    row-gap: ${normalizeValue(3)};
     text-align: center;
   }
 
@@ -22,7 +24,7 @@ export const Container = styled.div`
   }
 
   @media screen and (max-width: 1200px) {
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
   }
 
   @media screen and (min-width: 1200px) {
@@ -46,12 +48,12 @@ export const ImageContainer = styled.div`
 
 export const TitleWrapper = styled.div`
   & h1 {
-    font-size: 5rem;
+    font-size: ${normalizeValue(5)};
     line-height: 1;
   }
 
   & p {
-    margin: 2rem 0;
+    margin: ${normalizeValue(2)} 0;
     line-height: 1.7;
   }
 `;
@@ -67,8 +69,8 @@ export const SocialIcons = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 10rem;
-      padding: 1rem;
+      border-radius: ${normalizeValue(10)}; 
+      padding: ${normalizeValue(1)};
       background: ${theme.colors.secondaryBackground};
       width: 4rem;
       height: 4rem;
@@ -77,7 +79,7 @@ export const SocialIcons = styled.div`
         background: ${theme.colors.secondaryBackgroundOpacity};
       }
       &:not(:last-child) {
-        margin-right: 1rem;
+        margin-right: ${normalizeValue(1)};
       }
     }
   `}

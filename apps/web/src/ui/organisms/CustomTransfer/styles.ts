@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Content = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -12,11 +14,11 @@ export const Content = styled.div`
 export const Form = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  max-width: 100rem;
-  padding: 2rem;
+  gap: ${normalizeValue(2)};
+  max-width: ${normalizeValue(100)};
+  padding: ${normalizeValue(2)};
   @media screen and (min-width: 1110px) {
-    padding: 2rem 4rem 4rem 4rem;
+    padding: ${normalizeValue(2)} 4rem 4rem 4rem;
   }
 `;
 

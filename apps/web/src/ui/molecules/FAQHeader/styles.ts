@@ -2,9 +2,11 @@ import styled, { css } from "styled-components";
 import media from "styled-media-query";
 import Link from "next/link";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Header = styled.div<{ noBorder?: boolean }>`
   ${({ noBorder, theme }) => css`
-    padding: 3rem;
+    padding: ${normalizeValue(3)};
     ${!noBorder &&
     `border-bottom: 1px solid ${theme.colors.secondaryBackground}`};
     width: 100%;
@@ -26,8 +28,8 @@ export const LastCrumb = styled(Link)`
 `;
 
 export const Heading = styled.p`
-  font-size: 3rem;
-  padding-top: 3rem;
+  font-size: ${normalizeValue(3)};
+  padding-top: ${normalizeValue(3)};
   font-weight: 700;
   ${media.lessThan("medium")`
   font-size:3rem

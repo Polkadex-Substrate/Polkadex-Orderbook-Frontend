@@ -1,13 +1,17 @@
 import styled, { css } from "styled-components";
 import { Container as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div<{ isLightMode: boolean }>`
   ${({ theme, isLightMode }) => css`
     background: ${theme.colors.primaryBackgroundSolid};
-    border-radius: 0 2rem 2rem 2rem;
+    border-radius: 0 ${normalizeValue(2)} ${normalizeValue(2)} ${normalizeValue(
+      2
+    )};
     box-shadow: box-shadow: ${theme.shadows.smooth};
     display: grid;
-    min-height: 50rem;
+    min-height: ${normalizeValue(50)};
     width:100%;
     display:flex;
     align-self:baseline;
@@ -18,7 +22,7 @@ export const Wrapper = styled.div<{ isLightMode: boolean }>`
       height: 50vh;
     }
     @media screen and (min-width: 1688px) {
-      min-height: 50rem;
+      min-height: ${normalizeValue(50)};
     }
     ${
       isLightMode &&
@@ -33,15 +37,14 @@ export const WrapperGraph = styled.section`
     display: flex;
     flex-direction: column;
     width: 100%;
-    /* padding: 2rem; */
     @media screen and (min-width: 1240px) {
-      min-width: 58rem;
+      min-width: ${normalizeValue(58)};
     }
     @media screen and (min-width: 1080px) and (max-width: 1240px) {
-      min-width: 36rem;
+      min-width: ${normalizeValue(36)};
     }
     @media screen and (min-width: 1688px) {
-      min-height: 50rem;
+      min-height: ${normalizeValue(50)};
     }
     @media screen and (min-width: 900px) {
       border-right: 1px solid ${theme.colors.secondaryBackground};
@@ -55,9 +58,9 @@ export const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.8rem;
+  margin-bottom: ${normalizeValue(0.8)};
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: ${normalizeValue(1.5)};
 `;
 
 export const ChartWrapper = styled.div`
@@ -65,7 +68,7 @@ export const ChartWrapper = styled.div`
   flex-direction: column;
   flex: 1;
 
-  height: 38rem;
+  height: ${normalizeValue(38)};
   @media screen and (min-width: 1688px) {
     height: 100%;
   }
@@ -79,26 +82,26 @@ export const FlexWrapper = styled.div`
 export const DropdownContent = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};
-    padding: 1rem;
-    border-radius: 0.5rem;
+    padding: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(0.5)};
   `}
 `;
 export const Ul = styled.ul<{ isColumn?: boolean }>`
   ${({ theme, isColumn }) => css`
     display: flex;
     flex-direction: ${isColumn ? "column" : "row"};
-    gap: 0.8rem;
+    gap: ${normalizeValue(0.8)};
     align-items: ${isColumn ? "flex-start" : "center"};
     background: ${isColumn ? theme.colors.primaryBackground : "none"};
-    border-radius: 1rem;
-    padding: ${isColumn ? "1rem" : "0"};
+    border-radius: ${normalizeValue(1)};
+    padding: ${isColumn ? normalizeValue(1) : "0"};
   `}
 `;
 
 export const List = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 0.8rem;
+    gap: ${normalizeValue(0.8)};
     align-items: center;
 
     ${Icon} {
@@ -116,8 +119,8 @@ export const List = styled.div`
 export const Li = styled.li<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     list-style: none;
-    padding: 0.2rem;
-    border-radius: 0.5rem;
+    padding: ${normalizeValue(0.2)};
+    border-radius: ${normalizeValue(0.5)};
     background: ${isActive ? theme.colors.primary : "none"};
     color: ${isActive ? theme.colors.white : "inherit"};
     user-select: none;
@@ -132,11 +135,11 @@ export const Graph = styled.div``;
 export const FilterIcon = styled.div<{ isActive?: boolean }>`
   ${({ theme }) => css`
     display: flex;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     align-items: center;
     cursor: pointer;
     svg {
-      width: 1.5rem;
+      width: ${normalizeValue(1.5)};
       stroke: ${theme.colors.text};
       fill: ${theme.colors.text};
       margin: 0;
@@ -150,24 +153,24 @@ export const Indicator = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1.5em;
-    padding: 1rem;
+    gap: ${normalizeValue(1.5)};
+    padding: ${normalizeValue(1)};
     background: ${theme.colors.secondaryBackgroundSolid};
     border: 1px solid ${theme.colors.secondaryBackground};
     max-height: 60vh;
     overflow-x: hidden;
     overflow-y: auto;
     @media screen and (min-width: 450px) {
-      min-width: 30rem;
+      min-width: ${normalizeValue(38)};
     }
   `}
 `;
 export const MainIndicator = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: ${normalizeValue(1.1)};
   strong {
-    font-size: 1.5rem;
+    font-size: ${normalizeValue(1.5)};
     font-weight: 550;
     display: block;
   }
@@ -176,7 +179,7 @@ export const TimezoneContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     background: ${theme.colors.tertiaryBackground};
     border: 1px solid ${theme.colors.secondaryBackground};
     max-height: 50vh;
@@ -187,8 +190,8 @@ export const TimezoneContent = styled.div`
 export const Button = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     background: ${isActive ? theme.colors.primary : "none"};
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    padding: ${normalizeValue(0.5)}${normalizeValue(1)};
+    border-radius: ${normalizeValue(0.5)};
   `}
 `;
 
@@ -199,9 +202,9 @@ export const IconComponent = styled.div`
     justify-content: center;
     background: ${theme.colors.primaryBackgroundOpacity};
     border-radius: 20%;
-    width: 2.3rem;
-    height: 2.3rem;
-    padding: 0.5rem;
+    width: ${normalizeValue(2.3)};
+    height: ${normalizeValue(2.3)};
+    padding: ${normalizeValue(0.5)};
     cursor: pointer;
     svg {
       fill: ${theme.colors.text};

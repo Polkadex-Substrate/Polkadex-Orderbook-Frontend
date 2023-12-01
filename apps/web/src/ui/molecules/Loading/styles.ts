@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   position: relative;
 `;
@@ -12,7 +14,7 @@ export const Container = styled.div<{
     position: absolute;
     top: 0;
     background-color: ${theme.colors.primaryBackground}BF;
-    padding: 1rem;
+    padding: ${normalizeValue(1)};
     color: ${theme.colors.text};
     width: 100%;
     height: 100%;
@@ -27,12 +29,12 @@ export const Container = styled.div<{
     div {
       background: ${hasBg ? theme.colors.secondaryBackgroundSolid : "none"};
       border: 1px solid ${hasBg ? theme.colors.secondaryBackground : "none"};
-      padding: 2rem;
-      border-radius: 1.5rem;
+      padding: ${normalizeValue(2)};
+      border-radius: ${normalizeValue(1.5)};
 
       p {
         text-align: center;
-        margin-top: 1rem;
+        margin-top: ${normalizeValue(1)};
       }
     }
     svg {

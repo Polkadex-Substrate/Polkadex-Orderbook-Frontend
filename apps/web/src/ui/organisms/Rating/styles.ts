@@ -1,16 +1,19 @@
 import styled, { css } from "styled-components";
+
+import { normalizeValue } from "@/utils/normalize";
+
 export const Container = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     background-color: ${theme.colors.tertiaryBackgroundOpacity};
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
     width: max-content;
   `}
 `;
 export const Image = styled.div`
-  width: 2rem;
-  height: 2rem;
+  width: ${normalizeValue(2)};
+  height: ${normalizeValue(2)};
   img {
     width: 100%;
     height: 100%;
@@ -29,7 +32,7 @@ export const RatingText = styled.div<{ value: string }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 2rem;
+    padding: 0 ${normalizeValue(2)};
     text-transform: capitalize;
     transition: width 0.2s ease-in-out;
     ${widthModifier[value]()};
@@ -46,6 +49,6 @@ const widthModifier = {
     width: 6.5rem;
   `,
   worst: () => css`
-    width: 8rem;
+    width: ${normalizeValue(8)};
   `,
 };

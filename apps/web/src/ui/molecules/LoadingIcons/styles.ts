@@ -3,6 +3,8 @@ import { variant } from "styled-system";
 
 import * as T from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled("svg")<T.Props>(
   ({ theme, color }) =>
     css({
@@ -33,7 +35,7 @@ export const Wrapper = styled("svg")<T.Props>(
         height: "4rem",
       },
     },
-  }),
+  })
 );
 export const Points = styled("div")`
   display: flex;
@@ -41,7 +43,7 @@ export const Points = styled("div")`
   justify-content: center;
   ${Wrapper} {
     height: fit-content;
-    margin-left: 0.4rem;
+    margin-left: ${normalizeValue(0.4)};
   }
 `;
 

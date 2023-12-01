@@ -3,10 +3,12 @@ import { PropsWithChildren } from "react";
 import * as S from "./styles";
 import { Props } from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Skeleton = ({
   width = "max-content",
   loading = true,
-  height = "1rem",
+  height = normalizeValue(1),
   minHeight = "auto",
   minWidth = "auto",
   isLight = false,

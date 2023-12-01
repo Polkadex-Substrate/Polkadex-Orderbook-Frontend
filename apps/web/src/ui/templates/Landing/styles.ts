@@ -1,6 +1,8 @@
 import Link from "next/link";
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.main<{ open?: boolean }>`
   ${({ theme, open }) => css`
     visibility: hidden;
@@ -27,8 +29,8 @@ export const Main = styled.main<{ open?: boolean }>`
 export const Button = styled(Link)`
   ${({ theme }) => css`
     background: ${theme.colors.primary};
-    padding: 1.3rem;
-    border-radius: 0.5rem;
+    padding: ${normalizeValue(1.3)};
+    border-radius: ${normalizeValue(0.5)};
     transition: background-color 0.4s ease-in;
     &:hover {
       background: ${theme.colors.primaryHover};
@@ -39,7 +41,7 @@ export const Button = styled(Link)`
 export const Hero = styled.section`
   display: flex;
   flex-direction: column;
-  padding: 1rem 3rem 1rem 0;
+  padding: ${normalizeValue(1)} ${normalizeValue(3)} ${normalizeValue(1)} 0;
   max-width: 140rem;
   margin: 0 auto;
   width: 100%;
@@ -59,7 +61,7 @@ export const Hero = styled.section`
       margin-top: -20rem;
     }
     @media screen and (min-width: 1500px) {
-      margin-top: -22rem;
+      margin-top: -${normalizeValue(22)};
     }
   }
 `;
@@ -70,16 +72,16 @@ export const HeroAside = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: ${normalizeValue(1.5)};
     text-align: center;
     h1 {
-      font-size: 5rem;
+      font-size: ${normalizeValue(5)};
       font-weight: 500;
     }
     p {
       line-height: 0.8;
       font-size: 4rem;
-      margin-bottom: 2rem;
+      margin-bottom: ${normalizeValue(2)};
       strong {
         color: ${theme.colors.primary};
       }
@@ -94,14 +96,14 @@ export const HeroHeader = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
   span {
-    font-size: 1.6rem;
+    font-size: ${normalizeValue(1.6)};
     opacity: 0.5;
     svg {
-      width: 1rem;
+      width: ${normalizeValue(1)};
       display: inline;
-      margin-right: 0.5rem;
+      margin-right: ${normalizeValue(0.5)};
     }
   }
 `;
@@ -124,16 +126,16 @@ export const StartHeader = styled.div`
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     padding: 0 3rem;
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     @media screen and (min-width: 600px) {
       padding: 0 5rem;
     }
     span {
-      font-size: 5rem;
+      font-size: ${normalizeValue(5)};
       @media screen and (min-width: 992px) {
-        font-size: 8rem;
+        font-size: ${normalizeValue(8)};
       }
 
       &:nth-child(2) {
@@ -147,12 +149,12 @@ export const StartFooter = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  gap: 3rem;
-  padding: 3rem 1rem;
+  gap: ${normalizeValue(3)};
+  padding: ${normalizeValue(3)} ${normalizeValue(1)};
   @media screen and (min-width: 600px) {
     flex-direction: row;
     align-items: center;
-    padding: 3rem 5rem 5rem 5rem;
+    padding: ${normalizeValue(3)} ${normalizeValue(5)} 5rem 5rem;
   }
 
   a {
@@ -161,12 +163,12 @@ export const StartFooter = styled.div`
     text-align: center;
   }
   span {
-    font-size: 1.4rem;
+    font-size: ${normalizeValue(1.4)};
     opacity: 0.5;
     svg {
-      width: 1rem;
+      width: ${normalizeValue(1)};
       display: inline;
-      margin-left: 1rem;
+      margin-left: ${normalizeValue(1)};
       vertical-align: middle;
     }
   }
@@ -182,10 +184,10 @@ export const StartCard = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    min-width: 32rem;
+    gap: ${normalizeValue(2)};
+    min-width: ${normalizeValue(32)};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    padding: 3rem 1rem;
+    padding: ${normalizeValue(3)} ${normalizeValue(1)};
     &:not(:last-child) {
       border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     }
@@ -193,13 +195,13 @@ export const StartCard = styled.div`
       padding: 8rem 5rem;
     }
     h3 {
-      font-size: 2rem;
+      font-size: ${normalizeValue(2)};
       font-weight: 500;
     }
     div {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: ${normalizeValue(1)};
     }
     &:first-child span {
       border: 1px solid ${theme.colors.primary};
@@ -218,8 +220,8 @@ export const StartCard = styled.div`
       justify-content: center;
       &::before {
         position: absolute;
-        width: 2.5rem;
-        height: 2.5rem;
+        width: ${normalizeValue(2.5)};
+        height: ${normalizeValue(2.5)};
         border-radius: 100%;
         content: "";
         background: ${theme.colors.secondaryBackground};
@@ -228,7 +230,7 @@ export const StartCard = styled.div`
     p {
       opacity: 0.7;
       line-height: 1.4;
-      font-size: 1.4rem;
+      font-size: ${normalizeValue(1.4)};
     }
   `}
 `;
@@ -254,9 +256,9 @@ export const FeaturesHeaderCard = styled.div`
   ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     flex-wrap: wrap;
-    padding: 4rem 1rem;
+    padding: 4rem ${normalizeValue(1)};
     @media screen and (min-width: 600px) {
       padding: 4rem 8rem;
     }
@@ -265,7 +267,7 @@ export const FeaturesHeaderCard = styled.div`
       display: flex;
       align-items: center;
       flex-direction: column;
-      margin-top: 5rem;
+      margin-top: ${normalizeValue(5)};
       p {
         font-size: 3em;
         @media screen and (min-width: 600px) {
@@ -302,13 +304,13 @@ export const FeaturesHeader = styled.div`
 
 export const FeaturesContent = styled.section`
   h3 {
-    font-size: 2.5rem;
+    font-size: ${normalizeValue(2.5)};
     font-weight: 500;
   }
   p {
     opacity: 0.7;
     line-height: 1.4;
-    font-size: 1.4rem;
+    font-size: ${normalizeValue(1.4)};
   }
 `;
 
@@ -338,8 +340,8 @@ export const FeaturesHighlight = styled.div`
       padding-left: 6rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      padding: 3rem;
+      gap: ${normalizeValue(1)};
+      padding: ${normalizeValue(3)};
     }
     @media screen and (min-width: 600px) {
       div {
@@ -359,8 +361,8 @@ export const FeaturesCard = styled.div`
     align-items: center;
     gap: 4rem;
     text-align: center;
-    min-width: 30rem;
-    padding: 3rem 1rem 0 1rem;
+    min-width: ${normalizeValue(38)};
+    padding: ${normalizeValue(3)} ${normalizeValue(1)} 0 ${normalizeValue(1)};
     @media screen and (min-width: 600px) {
       padding: 6rem 6rem 0 6rem;
       &:not(:last-child) {
@@ -375,12 +377,12 @@ export const FeaturesCard = styled.div`
     div {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: ${normalizeValue(1)};
     }
 
     img {
       width: 100%;
-      max-width: 30rem;
+      max-width: ${normalizeValue(38)};
       height: 100%;
     }
   `}
@@ -390,7 +392,7 @@ export const FeaturesWrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
@@ -399,27 +401,27 @@ export const FeaturesFooter = styled.div`
   ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
-    gap: 2rem;
-    padding: 3rem 1rem;
+    gap: ${normalizeValue(2)};
+    padding: ${normalizeValue(3)} ${normalizeValue(1)};
     flex-direction: column;
     @media screen and (min-width: 600px) {
-      padding: 3rem 5rem;
+      padding: ${normalizeValue(3)} 5rem;
       flex-direction: row;
       align-items: center;
     }
     a {
       &:first-child {
-        font-size: 1.6rem;
+        font-size: ${normalizeValue(1.6)};
         color: ${theme.colors.blue};
         transition: opacity ease-in 0.3s;
         &:hover {
           opacity: 0.6;
         }
         svg {
-          width: 1rem;
-          height: 1rem;
+          width: ${normalizeValue(1)};
+          height: ${normalizeValue(1)};
           display: inline;
-          margin-left: 0.5rem;
+          margin-left: ${normalizeValue(0.5)};
           fill: ${theme.colors.blue};
         }
       }
@@ -444,15 +446,15 @@ export const Support = styled.section`
 export const SupportCard = styled.div`
   ${({ theme }) => css`
     flex: 1;
-    min-width: 35rem;
+    min-width: ${normalizeValue(35)};
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     justify-content: space-between;
-    padding: 3rem 1rem;
+    padding: ${normalizeValue(3)} ${normalizeValue(1)};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     @media screen and (min-width: 600px) {
-      padding: 5rem;
+      padding: ${normalizeValue(5)};
       &:first-child {
         border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       }
@@ -465,10 +467,10 @@ export const SupportCard = styled.div`
         opacity: 0.5;
       }
       svg {
-        width: 1rem;
-        height: 1rem;
+        width: ${normalizeValue(1)};
+        height: ${normalizeValue(1)};
         display: inline;
-        margin-left: 0.5rem;
+        margin-left: ${normalizeValue(0.5)};
         fill: ${theme.colors.blue};
       }
     }
@@ -478,16 +480,16 @@ export const SupportCard = styled.div`
 export const SupportCardHeader = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 
   h3 {
-    font-size: 2rem;
+    font-size: ${normalizeValue(2)};
     font-weight: 550;
   }
   p {
     opacity: 0.5;
     line-height: 1.4;
-    font-size: 1.4rem;
+    font-size: ${normalizeValue(1.4)};
   }
 `;
 
@@ -495,11 +497,11 @@ export const SupportCardFooter = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     a {
       background: ${theme.colors.secondaryBackgroundOpacity};
-      border-radius: 0.5rem;
-      padding: 1rem;
+      border-radius: ${normalizeValue(0.5)};
+      padding: ${normalizeValue(1)};
       transition: background-color ease 0.4s;
       &:hover {
         background: ${theme.colors.secondaryBackground};
@@ -508,13 +510,13 @@ export const SupportCardFooter = styled.div`
         display: inline;
         vertical-align: middle;
         fill: ${theme.colors.white};
-        width: 1.2rem;
-        height: 1.2rem;
+        width: ${normalizeValue(1.2)};
+        height: ${normalizeValue(1.2)};
         &:first-child {
-          margin-right: 0.8rem;
+          margin-right: ${normalizeValue(0.8)};
         }
         &:last-child {
-          margin-left: 0.5rem;
+          margin-left: ${normalizeValue(0.5)};
         }
       }
     }
@@ -525,7 +527,7 @@ export const Footer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 0 1rem;
+  padding: 0 ${normalizeValue(1)};
   max-width: 140rem;
   margin: 0 auto;
   width: 100%;
@@ -544,7 +546,7 @@ export const Footer = styled.div`
 export const FooterTop = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
   padding: 4rem 0;
   span {
     width: 4rem;
@@ -552,20 +554,20 @@ export const FooterTop = styled.div`
   }
   div {
     flex: 1;
-    min-width: 20rem;
+    min-width: ${normalizeValue(20)};
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     strong {
-      font-size: 1.5rem;
+      font-size: ${normalizeValue(1.5)};
       font-weight: 550;
     }
     ul {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: ${normalizeValue(1)};
       list-style: none;
     }
   }
@@ -576,9 +578,9 @@ export const FooterBottom = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     flex-wrap: wrap;
-    padding: 3rem 0;
+    padding: ${normalizeValue(3)} 0;
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
@@ -587,10 +589,10 @@ export const FooterCopyright = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
   div {
     display: flex;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
   }
 `;
 
@@ -598,10 +600,10 @@ export const FooterSocial = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     a {
       svg {
-        width: 1.6rem;
+        width: ${normalizeValue(1.6)};
         fill: ${theme.colors.white};
       }
     }
@@ -613,7 +615,7 @@ export const Header = styled.div`
     position: relative;
     display: flex;
     justify-content: space-between;
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
@@ -630,17 +632,17 @@ export const Logo = styled(Link)`
   ${({ theme }) => css`
     display: flex;
     align-items: start;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     svg {
       max-width: 14rem;
     }
     span {
       font-weight: 500;
-      font-size: 1.2rem;
+      font-size: ${normalizeValue(1.2)};
       display: inline-block;
       background: ${theme.colors.primary};
-      padding: 0.2rem 0.3rem;
-      border-radius: 0.2rem;
+      padding: ${normalizeValue(0.2)} ${normalizeValue(0.3)};
+      border-radius: ${normalizeValue(0.2)};
     }
   `}
 `;
@@ -648,7 +650,7 @@ export const Logo = styled(Link)`
 export const Menu = styled.div`
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
   @media screen and (max-width: 750px) {
     display: none;
   }
@@ -664,10 +666,10 @@ export const MenuContent = styled.div`
     position: relative;
     width: 96vw;
     height: 96vh;
-    padding: 2.5rem;
+    padding: ${normalizeValue(2.5)};
     overflow: auto;
     -webkit-backdrop-filter: blur(5px);
-    border-radius: 2rem;
+    border-radius: ${normalizeValue(2)};
     backdrop-filter: blur(5px);
     background: ${theme.colors.primaryBackground};
   `}
@@ -676,15 +678,15 @@ export const MenuContent = styled.div`
 export const MenuClose = styled.div`
   ${({ theme }) => css`
     position: absolute;
-    right: 2rem;
-    top: 2rem;
+    right: ${normalizeValue(2)};
+    top: ${normalizeValue(2)};
     z-index: 2;
-    width: 3rem;
-    height: 3rem;
-    padding: 1rem;
+    width: ${normalizeValue(3)};
+    height: ${normalizeValue(3)};
+    padding: ${normalizeValue(1)};
     transition: background-color ease 0.4s;
     cursor: pointer;
-    border-radius: 30rem;
+    border-radius: ${normalizeValue(38)};
     &:hover {
       background-color: ${theme.colors.secondaryBackground};
     }
@@ -697,22 +699,22 @@ export const MenuClose = styled.div`
 export const MenuItems = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
   span {
     opacity: 0.5;
   }
   div {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
   }
   ul {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     list-style: none;
     a {
-      font-size: 1.5rem;
+      font-size: ${normalizeValue(1.5)};
     }
   }
 `;
@@ -752,11 +754,11 @@ export const Aside = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     .dropdownButton {
-      font-size: 1.4rem;
+      font-size: ${normalizeValue(1.4)};
       svg {
-        width: 1rem;
+        width: ${normalizeValue(1)};
         display: inline-block;
         vertical-align: middle;
         opacity: 0.5;
@@ -767,17 +769,17 @@ export const Aside = styled.div`
       color: ${theme.colors.black};
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: ${normalizeValue(1)};
       position: absolute;
       right: 0;
-      top: 3rem;
-      max-width: 50rem;
+      top: ${normalizeValue(3)};
+      max-width: ${normalizeValue(50)};
       background: ${theme.colors.white};
-      border-radius: 1rem;
-      padding: 2rem;
+      border-radius: ${normalizeValue(1)};
+      padding: ${normalizeValue(2)};
       a {
         font-weight: 500;
-        font-size: 1.4rem;
+        font-size: ${normalizeValue(1.4)};
         white-space: nowrap;
         transition: opacity 0.5s ease-in-out;
         &:hover {
@@ -790,7 +792,7 @@ export const Aside = styled.div`
 
 export const Spline = styled.div`
   @media screen and (min-width: 1000px) {
-    min-height: 50rem;
+    min-height: ${normalizeValue(50)};
   }
 `;
 
@@ -803,15 +805,15 @@ export const SplineError = styled.div<{ error: boolean }>`
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      gap: 1rem;
-      margin: 10rem auto auto auto;
-      font-size: 1.6rem;
+      gap: ${normalizeValue(1)};
+      margin: ${normalizeValue(10)} auto auto auto;
+      font-size: ${normalizeValue(1.6)};
       color: ${theme.colors.red};
-      padding: 1rem 1rem;
+      padding: ${normalizeValue(1)} ${normalizeValue(1)};
       a {
         color: white;
-        padding: 0.9rem 1.9rem;
-        font-size: 1.4rem;
+        padding: 0.9rem ${normalizeValue(1.9)};
+        font-size: ${normalizeValue(1.4)};
       }
     `}
   `}

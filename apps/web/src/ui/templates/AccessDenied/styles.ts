@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.section`
   ${({ theme }) => css`
     min-height: 100vh;
@@ -13,12 +15,12 @@ export const Container = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  column-gap: 2rem;
+  column-gap: ${normalizeValue(2)};
   flex: 1;
 `;
 
 export const Header = styled.div`
-  padding: 2rem 1rem;
+  padding: ${normalizeValue(2)} ${normalizeValue(1)};
 `;
 
 export const LogoWrapper = styled.a`
@@ -47,9 +49,9 @@ export const AsideLeft = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    padding: 3rem;
+    padding: ${normalizeValue(3)};
     @media screen and (min-width: 1200px) {
-      padding: 5rem;
+      padding: ${normalizeValue(5)};
       max-width: 48rem;
     }
     @media screen and (min-width: 930px) and (max-width: 1200px) {
@@ -62,18 +64,18 @@ export const AsideLeft = styled.div`
       width: fit-content;
       background: ${theme.colors.primary};
       color: ${theme.colors.black};
-      border-radius: 0.5rem;
-      padding: 0.2rem 0.4rem;
+      border-radius: ${normalizeValue(0.5)};
+      padding: ${normalizeValue(0.2)} ${normalizeValue(0.4)};
       font-weight: bold;
-      font-size: 1.5rem;
+      font-size: ${normalizeValue(1.5)};
     }
     h1 {
-      font-size: 5rem;
+      font-size: ${normalizeValue(5)};
       font-weight: 550;
-      margin-bottom: 1.5rem;
+      margin-bottom: ${normalizeValue(1.5)};
     }
     p {
-      font-size: 1.6rem;
+      font-size: ${normalizeValue(1.6)};
       line-height: 1.4;
       a {
         color: ${theme.colors.primary};
@@ -82,8 +84,8 @@ export const AsideLeft = styled.div`
     }
 
     small {
-      margin-top: 3rem;
-      font-size: 1.4rem;
+      margin-top: ${normalizeValue(3)};
+      font-size: ${normalizeValue(1.4)};
       color: gray;
     }
   `}
@@ -95,20 +97,20 @@ export const AsideRight = styled.div`
 `;
 export const Social = styled.div`
   ${({ theme }) => css`
-    margin-top: 1rem;
+    margin-top: ${normalizeValue(1)};
     a {
       display: flex;
       align-items: center;
-      gap: 0.8rem;
-      border-radius: 1rem;
+      gap: ${normalizeValue(0.8)};
+      border-radius: ${normalizeValue(1)};
       background: ${theme.colors.secondaryBackground};
       width: fit-content;
-      padding: 0.8rem 1rem;
-      font-size: 1.4rem;
+      padding: ${normalizeValue(0.8)} ${normalizeValue(1)};
+      font-size: ${normalizeValue(1.4)};
       transition: background-color 0.4s ease-in-out;
       div {
-        width: 2rem;
-        height: 2rem;
+        width: ${normalizeValue(2)};
+        height: ${normalizeValue(2)};
       }
       &:hover {
         background: ${theme.colors.secondaryBackgroundOpacity};

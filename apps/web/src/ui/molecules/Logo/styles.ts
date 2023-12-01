@@ -4,7 +4,7 @@ import { LogoProps } from "./index";
 
 const imageModifier = {
   Small: () => css`
-    min-width: 8rem;
+    min-width: ${normalizeValue(8)};
   `,
   Medium: () => css`
     width: 12rem;

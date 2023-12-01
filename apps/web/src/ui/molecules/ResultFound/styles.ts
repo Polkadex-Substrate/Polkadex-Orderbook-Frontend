@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   flex: 1;
   display: flex;
@@ -8,9 +10,9 @@ export const Wrapper = styled.div`
 `;
 export const Container = styled.div`
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 4rem ${normalizeValue(2)};
   p {
-    margin-top: 1rem;
+    margin-top: ${normalizeValue(1)};
   }
   svg {
     width: 4rem;

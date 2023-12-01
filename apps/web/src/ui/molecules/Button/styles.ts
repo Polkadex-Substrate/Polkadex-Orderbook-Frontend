@@ -2,28 +2,30 @@ import styled, { css } from "styled-components";
 
 import { Wrapper as IconWrapper } from "../Icon/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const sizeModifier = {
   small: () => css`
-    font-size: 1.2rem;
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.4rem;
+    font-size: ${normalizeValue(1.2)};
+    padding: ${normalizeValue(0.2)} ${normalizeValue(0.4)};
+    border-radius: ${normalizeValue(0.4)};
   `,
   extraSmall: () => css`
-    font-size: 1.2rem;
-    padding: 0.4rem 0.6rem;
-    border-radius: 0.6rem;
+    font-size: ${normalizeValue(1.2)};
+    padding: ${normalizeValue(0.4)} ${normalizeValue(0.6)};
+    border-radius: ${normalizeValue(0.6)};
   `,
   medium: () => css`
-    padding: 0.8rem;
-    border-radius: 0.8rem;
+    padding: ${normalizeValue(0.8)};
+    border-radius: ${normalizeValue(0.8)};
   `,
   large: () => css`
-    padding: 1.2rem;
-    border-radius: 0.6rem;
+    padding: ${normalizeValue(1.2)};
+    border-radius: ${normalizeValue(0.6)};
   `,
   extraLarge: () => css`
-    padding: 1.5rem 2rem;
-    border-radius: 0.8rem;
+    padding: 1.5rem ${normalizeValue(2)};
+    border-radius: ${normalizeValue(0.8)};
   `,
 };
 
@@ -68,11 +70,11 @@ export const Wrapper = styled.button<{
     ${
       hasIcon &&
       css`
-        padding-right: 1rem;
+        padding-right: ${normalizeValue(1)};
       `
     }
     ${IconWrapper} {
-      margin-right: 0.6rem;
+      margin-right: ${normalizeValue(0.6)};
       vertical-align: middle;
     }
     &:hover {
@@ -93,7 +95,7 @@ export const Wrapper = styled.button<{
         color: ${theme.colors.white};
         p {
           display: inline-block;
-          padding-right: 0.8rem;
+          padding-right: ${normalizeValue(0.8)};
           :after {
             content: ".";
             animation: dots 1.5s steps(5, end) infinite;

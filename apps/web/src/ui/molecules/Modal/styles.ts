@@ -4,6 +4,8 @@ import { bgStyleVariants, Direction } from "@orderbook/core/helpers";
 
 import * as T from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Header = styled("div")({
   position: "relative",
 });
@@ -26,7 +28,7 @@ export const HeaderClose = styled("button")(({ theme }) =>
     position: "absolute",
     top: 0,
     right: 0,
-    padding: "1rem",
+    padding: normalizeValue(1),
     borderRadius: "5rem",
     transition: "background 0.3s ease-in",
     "& svg": {
@@ -51,7 +53,7 @@ export const Container: any = styled("div")<T.ModalStyleProps>(
     prop: "border",
     variants: {
       semiRounded: {
-        borderRadius: "1rem",
+        borderRadius: normalizeValue(1),
       },
       rounded: {
         borderRadius: "2rem",
@@ -210,7 +212,7 @@ export const Overlay = styled("div")<
       "start left": {
         alignItems: "center",
         [Container]: {
-          padding: "2rem 2rem 2rem 2rem",
+          padding: "2rem ${normalizeValue(2)} ${normalizeValue(2)} 2rem",
         },
       },
       start: {
