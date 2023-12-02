@@ -51,7 +51,7 @@ export const ContainerMain = styled.div`
   ${({ theme }) => css`
     display: flex;
     width: 100%;
-    max-width: 140rem;
+    max-width: 1 ${normalizeValue(40)};
     border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     @media screen and (max-width: 1100px) {
       flex-direction: column;
@@ -75,7 +75,7 @@ export const Title = styled.div`
       opacity: 0.5;
     }
     @media screen and (min-width: 1110px) {
-      padding: 4rem;
+      padding: ${normalizeValue(4)};
     }
   `}
 `;
@@ -109,13 +109,13 @@ export const WalletTitle = styled.div`
     flex-wrap: wrap;
     gap: ${normalizeValue(1)};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    padding: 1.5rem ${normalizeValue(2)};
+    padding: ${normalizeValue(1.5)} ${normalizeValue(2)};
     h2 {
       font-size: ${normalizeValue(1.7)};
       font-weight: 550;
     }
     @media screen and (min-width: 1110px) {
-      padding: 1.5rem 4rem;
+      padding: ${normalizeValue(1.5)} ${normalizeValue(4)};
     }
   `}
 `;
@@ -133,7 +133,7 @@ export const Disclaimer = styled.div`
     background: ${theme.colors.tertiaryBackgroundOpacity};
     padding: ${normalizeValue(2)};
     @media screen and (min-width: 1110px) {
-      padding: ${normalizeValue(2)} 4rem;
+      padding: ${normalizeValue(2)} ${normalizeValue(4)};
     }
   `}
 `;
@@ -143,11 +143,11 @@ export const WalletContent = styled.div`
     display: flex;
     flex-direction: column;
     gap: ${normalizeValue(1.5)};
-    max-height: 40rem;
+    max-height: ${normalizeValue(40)};
     padding: 0 ${normalizeValue(2)};
     overflow-y: auto;
     @media screen and (min-width: 1110px) {
-      padding: 0 4rem;
+      padding: 0 ${normalizeValue(4)};
     }
     &::-webkit-scrollbar-thumb {
       background: none;
@@ -246,7 +246,7 @@ export const EmptyBox = styled.div`
     align-items: center;
     justify-content: center;
     gap: ${normalizeValue(0.8)};
-    max-width: 40rem;
+    max-width: ${normalizeValue(40)};
     margin: 0 auto;
     text-align: center;
     p {
@@ -261,7 +261,7 @@ export const EmptyBox = styled.div`
     div {
       background: ${theme.colors.secondaryBackground};
       border-radius: ${normalizeValue(0.5)};
-      width: 4rem;
+      width: ${normalizeValue(4)};
       padding: ${normalizeValue(0.8)};
       border-radius: ${normalizeValue(1)};
     }
@@ -293,7 +293,7 @@ export const AccountCard = styled.div`
     padding: ${normalizeValue(2)};
     gap: ${normalizeValue(2)};
     @media screen and (min-width: 1110px) {
-      padding: ${normalizeValue(2)} 4rem;
+      padding: ${normalizeValue(2)} ${normalizeValue(4)};
     }
   `}
 `;
@@ -303,8 +303,8 @@ export const AccountCardWrapper = styled.div`
   gap: ${normalizeValue(1)};
 `;
 export const AccountCardAvatar = styled.div`
-  width: 4.5rem;
-  height: 4.5rem;
+  width: ${normalizeValue(4.5)};
+  height: ${normalizeValue(4.5)};
 `;
 
 export const AccountCardContent = styled.div`
@@ -417,7 +417,7 @@ export const Header = styled.div`
     padding: ${normalizeValue(2)};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     @media screen and (min-width: 1110px) {
-      padding: ${normalizeValue(2)} 4rem;
+      padding: ${normalizeValue(2)} ${normalizeValue(4)};
     }
   `}
 `;
@@ -453,8 +453,8 @@ export const Using = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 4rem;
-    height: 4rem;
+    width: ${normalizeValue(4)};
+    height: ${normalizeValue(4)};
     background: ${theme.colors.green}33;
     color: ${theme.colors.green};
     font-size: ${normalizeValue(0.9)};
@@ -471,7 +471,7 @@ export const WalletCard = styled.div<{ isActive?: boolean }>`
     justify-content: space-between;
     gap: ${normalizeValue(0.5)};
     flex-wrap: wrap;
-    min-height: 6rem;
+    min-height: ${normalizeValue(6)};
     padding-bottom: ${normalizeValue(2)};
 
     &:not(:last-child) {
@@ -604,7 +604,7 @@ export const WalletActions = styled.div`
     a {
       background: ${theme.colors.secondaryBackground};
       border-radius: ${normalizeValue(0.3)};
-      padding: 0.3rem ${normalizeValue(0.5)};
+      padding: ${normalizeValue(0.3)} ${normalizeValue(0.5)};
       font-weight: 500;
       font-size: ${normalizeValue(1.3)};
       transition: background-color 0.4s ease-in-out;

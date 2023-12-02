@@ -8,7 +8,7 @@ export const Container = styled.div`
 `;
 
 export const Heading = styled.p`
-  font-size: 4rem;
+  font-size: ${normalizeValue(4)};
   padding-top: ${normalizeValue(3)};
   font-weight: 700;
   ${media.lessThan("medium")`
@@ -44,7 +44,7 @@ export const Question = styled.p`
 export const Input = styled.textarea`
   ${({ theme }) => css`
     width: 100%;
-    max-width: 42rem;
+    max-width: ${normalizeValue(42)};
     background-color: ${theme.colors.secondaryBackgroundOpacity};
     opacity: 0.5;
     font-size: small;
@@ -79,7 +79,7 @@ export const SwitchWrapper = styled.div`
 export const Switch = styled.div`
   ${({ theme }) => css`
     display: flex;
-    width: 6rem;
+    width: ${normalizeValue(6)};
     height: ${normalizeValue(3)};
     background: ${theme.colors.tertiaryBackgroundOpacity};
     border-radius: ${normalizeValue(0.4)};

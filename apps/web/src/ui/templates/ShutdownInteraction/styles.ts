@@ -8,7 +8,7 @@ export const Wrapper = styled.section`
     flex-direction: column;
     background: ${theme.colors.primaryBackground};
     box-shadow: ${theme.shadows.primary};
-    max-width: 42rem;
+    max-width: ${normalizeValue(42)};
     width: 100%;
     border-radius: ${normalizeValue(1.2)};
     p,
@@ -26,8 +26,8 @@ export const Header = styled.div`
       position: absolute;
       top: ${normalizeValue(1)};
       right: ${normalizeValue(1)};
-      width: 4rem;
-      height: 4rem;
+      width: ${normalizeValue(4)};
+      height: ${normalizeValue(4)};
       background-color: transparent;
       border-radius: ${normalizeValue(100)};
       display: grid;
@@ -76,7 +76,7 @@ export const Footer = styled.div`
     background: ${theme.colors.tertiaryBackgroundOpacity};
     border-bottom-left-radius: ${normalizeValue(1.2)};
     border-bottom-right-radius: ${normalizeValue(1.2)};
-    padding: 1.5rem ${normalizeValue(2)};
+    padding: ${normalizeValue(1.5)} ${normalizeValue(2)};
     p {
       color: ${theme.colors.tertiaryText};
     }

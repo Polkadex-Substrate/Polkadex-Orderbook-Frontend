@@ -24,18 +24,18 @@ export const TokenCard = ({
   return (
     <S.Wrapper role="button" onClick={onAction}>
       <S.AsideLeft>
-        <Skeleton width="4rem" height="4rem" loading={!tokenIcon}>
+        <Skeleton width=normalizeValue(4) height=normalizeValue(4) loading={!tokenIcon}>
           <S.TokenWrapper>
             <Token />
           </S.TokenWrapper>
         </Skeleton>
         <S.TokenInfo>
-          <Skeleton width="5rem" height="1.5rem" loading={!tokenTicker}>
+          <Skeleton width="5rem" height=normalizeValue(1.5) loading={!tokenTicker}>
             <p>{tokenTicker}</p>
           </Skeleton>
           <Skeleton
-            width="12rem"
-            height="1.5rem"
+            width="${normalizeValue(12)}"
+            height=normalizeValue(1.5)
             loading={(!availableAmount && !tokenTicker) || loading}
           >
             <span>

@@ -12,7 +12,8 @@ const defaultTheme = {
       medium: normalizeValue(1),
       large: "1.3rem",
       primary: {
-        small: "0 1.5rem 1.5rem 1.5rem",
+        small:
+          "0 ${normalizeValue(1.5)} ${normalizeValue(1.5)} ${normalizeValue(1.5)}",
         medium: "0 2.5rem 2.5rem 2.5rem",
       },
     },
@@ -40,7 +41,7 @@ const defaultTheme = {
       xxsmall: normalizeValue(1),
       xsmall: "1.2rem",
       small: "1.4rem",
-      medium: "1.5rem",
+      medium: normalizeValue(1.5),
       large: "1.8rem",
       xlarge: "2.0rem",
       xxlarge: "2.8rem",
@@ -79,7 +80,7 @@ const defaultTheme = {
   },
   spacings: {
     xxxsmall: normalizeValue(0.5),
-    xxsmall: "0.8rem",
+    xxsmall: normalizeValue(0.6),
     xsmall: "1.6rem",
     small: "2.4rem",
     medium: "3.2rem",
@@ -88,12 +89,12 @@ const defaultTheme = {
     xxlarge: "5.6rem",
   },
   padding: {
-    xxsmall: "0.1rem",
-    xsmall: "0.2rem",
-    small: "0.3rem",
-    medium: "0.4rem",
+    xxsmall: normalizeValue(0.1),
+    xsmall: normalizeValue(0.2),
+    small: normalizeValue(0.3),
+    medium: normalizeValue(0.4),
     large: normalizeValue(0.5),
-    xlarge: "0.6rem",
+    xlarge: normalizeValue(0.6),
     xxlarge: "0.7rem",
   },
   layers: {

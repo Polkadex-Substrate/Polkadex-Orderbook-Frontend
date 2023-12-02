@@ -8,8 +8,8 @@ const Points = forwardRef(({ ...props }: T.Props, ref: Ref<HTMLButtonElement | n
     <S.Points>
       <S.Wrapper
         xmlns="http://www.w3.org/2000/svg"
-        width="3rem"
-        height="3rem"
+        width=normalizeValue(2.5)
+        height=normalizeValue(2.5)
         viewBox="0 0 2 1"
         xmlSpace="preserve"
         {...props}>

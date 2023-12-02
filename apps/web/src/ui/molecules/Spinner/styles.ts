@@ -24,7 +24,7 @@ export const SecondaryWrapper = styled.div<{ color: string; size: string }>`
 
 export const Container = styled.div<Props>`
   ${({ theme, size = normalizeValue(1), color = "primary" }) => css`
-    margin-left: -2rem;
+    margin-left: ${normalizeValue(-2)};
 
     &,
     &:before,

@@ -108,7 +108,7 @@ export const LinePassCode = styled.div<{ error?: boolean }>`
       color: ${theme.colors.text};
       border-radius: ${normalizeValue(0.4)};
       background: ${theme.colors.secondaryBackgroundOpacity};
-      width: 4rem;
+      width: ${normalizeValue(4)};
       height: ${normalizeValue(5)};
       border: 2px solid ${theme.colors.transparent};
       :-webkit-outer-spin-button,
@@ -136,7 +136,7 @@ export const Error = styled.span<{ hasMargin?: boolean }>`
   ${({ theme, hasMargin = true }) => css`
     color: ${theme.colors.primary} !important;
     font-size: ${normalizeValue(1.2)};
-    margin-left: ${hasMargin ? "1.3rem" : "none"};
+    margin-left: ${hasMargin ? normalizeValue(1.3) : "none"};
   `}
 `;
 
@@ -145,7 +145,7 @@ export const Error = styled.span<{ hasMargin?: boolean }>`
 export const SecondaryWrapper = styled.div<{ hasLabel?: boolean }>`
   ${({ theme, hasLabel }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 1.2rem ${normalizeValue(0.8)};
+    padding: ${normalizeValue(1.2)} ${normalizeValue(0.8)};
     border-radius: ${normalizeValue(0.8)};
     display: flex;
     justify-content: space-between;

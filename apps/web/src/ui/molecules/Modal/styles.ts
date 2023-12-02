@@ -11,7 +11,7 @@ export const Header = styled("div")({
 });
 export const HeaderContent = styled("div")<{ isString?: boolean }>(
   {
-    padding: "2rem",
+    padding: normalizeValue(2),
   },
   variant({
     prop: "isString",
@@ -29,11 +29,11 @@ export const HeaderClose = styled("button")(({ theme }) =>
     top: 0,
     right: 0,
     padding: normalizeValue(1),
-    borderRadius: "5rem",
+    borderRadius: normalizeValue(5),
     transition: "background 0.3s ease-in",
     "& svg": {
-      width: "2rem",
-      height: "2rem",
+      width: normalizeValue(2),
+      height: normalizeValue(2),
     },
     "&:hover": {
       background: `${theme.colors.text}11`,
@@ -56,7 +56,7 @@ export const Container: any = styled("div")<T.ModalStyleProps>(
         borderRadius: normalizeValue(1),
       },
       rounded: {
-        borderRadius: "2rem",
+        borderRadius: normalizeValue(2),
       },
       squared: {
         borderRadius: "none",
@@ -164,45 +164,45 @@ export const Overlay = styled("div")<
       "bottom left": {
         alignItems: "flex-end",
         [Container]: {
-          marginBottom: "2rem",
-          marginLeft: "2rem",
+          marginBottom: normalizeValue(2),
+          marginLeft: normalizeValue(2),
         },
       },
       "bottom right": {
         alignItems: "flex-end",
         justifyContent: "flex-end",
         [Container]: {
-          marginBottom: "2rem",
-          marginRight: "2rem",
+          marginBottom: normalizeValue(2),
+          marginRight: normalizeValue(2),
         },
       },
       "bottom start": {
         alignItems: "flex-end",
         justifyContent: "center",
         [Container]: {
-          marginBottom: "2rem",
+          marginBottom: normalizeValue(2),
         },
       },
       "top right": {
         justifyContent: "flex-end",
         alignItems: "flex-start",
         [Container]: {
-          marginTop: "2rem",
-          marginRight: "2rem",
+          marginTop: normalizeValue(2),
+          marginRight: normalizeValue(2),
         },
       },
       "top left": {
         alignItems: "flex-start",
         [Container]: {
-          marginTop: "2rem",
-          marginLeft: "2rem",
+          marginTop: normalizeValue(2),
+          marginLeft: normalizeValue(2),
         },
       },
       "top start": {
         alignItems: "flex-start",
         justifyContent: "center",
         [Container]: {
-          marginTop: "2rem",
+          marginTop: normalizeValue(2),
         },
       },
       "start right": {
@@ -212,7 +212,9 @@ export const Overlay = styled("div")<
       "start left": {
         alignItems: "center",
         [Container]: {
-          padding: "2rem ${normalizeValue(2)} ${normalizeValue(2)} 2rem",
+          padding: `${normalizeValue(2)} ${normalizeValue(2)} ${normalizeValue(
+            2
+          )} ${normalizeValue(2)}`,
         },
       },
       start: {

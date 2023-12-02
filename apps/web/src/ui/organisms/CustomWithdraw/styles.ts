@@ -18,7 +18,7 @@ export const Form = styled.div`
   max-width: ${normalizeValue(100)};
   padding: ${normalizeValue(2)};
   @media screen and (min-width: 1110px) {
-    padding: ${normalizeValue(2)} 4rem 4rem 4rem;
+    padding: ${normalizeValue(2)} ${normalizeValue(4)} ${normalizeValue(4)} ${normalizeValue(4)};
   }
 `;
 

@@ -33,16 +33,16 @@ export const Container = styled.div`
   margin: 0 auto;
   display: grid;
   align-items: center;
-  column-gap: 4rem;
+  column-gap: ${normalizeValue(4)};
 `;
 
 export const TitleContainer = styled.div`
   & h1 {
-    font-size: 12rem;
+    font-size: ${normalizeValue(12)};
   }
 
   & h2 {
-    font-size: 4rem;
+    font-size: ${normalizeValue(4)};
     margin-bottom: ${normalizeValue(2)};
   }
 

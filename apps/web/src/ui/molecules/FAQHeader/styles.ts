@@ -31,7 +31,8 @@ export const Heading = styled.p`
   font-size: ${normalizeValue(3)};
   padding-top: ${normalizeValue(3)};
   font-weight: 700;
+
   ${media.lessThan("medium")`
-  font-size:3rem
+    font-size: ${normalizeValue(3)};
   `}
 `;

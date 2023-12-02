@@ -7,8 +7,8 @@ const Spinner = forwardRef(({ ...props }: T.Props, ref: Ref<HTMLButtonElement | 
   return (
     <S.Wrapper
       xmlns="http://www.w3.org/2000/svg"
-      width="3rem"
-      height="3rem"
+      width=normalizeValue(2.5)
+      height=normalizeValue(2.5)
       viewBox="0 0 100 100"
       {...props}>
       <rect x="0" y="0" width="100" height="100" stroke="none" fill="none"></rect>

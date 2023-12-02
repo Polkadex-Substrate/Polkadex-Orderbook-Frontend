@@ -9,7 +9,7 @@ export const Main = styled.main`
     min-width: 100vw;
     height: 100vh;
     display: flex;
-    max-width: 160rem;
+    max-width: ${normalizeValue(160)};
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
   `}
@@ -39,8 +39,8 @@ export const Wrapper = styled.div`
 export const Container = styled.div`
   width: 100%;
   @media screen and (min-width: 880px) {
-    min-width: 80rem;
-    max-width: 80rem;
+    min-width: ${normalizeValue(80)};
+    max-width: ${normalizeValue(80)};
   }
 `;
 
@@ -52,7 +52,7 @@ export const Title = styled.div`
     flex-wrap: wrap;
     margin: 0 ${normalizeValue(2)} ${normalizeValue(1)} ${normalizeValue(2)};
     div {
-      max-width: 15rem;
+      max-width: ${normalizeValue(15)};
       svg {
         width: 100%;
       }
@@ -71,7 +71,7 @@ export const Card = styled.div`
     border: 1px solid ${theme.colors.secondaryBackground};
     margin: ${normalizeValue(2)};
     @media screen and (min-width: 880px) {
-      min-height: 40rem;
+      min-height: ${normalizeValue(40)};
     }
   `}
 `;
@@ -88,8 +88,8 @@ export const Box = styled.div`
   padding: ${normalizeValue(2)};
   width: 100%;
   @media screen and (min-width: 880px) {
-    max-width: 40rem;
-    padding: 4rem;
+    max-width: ${normalizeValue(40)};
+    padding: ${normalizeValue(4)};
     justify-self: center;
     align-self: center;
   }

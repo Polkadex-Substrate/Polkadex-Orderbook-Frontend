@@ -34,8 +34,9 @@ export const Label = styled.label`
 export const Box = styled.div<Partial<InputProps>>`
   ${({ theme, inputInfo, fullWidth, hasError }) => css`
     padding: ${normalizeValue(1)};
-    border-bottom: 0.1rem solid ${theme.colors.secondaryBackground};
-    width: ${fullWidth ? "100%" : "20rem"};
+    border-bottom: ${normalizeValue(0.1)} solid
+      ${theme.colors.secondaryBackground};
+    width: ${fullWidth ? "100%" : normalizeValue(20)};
     transition: border 0.3s ease-in-out;
     ${inputInfo && inputModifier.Flex()}
     &:hover {

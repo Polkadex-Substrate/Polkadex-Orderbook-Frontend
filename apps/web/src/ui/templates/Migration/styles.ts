@@ -56,16 +56,16 @@ export const Inner = styled.div`
     background: ${theme.colors.primary};
     width: ${normalizeValue(20)};
     height: ${normalizeValue(10)};
-    border-radius: 0 0 ${normalizeValue(10)} 10rem;
+    border-radius: 0 0 ${normalizeValue(10)} ${normalizeValue(10)};
   `}
 `;
 
 export const Outer = styled.div`
   ${({ theme }) => css`
     position: absolute;
-    width: 40rem;
+    width: ${normalizeValue(40)};
     height: ${normalizeValue(20)};
-    border-radius: 0 0 20rem 20rem;
+    border-radius: 0 0 ${normalizeValue(20)} ${normalizeValue(20)};
     background: ${theme.colors.primary}22;
     display: flex;
     justify-content: center;
@@ -221,7 +221,7 @@ export const CountDown = styled.div`
           font-size: ${normalizeValue(4)};
           position: absolute;
           content: ":";
-          right: -3.2rem;
+          right: ${normalizeValue(-3.2)};
           top: 20%;
         }
       }

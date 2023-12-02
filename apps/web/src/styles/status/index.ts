@@ -9,7 +9,7 @@ export const Wrapper = styled.main`
 `;
 
 export const Header = styled.header`
-  padding: 1.5rem 0;
+  padding: ${normalizeValue(1.5)} 0;
   display: flex;
   align-items: center;
 `;
@@ -40,12 +40,12 @@ export const Logo = styled.div`
 export const Content = styled.div``;
 
 export const Status = styled.div`
-  max-width: 60rem;
+  max-width: ${normalizeValue(60)};
   padding: ${normalizeValue(10)} 0;
   margin: 0 auto;
   text-align: center;
   h1 {
-    font-size: 4rem;
+    font-size: ${normalizeValue(4)};
     margin-top: ${normalizeValue(2)};
     margin-bottom: ${normalizeValue(1)};
   }

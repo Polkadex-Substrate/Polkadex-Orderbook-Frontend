@@ -12,6 +12,8 @@ import { Decimal } from "@polkadex/orderbook-ui/atoms";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Navbar = ({ onOpenMarkets }) => {
   const { getCurrentTradePrice, loading: isRecentTradeFetching } =
     useRecentTradesProvider();
@@ -134,7 +136,7 @@ type SkeletonProps = {
 };
 
 export const InfoSkeleton = ({
-  height = "4rem",
+  height = normalizeValue(4),
   width = "7rem",
 }: SkeletonProps) => (
   <Skeleton style={{ marginBlock: 4 }} height={height} width={width} />

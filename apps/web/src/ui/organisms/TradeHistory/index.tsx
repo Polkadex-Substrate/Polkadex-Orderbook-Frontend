@@ -65,7 +65,7 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
               height={300}
               loader={
                 <S.Loader>
-                  <LoadingSpinner size="2rem" />
+                  <LoadingSpinner size=normalizeValue(2) />
                 </S.Loader>
               }
             >

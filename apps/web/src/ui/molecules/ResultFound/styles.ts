@@ -10,11 +10,11 @@ export const Wrapper = styled.div`
 `;
 export const Container = styled.div`
   text-align: center;
-  padding: 4rem ${normalizeValue(2)};
+  padding: ${normalizeValue(4)} ${normalizeValue(2)};
   p {
     margin-top: ${normalizeValue(1)};
   }
   svg {
-    width: 4rem;
+    width: ${normalizeValue(4)};
   }
 `;

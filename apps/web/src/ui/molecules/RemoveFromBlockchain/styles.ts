@@ -57,7 +57,7 @@ export const Actions = styled.div`
   align-self: flex-end;
   margin-top: ${normalizeValue(3)};
   ${Button} {
-    padding-left: 4rem;
-    padding-right: 4rem;
+    padding-left: ${normalizeValue(4)};
+    padding-right: ${normalizeValue(4)};
   }
 `;

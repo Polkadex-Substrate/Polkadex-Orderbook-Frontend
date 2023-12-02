@@ -96,7 +96,7 @@ export const Body = styled.tr<BodyProps>`
       variants: {
         true: {
           "& td": {
-            padding: "1rem 2rem",
+            padding: `${normalizeValue(1)} ${normalizeValue(2)}`,
           },
           "&:nth-child(odd)": {
             background: `${theme.colors.tertiaryBackgroundOpacity}`,

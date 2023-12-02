@@ -24,7 +24,7 @@ const sizeModifier = {
     border-radius: ${normalizeValue(0.6)};
   `,
   extraLarge: () => css`
-    padding: 1.5rem ${normalizeValue(2)};
+    padding: ${normalizeValue(1.5)} ${normalizeValue(2)};
     border-radius: ${normalizeValue(0.8)};
   `,
 };

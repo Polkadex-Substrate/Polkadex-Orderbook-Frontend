@@ -8,8 +8,8 @@ const Keyboard = forwardRef(
     return (
       <S.Wrapper
         xmlns="http://www.w3.org/2000/svg"
-        width="3rem"
-        height="3rem"
+        width=normalizeValue(2.5)
+        height=normalizeValue(2.5)
         viewBox="0 0 24 30"
         {...props}
       >

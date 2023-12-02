@@ -38,8 +38,8 @@ export const DisclaimerContainer = styled.div<{ isSmall?: boolean }>`
     align-items: center;
     gap: ${normalizeValue(1)};
     div {
-      padding: ${isSmall ? "0.3rem" : "0.8rem"};
-      width: ${isSmall ? "1.6rem" : "3rem"};
+      padding: ${isSmall ? normalizeValue(0.3) : normalizeValue(0.6)};
+      width: ${isSmall ? "1.6rem" : normalizeValue(2.5)};
       height: ${isSmall ? "1.6rem" : "rem"};
       background: ${theme.colors.orange};
       border-radius: ${normalizeValue(20)};

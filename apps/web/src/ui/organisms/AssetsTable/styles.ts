@@ -53,7 +53,8 @@ export const Wrapper = styled.div`
         opacity: 0.5;
         font-weight: normal;
         text-align: left;
-        padding: 0 ${normalizeValue(1)} 1.5rem ${normalizeValue(1)};
+        padding: 0 ${normalizeValue(1)} ${normalizeValue(1.5)}
+          ${normalizeValue(1)};
         div {
           margin-left: ${normalizeValue(0.4)};
           display: inline-block;
@@ -97,7 +98,7 @@ export const Date = styled.div`
       background: ${theme.colors.green}22;
       color: ${theme.colors.green};
       width: fit-content;
-      padding: 0.1rem ${normalizeValue(0.2)};
+      padding: ${normalizeValue(0.1)} ${normalizeValue(0.2)};
       border-radius: ${normalizeValue(0.2)};
       font-size: ${normalizeValue(1.2)};
     }
@@ -111,8 +112,8 @@ export const Token = styled.div`
     text-align: left;
     div {
       &:first-child {
-        width: 3.5rem;
-        height: 3.5rem;
+        width: ${normalizeValue(3.5)};
+        height: ${normalizeValue(3.5)};
         padding: ${normalizeValue(0.5)};
         border-radius: ${normalizeValue(100)};
         border: 1px solid ${theme.colors.secondaryBackgroundOpacity};

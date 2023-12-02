@@ -72,7 +72,7 @@ export const WordsContainer = styled.div`
     flex-wrap: wrap;
     gap: ${normalizeValue(1)};
     div {
-      padding: 0.3rem ${normalizeValue(0.5)};
+      padding: ${normalizeValue(0.3)} ${normalizeValue(0.5)};
       border-radius: ${normalizeValue(0.5)};
       border: 1px solid ${theme.colors.secondaryBackground};
       width: fit-content;
@@ -244,8 +244,8 @@ export const Upload = styled(Container)<{
     gap: ${normalizeValue(0.2)};
     text-align: center;
     border: 2px dashed ${theme.colors.secondaryBackground};
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+    padding-top: ${normalizeValue(4)};
+    padding-bottom: ${normalizeValue(4)};
     div {
       width: ${normalizeValue(2.5)};
       margin-bottom: ${normalizeValue(1)};

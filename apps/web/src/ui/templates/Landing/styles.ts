@@ -42,11 +42,11 @@ export const Hero = styled.section`
   display: flex;
   flex-direction: column;
   padding: ${normalizeValue(1)} ${normalizeValue(3)} ${normalizeValue(1)} 0;
-  max-width: 140rem;
+  max-width: 1 ${normalizeValue(40)};
   margin: 0 auto;
   width: 100%;
   @media screen and (min-width: 600px) {
-    padding: 8rem 8rem 0 8rem;
+    padding: ${normalizeValue(8)} ${normalizeValue(8)} 0 ${normalizeValue(8)};
   }
   a {
     width: fit-content;
@@ -56,9 +56,9 @@ export const Hero = styled.section`
     height: 100% !important;
   }
   .spline {
-    margin-top: -10rem;
+    margin-top: ${normalizeValue(-10)};
     @media screen and (min-width: 1000px) and (max-width: 1500px) {
-      margin-top: -20rem;
+      margin-top: ${normalizeValue(-20)};
     }
     @media screen and (min-width: 1500px) {
       margin-top: -${normalizeValue(22)};
@@ -80,13 +80,13 @@ export const HeroAside = styled.div`
     }
     p {
       line-height: 0.8;
-      font-size: 4rem;
+      font-size: ${normalizeValue(4)};
       margin-bottom: ${normalizeValue(2)};
       strong {
         color: ${theme.colors.primary};
       }
       @media screen and (min-width: 600px) {
-        font-size: 7rem;
+        font-size: ${normalizeValue(7)};
       }
     }
   `}
@@ -109,15 +109,15 @@ export const HeroHeader = styled.div`
 `;
 
 export const Start = styled.section`
-  max-width: 140rem;
+  max-width: 1 ${normalizeValue(40)};
   margin: 0 auto;
   width: 100%;
 
   @media screen and (min-width: 700px) {
-    margin-top: -9rem;
+    margin-top: ${normalizeValue(-9)};
   }
   @media screen and (min-width: 1100px) {
-    margin-top: -14rem;
+    margin-top: ${normalizeValue(-14)};
   }
 `;
 
@@ -127,10 +127,10 @@ export const StartHeader = styled.div`
     justify-content: space-between;
     flex-wrap: wrap;
     gap: ${normalizeValue(1)};
-    padding: 0 3rem;
+    padding: 0 ${normalizeValue(3)};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     @media screen and (min-width: 600px) {
-      padding: 0 5rem;
+      padding: 0 ${normalizeValue(5)};
     }
     span {
       font-size: ${normalizeValue(5)};
@@ -154,7 +154,8 @@ export const StartFooter = styled.div`
   @media screen and (min-width: 600px) {
     flex-direction: row;
     align-items: center;
-    padding: ${normalizeValue(3)} ${normalizeValue(5)} 5rem 5rem;
+    padding: ${normalizeValue(3)} ${normalizeValue(5)} ${normalizeValue(5)}
+      ${normalizeValue(5)};
   }
 
   a {
@@ -192,7 +193,7 @@ export const StartCard = styled.div`
       border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     }
     @media screen and (min-width: 600px) {
-      padding: 8rem 5rem;
+      padding: ${normalizeValue(8)} ${normalizeValue(5)};
     }
     h3 {
       font-size: ${normalizeValue(2)};
@@ -211,8 +212,8 @@ export const StartCard = styled.div`
     }
     span {
       position: relative;
-      width: 4rem;
-      height: 4rem;
+      width: ${normalizeValue(4)};
+      height: ${normalizeValue(4)};
       border-radius: 100%;
       border: 1px solid ${theme.colors.secondaryBackground};
       display: flex;
@@ -242,7 +243,7 @@ export const Features = styled.section`
   `}
 `;
 export const FeaturesContainer = styled.section`
-  max-width: 140rem;
+  max-width: 1 ${normalizeValue(40)};
   margin: 0 auto;
   width: 100%;
 `;
@@ -258,9 +259,9 @@ export const FeaturesHeaderCard = styled.div`
     justify-content: space-between;
     gap: ${normalizeValue(2)};
     flex-wrap: wrap;
-    padding: 4rem ${normalizeValue(1)};
+    padding: ${normalizeValue(4)} ${normalizeValue(1)};
     @media screen and (min-width: 600px) {
-      padding: 4rem 8rem;
+      padding: ${normalizeValue(4)} ${normalizeValue(8)};
     }
 
     div {
@@ -331,13 +332,13 @@ export const FeaturesHighlight = styled.div`
       bottom: 0;
     }
     img {
-      max-height: 40rem;
+      max-height: ${normalizeValue(40)};
       width: 100%;
-      max-width: 60rem;
+      max-width: ${normalizeValue(60)};
       object-fit: contain;
     }
     div {
-      padding-left: 6rem;
+      padding-left: ${normalizeValue(6)};
       display: flex;
       flex-direction: column;
       gap: ${normalizeValue(1)};
@@ -345,8 +346,8 @@ export const FeaturesHighlight = styled.div`
     }
     @media screen and (min-width: 600px) {
       div {
-        padding: 6rem;
-        max-width: 40rem;
+        padding: ${normalizeValue(6)};
+        max-width: ${normalizeValue(40)};
       }
     }
   `}
@@ -359,12 +360,12 @@ export const FeaturesCard = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    gap: 4rem;
+    gap: ${normalizeValue(4)};
     text-align: center;
     min-width: ${normalizeValue(38)};
     padding: ${normalizeValue(3)} ${normalizeValue(1)} 0 ${normalizeValue(1)};
     @media screen and (min-width: 600px) {
-      padding: 6rem 6rem 0 6rem;
+      padding: ${normalizeValue(6)} ${normalizeValue(6)} 0 ${normalizeValue(6)};
       &:not(:last-child) {
         border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       }
@@ -405,7 +406,7 @@ export const FeaturesFooter = styled.div`
     padding: ${normalizeValue(3)} ${normalizeValue(1)};
     flex-direction: column;
     @media screen and (min-width: 600px) {
-      padding: ${normalizeValue(3)} 5rem;
+      padding: ${normalizeValue(3)} ${normalizeValue(5)};
       flex-direction: row;
       align-items: center;
     }
@@ -437,7 +438,7 @@ export const Support = styled.section`
     display: flex;
     flex-wrap: wrap;
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    max-width: 140rem;
+    max-width: 1 ${normalizeValue(40)};
     margin: 0 auto;
     width: 100%;
   `}
@@ -528,11 +529,11 @@ export const Footer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 0 ${normalizeValue(1)};
-  max-width: 140rem;
+  max-width: 1 ${normalizeValue(40)};
   margin: 0 auto;
   width: 100%;
   @media screen and (min-width: 600px) {
-    padding: 0 5rem;
+    padding: 0 ${normalizeValue(5)};
   }
   a {
     transition: opacity ease 0.5s;
@@ -547,10 +548,10 @@ export const FooterTop = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: ${normalizeValue(2)};
-  padding: 4rem 0;
+  padding: ${normalizeValue(4)} 0;
   span {
-    width: 4rem;
-    height: 4rem;
+    width: ${normalizeValue(4)};
+    height: ${normalizeValue(4)};
   }
   div {
     flex: 1;
@@ -622,7 +623,7 @@ export const Header = styled.div`
     position: sticky;
     top: 0;
     z-index: 2;
-    max-width: 140rem;
+    max-width: 1 ${normalizeValue(40)};
     margin: 0 auto;
     width: 100%;
   `}
@@ -634,7 +635,7 @@ export const Logo = styled(Link)`
     align-items: start;
     gap: ${normalizeValue(0.5)};
     svg {
-      max-width: 14rem;
+      max-width: ${normalizeValue(14)};
     }
     span {
       font-weight: 500;
@@ -812,7 +813,7 @@ export const SplineError = styled.div<{ error: boolean }>`
       padding: ${normalizeValue(1)} ${normalizeValue(1)};
       a {
         color: white;
-        padding: 0.9rem ${normalizeValue(1.9)};
+        padding: ${normalizeValue(0.9)} ${normalizeValue(1.9)};
         font-size: ${normalizeValue(1.4)};
       }
     `}

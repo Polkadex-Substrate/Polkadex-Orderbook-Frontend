@@ -18,8 +18,8 @@ export const Wrapper = styled.div`
 export const Icon = styled.div`
   ${({ theme }) => css`
     position: relative;
-    width: 4.5rem;
-    height: 4.5rem;
+    width: ${normalizeValue(4.5)};
+    height: ${normalizeValue(4.5)};
     padding: ${normalizeValue(1.3)};
     border-radius: ${normalizeValue(10)};
     background: ${theme.colors.primaryBackground};
@@ -36,8 +36,8 @@ export const Icon = styled.div`
       top: 0;
       left: 0;
       position: absolute;
-      width: 4.5rem;
-      height: 4.5rem;
+      width: ${normalizeValue(4.5)};
+      height: ${normalizeValue(4.5)};
       border-radius: ${normalizeValue(10)};
       transform: scale(1.5);
       border-radius: ${normalizeValue(10)};
@@ -61,7 +61,7 @@ export const Actions = styled.div`
   display: flex;
   gap: ${normalizeValue(1)};
   align-self: center;
-  max-width: 24rem;
+  max-width: ${normalizeValue(24)};
   margin: ${normalizeValue(2)} auto 0 auto;
   width: 100%;
 `;

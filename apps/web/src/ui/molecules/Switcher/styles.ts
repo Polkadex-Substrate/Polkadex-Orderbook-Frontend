@@ -36,7 +36,7 @@ export const Switch = styled.div<{ isActive?: boolean; disable: boolean }>`
       : theme.colors.secondaryBackground};
     padding: ${normalizeValue(0.2)};
     border-radius: ${normalizeValue(10)};
-    min-width: 3.5rem;
+    min-width: ${normalizeValue(3.5)};
     height: ${normalizeValue(2)};
     position: relative;
     cursor: ${disable ? "not-allowed" : "pointer"};

@@ -2,15 +2,17 @@ import styled, { css } from "styled-components";
 
 import { LogoProps } from "./index";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const imageModifier = {
   Small: () => css`
     min-width: ${normalizeValue(8)};
   `,
   Medium: () => css`
-    width: 12rem;
+    width: ${normalizeValue(12)};
   `,
   Large: () => css`
-    width: 16rem;
+    width: ${normalizeValue(16)};
   `,
 };
 export const Link = styled.div<Partial<LogoProps>>`

@@ -107,7 +107,7 @@ export const WordsContainer = styled.div`
     flex-wrap: wrap;
     gap: ${normalizeValue(1)};
     div {
-      padding: 0.3rem ${normalizeValue(0.5)};
+      padding: ${normalizeValue(0.3)} ${normalizeValue(0.5)};
       border-radius: ${normalizeValue(0.5)};
       border: 1px solid ${theme.colors.secondaryBackground};
       width: fit-content;
@@ -190,7 +190,8 @@ export const WalletContent = styled.div`
 export const Actions = styled.div`
   ${({ theme }) => css`
     text-align: center;
-    padding: 1.2rem ${normalizeValue(1)};
+    padding: ${normalizeValue(1.2)};
+    ${normalizeValue(1)};
     background: ${theme.colors.primary};
     border-radius: ${normalizeValue(0.4)};
     transition: background-color 0.4s ease-in;

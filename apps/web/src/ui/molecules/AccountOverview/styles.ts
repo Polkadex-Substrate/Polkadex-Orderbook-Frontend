@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
     background: ${theme.colors.primaryBackground};
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: ${normalizeValue(1.5)};
-    min-height: 34rem;
+    min-height: ${normalizeValue(34)};
     @media screen and (min-width: 400px) {
       min-width: ${normalizeValue(35)};
     }
@@ -22,7 +22,7 @@ export const Profile = styled.div`
   gap: ${normalizeValue(1)};
   padding: ${normalizeValue(1)} ${normalizeValue(1.5)};
   div {
-    max-width: 4rem;
+    max-width: ${normalizeValue(4)};
     width: 100%;
   }
   span {

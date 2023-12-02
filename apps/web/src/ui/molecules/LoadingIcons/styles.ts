@@ -15,24 +15,24 @@ export const Wrapper = styled("svg")<T.Props>(
     prop: "size",
     variants: {
       mini: {
-        width: "0.8rem",
-        height: "0.8rem",
+        width: normalizeValue(0.6),
+        height: normalizeValue(0.6),
       },
       small: {
-        width: "1.5rem",
-        height: "1.5rem",
+        width: normalizeValue(1.5),
+        height: normalizeValue(1.5),
       },
       extraSmall: {
-        width: "2.5rem",
-        height: "2.5rem",
+        width: normalizeValue(2.5),
+        height: normalizeValue(2.5),
       },
       medium: {
-        width: "3rem",
-        height: "3rem",
+        width: normalizeValue(2.5),
+        height: normalizeValue(2.5),
       },
       large: {
-        width: "4rem",
-        height: "4rem",
+        width: normalizeValue(4),
+        height: normalizeValue(4),
       },
     },
   })

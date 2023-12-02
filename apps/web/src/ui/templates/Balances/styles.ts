@@ -8,7 +8,7 @@ export const Main = styled.main`
     background: ${theme.colors.primaryBackground};
     height: 100vh;
     display: flex;
-    max-width: 160rem;
+    max-width: ${normalizeValue(160)};
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
   `}
@@ -88,14 +88,14 @@ export const Header = styled.div`
       opacity: 0.5;
     }
     @media screen and (min-width: 1110px) {
-      padding: 4rem;
+      padding: ${normalizeValue(4)};
     }
   `}
 `;
 
 export const Title = styled.div`
   ${({ theme }) => css`
-    padding: 1.5rem ${normalizeValue(2)};
+    padding: ${normalizeValue(1.5)} ${normalizeValue(2)};
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -105,7 +105,7 @@ export const Title = styled.div`
       font-weight: 550;
     }
     @media screen and (min-width: 1110px) {
-      padding: 1.5rem 4rem;
+      padding: ${normalizeValue(1.5)} ${normalizeValue(4)};
     }
   `}
 `;
@@ -233,7 +233,7 @@ export const SupportCard = styled.div`
     align-items: flex-end;
     justify-content: space-between;
     gap: ${normalizeValue(3)};
-    padding: 4rem;
+    padding: ${normalizeValue(4)};
     p {
       opacity: 0.6;
     }
@@ -294,7 +294,7 @@ export const SkeletonComponent = styled.div`
   gap: ${normalizeValue(1)};
   flex-direction: column;
   @media screen and (min-width: 1110px) {
-    padding: 4rem;
+    padding: ${normalizeValue(4)};
   }
 `;
 

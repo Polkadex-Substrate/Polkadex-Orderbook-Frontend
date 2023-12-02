@@ -16,7 +16,7 @@ export const Main = styled.div`
 export const Wrapper = styled.section`
   display: grid;
   grid-gap: ${normalizeValue(5)};
-  max-width: 90rem;
+  max-width: ${normalizeValue(90)};
   margin: 0 auto;
   width: 100%;
   flex: 1;
@@ -49,7 +49,7 @@ export const AsideLeft = styled.div`
 export const Title = styled.div`
   ${({ theme }) => css`
     h1 {
-      font-size: 3.5rem;
+      font-size: ${normalizeValue(3.5)};
     }
     p {
       font-size: ${normalizeValue(1.5)};
@@ -93,7 +93,7 @@ export const Footer = styled.div`
 export const Box = styled.div`
   padding: ${normalizeValue(2)};
   @media screen and (min-width: 920px) {
-    padding: 4rem;
+    padding: ${normalizeValue(4)};
   }
   @media screen and (max-width: 760px) {
     display: none;
@@ -113,7 +113,7 @@ export const CardContent = styled.div`
   ${({ theme }) => css`
     padding: ${normalizeValue(3)};
     @media screen and (min-width: 920px) {
-      padding: 4rem;
+      padding: ${normalizeValue(4)};
     }
     h4 {
       font-size: ${normalizeValue(1.6)};

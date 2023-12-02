@@ -87,8 +87,8 @@ export const Icon = styled.div`
 export const OptionsWrapper = styled(Combobox.Options)`
   position: absolute;
   margin-top: 5px;
-  max-height: 24rem;
-  max-width: 40rem;
+  max-height: ${normalizeValue(24)};
+  max-width: ${normalizeValue(40)};
   width: 100%;
   overflow: auto;
   top: 100%;
@@ -102,7 +102,7 @@ export const OptionsContainer = styled.div`
     width: 100%;
     border-top: 1px solid ${theme.colors.secondaryBackground};
     background-color: ${theme.colors.secondaryBackgroundSolid};
-    border-radius: 0 0 0.5rem ${normalizeValue(0.5)};
+    border-radius: 0 0 ${normalizeValue(0.5)} ${normalizeValue(0.5)};
     padding: ${normalizeValue(1.5)};
     display: flex;
     flex-direction: column;

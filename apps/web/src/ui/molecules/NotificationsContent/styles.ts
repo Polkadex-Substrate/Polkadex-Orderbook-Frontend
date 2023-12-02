@@ -6,7 +6,7 @@ export const Content = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
     min-width: ${normalizeValue(35)};
-    max-width: 40rem;
+    max-width: ${normalizeValue(40)};
     border-radius: ${normalizeValue(1)};
     border: 1px solid ${theme.colors.secondaryBackground};
     box-shadow: ${theme.shadows.secondary};
@@ -68,7 +68,7 @@ export const RecentLi = styled.li<{ isActive?: boolean }>`
 export const RecentContent = styled.div<{ isScrollable?: boolean }>`
   ${({ isScrollable }) => css`
     padding: ${normalizeValue(0.5)};
-    max-height: 33rem;
+    max-height: ${normalizeValue(33)};
     overflow-y: ${isScrollable ? "scroll" : "hidden"};
     scrollbar-width: none;
   `}
@@ -182,7 +182,7 @@ export const Actions = styled.div`
     a {
       background: ${theme.colors.primary}33;
       color: ${theme.colors.primary};
-      padding: 0.3rem ${normalizeValue(0.4)};
+      padding: ${normalizeValue(0.3)} ${normalizeValue(0.4)};
       border-radius: ${normalizeValue(0.5)};
       font-size: ${normalizeValue(1.2)};
       border: 1px solid transparent;

@@ -12,37 +12,37 @@ const sizeModifier = {
   extraSmall: (isToken: boolean) => css`
     width: ${normalizeValue(1.3)};
     height: ${normalizeValue(1.3)};
-    padding: ${isToken ? "0.1rem" : "0.2rem"};
+    padding: ${isToken ? normalizeValue(0.1) : normalizeValue(0.2)};
   `,
   medium: (isToken: boolean) => css`
     width: ${normalizeValue(1.8)};
     height: ${normalizeValue(1.8)};
-    padding: ${isToken ? "0.2rem" : "0.3rem"};
+    padding: ${isToken ? normalizeValue(0.2) : normalizeValue(0.3)};
   `,
   extraMedium: (isToken: boolean) => css`
     width: ${normalizeValue(2.3)};
     height: ${normalizeValue(2.3)};
-    padding: ${isToken ? "0.3rem" : normalizeValue(0.5)};
+    padding: ${isToken ? normalizeValue(0.3) : normalizeValue(0.5)};
   `,
   large: (isToken: boolean) => css`
     width: ${normalizeValue(2.8)};
     height: ${normalizeValue(2.8)};
-    padding: ${isToken ? "0.3em" : normalizeValue(0.5)};
+    padding: ${isToken ? normalizeValue(3) : normalizeValue(0.5)};
   `,
   extraLarge: (isToken: boolean) => css`
-    width: 3.5rem;
-    height: 3.5rem;
-    padding: ${isToken ? "0.4rem" : "0.6rem"};
+    width: ${normalizeValue(3.5)};
+    height: ${normalizeValue(3.5)};
+    padding: ${isToken ? normalizeValue(0.4) : normalizeValue(0.6)};
   `,
   giant: (isToken: boolean) => css`
-    width: 4rem;
-    height: 4rem;
-    padding: ${isToken ? "0.8rem" : "0.6rem"};
+    width: ${normalizeValue(4)};
+    height: ${normalizeValue(4)};
+    padding: ${isToken ? normalizeValue(0.6) : normalizeValue(0.6)};
   `,
   extraGiant: (isToken: boolean) => css`
     width: ${normalizeValue(5)};
     height: ${normalizeValue(5)};
-    padding: ${isToken ? normalizeValue(1) : "0.6rem"};
+    padding: ${isToken ? normalizeValue(1) : normalizeValue(0.6)};
   `,
 };
 

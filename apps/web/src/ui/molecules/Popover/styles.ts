@@ -41,8 +41,8 @@ export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   min-width: ${normalizeValue(2)};
-  max-width: calc(100% - 2rem);
+  max-width: calc(100% - ${normalizeValue(2)};);
   min-height: ${normalizeValue(2)};
-  max-height: calc(100% - 2rem);
+  max-height: calc(100% - ${normalizeValue(2)};);
   overflow: hidden auto;
 `;

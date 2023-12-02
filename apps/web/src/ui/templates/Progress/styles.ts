@@ -20,7 +20,7 @@ export const Header = styled.header`
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-height: 6rem;
+    max-height: ${normalizeValue(6)};
     padding: ${normalizeValue(1)};
     border-bottom: 1px solid ${theme.colors.secondaryBackground};
   `}
@@ -109,19 +109,19 @@ export const Footer = styled.div`
     padding: ${normalizeValue(3)} ${normalizeValue(2)};
     backdrop-filter: blur(10px);
     background: ${theme.colors.overlayOpacity};
-    margin-top: -4rem;
+    margin-top: ${normalizeValue(-4)};
     @media screen and (min-width: 750px) {
-      margin-top: -10rem;
+      margin-top: ${normalizeValue(-10)};
     }
   `}
 `;
 
 export const FooterWrapper = styled.div`
-  max-width: 120rem;
+  max-width: ${normalizeValue(120)};
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: ${normalizeValue(4)};
 `;
 
 export const FooterTitle = styled.div`

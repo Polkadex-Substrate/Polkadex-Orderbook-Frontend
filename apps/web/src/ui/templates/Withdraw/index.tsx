@@ -394,7 +394,7 @@ export const WithdrawTemplate = () => {
                             {pendingWithdraws?.length ? (
                               <HistoryTable items={pendingWithdraws} />
                             ) : (
-                              <div style={{ padding: "2rem" }}>
+                              <div style={{ padding: normalizeValue(2) }}>
                                 <EmptyData />
                               </div>
                             )}
@@ -417,7 +417,7 @@ export const WithdrawTemplate = () => {
                                 />
                               ))
                             ) : (
-                              <div style={{ padding: "2rem" }}>
+                              <div style={{ padding: normalizeValue(2) }}>
                                 <EmptyData />
                               </div>
                             )}
@@ -426,7 +426,7 @@ export const WithdrawTemplate = () => {
                             {claimedWithdraws?.length ? (
                               <HistoryTable items={claimedWithdraws} />
                             ) : (
-                              <div style={{ padding: "2rem" }}>
+                              <div style={{ padding: normalizeValue(2) }}>
                                 <EmptyData />
                               </div>
                             )}

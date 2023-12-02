@@ -208,7 +208,7 @@ export const SelectAccount = styled.div<{
   ${({ theme, isActive, isHeader, isHoverable }) => css`
     display: flex;
     align-items: center;
-    padding: ${isHeader ? "0.8rem" : "0.6rem"};
+    padding: ${isHeader ? normalizeValue(0.6) : normalizeValue(0.6)};
     cursor: pointer;
     transition: background 0.5s;
     border: 1px solid ${theme.colors.secondaryBackground};

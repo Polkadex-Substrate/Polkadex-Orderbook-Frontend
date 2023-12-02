@@ -4,7 +4,7 @@ import { normalizeValue } from "@/utils/normalize";
 
 export const Main = styled.section`
   ${({ theme }) => css`
-    border-radius: 1.5rem 0 0 0;
+    border-radius: ${normalizeValue(1.5)} 0 0 0;
     background: ${theme.colors.primaryBackground};
     box-shadow: ${theme.shadows.secondary};
     display: flex;
@@ -26,8 +26,8 @@ export const Main = styled.section`
 
 export const Header = styled.button`
   ${({ theme }) => css`
-    width: 4rem;
-    height: 4rem;
+    width: ${normalizeValue(4)};
+    height: ${normalizeValue(4)};
     padding: ${normalizeValue(1)};
     border-radius: ${normalizeValue(10)};
     cursor: pointer;

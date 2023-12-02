@@ -33,7 +33,7 @@ export const Container = styled.div`
   margin: 0 auto;
   display: grid;
   align-items: center;
-  column-gap: 4rem;
+  column-gap: ${normalizeValue(4)};
 `;
 
 export const TitleContainer = styled.div``;
@@ -69,11 +69,11 @@ export const SocialIcons = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: ${normalizeValue(10)}; 
+      border-radius: ${normalizeValue(10)};
       padding: ${normalizeValue(1)};
       background: ${theme.colors.secondaryBackground};
-      width: 4rem;
-      height: 4rem;
+      width: ${normalizeValue(4)};
+      height: ${normalizeValue(4)};
       transition: background 0.3s ease-in-out;
       &:hover {
         background: ${theme.colors.secondaryBackgroundOpacity};

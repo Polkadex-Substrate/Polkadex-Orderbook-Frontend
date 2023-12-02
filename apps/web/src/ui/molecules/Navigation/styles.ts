@@ -4,7 +4,7 @@ import { normalizeValue } from "@/utils/normalize";
 
 export const Main = styled.div<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
-    max-width: ${isFull ? "inherit" : "35rem"};
+    max-width: ${isFull ? "inherit" : normalizeValue(35)};
     background: ${theme.colors.secondaryBackgroundSolid};
     min-width: ${normalizeValue(35)};
     border-radius: ${normalizeValue(1)};

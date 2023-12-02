@@ -9,7 +9,7 @@ export const Main = styled.main`
     min-width: 100vw;
     height: 100vh;
     display: flex;
-    max-width: 160rem;
+    max-width: ${normalizeValue(160)};
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
   `}
@@ -30,7 +30,8 @@ export const Wrapper = styled.div`
   padding: ${normalizeValue(2)};
   overflow-y: scroll;
   @media screen and (min-width: 590px) {
-    padding: 4rem 4rem ${normalizeValue(10)} 4rem;
+    padding: ${normalizeValue(4)} ${normalizeValue(4)} ${normalizeValue(10)}
+      ${normalizeValue(4)};
   }
 `;
 
@@ -77,7 +78,7 @@ export const Column = styled.div`
       background-position: bottom;
     }
     div {
-      padding: 3.5rem;
+      padding: ${normalizeValue(3.5)};
     }
     h1 {
       font-size: ${normalizeValue(2.2)};
@@ -96,7 +97,7 @@ export const Container = styled.div`
   display: grid;
   gap: ${normalizeValue(1)};
   @media screen and (min-width: 830px) {
-    grid-template-columns: minmax(25rem, 30rem) 1fr;
+    grid-template-columns: minmax(${normalizeValue(25)}, ${normalizeValue(30)}) 1fr;
   }
 `;
 
@@ -107,13 +108,14 @@ export const Box = styled.div`
   gap: ${normalizeValue(2)};
   flex: 1;
   @media screen and (min-width: 830px) {
-    padding: 8rem 4rem 4rem 4rem;
+    padding: ${normalizeValue(8)} ${normalizeValue(4)} ${normalizeValue(4)}
+      ${normalizeValue(4)};
   }
 `;
 
 export const Form = styled.div`
   @media screen and (min-width: 830px) {
-    max-width: 40rem;
+    max-width: ${normalizeValue(40)};
   }
   form {
     margin-top: ${normalizeValue(1.5)};
@@ -170,7 +172,8 @@ export const MAXButton = styled.button`
     color: white;
     background: ${theme.colors.green};
     border-radius: ${normalizeValue(0.3)};
-    padding: 0.3rem 0.5rem 0.3rem ${normalizeValue(0.5)};
+    padding: ${normalizeValue(0.3)} ${normalizeValue(0.5)}
+      ${normalizeValue(0.3)} ${normalizeValue(0.5)};
     margin-bottom: -${normalizeValue(0.5)};
     transition: background 0.2s ease-in;
     &:hover {
@@ -193,8 +196,8 @@ export const SelectAccount = styled.div`
     align-items: center;
     div {
       &:first-child {
-        min-width: 3.5rem;
-        min-height: 3.5rem;
+        min-width: ${normalizeValue(3.5)};
+        min-height: ${normalizeValue(3.5)};
         border-radius: ${normalizeValue(0.8)};
         padding: ${normalizeValue(0.8)};
         background: ${theme.colors.secondaryBackgroundOpacity};
@@ -281,13 +284,13 @@ export const History = styled.div`
     flex-direction: column;
     background: ${theme.colors.secondaryBackgroundOpacity};
     border-radius: ${normalizeValue(1)};
-    margin-top: 4rem;
+    margin-top: ${normalizeValue(4)};
     padding-bottom: ${normalizeValue(3)};
     flex: 1;
     h2 {
       font-size: ${normalizeValue(1.8)};
       font-weight: 500;
-      padding: ${normalizeValue(2)} 3rem;
+      padding: ${normalizeValue(2)} ${normalizeValue(3)};
     }
   `}
 `;

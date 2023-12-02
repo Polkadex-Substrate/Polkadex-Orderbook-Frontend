@@ -24,7 +24,7 @@ export const Header = styled.div`
 `;
 
 export const LogoWrapper = styled.a`
-  max-width: 12rem;
+  max-width: ${normalizeValue(12)};
   margin: 0 auto;
   display: block;
   cursor: pointer;
@@ -52,13 +52,13 @@ export const AsideLeft = styled.div`
     padding: ${normalizeValue(3)};
     @media screen and (min-width: 1200px) {
       padding: ${normalizeValue(5)};
-      max-width: 48rem;
+      max-width: ${normalizeValue(48)};
     }
     @media screen and (min-width: 930px) and (max-width: 1200px) {
-      max-width: 40rem;
+      max-width: ${normalizeValue(40)};
     }
     @media screen and (max-width: 930px) {
-      margin-bottom: 4rem;
+      margin-bottom: ${normalizeValue(4)};
     }
     span {
       width: fit-content;

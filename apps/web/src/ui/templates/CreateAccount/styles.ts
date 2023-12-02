@@ -9,7 +9,7 @@ export const Main = styled.main`
     min-width: 100vw;
     min-height: 100vh;
     display: flex;
-    max-width: 160rem;
+    max-width: ${normalizeValue(160)};
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
   `}
@@ -28,7 +28,8 @@ export const Wrapper = styled.div`
   flex: 1;
   padding: ${normalizeValue(2)};
   @media screen and (min-width: 590px) {
-    padding: 4rem 4rem ${normalizeValue(10)} 4rem;
+    padding: ${normalizeValue(4)} ${normalizeValue(4)} ${normalizeValue(10)}
+      ${normalizeValue(4)};
   }
 `;
 
@@ -63,7 +64,7 @@ export const Title = styled.button`
   `}
 `;
 export const ColumnWrapper = styled.div`
-  padding: 3.5rem;
+  padding: ${normalizeValue(3.5)};
 `;
 
 export const Column = styled.div`
@@ -117,7 +118,7 @@ export const Container = styled.div`
   display: grid;
   gap: ${normalizeValue(1)};
   @media screen and (min-width: 830px) {
-    grid-template-columns: minmax(25rem, 30rem) 1fr;
+    grid-template-columns: minmax(${normalizeValue(25)}, ${normalizeValue(30)}) 1fr;
   }
 `;
 
@@ -129,8 +130,9 @@ export const Box = styled.div`
     gap: ${normalizeValue(2)};
   }
   @media screen and (min-width: 830px) {
-    padding: 8rem 4rem 4rem 4rem;
-    max-width: 40rem;
+    padding: ${normalizeValue(8)} ${normalizeValue(4)} ${normalizeValue(4)}
+      ${normalizeValue(4)};
+    max-width: ${normalizeValue(40)};
   }
 `;
 

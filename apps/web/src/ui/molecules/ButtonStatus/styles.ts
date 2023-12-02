@@ -30,7 +30,7 @@ export const Wrapper = styled.button<{
       }
     }
     &:active {
-      transform: translateY(0.2rem);
+      transform: translateY (${normalizeValue(0.2)});
     }
 
     span {
@@ -60,7 +60,7 @@ export const Wrapper = styled.button<{
         height: ${normalizeValue(1.2)};
         left: 50%;
         top: 50%;
-        margin: - ${normalizeValue(0.6)} 0 0 -${normalizeValue(0.6)};
+        margin: -${normalizeValue(0.6)} 0 0 -${normalizeValue(0.6)};
         z-index: 1;
         &:nth-child(1) {
           width: ${normalizeValue(2)};
@@ -81,7 +81,7 @@ export const Wrapper = styled.button<{
         &:nth-child(2) {
           fill: ${theme.colors.primary};
           transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          transform: translateY(2rem);
+          transform: translateY (${normalizeValue(2)});
         }
       }
     }
@@ -106,13 +106,13 @@ export const Wrapper = styled.button<{
         backface-visibility: hidden;
         transform-origin: 50% 50%;
         &:nth-child(1) {
-          transform: rotateX(0deg) translateZ(1rem);
+          transform: rotateX(0deg) translateZ();
         }
         &:nth-child(2) {
-          transform: rotateX(-90deg) translateZ(1rem);
+          transform: rotateX(-90deg) translateZ (${normalizeValue(1)});
         }
         &:nth-child(3) {
-          transform: rotateX(-180deg) translateZ(1rem);
+          transform: rotateX(-180deg) translateZ (${normalizeValue(1)});
         }
       }
     }

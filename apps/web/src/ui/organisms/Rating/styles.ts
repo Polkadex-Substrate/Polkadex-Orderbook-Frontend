@@ -28,7 +28,7 @@ export const RatingWrapper = styled.div`
 export const RatingText = styled.div<{ value: string }>`
   ${({ theme, value }) => css`
     background-color: ${theme.colors.secondaryBackgroundOpacity};
-    height: 6rem;
+    height: ${normalizeValue(6)};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,7 +43,7 @@ const widthModifier = {
     width: 7.5rem;
   `,
   average: () => css`
-    width: 9rem;
+    width: ${normalizeValue(9)};
   `,
   best: () => css`
     width: 6.5rem;

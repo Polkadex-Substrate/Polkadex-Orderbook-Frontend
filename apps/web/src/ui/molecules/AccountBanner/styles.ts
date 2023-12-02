@@ -3,8 +3,8 @@ import styled, { css } from "styled-components";
 import { normalizeValue } from "@/utils/normalize";
 
 export const Wrapper = styled.div`
-  min-height: ${normalizeValue(28)}; 
-  max-width: 60rem;
+  min-height: ${normalizeValue(28)};
+  max-width: ${normalizeValue(60)};
   display: flex;
   position: relative;
 `;
@@ -46,8 +46,8 @@ export const Column = styled.div`
   justify-content: center;
   img {
     width: 100%;
-    max-width: 40rem;
-    margin-left: -2rem;
+    max-width: ${normalizeValue(40)};
+    margin-left: ${normalizeValue(-2)};
   }
 `;
 

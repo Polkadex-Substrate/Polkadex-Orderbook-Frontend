@@ -49,7 +49,7 @@ export const Footer = styled.div`
     flex: 1;
     align-items: center;
     gap: ${normalizeValue(1)};
-    padding: 1.5rem ${normalizeValue(2)};
+    padding: ${normalizeValue(1.5)} ${normalizeValue(2)};
     span {
       color: ${theme.colors.tertiaryText};
     }

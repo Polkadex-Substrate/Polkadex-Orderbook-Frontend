@@ -20,7 +20,7 @@ export const Box = styled.div`
   text-align: center;
   img {
     margin-bottom: ${normalizeValue(1)};
-    max-width: 7rem;
+    max-width: ${normalizeValue(7)};
     width: 100%;
   }
 `;

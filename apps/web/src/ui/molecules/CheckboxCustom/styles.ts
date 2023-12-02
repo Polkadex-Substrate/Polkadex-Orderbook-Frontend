@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 
 import * as T from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
   css({
     display: "flex",
@@ -20,8 +22,8 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
       alignItems: "center",
       justifyContent: "center",
       appearance: "none",
-      width: "1.7rem",
-      height: "1.7rem",
+      width: normalizeValue(1.7),
+      height: normalizeValue(1.7),
       background: fill ? theme.colors[fill] : theme.colors.primaryBackground,
       borderRadius: normalizeValue(0.5),
       outline: "none",
@@ -38,8 +40,8 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
       transitionProperty: "all",
       transitionDuration: "350ms",
       transitionTimingFunction: "cubic-bezier(0.53, -0.67, 0.73, 0.74)",
-      width: "1.5rem",
-      height: "1.5rem",
+      width: normalizeValue(1.5),
+      height: normalizeValue(1.5),
       borderRadius: normalizeValue(0.5),
       border: "1px solid",
       borderColor: theme.colors.secondaryBackground,
@@ -47,14 +49,14 @@ export const Wrapper = styled("div")<T.Props>(({ theme, fill, disabled }) =>
     },
     "& input:before": {
       content: "' '",
-      width: "0.35rem",
-      height: "0.9rem",
+      width: normalizeValue(0.35),
+      height: normalizeValue(0.9),
       border: `2px solid ${theme.colors.white}`,
       borderTop: "0",
       borderLeft: "0",
       transform: "rotate(45deg)",
       position: "absolute",
-      top: "0.1rem",
+      top: normalizeValue(0.1),
       opacity: "0",
     },
     "& input:hover:after": {

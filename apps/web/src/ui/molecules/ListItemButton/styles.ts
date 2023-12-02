@@ -10,7 +10,7 @@ const wrapperModifier = {
     font-size: ${theme.font.sizes.xsmall};
   `,
   Medium: (theme: DefaultTheme) => css`
-    height: 4rem;
+    height: ${normalizeValue(4)};
     font-size: ${theme.font.sizes.small};
     padding: ${theme.spacings.xxsmall} ${theme.spacings.medium};
   `,

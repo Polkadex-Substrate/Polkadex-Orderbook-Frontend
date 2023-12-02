@@ -83,8 +83,8 @@ export const OnlyIcons = styled.div`
 export const IconWrapper = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.tertiaryBackgroundOpacity};
-    width: 4.5rem;
-    height: 4.5rem;
+    width: ${normalizeValue(4.5)};
+    height: ${normalizeValue(4.5)};
     border-radius: ${theme.border.radius.medium};
     display: flex;
     align-items: center;

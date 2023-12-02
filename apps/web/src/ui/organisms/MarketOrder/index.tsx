@@ -109,7 +109,7 @@ export const MarketOrder = () => {
 export const MarketSkeleton = () => (
   <Skeleton
     style={{ marginTop: 10 }}
-    height="40rem"
+    height="${normalizeValue(40)}"
     width="100%"
     minWidth="350px"
   />
