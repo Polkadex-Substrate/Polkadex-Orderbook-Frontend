@@ -297,7 +297,7 @@ Super Form Reset
   /* Custom Scroll ------------------------------------
 -----------------------------------------------*/
   &::-webkit-scrollbar {
-    width: 0.3125rem;
+    width: ${normalizeValue(0.3125)};
   }
   /* Track */
   &::-webkit-scrollbar-track {
@@ -379,7 +379,7 @@ Super Form Reset
     .rdrMonthPicker,
     .rdrYearPicker {
       background: ${theme.colors.primaryBackgroundOpacity};
-      border-radius: 0.3125rem;
+      border-radius: ${normalizeValue(0.3125)};
     }
     .rdrNextPrevButton {
       background: ${theme.colors.secondaryBackground};

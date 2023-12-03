@@ -3,18 +3,21 @@ import { normalizeValue } from "@/utils/normalize";
 const defaultTheme = {
   title: "dark",
   grid: {
-    container: "130rem",
-    gutter: "3.2rem",
+    container: normalizeValue(130),
+    gutter: normalizeValue(3.2),
   },
   border: {
     radius: {
-      small: "0.7rem",
+      small: normalizeValue(0.7),
       medium: normalizeValue(1),
-      large: "1.3rem",
+      large: normalizeValue(1.3),
       primary: {
-        small:
-          "0 ${normalizeValue(1.5)} ${normalizeValue(1.5)} ${normalizeValue(1.5)}",
-        medium: "0 2.5rem 2.5rem 2.5rem",
+        small: `0 ${normalizeValue(1.5)} ${normalizeValue(
+          1.5
+        )} ${normalizeValue(1.5)}`,
+        medium: `0 ${normalizeValue(2.5)} ${normalizeValue(
+          2.5
+        )} ${normalizeValue(2.5)}`,
       },
     },
   },
@@ -26,25 +29,25 @@ const defaultTheme = {
     bold: 600,
     sizes: {
       xxxxsmall: normalizeValue(1),
-      xxxsmall: "1.1rem",
-      xxsmall: "1.2rem",
-      xsmall: "1.3rem",
-      small: "1.4rem",
-      medium: "1.6rem",
-      large: "1.8rem",
-      xlarge: "2.0rem",
-      xxlarge: "2.8rem",
+      xxxsmall: normalizeValue(1.1),
+      xxsmall: normalizeValue(1.2),
+      xsmall: normalizeValue(1.3),
+      small: normalizeValue(1.4),
+      medium: normalizeValue(1.6),
+      large: normalizeValue(1.8),
+      xlarge: normalizeValue(2),
+      xxlarge: normalizeValue(2.8),
     },
   },
   icon: {
     sizes: {
       xxsmall: normalizeValue(1),
-      xsmall: "1.2rem",
-      small: "1.4rem",
+      xsmall: normalizeValue(1.2),
+      small: normalizeValue(1.4),
       medium: normalizeValue(1.5),
-      large: "1.8rem",
-      xlarge: "2.0rem",
-      xxlarge: "2.8rem",
+      large: normalizeValue(1.8),
+      xlarge: normalizeValue(2),
+      xxlarge: normalizeValue(2.8),
     },
   },
   colors: {
@@ -81,12 +84,12 @@ const defaultTheme = {
   spacings: {
     xxxsmall: normalizeValue(0.5),
     xxsmall: normalizeValue(0.6),
-    xsmall: "1.6rem",
-    small: "2.4rem",
-    medium: "3.2rem",
-    large: "4.0rem",
-    xlarge: "4.8rem",
-    xxlarge: "5.6rem",
+    xsmall: normalizeValue(1.6),
+    small: normalizeValue(2.4),
+    medium: normalizeValue(3.2),
+    large: normalizeValue(4),
+    xlarge: normalizeValue(4.8),
+    xxlarge: normalizeValue(5.6),
   },
   padding: {
     xxsmall: normalizeValue(0.1),
@@ -95,7 +98,7 @@ const defaultTheme = {
     medium: normalizeValue(0.4),
     large: normalizeValue(0.5),
     xlarge: normalizeValue(0.6),
-    xxlarge: "0.7rem",
+    xxlarge: normalizeValue(0.7),
   },
   layers: {
     base: 5,

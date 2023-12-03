@@ -99,6 +99,7 @@ export const HeaderInfo = styled.div`
   margin-left: ${normalizeValue(1)};
   p {
     opacity: 0.5;
+    font-size: ${normalizeValue(1.3)};
   }
 `;
 export const HeaderInfoContainer = styled.div`
@@ -107,6 +108,7 @@ export const HeaderInfoContainer = styled.div`
   span {
     font-weight: 550;
     white-space: nowrap;
+    font-size: ${normalizeValue(1.3)};
   }
 `;
 
