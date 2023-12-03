@@ -40,13 +40,13 @@ export const RatingText = styled.div<{ value: string }>`
 `;
 const widthModifier = {
   good: () => css`
-    width: 7.5rem;
+    width: ${normalizeValue(7.5)};
   `,
   average: () => css`
     width: ${normalizeValue(9)};
   `,
   best: () => css`
-    width: 6.5rem;
+    width: ${normalizeValue(6.5)};
   `,
   worst: () => css`
     width: ${normalizeValue(8)};

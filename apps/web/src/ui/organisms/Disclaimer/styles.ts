@@ -9,7 +9,7 @@ export const Disclaimer = styled.div`
     padding: ${normalizeValue(3)};
     border-radius: ${normalizeValue(0.3)};
     border: 1px solid ${theme.colors.secondaryBackground};
-    max-width: 45rem;
+    max-width: ${normalizeValue(45)};
   `}
 `;
 export const Close = styled.button`
@@ -39,8 +39,8 @@ export const DisclaimerContainer = styled.div<{ isSmall?: boolean }>`
     gap: ${normalizeValue(1)};
     div {
       padding: ${isSmall ? normalizeValue(0.3) : normalizeValue(0.6)};
-      width: ${isSmall ? "1.6rem" : normalizeValue(2.5)};
-      height: ${isSmall ? "1.6rem" : "rem"};
+      width: ${isSmall ? normalizeValue(1.6) : normalizeValue(2.5)};
+      height: ${isSmall ? normalizeValue(1.6) : normalizeValue(2.5)};
       background: ${theme.colors.orange};
       border-radius: ${normalizeValue(20)};
     }

@@ -13,6 +13,8 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 type FormValues = {
   priceSell: string;
   priceBuy: string;
@@ -109,7 +111,7 @@ export const MarketOrder = () => {
 export const MarketSkeleton = () => (
   <Skeleton
     style={{ marginTop: 10 }}
-    height="${normalizeValue(40)}"
+    height={normalizeValue(40)}
     width="100%"
     minWidth="350px"
   />

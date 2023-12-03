@@ -18,6 +18,8 @@ import { TransactionsSkeleton } from "../Transactions";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 type Props = {
   filters: Ifilters;
 };
@@ -70,7 +72,7 @@ export const OrderHistory = ({ filters }: Props) => {
               height={300}
               loader={
                 <S.Loader>
-                  <LoadingSpinner size=normalizeValue(2) />
+                  <LoadingSpinner size={normalizeValue(2)} />
                 </S.Loader>
               }
             >

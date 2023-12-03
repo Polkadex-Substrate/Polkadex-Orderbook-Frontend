@@ -14,6 +14,7 @@ import { WithdrawHistorySkeleton } from "./skeleton";
 import { ReadyToClaimDataProps, ReadyToClaimProps } from "./types";
 
 import { LoadingSpinner, ResultFound } from "@/ui/molecules";
+import { normalizeValue } from "@/utils/normalize";
 
 export const ReadyToClaimTable = ({
   data,
@@ -97,7 +98,10 @@ const BatchTable = ({
         >
           {loading ? (
             <>
-              <LoadingSpinner color="white" style={{ marginRight: normalizeValue(0.5) }} />{" "}
+              <LoadingSpinner
+                color="white"
+                style={{ marginRight: normalizeValue(0.5) }}
+              />{" "}
               {t("claimLoading")}
             </>
           ) : (

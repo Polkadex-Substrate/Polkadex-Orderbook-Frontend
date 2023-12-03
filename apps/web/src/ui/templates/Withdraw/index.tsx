@@ -43,6 +43,8 @@ import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const initialValues = {
   amount: 0.0,
 };

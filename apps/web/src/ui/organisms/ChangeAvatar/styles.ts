@@ -55,7 +55,7 @@ export const Card = styled.div<{ isActive?: boolean }>`
     cursor: pointer;
     transition: transform 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
     &:hover {
-      transform: translateY(-0.2rem) scale(1.2);
+      transform: translateY(${normalizeValue(-0.2)};) scale(1.2);
     }
     svg g circle:first-child {
       fill: ${isActive ? theme.colors.primary : theme.colors.white};

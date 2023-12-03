@@ -33,7 +33,7 @@ export const TableAside = styled.div<{ loading: boolean }>`
     gap: ${normalizeValue(1)};
     button {
       padding: ${normalizeValue(1)} ${normalizeValue(4)};
-      max-width: 14.5rem;
+      max-width: ${normalizeValue(14.5)};
       border-radius: ${normalizeValue(0.4)};
       background: ${loading
         ? theme.colors.primary

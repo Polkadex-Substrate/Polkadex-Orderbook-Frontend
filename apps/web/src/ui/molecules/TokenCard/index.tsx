@@ -5,6 +5,8 @@ import { Skeleton } from "../Skeleton";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const TokenCard = ({
   tokenTicker,
   tokenIcon,
@@ -24,18 +26,26 @@ export const TokenCard = ({
   return (
     <S.Wrapper role="button" onClick={onAction}>
       <S.AsideLeft>
-        <Skeleton width=normalizeValue(4) height=normalizeValue(4) loading={!tokenIcon}>
+        <Skeleton
+          width={normalizeValue(4)}
+          height={normalizeValue(4)}
+          loading={!tokenIcon}
+        >
           <S.TokenWrapper>
             <Token />
           </S.TokenWrapper>
         </Skeleton>
         <S.TokenInfo>
-          <Skeleton width="5rem" height=normalizeValue(1.5) loading={!tokenTicker}>
+          <Skeleton
+            width="5rem"
+            height={normalizeValue(1.5)}
+            loading={!tokenTicker}
+          >
             <p>{tokenTicker}</p>
           </Skeleton>
           <Skeleton
-            width="${normalizeValue(12)}"
-            height=normalizeValue(1.5)
+            width={normalizeValue(12)}
+            height={normalizeValue(1.5)}
             loading={(!availableAmount && !tokenTicker) || loading}
           >
             <span>

@@ -3,13 +3,15 @@ import { forwardRef, Ref } from "react";
 import * as S from "../styles";
 import * as T from "../types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const Keyboard = forwardRef(
   ({ ...props }: T.Props, ref: Ref<HTMLButtonElement | null>) => {
     return (
       <S.Wrapper
         xmlns="http://www.w3.org/2000/svg"
-        width=normalizeValue(2.5)
-        height=normalizeValue(2.5)
+        width={normalizeValue(2.5)}
+        height={normalizeValue(2.5)}
         viewBox="0 0 24 30"
         {...props}
       >
@@ -93,7 +95,7 @@ const Keyboard = forwardRef(
         </rect>
       </S.Wrapper>
     );
-  },
+  }
 );
 
 Keyboard.displayName = "Keyboard";

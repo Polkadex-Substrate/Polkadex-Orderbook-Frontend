@@ -12,7 +12,7 @@ export const Heading = styled.p`
   padding-top: ${normalizeValue(3)};
   font-weight: 700;
   ${media.lessThan("medium")`
-  font-size:3rem
+    font-size: ${normalizeValue(3)};
   `}
 `;
 
@@ -28,7 +28,7 @@ export const QuestionWrapper = styled.div`
     flex-direction: column;
     gap: ${normalizeValue(1.5)};
     padding: ${normalizeValue(3)};
-    max-width: 51rem;
+    max-width: ${normalizeValue(51)};
     width: 100%;
     border-bottom: 1px solid ${theme.colors.secondaryBackground};
   `}
@@ -116,5 +116,5 @@ export const Comment = styled.div<{ maxHeight: number | undefined }>`
   display: flex;
   gap: ${normalizeValue(1.5)};
   flex-direction: column;
-  margin-top: ${(p) => `${p.maxHeight ? "0" : "-1.5rem"}`};
+  margin-top: ${(p) => `${p.maxHeight ? "0" : normalizeValue(-1.5)}`};
 `;

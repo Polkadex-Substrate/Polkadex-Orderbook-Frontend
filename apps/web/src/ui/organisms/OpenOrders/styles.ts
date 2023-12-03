@@ -22,7 +22,7 @@ export const Thead = styled(Grid)`
   color: #8ba1be;
   tr {
     margin-bottom: ${normalizeValue(1)};
-    padding: 0${normalizeValue(1)};
+    padding: 0 ${normalizeValue(1)};
   }
 `;
 

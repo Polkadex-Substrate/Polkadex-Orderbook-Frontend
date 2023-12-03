@@ -16,7 +16,7 @@ export const HomeLayout = styled.div`
 
 export const Sticker = styled.div`
   position: absolute;
-  right: -8.5rem;
+  right: ${normalizeValue(-8.5)};
   top: 50%;
   transform: translateY(-50%) rotate(-90deg);
   padding: ${normalizeValue(1)} ${normalizeValue(1.5)};

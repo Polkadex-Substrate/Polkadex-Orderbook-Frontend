@@ -107,6 +107,8 @@ type InteractiveProps = {
   defaultActive?: boolean;
   resetOnUnmount?: boolean;
   children: ((value?: InteractiveActions) => ReactNode) | ReactNode;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   placement?: (typeof places)[number];
 } & Pick<ComponentProps<"div">, "className">;
 

@@ -5,6 +5,8 @@ import { Icon, LoadingSpinner } from "../";
 import * as S from "./styles";
 import * as T from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Button = ({
   isFull = false,
   icon,
@@ -31,7 +33,10 @@ export const Button = ({
       {...props}
     >
       {isLoading ? (
-        <LoadingSpinner color="white" style={{ marginRight: normalizeValue(0.5) }} />
+        <LoadingSpinner
+          color="white"
+          style={{ marginRight: normalizeValue(0.5) }}
+        />
       ) : (
         !!icon && <Icon {...icon} />
       )}

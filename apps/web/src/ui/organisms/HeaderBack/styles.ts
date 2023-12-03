@@ -12,12 +12,12 @@ export const Wrapper = styled.header`
     box-shadow: ${theme.shadows.primary};
     padding: ${normalizeValue(0.5)} ${normalizeValue(1)};
     z-index: ${theme.layers.alwaysOnTop};
-    max-height: 4.9rem;
+    max-height: ${normalizeValue(4.9)};
   `}
 `;
 
 export const Container = styled.div`
-  max-width: 1${normalizeValue(40)};
+  max-width: 1 ${normalizeValue(40)};
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -51,10 +51,10 @@ export const HeaderBack = styled.div`
           transform: translateX(0);
         }
         50% {
-          transform: translateX(0.5rem);
+          transform: translateX${normalizeValue(0.5)};);
         }
         100% {
-          transform: translateX(0rem);
+          transform: translateX(0);
         }
       }
     }
