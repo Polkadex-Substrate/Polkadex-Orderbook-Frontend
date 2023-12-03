@@ -106,7 +106,7 @@ export const HeaderInfoContainer = styled.div`
   display: flex;
   align-items: center;
   span {
-    font-weight: 550;
+    font-weight: 600;
     white-space: nowrap;
     font-size: ${normalizeValue(1.3)};
   }
@@ -141,7 +141,7 @@ export const Title = styled.div`
     gap: ${normalizeValue(1)};
     h2 {
       font-size: ${normalizeValue(1.5)};
-      font-weight: 550;
+      font-weight: 600;
     }
   `}
 `;
@@ -204,7 +204,7 @@ export const Card = styled.div`
       font-size: ${normalizeValue(1.2)};
     }
     span {
-      font-weight: 550;
+      font-weight: 600;
     }
     p {
       opacity: 0.6;

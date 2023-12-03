@@ -95,7 +95,7 @@ export const Box = styled.div`
   }
   h1 {
     font-size: ${normalizeValue(1.8)};
-    font-weight: 550;
+    font-weight: 600;
   }
   form {
     margin-top: ${normalizeValue(2)};

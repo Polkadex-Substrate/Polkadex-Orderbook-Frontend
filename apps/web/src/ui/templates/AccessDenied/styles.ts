@@ -71,7 +71,7 @@ export const AsideLeft = styled.div`
     }
     h1 {
       font-size: ${normalizeValue(5)};
-      font-weight: 550;
+      font-weight: 600;
       margin-bottom: ${normalizeValue(1.5)};
     }
     p {

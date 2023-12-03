@@ -48,7 +48,7 @@ export const Header = styled.div`
   margin-bottom: ${normalizeValue(1)};
   h2 {
     font-size: ${normalizeValue(1.5)};
-    font-weight: 550;
+    font-weight: 600;
   }
 `;
 

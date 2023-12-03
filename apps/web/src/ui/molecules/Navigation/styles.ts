@@ -20,7 +20,7 @@ export const Header = styled.div`
   span {
     display: block;
     font-size: ${normalizeValue(1.6)};
-    font-weight: 550;
+    font-weight: 600;
     margin-left: ${normalizeValue(1)};
   }
 `;

@@ -17,7 +17,7 @@ export const Wrapper = styled.header`
 `;
 
 export const Container = styled.div`
-  max-width: 1 ${normalizeValue(40)};
+  max-width: ${normalizeValue(140)};
   margin: 0 auto;
   display: flex;
   justify-content: space-between;

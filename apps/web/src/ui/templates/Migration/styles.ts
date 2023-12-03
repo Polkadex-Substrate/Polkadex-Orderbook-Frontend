@@ -108,7 +108,7 @@ export const Box = styled.div`
     gap: ${normalizeValue(2)};
     h1 {
       font-size: ${normalizeValue(5.5)};
-      font-weight: 550;
+      font-weight: 600;
       line-height: 1;
     }
     p {
@@ -233,7 +233,7 @@ export const CountDown = styled.div`
       font-size: ${normalizeValue(3)};
       color: ${theme.colors.tertiaryText};
       opacity: 0.5;
-      font-weight: 550;
+      font-weight: 600;
     }
     span {
       color: ${theme.colors.white};
@@ -252,7 +252,7 @@ export const CountDown = styled.div`
 export const InfoButton = styled.button`
   ${({ theme }) => css`
     cursor: pointer;
-    font-weight: 550;
+    font-weight: 600;
     border-radius: ${normalizeValue(0.6)};
 
     padding: ${normalizeValue(2)} ${normalizeValue(1)};

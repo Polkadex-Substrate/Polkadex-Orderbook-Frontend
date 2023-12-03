@@ -49,7 +49,7 @@ export const EmptyContent = styled.div`
     justify-content: center;
     h2 {
       font-size: ${normalizeValue(1.8)};
-      font-weight: 550;
+      font-weight: 600;
     }
     p {
       margin: ${normalizeValue(1)} 0 ${normalizeValue(3)} 0;

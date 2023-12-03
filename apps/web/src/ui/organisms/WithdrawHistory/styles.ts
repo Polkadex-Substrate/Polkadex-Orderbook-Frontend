@@ -61,7 +61,7 @@ export const Header = styled.div`
   }
   h3 {
     font-size: ${normalizeValue(1.8)};
-    font-weight: 550;
+    font-weight: 600;
   }
 `;
 
@@ -82,7 +82,7 @@ export const TabList = styled(Tab.List)`
     display: flex;
     align-items: center;
     gap: ${normalizeValue(2)};
-    font-weight: 550;
+    font-weight: 600;
     ${TabItem}:nth-child(1) {
       &[data-headlessui-state="selected"] {
         border-bottom: 2px solid ${theme.colors.orange};
@@ -115,7 +115,7 @@ export const TabItemPending = styled(TabItem)`
       border-radius: ${normalizeValue(0.3)};
       padding: 0;
       font-size: ${normalizeValue(1.1)};
-      font-weight: 550;
+      font-weight: 600;
     }
   `}
 `;

@@ -45,7 +45,7 @@ export const Header = styled.button`
 export const Content = styled.div`
   h2 {
     font-size: ${normalizeValue(1.8)};
-    font-weight: 550;
+    font-weight: 600;
   }
 `;
 export const Card = styled.div<{ isActive?: boolean }>`

@@ -171,7 +171,7 @@ export const MainIndicator = styled.div`
   gap: ${normalizeValue(1.1)};
   strong {
     font-size: ${normalizeValue(1.5)};
-    font-weight: 550;
+    font-weight: 600;
     display: block;
   }
 `;

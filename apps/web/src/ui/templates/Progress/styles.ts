@@ -77,7 +77,7 @@ export const HeroContent = styled.div`
     }
     h3 {
       font-size: ${normalizeValue(2)};
-      font-weight: 550;
+      font-weight: 600;
     }
     p {
       font-size: ${normalizeValue(1.4)};
@@ -135,7 +135,7 @@ export const FooterTitle = styled.div`
     }
     h1 {
       font-size: ${normalizeValue(3)};
-      font-weight: 550;
+      font-weight: 600;
     }
     p {
       font-size: ${normalizeValue(1.4)};

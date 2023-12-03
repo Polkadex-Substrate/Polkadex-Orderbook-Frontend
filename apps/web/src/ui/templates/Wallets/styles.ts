@@ -51,7 +51,7 @@ export const ContainerMain = styled.div`
   ${({ theme }) => css`
     display: flex;
     width: 100%;
-    max-width: 1 ${normalizeValue(40)};
+    max-width: ${normalizeValue(140)};
     border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     @media screen and (max-width: 1100px) {
       flex-direction: column;
@@ -86,7 +86,7 @@ export const Container = styled.div`
   gap: ${normalizeValue(3)};
   h2 {
     font-size: ${normalizeValue(1.6)};
-    font-weight: 550;
+    font-weight: 600;
   }
 `;
 
@@ -112,7 +112,7 @@ export const WalletTitle = styled.div`
     padding: ${normalizeValue(1.5)} ${normalizeValue(2)};
     h2 {
       font-size: ${normalizeValue(1.7)};
-      font-weight: 550;
+      font-weight: 600;
     }
     @media screen and (min-width: 1110px) {
       padding: ${normalizeValue(1.5)} ${normalizeValue(4)};
@@ -195,7 +195,7 @@ export const ButtonWallet = styled.button`
   ${({ theme }) => css`
     border-radius: ${normalizeValue(0.8)};
     padding: ${normalizeValue(0.8)};
-    font-weight: 550;
+    font-weight: 600;
     background: ${theme.colors.primary};
     color: ${theme.colors.white};
     transition: background-color 0.5s ease-in;
@@ -256,7 +256,7 @@ export const EmptyBox = styled.div`
     }
     span {
       font-size: ${normalizeValue(1.5)};
-      font-weight: 550;
+      font-weight: 600;
     }
     div {
       background: ${theme.colors.secondaryBackground};
@@ -398,7 +398,7 @@ export const Registered = styled.div`
         span {
           font-size: ${normalizeValue(1.4)};
           display: block;
-          font-weight: 550;
+          font-weight: 600;
         }
         p {
           opacity: 0.8;
@@ -459,7 +459,7 @@ export const Using = styled.div`
     color: ${theme.colors.green};
     font-size: ${normalizeValue(0.9)};
     text-transform: uppercase;
-    font-weight: 550;
+    font-weight: 600;
     border-radius: ${normalizeValue(10)};
   `}
 `;
@@ -506,7 +506,7 @@ export const WalletCardContent = styled.div`
     flex-direction: column;
     gap: ${normalizeValue(0.2)};
     span {
-      font-weight: 550;
+      font-weight: 600;
     }
     small {
       font-size: ${normalizeValue(1.2)};

@@ -20,7 +20,7 @@ export const Title = styled.div`
     align-items: center;
     h3 {
       font-size: ${normalizeValue(1.6)};
-      font-weight: 550;
+      font-weight: 600;
     }
   }
 `;
@@ -164,7 +164,7 @@ export const CardContent = styled.div`
   }
   strong {
     font-size: ${normalizeValue(1.4)};
-    font-weight: 550;
+    font-weight: 600;
   }
 `;
 

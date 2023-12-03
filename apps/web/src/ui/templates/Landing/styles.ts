@@ -42,7 +42,7 @@ export const Hero = styled.section`
   display: flex;
   flex-direction: column;
   padding: ${normalizeValue(1)} ${normalizeValue(3)} ${normalizeValue(1)} 0;
-  max-width: 1 ${normalizeValue(40)};
+  max-width: ${normalizeValue(140)};
   margin: 0 auto;
   width: 100%;
   @media screen and (min-width: 600px) {
@@ -109,7 +109,7 @@ export const HeroHeader = styled.div`
 `;
 
 export const Start = styled.section`
-  max-width: 1 ${normalizeValue(40)};
+  max-width: ${normalizeValue(140)};
   margin: 0 auto;
   width: 100%;
 
@@ -243,7 +243,7 @@ export const Features = styled.section`
   `}
 `;
 export const FeaturesContainer = styled.section`
-  max-width: 1 ${normalizeValue(40)};
+  max-width: ${normalizeValue(140)};
   margin: 0 auto;
   width: 100%;
 `;
@@ -438,7 +438,7 @@ export const Support = styled.section`
     display: flex;
     flex-wrap: wrap;
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    max-width: 1 ${normalizeValue(40)};
+    max-width: ${normalizeValue(140)};
     margin: 0 auto;
     width: 100%;
   `}
@@ -485,7 +485,7 @@ export const SupportCardHeader = styled.div`
 
   h3 {
     font-size: ${normalizeValue(2)};
-    font-weight: 550;
+    font-weight: 600;
   }
   p {
     opacity: 0.5;
@@ -529,7 +529,7 @@ export const Footer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 0 ${normalizeValue(1)};
-  max-width: 1 ${normalizeValue(40)};
+  max-width: ${normalizeValue(140)};
   margin: 0 auto;
   width: 100%;
   @media screen and (min-width: 600px) {
@@ -563,7 +563,7 @@ export const FooterTop = styled.div`
     gap: ${normalizeValue(2)};
     strong {
       font-size: ${normalizeValue(1.5)};
-      font-weight: 550;
+      font-weight: 600;
     }
     ul {
       display: flex;
@@ -623,7 +623,7 @@ export const Header = styled.div`
     position: sticky;
     top: 0;
     z-index: 2;
-    max-width: 1 ${normalizeValue(40)};
+    max-width: ${normalizeValue(140)};
     margin: 0 auto;
     width: 100%;
   `}

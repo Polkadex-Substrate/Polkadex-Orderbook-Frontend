@@ -20,6 +20,6 @@ export const Info = styled.p<Partial<NavbarItemPops>>`
       : color === "green"
       ? theme.colors.green
       : "inherit"};
-    font-weight: 550;
+    font-weight: 600;
   `}
 `;

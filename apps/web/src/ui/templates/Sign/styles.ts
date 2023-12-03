@@ -99,7 +99,7 @@ export const Column = styled.div`
     h2 {
       font-size: ${normalizeValue(2.2)};
       line-height: 1.2;
-      font-weight: 550;
+      font-weight: 600;
       margin-bottom: ${normalizeValue(1.5)};
     }
     p {
@@ -116,7 +116,7 @@ export const Box = styled.div`
   }
   h1 {
     font-size: ${normalizeValue(1.8)};
-    font-weight: 550;
+    font-weight: 600;
   }
   form {
     margin-top: ${normalizeValue(2)};

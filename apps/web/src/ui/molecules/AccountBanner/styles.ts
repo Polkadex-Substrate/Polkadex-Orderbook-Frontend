@@ -64,7 +64,7 @@ export const Content = styled.div`
     div {
       &:first-child {
         h2 {
-          font-weight: 550;
+          font-weight: 600;
           margin-bottom: ${normalizeValue(1)};
         }
         p: last-child {

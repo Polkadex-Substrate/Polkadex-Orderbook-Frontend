@@ -47,7 +47,7 @@ export const Content = styled.div`
     padding: ${normalizeValue(2)};
     h2 {
       font-size: ${normalizeValue(2.2)};
-      font-weight: 550;
+      font-weight: 600;
     }
     p {
       color: ${theme.colors.tertiaryText};

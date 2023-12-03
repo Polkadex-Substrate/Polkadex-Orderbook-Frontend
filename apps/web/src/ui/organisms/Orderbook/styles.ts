@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
       /* border-left: 1px solid ${theme.colors.secondaryBackground}; */
       max-width: ${normalizeValue(35)};
       width: 30%;
-      min-width: ${normalizeValue(38)};
+      min-width: ${normalizeValue(30)};
     }
 
     @media screen and (min-width: 1688px) {
@@ -88,7 +88,7 @@ export const Header = styled.div`
   margin-bottom: ${normalizeValue(1)};
   h2 {
     font-size: ${normalizeValue(1.5)};
-    font-weight: 550;
+    font-weight: 600;
   }
 `;
 
@@ -226,7 +226,7 @@ export const PricingAsideLeft = styled.div<{ isPriceUp?: boolean }>`
     flex: 1;
     span {
       font-size: ${normalizeValue(1.5)};
-      font-weight: 550;
+      font-weight: 600;
       color: ${isPriceUp ? theme.colors.green : theme.colors.primary};
 
       ${Icon} {

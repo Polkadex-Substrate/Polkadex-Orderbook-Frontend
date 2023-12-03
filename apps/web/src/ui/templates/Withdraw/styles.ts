@@ -114,7 +114,7 @@ export const Column = styled.div`
     }
     h1 {
       font-size: ${normalizeValue(2.2)};
-      font-weight: 550;
+      font-weight: 600;
       margin-bottom: ${normalizeValue(1.5)};
     }
     p {
@@ -397,7 +397,7 @@ export const HistoryTitle = styled.div`
     border-bottom: 1px solid ${theme.colors.secondaryBackground};
 
     strong {
-      font-weight: 550;
+      font-weight: 600;
       font-size: ${normalizeValue(1.5)};
     }
     button {

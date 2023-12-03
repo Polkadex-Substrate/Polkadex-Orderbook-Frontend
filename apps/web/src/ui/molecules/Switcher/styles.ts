@@ -17,7 +17,7 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   span {
-    font-weight: 550;
+    font-weight: 600;
   }
   p {
     margin-top: ${normalizeValue(0.5)};

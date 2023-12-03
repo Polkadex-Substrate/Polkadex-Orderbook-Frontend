@@ -105,7 +105,7 @@ export const Amount = styled.div`
       input {
         width: 100%;
         font-size: ${normalizeValue(1.6)};
-        font-weight: 550;
+        font-weight: 600;
         color: ${theme.colors.text};
       }
     }

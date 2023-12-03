@@ -48,7 +48,7 @@ export const Header = styled.button`
 export const Content = styled.div`
   h2 {
     font-size: ${normalizeValue(1.8)};
-    font-weight: 550;
+    font-weight: 600;
   }
 `;
 
@@ -59,14 +59,14 @@ export const Title = styled.div`
     gap: ${normalizeValue(2)};
     h2 {
       font-size: ${normalizeValue(1.8)};
-      font-weight: 550;
+      font-weight: 600;
     }
     p {
       line-height: 1.4;
       color: ${theme.colors.tertiaryText};
     }
     strong {
-      font-weight: 550;
+      font-weight: 600;
       color: ${theme.colors.text};
     }
     a {

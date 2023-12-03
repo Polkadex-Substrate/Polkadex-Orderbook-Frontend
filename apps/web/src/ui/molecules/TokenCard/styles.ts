@@ -43,7 +43,7 @@ export const TokenInfo = styled.div`
   gap: ${normalizeValue(0.4)};
   p {
     font-size: ${normalizeValue(1.6)};
-    font-weight: 550;
+    font-weight: 600;
   }
   span {
     opacity: 0.5;

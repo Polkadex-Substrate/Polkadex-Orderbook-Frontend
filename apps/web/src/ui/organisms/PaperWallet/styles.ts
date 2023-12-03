@@ -21,5 +21,5 @@ export const Container = styled.div`
 
 export const Text = styled.text`
   font-size: ${normalizeValue(1.05)};
-  font-weight: 550;
+  font-weight: 600;
 `;

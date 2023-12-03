@@ -102,7 +102,7 @@ export const Title = styled.div`
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     h2 {
       font-size: ${normalizeValue(1.7)};
-      font-weight: 550;
+      font-weight: 600;
     }
     @media screen and (min-width: 1110px) {
       padding: ${normalizeValue(1.5)} ${normalizeValue(4)};
