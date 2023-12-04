@@ -1,5 +1,4 @@
 export { KlineProvider } from "./public/klineProvider";
-export { MarketsProvider } from "./public/marketsProvider";
 export { NativeApiProvider } from "./public/nativeApi";
 export { SettingProvider } from "./public/settings";
 export { OrderbookServiceProvider } from "./public/orderbookServiceProvider";

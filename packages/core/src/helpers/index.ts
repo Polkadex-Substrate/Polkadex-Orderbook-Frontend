@@ -3,7 +3,6 @@ export * from "./appsync";
 export * from "./calcMaxVolume";
 export * from "./cleanPositiveFloatInput";
 export * from "./convertExponential";
-export * from "./convertToTicker";
 export * from "./createOrdersHelpers";
 export * from "./createWithdrawHelpers";
 export * from "./DateTime";
