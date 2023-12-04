@@ -18,9 +18,9 @@ import {
 import BigNumber from "bignumber.js";
 import {
   useFunds,
-  useRecentTrades,
   useOrderbook,
   useMarkets,
+  useTickers,
 } from "@orderbook/core/hooks";
 
 type FormValues = {
@@ -50,8 +50,9 @@ export function usePlaceOrder(
   );
 
   const { asks, bids } = useOrderbook(market);
-
-  const { currentTradePrice: lastPriceValue } = useRecentTrades(market);
+  const {
+    currentTicker: { currentPrice: lastPriceValue },
+  } = useTickers(market);
 
   const { allBrowserAccounts } = useTradeWallet();
 
@@ -488,11 +489,11 @@ export function usePlaceOrder(
             Number(availableBaseAmount) * Number(data.values[0]) * rangeDecimal
           }`;
           const total = getAbsoluteNumber(
-            getEstimatedTotal(calculateTotal(formPrice, amount))
+            getEstimatedTotal(calculateTotal(String(formPrice), amount))
           );
           setFormValues({
             ...formValues,
-            priceSell: formPrice,
+            priceSell: String(formPrice),
             amountSell: Decimal.format(amount, qtyPrecision),
             totalSell: Decimal.format(total, totalPrecision),
           });
@@ -508,12 +509,12 @@ export function usePlaceOrder(
             Number(formPrice)
           }`;
           const total = getAbsoluteNumber(
-            getEstimatedTotal(calculateTotal(formPrice, amount))
+            getEstimatedTotal(calculateTotal(String(formPrice), amount))
           );
 
           setFormValues({
             ...formValues,
-            priceBuy: formPrice,
+            priceBuy: String(formPrice),
             amountBuy: Decimal.format(amount, qtyPrecision),
             totalBuy: Decimal.format(total, totalPrecision),
           });

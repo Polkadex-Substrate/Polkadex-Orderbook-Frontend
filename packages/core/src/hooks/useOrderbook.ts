@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   decimalPlaces,
   deleteFromBook,
@@ -11,7 +11,7 @@ import {
   MAX_DIGITS_AFTER_DECIMAL,
   QUERY_KEYS,
 } from "@orderbook/core/constants";
-import { useMarkets, useRecentTrades } from "@orderbook/core/hooks";
+import { useRecentTrades, useTickers } from "@orderbook/core/hooks";
 
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 import { useSettingsProvider } from "../providers/public/settings";
@@ -31,10 +31,13 @@ export function useOrderbook(defaultMarket: string) {
   const [sizeState, setSizeState] = useState(initialState[1]);
 
   const queryClient = useQueryClient();
-  const { isReady } = useOrderbookService();
+  const { isReady, markets: list } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
-  const { list } = useMarkets();
-  const { currentTrade, lastTrade } = useRecentTrades(defaultMarket);
+  const {
+    currentTicker: { currentPrice },
+  } = useTickers(defaultMarket);
+
+  const { isPriceUp } = useRecentTrades(defaultMarket);
 
   const {
     data: { asks, bids },
@@ -134,16 +137,10 @@ export function useOrderbook(defaultMarket: string) {
     return () => subscription.unsubscribe();
   }, [asks, bids, defaultMarket, isReady, queryClient]);
 
-  const isPriceUp = useMemo(() => {
-    const currentPrice = Number(currentTrade?.price);
-    const lastPrice = Number(lastTrade?.price);
-    return currentPrice > lastPrice;
-  }, [currentTrade, lastTrade]);
-
   return {
     isPriceUp,
     qtyPrecision,
-    lastPriceValue: Number(currentTrade?.price),
+    lastPriceValue: currentPrice,
     hasMarket: !!currentMarket,
     loading: isLoading || isFetching,
     asks: asksSorted,

@@ -36,15 +36,13 @@ export function useRecentTrades(market: string) {
   const isDecreasing = getIsDecreasingArray(recentTradesList);
 
   const currentTradePrice = useMemo(() => {
-    if (!recentTradesList) return "0";
-    return recentTradesList.length > 0
-      ? String(recentTradesList[0].price)
-      : "0";
+    if (!recentTradesList) return 0;
+    return recentTradesList.length > 0 ? recentTradesList[0].price : 0;
   }, [recentTradesList]);
 
   const lastTradePrice = useMemo(() => {
-    if (!recentTradesList) return "0";
-    return recentTradesList.length > 1 ? recentTradesList[1].price : "0";
+    if (!recentTradesList) return 0;
+    return recentTradesList.length > 1 ? recentTradesList[1].price : 0;
   }, [recentTradesList]);
 
   useEffect(() => {
@@ -68,10 +66,7 @@ export function useRecentTrades(market: string) {
   return {
     list: recentTradesList,
     loading: isLoading || isFetching,
-    currentTrade: recentTradesList.at(0),
-    lastTrade: recentTradesList.at(1),
     isDecreasing,
-    currentTradePrice,
-    lastTradePrice,
+    isPriceUp: currentTradePrice > lastTradePrice,
   };
 }
