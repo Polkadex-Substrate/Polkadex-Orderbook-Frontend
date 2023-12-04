@@ -34,10 +34,6 @@ ${({ theme }) => css`
   }
   svg {
     fill: ${theme.colors.text};
-    display: block;
-    margin: auto;
-    height: 100%;
-    width: 100%;
   }
 
   .Toastify__toast-theme--colored.Toastify__toast--success {
@@ -79,11 +75,6 @@ ${({ theme }) => css`
     height: 100%;
   }
 
-  .flex-1 {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-  }
   /* ----------------------------------------------------------------------------------------------------
 Transition
 ----------------------------------------------------------------------------------------------------*/
