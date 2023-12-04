@@ -17,7 +17,6 @@ export * from "./useTryUnlockTradeAccount";
 export * from "./types";
 export * from "./useClickOutside";
 export * from "./useMiniGraph";
-export * from "./useOnChainBalance";
 export * from "./useTradeHistory";
 export * from "./useAssets";
 export * from "./useAssetTransfer";
