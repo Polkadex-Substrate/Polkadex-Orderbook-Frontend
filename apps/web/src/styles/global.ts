@@ -22,12 +22,8 @@ ${({ theme }) => css`
   *:focus {
     outline: none;
   }
-  html {
-    // font-size: 62.5%;
-  }
 
   body {
-    font-size: ${theme.font.sizes.xsmall};
     background-color: ${theme.colors.primaryBackground};
     color: ${theme.colors.text};
     overflow-x: hidden;
