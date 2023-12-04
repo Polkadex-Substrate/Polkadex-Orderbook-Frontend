@@ -4,9 +4,11 @@ import { defaultConfig } from "@orderbook/core/config";
 import { BalanceFormatter } from "@orderbook/format";
 import { Asset } from "@orderbook/core/utils/orderbookService";
 
-import { useAssetsMetaData } from "./useAssetsMetaData";
-import { useFunds } from "./useFunds";
+import { isAssetPDEX } from "../helpers";
+import { POLKADEX_ASSET } from "../constants";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
+import { useFunds } from "./useFunds";
 export interface AssetsProps extends Asset {
   free_balance: string;
   onChainBalance: string;
@@ -17,14 +19,28 @@ export function useAssets() {
   const { locale } = useRouter();
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
-  const { list, loading } = useAssetsMetaData();
+  const { assets: assetsList, isReady } = useOrderbookService();
   const { balances, loading: balancesLoading } = useFunds();
+
+  const selectGetAsset = (
+    assetId: string | number | Record<string, string>
+  ): Asset | undefined => {
+    if (!assetId || !assetsList) {
+      return;
+    }
+    if (typeof assetId === "object" && "asset" in assetId) {
+      assetId = assetId.asset;
+    }
+    return isAssetPDEX(assetId.toString())
+      ? POLKADEX_ASSET
+      : assetsList?.find((asset) => asset.id === assetId.toString());
+  };
 
   const toHuman = BalanceFormatter.toHuman;
 
   const assets = useMemo(
     () =>
-      list
+      assetsList
         ?.map((e: AssetsProps) => {
           const tokenBalance = balances?.find(
             (value) => value.asset.id === e.id
@@ -66,13 +82,13 @@ export function useAssets() {
           );
         })
         ?.sort((a, b) => a.name.localeCompare(b.name)),
-    [filters.search, list, balances, filters.hideZero, locale, toHuman]
+    [filters.search, assetsList, balances, filters.hideZero, locale, toHuman]
   );
 
   return {
     assets,
     filters,
-    loading: loading || balancesLoading,
+    loading: !isReady || balancesLoading,
     onHideZeroBalance: () =>
       setFilters({
         ...filters,
@@ -80,5 +96,6 @@ export function useAssets() {
       }),
     onSearchToken: (e: ChangeEvent<HTMLInputElement>) =>
       setFilters({ ...filters, search: e.target.value }),
+    selectGetAsset,
   };
 }

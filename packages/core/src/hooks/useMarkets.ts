@@ -162,7 +162,7 @@ export function useMarkets(onClose: () => void, market: string) {
     marketTickers,
     fieldValue,
     currentTickerName: currentMarket?.name,
-    currentTickerImg: currentMarket?.baseAsset.name,
+    currentTickerImg: currentMarket?.baseAsset.ticker,
     id: currentMarket?.id,
   };
 }

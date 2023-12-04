@@ -19,7 +19,7 @@ import {
   READ_ONLY_TOKEN,
 } from "@orderbook/core/constants";
 import { Asset } from "@orderbook/core/utils/orderbookService";
-import { useAssetsMetaData } from "@orderbook/core/hooks";
+import { useAssets } from "@orderbook/core/hooks";
 
 import { useSettingsProvider } from "../settings";
 
@@ -30,7 +30,7 @@ import { fetchMarketTickers, fetchMarkets } from "./helper";
 
 export const MarketsProvider: MarketsComponent = ({ children }) => {
   const queryClient = useQueryClient();
-  const { list: allAssets } = useAssetsMetaData();
+  const { list: allAssets } = useAssets();
   const { onHandleError } = useSettingsProvider();
 
   const router = useRouter();

@@ -8,7 +8,7 @@ import {
 import { useMemo, useState } from "react";
 import classNames from "classnames";
 import { intlFormat } from "date-fns";
-import { useAssetsMetaData } from "@orderbook/core/index";
+import { useAssets } from "@orderbook/core/hooks";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
 import { useTranslation } from "next-i18next";
 import { TransferHistory as TransferHistoryProps } from "@orderbook/core/helpers";
@@ -36,7 +36,7 @@ export const TransferHistory = ({
 
   const { t } = useTranslation("transfer");
 
-  const { selectGetAsset } = useAssetsMetaData();
+  const { selectGetAsset } = useAssets();
   const { allAccounts } = useExtensionWallet();
   const columns = useMemo(
     () => getColumns(["Date", "Token", "Amount", "From/To", "Hash"]),

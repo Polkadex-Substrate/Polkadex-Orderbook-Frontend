@@ -2,7 +2,7 @@ import { useTranslation } from "next-i18next";
 import { NavbarItem, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
 import {
-  useAssetsMetaData,
+  useAssets,
   useMarketsData,
   useRecentTrades,
   useTickers,
@@ -21,7 +21,7 @@ type Props = {
 export const Navbar = ({ onOpenMarkets, market }: Props) => {
   const { currentTradePrice, loading: isRecentTradeFetching } =
     useRecentTrades(market);
-  const { selectGetAsset } = useAssetsMetaData();
+  const { selectGetAsset } = useAssets();
   const { currentTicker, tickerLoading } = useTickers(market);
   const { list, loading: isMarketFetching } = useMarketsData();
   const currMarket = getCurrentMarket(list, market);

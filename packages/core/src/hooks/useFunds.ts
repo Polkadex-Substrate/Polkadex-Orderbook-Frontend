@@ -10,22 +10,16 @@ import { appsyncOrderbookService, Balance } from "../utils/orderbookService";
 import { fetchOnChainBalance, fetchOnChainBalances } from "../helpers";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
-import { useAssetsMetaData } from "./useAssetsMetaData";
-
 export function useFunds() {
   const queryClient = useQueryClient();
-  const { isReady } = useOrderbookService();
+  const { isReady, assets: assetsList } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
   const {
     selectedAccount: { mainAddress },
   } = useProfile();
-  const {
-    success: isAssetsFetched,
-    list: assetsList,
-    selectGetAsset,
-  } = useAssetsMetaData();
   const { api, connected } = useNativeApi();
 
+  const isAssetsFetched = isReady;
   const [state, setState] = useState("");
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setState(e.target.value);
@@ -95,9 +89,8 @@ export function useFunds() {
 
       // Get trading balance object for current assetId
       const tradingBalance = tradingBalances?.find((balance) => {
-        const asset = selectGetAsset(balance.asset.id);
-        if (!asset) return {};
-        return asset.id === currentAssetId;
+        if (!balance?.asset) return {};
+        return balance.asset.id === currentAssetId;
       });
 
       // Get onChain balances for current assetId
@@ -111,13 +104,7 @@ export function useFunds() {
         onChainBalance,
       };
     });
-  }, [
-    isAssetsFetched,
-    tradingBalances,
-    selectGetAsset,
-    onChainBalances,
-    assetsList,
-  ]);
+  }, [isAssetsFetched, tradingBalances, onChainBalances, assetsList]);
 
   const getFreeProxyBalance = (assetId: string) => {
     const balance = balances?.find(
@@ -152,8 +139,8 @@ export function useFunds() {
       const assetId = msg.asset.id;
 
       const payload = {
-        name: selectGetAsset(assetId)?.name || "",
-        symbol: selectGetAsset(assetId)?.ticker || "",
+        name: msg?.asset?.name || "",
+        symbol: msg?.asset?.ticker || "",
         assetId: assetId.toString(),
         free_balance: msg.free,
         reserved_balance: msg.reserved,
@@ -168,7 +155,7 @@ export function useFunds() {
       );
       return { ...payload, onChainBalance: onChainBalance.toString() };
     },
-    [selectGetAsset, api, mainAddress]
+    [api, mainAddress]
   );
 
   const onBalanceUpdate = useCallback(
