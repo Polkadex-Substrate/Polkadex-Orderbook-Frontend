@@ -1,4 +1,3 @@
-export * from "./useMarketsData";
 export * from "./useRecentTrades";
 export * from "./useFunds";
 export * from "./useOpenOrders";

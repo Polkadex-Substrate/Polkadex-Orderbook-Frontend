@@ -14,7 +14,7 @@ import { useSessionProvider } from "../providers/user/sessionProvider";
 import { useSettingsProvider } from "../providers/public/settings";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
-import { useMarketsData } from "./useMarketsData";
+import { useMarkets } from "./useMarkets";
 
 export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
   const queryClient = useQueryClient();
@@ -24,7 +24,7 @@ export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
   const { isReady } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
   const { dateFrom, dateTo } = useSessionProvider();
-  const { list: markets } = useMarketsData();
+  const { list: markets } = useMarkets();
   const currentMarket = getCurrentMarket(markets, defaultMarket);
 
   const userLoggedIn = tradeAddress !== "";

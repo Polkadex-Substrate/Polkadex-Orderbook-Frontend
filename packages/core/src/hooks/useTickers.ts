@@ -8,12 +8,9 @@ import { useOrderbookService } from "../providers/public/orderbookServiceProvide
 import { appsyncOrderbookService, Ticker } from "../utils/orderbookService";
 import { decimalPlaces } from "../helpers";
 
-import { useMarketsData } from "./useMarketsData";
-
 export function useTickers(defaultMarket?: string) {
   const queryClient = useQueryClient();
-  const { isReady } = useOrderbookService();
-  const { list: markets } = useMarketsData();
+  const { isReady, markets } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
 
   const shouldFetchTickers = Boolean(markets && markets?.length > 0);

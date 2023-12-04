@@ -11,7 +11,7 @@ import { Ifilters } from "@orderbook/core/providers/types";
 import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 import { Order } from "@orderbook/core/utils/orderbookService";
-import { useMarketsData, useOrderHistory } from "@orderbook/core/hooks";
+import { useMarkets, useOrderHistory } from "@orderbook/core/hooks";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -26,7 +26,7 @@ export const OrderHistory = ({ filters, market }: Props) => {
   const { hasNextPage, isLoading, onFetchNextPage, orderHistory, error } =
     useOrderHistory(filters, market);
 
-  const { list } = useMarketsData();
+  const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, market);
 
   const priceFixed = currentMarket

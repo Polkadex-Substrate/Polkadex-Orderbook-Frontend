@@ -6,7 +6,7 @@ import { EmptyData, OpenOrderCard } from "@polkadex/orderbook-ui/molecules";
 import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 import { Order } from "@orderbook/core/utils/orderbookService";
-import { useMarketsData, useOpenOrders } from "@orderbook/core/hooks";
+import { useMarkets, useOpenOrders } from "@orderbook/core/hooks";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -24,7 +24,7 @@ export const OpenOrders = ({
   market,
 }: Props) => {
   const { isLoading, openOrders } = useOpenOrders(filters, market);
-  const { list } = useMarketsData();
+  const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, market);
 
   const { t: translation } = useTranslation("organisms");

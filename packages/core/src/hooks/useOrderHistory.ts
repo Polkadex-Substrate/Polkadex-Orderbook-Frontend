@@ -11,7 +11,7 @@ import { useSettingsProvider } from "../providers/public/settings";
 import { replaceOrPushOrder } from "../utils/orderbookService/appsync_v1/helpers";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
-import { useMarketsData } from "./useMarketsData";
+import { useMarkets } from "./useMarkets";
 
 export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
   const queryClient = useQueryClient();
@@ -21,7 +21,7 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
   } = useProfile();
   const { dateFrom, dateTo } = useSessionProvider();
   const { onHandleError } = useSettingsProvider();
-  const { list: markets } = useMarketsData();
+  const { list: markets } = useMarkets();
   const currentMarket = getCurrentMarket(markets, defaultMarket);
 
   const userLoggedIn = tradeAddress !== "";

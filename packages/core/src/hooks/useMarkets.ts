@@ -1,12 +1,13 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { Market } from "@orderbook/core/utils/orderbookService";
 import { getCurrentMarket } from "@orderbook/core/helpers";
+import { defaultConfig } from "@orderbook/core/config";
 
 import { defaultTicker } from "../constants";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
-import { useMarketsData } from "./useMarketsData";
 import { useTickers } from "./useTickers";
 
 export type InitialMarkets = {
@@ -17,21 +18,37 @@ export type InitialMarkets = {
   isFavourite?: boolean;
 } & Market;
 
-export function useMarkets(onClose: () => void, market: string) {
+export function useMarkets(market?: string) {
   const [fieldValue, setFieldValue] = useState({
     searchFieldValue: "",
     marketsTabsSelected: "All",
     showFavourite: false,
   });
 
-  const profileState = useProfile();
   const router = useRouter();
-
-  const { list: markets } = useMarketsData();
-  const currentMarket = getCurrentMarket(markets, market);
+  const { markets: data, isReady } = useOrderbookService();
+  const {
+    userMarket: { favoriteMarkets: favorites },
+    onUserFavoriteMarketPush,
+  } = useProfile();
   const { tickers: allMarketTickers } = useTickers(market);
 
-  const favorites = profileState.userMarket.favoriteMarkets;
+  const markets = useMemo(() => {
+    return data?.filter(
+      (market) =>
+        !defaultConfig.blockedAssets.some(
+          (item) => item === market.baseAsset.id
+        ) &&
+        !defaultConfig.blockedAssets.some(
+          (item) => item === market.quoteAsset.id
+        )
+    );
+  }, [data]);
+
+  const currentMarket = useMemo(
+    () => (market ? getCurrentMarket(markets, market) : undefined),
+    [market, markets]
+  );
 
   /**
    * @description Get the single market information for the current market
@@ -46,16 +63,12 @@ export function useMarkets(onClose: () => void, market: string) {
    * @param {string} e -  Search field value
    */
   const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log({
-      searchFieldValue: e.target.value,
-    });
-
     setFieldValue({ ...fieldValue, searchFieldValue: e.target.value });
   };
 
   const handleSelectedFavorite = (id: string) => {
     // this should dispatch an action to make store favorites to the dynamo db
-    profileState.onUserFavoriteMarketPush(id.trim());
+    onUserFavoriteMarketPush(id.trim());
   };
 
   /**
@@ -76,7 +89,7 @@ export function useMarkets(onClose: () => void, market: string) {
    * @returns {void} dispatch setCurrentMarket action
    */
   const handleChangeMarket = useCallback(
-    (e: string): void => {
+    (e: string, onClose: () => void): void => {
       const marketToSet = markets?.find((el) => el.name === e);
       if (marketToSet) {
         router.push(
@@ -86,10 +99,11 @@ export function useMarkets(onClose: () => void, market: string) {
             shallow: true,
           }
         );
+
         onClose();
       }
     },
-    [markets, onClose, router]
+    [markets, router]
   );
 
   /**
@@ -164,5 +178,8 @@ export function useMarkets(onClose: () => void, market: string) {
     currentTickerName: currentMarket?.name,
     currentTickerImg: currentMarket?.baseAsset.ticker,
     id: currentMarket?.id,
+
+    list: markets,
+    loading: !isReady,
   };
 }

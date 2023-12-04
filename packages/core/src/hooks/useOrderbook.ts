@@ -11,7 +11,7 @@ import {
   MAX_DIGITS_AFTER_DECIMAL,
   QUERY_KEYS,
 } from "@orderbook/core/constants";
-import { useMarketsData, useRecentTrades } from "@orderbook/core/hooks";
+import { useMarkets, useRecentTrades } from "@orderbook/core/hooks";
 
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 import { useSettingsProvider } from "../providers/public/settings";
@@ -33,7 +33,7 @@ export function useOrderbook(defaultMarket: string) {
   const queryClient = useQueryClient();
   const { isReady } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
-  const { list } = useMarketsData();
+  const { list } = useMarkets();
   const { currentTrade, lastTrade } = useRecentTrades(defaultMarket);
 
   const {

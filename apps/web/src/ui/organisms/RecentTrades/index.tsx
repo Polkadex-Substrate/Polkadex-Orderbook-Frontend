@@ -7,7 +7,7 @@ import {
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
-import { useMarketsData, useRecentTrades } from "@orderbook/core/hooks";
+import { useMarkets, useRecentTrades } from "@orderbook/core/hooks";
 
 import * as S from "./styles";
 
@@ -22,7 +22,7 @@ export const RecentTrades = ({ market }: Props) => {
   const t = (key: string, args = {}) =>
     translation(`recentTrades.${key}`, args);
 
-  const { list: allMarkets } = useMarketsData();
+  const { list: allMarkets } = useMarkets();
   const currentMarket = getCurrentMarket(allMarkets, market);
   const { isDecreasing, list, loading } = useRecentTrades(
     currentMarket?.id as string

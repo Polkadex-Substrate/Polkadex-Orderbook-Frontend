@@ -24,7 +24,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import { SessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { KlineProvider } from "@orderbook/core/providers/public/klineProvider";
 import { defaultConfig } from "@orderbook/core/config";
-import { useMarketsData, useRecentTrades } from "@orderbook/core/hooks";
+import { useMarkets, useRecentTrades } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
 
 import { ShutdownInteraction } from "../ShutdownInteraction";
@@ -57,7 +57,7 @@ export function Trading({ market: id }: Props) {
   const [banner, setBanner] = useState(false);
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
-  const { list } = useMarketsData();
+  const { list } = useMarkets();
   const market = getCurrentMarket(list, id);
   const { currentTradePrice: currentTrade } = useRecentTrades(market?.id ?? "");
 

@@ -3,7 +3,7 @@ import { NavbarItem, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
 import {
   useAssets,
-  useMarketsData,
+  useMarkets,
   useRecentTrades,
   useTickers,
 } from "@orderbook/core/hooks";
@@ -23,7 +23,7 @@ export const Navbar = ({ onOpenMarkets, market }: Props) => {
     useRecentTrades(market);
   const { selectGetAsset } = useAssets();
   const { currentTicker, tickerLoading } = useTickers(market);
-  const { list, loading: isMarketFetching } = useMarketsData();
+  const { list, loading: isMarketFetching } = useMarkets();
   const currMarket = getCurrentMarket(list, market);
 
   const quoteAsset = currMarket

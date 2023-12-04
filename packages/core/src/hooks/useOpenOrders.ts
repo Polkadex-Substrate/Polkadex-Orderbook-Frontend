@@ -13,7 +13,7 @@ import {
 } from "../utils/orderbookService/appsync_v1/helpers";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
-import { useMarketsData } from "./useMarketsData";
+import { useMarkets } from "./useMarkets";
 
 export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
   const queryClient = useQueryClient();
@@ -23,7 +23,7 @@ export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
     selectedAccount: { tradeAddress },
   } = useProfile();
 
-  const { list: markets } = useMarketsData();
+  const { list: markets } = useMarkets();
   const currentMarket = getCurrentMarket(markets, defaultMarket);
 
   const userLoggedIn = tradeAddress !== "";

@@ -44,7 +44,7 @@ export const Markets = ({ hasMargin = false, onClose, market }: Props) => {
     fieldValue,
     handleShowFavourite,
     id,
-  } = useMarkets(onClose, market);
+  } = useMarkets(market);
 
   return (
     <S.Main hasMargin={hasMargin}>
@@ -70,7 +70,7 @@ export const Markets = ({ hasMargin = false, onClose, market }: Props) => {
       <Content
         handleSelectedFavorite={handleSelectedFavorite}
         tokens={marketTokens()}
-        changeMarket={handleChangeMarket}
+        changeMarket={(e) => handleChangeMarket(e, onClose)}
       />
       <Footer
         tickers={marketTickers}

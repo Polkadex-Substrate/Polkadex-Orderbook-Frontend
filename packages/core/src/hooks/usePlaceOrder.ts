@@ -18,9 +18,9 @@ import {
 import BigNumber from "bignumber.js";
 import {
   useFunds,
-  useMarketsData,
   useRecentTrades,
   useOrderbook,
+  useMarkets,
 } from "@orderbook/core/hooks";
 
 type FormValues = {
@@ -69,7 +69,7 @@ export function usePlaceOrder(
     amount: selectedAmountFromOrderbookTable,
   } = useOrders();
 
-  const { loading: isMarketFetching, list } = useMarketsData();
+  const { loading: isMarketFetching, list } = useMarkets();
   const currentMarket = getCurrentMarket(list, market);
 
   const { getFreeProxyBalance, loading: isBalanceFetching } = useFunds();
