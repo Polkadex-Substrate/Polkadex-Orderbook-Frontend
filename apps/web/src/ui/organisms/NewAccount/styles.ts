@@ -35,6 +35,8 @@ export const Header = styled.button`
     svg {
       fill: ${theme.colors.text};
       stroke: ${theme.colors.text};
+      width: 100%;
+      height: 100%;
     }
     &:hover {
       background: ${theme.colors.secondaryBackgroundOpacity};
@@ -64,6 +66,7 @@ export const Title = styled.div`
     p {
       line-height: 1.4;
       color: ${theme.colors.tertiaryText};
+      font-size: ${normalizeValue(1.3)};
     }
     strong {
       font-weight: 600;
@@ -120,6 +123,8 @@ export const CardInfo = styled.div`
     display: flex;
     flex-direction: column;
     gap: ${normalizeValue(0.3)};
+    font-size: ${normalizeValue(1.3)};
+
     span {
       font-weight: 500;
     }
@@ -139,6 +144,8 @@ export const CardIcon = styled.div`
     svg {
       fill: ${theme.colors.tertiaryText};
       stroke: ${theme.colors.tertiaryText};
+      width: 100%;
+      height: 100%;
     }
   `}
 `;
@@ -149,6 +156,8 @@ export const CardArrow = styled.div`
     svg {
       fill: ${theme.colors.tertiaryText};
       stroke: ${theme.colors.tertiaryText};
+      width: 100%;
+      height: 100%;
     }
   `}
 `;

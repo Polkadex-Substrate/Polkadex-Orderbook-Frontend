@@ -14,6 +14,7 @@ export const Main = styled.div`
 `;
 
 export const Wrapper = styled.section`
+  font-size: ${normalizeValue(1.3)};
   display: grid;
   grid-gap: ${normalizeValue(5)};
   max-width: ${normalizeValue(90)};

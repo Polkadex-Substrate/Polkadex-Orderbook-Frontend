@@ -155,6 +155,7 @@ export const BottomContainer = styled.div``;
 export const Wrapper = styled.nav<{ open?: boolean }>`
   ${({ theme, open }) => css`
     position: sticky;
+    font-size: ${normalizeValue(1.3)};
     top: ${normalizeValue(5.5)};
     left: 0;
     display: flex;

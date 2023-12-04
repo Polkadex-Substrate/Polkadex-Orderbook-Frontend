@@ -34,6 +34,8 @@ export const Header = styled.button`
     svg {
       fill: ${theme.colors.text};
       stroke: ${theme.colors.text};
+      width: 100%;
+      height: 100%;
     }
     &:hover {
       background: ${theme.colors.secondaryBackgroundOpacity};
@@ -152,6 +154,8 @@ export const Icon = styled.div`
     svg {
       fill: ${theme.colors.tertiaryText};
       stroke: ${theme.colors.tertiaryText};
+      width: 100%;
+      height: 100%;
     }
   `}
 `;
@@ -160,10 +164,12 @@ export const CardInfo = styled.div`
     display: flex;
     align-items: center;
     gap: ${normalizeValue(0.5)};
-
+    font-size: ${normalizeValue(1.3)};
     svg {
       fill: ${theme.colors.tertiaryText};
       stroke: ${theme.colors.tertiaryText};
+      width: 100%;
+      height: 100%;
     }
 
     small {
@@ -203,12 +209,17 @@ export const ExportButton = styled(FooterButton)`
 
 export const DropdownButton = styled(FooterButton)`
   ${({ theme }) => css`
+    font-size: ${normalizeValue(1.3)};
     background: ${theme.colors.red};
     cursor: pointer;
     div {
       display: inline-block;
       margin-left: ${normalizeValue(0.5)};
       width: ${normalizeValue(0.7)};
+      svg {
+        width: 100%;
+        height: 100%;
+      }
     }
   `}
 `;

@@ -26,6 +26,9 @@ export const Title = styled.div`
     font-weight: 500;
     margin-bottom: ${normalizeValue(0.8)};
   }
+  p {
+    font-size: ${normalizeValue(1.3)};
+  }
 `;
 export const Content = styled.div`
   display: flex;

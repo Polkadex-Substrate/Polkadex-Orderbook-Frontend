@@ -63,6 +63,7 @@ export const Connect = styled.div`
   ${({ theme }) => css`
     cursor: pointer;
     display: block;
+    font-size: ${normalizeValue(1.3)};
     background: ${theme.colors.primaryBackground};
     color: ${theme.colors.text};
     padding: ${normalizeValue(1)};

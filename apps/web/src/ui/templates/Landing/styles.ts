@@ -5,6 +5,7 @@ import { normalizeValue } from "@/utils/normalize";
 
 export const Main = styled.main<{ open?: boolean }>`
   ${({ theme, open }) => css`
+    font-size: ${normalizeValue(1.3)};
     visibility: hidden;
     opacity: 0;
     transition:

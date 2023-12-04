@@ -29,6 +29,9 @@ export const Title = styled.div`
     font-size: ${normalizeValue(1.8)};
     font-weight: 500;
   }
+  p {
+    font-size: ${normalizeValue(1.3)};
+  }
 `;
 export const CopyButton = styled.button`
   ${({ theme }) => css`
@@ -107,6 +110,7 @@ export const WordsContainer = styled.div`
     flex-wrap: wrap;
     gap: ${normalizeValue(1)};
     div {
+      font-size: ${normalizeValue(1.3)};
       padding: ${normalizeValue(0.3)} ${normalizeValue(0.5)};
       border-radius: ${normalizeValue(0.5)};
       border: 1px solid ${theme.colors.secondaryBackground};

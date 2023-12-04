@@ -163,6 +163,7 @@ export const UserActions = styled.div`
     align-items: center;
     gap: ${normalizeValue(1)};
     a {
+      font-size: ${normalizeValue(1.3)};
       padding: ${normalizeValue(0.5)} ${normalizeValue(0.6)};
       border-radius: ${normalizeValue(0.3)};
       transition: background-color ease 0.8s;

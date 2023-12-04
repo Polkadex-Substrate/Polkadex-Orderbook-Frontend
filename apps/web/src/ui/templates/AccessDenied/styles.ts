@@ -7,6 +7,7 @@ export const Wrapper = styled.section`
     min-height: 100vh;
     display: flex;
     background: ${theme.colors.primaryBackground};
+    font-size: ${normalizeValue(1.3)};
   `}
 `;
 

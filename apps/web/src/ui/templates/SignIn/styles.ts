@@ -16,6 +16,8 @@ export const Main = styled.main`
 `;
 
 export const Wrapper = styled.div`
+  font-size: ${normalizeValue(1.3)};
+
   flex: 1;
   display: flex;
   flex-direction: column;

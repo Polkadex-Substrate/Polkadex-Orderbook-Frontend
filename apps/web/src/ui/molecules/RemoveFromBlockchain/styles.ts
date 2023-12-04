@@ -27,6 +27,7 @@ export const Tag = styled.span`
     border-radius: ${normalizeValue(0.4)};
     border: 1px solid ${theme.colors.primary};
     background: ${theme.colors.primary}11;
+    font-size: ${normalizeValue(1.3)};
   `}
 `;
 
@@ -40,6 +41,9 @@ export const Title = styled.div`
       font-size: ${normalizeValue(2)};
       font-weight: 500;
       margin-bottom: ${normalizeValue(0.8)};
+    }
+    p {
+      font-size: ${normalizeValue(1.3)};
     }
   `}
 `;

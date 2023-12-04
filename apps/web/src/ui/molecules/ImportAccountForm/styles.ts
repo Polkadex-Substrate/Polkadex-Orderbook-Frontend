@@ -258,7 +258,9 @@ export const Upload = styled(Container)<{
       color: ${theme.colors.red};
       font-size: ${normalizeValue(1.3)};
     }
-
+    p {
+      font-size: ${normalizeValue(1.3)};
+    }
     ${isDragAccept &&
     css`
       border-color: ${theme.colors.green};

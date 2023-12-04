@@ -76,6 +76,8 @@ export const Thead = styled.th`
     text-align: right;
     svg {
       fill: ${theme.colors.text};
+      width: 100%;
+      height: 100%;
       path {
         opacity: 0.5;
       }
@@ -111,6 +113,10 @@ export const Token = styled.div`
     gap: ${normalizeValue(0.5)};
     text-align: left;
     div {
+      svg {
+        width: 100%;
+        height: 100%;
+      }
       &:first-child {
         width: ${normalizeValue(3.5)};
         height: ${normalizeValue(3.5)};

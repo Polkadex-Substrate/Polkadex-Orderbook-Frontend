@@ -193,6 +193,8 @@ export const ButtonGroup = styled.div`
 
 export const ButtonWallet = styled.button`
   ${({ theme }) => css`
+    display: flex;
+    align-items: center;
     border-radius: ${normalizeValue(0.8)};
     padding: ${normalizeValue(0.8)};
     font-weight: 600;
@@ -203,13 +205,20 @@ export const ButtonWallet = styled.button`
       background: ${theme.colors.primary}33;
     }
     div {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border: 1.8px solid ${theme.colors.white};
       border-radius: ${normalizeValue(0.4)};
       vertical-align: middle;
       margin-right: ${normalizeValue(0.5)};
       padding: ${normalizeValue(0.4)};
       width: ${normalizeValue(1.8)};
+      height: ${normalizeValue(1.8)};
+      svg {
+        width: 100%;
+        height: 100%;
+      }
     }
   `}
 `;
@@ -252,6 +261,7 @@ export const EmptyBox = styled.div`
     p {
       line-height: 1.5;
       margin-top: ${normalizeValue(0.5)};
+      font-size: ${normalizeValue(1.3)};
       color: ${theme.colors.tertiaryText};
     }
     span {
@@ -312,6 +322,7 @@ export const AccountCardContent = styled.div`
     display: flex;
     flex-direction: column;
     gap: ${normalizeValue(0.3)};
+    font-size: ${normalizeValue(1.3)};
     span {
       font-weight: 500;
     }
@@ -330,6 +341,8 @@ export const AccountCardFlex = styled.div`
       svg {
         fill: ${theme.colors.tertiaryText};
         stroke: ${theme.colors.tertiaryText};
+        width: 100%;
+        height: 100%;
       }
     }
   `}
@@ -356,14 +369,19 @@ export const Badge = styled.div<{ isRegistered: boolean }>`
     ${isRegistered &&
     css`
       div {
-        vertical-align: middle;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: ${normalizeValue(1.3)};
+        height: ${normalizeValue(1.3)};
         background: ${theme.colors.green};
         border-radius: ${normalizeValue(10)};
-        padding: ${normalizeValue(0.3)};
+        padding: ${normalizeValue(0.2)};
         svg {
           fill: ${theme.colors.white};
           stroke: ${theme.colors.white};
+          width: 100%;
+          height: 100%;
         }
       }
     `}
@@ -389,6 +407,8 @@ export const Registered = styled.div`
         width: ${normalizeValue(2)};
         svg {
           fill: ${theme.colors.primary};
+          width: 100%;
+          height: 100%;
         }
       }
       &:last-child {
@@ -429,6 +449,10 @@ export const AccountHeaderTrigger = styled.div`
   cursor: pointer;
   div {
     width: ${normalizeValue(0.8)};
+  }
+  svg {
+    width: 100%;
+    height: 100;
   }
 `;
 
@@ -507,6 +531,7 @@ export const WalletCardContent = styled.div`
     gap: ${normalizeValue(0.2)};
     span {
       font-weight: 600;
+      font-size: ${normalizeValue(1.3)};
     }
     small {
       font-size: ${normalizeValue(1.2)};
@@ -514,6 +539,7 @@ export const WalletCardContent = styled.div`
     }
     p {
       color: ${theme.colors.tertiaryText};
+      font-size: ${normalizeValue(1.3)};
     }
   `}
 `;
@@ -528,6 +554,8 @@ export const WalletCardCopy = styled.div`
       svg {
         fill: ${theme.colors.tertiaryText};
         stroke: ${theme.colors.tertiaryText};
+        width: 100%;
+        height: 100%;
       }
     }
   `}
@@ -657,6 +685,7 @@ export const SupportCard = styled.div`
     p {
       opacity: 0.6;
       line-height: 1.5;
+      font-size: ${normalizeValue(1.3)};
     }
     h4 {
       font-size: ${normalizeValue(1.7)};
@@ -664,6 +693,7 @@ export const SupportCard = styled.div`
     }
     a,
     button {
+      font-size: ${normalizeValue(1.3)};
       background: ${theme.colors.secondaryBackgroundOpacity};
       padding: ${normalizeValue(1)} ${normalizeValue(2)};
       border-radius: ${normalizeValue(0.5)};

@@ -236,6 +236,7 @@ export const SupportCard = styled.div`
     padding: ${normalizeValue(4)};
     p {
       opacity: 0.6;
+      font-size: ${normalizeValue(1.3)};
     }
     h4 {
       font-size: ${normalizeValue(1.7)};
@@ -243,6 +244,7 @@ export const SupportCard = styled.div`
     }
     a,
     button {
+      font-size: ${normalizeValue(1.3)};
       background: ${theme.colors.secondaryBackgroundOpacity};
       padding: ${normalizeValue(1)} ${normalizeValue(2)};
       border-radius: ${normalizeValue(0.5)};

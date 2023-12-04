@@ -18,6 +18,7 @@ export const Modal = styled.div`
   position: fixed;
   inset: 0;
   overflow-y: auto;
+  font-size: ${normalizeValue(1.3)};
 `;
 
 export const ModalWrapper = styled.div`
@@ -49,6 +50,8 @@ export const ModalTitle = styled(Dialog.Title)`
     width: ${normalizeValue(2)};
     svg {
       stroke: ${theme.colors.text};
+      width: 100%;
+      height: 100%;
     }
   `}
 `;

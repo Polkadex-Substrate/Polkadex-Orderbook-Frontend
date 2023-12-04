@@ -10,6 +10,7 @@ export const Wrapper = styled.div`
     overflow: auto;
     max-height: 54vh;
     table {
+      font-size: ${normalizeValue(1.3)};
       border-spacing: 0 ${normalizeValue(0.5)};
       border-collapse: separate;
       width: 100%;
@@ -67,8 +68,11 @@ export const Thead = styled.th<{ isActionTab?: boolean }>`
     cursor: ${isActionTab ? "default" : "pointer"};
     user-select: none;
     text-align: right;
+
     svg {
       fill: ${theme.colors.text};
+      width: 100%;
+      height: 100%;
       path {
         opacity: 0.5;
       }
@@ -104,6 +108,10 @@ export const Token = styled.div`
     gap: ${normalizeValue(0.5)};
     text-align: left;
     div {
+      svg {
+        width: 100%;
+        height: 100%;
+      }
       &:first-child {
         width: ${normalizeValue(3.5)};
         height: ${normalizeValue(3.5)};

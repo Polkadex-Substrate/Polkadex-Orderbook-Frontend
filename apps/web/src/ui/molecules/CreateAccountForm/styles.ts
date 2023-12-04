@@ -40,10 +40,16 @@ export const WalletSelectWrapper = styled(Container)<{ hasError?: boolean }>`
 
 export const WalletSelectArrow = styled.div`
   width: ${normalizeValue(0.8)};
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export const DropdownHeader = styled.p`
   ${({ theme }) => css`
+    font-size: ${normalizeValue(1.3)};
+
     small {
       color: ${theme.colors.tertiaryText};
       font-size: ${normalizeValue(1.3)};
@@ -63,6 +69,9 @@ export const WalletSelectContent = styled.div`
     align-items: center;
     gap: ${normalizeValue(0.5)};
     div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: ${normalizeValue(1.3)};
       height: ${normalizeValue(1.3)};
       padding: ${normalizeValue(0.2)};
@@ -71,6 +80,8 @@ export const WalletSelectContent = styled.div`
       svg {
         stroke: ${theme.colors.tertiaryText};
         fill: ${theme.colors.tertiaryText};
+        width: 100%;
+        height: 100%;
       }
     }
   `}
@@ -127,6 +138,7 @@ export const WalletError = styled.div<{ isNegative?: boolean }>`
     }
     p {
       color: ${theme.colors.red};
+      font-size: ${normalizeValue(1.3)};
     }
   `}
 `;
@@ -135,6 +147,7 @@ export const Error = styled.p`
   ${({ theme }) => css`
     color: ${theme.colors.red};
     margin-top: ${normalizeValue(0.5)};
+    font-size: ${normalizeValue(1.3)};
   `}
 `;
 
@@ -170,6 +183,8 @@ export const PasswordFooter = styled.div`
       svg {
         fill: ${theme.colors.tertiaryText};
         stroke: ${theme.colors.tertiaryText};
+        width: 100%;
+        height: 100%;
       }
     }
   `}

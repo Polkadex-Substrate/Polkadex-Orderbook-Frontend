@@ -38,10 +38,12 @@ ${({ theme }) => css`
 
   .Toastify__toast-theme--colored.Toastify__toast--success {
     background-color: ${theme.colors.green};
+    font-size: ${normalizeValue(1.3)};
   }
 
   .Toastify__toast-theme--colored.Toastify__toast--error {
     background-color: ${theme.colors.red};
+    font-size: ${normalizeValue(1.3)};
   }
 
   .infinite-scroll-component {

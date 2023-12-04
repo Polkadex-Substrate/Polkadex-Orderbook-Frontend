@@ -24,6 +24,8 @@ export const Close = styled.button`
     border-radius: ${normalizeValue(10)};
     svg {
       stroke: ${theme.colors.text};
+      width: 100%;
+      height: 100%;
     }
     &:hover {
       background: ${theme.colors.secondaryBackgroundOpacity};
@@ -38,11 +40,18 @@ export const DisclaimerContainer = styled.div<{ isSmall?: boolean }>`
     align-items: center;
     gap: ${normalizeValue(1)};
     div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: ${isSmall ? normalizeValue(0.3) : normalizeValue(0.6)};
       width: ${isSmall ? normalizeValue(1.6) : normalizeValue(2.5)};
       height: ${isSmall ? normalizeValue(1.6) : normalizeValue(2.5)};
       background: ${theme.colors.orange};
       border-radius: ${normalizeValue(20)};
+      svg {
+        width: 100%;
+        height: 100%;
+      }
     }
   `}
 `;
@@ -50,6 +59,7 @@ export const DisclaimerContainer = styled.div<{ isSmall?: boolean }>`
 export const DisclaimerMessage = styled.p`
   ${({ theme }) => css`
     line-height: 1.4;
+    font-size: ${normalizeValue(1.3)};
     strong {
       margin-right: ${normalizeValue(0.3)};
     }

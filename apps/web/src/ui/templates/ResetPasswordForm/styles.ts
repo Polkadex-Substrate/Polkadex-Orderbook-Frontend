@@ -24,6 +24,7 @@ export const Flex = styled.div`
   }
 `;
 export const Wrapper = styled.div`
+  font-size: ${normalizeValue(1.3)};
   display: flex;
   flex-direction: column;
   align-items: center;

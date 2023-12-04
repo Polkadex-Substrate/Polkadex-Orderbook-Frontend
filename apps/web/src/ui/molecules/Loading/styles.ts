@@ -27,6 +27,9 @@ export const Container = styled.div<{
     justify-content: center;
     z-index: 99;
     div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       background: ${hasBg ? theme.colors.secondaryBackgroundSolid : "none"};
       border: 1px solid ${hasBg ? theme.colors.secondaryBackground : "none"};
       padding: ${normalizeValue(2)};
@@ -35,11 +38,15 @@ export const Container = styled.div<{
       p {
         text-align: center;
         margin-top: ${normalizeValue(1)};
+        font-size: ${normalizeValue(1.3)};
       }
     }
     svg {
       stroke: ${theme.colors.primary};
       fill: ${theme.colors.primary};
+      max-width: ${normalizeValue(2)};
+      width: 100%;
+      height: 100%;
     }
   `}
 `;

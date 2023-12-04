@@ -7,6 +7,7 @@ export const Wrapper = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: ${normalizeValue(1.3)};
 `;
 
 export const Container = styled.div`

@@ -7,6 +7,7 @@ export const Content = styled.div`
     display: flex;
     flex-direction: column;
     flex: 1;
+    font-size: ${normalizeValue(1.3)};
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
