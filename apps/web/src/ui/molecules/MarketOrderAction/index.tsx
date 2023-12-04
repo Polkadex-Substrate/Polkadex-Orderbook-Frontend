@@ -316,7 +316,7 @@ const ProtectPassword = () => {
 };
 
 export const AvaliableBalanceSkeleton = () => (
-  <Skeleton height={normalizeValue(2)} width="10rem" />
+  <Skeleton height={normalizeValue(2)} width={normalizeValue(10)} />
 );
 export const ButtonSkeleton = () => (
   <S.ButtonSkeletonWrapper>

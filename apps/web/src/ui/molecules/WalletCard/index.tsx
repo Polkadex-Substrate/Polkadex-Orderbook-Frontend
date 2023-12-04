@@ -5,6 +5,8 @@ import { Skeleton } from "../Skeleton";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const WalletCard = ({
   label,
   walletType,
@@ -30,13 +32,17 @@ export const WalletCard = ({
         )}
       </S.Header>
       <S.Footer>
-        <Skeleton height="4px" width="5rem" loading={!walletName}>
+        <Skeleton height="4px" width={normalizeValue(5)} loading={!walletName}>
           {walletAddress && (
             <>
               <S.Icon>
                 <Icons.Wallet />
               </S.Icon>
-              <Skeleton height="4px" width="5rem" loading={!walletAddress}>
+              <Skeleton
+                height="4px"
+                width={normalizeValue(5)}
+                loading={!walletAddress}
+              >
                 {searchable ? (
                   <span>{walletAddress}</span>
                 ) : (

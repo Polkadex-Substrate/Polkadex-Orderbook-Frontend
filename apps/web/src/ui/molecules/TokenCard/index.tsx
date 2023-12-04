@@ -37,7 +37,7 @@ export const TokenCard = ({
         </Skeleton>
         <S.TokenInfo>
           <Skeleton
-            width="5rem"
+            width={normalizeValue(5)}
             height={normalizeValue(1.5)}
             loading={!tokenTicker}
           >

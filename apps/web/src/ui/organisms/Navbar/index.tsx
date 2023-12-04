@@ -94,7 +94,7 @@ export const Navbar = ({ onOpenMarkets }) => {
           )}
 
           {isLoading ? (
-            <InfoSkeleton width="11rem" />
+            <InfoSkeleton width={normalizeValue(11)} />
           ) : (
             <NavbarItem
               label={t("volume24hr", {
@@ -109,7 +109,7 @@ export const Navbar = ({ onOpenMarkets }) => {
           <S.WrapperVolume>
             <S.ContainerVolume>
               {isLoading ? (
-                <InfoSkeleton width="11rem" />
+                <InfoSkeleton width={normalizeValue(11)} />
               ) : (
                 <>
                   <S.VolumeHigh>
@@ -137,7 +137,7 @@ type SkeletonProps = {
 
 export const InfoSkeleton = ({
   height = normalizeValue(4),
-  width = "7rem",
+  width = normalizeValue(7),
 }: SkeletonProps) => (
   <Skeleton style={{ marginBlock: 4 }} height={height} width={width} />
 );

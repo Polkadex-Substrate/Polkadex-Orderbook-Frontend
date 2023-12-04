@@ -48,7 +48,10 @@ export const ShutdownInteraction = ({
               name="SingleArrowRight"
               fill="primary"
               size="medium"
-              style={{ marginLeft: normalizeValue(1), width: "1.3rem" }}
+              style={{
+                marginLeft: normalizeValue(1),
+                width: normalizeValue(1.3),
+              }}
             />
           </a>
         )}
