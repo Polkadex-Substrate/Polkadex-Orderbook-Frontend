@@ -63,15 +63,15 @@ ${({ theme }) => css`
 
   @keyframes slideIn {
     0% {
-      transform: translateY(0.625rem);
+      transform: translateY(${normalizeValue(1)});
       opacity: 0;
     }
     100% {
-      transform: translateY(0rem);
+      transform: translateY(0);
       opacity: 1;
     }
     0% {
-      transform: translateY(0.625rem);
+      transform: translateY(${normalizeValue(1)});
       opacity: 0;
     }
   }
@@ -293,7 +293,7 @@ Super Form Reset
   /* Custom Scroll ------------------------------------
 -----------------------------------------------*/
   &::-webkit-scrollbar {
-    width: ${normalizeValue(0.3125)};
+    width: ${normalizeValue(0.5)};
   }
   /* Track */
   &::-webkit-scrollbar-track {
@@ -375,7 +375,7 @@ Super Form Reset
     .rdrMonthPicker,
     .rdrYearPicker {
       background: ${theme.colors.primaryBackgroundOpacity};
-      border-radius: ${normalizeValue(0.3125)};
+      border-radius: ${normalizeValue(0.5)};
     }
     .rdrNextPrevButton {
       background: ${theme.colors.secondaryBackground};
