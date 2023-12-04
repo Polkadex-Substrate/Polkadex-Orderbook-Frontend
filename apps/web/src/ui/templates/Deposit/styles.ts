@@ -174,7 +174,7 @@ export const MAXButton = styled.button`
     border-radius: ${normalizeValue(0.3)};
     padding: ${normalizeValue(0.3)} ${normalizeValue(0.5)}
       ${normalizeValue(0.3)} ${normalizeValue(0.5)};
-    margin-bottom: -${normalizeValue(0.5)};
+    margin-bottom: ${normalizeValue(-0.5)};
     transition: background 0.2s ease-in;
     &:hover {
       background: ${theme.colors.green}88;

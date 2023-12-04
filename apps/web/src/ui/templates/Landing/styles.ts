@@ -61,7 +61,7 @@ export const Hero = styled.section`
       margin-top: ${normalizeValue(-20)};
     }
     @media screen and (min-width: 1500px) {
-      margin-top: -${normalizeValue(22)};
+      margin-top: ${normalizeValue(-22)};
     }
   }
 `;

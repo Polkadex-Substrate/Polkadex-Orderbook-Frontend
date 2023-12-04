@@ -61,8 +61,13 @@ export const SizeHeader = styled.div`
   display: flex;
   align-items: center;
   gap: ${normalizeValue(0.5)};
+  font-size: ${normalizeValue(1.3)};
   div {
     width: ${normalizeValue(0.8)};
+  }
+  svg {
+    width: 100%;
+    height: 100%;
   }
 `;
 

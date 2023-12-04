@@ -50,6 +50,7 @@ export const Box = styled.div<Partial<InputProps>>`
 `;
 export const Span = styled.span`
   color: #8ba1be;
+  font-size: ${normalizeValue(1.3)};
 `;
 
 export const Input = styled.input`

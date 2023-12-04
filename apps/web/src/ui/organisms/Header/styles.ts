@@ -91,12 +91,16 @@ export const Flex = styled.div`
   align-items: center;
   gap: ${normalizeValue(0.5)};
   cursor: pointer;
+  span {
+    font-size: ${normalizeValue(1.3)};
+  }
 `;
 export const NotificationsActive = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     cursor: pointer;
     svg {
       width: ${normalizeValue(1.5)};
+      height: 100%;
     }
     ${isActive &&
     css`
@@ -128,6 +132,7 @@ export const Account = styled.div`
 export const Avatar = styled.div`
   ${({ theme }) => css`
     max-width: ${normalizeValue(3)};
+    max-height: ${normalizeValue(3)};
     background: ${theme.colors.secondaryBackgroundOpacity};
     padding: ${normalizeValue(0.5)};
     border-radius: ${normalizeValue(5)};
@@ -138,6 +143,9 @@ export const Avatar = styled.div`
   `}
 `;
 export const AccountInfo = styled.div`
+  p {
+    font-size: ${normalizeValue(1.3)};
+  }
   @media screen and (max-width: 650px) {
     display: none;
   }

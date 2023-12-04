@@ -69,6 +69,7 @@ export const Cell = styled.div`
     display: inline-block;
     vertical-align: middle;
     font-weight: 500;
+    font-size: ${normalizeValue(1.3)};
     small {
       font-size: ${normalizeValue(1.3)};
       color: ${theme.colors.tertiaryText};
@@ -111,13 +112,18 @@ export const Link = styled.div`
   `}
 `;
 
-export const WithdrawLink = styled(Link)``;
-export const DepositLink = styled(Link)``;
+export const WithdrawLink = styled(Link)`
+  font-size: ${normalizeValue(1.3)};
+`;
+export const DepositLink = styled(Link)`
+  font-size: ${normalizeValue(1.3)};
+`;
 
 export const TransferLink = styled(Link)`
   ${({ theme }) => css`
     background: ${theme.colors.primary};
     color: ${theme.colors.white};
+    font-size: ${normalizeValue(1.3)};
     &:hover {
       background-color: ${theme.colors.primary}88;
     }

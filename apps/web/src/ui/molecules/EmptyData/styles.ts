@@ -23,4 +23,7 @@ export const Box = styled.div`
     max-width: ${normalizeValue(7)};
     width: 100%;
   }
+  p {
+    font-size: ${normalizeValue(1.3)};
+  }
 `;

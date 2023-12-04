@@ -153,6 +153,7 @@ export const Read = styled.div`
 `;
 
 export const CardContent = styled.div`
+  font-size: ${normalizeValue(1.3)};
   p,
   strong {
     word-break: break-all;

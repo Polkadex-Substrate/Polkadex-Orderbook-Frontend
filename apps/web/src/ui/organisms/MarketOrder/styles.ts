@@ -26,6 +26,7 @@ export const DropdownTrigger = styled.div`
     border-radius: ${normalizeValue(0.7)};
     padding: ${normalizeValue(0.6)} ${normalizeValue(0.8)};
     user-select: none;
+    font-size: ${normalizeValue(1.3)};
     transition:
       background 0.4s ease-in-out,
       opacity 0.4s ease-in-out;
@@ -49,6 +50,7 @@ export const ActionItem = styled.div<{ isActive?: boolean }>`
     cursor: pointer;
     transition: background 0.4s ease-in-out;
     font-weight: 500;
+    font-size: ${normalizeValue(1.3)};
     padding: ${normalizeValue(0.6)} ${normalizeValue(1.5)};
     color: ${isActive ? theme.colors.white : theme.colors.text};
     user-select: none;

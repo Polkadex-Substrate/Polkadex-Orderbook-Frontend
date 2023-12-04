@@ -39,6 +39,7 @@ export const Switch = styled.div`
 export const SwitchCard = styled.div`
   ${({ theme }) => css`
     display: flex;
+    font-size: ${normalizeValue(1.3)};
     justify-content: space-between;
     align-items: center;
     gap: ${normalizeValue(2)};
@@ -91,16 +92,23 @@ export const SwitchCardContent = styled.div`
     flex-direction: column;
     gap: ${normalizeValue(0.8)};
     span {
+      display: flex;
+      align-items: center;
       font-size: ${normalizeValue(1.3)};
       div {
-        display: inline-block;
+        display: flex;
+        align-items: center;
+        justify-center;
         max-width: ${normalizeValue(1)};
+        max-height: ${normalizeValue(1)};
         border-radius: ${normalizeValue(10)};
         margin-left: ${normalizeValue(0.5)};
         background: ${theme.colors.green};
-        padding: ${normalizeValue(0.2)};
+        padding: ${normalizeValue(0.1)};
         svg {
           fill: ${theme.colors.white};
+          width: 100%;
+          height: 100%;
         }
       }
     }
@@ -119,6 +127,8 @@ export const SwitchCardInfo = styled.div`
       svg {
         stroke: ${theme.colors.tertiaryText};
         fill: ${theme.colors.tertiaryText};
+        width: 100%;
+        height: 100%;
       }
     }
     p {
@@ -129,6 +139,10 @@ export const SwitchCardInfo = styled.div`
 
 export const SwitchCardArrow = styled.div`
   max-width: ${normalizeValue(0.8)};
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export const Links = styled.div``;

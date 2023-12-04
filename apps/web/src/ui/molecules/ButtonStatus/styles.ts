@@ -21,6 +21,10 @@ export const Wrapper = styled.button<{
     transition:
       transform 0.2s ease,
       background 0.3s ease;
+    svg {
+      width: 100%;
+      height: 100%;
+    }
     &:disabled {
       background: ${theme.colors.primaryBackground};
       color: ${theme.colors.text};
@@ -30,7 +34,7 @@ export const Wrapper = styled.button<{
       }
     }
     &:active {
-      transform: translateY (${normalizeValue(0.2)});
+      transform: translateY(${normalizeValue(0.2)});
     }
 
     span {
@@ -40,7 +44,7 @@ export const Wrapper = styled.button<{
       border-radius: ${normalizeValue(1)};
       position: relative;
       overflow: hidden;
-      background: ${isLoading ? "white" : "transaparent"};
+      background: ${isLoading ? "white" : "transparent"};
       &:before {
         content: "";
         left: 0;
@@ -60,7 +64,7 @@ export const Wrapper = styled.button<{
         height: ${normalizeValue(1.2)};
         left: 50%;
         top: 50%;
-        margin: -${normalizeValue(0.6)} 0 0 -${normalizeValue(0.6)};
+        margin: ${normalizeValue(-0.6)} 0 0 ${normalizeValue(-0.6)};
         z-index: 1;
         &:nth-child(1) {
           width: ${normalizeValue(2)};
@@ -81,7 +85,7 @@ export const Wrapper = styled.button<{
         &:nth-child(2) {
           fill: ${theme.colors.primary};
           transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          transform: translateY (${normalizeValue(2)});
+          transform: translateY(${normalizeValue(2)});
         }
       }
     }
@@ -106,13 +110,13 @@ export const Wrapper = styled.button<{
         backface-visibility: hidden;
         transform-origin: 50% 50%;
         &:nth-child(1) {
-          transform: rotateX(0deg) translateZ();
+          transform: rotateX(0deg) translateZ(${normalizeValue(1)});
         }
         &:nth-child(2) {
-          transform: rotateX(-90deg) translateZ (${normalizeValue(1)});
+          transform: rotateX(-90deg) translateZ(${normalizeValue(1)});
         }
         &:nth-child(3) {
-          transform: rotateX(-180deg) translateZ (${normalizeValue(1)});
+          transform: rotateX(-180deg) translateZ(${normalizeValue(1)});
         }
       }
     }

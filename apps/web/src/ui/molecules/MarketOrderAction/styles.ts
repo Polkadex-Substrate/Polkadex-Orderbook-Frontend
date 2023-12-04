@@ -120,7 +120,7 @@ export const Error = styled.div<{ hasError: boolean }>`
     position: relative;
     display: ${hasError ? "inline-block" : "none"};
     border-bottom: 1px dotted black;
-    top: -${normalizeValue(2.2)};
+    top: ${normalizeValue(-2.2)};
     left: 15%;
     font-weight: 500;
   `}

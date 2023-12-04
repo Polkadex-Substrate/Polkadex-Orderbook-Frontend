@@ -91,6 +91,10 @@ export const HeaderAsideCenter = styled.div`
   height: ${normalizeValue(4)};
   min-width: ${normalizeValue(10)};
   margin-left: ${normalizeValue(1)};
+  svg {
+    height: 100%;
+    width: 100%;
+  }
   @media (min-width: 780px) and (max-width: 850px) {
     display: none;
   }

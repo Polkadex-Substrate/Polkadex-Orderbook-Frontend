@@ -198,7 +198,7 @@ export const MAXButton = styled.button`
     border-radius: ${normalizeValue(0.3)};
     padding: ${normalizeValue(0.3)} ${normalizeValue(0.5)}
       ${normalizeValue(0.3)} ${normalizeValue(0.5)};
-    margin-bottom: -${normalizeValue(0.5)};
+    margin-bottom: ${normalizeValue(-0.5)};
     transition: background 0.2s ease-in;
     &:hover {
       background: ${theme.colors.primaryHover};
@@ -452,7 +452,7 @@ export const HistoryTab = styled.div<{
       border-radius: ${normalizeValue(2)};
       align-items: center;
       justify-content: center;
-      margin-top: -${normalizeValue(0.3)};
+      margin-top: ${normalizeValue(-0.3)};
       padding-right: 1px;
       padding-bottom: 2px;
     }

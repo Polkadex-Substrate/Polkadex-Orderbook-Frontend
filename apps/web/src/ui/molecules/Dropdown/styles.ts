@@ -17,6 +17,7 @@ export const Item: any = styled("li")<{
     padding: `${normalizeValue(0.8)} ${normalizeValue(1)}`,
     outline: "none",
     border: "1px solid transparent",
+    fontSize: normalizeValue(1.3),
   },
   variant({
     prop: "isCloseOnSelect",

@@ -68,6 +68,8 @@ export const Container = styled.div<Partial<Props>>`
     background: ${isActive ? theme.colors.primary : theme.colors[background]};
     border-radius: 20%;
     svg {
+      width: 100%;
+      height: 100%;
       fill: ${fill
         ? theme.colors[fill]
         : isActive
