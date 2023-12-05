@@ -1,7 +1,7 @@
 import { useTranslation } from "next-i18next";
 import { NavbarItem, Skeleton } from "@polkadex/orderbook-ui/molecules";
 import { HeaderMarket } from "@polkadex/orderbook-ui/organisms";
-import { useAssets, useMarkets, useTickers } from "@orderbook/core/hooks";
+import { useMarkets, useTickers } from "@orderbook/core/hooks";
 import { getCurrentMarket, hasOnlyZeros } from "@orderbook/core/helpers";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { defaultTicker } from "@orderbook/core/constants";
@@ -14,15 +14,13 @@ type Props = {
 };
 
 export const Navbar = ({ onOpenMarkets, market }: Props) => {
-  const { selectGetAsset } = useAssets();
   const { currentTicker, tickerLoading } = useTickers(market);
   const { list, loading: isMarketFetching } = useMarkets();
   const currMarket = getCurrentMarket(list, market);
 
   const currentTradePrice = currentTicker?.currentPrice;
-  const quoteAsset = currMarket
-    ? selectGetAsset(currMarket.quoteAsset.id)
-    : undefined;
+  const quoteAsset = currMarket?.quoteAsset;
+
   const currPrice = currentTicker?.close;
   const priceChangePerCent =
     (currentTicker?.priceChangePercent24Hr).toFixed(2) + "%";
