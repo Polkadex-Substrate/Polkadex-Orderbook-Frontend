@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   decimalPlaces,
   deleteFromBook,
@@ -65,13 +65,11 @@ export function useOrderbook(defaultMarket: string) {
     refetchOnMount: false,
   });
 
-  const [asks, bids] = useMemo(
-    () => [data?.asks ?? [], data?.bids ?? []],
-    [data?.asks, data?.bids]
-  );
+  const [asks, bids] = [
+    sortArrayDescending(data?.asks ?? []),
+    sortArrayDescending(data?.bids ?? []),
+  ];
 
-  const bidsSorted = sortArrayDescending(bids);
-  const asksSorted = sortArrayDescending(asks);
   const currentMarket = getCurrentMarket(list, defaultMarket);
 
   const handleChange = (select: string) => setFilterState(select);
@@ -141,8 +139,8 @@ export function useOrderbook(defaultMarket: string) {
     lastPriceValue: currentPrice,
     hasMarket: !!currentMarket,
     loading: isLoading || isFetching,
-    asks: asksSorted,
-    bids: bidsSorted,
+    asks,
+    bids,
     initialState,
     filterState,
     sizeState,
