@@ -7,6 +7,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import { QUERY_KEYS } from "../constants";
 import {
   appsyncOrderbookService,
+  MaybePaginated,
   Transaction,
 } from "../utils/orderbookService";
 import {
@@ -86,8 +87,8 @@ export function useTransactions() {
         if (payload) {
           queryClient.setQueryData(
             QUERY_KEYS.transactions(mainAddress),
-            (oldData) => {
-              const transactions = _.cloneDeep(oldData as Transaction[]);
+            (oldData: MaybePaginated<Transaction[]> | undefined) => {
+              const transactions = _.cloneDeep(oldData?.data as Transaction[]);
               const index = transactions.findIndex(
                 ({ stid }) => Number(stid) === Number(payload.stid)
               );
@@ -96,7 +97,7 @@ export function useTransactions() {
               } else {
                 transactions.push(payload);
               }
-              return transactions;
+              return { data: transactions, nextToken: null };
             }
           );
         }

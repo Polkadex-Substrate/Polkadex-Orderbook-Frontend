@@ -41,7 +41,7 @@ export function useTransfer() {
     push({
       href: "/transfer",
       query: {
-        token: asset.name,
+        token: asset.ticker,
       },
     });
     onAssetsInteraction();

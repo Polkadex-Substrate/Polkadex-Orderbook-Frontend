@@ -332,6 +332,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       variables: {
         name: address,
       },
+      authToken: READ_ONLY_TOKEN,
     });
     const observable = subscription
       .filter((data) => {
@@ -344,18 +345,22 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
         const item = JSON.parse(
           data?.value?.data?.websocket_streams?.data as unknown as string
         ) as TransactionUpdateEvent;
-        const asset = this._assetList.find((a) => a.id === item.asset);
+
+        const itemAssetId =
+          typeof item?.asset === "string" ? item?.asset : item?.asset?.asset;
+
+        const asset = this._assetList.find((a) => a.id === itemAssetId);
         if (!asset) {
-          throw new Error(`Asset ${item.asset} not found`);
+          throw new Error(`Asset ${itemAssetId} not found`);
         }
         return {
           stid: Number(item.stid),
           snapshot_id: Number(item.snapshot_id),
-          amount: 0,
+          amount: item.amount,
           fee: 0,
           isReverted: false,
           status: item.status,
-          timestamp: new Date(item.t),
+          timestamp: new Date(),
           txType: item.txn_type === "DEPOSIT" ? "DEPOSIT" : "WITHDRAW",
           asset,
         };
