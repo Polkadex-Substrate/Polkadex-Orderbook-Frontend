@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 import { BalanceFormatter } from "@orderbook/format";
 import { Asset } from "@orderbook/core/utils/orderbookService";
@@ -22,19 +22,20 @@ export function useAssets() {
   const { assets: assetsList, isReady } = useOrderbookService();
   const { balances, loading: balancesLoading } = useFunds();
 
-  const selectGetAsset = (
-    assetId: string | number | Record<string, string>
-  ): Asset | undefined => {
-    if (!assetId || !assetsList) {
-      return;
-    }
-    if (typeof assetId === "object" && "asset" in assetId) {
-      assetId = assetId.asset;
-    }
-    return isAssetPDEX(assetId.toString())
-      ? POLKADEX_ASSET
-      : assetsList?.find((asset) => asset.id === assetId.toString());
-  };
+  const selectGetAsset = useCallback(
+    (assetId: string | number | Record<string, string>): Asset | undefined => {
+      if (!assetId || !assetsList) {
+        return;
+      }
+      if (typeof assetId === "object" && "asset" in assetId) {
+        assetId = assetId.asset;
+      }
+      return isAssetPDEX(assetId.toString())
+        ? POLKADEX_ASSET
+        : assetsList?.find((asset) => asset.id === assetId.toString());
+    },
+    [assetsList]
+  );
 
   const toHuman = BalanceFormatter.toHuman;
 
