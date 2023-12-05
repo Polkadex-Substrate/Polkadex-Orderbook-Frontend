@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   decimalPlaces,
   deleteFromBook,
@@ -39,11 +39,7 @@ export function useOrderbook(defaultMarket: string) {
 
   const { isPriceUp } = useRecentTrades(defaultMarket);
 
-  const {
-    data: { asks, bids },
-    isLoading,
-    isFetching,
-  } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: QUERY_KEYS.orderBook(defaultMarket),
     queryFn: async () => {
       const orderbook =
@@ -66,11 +62,13 @@ export function useOrderbook(defaultMarket: string) {
         error instanceof Error ? error.message : (error as string);
       onHandleError(errorMessage);
     },
-    initialData: {
-      asks: [],
-      bids: [],
-    },
+    refetchOnMount: false,
   });
+
+  const [asks, bids] = useMemo(
+    () => [data?.asks ?? [], data?.bids ?? []],
+    [data?.asks, data?.bids]
+  );
 
   const bidsSorted = sortArrayDescending(bids);
   const asksSorted = sortArrayDescending(asks);

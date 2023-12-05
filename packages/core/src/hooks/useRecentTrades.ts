@@ -30,10 +30,10 @@ export function useRecentTrades(market: string) {
         error instanceof Error ? error.message : (error as string);
       onHandleError(errorMessage);
     },
-    initialData: [],
+    refetchOnMount: false,
   });
 
-  const isDecreasing = getIsDecreasingArray(recentTradesList);
+  const isDecreasing = getIsDecreasingArray(recentTradesList ?? []);
 
   const currentTradePrice = useMemo(() => {
     if (!recentTradesList) return 0;
