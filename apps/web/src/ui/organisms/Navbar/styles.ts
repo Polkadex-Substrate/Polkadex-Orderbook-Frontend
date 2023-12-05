@@ -2,12 +2,14 @@ import styled, { css } from "styled-components";
 import { LogoText } from "@polkadex/orderbook-ui/molecules/Logo/styles";
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.section`
   position: relative;
   display: flex;
   justify-content: space-between;
   flex-wrap: nowrap;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   width: 100%;
 `;
 
@@ -24,29 +26,29 @@ export const ContainerInfo = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-around;
-    gap: 5rem;
-    border-radius: 0 0 2rem 2rem;
+    gap: ${normalizeValue(5)};
+    border-radius: 0 0 ${normalizeValue(2)} ${normalizeValue(2)};
     box-shadow: ${theme.shadows.smooth};
-    padding: 1rem 1.5rem;
+    padding: ${normalizeValue(1)} ${normalizeValue(1.5)};
     @media screen and (max-width: 1268px) {
-      grid-column-gap: 4rem;
+      grid-column-gap: ${normalizeValue(4)};
     }
 
     @media screen and (max-width: 494px) {
       grid-template-columns: 1fr 1fr;
-      grid-row-gap: 0.5rem;
-      grid-column-gap: 1rem;
+      grid-row-gap: ${normalizeValue(0.5)};
+      grid-column-gap: ${normalizeValue(1)};
     }
   `}
 `;
 export const WrapperInfo = styled.div`
   display: flex;
   flex: 1;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   justify-content: space-between;
   @media screen and (max-width: 780px) {
     flex-direction: column;
-    margin-top: 1rem;
+    margin-top: ${normalizeValue(1)};
   }
 `;
 
@@ -55,7 +57,7 @@ export const Box = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.4rem 1rem;
+    padding: ${normalizeValue(0.4)} ${normalizeValue(1)};
     ${Button} {
       transition: background 0.5s ease-in-out;
       background: ${theme.colors.primary};
@@ -90,7 +92,7 @@ export const Logo = styled.div`
 export const BoxWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
   justify-self: flex-end;
 `;
 
@@ -119,8 +121,8 @@ export const ContainerVolume = styled.div`
   ${({ theme }) => css`
     span {
       display: block;
-      margin-right: 1rem;
-      font-size: 1.1rem;
+      margin-right: ${normalizeValue(1)};
+      font-size: ${normalizeValue(1.1)};
       color: #8ba1be;
       opacity: 0.7;
       font-weight: 500;
@@ -140,9 +142,9 @@ export const ContainerVolume = styled.div`
 
 // Dropdown
 export const WrapperDropdownContent = styled.a`
-  padding: 0.5rem;
+  padding: ${normalizeValue(0.5)};
   &:not(:last-child) {
-    margin-bottom: 1rem;
+    margin-bottom: ${normalizeValue(1)};
   }
   &:hover {
     opacity: 0.7;
@@ -150,11 +152,11 @@ export const WrapperDropdownContent = styled.a`
 `;
 
 export const DropdownTitle = styled.p`
-  font-size: 1.3rem;
+  font-size: ${normalizeValue(1.3)};
   font-weight: 600;
 `;
 
 export const DropdownDescription = styled.p`
-  font-size: 1.2rem;
+  font-size: ${normalizeValue(1.2)};
   opacity: 0.6;
 `;

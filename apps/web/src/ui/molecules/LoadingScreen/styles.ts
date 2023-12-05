@@ -1,5 +1,7 @@
 import styled, { css, keyframes } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Container = styled.div`
   position: relative;
   display: grid;
@@ -15,7 +17,7 @@ export const Main = styled.div`
     width: 80px;
     height: 80px;
     animation: ${spinAnimation} 1s linear infinite;
-    padding: 1.8rem;
+    padding: ${normalizeValue(1.8)};
   `}
 `;
 

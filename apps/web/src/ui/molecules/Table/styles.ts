@@ -3,13 +3,16 @@ import { variant } from "styled-system";
 
 import * as T from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Table = styled.table<{ cellSpacing?: string | number }>`
   ${({ cellSpacing = 0.5 }) => css`
     border-collapse: collapse;
     border-spacing: 0 ${cellSpacing}rem;
     th,
     td {
-      padding: 0.5rem 0.5rem 0.5rem 0;
+      padding: ${normalizeValue(0.5)} ${normalizeValue(0.5)}
+        ${normalizeValue(0.5)} 0;
     }
   `}
 `;
@@ -26,7 +29,7 @@ export const Header = styled.tr<Partial<T.HeaderCustomProps>>`
     ${bgStyleVariants({ theme, fill })};
     ${borderVariants({ theme, is: "th" })};
     & th {
-      padding: 1rem 2rem;
+      padding: ${normalizeValue(1)} ${normalizeValue(2)};
     }
   `}
 `;
@@ -93,7 +96,7 @@ export const Body = styled.tr<BodyProps>`
       variants: {
         true: {
           "& td": {
-            padding: "1rem 2rem",
+            padding: `${normalizeValue(1)} ${normalizeValue(2)}`,
           },
           "&:nth-child(odd)": {
             background: `${theme.colors.tertiaryBackgroundOpacity}`,
@@ -150,18 +153,18 @@ const borderVariants = ({ is = "th" }: bgVariants<T.BodyCustomProps>) =>
     variants: {
       rounded: {
         [`& ${is}:first-child`]: {
-          borderRadius: "5rem 0 0 5rem",
+          borderRadius: `${normalizeValue(5)} 0 0 ${normalizeValue(5)}`,
         },
         [`& ${is}:last-child`]: {
-          borderRadius: "0 5rem 5rem 0",
+          borderRadius: `0 ${normalizeValue(5)} ${normalizeValue(5)} 0`,
         },
       },
       semiRounded: {
         [`& ${is}:first-child`]: {
-          borderRadius: "1rem 0 0 1rem",
+          borderRadius: `${normalizeValue(1)} 0 0  ${normalizeValue(1)}`,
         },
         [`& ${is}:last-child`]: {
-          borderRadius: "0 1rem 1rem 0",
+          borderRadius: `0 ${normalizeValue(1)} ${normalizeValue(1)} 0`,
         },
       },
     },

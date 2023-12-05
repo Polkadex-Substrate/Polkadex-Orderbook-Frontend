@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const LoadingWrapper = styled.div`
   ${({ theme }) => css`
     position: absolute;
@@ -25,7 +27,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex: 1;
   transition: width 0.5s ease-in-out;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const Container = styled.div<{ isVisible: boolean }>`
@@ -34,7 +36,7 @@ export const Container = styled.div<{ isVisible: boolean }>`
     flex: 1;
     height: 100%;
     height: 38vh;
-    min-height: 48.5rem;
+    min-height: ${normalizeValue(48.5)};
     @media screen and (min-height: 1200px) {
       height: 42vh;
     }

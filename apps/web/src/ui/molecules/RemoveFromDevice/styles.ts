@@ -1,15 +1,17 @@
 import styled, { css } from "styled-components";
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
-    border-radius: 1.5rem;
-    padding: 3rem;
+    border-radius: ${normalizeValue(1.5)};
+    padding: ${normalizeValue(3)};
     form {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: ${normalizeValue(1)};
       margin: 0 auto;
     }
   `}
@@ -17,12 +19,15 @@ export const Wrapper = styled.div`
 
 export const Title = styled.div`
   text-align: center;
-  margin-bottom: 3rem;
-  padding-bottom: 3rem;
+  margin-bottom: ${normalizeValue(3)};
+  padding-bottom: ${normalizeValue(3)};
   h2 {
-    font-size: 2rem;
+    font-size: ${normalizeValue(2)};
     font-weight: 500;
-    margin-bottom: 0.8rem;
+    margin-bottom: ${normalizeValue(0.8)};
+  }
+  p {
+    font-size: ${normalizeValue(1.3)};
   }
 `;
 export const Content = styled.div`
@@ -32,11 +37,11 @@ export const Content = styled.div`
 
 export const Actions = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   align-self: flex-end;
-  margin-top: 3rem;
+  margin-top: ${normalizeValue(3)};
   ${Button} {
-    padding-left: 4rem;
-    padding-right: 4rem;
+    padding-left: ${normalizeValue(4)};
+    padding-right: ${normalizeValue(4)};
   }
 `;

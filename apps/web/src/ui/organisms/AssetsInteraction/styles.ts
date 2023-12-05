@@ -1,6 +1,8 @@
 import { Dialog } from "@headlessui/react";
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div``;
 
 export const Overlay = styled.div`
@@ -16,6 +18,7 @@ export const Modal = styled.div`
   position: fixed;
   inset: 0;
   overflow-y: auto;
+  font-size: ${normalizeValue(1.3)};
 `;
 
 export const ModalWrapper = styled.div`
@@ -23,7 +26,7 @@ export const ModalWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   text-align: center;
-  padding: 1rem;
+  padding: ${normalizeValue(1)};
 `;
 
 export const ModalPanel = styled(Dialog.Panel)`
@@ -31,21 +34,24 @@ export const ModalPanel = styled(Dialog.Panel)`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 8rem;
-    max-width: 46rem;
+    gap: ${normalizeValue(8)};
+    max-width: ${normalizeValue(46)};
     width: 100%;
     background: ${theme.colors.primaryBackground};
-    padding: 2rem;
-    border-radius: 0 2rem 2rem 2rem;
+    padding: ${normalizeValue(2)};
+    border-radius: 0 ${normalizeValue(2)} ${normalizeValue(2)}
+      ${normalizeValue(2)};
     box-shadow: ${theme.shadows.quaternary};
   `}
 `;
 
 export const ModalTitle = styled(Dialog.Title)`
   ${({ theme }) => css`
-    width: 2rem;
+    width: ${normalizeValue(2)};
     svg {
       stroke: ${theme.colors.text};
+      width: 100%;
+      height: 100%;
     }
   `}
 `;
@@ -54,10 +60,10 @@ export const ModalContent = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
   align-items: flex-start;
   h3 {
-    font-size: 1.8rem;
+    font-size: ${normalizeValue(1.8)};
     font-weight: 500;
   }
 `;
@@ -65,7 +71,7 @@ export const ModalContent = styled.div`
 export const ModalContentHeader = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     width: 100%;
     align-items: center;
     justify-content: space-between;
@@ -84,6 +90,6 @@ export const SkeletonComponent = styled.div`
   display: flex;
   flex: 1;
   width: 100%;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   flex-direction: column;
 `;

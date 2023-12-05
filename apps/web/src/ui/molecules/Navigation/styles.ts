@@ -1,36 +1,38 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.div<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
-    max-width: ${isFull ? "inherit" : "35rem"};
+    max-width: ${isFull ? "inherit" : normalizeValue(35)};
     background: ${theme.colors.secondaryBackgroundSolid};
-    min-width: 35rem;
-    border-radius: 1rem;
+    min-width: ${normalizeValue(35)};
+    border-radius: ${normalizeValue(1)};
     border: 1px solid ${theme.colors.secondaryBackground};
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
   `}
 `;
 
 export const Header = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: ${normalizeValue(2)};
   span {
     display: block;
-    font-size: 1.6rem;
-    font-weight: 550;
-    margin-left: 1rem;
+    font-size: ${normalizeValue(1.6)};
+    font-weight: 600;
+    margin-left: ${normalizeValue(1)};
   }
 `;
 
 export const Action = styled.div`
   ${({ theme }) => css`
-    width: 3rem;
-    height: 3rem;
+    width: ${normalizeValue(3)};
+    height: ${normalizeValue(3)};
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: ${normalizeValue(1)};
     border-radius: 50%;
     transition: background 0.5s ease-in-out;
     cursor: pointer;

@@ -31,6 +31,7 @@ import {
   WalletCard,
 } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
+import { normalizeValue } from "@/utils/normalize";
 
 const initialValues = { amount: 0.0 };
 
@@ -208,7 +209,7 @@ export const TransferForm = ({
 
   return (
     <Loading
-      style={{ maxWidth: "100rem" }}
+      style={{ maxWidth: normalizeValue(100) }}
       isVisible={isLoading || switchEnable}
       hasBg={false}
       message=""

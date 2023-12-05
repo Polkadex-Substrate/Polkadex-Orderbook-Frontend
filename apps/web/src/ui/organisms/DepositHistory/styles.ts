@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -18,7 +20,7 @@ export const Table = styled.div`
     flex: 1;
     overflow: auto;
     width: 100%;
-    max-height: 40rem;
+    max-height: ${normalizeValue(40)};
     &::-webkit-scrollbar-thumb {
       background: none;
     }
@@ -36,14 +38,15 @@ export const Table = styled.div`
     }
     table {
       table-layout: auto;
-      padding: 1rem 1rem;
+      padding: ${normalizeValue(1)} ${normalizeValue(1)};
       width: 100%;
       border-collapse: separate;
       @media screen and (min-width: 1110px) {
-        padding: 1rem 3rem;
+        padding: ${normalizeValue(1)} ${normalizeValue(3)};
       }
       td {
-        padding: 1.5rem 1rem 1.5rem 1rem;
+        padding: ${normalizeValue(1.5)} ${normalizeValue(1)}
+          ${normalizeValue(1.5)} ${normalizeValue(1)};
         border-bottom: 1px solid ${theme.colors.tertiaryBackgroundOpacity};
         &.last {
           border-bottom: none;
@@ -53,12 +56,13 @@ export const Table = styled.div`
         opacity: 0.5;
         font-weight: normal;
         text-align: left;
-        padding: 0 1rem 1.5rem 1rem;
+        padding: 0 ${normalizeValue(1)} ${normalizeValue(1.5)}
+          ${normalizeValue(1)};
 
         div {
-          margin-left: 0.4rem;
+          margin-left: ${normalizeValue(0.4)};
           display: inline-block;
-          width: 0.8rem;
+          width: ${normalizeValue(0.8)};
         }
       }
     }
@@ -72,6 +76,8 @@ export const Thead = styled.th`
     user-select: none;
     svg {
       fill: ${theme.colors.text};
+      width: 100%;
+      height: 100%;
       path {
         opacity: 0.5;
       }
@@ -89,15 +95,15 @@ export const Date = styled.div<{ isReverted: boolean | null }>`
   ${({ theme, isReverted }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.1rem;
+    gap: ${normalizeValue(0.1)};
     white-space: nowrap;
     span {
       background: ${isReverted ? "#E4A11B" : theme.colors.green}22;
       color: ${isReverted ? "#E4A11B" : theme.colors.green};
       width: fit-content;
-      padding: 0.1rem 0.2rem;
-      border-radius: 0.2rem;
-      font-size: 1.2rem;
+      padding: ${normalizeValue(0.1)} ${normalizeValue(0.2)};
+      border-radius: ${normalizeValue(0.2)};
+      font-size: ${normalizeValue(1.2)};
     }
   `}
 `;
@@ -105,19 +111,19 @@ export const Date = styled.div<{ isReverted: boolean | null }>`
 export const Token = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     div {
       &:first-child {
-        width: 3.5rem;
-        height: 3.5rem;
-        padding: 0.5rem;
-        border-radius: 100rem;
+        width: ${normalizeValue(3.5)};
+        height: ${normalizeValue(3.5)};
+        padding: ${normalizeValue(0.5)};
+        border-radius: ${normalizeValue(100)};
         border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
       }
       &:last-child {
         display: flex;
         flex-direction: column;
-        gap: 0.1rem;
+        gap: ${normalizeValue(0.1)};
         span {
           display: block;
           opacity: 0.5;
@@ -134,7 +140,7 @@ export const Token = styled.div`
 export const Box = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: ${normalizeValue(0.1)};
   span {
     opacity: 0.5;
   }
@@ -144,20 +150,20 @@ export const Wallet = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     white-space: nowrap;
     div {
       &:first-child {
         background: ${theme.colors.secondaryBackgroundOpacity};
-        border-radius: 50rem;
-        width: 3rem;
-        height: 3rem;
-        padding: 0.8rem;
+        border-radius: ${normalizeValue(50)};
+        width: ${normalizeValue(3)};
+        height: ${normalizeValue(3)};
+        padding: ${normalizeValue(0.8)};
       }
       &:last-child {
         display: flex;
         flex-direction: column;
-        gap: 0.1rem;
+        gap: ${normalizeValue(0.1)};
         span {
           opacity: 0.5;
         }
@@ -170,8 +176,8 @@ export const Title = styled.div`
   ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem 2rem;
+    gap: ${normalizeValue(1)};
+    padding: ${normalizeValue(1)} ${normalizeValue(2)};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     flex-direction: column;
     @media screen and (min-width: 550px) {
@@ -179,18 +185,18 @@ export const Title = styled.div`
       align-items: center;
     }
     h3 {
-      font-size: 1.8rem;
-      font-weight: 550;
+      font-size: ${normalizeValue(1.8)};
+      font-weight: 600;
     }
     @media screen and (min-width: 1110px) {
-      padding: 1rem 4rem;
+      padding: ${normalizeValue(1)} ${normalizeValue(4)};
     }
   `}
 `;
 
 export const TitleWrapper = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   flex-direction: column;
   @media screen and (min-width: 480px) {
     flex-direction: row;
@@ -202,12 +208,12 @@ export const EmptyData = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 2rem;
+  padding: ${normalizeValue(2)};
 `;
 
 export const SkeletonComponent = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   flex-direction: column;
-  padding: 2rem;
+  padding: ${normalizeValue(2)};
 `;

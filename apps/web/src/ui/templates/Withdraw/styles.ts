@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
@@ -7,7 +9,7 @@ export const Main = styled.main`
     min-width: 100vw;
     height: 100vh;
     display: flex;
-    max-width: 160rem;
+    max-width: ${normalizeValue(160)};
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
   `}
@@ -16,7 +18,7 @@ export const Main = styled.main`
 export const Flex = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: ${normalizeValue(1.5)};
 `;
 export const UnlockAccount = styled.div`
   ${({ theme }) => css`
@@ -38,12 +40,12 @@ export const FlexContainer = styled.div`
 export const UnlockButton = styled.button`
   ${({ theme }) => css`
     position: absolute;
-    top: 2rem;
-    right: 2rem;
-    width: 3rem;
-    height: 3rem;
-    padding: 1rem;
-    border-radius: 10rem;
+    top: ${normalizeValue(2)};
+    right: ${normalizeValue(2)};
+    width: ${normalizeValue(3)};
+    height: ${normalizeValue(3)};
+    padding: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(10)};
     transition: background-color 0.3s ease-in-out;
     svg {
       stroke: ${theme.colors.text};
@@ -58,10 +60,10 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 2rem;
+  padding: ${normalizeValue(2)};
   overflow-y: scroll;
   @media screen and (min-width: 590px) {
-    padding: 4rem;
+    padding: ${normalizeValue(4)};
   }
 `;
 
@@ -74,12 +76,12 @@ export const Title = styled.button`
     div {
       vertical-align: middle;
       display: inline-block;
-      width: 3rem;
-      height: 3rem;
-      padding: 0.8rem;
-      border-radius: 10rem;
+      width: ${normalizeValue(3)};
+      height: ${normalizeValue(3)};
+      padding: ${normalizeValue(0.8)};
+      border-radius: ${normalizeValue(10)};
       border: 1px solid ${theme.colors.secondaryBackground};
-      margin-right: 0.8rem;
+      margin-right: ${normalizeValue(0.8)};
       transition: border 0.5s ease-in;
 
       svg {
@@ -99,7 +101,7 @@ export const Title = styled.button`
 export const Column = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 2rem;
+    border-radius: ${normalizeValue(2)};
     background-image: url("/img/depositHero.svg");
     background-repeat: no-repeat;
     background-size: contain;
@@ -108,12 +110,12 @@ export const Column = styled.div`
       background-position: bottom;
     }
     div {
-      padding: 3.5rem;
+      padding: ${normalizeValue(3.5)};
     }
     h1 {
-      font-size: 2.2rem;
-      font-weight: 550;
-      margin-bottom: 1.5rem;
+      font-size: ${normalizeValue(2.2)};
+      font-weight: 600;
+      margin-bottom: ${normalizeValue(1.5)};
     }
     p {
       line-height: 1.4;
@@ -123,26 +125,27 @@ export const Column = styled.div`
 
 export const Container = styled.div`
   flex: 1;
-  margin-top: 2rem;
+  margin-top: ${normalizeValue(2)};
   display: grid;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   @media screen and (min-width: 830px) {
-    grid-template-columns: minmax(25rem, 30rem) 1fr;
+    grid-template-columns: minmax(${normalizeValue(25)}, ${normalizeValue(30)}) 1fr;
   }
 `;
 
 export const Box = styled.div`
-  margin-top: 2rem;
+  margin-top: ${normalizeValue(2)};
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
   flex: 1;
 
   @media screen and (min-width: 830px) {
-    padding: 8rem 4rem 4rem 4rem;
+    padding: ${normalizeValue(8)} ${normalizeValue(4)} ${normalizeValue(4)}
+      ${normalizeValue(4)};
   }
   @media screen and (max-width: 830px) {
-    padding-bottom: 5rem;
+    padding-bottom: ${normalizeValue(5)};
   }
 `;
 
@@ -161,8 +164,8 @@ export const SelectInput = styled.div`
 export const SelectInputContainer = styled.div`
   ${({ theme }) => css`
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    padding-bottom: 1rem;
-    margin-top: 1rem;
+    padding-bottom: ${normalizeValue(1)};
+    margin-top: ${normalizeValue(1)};
     cursor: pointer;
     input {
       width: 100%;
@@ -175,8 +178,8 @@ export const Available = styled.span`
   ${({ theme }) => css`
     display: block;
     align-self: flex-end;
-    font-size: 1.3rem;
-    margin-top: 1.2rem;
+    font-size: ${normalizeValue(1.3)};
+    margin-top: ${normalizeValue(1.2)};
     strong {
       color: ${theme.colors.text};
       font-weight: 500;
@@ -188,13 +191,14 @@ export const MAXButton = styled.button`
   ${({ theme }) => css`
     display: block;
     align-self: flex-end;
-    font-size: 1.2rem;
-    margin-top: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
+    margin-top: ${normalizeValue(1.2)};
     color: white;
     background: ${theme.colors.primary};
-    border-radius: 0.3rem;
-    padding: 0.3rem 0.5rem 0.3rem 0.5rem;
-    margin-bottom: -0.5rem;
+    border-radius: ${normalizeValue(0.3)};
+    padding: ${normalizeValue(0.3)} ${normalizeValue(0.5)}
+      ${normalizeValue(0.3)} ${normalizeValue(0.5)};
+    margin-bottom: ${normalizeValue(-0.5)};
     transition: background 0.2s ease-in;
     &:hover {
       background: ${theme.colors.primaryHover};
@@ -205,19 +209,19 @@ export const MAXButton = styled.button`
 export const SelectAccount = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     align-items: center;
     div {
       &:first-child {
-        width: 3.5rem;
-        height: 3.5rem;
-        border-radius: 0.8rem;
-        padding: 0.8rem;
+        width: ${normalizeValue(3.5)};
+        height: ${normalizeValue(3.5)};
+        border-radius: ${normalizeValue(0.8)};
+        padding: ${normalizeValue(0.8)};
         background: ${theme.colors.secondaryBackgroundOpacity};
       }
       &:last-child {
         strong {
-          font-size: 1.4rem;
+          font-size: ${normalizeValue(1.4)};
           font-weight: 500;
         }
         span {
@@ -236,7 +240,7 @@ export const DropdownHeader = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     justify-content: space-between;
     flex: 1;
     div {
@@ -246,19 +250,19 @@ export const DropdownHeader = styled.div`
       &:first-child {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: ${normalizeValue(0.5)};
         span {
-          width: 2rem;
-          height: 2rem;
-          border-radius: 10rem;
-          padding: 0.4rem;
+          width: ${normalizeValue(2)};
+          height: ${normalizeValue(2)};
+          border-radius: ${normalizeValue(10)};
+          padding: ${normalizeValue(0.4)};
           background: ${theme.colors.secondaryBackgroundOpacity};
         }
       }
       &:last-child {
         span {
-          width: 1rem;
-          height: 1rem;
+          width: ${normalizeValue(1)};
+          height: ${normalizeValue(1)};
           svg {
             stroke: ${theme.colors.secondaryText};
           }
@@ -272,12 +276,12 @@ export const DropdownContent = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 0.8rem;
+    border-radius: ${normalizeValue(0.8)};
     button {
       white-space: nowrap;
-      font-size: 1.3rem;
-      padding: 1.2rem;
-      border-radius: 0.8rem;
+      font-size: ${normalizeValue(1.3)};
+      padding: ${normalizeValue(1.2)};
+      border-radius: ${normalizeValue(0.8)};
       transition: background 0.5s ease-in;
       text-align: left;
       width: 100%;
@@ -293,30 +297,30 @@ export const DropdownContent = styled.div`
 
 export const Form = styled.div`
   @media screen and (min-width: 830px) {
-    max-width: 40rem;
+    max-width: ${normalizeValue(40)};
   }
   form {
-    margin-top: 1.5rem;
+    margin-top: ${normalizeValue(1.5)};
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: ${normalizeValue(2.5)};
   }
 `;
 
 export const History = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackgroundOpacity};
-    border-radius: 1rem;
-    margin-top: 4rem;
+    border-radius: ${normalizeValue(1)};
+    margin-top: ${normalizeValue(4)};
     h2 {
-      padding: 2rem 2rem 0 2rem;
-      font-size: 1.8rem;
+      padding: ${normalizeValue(2)} ${normalizeValue(2)} 0 ${normalizeValue(2)};
+      font-size: ${normalizeValue(1.8)};
       font-weight: 500;
     }
   `}
 `;
 export const HistoryWrapper = styled.div`
-  max-height: 26rem;
+  max-height: ${normalizeValue(26)};
   overflow-y: auto;
   height: fit-content;
   overflow-x: hidden;
@@ -325,7 +329,7 @@ export const HistoryWrapper = styled.div`
 export const HistoryContent = styled.div`
   ${({ theme }) => css`
     &:not(:last-child) {
-      margin-bottom: 2rem;
+      margin-bottom: ${normalizeValue(2)};
       background-color: ${theme.colors.tertiaryBackgroundOpacity};
     }
   `}
@@ -338,14 +342,14 @@ export const HistoryTable = styled.div`
     }
     th,
     td {
-      padding-right: 1rem;
-      padding-bottom: 1rem;
+      padding-right: ${normalizeValue(1)};
+      padding-bottom: ${normalizeValue(1)};
       white-space: nowrap;
       vertical-align: top;
     }
     th:first-child,
     td:first-child {
-      width: 17rem;
+      width: 1 ${normalizeValue(7)};
     }
   `}
 `;
@@ -354,20 +358,20 @@ export const Cell = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: ${normalizeValue(0.2)};
     vertical-align: middle;
     font-weight: 500;
     small {
       display: block;
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
       color: ${theme.colors.tertiaryText};
     }
     button {
       display: inline-block;
-      width: 1.4rem;
-      height: 1.4rem;
+      width: ${normalizeValue(1.4)};
+      height: ${normalizeValue(1.4)};
       vertical-align: middle;
-      margin-right: 0.4rem;
+      margin-right: ${normalizeValue(0.4)};
       svg {
         display: block;
         stroke: ${theme.colors.tertiaryText};
@@ -377,7 +381,7 @@ export const Cell = styled.div`
 `;
 export const HeaderColumn = styled.strong`
   ${({ theme }) => css`
-    font-size: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
     font-weight: 500;
     color: ${theme.colors.tertiaryText};
   `}
@@ -388,24 +392,25 @@ export const HistoryTitle = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem 1rem 2rem;
+    padding: ${normalizeValue(1)} ${normalizeValue(2)} ${normalizeValue(1)}
+      ${normalizeValue(2)};
     border-bottom: 1px solid ${theme.colors.secondaryBackground};
 
     strong {
-      font-weight: 550;
-      font-size: 1.5rem;
+      font-weight: 600;
+      font-size: ${normalizeValue(1.5)};
     }
     button {
       width: fit-content;
-      font-size: 1.2rem;
-      padding: 0.8rem;
+      font-size: ${normalizeValue(1.2)};
+      padding: ${normalizeValue(0.8)};
     }
   `}
 `;
 
 export const HistoryTabs = styled.div`
   display: flex;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
 `;
 
 export const HistoryHeader = styled.div`
@@ -413,9 +418,9 @@ export const HistoryHeader = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 2rem;
-    padding: 0 2rem;
-    margin-top: 2rem;
+    gap: ${normalizeValue(2)};
+    padding: 0 ${normalizeValue(2)};
+    margin-top: ${normalizeValue(2)};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     @media screen and (max-width: 600px) {
       flex-direction: column-reverse;
@@ -429,10 +434,10 @@ export const HistoryTab = styled.div<{
 }>`
   ${({ theme, isActive, hasPendingClaims }) => css`
     display: flex;
-    gap: 0.2rem;
+    gap: ${normalizeValue(0.2)};
     border-bottom: 2px solid;
     border-bottom-color: ${isActive ? theme.colors.primary : "transparent"};
-    padding-bottom: 1.5rem;
+    padding-bottom: ${normalizeValue(1.5)};
     opacity: ${isActive || hasPendingClaims ? 1 : 0.5};
     font-weight: ${hasPendingClaims ? "bold" : "normal"};
     cursor: pointer;
@@ -440,14 +445,14 @@ export const HistoryTab = styled.div<{
     white-space: nowrap;
     span {
       display: ${hasPendingClaims ? "flex" : "none"};
-      font-size: 1rem;
+      font-size: ${normalizeValue(1)};
       background: ${theme.colors.primary};
-      width: 1.6rem;
-      height: 1.6rem;
-      border-radius: 2rem;
+      width: ${normalizeValue(1.6)};
+      height: ${normalizeValue(1.6)};
+      border-radius: ${normalizeValue(2)};
       align-items: center;
       justify-content: center;
-      margin-top: -0.3rem;
+      margin-top: ${normalizeValue(-0.3)};
       padding-right: 1px;
       padding-bottom: 2px;
     }
@@ -456,12 +461,12 @@ export const HistoryTab = styled.div<{
 export const HistoryHeaderAside = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const LoadingWrapper = styled.div`
   width: 100%;
-  height: 10rem;
+  height: ${normalizeValue(10)};
   top: 0;
   display: flex;
   align-items: center;

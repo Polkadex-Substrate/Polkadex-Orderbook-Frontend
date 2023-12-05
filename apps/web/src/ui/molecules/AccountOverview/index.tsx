@@ -57,11 +57,11 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
     if (currentUsingAccount) {
       const tradeAcc = getTradeAccount(
         currentUsingAccount.tradeAddress,
-        tradingAccounts,
+        tradingAccounts
       );
       const mainAcc = userMainAccountDetails(
         currentUsingAccount.mainAddress,
-        mainAccounts,
+        mainAccounts
       );
       setSelectedTradeAccount(tradeAcc);
       setSelectedMainAccount(mainAcc);
@@ -82,7 +82,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
   const handleClick = (addr: string) => {
     const acc = getTradeAccount(addr, tradingAccounts);
     const userAcc = allUserAccounts?.find(
-      (acc) => acc.tradeAddress?.toLowerCase() === addr?.toLowerCase(),
+      (acc) => acc.tradeAddress?.toLowerCase() === addr?.toLowerCase()
     );
     const mainAcc =
       userAcc && userMainAccountDetails(userAcc.mainAddress, mainAccounts);
@@ -107,7 +107,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
 
   const handleCopy = async (
     data: string,
-    ref: MutableRefObject<HTMLElement | null>,
+    ref: MutableRefObject<HTMLElement | null>
   ) => {
     await navigator.clipboard.writeText(data);
     if (ref.current) {
@@ -136,7 +136,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                             onClick={() =>
                               handleCopy(
                                 selectedTradeAccount.address,
-                                tradeButton,
+                                tradeButton
                               )
                             }
                             onMouseOut={() => handleOnMouseOut(tradeButton)}
@@ -212,7 +212,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                         if (selectedMainAccount?.account?.address)
                           handleCopy(
                             selectedMainAccount.account.address,
-                            controllerButton,
+                            controllerButton
                           );
                       }}
                       onMouseOut={() => handleOnMouseOut(controllerButton)}
@@ -233,7 +233,7 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
                   {selectedMainAccount?.account?.meta?.name} •{" "}
                   <small>
                     {transformAddress(
-                      selectedMainAccount?.account?.address ?? "",
+                      selectedMainAccount?.account?.address ?? ""
                     )}
                   </small>
                 </p>

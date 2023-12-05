@@ -1,26 +1,28 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
-    padding: 1.2rem;
+    padding: ${normalizeValue(1.2)};
     background: ${theme.colors.white};
     border: 1px solid ${theme.colors.secondaryBackground};
     width: 100%;
-    border-radius: 1rem;
+    border-radius: ${normalizeValue(1)};
     input,
     label {
       color: ${theme.colors.black};
     }
     label,
     input {
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
     }
     label {
       font-weight: 600;
       width: 100%;
     }
     input {
-      margin-top: 1rem;
+      margin-top: ${normalizeValue(1)};
       display: block;
       width: 100%;
     }
@@ -33,7 +35,7 @@ export const MnemonicAction = styled.button`
   ${({ theme }) => css`
     text-align: center;
     width: 100%;
-    margin-top: 2rem;
+    margin-top: ${normalizeValue(2)};
     position: relative;
     color: ${theme.colors.black};
     opacity: 1;
@@ -53,21 +55,21 @@ export const MnemonicAction = styled.button`
 `;
 
 export const TagsContainer = styled.div`
-  margin-top: 1.2rem;
+  margin-top: ${normalizeValue(1.2)};
   display: flex;
   flex-wrap: wrap;
 `;
 
 export const Tag = styled.span`
   ${({ theme }) => css`
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+    padding: ${normalizeValue(0.5)};
+    border-radius: ${normalizeValue(0.5)};
     background: ${theme.colors.black};
     color: ${theme.colors.white};
     width: fit-content;
-    margin-bottom: 0.5rem;
+    margin-bottom: ${normalizeValue(0.5)};
     &:not(:last-child) {
-      margin-right: 0.5rem;
+      margin-right: ${normalizeValue(0.5)};
     }
   `}
 `;
@@ -76,10 +78,10 @@ export const MnemonicSelect = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4rem 0;
+    padding: ${normalizeValue(4)} 0;
     color: ${theme.colors.black};
     span {
-      margin: 0 0.5rem;
+      margin: 0 ${normalizeValue(0.5)};
     }
     button :first-child {
       opacity: 0.6;
@@ -89,7 +91,7 @@ export const MnemonicSelect = styled.div`
 
 export const MnemonicImport = styled.div<{ hasTag?: boolean }>`
   ${({ hasTag }) => css`
-    margin-top: 1rem;
+    margin-top: ${normalizeValue(1)};
     ul {
       list-style: none;
       li {
@@ -105,14 +107,14 @@ export const MnemonicImport = styled.div<{ hasTag?: boolean }>`
 
 export const MnemonicListItem = styled.li`
   ${({ theme }) => css`
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+    padding: ${normalizeValue(0.5)};
+    border-radius: ${normalizeValue(0.5)};
     background: ${theme.colors.black};
     color: ${theme.colors.white};
     width: fit-content;
-    margin-bottom: 0.5rem;
+    margin-bottom: ${normalizeValue(0.5)};
     &:not(:last-child) {
-      margin-right: 0.5rem;
+      margin-right: ${normalizeValue(0.5)};
     }
   `}
 `;

@@ -22,6 +22,8 @@ import { buySellValidation } from "@orderbook/core/validations";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 type FormValues = {
   priceSell: string;
   priceBuy: string;
@@ -314,10 +316,10 @@ const ProtectPassword = () => {
 };
 
 export const AvaliableBalanceSkeleton = () => (
-  <Skeleton height="2rem" width="10rem" />
+  <Skeleton height={normalizeValue(2)} width={normalizeValue(10)} />
 );
 export const ButtonSkeleton = () => (
   <S.ButtonSkeletonWrapper>
-    <Skeleton height="4rem" width="100%" />
+    <Skeleton height={normalizeValue(4)} width="100%" />
   </S.ButtonSkeletonWrapper>
 );

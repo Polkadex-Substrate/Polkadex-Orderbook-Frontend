@@ -16,6 +16,8 @@ import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 import * as T from "./types";
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const OrderBook = () => {
   const {
     isPriceUp,
@@ -237,7 +239,7 @@ export const OrderbookPricing = ({
   <S.Pricing>
     <S.PricingAsideLeft isPriceUp={isPriceUp}>
       {loading ? (
-        <Skeleton height="2rem" width="50%" />
+        <Skeleton height={normalizeValue(2)} width="50%" />
       ) : (
         <span>
           <Icon name="SingleArrowBottom" size="extraSmall" />
@@ -255,13 +257,13 @@ export const OrderbookPricing = ({
 
 export const OrderbookSkeleton = () => (
   <S.Skeleton>
-    <Skeleton height="2rem" width="100%" />
-    <Skeleton height="2rem" width="100%" />
-    <Skeleton height="2rem" width="100%" />
-    <Skeleton height="2rem" width="100%" />
-    <Skeleton height="2rem" width="100%" />
-    <Skeleton height="2rem" width="100%" />
-    <Skeleton height="2rem" width="100%" />
-    <Skeleton height="2rem" width="100%" />
+    <Skeleton height={normalizeValue(2)} width="100%" />
+    <Skeleton height={normalizeValue(2)} width="100%" />
+    <Skeleton height={normalizeValue(2)} width="100%" />
+    <Skeleton height={normalizeValue(2)} width="100%" />
+    <Skeleton height={normalizeValue(2)} width="100%" />
+    <Skeleton height={normalizeValue(2)} width="100%" />
+    <Skeleton height={normalizeValue(2)} width="100%" />
+    <Skeleton height={normalizeValue(2)} width="100%" />
   </S.Skeleton>
 );

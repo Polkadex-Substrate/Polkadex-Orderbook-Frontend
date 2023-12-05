@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 import { Wrapper as EmptyData } from "@polkadex/orderbook-ui/molecules/EmptyData/styles";
 import { Table, Body } from "@polkadex/orderbook-ui/organisms/Orderbook/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div<{ filterBy?: string }>`
   ${({ filterBy }) => css`
     flex: 1;
@@ -14,7 +16,7 @@ export const Wrapper = styled.div<{ filterBy?: string }>`
     overflow: hidden;
     @media screen and (max-width: 700px) {
       ${EmptyData} {
-        padding: 3rem 1rem;
+        padding: ${normalizeValue(3)} ${normalizeValue(1)};
       }
     }
     ${Table}:first-child {

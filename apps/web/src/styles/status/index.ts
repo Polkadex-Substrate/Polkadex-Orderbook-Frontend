@@ -1,14 +1,15 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
 export const Wrapper = styled.main`
   display: flex;
   flex-direction: column;
-  max-width: 100rem;
-  margin: 0 auto 5rem auto;
+  max-width: ${normalizeValue(100)};
+  margin: 0 auto ${normalizeValue(5)} auto;
 `;
 
 export const Header = styled.header`
-  padding: 1.5rem 0;
+  padding: ${normalizeValue(1.5)} 0;
   display: flex;
   align-items: center;
 `;
@@ -17,10 +18,10 @@ export const Logo = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    margin: 0 0.5rem;
+    margin: 0 ${normalizeValue(0.5)};
     span {
       display: block;
-      margin-left: 1.5rem;
+      margin-left: ${normalizeValue(1.5)};
       position: relative;
       &:before {
         content: "";
@@ -28,7 +29,7 @@ export const Logo = styled.div`
         left: -15%;
         top: -15%;
         width: 1px;
-        height: 2rem;
+        height: ${normalizeValue(2)};
         background: ${theme.colors.text};
         opacity: 0.3;
       }
@@ -39,31 +40,31 @@ export const Logo = styled.div`
 export const Content = styled.div``;
 
 export const Status = styled.div`
-  max-width: 60rem;
-  padding: 10rem 0;
+  max-width: ${normalizeValue(60)};
+  padding: ${normalizeValue(10)} 0;
   margin: 0 auto;
   text-align: center;
   h1 {
-    font-size: 4rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    font-size: ${normalizeValue(4)};
+    margin-top: ${normalizeValue(2)};
+    margin-bottom: ${normalizeValue(1)};
   }
   p {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
+    font-size: ${normalizeValue(1.5)};
+    margin-bottom: ${normalizeValue(2)};
   }
 `;
 
 export const Information = styled.div`
   ${({ theme }) => css`
     border: 1px solid ${theme.colors.secondaryBackground};
-    border-radius: 0.2rem;
+    border-radius: ${normalizeValue(0.2)};
   `}
 `;
 
 export const Nav = styled.div`
   ${({ theme }) => css`
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -87,13 +88,13 @@ export const AsideContainer = styled.div`
   align-items: center;
 
   span {
-    margin-left: 0.5rem;
+    margin-left: ${normalizeValue(0.5)};
   }
   &:not(:last-child) {
-    margin-right: 1rem;
+    margin-right: ${normalizeValue(1)};
   }
   @media screen and (max-width: 480px) {
-    margin-top: 1rem;
+    margin-top: ${normalizeValue(1)};
   }
 `;
 
@@ -110,9 +111,9 @@ export const Card = styled.div`
     align-items: center;
     justify-content: space-between;
     border: 1px solid ${theme.colors.secondaryBackground};
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
     h5{
-      font-size: 1.4rem;
+      font-size: ${normalizeValue(1.4)};
       line-height: 1.5;
     }
     }
@@ -130,17 +131,17 @@ export const CardContainer = styled.div`
     }
     button {
       background: ${theme.colors.secondaryBackground};
-      padding: 0.5rem;
-      border-radius: 0.3rem;
-      margin-right: 0.5rem;
-      font-size: 1.2rem;
+      padding: ${normalizeValue(0.5)};
+      border-radius: ${normalizeValue(0.3)};
+      margin-right: ${normalizeValue(0.5)};
+      font-size: ${normalizeValue(1.2)};
       transition: background 0.5s;
       &:hover {
         background: ${theme.colors.primary};
       }
     }
     p {
-      margin-top: 0.5rem;
+      margin-top: ${normalizeValue(0.5)};
     }
   `}
 `;

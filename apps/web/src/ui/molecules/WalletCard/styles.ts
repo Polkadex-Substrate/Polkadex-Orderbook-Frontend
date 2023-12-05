@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   flex: 1;
   display: flex;
@@ -9,17 +11,17 @@ export const Wrapper = styled.div`
 export const Header = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 2rem;
+  gap: ${normalizeValue(1)};
+  padding: ${normalizeValue(2)};
   small {
-    font-size: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
     opacity: 0.5;
   }
 `;
 
 export const Paragraph = styled.p`
   white-space: break-spaces;
-  font-size: 1.9rem;
+  font-size: ${normalizeValue(1.9)};
   font-weight: 500;
   span {
     opacity: 0.5;
@@ -29,10 +31,10 @@ export const Paragraph = styled.p`
 export const Icon = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 0.5rem;
-    width: 2.3rem;
-    height: 2.3rem;
-    padding: 0.5rem;
+    border-radius: ${normalizeValue(0.5)};
+    width: ${normalizeValue(2.3)};
+    height: ${normalizeValue(2.3)};
+    padding: ${normalizeValue(0.5)};
     svg {
       stroke: ${theme.colors.tertiaryText};
     }
@@ -46,8 +48,8 @@ export const Footer = styled.div`
     display: flex;
     flex: 1;
     align-items: center;
-    gap: 1rem;
-    padding: 1.5rem 2rem;
+    gap: ${normalizeValue(1)};
+    padding: ${normalizeValue(1.5)} ${normalizeValue(2)};
     span {
       color: ${theme.colors.tertiaryText};
     }
@@ -58,9 +60,9 @@ export const Message = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
   div {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: ${normalizeValue(1.5)};
+    height: ${normalizeValue(1.5)};
   }
 `;

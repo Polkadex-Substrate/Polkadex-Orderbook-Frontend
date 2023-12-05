@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Section = styled.section`
   width: 100%;
 `;
@@ -9,29 +11,30 @@ export const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 0;
+  margin: ${normalizeValue(1)} 0;
 `;
 export const HeaderWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
 `;
 export const DropdownTrigger = styled.div`
   ${({ theme }) => css`
     cursor: pointer;
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 0.7rem;
-    padding: 0.6rem 0.8rem;
+    border-radius: ${normalizeValue(0.7)};
+    padding: ${normalizeValue(0.6)} ${normalizeValue(0.8)};
     user-select: none;
+    font-size: ${normalizeValue(1.3)};
     transition:
       background 0.4s ease-in-out,
       opacity 0.4s ease-in-out;
     svg {
       display: inline-block;
       vertical-align: middle;
-      width: 0.8rem;
-      height: 0.8rem;
+      width: ${normalizeValue(0.8)};
+      height: ${normalizeValue(0.8)};
     }
     &:hover {
       background: ${theme.colors.secondaryBackground};
@@ -41,13 +44,14 @@ export const DropdownTrigger = styled.div`
 
 export const ActionItem = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
-    border-radius: 0.7rem;
+    border-radius: ${normalizeValue(0.7)};
     width: 100%;
     text-align: center;
     cursor: pointer;
     transition: background 0.4s ease-in-out;
     font-weight: 500;
-    padding: 0.6rem 1.5rem;
+    font-size: ${normalizeValue(1.3)};
+    padding: ${normalizeValue(0.6)} ${normalizeValue(1.5)};
     color: ${isActive ? theme.colors.white : theme.colors.text};
     user-select: none;
     &:first-child {

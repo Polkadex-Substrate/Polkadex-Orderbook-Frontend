@@ -2,18 +2,20 @@ import styled, { css, DefaultTheme } from "styled-components";
 
 import { ListItemProps } from ".";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const wrapperModifier = {
   Small: (theme: DefaultTheme) => css`
-    height: 3rem;
+    height: ${normalizeValue(3)};
     font-size: ${theme.font.sizes.xsmall};
   `,
   Medium: (theme: DefaultTheme) => css`
-    height: 4rem;
+    height: ${normalizeValue(4)};
     font-size: ${theme.font.sizes.small};
     padding: ${theme.spacings.xxsmall} ${theme.spacings.medium};
   `,
   Large: (theme: DefaultTheme) => css`
-    height: 5rem;
+    height: ${normalizeValue(5)};
     font-size: ${theme.font.sizes.medium};
     padding: ${theme.spacings.xxsmall} ${theme.spacings.xlarge};
   `,
@@ -33,8 +35,8 @@ const wrapperModifier = {
 export const Wrapper = styled.div<Partial<ListItemProps>>`
   ${({ theme, fullWidth, isActive }) => css`
     border: 0;
-    border-radius: 0.5rem;
-    padding: 0.2rem;
+    border-radius: ${normalizeValue(0.5)};
+    padding: ${normalizeValue(0.2)};
     color: ${isActive ? theme.colors.white : theme.colors.text};
     transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
     display: inline-block;
@@ -42,7 +44,7 @@ export const Wrapper = styled.div<Partial<ListItemProps>>`
     background: ${isActive
       ? theme.colors.primary
       : theme.colors.primaryBackgroundOpacity};
-    padding: 0.4rem 0.5rem;
+    padding: ${normalizeValue(0.4)} ${normalizeValue(0.5)};
     ${fullWidth && wrapperModifier.FullWidth()};
     user-select: none;
     &:hover {

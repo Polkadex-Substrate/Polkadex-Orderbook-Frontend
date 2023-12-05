@@ -10,6 +10,7 @@ import { Popover } from "../Popover";
 import * as S from "./styles";
 
 import { CustomAddress } from "@/ui/organisms/TransferFormWithdraw/types";
+import { normalizeValue } from "@/utils/normalize";
 
 export const AccountSelect = ({
   selectedAccount,
@@ -43,9 +44,17 @@ export const AccountSelect = ({
         <Combobox.Button>
           {({ open }) => (
             <S.Wrapper>
-              <Skeleton height="4px" width="5rem" loading={loading}>
+              <Skeleton
+                height="4px"
+                width={normalizeValue(5)}
+                loading={loading}
+              >
                 <S.Container>
-                  <Skeleton height="4px" width="5rem" loading={loading}>
+                  <Skeleton
+                    height="4px"
+                    width={normalizeValue(5)}
+                    loading={loading}
+                  >
                     <Popover
                       placement="top left"
                       isOpen={!!selectedAccount && !isValidAddress}

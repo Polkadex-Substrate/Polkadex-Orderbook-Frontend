@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
@@ -7,7 +9,7 @@ export const Main = styled.main`
     min-width: 100vw;
     height: 100vh;
     display: flex;
-    max-width: 160rem;
+    max-width: ${normalizeValue(160)};
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
   `}
@@ -22,6 +24,7 @@ export const Flex = styled.div`
   }
 `;
 export const Wrapper = styled.div`
+  font-size: ${normalizeValue(1.3)};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,15 +33,15 @@ export const Wrapper = styled.div`
   overflow-y: scroll;
   @media screen and (max-height: 830px) {
     justify-content: flex-start;
-    margin-top: 3rem;
+    margin-top: ${normalizeValue(3)};
   }
 `;
 
 export const Container = styled.div`
   width: 100%;
   @media screen and (min-width: 880px) {
-    min-width: 80rem;
-    max-width: 80rem;
+    min-width: ${normalizeValue(80)};
+    max-width: ${normalizeValue(80)};
   }
 `;
 
@@ -48,9 +51,9 @@ export const Title = styled.div`
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    margin: 0 2rem 1rem 2rem;
+    margin: 0 ${normalizeValue(2)} ${normalizeValue(1)} ${normalizeValue(2)};
     div {
-      max-width: 15rem;
+      max-width: ${normalizeValue(15)};
       svg {
         width: 100%;
       }
@@ -65,11 +68,11 @@ export const Card = styled.div`
   ${({ theme }) => css`
     display: grid;
     grid-template-columns: auto 1fr;
-    border-radius: 2rem;
+    border-radius: ${normalizeValue(2)};
     border: 1px solid ${theme.colors.secondaryBackground};
-    margin: 2rem;
+    margin: ${normalizeValue(2)};
     @media screen and (min-width: 880px) {
-      min-height: 40rem;
+      min-height: ${normalizeValue(40)};
     }
   `}
 `;
@@ -77,37 +80,37 @@ export const Card = styled.div`
 export const Column = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 2rem;
-    width: 3rem;
+    border-radius: ${normalizeValue(2)};
+    width: ${normalizeValue(3)};
   `}
 `;
 
 export const Box = styled.div`
-  padding: 2rem;
+  padding: ${normalizeValue(2)};
   width: 100%;
   @media screen and (min-width: 880px) {
-    max-width: 40rem;
-    padding: 4rem;
+    max-width: ${normalizeValue(40)};
+    padding: ${normalizeValue(4)};
     justify-self: center;
     align-self: center;
   }
   h1 {
-    font-size: 1.8rem;
-    font-weight: 550;
+    font-size: ${normalizeValue(1.8)};
+    font-weight: 600;
   }
   form {
-    margin-top: 2rem;
+    margin-top: ${normalizeValue(2)};
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
   }
 `;
 export const ResendButton = styled.button`
   ${({ theme }) => css`
-    font-size: 1.2rem;
-    padding: 0.6rem;
-    border-radius: 0.5rem;
-    margin-top: 0.8rem;
+    font-size: ${normalizeValue(1.2)};
+    padding: ${normalizeValue(0.6)};
+    border-radius: ${normalizeValue(0.5)};
+    margin-top: ${normalizeValue(0.8)};
     background: ${theme.colors.primary}22;
     color: ${theme.colors.primary};
     white-space: nowrap;

@@ -43,6 +43,8 @@ import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const initialValues = {
   amount: 0.0,
 };
@@ -394,7 +396,7 @@ export const WithdrawTemplate = () => {
                             {pendingWithdraws?.length ? (
                               <HistoryTable items={pendingWithdraws} />
                             ) : (
-                              <div style={{ padding: "2rem" }}>
+                              <div style={{ padding: normalizeValue(2) }}>
                                 <EmptyData />
                               </div>
                             )}
@@ -417,7 +419,7 @@ export const WithdrawTemplate = () => {
                                 />
                               ))
                             ) : (
-                              <div style={{ padding: "2rem" }}>
+                              <div style={{ padding: normalizeValue(2) }}>
                                 <EmptyData />
                               </div>
                             )}
@@ -426,7 +428,7 @@ export const WithdrawTemplate = () => {
                             {claimedWithdraws?.length ? (
                               <HistoryTable items={claimedWithdraws} />
                             ) : (
-                              <div style={{ padding: "2rem" }}>
+                              <div style={{ padding: normalizeValue(2) }}>
                                 <EmptyData />
                               </div>
                             )}

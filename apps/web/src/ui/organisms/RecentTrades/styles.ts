@@ -1,4 +1,7 @@
 import styled, { css } from "styled-components";
+
+import { normalizeValue } from "@/utils/normalize";
+
 export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -20,8 +23,8 @@ export const Main = styled.div<{ hasData?: boolean }>`
     display: flex;
     flex-flow: column;
     flex: 1;
-    border-radius: 0 2rem 2rem 0rem;
-    min-width: 28rem;
+    border-radius: 0 ${normalizeValue(2)} ${normalizeValue(2)} 0;
+    min-width: ${normalizeValue(28)};
     width: 100%;
     max-height: 540px;
     height: 50vh;
@@ -41,11 +44,11 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1rem 0 1rem;
-  margin-bottom: 1rem;
+  padding: ${normalizeValue(1)} ${normalizeValue(1)} 0 ${normalizeValue(1)};
+  margin-bottom: ${normalizeValue(1)};
   h2 {
-    font-size: 1.5rem;
-    font-weight: 550;
+    font-size: ${normalizeValue(1.5)};
+    font-weight: 600;
   }
 `;
 
@@ -53,19 +56,19 @@ export const DropdownTrigger = styled.div`
   ${({ theme }) => css`
     cursor: pointer;
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 0.7rem;
-    padding: 0.4rem 0.6rem;
+    border-radius: ${normalizeValue(0.7)};
+    padding: ${normalizeValue(0.4)} ${normalizeValue(0.6)};
     user-select: none;
     text-transform: capitalize;
     transition:
       background 0.4s ease-in-out,
       opacity 0.4s ease-in-out;
-    font-size: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
     svg {
       display: inline-block;
       vertical-align: middle;
-      width: 0.8rem;
-      height: 0.8rem;
+      width: ${normalizeValue(0.8)};
+      height: ${normalizeValue(0.8)};
     }
     &:hover {
       background: ${theme.colors.secondaryBackground};
@@ -77,7 +80,7 @@ export const DropdownMenuItem = styled.div`
 `;
 export const Content = styled.div`
   ${({ theme }) => css`
-    padding-bottom: 0.5rem;
+    padding-bottom: ${normalizeValue(0.5)};
     flex: 1;
     height: 100%;
     overflow: auto;
@@ -109,8 +112,8 @@ export const Head = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    padding: 0 1rem;
-    margin-bottom: 0.5rem;
+    padding: 0 ${normalizeValue(1)};
+    margin-bottom: ${normalizeValue(0.5)};
     span {
       opacity: 0.5;
     }
@@ -118,7 +121,7 @@ export const Head = styled.div`
 `;
 
 export const CellHead = styled.span`
-  font-size: 1.2rem;
+  font-size: ${normalizeValue(1.2)};
   justify-self: flex-end;
   &:not(:last-child) {
     justify-self: flex-start;
@@ -131,10 +134,10 @@ export const Card = styled.div<{ isSell?: boolean }>`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    padding: 0 0.6rem 0 1rem;
+    padding: 0 ${normalizeValue(0.6)} 0 ${normalizeValue(1)};
     font-weight: 500;
     &:not(:last-child) {
-      margin-bottom: 0.1rem;
+      margin-bottom: ${normalizeValue(0.1)};
     }
     ${CardCell} {
       &:first-child {
@@ -145,8 +148,8 @@ export const Card = styled.div<{ isSell?: boolean }>`
 `;
 
 export const CardCell = styled.span`
-  padding: 0.4rem 0;
-  font-size: 1.2rem;
+  padding: ${normalizeValue(0.4)} 0;
+  font-size: ${normalizeValue(1.2)};
   &:not(:first-child) {
     justify-self: flex-end;
   }
@@ -164,9 +167,9 @@ export const Container = styled.div`
 
 export const Empty = styled.div`
   text-align: center;
-  padding: 5rem 1rem;
+  padding: ${normalizeValue(5)} ${normalizeValue(1)};
   img {
-    margin-bottom: 1rem;
-    max-width: 22rem;
+    margin-bottom: ${normalizeValue(1)};
+    max-width: ${normalizeValue(22)};
   }
 `;

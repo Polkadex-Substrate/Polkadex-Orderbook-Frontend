@@ -3,6 +3,8 @@ import { variant } from "styled-system";
 
 import * as T from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled("svg")<T.Props>(
   ({ theme, color }) =>
     css({
@@ -13,27 +15,27 @@ export const Wrapper = styled("svg")<T.Props>(
     prop: "size",
     variants: {
       mini: {
-        width: "0.8rem",
-        height: "0.8rem",
+        width: normalizeValue(0.6),
+        height: normalizeValue(0.6),
       },
       small: {
-        width: "1.5rem",
-        height: "1.5rem",
+        width: normalizeValue(1.5),
+        height: normalizeValue(1.5),
       },
       extraSmall: {
-        width: "2.5rem",
-        height: "2.5rem",
+        width: normalizeValue(2.5),
+        height: normalizeValue(2.5),
       },
       medium: {
-        width: "3rem",
-        height: "3rem",
+        width: normalizeValue(2.5),
+        height: normalizeValue(2.5),
       },
       large: {
-        width: "4rem",
-        height: "4rem",
+        width: normalizeValue(4),
+        height: normalizeValue(4),
       },
     },
-  }),
+  })
 );
 export const Points = styled("div")`
   display: flex;
@@ -41,7 +43,7 @@ export const Points = styled("div")`
   justify-content: center;
   ${Wrapper} {
     height: fit-content;
-    margin-left: 0.4rem;
+    margin-left: ${normalizeValue(0.4)};
   }
 `;
 

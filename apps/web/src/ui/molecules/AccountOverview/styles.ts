@@ -1,15 +1,17 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     width: 100%;
     height: 100%;
     background: ${theme.colors.primaryBackground};
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 1.5rem;
-    min-height: 34rem;
+    border-radius: ${normalizeValue(1.5)};
+    min-height: ${normalizeValue(34)};
     @media screen and (min-width: 400px) {
-      min-width: 35rem;
+      min-width: ${normalizeValue(35)};
     }
   `}
 `;
@@ -17,30 +19,31 @@ export const Wrapper = styled.div`
 export const Profile = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
+  gap: ${normalizeValue(1)};
+  padding: ${normalizeValue(1)} ${normalizeValue(1.5)};
   div {
-    max-width: 4rem;
+    max-width: ${normalizeValue(4)};
     width: 100%;
   }
   span {
-    font-size: 1.4rem;
+    font-size: ${normalizeValue(1.4)};
   }
 `;
 export const Switch = styled.div`
   ${({ theme }) => css`
-    margin: 1.5rem;
+    margin: ${normalizeValue(1.5)};
     border: 2px solid ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 1rem;
+    border-radius: ${normalizeValue(1)};
   `}
 `;
 export const SwitchCard = styled.div`
   ${({ theme }) => css`
     display: flex;
+    font-size: ${normalizeValue(1.3)};
     justify-content: space-between;
     align-items: center;
-    gap: 2rem;
-    padding: 1.5rem;
+    gap: ${normalizeValue(2)};
+    padding: ${normalizeValue(1.5)};
     &:first-child {
       cursor: pointer;
     }
@@ -54,7 +57,7 @@ export const SwitchCard = styled.div`
 export const DropdownHeader = styled.div`
   ${({ theme }) => css`
     small {
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
       color: ${theme.colors.tertiaryText};
     }
   `}
@@ -63,19 +66,19 @@ export const DropdownHeader = styled.div`
 export const DropdownEmpty = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundSolid};
-    padding: 2rem;
-    border-radius: 0.8rem;
+    padding: ${normalizeValue(2)};
+    border-radius: ${normalizeValue(0.8)};
     width: 100%;
     @media screen and (min-width: 400px) {
-      min-width: 31.5rem;
+      min-width: 3 ${normalizeValue(1.5)};
     }
     a {
       display: block;
-      margin-top: 1.5rem;
+      margin-top: ${normalizeValue(1.5)};
       text-align: center;
-      padding: 1.5rem;
+      padding: ${normalizeValue(1.5)};
       background-color: ${theme.colors.secondaryBackgroundOpacity};
-      border-radius: 0.7rem;
+      border-radius: ${normalizeValue(0.7)};
       transition: background-color 0.3s ease-out;
       &:hover {
         background-color: ${theme.colors.secondaryBackground};
@@ -87,18 +90,25 @@ export const SwitchCardContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: ${normalizeValue(0.8)};
     span {
-      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      font-size: ${normalizeValue(1.3)};
       div {
-        display: inline-block;
-        max-width: 1rem;
-        border-radius: 10rem;
-        margin-left: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-center;
+        max-width: ${normalizeValue(1)};
+        max-height: ${normalizeValue(1)};
+        border-radius: ${normalizeValue(10)};
+        margin-left: ${normalizeValue(0.5)};
         background: ${theme.colors.green};
-        padding: 0.2rem;
+        padding: ${normalizeValue(0.1)};
         svg {
           fill: ${theme.colors.white};
+          width: 100%;
+          height: 100%;
         }
       }
     }
@@ -107,16 +117,18 @@ export const SwitchCardContent = styled.div`
 export const SwitchCardInfo = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     small {
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
       color: ${theme.colors.tertiaryText};
     }
     button {
-      max-width: 1rem;
+      max-width: ${normalizeValue(1)};
       svg {
         stroke: ${theme.colors.tertiaryText};
         fill: ${theme.colors.tertiaryText};
+        width: 100%;
+        height: 100%;
       }
     }
     p {
@@ -126,7 +138,11 @@ export const SwitchCardInfo = styled.div`
 `;
 
 export const SwitchCardArrow = styled.div`
-  max-width: 0.8rem;
+  max-width: ${normalizeValue(0.8)};
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export const Links = styled.div``;
@@ -135,9 +151,9 @@ export const Card = styled.div<{ isHoverable?: boolean }>`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.5rem;
+    padding: ${normalizeValue(1)} ${normalizeValue(1.5)};
     &:last-child {
-      margin-bottom: 1rem;
+      margin-bottom: ${normalizeValue(1)};
     }
     ${isHoverable &&
     css`
@@ -157,9 +173,9 @@ export const CardContent = styled.div`
 
 export const CardTitle = styled.div`
   ${({ theme }) => css`
-    margin-left: 1rem;
+    margin-left: ${normalizeValue(1)};
     span {
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
       color: ${theme.colors.tertiaryText};
     }
     p {

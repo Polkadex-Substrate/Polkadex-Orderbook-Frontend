@@ -1,5 +1,8 @@
 import styled, { css } from "styled-components";
 import { Wrapper as Checkbox } from "@polkadex/orderbook-ui/molecules/Checkbox/styles";
+
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.main`
   ${({ theme }) => css`
     position: relative;
@@ -29,7 +32,7 @@ export const Wrapper = styled.div`
     flex: 1;
     border-left: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     @media screen and (min-width: 590px) {
-      margin-left: 2rem;
+      margin-left: ${normalizeValue(2)};
     }
   `}
 `;
@@ -48,7 +51,7 @@ export const ContainerMain = styled.div`
   ${({ theme }) => css`
     display: flex;
     width: 100%;
-    max-width: 140rem;
+    max-width: ${normalizeValue(140)};
     border-right: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     @media screen and (max-width: 1100px) {
       flex-direction: column;
@@ -60,10 +63,10 @@ export const Title = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
-    padding: 2rem;
+    gap: ${normalizeValue(0.6)};
+    padding: ${normalizeValue(2)};
     h1 {
-      font-size: 2.5rem;
+      font-size: ${normalizeValue(2.5)};
       font-weight: 500;
     }
     h2 {
@@ -72,7 +75,7 @@ export const Title = styled.div`
       opacity: 0.5;
     }
     @media screen and (min-width: 1110px) {
-      padding: 4rem;
+      padding: ${normalizeValue(4)};
     }
   `}
 `;
@@ -80,10 +83,10 @@ export const Title = styled.div`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: ${normalizeValue(3)};
   h2 {
-    font-size: 1.6rem;
-    font-weight: 550;
+    font-size: ${normalizeValue(1.6)};
+    font-weight: 600;
   }
 `;
 
@@ -104,15 +107,15 @@ export const WalletTitle = styled.div`
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    padding: 1.5rem 2rem;
+    padding: ${normalizeValue(1.5)} ${normalizeValue(2)};
     h2 {
-      font-size: 1.7rem;
-      font-weight: 550;
+      font-size: ${normalizeValue(1.7)};
+      font-weight: 600;
     }
     @media screen and (min-width: 1110px) {
-      padding: 1.5rem 4rem;
+      padding: ${normalizeValue(1.5)} ${normalizeValue(4)};
     }
   `}
 `;
@@ -121,16 +124,16 @@ export const WalletContainer = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     background: ${theme.colors.tertiaryBackgroundOpacity};
   `}
 `;
 export const Disclaimer = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackgroundOpacity};
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
     @media screen and (min-width: 1110px) {
-      padding: 2rem 4rem;
+      padding: ${normalizeValue(2)} ${normalizeValue(4)};
     }
   `}
 `;
@@ -139,12 +142,12 @@ export const WalletContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    max-height: 40rem;
-    padding: 0 2rem;
+    gap: ${normalizeValue(1.5)};
+    max-height: ${normalizeValue(40)};
+    padding: 0 ${normalizeValue(2)};
     overflow-y: auto;
     @media screen and (min-width: 1110px) {
-      padding: 0 4rem;
+      padding: 0 ${normalizeValue(4)};
     }
     &::-webkit-scrollbar-thumb {
       background: none;
@@ -168,7 +171,7 @@ export const WalletWrapper = styled.div``;
 export const AccountHeaderFlex = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const ButtonGroup = styled.div`
@@ -176,7 +179,7 @@ export const ButtonGroup = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     button {
       &:nth-child(1) {
         background: ${theme.colors.secondaryBackground} !important;
@@ -190,9 +193,11 @@ export const ButtonGroup = styled.div`
 
 export const ButtonWallet = styled.button`
   ${({ theme }) => css`
-    border-radius: 0.8rem;
-    padding: 0.8rem;
-    font-weight: 550;
+    display: flex;
+    align-items: center;
+    border-radius: ${normalizeValue(0.8)};
+    padding: ${normalizeValue(0.8)};
+    font-weight: 600;
     background: ${theme.colors.primary};
     color: ${theme.colors.white};
     transition: background-color 0.5s ease-in;
@@ -200,13 +205,20 @@ export const ButtonWallet = styled.button`
       background: ${theme.colors.primary}33;
     }
     div {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border: 1.8px solid ${theme.colors.white};
-      border-radius: 0.4rem;
+      border-radius: ${normalizeValue(0.4)};
       vertical-align: middle;
-      margin-right: 0.5rem;
-      padding: 0.4rem;
-      width: 1.8rem;
+      margin-right: ${normalizeValue(0.5)};
+      padding: ${normalizeValue(0.4)};
+      width: ${normalizeValue(1.8)};
+      height: ${normalizeValue(1.8)};
+      svg {
+        width: 100%;
+        height: 100%;
+      }
     }
   `}
 `;
@@ -214,7 +226,7 @@ export const ButtonWallet = styled.button`
 export const WalletTitleWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
   span {
     white-space: nowrap;
   }
@@ -222,10 +234,10 @@ export const WalletTitleWrapper = styled.div`
 
 export const TooltipHeader = styled.div`
   ${({ theme }) => css`
-    width: 1.5rem;
+    width: ${normalizeValue(1.5)};
     background: ${theme.colors.secondaryBackground};
-    border-radius: 10rem;
-    padding: 0.3rem;
+    border-radius: ${normalizeValue(10)};
+    padding: ${normalizeValue(0.3)};
   `}
 `;
 
@@ -233,7 +245,7 @@ export const Empty = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
 `;
 
 export const EmptyBox = styled.div`
@@ -242,25 +254,26 @@ export const EmptyBox = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.8rem;
-    max-width: 40rem;
+    gap: ${normalizeValue(0.8)};
+    max-width: ${normalizeValue(40)};
     margin: 0 auto;
     text-align: center;
     p {
       line-height: 1.5;
-      margin-top: 0.5rem;
+      margin-top: ${normalizeValue(0.5)};
+      font-size: ${normalizeValue(1.3)};
       color: ${theme.colors.tertiaryText};
     }
     span {
-      font-size: 1.5rem;
-      font-weight: 550;
+      font-size: ${normalizeValue(1.5)};
+      font-weight: 600;
     }
     div {
       background: ${theme.colors.secondaryBackground};
-      border-radius: 0.5rem;
-      width: 4rem;
-      padding: 0.8rem;
-      border-radius: 1rem;
+      border-radius: ${normalizeValue(0.5)};
+      width: ${normalizeValue(4)};
+      padding: ${normalizeValue(0.8)};
+      border-radius: ${normalizeValue(1)};
     }
   `}
 `;
@@ -278,7 +291,7 @@ export const Account = styled.div`
 export const AccountContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: ${normalizeValue(0.4)};
 `;
 
 export const AccountCard = styled.div`
@@ -287,28 +300,29 @@ export const AccountCard = styled.div`
     align-items: center;
     justify-content: space-between;
     background: ${theme.colors.tertiaryBackgroundOpacity};
-    padding: 2rem;
-    gap: 2rem;
+    padding: ${normalizeValue(2)};
+    gap: ${normalizeValue(2)};
     @media screen and (min-width: 1110px) {
-      padding: 2rem 4rem;
+      padding: ${normalizeValue(2)} ${normalizeValue(4)};
     }
   `}
 `;
 export const AccountCardWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 export const AccountCardAvatar = styled.div`
-  width: 4.5rem;
-  height: 4.5rem;
+  width: ${normalizeValue(4.5)};
+  height: ${normalizeValue(4.5)};
 `;
 
 export const AccountCardContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: ${normalizeValue(0.3)};
+    font-size: ${normalizeValue(1.3)};
     span {
       font-weight: 500;
     }
@@ -321,12 +335,14 @@ export const AccountCardFlex = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     div {
-      width: 1rem;
+      width: ${normalizeValue(1)};
       svg {
         fill: ${theme.colors.tertiaryText};
         stroke: ${theme.colors.tertiaryText};
+        width: 100%;
+        height: 100%;
       }
     }
   `}
@@ -334,33 +350,38 @@ export const AccountCardFlex = styled.div`
 export const AccountCardActions = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 export const Badge = styled.div<{ isRegistered: boolean }>`
   ${({ theme, isRegistered }) => css`
     background: ${isRegistered
       ? `${theme.colors.green}33`
       : theme.colors.secondaryBackground};
-    border-radius: 0.3rem;
-    padding: 0.5rem 0.7rem;
+    border-radius: ${normalizeValue(0.3)};
+    padding: ${normalizeValue(0.5)} ${normalizeValue(0.7)};
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    border-radius: 10rem;
-    font-size: 1.2rem;
+    gap: ${normalizeValue(0.5)};
+    border-radius: ${normalizeValue(10)};
+    font-size: ${normalizeValue(1.2)};
     font-weight: 500;
     user-select: none;
     ${isRegistered &&
     css`
       div {
-        vertical-align: middle;
-        width: 1.3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: ${normalizeValue(1.3)};
+        height: ${normalizeValue(1.3)};
         background: ${theme.colors.green};
-        border-radius: 10rem;
-        padding: 0.3rem;
+        border-radius: ${normalizeValue(10)};
+        padding: ${normalizeValue(0.2)};
         svg {
           fill: ${theme.colors.white};
           stroke: ${theme.colors.white};
+          width: 100%;
+          height: 100%;
         }
       }
     `}
@@ -371,31 +392,33 @@ export const Registered = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     border-left: 2px solid ${theme.colors.primary};
     border-right: 2px solid ${theme.colors.primary};
     background: ${theme.colors.primary}33;
-    border-radius: 0.5rem;
-    padding: 2rem;
+    border-radius: ${normalizeValue(0.5)};
+    padding: ${normalizeValue(2)};
     user-select: none;
     div {
       &:first-child {
-        padding: 0.4rem;
+        padding: ${normalizeValue(0.4)};
         border: 1px solid ${theme.colors.primary};
-        border-radius: 10rem;
-        width: 2rem;
+        border-radius: ${normalizeValue(10)};
+        width: ${normalizeValue(2)};
         svg {
           fill: ${theme.colors.primary};
+          width: 100%;
+          height: 100%;
         }
       }
       &:last-child {
         display: flex;
         flex-direction: column;
-        gap: 0.2rem;
+        gap: ${normalizeValue(0.2)};
         span {
-          font-size: 1.4rem;
+          font-size: ${normalizeValue(1.4)};
           display: block;
-          font-weight: 550;
+          font-weight: 600;
         }
         p {
           opacity: 0.8;
@@ -409,12 +432,12 @@ export const Header = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-    padding: 2rem;
+    gap: ${normalizeValue(2)};
+    margin-bottom: ${normalizeValue(1.5)};
+    padding: ${normalizeValue(2)};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     @media screen and (min-width: 1110px) {
-      padding: 2rem 4rem;
+      padding: ${normalizeValue(2)} ${normalizeValue(4)};
     }
   `}
 `;
@@ -422,21 +445,25 @@ export const Header = styled.div`
 export const AccountHeaderTrigger = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
   cursor: pointer;
   div {
-    width: 0.8rem;
+    width: ${normalizeValue(0.8)};
+  }
+  svg {
+    width: 100%;
+    height: 100;
   }
 `;
 
 export const AccountHeaderContent = styled.div`
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: ${normalizeValue(1.5)};
   label,
   span {
     white-space: nowrap;
-    font-size: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
   }
   ${Checkbox} {
     align-items: center;
@@ -450,14 +477,14 @@ export const Using = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 4rem;
-    height: 4rem;
+    width: ${normalizeValue(4)};
+    height: ${normalizeValue(4)};
     background: ${theme.colors.green}33;
     color: ${theme.colors.green};
-    font-size: 0.9rem;
+    font-size: ${normalizeValue(0.9)};
     text-transform: uppercase;
-    font-weight: 550;
-    border-radius: 10rem;
+    font-weight: 600;
+    border-radius: ${normalizeValue(10)};
   `}
 `;
 
@@ -466,10 +493,10 @@ export const WalletCard = styled.div<{ isActive?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     flex-wrap: wrap;
-    min-height: 6rem;
-    padding-bottom: 2rem;
+    min-height: ${normalizeValue(6)};
+    padding-bottom: ${normalizeValue(2)};
 
     &:not(:last-child) {
       border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
@@ -488,29 +515,31 @@ export const WalletCard = styled.div<{ isActive?: boolean }>`
 export const WalletCardWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
 `;
 
 export const WalletCardAside = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
 `;
 
 export const WalletCardContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: ${normalizeValue(0.2)};
     span {
-      font-weight: 550;
+      font-weight: 600;
+      font-size: ${normalizeValue(1.3)};
     }
     small {
-      font-size: 1.2rem;
+      font-size: ${normalizeValue(1.2)};
       font-weight: normal;
     }
     p {
       color: ${theme.colors.tertiaryText};
+      font-size: ${normalizeValue(1.3)};
     }
   `}
 `;
@@ -519,12 +548,14 @@ export const WalletCardCopy = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     button {
-      width: 1rem;
+      width: ${normalizeValue(1)};
       svg {
         fill: ${theme.colors.tertiaryText};
         stroke: ${theme.colors.tertiaryText};
+        width: 100%;
+        height: 100%;
       }
     }
   `}
@@ -534,13 +565,13 @@ export const WalletCardBadge = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
     color: ${theme.colors.tertiaryText};
-    border-radius: 0.3rem;
-    padding: 0.5rem 0.8rem;
+    border-radius: ${normalizeValue(0.3)};
+    padding: ${normalizeValue(0.5)} ${normalizeValue(0.8)};
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    border-radius: 10rem;
-    font-size: 1.2rem;
+    gap: ${normalizeValue(0.5)};
+    border-radius: ${normalizeValue(10)};
+    font-size: ${normalizeValue(1.2)};
     font-weight: 500;
     user-select: none;
   `}
@@ -549,10 +580,10 @@ export const WalletCardBadge = styled.div`
 export const Button = styled.button<{ fill?: string }>`
   ${({ theme, fill = "secondaryBackground" }) => css`
     background: ${theme.colors[fill]};
-    border-radius: 0.3rem;
-    padding: 0.5rem;
+    border-radius: ${normalizeValue(0.3)};
+    padding: ${normalizeValue(0.5)};
     font-weight: 500;
-    font-size: 1.3rem;
+    font-size: ${normalizeValue(1.3)};
     transition: background-color 0.4s ease-in-out;
     &:hover {
       background: ${theme.colors.secondaryBackgroundOpacity};
@@ -563,10 +594,10 @@ export const Preview = styled.button`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    height: 2.6rem;
-    padding: 0.5rem;
-    border-radius: 10rem;
+    gap: ${normalizeValue(0.4)};
+    height: ${normalizeValue(2.6)};
+    padding: ${normalizeValue(0.5)};
+    border-radius: ${normalizeValue(10)};
     transition: 0.2s background-color ease;
     width: fit-content;
     span {
@@ -574,7 +605,7 @@ export const Preview = styled.button`
       width: 0;
     }
     div {
-      height: 1.2rem;
+      height: ${normalizeValue(1.2)};
       svg {
         fill: ${theme.colors.text};
         stroke: ${theme.colors.text};
@@ -596,14 +627,14 @@ export const WalletActions = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     transition: 0.2s ease;
     a {
       background: ${theme.colors.secondaryBackground};
-      border-radius: 0.3rem;
-      padding: 0.3rem 0.5rem;
+      border-radius: ${normalizeValue(0.3)};
+      padding: ${normalizeValue(0.3)} ${normalizeValue(0.5)};
       font-weight: 500;
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
       transition: background-color 0.4s ease-in-out;
       &:hover {
         background: ${theme.colors.secondaryBackgroundOpacity};
@@ -613,7 +644,7 @@ export const WalletActions = styled.div`
 `;
 export const Dropdown = styled.div`
   small {
-    font-size: 1.3rem;
+    font-size: ${normalizeValue(1.3)};
   }
 `;
 
@@ -621,7 +652,7 @@ export const LoadingWrapper = styled.div`
   ${({ theme }) => css`
     width: 100%;
     z-index: 20;
-    height: 30rem;
+    height: ${normalizeValue(38)};
     top: 0;
     display: flex;
     align-items: center;
@@ -634,7 +665,7 @@ export const Support = styled.div`
   display: flex;
   @media screen and (min-width: 1100px) {
     flex-direction: column;
-    max-width: 35rem;
+    max-width: ${normalizeValue(35)};
   }
   @media screen and (max-width: 600px) {
     flex-direction: column;
@@ -646,24 +677,26 @@ export const SupportCard = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 2rem;
-    padding: 3rem;
+    gap: ${normalizeValue(2)};
+    padding: ${normalizeValue(3)};
     @media screen and (max-width: 1100px) {
       flex: 1;
     }
     p {
       opacity: 0.6;
       line-height: 1.5;
+      font-size: ${normalizeValue(1.3)};
     }
     h4 {
-      font-size: 1.7rem;
+      font-size: ${normalizeValue(1.7)};
       font-weight: 500;
     }
     a,
     button {
+      font-size: ${normalizeValue(1.3)};
       background: ${theme.colors.secondaryBackgroundOpacity};
-      padding: 1rem 2rem;
-      border-radius: 0.5rem;
+      padding: ${normalizeValue(1)} ${normalizeValue(2)};
+      border-radius: ${normalizeValue(0.5)};
       transition: background-color 0.5s ease;
       white-space: nowrap;
       width: fit-content;
@@ -695,14 +728,14 @@ export const SupportCardContainer = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     div {
-      width: 3rem;
-      height: 3rem;
-      padding: 0.6rem;
-      border-radius: 50rem;
+      width: ${normalizeValue(3)};
+      height: ${normalizeValue(3)};
+      padding: ${normalizeValue(0.6)};
+      border-radius: ${normalizeValue(50)};
       background: ${theme.colors.secondaryBackgroundOpacity};
-      margin-bottom: 1rem;
+      margin-bottom: ${normalizeValue(1)};
     }
   `}
 `;
@@ -710,19 +743,19 @@ export const SupportCardContainer = styled.div`
 export const IntroCard = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   div {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: ${normalizeValue(1.5)};
   }
   span {
-    font-size: 1.8rem;
+    font-size: ${normalizeValue(1.8)};
     font-weight: 500;
   }
   p {
     line-height: 1.4;
     opacity: 0.7;
-    font-size: 1.4rem;
+    font-size: ${normalizeValue(1.4)};
   }
 `;

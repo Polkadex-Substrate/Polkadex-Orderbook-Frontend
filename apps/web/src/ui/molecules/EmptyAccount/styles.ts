@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const EmptyContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -13,8 +15,9 @@ export const Empty = styled.div<{ hasLimit?: boolean; balances?: boolean }>`
       ? theme.colors.secondaryBackgroundSolid
       : "inherit"};
     border: 1px solid ${!hasLimit ? theme.colors.secondaryBackground : "none"};
-    border-radius: 1.5rem;
-    padding: 1rem 1rem ${balances ? "4rem" : "1rem"} 1rem;
+    border-radius: ${normalizeValue(1.5)};
+    padding: ${normalizeValue(1)} ${normalizeValue(1)}
+      ${balances ? normalizeValue(4) : normalizeValue(1)}${normalizeValue(1)};
     text-align: center;
     display: flex;
     align-items: center;
@@ -22,19 +25,19 @@ export const Empty = styled.div<{ hasLimit?: boolean; balances?: boolean }>`
     flex: 1;
     ${!hasLimit &&
     css`
-      max-width: 25rem;
+      max-width: ${normalizeValue(25)};
     `}
   `}
 `;
 export const EmptyHeader = styled.div`
-  border-radius: 1.5rem;
-  padding: 1rem;
-  margin-bottom: 2rem;
+  border-radius: ${normalizeValue(1.5)};
+  padding: ${normalizeValue(1)};
+  margin-bottom: ${normalizeValue(2)};
   flex: 1;
   img {
     width: 100%;
-    max-width: 25rem;
-    max-height: 18rem;
+    max-width: ${normalizeValue(25)};
+    max-height: ${normalizeValue(18)};
   }
 `;
 export const EmptyContent = styled.div`
@@ -45,11 +48,11 @@ export const EmptyContent = styled.div`
     align-items: center;
     justify-content: center;
     h2 {
-      font-size: 1.8rem;
-      font-weight: 550;
+      font-size: ${normalizeValue(1.8)};
+      font-weight: 600;
     }
     p {
-      margin: 1rem 0 3rem 0;
+      margin: ${normalizeValue(1)} 0 ${normalizeValue(3)} 0;
       color: ${theme.colors.tertiaryText};
     }
   `}
@@ -63,9 +66,9 @@ export const EmptyActions = styled.div<{ hasLimit?: boolean }>`
     background: ${hasLimit
       ? theme.colors.secondaryBackgroundOpacity
       : theme.colors.primaryBackgroundOpacity};
-    border-radius: 1rem;
+    border-radius: ${normalizeValue(1)};
     position: relative;
-    max-width: 25rem;
+    max-width: ${normalizeValue(25)};
 
     &:hover a {
       &:nth-child(1) {
@@ -83,7 +86,7 @@ export const EmptyActions = styled.div<{ hasLimit?: boolean }>`
     }
     a {
       z-index: 1;
-      padding: 1.5rem;
+      padding: ${normalizeValue(1.5)};
       white-space: nowrap;
       font-weight: 500;
       &:nth-child(1) {
@@ -97,7 +100,7 @@ export const EmptyActions = styled.div<{ hasLimit?: boolean }>`
       width: 48%;
       height: 80%;
       background-color: ${theme.colors.primary};
-      border-radius: 0.8rem;
+      border-radius: ${normalizeValue(0.8)};
       left: 2%;
       z-index: 0;
       transition:
