@@ -64,7 +64,7 @@ export function useRecentTrades(market: string) {
   }, [market, queryClient]);
 
   return {
-    list: recentTradesList,
+    list: recentTradesList ?? [],
     loading: isLoading || isFetching,
     isDecreasing,
     isPriceUp: currentTradePrice > lastTradePrice,
