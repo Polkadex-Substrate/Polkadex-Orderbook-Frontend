@@ -28,7 +28,7 @@ import { ExtensionAccount } from "@orderbook/core/providers/types";
 import * as T from "./types";
 import * as S from "./styles";
 
-export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
+export const AccountOverview = ({ onNavigate }: T.Props) => {
   const { t: translation } = useTranslation("molecules");
   const t = (key: string) => translation(`accountOverview.${key}`);
 
@@ -258,7 +258,6 @@ export const AccountOverview = ({ onNavigate, logout }: T.Props) => {
           icon="Appearance"
           onClick={() => onNavigate("Appearance")}
         />
-        <Card title={t("logout")} icon="Logout" onClick={logout} />
       </S.Links>
     </S.Wrapper>
   );

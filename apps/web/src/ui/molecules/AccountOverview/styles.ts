@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
     background: ${theme.colors.primaryBackground};
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-radius: ${normalizeValue(1.5)};
-    min-height: ${normalizeValue(34)};
+    min-height: ${normalizeValue(30)};
     @media screen and (min-width: 400px) {
       min-width: ${normalizeValue(35)};
     }

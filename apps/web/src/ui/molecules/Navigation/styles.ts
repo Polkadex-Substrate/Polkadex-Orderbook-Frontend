@@ -10,6 +10,7 @@ export const Main = styled.div<{ isFull?: boolean }>`
     border-radius: ${normalizeValue(1)};
     border: 1px solid ${theme.colors.secondaryBackground};
     padding: ${normalizeValue(2)};
+    font-size: ${normalizeValue(1.4)};
   `}
 `;
 
