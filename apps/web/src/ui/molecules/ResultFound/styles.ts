@@ -16,5 +16,6 @@ export const Container = styled.div`
   }
   svg {
     width: ${normalizeValue(4)};
+    height: ${normalizeValue(4)};
   }
 `;

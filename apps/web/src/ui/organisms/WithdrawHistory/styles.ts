@@ -43,6 +43,11 @@ export const TableAside = styled.div<{ loading: boolean }>`
       &:hover {
         background: ${theme.colors.primaryHover};
       }
+      svg {
+        width: 15px;
+        height: 15px;
+        margin: ${normalizeValue(-0.5)} 0 0 ${normalizeValue(-0.4)};
+      }
     }
     h4 {
       font-weight: 500;
