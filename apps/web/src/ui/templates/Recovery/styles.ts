@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 import { Primary as Input } from "@polkadex/orderbook-ui/molecules/Input/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};
@@ -12,15 +14,16 @@ export const Main = styled.div`
 `;
 
 export const Wrapper = styled.section`
+  font-size: ${normalizeValue(1.3)};
   display: grid;
-  grid-gap: 5rem;
-  max-width: 90rem;
+  grid-gap: ${normalizeValue(5)};
+  max-width: ${normalizeValue(90)};
   margin: 0 auto;
   width: 100%;
   flex: 1;
 
   @media screen and (max-width: 920px) {
-    padding: 0 2rem;
+    padding: 0 ${normalizeValue(2)};
   }
 
   @media screen and (min-width: 760px) {
@@ -31,7 +34,7 @@ export const Wrapper = styled.section`
 export const Content = styled.div``;
 
 export const Container = styled.div`
-  padding-top: 8rem;
+  padding-top: ${normalizeValue(8)};
   display: flex;
   justify-content: space-between;
   align-items: stretch;
@@ -47,10 +50,10 @@ export const AsideLeft = styled.div`
 export const Title = styled.div`
   ${({ theme }) => css`
     h1 {
-      font-size: 3.5rem;
+      font-size: ${normalizeValue(3.5)};
     }
     p {
-      font-size: 1.5rem;
+      font-size: ${normalizeValue(1.5)};
     }
     a {
       color: ${theme.colors.primary};
@@ -60,20 +63,20 @@ export const Title = styled.div`
 `;
 
 export const Form = styled.div`
-  padding: 5rem 0;
+  padding: ${normalizeValue(5)} 0;
   ${Input} {
-    margin-top: 1rem;
+    margin-top: ${normalizeValue(1)};
   }
 `;
 
 export const SelectContent = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.secondaryBackgroundSolid};
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+    padding: ${normalizeValue(0.5)};
+    border-radius: ${normalizeValue(0.5)};
     width: 100%;
     shadow: ${theme.shadows.primary};
-    max-height: 20rem;
+    max-height: ${normalizeValue(20)};
     overflow-y: scroll;
     scrollbar-width: none;
   `}
@@ -89,9 +92,9 @@ export const Footer = styled.div`
 `;
 
 export const Box = styled.div`
-  padding: 2rem;
+  padding: ${normalizeValue(2)};
   @media screen and (min-width: 920px) {
-    padding: 4rem;
+    padding: ${normalizeValue(4)};
   }
   @media screen and (max-width: 760px) {
     display: none;
@@ -101,21 +104,21 @@ export const Box = styled.div`
 export const Card = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.text};
-    border-radius: 2rem;
+    border-radius: ${normalizeValue(2)};
     height: 100%;
-    padding-top: 8rem;
+    padding-top: ${normalizeValue(8)};
   `}
 `;
 
 export const CardContent = styled.div`
   ${({ theme }) => css`
-    padding: 3rem;
+    padding: ${normalizeValue(3)};
     @media screen and (min-width: 920px) {
-      padding: 4rem;
+      padding: ${normalizeValue(4)};
     }
     h4 {
-      font-size: 1.6rem;
-      margin: 1rem 0 2rem 0;
+      font-size: ${normalizeValue(1.6)};
+      margin: ${normalizeValue(1)} 0 ${normalizeValue(2)} 0;
     }
     p {
       line-height: 1.5;
@@ -126,7 +129,7 @@ export const CardContent = styled.div`
     }
 
     strong {
-      margin-top: 2rem;
+      margin-top: ${normalizeValue(2)};
     }
     strong {
       display: block;

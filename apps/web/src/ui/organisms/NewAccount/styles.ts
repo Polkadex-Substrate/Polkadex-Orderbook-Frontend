@@ -1,21 +1,24 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.section`
   ${({ theme }) => css`
-    border-radius: 1.5rem 0 0 0;
+    border-radius: ${normalizeValue(1.5)} 0 0 0;
     background: ${theme.colors.primaryBackground};
     box-shadow: ${theme.shadows.secondary};
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     min-width: 90vw;
     min-height: 99vh;
     height: 100%;
-    padding: 3rem 2rem 2rem 2rem;
+    padding: ${normalizeValue(3)} ${normalizeValue(2)} ${normalizeValue(2)}
+      ${normalizeValue(2)};
     @media screen and (min-width: 440px) {
-      min-width: 50rem;
-      max-width: 50rem;
+      min-width: ${normalizeValue(50)};
+      max-width: ${normalizeValue(50)};
     }
     overflow-y: auto;
   `}
@@ -23,15 +26,17 @@ export const Main = styled.section`
 
 export const Header = styled.button`
   ${({ theme }) => css`
-    width: 4rem;
-    height: 4rem;
-    padding: 1rem;
-    border-radius: 10rem;
+    width: ${normalizeValue(4)};
+    height: ${normalizeValue(4)};
+    padding: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(10)};
     cursor: pointer;
     transition: background-color 0.5s ease-in;
     svg {
       fill: ${theme.colors.text};
       stroke: ${theme.colors.text};
+      width: 100%;
+      height: 100%;
     }
     &:hover {
       background: ${theme.colors.secondaryBackgroundOpacity};
@@ -44,8 +49,8 @@ export const Header = styled.button`
 
 export const Content = styled.div`
   h2 {
-    font-size: 1.8rem;
-    font-weight: 550;
+    font-size: ${normalizeValue(1.8)};
+    font-weight: 600;
   }
 `;
 
@@ -53,17 +58,18 @@ export const Title = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     h2 {
-      font-size: 1.8rem;
-      font-weight: 550;
+      font-size: ${normalizeValue(1.8)};
+      font-weight: 600;
     }
     p {
       line-height: 1.4;
       color: ${theme.colors.tertiaryText};
+      font-size: ${normalizeValue(1.3)};
     }
     strong {
-      font-weight: 550;
+      font-weight: 600;
       color: ${theme.colors.text};
     }
     a {
@@ -76,24 +82,24 @@ export const Title = styled.div`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  margin-top: 1.5rem;
+  gap: ${normalizeValue(2)};
+  margin-top: ${normalizeValue(1.5)};
 `;
 
 export const Box = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const Card = styled.div<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 1.5rem;
+    gap: ${normalizeValue(1)};
+    padding: ${normalizeValue(1.5)};
     background: ${theme.colors.tertiaryBackgroundOpacity};
-    border-radius: 0.4rem;
+    border-radius: ${normalizeValue(0.4)};
     opacity: ${isActive ? 1 : 0.3};
     cursor: pointer;
     user-select: none;
@@ -103,20 +109,22 @@ export const CardWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const CardContent = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const CardInfo = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: ${normalizeValue(0.3)};
+    font-size: ${normalizeValue(1.3)};
+
     span {
       font-weight: 500;
     }
@@ -128,24 +136,28 @@ export const CardInfo = styled.div`
 
 export const CardIcon = styled.div`
   ${({ theme }) => css`
-    width: 3rem;
-    height: 3rem;
-    border-radius: 20rem;
+    width: ${normalizeValue(3)};
+    height: ${normalizeValue(3)};
+    border-radius: ${normalizeValue(20)};
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 0.8rem;
+    padding: ${normalizeValue(0.8)};
     svg {
       fill: ${theme.colors.tertiaryText};
       stroke: ${theme.colors.tertiaryText};
+      width: 100%;
+      height: 100%;
     }
   `}
 `;
 
 export const CardArrow = styled.div`
   ${({ theme }) => css`
-    width: 1rem;
+    width: ${normalizeValue(1)};
     svg {
       fill: ${theme.colors.tertiaryText};
       stroke: ${theme.colors.tertiaryText};
+      width: 100%;
+      height: 100%;
     }
   `}
 `;

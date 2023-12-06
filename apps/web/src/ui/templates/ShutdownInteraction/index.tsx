@@ -3,6 +3,8 @@ import { Icon } from "@polkadex/orderbook-ui/molecules";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 type Props = {
   title: string;
   textLink?: string;
@@ -46,7 +48,10 @@ export const ShutdownInteraction = ({
               name="SingleArrowRight"
               fill="primary"
               size="medium"
-              style={{ marginLeft: "1rem", width: "1.3rem" }}
+              style={{
+                marginLeft: normalizeValue(1),
+                width: normalizeValue(1.3),
+              }}
             />
           </a>
         )}

@@ -45,6 +45,7 @@ import * as T from "./types";
 import * as S from "./styles";
 
 import { defaulIntrotStyles } from "@/styles/introStyles";
+import { normalizeValue } from "@/utils/normalize";
 
 export const WalletsTemplate = () => {
   const router = useRouter();
@@ -229,7 +230,13 @@ export const WalletsTemplate = () => {
                           <Keyboard color="primary" />
                         </S.LoadingWrapper>
                       ) : !tradeAccounts?.length ? (
-                        <div style={{ padding: "4rem 2rem" }}>
+                        <div
+                          style={{
+                            padding: `${normalizeValue(4)} ${normalizeValue(
+                              2
+                            )}`,
+                          }}
+                        >
                           <Empty
                             title={t("noTradingAccountTitle")}
                             description={t("noTradingAccountDescription")}
@@ -421,7 +428,13 @@ export const WalletsTemplate = () => {
                           <Keyboard color="primary" />
                         </S.LoadingWrapper>
                       ) : !controllerWallets?.length ? (
-                        <div style={{ padding: "4rem 2rem" }}>
+                        <div
+                          style={{
+                            padding: `${normalizeValue(4)} ${normalizeValue(
+                              2
+                            )}`,
+                          }}
+                        >
                           <Empty
                             title={t("noWalletFoundTitle")}
                             description={t("noWalletFoundDescription")}

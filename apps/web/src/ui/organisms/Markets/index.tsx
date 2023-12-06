@@ -24,6 +24,7 @@ import { ORDERBOOK_PRECISION } from "@orderbook/core/constants";
 import * as S from "./styles";
 
 import { ArrowBottom } from "@/ui/atoms/Icons";
+import { normalizeValue } from "@/utils/normalize";
 
 type Props = {
   hasMargin?: boolean;
@@ -278,6 +279,6 @@ type SkeletonProps = {
 };
 
 export const MarketsSkeleton = ({
-  height = "5.2rem",
-  width = "27rem",
+  height = normalizeValue(5.2),
+  width = normalizeValue(27),
 }: SkeletonProps) => <Skeleton height={height} width={width} />;

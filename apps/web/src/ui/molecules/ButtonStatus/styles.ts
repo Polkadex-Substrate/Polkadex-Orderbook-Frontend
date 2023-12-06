@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.button<{
   isSell?: boolean;
   isSuccess?: boolean;
@@ -12,13 +14,17 @@ export const Wrapper = styled.button<{
     align-items: center;
     background: ${isSell ? theme.colors.primary : theme.colors.green};
     color: ${theme.colors.white};
-    padding: 1rem;
-    border-radius: 1rem;
+    padding: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(1)};
     font-weight: 500;
     width: 100%;
     transition:
       transform 0.2s ease,
       background 0.3s ease;
+    svg {
+      width: 100%;
+      height: 100%;
+    }
     &:disabled {
       background: ${theme.colors.primaryBackground};
       color: ${theme.colors.text};
@@ -28,17 +34,17 @@ export const Wrapper = styled.button<{
       }
     }
     &:active {
-      transform: translateY(0.2rem);
+      transform: translateY(${normalizeValue(0.2)});
     }
 
     span {
       display: inline-block;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 1rem;
+      width: ${normalizeValue(2)};
+      height: ${normalizeValue(2)};
+      border-radius: ${normalizeValue(1)};
       position: relative;
       overflow: hidden;
-      background: ${isLoading ? "white" : "transaparent"};
+      background: ${isLoading ? "white" : "transparent"};
       &:before {
         content: "";
         left: 0;
@@ -54,15 +60,15 @@ export const Wrapper = styled.button<{
       }
       svg {
         position: absolute;
-        width: 1.2rem;
-        height: 1.2rem;
+        width: ${normalizeValue(1.2)};
+        height: ${normalizeValue(1.2)};
         left: 50%;
         top: 50%;
-        margin: -0.6rem 0 0 -0.6rem;
+        margin: ${normalizeValue(-0.6)} 0 0 ${normalizeValue(-0.6)};
         z-index: 1;
         &:nth-child(1) {
-          width: 2rem;
-          height: 2rem;
+          width: ${normalizeValue(2)};
+          height: ${normalizeValue(2)};
           top: 0;
           left: 0;
           fill: none;
@@ -79,7 +85,7 @@ export const Wrapper = styled.button<{
         &:nth-child(2) {
           fill: ${theme.colors.primary};
           transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          transform: translateY(2rem);
+          transform: translateY(${normalizeValue(2)});
         }
       }
     }
@@ -88,13 +94,13 @@ export const Wrapper = styled.button<{
       position: relative;
       z-index: -1;
       list-style: none;
-      height: 1.4rem;
-      width: 10rem;
+      height: ${normalizeValue(1.4)};
+      width: ${normalizeValue(10)};
       display: inline-block;
       transform-style: preserve-3d;
       transition: transform 0.3s ease;
       flex: 1;
-      margin-right: 2rem;
+      margin-right: ${normalizeValue(2)};
       li {
         position: absolute;
         top: 0;
@@ -104,13 +110,13 @@ export const Wrapper = styled.button<{
         backface-visibility: hidden;
         transform-origin: 50% 50%;
         &:nth-child(1) {
-          transform: rotateX(0deg) translateZ(1rem);
+          transform: rotateX(0deg) translateZ(${normalizeValue(1)});
         }
         &:nth-child(2) {
-          transform: rotateX(-90deg) translateZ(1rem);
+          transform: rotateX(-90deg) translateZ(${normalizeValue(1)});
         }
         &:nth-child(3) {
-          transform: rotateX(-180deg) translateZ(1rem);
+          transform: rotateX(-180deg) translateZ(${normalizeValue(1)});
         }
       }
     }

@@ -1,12 +1,15 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 // Order Box
 
 export const WrapperOrder = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackground};
-    border-radius: 0 2rem 2rem 2rem;
-    padding: 1rem;
+    border-radius: 0 ${normalizeValue(2)} ${normalizeValue(2)}
+      ${normalizeValue(2)};
+    padding: ${normalizeValue(1)};
   `}
 `;
 
@@ -14,23 +17,23 @@ export const ContainerWallet = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: ${normalizeValue(2)};
 `;
 
 export const WrapperBalance = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 1rem;
+  margin-left: ${normalizeValue(1)};
   small {
-    font-size: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
     color: #8ba1be;
   }
 `;
 export const Span = styled.span`
-  font-size: 1.5rem;
+  font-size: ${normalizeValue(1.5)};
   font-weight: bold;
   word-break: break-word;
-  margin-top: 0.3rem;
+  margin-top: ${normalizeValue(0.3)};
 `;
 export const ContainerForm = styled.div``;
 export const WrapperActions = styled.div`
@@ -38,10 +41,10 @@ export const WrapperActions = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: ${normalizeValue(1.2)};
 `;
 export const RangeWrapper = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: ${normalizeValue(1)};
 `;
 
 export const SliderWrapper = styled.div`
@@ -49,10 +52,10 @@ export const SliderWrapper = styled.div`
     background: ${theme.colors.tertiaryBackground};
     display: grid;
     grid-template-columns: auto auto auto auto;
-    padding: 0.2rem;
-    column-gap: 0.5rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
+    padding: ${normalizeValue(0.2)};
+    column-gap: ${normalizeValue(0.5)};
+    border-radius: ${normalizeValue(0.5)};
+    margin-bottom: ${normalizeValue(1)};
   `}
 `;
 
@@ -60,10 +63,11 @@ export const Connect = styled.div`
   ${({ theme }) => css`
     cursor: pointer;
     display: block;
+    font-size: ${normalizeValue(1.3)};
     background: ${theme.colors.primaryBackground};
     color: ${theme.colors.text};
-    padding: 1rem;
-    border-radius: 1rem;
+    padding: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(1)};
     font-weight: 500;
     width: 100%;
     text-align: center;
@@ -76,13 +80,13 @@ export const Connect = styled.div`
 `;
 
 export const ProtectPassword = styled.div`
-  padding: 0.5rem 0 1rem 0;
+  padding: ${normalizeValue(0.5)} 0 ${normalizeValue(1)} 0;
 `;
 export const ProtectPasswordTitle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: ${normalizeValue(1.5)};
   span {
     display: block;
     font-weight: 500;
@@ -98,11 +102,11 @@ export const ProtectPasswordContent = styled.div`
 
 export const Show = styled.button`
   ${({ theme }) => css`
-    width: 2.2rem;
-    height: 2.2rem;
-    padding: 0.3rem;
+    width: ${normalizeValue(2.2)};
+    height: ${normalizeValue(2.2)};
+    padding: ${normalizeValue(0.3)};
     transition: background 0.5s ease-in;
-    border-radius: 10rem;
+    border-radius: ${normalizeValue(10)};
     &:hover {
       background: ${theme.colors.secondaryBackground};
     }
@@ -117,7 +121,7 @@ export const Error = styled.div<{ hasError: boolean }>`
     position: relative;
     display: ${hasError ? "inline-block" : "none"};
     border-bottom: 1px dotted black;
-    top: -2.2rem;
+    top: ${normalizeValue(-2.2)};
     left: 15%;
     font-weight: 500;
   `}
@@ -151,7 +155,7 @@ export const ErrorText = styled.span`
 `;
 
 export const ButtonSkeletonWrapper = styled.div`
-  border-radius: 1rem;
-  margin-inline: 0.3rem;
+  border-radius: ${normalizeValue(1)};
+  margin-inline: ${normalizeValue(0.3)};
   overflow: hidden;
 `;

@@ -15,6 +15,8 @@ import { TransactionsSkeleton } from "../Transactions";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 type Props = {
   filters: Ifilters;
   onHideTransactionDropdown: (v: boolean) => void;
@@ -68,7 +70,7 @@ export const TradeHistory = ({
               height={300}
               loader={
                 <S.Loader>
-                  <LoadingSpinner size="2rem" />
+                  <LoadingSpinner size={normalizeValue(2)} />
                 </S.Loader>
               }
             >

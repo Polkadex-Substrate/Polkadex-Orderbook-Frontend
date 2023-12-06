@@ -1,10 +1,13 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Content = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
     flex: 1;
+    font-size: ${normalizeValue(1.3)};
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
   `}
 `;
@@ -12,11 +15,12 @@ export const Content = styled.div`
 export const Form = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  max-width: 100rem;
-  padding: 2rem;
+  gap: ${normalizeValue(2)};
+  max-width: ${normalizeValue(100)};
+  padding: ${normalizeValue(2)};
   @media screen and (min-width: 1110px) {
-    padding: 2rem 4rem 4rem 4rem;
+    padding: ${normalizeValue(2)} ${normalizeValue(4)} ${normalizeValue(4)}
+      ${normalizeValue(4)};
   }
 `;
 

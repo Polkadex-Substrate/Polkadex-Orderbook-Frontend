@@ -1,11 +1,15 @@
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
+
+import { normalizeValue } from "@/utils/normalize";
+
 export const Tr = styled.tr`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 1.2rem;
-    margin-bottom: 1.2rem;
-    border-radius: 0 1rem 1rem 1rem;
+    padding: ${normalizeValue(1.2)};
+    margin-bottom: ${normalizeValue(1.2)};
+    border-radius: 0 ${normalizeValue(1)} ${normalizeValue(1)}
+      ${normalizeValue(1)};
     &:nth-child(even) {
       background: ${theme.colors.tertiaryBackgroundOpacity};
     }
@@ -15,22 +19,22 @@ export const Td = styled.td``;
 export const ContainerFlex = styled.div`
   display: flex;
   align-items: center;
-  padding-block: 0.6rem;
+  padding-block: ${normalizeValue(0.6)};
 `;
 
 export const Image = styled.div<{ isSell?: boolean }>`
   ${({ theme, isSell }) => css`
-    width: 2.5rem;
-    height: 2.5rem;
+    width: ${normalizeValue(2.5)};
+    height: ${normalizeValue(2.5)};
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid ${theme.colors.secondaryBackground};
-    border-radius: 30rem;
-    margin-right: 0.5rem;
+    border-radius: ${normalizeValue(38)};
+    margin-right: ${normalizeValue(0.5)};
     svg {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: ${normalizeValue(1.5)};
+      height: ${normalizeValue(1.5)};
       fill: ${isSell ? theme.colors.primary : theme.colors.green};
     }
   `}
@@ -38,7 +42,7 @@ export const Image = styled.div<{ isSell?: boolean }>`
 
 export const Tag = styled.span`
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: ${normalizeValue(1)};
   display: none;
   opacity: 0.5;
   ${media.lessThan("large")`

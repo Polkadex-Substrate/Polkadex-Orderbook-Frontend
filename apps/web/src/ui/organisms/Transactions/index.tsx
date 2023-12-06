@@ -29,6 +29,8 @@ import { Ifilters } from "@orderbook/core/providers/types";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const initialFilters: Ifilters = {
   hiddenPairs: false,
   onlyBuy: false,
@@ -222,11 +224,11 @@ export const Transactions = ({ market }: Props) => {
 export const TransactionsSkeleton = () => {
   return (
     <S.SkeletonWrapper>
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={normalizeValue(5)} />
+      <Skeleton width={"100%"} height={normalizeValue(5)} />
+      <Skeleton width={"100%"} height={normalizeValue(5)} />
+      <Skeleton width={"100%"} height={normalizeValue(5)} />
+      <Skeleton width={"100%"} height={normalizeValue(5)} />
     </S.SkeletonWrapper>
   );
 };

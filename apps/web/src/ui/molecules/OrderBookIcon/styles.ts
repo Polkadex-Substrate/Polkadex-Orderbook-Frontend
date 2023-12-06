@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 
 import { OrderBookProps } from ".";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div<Partial<OrderBookProps>>`
   ${({ active, theme }) => css`
     display: flex;
@@ -9,10 +11,10 @@ export const Wrapper = styled.div<Partial<OrderBookProps>>`
     justify-content: center;
     cursor: pointer;
     background: ${active ? theme.colors.text : theme.colors.primaryBackground};
-    height: 2rem;
-    width: 2rem;
+    height: ${normalizeValue(2)};
+    width: ${normalizeValue(2)};
     padding: ${theme.spacings.xxxsmall};
-    border-radius: 0.5rem;
+    border-radius: ${normalizeValue(0.5)};
     img {
       width: 100%;
       height: 100%;

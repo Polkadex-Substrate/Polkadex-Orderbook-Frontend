@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div``;
 
 // Table Styles
@@ -9,20 +11,20 @@ export const Table = styled.table`
   text-align: left;
 `;
 export const Thead = styled.thead`
-  font-size: 1.2rem;
+  font-size: ${normalizeValue(1.2)};
   color: #8ba1be;
   tr {
     display: grid;
     grid-template-columns: 1fr 1.5fr repeat(3, 1fr);
-    margin-bottom: 1rem;
-    padding: 0 1rem;
+    margin-bottom: ${normalizeValue(1)};
+    padding: 0 ${normalizeValue(1)};
   }
 `;
 export const Tbody = styled.tbody`
-  font-size: 1.3rem;
+  font-size: ${normalizeValue(1.3)};
 
   ${media.greaterThan("large")`
-    height: 32rem;
+    height: ${normalizeValue(32)};
     display: block;
     overflow-y: auto;
   `}
@@ -32,8 +34,8 @@ export const Tbody = styled.tbody`
     align-items: center;
     ${media.lessThan("large")`
       grid-template-columns: repeat(4,1fr);
-      grid-row-gap: 2rem;
-      grid-column-gap: 1rem;
+      grid-row-gap: ${normalizeValue(2)};
+      grid-column-gap: ${normalizeValue(1)};
     `}
   }
 `;
@@ -46,7 +48,7 @@ export const Th = styled.th`
   `}
 `;
 export const EmptyWrapper = styled.div`
-  padding: 10rem 0;
+  padding: ${normalizeValue(10)} 0;
 `;
 
 export const Loader = styled.div`
@@ -64,7 +66,7 @@ export const ErrorWrapper = styled.div`
     padding-top: 8px;
     p {
       font-weight: 500;
-      margin-bottom: 0.8rem;
+      margin-bottom: ${normalizeValue(0.8)};
       color: ${theme.colors.red};
     }
     button {

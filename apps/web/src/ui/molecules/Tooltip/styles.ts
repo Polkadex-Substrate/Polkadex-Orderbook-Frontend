@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 
 import * as T from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const directionModifier = {
   top: () => css`
     bottom: calc(100% + 0.4em);
@@ -51,8 +53,8 @@ export const Content = styled.div<Partial<T.TooltipContentProps>>`
     position: absolute;
     background: ${theme.colors[background]};
     box-shadow: ${theme.shadows.tertiary};
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+    padding: ${normalizeValue(0.5)};
+    border-radius: ${normalizeValue(0.5)};
     min-width: ${minWidth};
     /* white-space: nowrap; */
     animation: fadeIn ease-in-out 0.4s;

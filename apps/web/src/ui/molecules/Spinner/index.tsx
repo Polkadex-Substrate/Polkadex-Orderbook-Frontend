@@ -3,7 +3,13 @@ import { PropsWithChildren } from "react";
 import * as S from "./styles";
 import { Props } from "./types";
 
-export const Spinner = ({ color = "text", size = "1rem", ...props }: Props) => (
+import { normalizeValue } from "@/utils/normalize";
+
+export const Spinner = ({
+  color = "text",
+  size = normalizeValue(1),
+  ...props
+}: Props) => (
   <S.Wrapper {...props}>
     <S.Container color={color} size={size} aria-hidden="true"></S.Container>
   </S.Wrapper>
@@ -11,7 +17,7 @@ export const Spinner = ({ color = "text", size = "1rem", ...props }: Props) => (
 
 export const LoadingSpinner = ({
   color = "text",
-  size = "1rem",
+  size = normalizeValue(1),
   loading = true,
   children,
   ...props

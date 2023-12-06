@@ -20,6 +20,7 @@ import * as T from "./types";
 
 import { Loading, Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
+import { normalizeValue } from "@/utils/normalize";
 
 const initialValues = { amount: 0.0 };
 
@@ -116,7 +117,7 @@ export const TransferFormDeposit = ({
 
   return (
     <Loading
-      style={{ maxWidth: "100rem" }}
+      style={{ maxWidth: normalizeValue(100) }}
       isVisible={loading}
       hasBg={false}
       message=""

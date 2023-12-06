@@ -1,3 +1,9 @@
+import { normalizeValue } from "@/utils/normalize";
+
 export const Footer = ({ children }) => {
-  return <div style={{ padding: "1rem 2rem" }}>{children}</div>;
+  return (
+    <div style={{ padding: `${normalizeValue(1)} ${normalizeValue(2)}` }}>
+      {children}
+    </div>
+  );
 };

@@ -1,13 +1,15 @@
 import styled, { css } from "styled-components";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.div`
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-gap: 1.5rem;
+  grid-gap: ${normalizeValue(1.5)};
   align-items: center;
   &:not(:last-child) {
-    margin-bottom: 2rem;
+    margin-bottom: ${normalizeValue(2)};
   }
 `;
 
@@ -15,15 +17,15 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   span {
-    font-weight: 550;
+    font-weight: 600;
   }
   p {
-    margin-top: 0.5rem;
+    margin-top: ${normalizeValue(0.5)};
     line-height: 1.3;
     opacity: 0.6;
   }
   ${Icon} {
-    margin-right: 1rem;
+    margin-right: ${normalizeValue(1)};
   }
 `;
 
@@ -32,10 +34,10 @@ export const Switch = styled.div<{ isActive?: boolean; disable: boolean }>`
     background: ${isActive
       ? theme.colors.primary
       : theme.colors.secondaryBackground};
-    padding: 0.2rem;
-    border-radius: 10rem;
-    min-width: 3.5rem;
-    height: 2rem;
+    padding: ${normalizeValue(0.2)};
+    border-radius: ${normalizeValue(10)};
+    min-width: ${normalizeValue(3.5)};
+    height: ${normalizeValue(2)};
     position: relative;
     cursor: ${disable ? "not-allowed" : "pointer"};
     transition: background-color 0.2s ease-in-out;
@@ -55,11 +57,11 @@ export const Switch = styled.div<{ isActive?: boolean; disable: boolean }>`
             left: 0;
           `}
 
-      margin: 0 0.3rem;
+      margin: 0 ${normalizeValue(0.3)};
       background: ${theme.colors.white};
-      width: 1.4rem;
-      height: 1.4rem;
-      border-radius: 10rem;
+      width: ${normalizeValue(1.4)};
+      height: ${normalizeValue(1.4)};
+      border-radius: ${normalizeValue(10)};
     }
   `}
 `;

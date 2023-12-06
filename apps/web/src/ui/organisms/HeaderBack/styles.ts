@@ -2,20 +2,22 @@ import styled, { css } from "styled-components";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 import { Wrapper as SwitchWrapper } from "@polkadex/orderbook-ui/molecules/ThemeSwitch/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.header`
   ${({ theme }) => css`
     position: fixed;
     width: 100%;
     background: ${theme.colors.gradientBackground};
     box-shadow: ${theme.shadows.primary};
-    padding: 0.5rem 1rem;
+    padding: ${normalizeValue(0.5)} ${normalizeValue(1)};
     z-index: ${theme.layers.alwaysOnTop};
-    max-height: 4.9rem;
+    max-height: ${normalizeValue(4.9)};
   `}
 `;
 
 export const Container = styled.div`
-  max-width: 140rem;
+  max-width: ${normalizeValue(140)};
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -31,7 +33,7 @@ export const Column = styled.div`
     flex-direction: row;
     align-items: center;
     ${SwitchWrapper} {
-      margin-right: 0.5rem;
+      margin-right: ${normalizeValue(0.5)};
     }
   }
 `;
@@ -49,10 +51,10 @@ export const HeaderBack = styled.div`
           transform: translateX(0);
         }
         50% {
-          transform: translateX(0.5rem);
+          transform: translateX${normalizeValue(0.5)};);
         }
         100% {
-          transform: translateX(0rem);
+          transform: translateX(0);
         }
       }
     }
@@ -62,8 +64,8 @@ export const HeaderBack = styled.div`
 export const HeaderBackContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: 2rem 0;
-  gap: 1rem;
+  padding: ${normalizeValue(2)} 0;
+  gap: ${normalizeValue(1)};
   cursor: pointer;
   transition: opacity 0.5s ease-in-out;
 `;

@@ -8,6 +8,8 @@ import { defaultTicker } from "@orderbook/core/constants";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 type Props = {
   onOpenMarkets: () => void;
   market: string;
@@ -88,7 +90,7 @@ export const Navbar = ({ onOpenMarkets, market }: Props) => {
           )}
 
           {isLoading ? (
-            <InfoSkeleton width="11rem" />
+            <InfoSkeleton width={normalizeValue(11)} />
           ) : (
             <NavbarItem
               label={t("volume24hr", {
@@ -103,7 +105,7 @@ export const Navbar = ({ onOpenMarkets, market }: Props) => {
           <S.WrapperVolume>
             <S.ContainerVolume>
               {isLoading ? (
-                <InfoSkeleton width="11rem" />
+                <InfoSkeleton width={normalizeValue(11)} />
               ) : (
                 <>
                   <S.VolumeHigh>
@@ -130,8 +132,8 @@ type SkeletonProps = {
 };
 
 export const InfoSkeleton = ({
-  height = "4rem",
-  width = "7rem",
+  height = normalizeValue(4),
+  width = normalizeValue(7),
 }: SkeletonProps) => (
   <Skeleton style={{ marginBlock: 4 }} height={height} width={width} />
 );

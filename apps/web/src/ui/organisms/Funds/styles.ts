@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   overflow-x: auto;
 `;
@@ -11,20 +13,20 @@ export const Table = styled.table`
   text-align: left;
 `;
 export const Thead = styled.thead`
-  font-size: 1.2rem;
+  font-size: ${normalizeValue(1.2)};
   color: #8ba1be;
   tr {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    margin-bottom: 1rem;
-    padding: 0 1rem;
+    margin-bottom: ${normalizeValue(1)};
+    padding: 0 ${normalizeValue(1)};
   }
 `;
 export const Tbody = styled.tbody`
-  font-size: 1.3rem;
+  font-size: ${normalizeValue(1.3)};
 
   ${media.greaterThan("large")`
-    height: 32rem;
+    height: ${normalizeValue(32)};
     display: block;
     overflow-y: auto;
   `}
@@ -34,8 +36,8 @@ export const Tbody = styled.tbody`
     align-items: center;
     ${media.lessThan("large")`
       grid-template-columns: repeat(3,1fr);
-      grid-row-gap: 2rem;
-      grid-column-gap: 1rem;
+      grid-row-gap: ${normalizeValue(2)};
+      grid-column-gap: ${normalizeValue(1)};
     `}
   }
 `;
@@ -51,12 +53,12 @@ export const Th = styled.th`
   `}
 `;
 export const EmptyWrapper = styled.div`
-  padding: 10rem 0;
+  padding: ${normalizeValue(10)} 0;
 `;
 
 export const Column = styled.div`
   ${({ theme }) => css`
-    font-size: 1.2rem;
+    font-size: ${normalizeValue(1.2)};
     font-weight: 500;
     color: ${theme.colors.tertiaryText};
   `}
@@ -67,8 +69,9 @@ export const Cell = styled.div`
     display: inline-block;
     vertical-align: middle;
     font-weight: 500;
+    font-size: ${normalizeValue(1.3)};
     small {
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
       color: ${theme.colors.tertiaryText};
     }
   `}
@@ -77,7 +80,7 @@ export const Cell = styled.div`
 export const CellFlex = styled.div`
   display: flex;
   align-items: center;
-  padding-left: 1rem;
+  padding-left: ${normalizeValue(1)};
 `;
 
 export const TokenIcon = styled.div`
@@ -86,36 +89,41 @@ export const TokenIcon = styled.div`
     align-items: center;
     justify-content: center;
     border: 1px solid ${theme.colors.secondaryBackground};
-    border-radius: 5rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    margin-right: 0.3rem;
+    border-radius: ${normalizeValue(5)};
+    width: ${normalizeValue(2.5)};
+    height: ${normalizeValue(2.5)};
+    margin-right: ${normalizeValue(0.3)};
     background: ${theme.colors.primaryBackground};
   `}
 `;
 export const Actions = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 export const Link = styled.div`
   ${({ theme }) => css`
-    padding: 0.2rem 0.4rem;
-    font-size: 1.3rem;
+    padding: ${normalizeValue(0.2)} ${normalizeValue(0.4)};
+    font-size: ${normalizeValue(1.3)};
     transition: background 0.4s ease-in-out;
     border: 1px solid ${theme.colors.secondaryBackground};
     cursor: pointer;
-    padding: 0.5rem 0.8rem;
+    padding: ${normalizeValue(0.5)} ${normalizeValue(0.8)};
   `}
 `;
 
-export const WithdrawLink = styled(Link)``;
-export const DepositLink = styled(Link)``;
+export const WithdrawLink = styled(Link)`
+  font-size: ${normalizeValue(1.3)};
+`;
+export const DepositLink = styled(Link)`
+  font-size: ${normalizeValue(1.3)};
+`;
 
 export const TransferLink = styled(Link)`
   ${({ theme }) => css`
     background: ${theme.colors.primary};
     color: ${theme.colors.white};
+    font-size: ${normalizeValue(1.3)};
     &:hover {
       background-color: ${theme.colors.primary}88;
     }
@@ -123,11 +131,11 @@ export const TransferLink = styled(Link)`
 `;
 
 export const Icon = styled.div`
-  width: 1.5rem;
-  height: 1.5rem;
+  width: ${normalizeValue(1.5)};
+  height: ${normalizeValue(1.5)};
   display: inline-block;
   vertical-align: middle;
-  margin-right: 0.5rem;
+  margin-right: ${normalizeValue(0.5)};
 `;
 
 export const TooltipMessage = styled.div`
@@ -139,6 +147,6 @@ export const TooltipMessage = styled.div`
 
 export const SkeletonWrapper = styled.div`
   div {
-    margin-block: 1rem;
+    margin-block: ${normalizeValue(1)};
   }
 `;

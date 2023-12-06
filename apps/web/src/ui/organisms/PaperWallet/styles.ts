@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
 export const Wrapper = styled.div`
   min-width: 100vw;
   min-height: 100vh;
@@ -10,7 +11,7 @@ export const Wrapper = styled.div`
 
 export const Container = styled.div`
   ${({ theme }) => css`
-    max-width: 200rem;
+    max-width: ${normalizeValue(200)};
     /* border: 1px solid ${theme.colors.secondaryBackground}; */
     svg {
       fill: white;
@@ -19,6 +20,6 @@ export const Container = styled.div`
 `;
 
 export const Text = styled.text`
-  font-size: 1.05rem;
-  font-weight: 550;
+  font-size: ${normalizeValue(1.05)};
+  font-weight: 600;
 `;

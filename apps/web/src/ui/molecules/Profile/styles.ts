@@ -2,14 +2,16 @@ import styled, { css } from "styled-components";
 
 import { Wrapper as IconWrapper } from "../Icon/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div<{ isFull: boolean }>`
   ${({ theme, isFull = false }) => css`
     display: flex;
     align-items: center;
     background: ${theme.colors.white};
     color: ${theme.colors.inverse};
-    border-radius: 0.8rem;
-    padding: 0.4rem;
+    border-radius: ${normalizeValue(0.8)};
+    padding: ${normalizeValue(0.4)};
     ${isFull &&
     css`
       flex: 1;
@@ -21,7 +23,7 @@ export const AccountInfo = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-left: 0.5rem;
+  margin-left: ${normalizeValue(0.5)};
   flex: 1;
 
   span {
@@ -31,7 +33,7 @@ export const AccountInfo = styled.div`
 
 export const AccountInfoHeader = styled.div`
   ${({ theme }) => css`
-    margin-right: 1rem;
+    margin-right: ${normalizeValue(1)};
     p,
     span {
       color: ${theme.colors.black};
@@ -43,7 +45,7 @@ export const AccountInfoHeader = styled.div`
     }
     span {
       display: block;
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
     }
   `}
 `;
@@ -58,10 +60,10 @@ export const SelectAccountTitle = styled.div`
   display: flex;
   align-items: center;
   ${IconWrapper} {
-    margin-right: 0.2rem;
+    margin-right: ${normalizeValue(0.2)};
   }
   p {
-    max-width: 30rem;
+    max-width: ${normalizeValue(38)};
   }
 `;
 export const SelectAccountHeaderWrapper = styled.div`
@@ -78,7 +80,7 @@ export const SelectAccountHeader = styled(AccountInfoHeader)`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: 30rem;
+    max-width: ${normalizeValue(38)};
   }
   span,
   p {
@@ -90,7 +92,7 @@ export const AccountContent = styled.div<{ isFull?: boolean }>`
   ${({ theme, isFull = false }) => css`
     background: ${theme.colors.white};
     clor: ${theme.colors.black};
-    border-radius: 1rem;
+    border-radius: ${normalizeValue(1)};
     box-shadow: ${theme.shadows.primary};
     ${isFull &&
     css`
@@ -104,8 +106,8 @@ export const AccountContentHeader = styled.div`
     background: ${theme.colors.secondaryBackgroundOpacity};
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     border-top: 1px solid ${theme.colors.secondaryBackgroundOpacity};
-    padding: 1rem;
-    margin: 1rem 0;
+    padding: ${normalizeValue(1)};
+    margin: ${normalizeValue(1)} 0;
   `}
 `;
 
@@ -114,15 +116,15 @@ export const AccountContentInfo = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    margin-bottom: ${normalizeValue(0.5)};
     span {
       display: block;
       opacity: 0.6;
-      font-size: 1.2rem;
+      font-size: ${normalizeValue(1.2)};
       white-space: nowrap;
     }
     a {
-      margin-left: 0.2rem;
+      margin-left: ${normalizeValue(0.2)};
       display: inline-block;
       opacity: 1;
       transition: opacity 0.5s;
@@ -131,18 +133,18 @@ export const AccountContentInfo = styled.div`
       }
     }
     ${IconWrapper} {
-      margin-left: 0.5rem;
+      margin-left: ${normalizeValue(0.5)};
     }
   }
   &:last-child {
-    margin-top: 0.8rem;
-    font-size: 1.2rem;
+    margin-top: ${normalizeValue(0.8)};
+    font-size: ${normalizeValue(1.2)};
     p {
       opacity: 0.6;
       display: inline-block;
     }
     a {
-      margin-left: 0.5rem;
+      margin-left: ${normalizeValue(0.5)};
       text-decoration: underline;
       cursor: pointer;
       opacity: 1;
@@ -152,25 +154,25 @@ export const AccountContentInfo = styled.div`
       }
     }
     ${IconWrapper} {
-      margin-right: 0.5rem;
+      margin-right: ${normalizeValue(0.5)};
     }
   }
 `;
 
 export const AccountContentSection = styled.div`
-  padding: 1rem;
+  padding: ${normalizeValue(1)};
   a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    margin-bottom: ${normalizeValue(0.5)};
     opacity: 1;
     transition: opacity 0.5s;
     &:hover {
       opacity: 0.6;
     }
     &:not(:last-child) {
-      margin-bottom: 1rem;
+      margin-bottom: ${normalizeValue(1)};
     }
   }
 `;
@@ -187,9 +189,9 @@ export const AvatarWrapper = styled.div``;
 
 export const SelectAccountWrapper = styled.div<{ isFull?: boolean }>`
   ${({ theme, isFull }) => css`
-    min-width: 22rem;
+    min-width: ${normalizeValue(22)};
     background: ${theme.colors.white};
-    border-radius: 1rem;
+    border-radius: ${normalizeValue(1)};
     overflow: hidden;
     ${isFull &&
     css`
@@ -206,18 +208,18 @@ export const SelectAccount = styled.div<{
   ${({ theme, isActive, isHeader, isHoverable }) => css`
     display: flex;
     align-items: center;
-    padding: ${isHeader ? "0.8rem" : "0.6rem"};
+    padding: ${isHeader ? normalizeValue(0.6) : normalizeValue(0.6)};
     cursor: pointer;
     transition: background 0.5s;
     border: 1px solid ${theme.colors.secondaryBackground};
-    border-radius: 1rem;
+    border-radius: ${normalizeValue(1)};
     &:hover {
       background: ${isHoverable
         ? theme.colors.secondaryBackgroundOpacity
         : "inherit"};
     }
     &:not(:last-child) {
-      margin-bottom: 0.5rem;
+      margin-bottom: ${normalizeValue(0.5)};
     }
     ${isActive &&
     css`
@@ -231,8 +233,8 @@ export const Content = styled.div<{ hasUser?: boolean }>`
     ${hasUser &&
     css`
       background: ${theme.colors.secondaryBackgroundSolid};
-      min-width: 35rem;
-      border-radius: 1.5rem;
+      min-width: ${normalizeValue(35)};
+      border-radius: ${normalizeValue(1.5)};
       transition: height 400ms ease;
       border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     `}

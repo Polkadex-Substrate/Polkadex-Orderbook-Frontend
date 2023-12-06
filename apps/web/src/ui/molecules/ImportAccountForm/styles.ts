@@ -1,18 +1,20 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: ${normalizeValue(1.5)};
 `;
 
 export const Container = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.tertiaryBackgroundOpacity};
-    padding: 1.5rem;
-    border-radius: 0.4rem;
+    padding: ${normalizeValue(1.5)};
+    border-radius: ${normalizeValue(0.4)};
     span {
-      font-size: 1.2rem;
+      font-size: ${normalizeValue(1.2)};
       color: ${theme.colors.tertiaryText};
     }
   `}
@@ -21,13 +23,13 @@ export const Container = styled.div`
 export const Method = styled(Container)`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   div {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     input {
-      margin-right: 0.5rem;
+      margin-right: ${normalizeValue(0.5)};
     }
     label {
       &:last-child {
@@ -41,7 +43,7 @@ export const Words = styled(Container)<{ hasError?: boolean }>`
   ${({ theme, hasError }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: ${normalizeValue(1.5)};
     border: 1px solid ${hasError ? theme.colors.red : "inherit"};
   `}
 `;
@@ -49,12 +51,12 @@ export const WordsWrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     div {
-      width: 1.5rem;
-      height: 1.5rem;
-      padding: 0.3rem;
-      border-radius: 10rem;
+      width: ${normalizeValue(1.5)};
+      height: ${normalizeValue(1.5)};
+      padding: ${normalizeValue(0.3)};
+      border-radius: ${normalizeValue(10)};
       background: ${theme.colors.secondaryBackground};
       svg {
         fill: ${theme.colors.tertiaryText};
@@ -68,10 +70,10 @@ export const WordsContainer = styled.div`
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     div {
-      padding: 0.3rem 0.5rem;
-      border-radius: 0.5rem;
+      padding: ${normalizeValue(0.3)} ${normalizeValue(0.5)};
+      border-radius: ${normalizeValue(0.5)};
       border: 1px solid ${theme.colors.secondaryBackground};
       width: fit-content;
     }
@@ -83,8 +85,8 @@ export const WordsContainer = styled.div`
 `;
 export const WorrdsFooter = styled.button`
   ${({ theme }) => css`
-    margin-top: 1rem;
-    font-size: 1.2rem;
+    margin-top: ${normalizeValue(1)};
+    font-size: ${normalizeValue(1.2)};
     text-align: center;
     color: ${theme.colors.tertiaryText};
   `}
@@ -93,7 +95,7 @@ export const WorrdsFooter = styled.button`
 export const WalletName = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const WalletNameWrapper = styled(Container)`
@@ -104,7 +106,7 @@ export const WalletNameWrapper = styled(Container)`
     div {
       display: flex;
       flex-direction: column;
-      gap: 0.7rem;
+      gap: ${normalizeValue(0.7)};
       flex: 1;
     }
     input {
@@ -112,10 +114,10 @@ export const WalletNameWrapper = styled(Container)`
     }
     button {
       background: ${theme.colors.secondaryBackgroundOpacity};
-      border-radius: 0.3rem;
-      padding: 0.5rem;
+      border-radius: ${normalizeValue(0.3)};
+      padding: ${normalizeValue(0.5)};
       font-weight: 500;
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
       transition: background-color 0.4s ease-in-out;
       &:hover {
         background: ${theme.colors.secondaryBackground};
@@ -130,7 +132,7 @@ export const WalletError = styled.div<{ isNegative?: boolean }>`
     justify-content: space-between;
     small,
     strong {
-      font-size: 1.2rem;
+      font-size: ${normalizeValue(1.2)};
     }
     small {
       align-self: flex-end;
@@ -148,19 +150,19 @@ export const WalletError = styled.div<{ isNegative?: boolean }>`
 export const Password = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
 `;
 
 export const PasswordWrapper = styled(Container)`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: ${normalizeValue(1.5)};
 `;
 export const PasswordHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
 `;
 
 export const PasswordFooter = styled.div`
@@ -173,7 +175,7 @@ export const PasswordFooter = styled.div`
       width: 100%;
     }
     button {
-      width: 1.5rem;
+      width: ${normalizeValue(1.5)};
       svg {
         fill: ${theme.colors.tertiaryText};
         stroke: ${theme.colors.tertiaryText};
@@ -190,11 +192,11 @@ export const Error = styled.p`
 export const Footer = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     button {
-      border-radius: 0.3rem;
+      border-radius: ${normalizeValue(0.3)};
       font-weight: 500;
-      padding: 1rem;
+      padding: ${normalizeValue(1)};
       &:first-child {
         background: ${theme.colors.secondaryBackground};
       }
@@ -211,7 +213,7 @@ export const Footer = styled.div`
 export const Menmonic = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const Maintenance = styled.div`
@@ -219,10 +221,10 @@ export const Maintenance = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.2rem;
+    gap: ${normalizeValue(0.2)};
     text-align: center;
     img {
-      max-width: 25rem;
+      max-width: ${normalizeValue(25)};
       width: 100%;
     }
     p {
@@ -239,14 +241,14 @@ export const Upload = styled(Container)<{
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.2rem;
+    gap: ${normalizeValue(0.2)};
     text-align: center;
     border: 2px dashed ${theme.colors.secondaryBackground};
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+    padding-top: ${normalizeValue(4)};
+    padding-bottom: ${normalizeValue(4)};
     div {
-      width: 2.5rem;
-      margin-bottom: 1rem;
+      width: ${normalizeValue(2.5)};
+      margin-bottom: ${normalizeValue(1)};
       svg {
         fill: ${theme.colors.tertiaryText};
         stroke: ${theme.colors.tertiaryText};
@@ -254,9 +256,11 @@ export const Upload = styled(Container)<{
     }
     small {
       color: ${theme.colors.red};
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
     }
-
+    p {
+      font-size: ${normalizeValue(1.3)};
+    }
     ${isDragAccept &&
     css`
       border-color: ${theme.colors.green};
@@ -273,11 +277,11 @@ export const File = styled(Container)`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     button {
-      width: 2.5rem;
-      padding: 0.1rem;
-      border-radius: 10rem;
+      width: ${normalizeValue(2.5)};
+      padding: ${normalizeValue(0.1)};
+      border-radius: ${normalizeValue(10)};
       transition: background-color 0.4s ease;
       svg {
         fill: ${theme.colors.text};

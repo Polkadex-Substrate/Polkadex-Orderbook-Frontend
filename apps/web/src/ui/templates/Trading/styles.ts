@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 import { Wrapper as Button } from "@polkadex/orderbook-ui/molecules/Button/styles";
 import { LogoText } from "@polkadex/orderbook-ui/molecules/Logo/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Container = styled.div`
   min-height: 100vh;
 `;
@@ -20,7 +22,7 @@ export const WrapperMain = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   max-width: 1920px;
   margin-left: auto;
   margin-right: auto;
@@ -30,12 +32,12 @@ export const WrapperMain = styled.div`
 export const ContainerMain = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 
-  padding: 0 0.8rem;
+  padding: 0 ${normalizeValue(0.8)};
   flex: 1;
   @media screen and (max-width: 590px) {
-    margin-bottom: 8rem;
+    margin-bottom: ${normalizeValue(8)};
   }
 `;
 
@@ -43,7 +45,7 @@ export const Content = styled.div``;
 export const WrapperGraph = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: ${normalizeValue(0.8)};
   flex: 1;
   overflow: hidden;
   width: 100%;
@@ -59,7 +61,7 @@ export const Header = styled.div`
 export const CenterWrapper = styled.div`
   display: flex;
   width: 100%;
-  gap: 0.8rem;
+  gap: ${normalizeValue(0.8)};
   @media screen and (max-width: 1180px) {
     flex-direction: column;
   }
@@ -71,16 +73,16 @@ export const GraphEpmty = styled.div`
 `;
 
 export const WrapperRight = styled.div`
-  min-width: 28rem;
+  min-width: ${normalizeValue(28)};
   width: 25%;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: ${normalizeValue(0.8)};
   @media screen and (max-width: 1180px) {
     flex-direction: row;
     width: 100%;
-    gap: 1rem;
-    height: 41.4rem;
+    gap: ${normalizeValue(1)};
+    height: 4 ${normalizeValue(1.4)};
   }
   @media screen and (max-width: 750px) {
     flex-direction: column;
@@ -100,17 +102,17 @@ export const Box = styled.div`
     justify-content: space-between;
     align-items: center;
     display: none;
-    padding: 0 1rem;
+    padding: 0 ${normalizeValue(1)};
     ${Button} {
       transition: background-color 0.5s ease-in-out;
-      margin-left: 2rem;
+      margin-left: ${normalizeValue(2)};
     }
     ${Logo} {
-      margin: 1rem 0;
+      margin: ${normalizeValue(1)} 0;
     }
 
     ${Profile} {
-      margin: 1rem 0;
+      margin: ${normalizeValue(1)} 0;
     }
 
     @media screen and (max-width: 800px) {
@@ -140,7 +142,7 @@ export const Logo = styled.div`
 export const Profile = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: ${normalizeValue(0.7)};
   justify-self: flex-end;
   align-self: flex-end;
 `;
