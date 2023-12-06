@@ -22,7 +22,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       const { tradeAddress: _tradeAddress } = payload;
       try {
         const mainAddress = state.userData?.userAccounts?.find(
-          ({ tradeAddress }) => _tradeAddress === tradeAddress,
+          ({ tradeAddress }) => _tradeAddress === tradeAddress
         )?.mainAddress;
         if (mainAddress) {
           const data = { tradeAddress: _tradeAddress, mainAddress };
@@ -34,7 +34,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         onHandleError(`Invalid funding account, ${e?.message ?? e}`);
       }
     },
-    [onHandleError, state.userData?.userAccounts],
+    [onHandleError, state.userData?.userAccounts]
   );
 
   const getAllMainLinkedAccounts = useCallback(
@@ -52,11 +52,11 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       } catch (error) {
         console.log("Error: getAllMainLinkedAccounts", error.errors);
         onHandleError(
-          `Fet all linked accounts error: ${error?.message ?? error}`,
+          `Fet all linked accounts error: ${error?.message ?? error}`
         );
       }
     },
-    [onHandleError],
+    [onHandleError]
   );
 
   const getAllProxyAccounts = useCallback(
@@ -86,7 +86,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       });
       return accounts;
     },
-    [],
+    []
   );
 
   const onSetUserAuthData = ({
@@ -104,7 +104,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       const { email, isConfirmed, userExists } = payload;
       const userAccounts = state.userData?.userAccounts;
       const defaultTradeAccountFromStorage = window.localStorage.getItem(
-        LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT,
+        LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
       );
       const defaultTradeAddress =
         defaultTradeAccountFromStorage === "null"
@@ -117,7 +117,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
             await getAllMainLinkedAccounts(email);
           const userAccounts = await getAllProxyAccounts(accounts);
           const mainAddress = userAccounts?.find(
-            ({ tradeAddress }) => defaultTradeAddress === tradeAddress,
+            ({ tradeAddress }) => defaultTradeAddress === tradeAddress
           )?.mainAddress;
 
           if (mainAddress && defaultTradeAddress)
@@ -125,26 +125,26 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
               A.userAccountSelectData({
                 tradeAddress: defaultTradeAddress ?? null,
                 mainAddress: mainAddress ?? null,
-              }),
+              })
             );
           if (accounts?.length)
             dispatch(A.userData({ mainAccounts: accounts }));
           else
             dispatch(
-              A.userError({ code: -1, message: ["No mainAccounts present"] }),
+              A.userError({ code: -1, message: ["No mainAccounts present"] })
             ); // Need to do it to set isLoading to false
 
           if (userAccounts?.length)
             dispatch(A.userData({ userAccounts: userAccounts }));
           else
             dispatch(
-              A.userError({ code: -1, message: ["No userAccounts present"] }),
+              A.userError({ code: -1, message: ["No userAccounts present"] })
             ); // Need to do it to set isLoading to false
         }
         if (defaultTradeAddress?.length) {
           dispatch(A.userSetDefaultTradeAccount(defaultTradeAddress));
           dispatch(
-            A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress }),
+            A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress })
           );
           dispatch(A.userSetAvatar());
         }
@@ -167,7 +167,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       getAllMainLinkedAccounts,
       getAllProxyAccounts,
       state?.userData?.userAccounts,
-    ],
+    ]
   );
 
   const onUserLogout = () => {
@@ -198,13 +198,13 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   };
 
   const onUserAccountSelectFetch = (
-    payload: A.UserAccountSelectFetch["payload"],
+    payload: A.UserAccountSelectFetch["payload"]
   ) => {
     dispatch(A.userAccountSelectFetch(payload));
   };
 
   const onUserSetDefaultTradeAccount = (
-    payload: A.UserSetDefaultTradeAccount["payload"],
+    payload: A.UserSetDefaultTradeAccount["payload"]
   ) => {
     dispatch(A.userSetDefaultTradeAccount(payload));
   };
@@ -214,7 +214,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   };
 
   const onUserFavoriteMarketPush = (
-    payload: A.UserFavoriteMarketPush["payload"],
+    payload: A.UserFavoriteMarketPush["payload"]
   ) => {
     dispatch(A.userFavoriteMarketPush(payload));
   };
