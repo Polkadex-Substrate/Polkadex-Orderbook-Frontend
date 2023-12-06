@@ -1,6 +1,5 @@
 // TODO: Refactor hook
 import { useMemo, useState } from "react";
-import { useAuth } from "@orderbook/core/providers/user/auth";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
 import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
 import { ExtensionAccount } from "@orderbook/core/providers/types";
@@ -28,7 +27,6 @@ export const useSettings = () => {
   ) => setCurrentControllerWallet(account);
 
   const profileState = useProfile();
-  const authState = useAuth();
   const extensionWalletState = useExtensionWallet();
   const tradeWalletState = useTradeWallet();
 
@@ -41,12 +39,7 @@ export const useSettings = () => {
   const {
     userData: { userAccounts: allAccounts },
   } = useProfile();
-  const authInfo = profileState.authInfo;
-  const user = {
-    ...authInfo,
-    email: authState.email,
-    isConfirmed: authState.userConfirmed,
-  };
+
   const {
     userData: { userAccounts },
   } = useProfile();
@@ -213,7 +206,6 @@ export const useSettings = () => {
     controllerWallets,
     tradeAccounts,
     allFilteredTradeAccounts,
-    user,
     userAccounts,
     linkedMainAddress,
     filterControllerWallets: allFilteredControllerWallets,

@@ -17,7 +17,7 @@ export const Empty = styled.div<{ hasLimit?: boolean; balances?: boolean }>`
     border: 1px solid ${!hasLimit ? theme.colors.secondaryBackground : "none"};
     border-radius: ${normalizeValue(1.5)};
     padding: ${normalizeValue(1)} ${normalizeValue(1)}
-      ${balances ? normalizeValue(4) : normalizeValue(1)}${normalizeValue(1)};
+      ${balances ? normalizeValue(4) : normalizeValue(1)} ${normalizeValue(1)};
     text-align: center;
     display: flex;
     align-items: center;

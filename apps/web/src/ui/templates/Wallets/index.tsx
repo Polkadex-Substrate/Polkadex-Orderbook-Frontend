@@ -57,7 +57,6 @@ export const WalletsTemplate = () => {
     currentControllerWallet,
     controllerWallets,
     tradeAccounts,
-    user,
     userAccounts,
     isActive,
     isLoading,
@@ -503,12 +502,13 @@ export const WalletsTemplate = () => {
                       <h2>{t("profile")}</h2>
                     </S.WalletTitle>
                     <S.AccountContainer>
+                      {/* TODO: Could be removed as email no longer used */}
                       <Card
                         label={t("profileCardLabel")}
-                        description={user.email}
+                        description={"<User Email>"}
                         isLocked
                         hasBadge
-                        isVerified={user.isConfirmed}
+                        isVerified={true}
                       />
                       <AvailableMessage message={t("availableMessage")}>
                         <Card
