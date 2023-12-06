@@ -571,13 +571,9 @@ const ControllerWallets = ({
     ({ account }) => account?.address?.toLowerCase() === address?.toLowerCase()
   );
 
-  const { onLinkEmail } = useExtensionWallet();
-
+  // TODO: Could delete this function after connect wallet integration
   const handleLinkEmail = (extensionAccount: ExtensionAccount) => {
-    const accountAddress = extensionAccount.account.address;
-    onLinkEmail({
-      mainAccount: accountAddress,
-    });
+    console.log(extensionAccount);
   };
 
   const { t } = useTranslation("settings");
