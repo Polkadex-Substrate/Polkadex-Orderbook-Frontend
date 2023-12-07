@@ -32,9 +32,6 @@ ${({ theme }) => css`
       overflow-y: inherit;
     }
   }
-  svg {
-    fill: ${theme.colors.text};
-  }
 
   .Toastify__toast-theme--colored.Toastify__toast--success {
     background-color: ${theme.colors.green};
@@ -149,7 +146,6 @@ Reset Link
   a:active,
   a:visited {
     text-decoration: none;
-    color: inherit;
   }
   /* ----------------------------------------------------------------------------------------------------
 Super Form Reset
