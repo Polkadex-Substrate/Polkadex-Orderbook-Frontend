@@ -14,8 +14,8 @@ export const LoadingWrapper = styled.div`
     justify-content: center;
     background: ${theme.colors.tertiaryBackgroundOpacity};
     svg {
-      width: ${normalizeValue(3.1)};
-      height: ${normalizeValue(3.1)};
+      width: ${normalizeValue(3)};
+      height: ${normalizeValue(3)};
     }
   `}
 `;
