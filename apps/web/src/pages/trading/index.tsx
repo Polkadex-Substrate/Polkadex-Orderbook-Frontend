@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
-import { useMarkets, useAssets } from "@orderbook/core/hooks";
+import { useMarkets } from "@orderbook/core/hooks";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 import { getCurrentMarket } from "@orderbook/core/index";
 
@@ -14,13 +14,12 @@ function Home() {
       window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_MARKET),
     []
   );
-  const { loading: assetLoading } = useAssets();
 
   const { loading: marketLoading, list } = useMarkets();
   const currentMarket = getCurrentMarket(list, persistedMarket as string);
 
   useEffect(() => {
-    if (!marketLoading && !assetLoading) {
+    if (!marketLoading) {
       if (currentMarket)
         router.push(
           `/trading/${
@@ -29,7 +28,7 @@ function Home() {
         );
       else router.push(`/trading/${defaultConfig.landingPageMarket}`);
     }
-  }, [assetLoading, currentMarket, marketLoading, router]);
+  }, [currentMarket, marketLoading, router]);
 
   // Note: This could be used as masking page
   return <LoadingScreen />; // This is a temporary fix. (Showing loading indicator)

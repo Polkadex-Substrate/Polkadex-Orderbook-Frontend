@@ -20,7 +20,7 @@ export function useAssets() {
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
   const { assets: assetsList, isReady } = useOrderbookService();
-  const { balances } = useFunds();
+  const { balances, loading: balancesLoading } = useFunds();
 
   const selectGetAsset = useCallback(
     (assetId: string | number | Record<string, string>): Asset | undefined => {
@@ -89,7 +89,7 @@ export function useAssets() {
   return {
     assets,
     filters,
-    loading: !isReady,
+    loading: !isReady || balancesLoading,
     onHideZeroBalance: () =>
       setFilters({
         ...filters,

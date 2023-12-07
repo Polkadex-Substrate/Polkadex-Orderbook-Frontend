@@ -5,8 +5,6 @@ import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { sendQueryToAppSync } from "@orderbook/core/helpers";
 import * as queries from "@orderbook/core/graphql/queries";
 
-import { useAuth } from "../auth";
-
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
 import * as T from "./types";
@@ -14,7 +12,6 @@ import * as A from "./actions";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
-  const { onUserAuth, signin, logout } = useAuth();
   const { onHandleNotification, onHandleError } = useSettingsProvider();
 
   const onUserSelectAccount = useCallback(
@@ -219,9 +216,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     dispatch(A.userFavoriteMarketPush(payload));
   };
 
-  const signInSuccess = signin.isSuccess;
-  const logoutIsSuccess = logout.isSuccess;
-
   const fetchDataOnUserAuth = useCallback(async () => {
     try {
       onUserAuthFetch();
@@ -235,10 +229,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         isConfirmed: attributes?.email_verified,
         jwt: signInUserSession?.accessToken?.jwtToken,
       };
-      onUserAuth({
-        email: payload.email,
-        userConfirmed: payload.isConfirmed,
-      });
       onSetUserAuthData(payload);
       await onUserAuthentication(payload);
     } catch (error) {
@@ -272,16 +262,12 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         }
       }
     }
-  }, [onUserAuth, onHandleError, onUserAuthFetch, onUserAuthentication]);
+  }, [onHandleError, onUserAuthFetch, onUserAuthentication]);
 
   useEffect(() => {
     // When User logout, do not fetch the data
-    if (!logoutIsSuccess) fetchDataOnUserAuth();
-  }, [logoutIsSuccess, signInSuccess, fetchDataOnUserAuth]);
-
-  useEffect(() => {
-    if (logoutIsSuccess) onUserLogout();
-  }, [logoutIsSuccess]);
+    fetchDataOnUserAuth();
+  }, [fetchDataOnUserAuth]);
 
   return (
     <Provider
