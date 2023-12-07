@@ -28,10 +28,11 @@ export const Thead = styled(Grid)`
 
 export const Tbody = styled(Grid)`
   font-size: ${normalizeValue(1.3)};
+  gap: ${normalizeValue(1.2)};
 
   ${media.greaterThan("large")`
-    height: ${normalizeValue(38)};
-    display: block;
+    max-height: ${normalizeValue(30)};
+    display: grid;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;
     &::-webkit-scrollbar {
