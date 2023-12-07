@@ -91,7 +91,7 @@ export const AssetsTable = ({
             .rows.slice(0, 10)
             .map((row, ti) => {
               const tdClassName = classNames({
-                active: row.original.assetId === selectedAssetId,
+                active: row.original.id === selectedAssetId,
               });
 
               return (
@@ -102,9 +102,10 @@ export const AssetsTable = ({
                     onChangeAsset({
                       onChainBalance: row.original.onChainBalance,
                       free_balance: row.original.free_balance,
-                      assetId: row.original.assetId,
+                      id: row.original.id,
                       name: row.original.name,
-                      symbol: row.original.symbol,
+                      ticker: row.original.ticker,
+                      decimal: row.original.decimal,
                     })
                   }
                 >

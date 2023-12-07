@@ -20,6 +20,7 @@ import {
   BookLevel,
   MaybePaginated,
   LatestTradesPropsForMarket,
+  OrderSide,
 } from "./../types";
 import {
   fetchBatchFromAppSync,
@@ -146,41 +147,41 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     >({
       query: QUERIES.getAllMarkets,
     });
-    const markets = marketsQueryResult?.data?.getAllMarkets?.items?.map(
-      (item): Market => {
-        const market = item?.market || "";
-        const [baseAssetId, quoteAssetId] = market.split("-");
-        const baseAsset = assetList.find((x) => x.id === baseAssetId);
-        if (!baseAsset) {
-          throw new Error(
-            `[${this.constructor.name}:getMarkets] cannot find base asset`
-          );
-        }
-        const quoteAsset = this._assetsList.find((x) => x.id === quoteAssetId);
-        if (!quoteAsset) {
-          throw new Error(
-            `[${this.constructor.name}:getMarkets] cannot find quote asset`
-          );
-        }
-
-        return {
-          id: market || "",
-          name: `${baseAsset.ticker}/${quoteAsset.ticker}`,
-          baseAsset,
-          quoteAsset,
-          minQty: Number(item?.min_order_qty) || 0,
-          minPrice: Number(item?.min_order_price) || 0,
-          maxPrice: Number(item?.max_order_price) || 0,
-          maxQty: Number(item?.max_order_qty) || 0,
-          basePrecision: Number(item?.base_asset_precision) || 0,
-          quotePrecision: Number(item?.quote_asset_precision) || 0,
-          maxVolume:
-            Number(item?.max_order_price) * Number(item?.max_order_qty),
-          minVolume:
-            Number(item?.min_order_price) * Number(item?.min_order_qty),
-        };
+    const markets: Market[] = [];
+    marketsQueryResult?.data?.getAllMarkets?.items?.forEach((item) => {
+      const market = item?.market || "";
+      const [baseAssetId, quoteAssetId] = market.split("-");
+      const baseAsset = assetList.find((x) => x.id === baseAssetId);
+      if (!baseAsset) {
+        console.error(
+          `[${this.constructor.name}:getMarkets] cannot find base asset ${baseAssetId}`
+        );
       }
-    );
+      const quoteAsset = assetList.find((x) => x.id === quoteAssetId);
+      if (!quoteAsset) {
+        console.error(
+          `[${this.constructor.name}:getMarkets] cannot find quote asset ${quoteAssetId}`
+        );
+        return;
+      }
+      if (!quoteAsset || !baseAsset) return;
+      markets.push({
+        id: market || "",
+        name: `${baseAsset.ticker}/${quoteAsset.ticker}`,
+        baseAsset,
+        quoteAsset,
+        minQty: Number(item?.min_order_qty) || 0,
+        minPrice: Number(item?.min_order_price) || 0,
+        maxPrice: Number(item?.max_order_price) || 0,
+        maxQty: Number(item?.max_order_qty) || 0,
+        basePrecision: Number(item?.base_asset_precision) || 0,
+        quotePrecision: Number(item?.quote_asset_precision) || 0,
+        maxVolume: Number(item?.max_order_price) * Number(item?.max_order_qty),
+        minVolume: Number(item?.min_order_price) * Number(item?.min_order_qty),
+        price_tick_size: Number(item?.price_tick_size),
+        qty_step_size: Number(item?.qty_step_size),
+      });
+    });
     return markets || [];
   }
 
@@ -215,6 +216,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         limit: args.limit,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
+        nextToken: args.pageParams,
       },
       "listOrderHistorybyMainAccount"
     );
@@ -236,7 +238,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     const queryResult = await fetchFullListFromAppSync<SetPriceLevel | null>(
       QUERIES.getOrderbook,
       {
-        m: market,
+        market,
       },
       "getOrderbook"
     );
@@ -276,6 +278,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     });
     const tickerItem = tickersQueryResult?.data?.getMarketTickers?.items;
     return {
+      market,
       open: Number(tickerItem?.o) || 0,
       close: Number(tickerItem?.c) || 0,
       high: Number(tickerItem?.h) || 0,
@@ -296,6 +299,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         limit: args.limit,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
+        nextToken: args.pageParams,
       },
       "listTradesByMainAccount"
     );
@@ -303,13 +307,22 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       return { data: [], nextToken: null };
     }
     const trades = queryResult.response.map((item: APITrade): Trade => {
+      const market = this._marketList.find((x) => x.id === item?.m);
+      if (!market) {
+        throw new Error(
+          `[${this.constructor.name}:getTradeHistory] cannot find market`
+        );
+      }
       return {
+        market,
         price: Number(item?.p) || 0,
         qty: Number(item?.q) || 0,
         isReverted: item?.isReverted || false,
-        timestamp: new Date(item?.t || 0),
+        timestamp: new Date(Number(item?.t) || 0),
         tradeId: item?.t_id || "",
         fee: 0,
+        side: item.s as OrderSide,
+        quantity: item.q,
       };
     });
     return { data: trades, nextToken: queryResult.nextToken };
@@ -334,7 +347,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         price: Number(item?.p) || 0,
         qty: Number(item?.q) || 0,
         isReverted: item?.isReverted || false,
-        timestamp: new Date(item?.t || 0),
+        timestamp: new Date(Number(item?.t) || 0),
       };
     });
   }
@@ -381,10 +394,12 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
           );
         }
         return {
+          stid: Number(item.stid),
+          snapshot_id: Number(item.snapshot_id),
           txType: (item?.tt as Transaction["txType"]) || "",
-          amount: Number(item?.a) || 0,
+          amount: Number(item?.q) || 0,
           fee: Number(item?.fee) || 0,
-          timestamp: new Date(item?.t || 0),
+          timestamp: new Date(Number(item?.t) || 0),
           isReverted: item?.isReverted || false,
           status: (item?.st as Transaction["status"]) || "",
           asset,
@@ -421,11 +436,14 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       orderId: item?.id || "",
       price: Number(item?.p) || 0,
       averagePrice: Number(item?.afp) || 0,
-      type: (item?.t as OrderType) || "LIMIT",
-      status: (item?.s as OrderStatus) || "CLOSED",
+      type: (item?.ot as OrderType) || "LIMIT",
+      status: (item?.st as OrderStatus) || "CLOSED",
       isReverted: item?.isReverted || false,
       fee: Number(item?.fee) || 0,
-      timestamp: new Date(item?.t || 0),
+      timestamp: new Date(Number(item?.t) || 0),
+      side: item.s as OrderSide,
+      filledQuantity: String(item.fq),
+      quantity: item.q,
     };
   }
 }

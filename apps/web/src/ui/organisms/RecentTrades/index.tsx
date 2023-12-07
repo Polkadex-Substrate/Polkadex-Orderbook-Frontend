@@ -5,27 +5,35 @@ import {
   Spinner,
 } from "@polkadex/orderbook-ui/molecules";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
-import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
+import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
+import { useMarkets, useRecentTrades } from "@orderbook/core/hooks";
 
 import * as S from "./styles";
 
 export const filters = ["all", "buy", "sell"];
 
-export const RecentTrades = () => {
+type Props = {
+  market: string;
+};
+
+export const RecentTrades = ({ market }: Props) => {
   const { t: translation } = useTranslation("organisms");
   const t = (key: string, args = {}) =>
     translation(`recentTrades.${key}`, args);
 
-  const {
-    list,
-    loading,
-    isDecreasing,
-    quoteUnit,
-    baseUnit,
-    pricePrecision,
-    amountPrecision,
-  } = useRecentTradesProvider();
+  const { list: allMarkets } = useMarkets();
+  const currentMarket = getCurrentMarket(allMarkets, market);
+  const { isDecreasing, list, loading } = useRecentTrades(
+    currentMarket?.id as string
+  );
+
+  const pricePrecision = currentMarket
+    ? decimalPlaces(currentMarket.price_tick_size)
+    : undefined;
+  const amountPrecision = currentMarket
+    ? decimalPlaces(currentMarket.qty_step_size)
+    : undefined;
 
   const priceDecimals = pricePrecision || MIN_DIGITS_AFTER_DECIMAL;
   const qtyDecimals = amountPrecision || MIN_DIGITS_AFTER_DECIMAL;
@@ -43,8 +51,12 @@ export const RecentTrades = () => {
         ) : list.length ? (
           <>
             <S.Head>
-              <S.CellHead>{t("price", { price: quoteUnit })}</S.CellHead>
-              <S.CellHead>{t("amount", { amount: baseUnit })}</S.CellHead>
+              <S.CellHead>
+                {t("price", { price: currentMarket?.quoteAsset.ticker })}
+              </S.CellHead>
+              <S.CellHead>
+                {t("amount", { amount: currentMarket?.baseAsset.ticker })}
+              </S.CellHead>
               <S.CellHead>{t("time")}</S.CellHead>
             </S.Head>
             <S.Content>
@@ -54,7 +66,7 @@ export const RecentTrades = () => {
                   <Card
                     key={i}
                     price={Decimal.format(order.price, priceDecimals, ",")}
-                    amount={Decimal.format(order.amount, qtyDecimals, ",")}
+                    amount={Decimal.format(order.qty, qtyDecimals, ",")}
                     date={date}
                     isSell={isDecreasing[i]}
                   />

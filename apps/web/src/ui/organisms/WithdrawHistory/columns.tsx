@@ -15,7 +15,7 @@ export const pendingColumns = (header: string[]) => [
         <span>
           {e.getValue().isReverted ? <>REVERTED</> : e.getValue().status}
         </span>
-        <p>{e.getValue().time}</p>
+        <p>{e.getValue().timestamp}</p>
       </Date>
     ),
     header: () => <span>{header[0]}</span>,
@@ -83,7 +83,7 @@ export const claimedColumns = (header: string[]) => [
     cell: (e) => (
       <Date>
         <span>{e.getValue().status}</span>
-        <p>{e.getValue().time}</p>
+        <p>{e.getValue().timestamp}</p>
       </Date>
     ),
     header: () => <span>{header[0]}</span>,

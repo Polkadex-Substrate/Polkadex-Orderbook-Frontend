@@ -12,12 +12,12 @@ import {
   sendQueryToAppSync,
   signPayload,
 } from "@orderbook/core/helpers";
+import { useFunds } from "@orderbook/core/hooks";
 
 import { useProfile, UserAccount } from "../profile";
 import { useExtensionWallet } from "../extensionWallet";
 import { selectTradeAccount } from "../tradeWallet/helper";
 import { useTradeWallet } from "../tradeWallet";
-import { useBalancesProvider } from "../balancesProvider";
 
 import * as A from "./actions";
 import * as T from "./types";
@@ -26,7 +26,7 @@ import { initialState, withdrawsReducer } from "./reducer";
 
 export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(withdrawsReducer, initialState);
-  const { onChangeChainBalance } = useBalancesProvider();
+  const { onChangeChainBalance } = useFunds();
   const profileState = useProfile();
   const nativeApiState = useNativeApi();
   const settingsState = useSettingsProvider();

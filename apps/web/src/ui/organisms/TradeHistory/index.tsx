@@ -10,7 +10,6 @@ import {
   TradeHistoryCard,
 } from "@polkadex/orderbook-ui/molecules";
 import { Ifilters } from "@orderbook/core/providers/types";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -21,9 +20,14 @@ import { normalizeValue } from "@/utils/normalize";
 type Props = {
   filters: Ifilters;
   onHideTransactionDropdown: (v: boolean) => void;
+  market: string;
 };
 
-export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
+export const TradeHistory = ({
+  filters,
+  onHideTransactionDropdown,
+  market,
+}: Props) => {
   const {
     priceFixed,
     amountFixed,
@@ -32,8 +36,7 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
     error,
     isLoading,
     onFetchNextPage,
-  } = useTradeHistory(filters);
-  const { selectGetAsset } = useAssetsProvider();
+  } = useTradeHistory(filters, market);
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`tradeHistory.${key}`);
@@ -73,8 +76,8 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
             >
               {trades?.map((trade, i) => {
                 const date = new Date(trade.timestamp).toLocaleString();
-                const baseUnit = selectGetAsset(trade.baseAsset)?.symbol;
-                const quoteUnit = selectGetAsset(trade.quoteAsset)?.symbol;
+                const baseUnit = trade.market?.baseAsset?.ticker;
+                const quoteUnit = trade.market?.quoteAsset?.ticker;
                 return (
                   <TradeHistoryCard
                     key={i}
@@ -102,8 +105,10 @@ export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
               })}
               {!isLoading && error && (
                 <S.ErrorWrapper>
-                  <p>{error.message}</p>
-                  <Button onClick={onFetchNextPage}>{t("tryAgain")}</Button>
+                  <p>{error}</p>
+                  <Button onClick={() => onFetchNextPage()}>
+                    {t("tryAgain")}
+                  </Button>
                 </S.ErrorWrapper>
               )}
             </InfiniteScroll>

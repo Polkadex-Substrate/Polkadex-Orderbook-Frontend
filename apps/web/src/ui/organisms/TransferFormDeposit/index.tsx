@@ -12,7 +12,7 @@ import { depositValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useTranslation } from "next-i18next";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
+import { useFunds } from "@orderbook/core/index";
 import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
 
 import * as S from "./styles";
@@ -34,7 +34,7 @@ export const TransferFormDeposit = ({
   const { allAccounts } = useExtensionWallet();
   const { loading, onFetchDeposit } = useDepositProvider();
   const { selectedAccount } = useProfile();
-  const { loading: balancesLoading } = useBalancesProvider();
+  const { loading: balancesLoading } = useFunds();
 
   const { mainAddress } = selectedAccount;
 
@@ -46,8 +46,8 @@ export const TransferFormDeposit = ({
   const amountRef = useRef<HTMLInputElement | null>(null);
 
   const isPolkadexToken = useMemo(
-    () => isAssetPDEX(selectedAsset?.assetId),
-    [selectedAsset?.assetId]
+    () => isAssetPDEX(selectedAsset?.id),
+    [selectedAsset?.id]
   );
 
   const existentialBalance = useMemo(
@@ -99,7 +99,7 @@ export const TransferFormDeposit = ({
 
         const asset: T.GenericAsset = isPolkadexToken
           ? { polkadex: null }
-          : { asset: selectedAsset?.assetId || null };
+          : { asset: selectedAsset?.id || null };
 
         // TODO: Fix types or Handle Error
         if (!address || !fundingWallet) return;
@@ -145,8 +145,8 @@ export const TransferFormDeposit = ({
         </S.Wallets>
         <S.Form>
           <TokenCard
-            tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
-            tokenTicker={selectedAsset?.symbol ?? ""}
+            tokenIcon={(selectedAsset?.ticker as keyof typeof Tokens) ?? ""}
+            tokenTicker={selectedAsset?.ticker ?? ""}
             availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
             onAction={() => onOpenAssets(resetForm)}
             loading={balancesLoading}

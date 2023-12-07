@@ -21,9 +21,9 @@ class AppsyncV1 implements OrderbookService {
   subscriber: OrderbookSubscriptionStrategy;
   async init(): Promise<void> {
     await Promise.all([
-      this.operation.init,
-      this.query.init,
-      this.subscriber.init,
+      this.operation.init(),
+      this.query.init(),
+      this.subscriber.init(),
     ]);
     this._isReady = true;
   }

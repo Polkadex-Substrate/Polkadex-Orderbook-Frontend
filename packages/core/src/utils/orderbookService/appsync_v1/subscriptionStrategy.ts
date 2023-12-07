@@ -19,6 +19,7 @@ import {
   OrderType,
   OrderStatus,
   MarketBase,
+  OrderSide,
 } from "./../types";
 import {
   OrderbookReadStrategy,
@@ -113,17 +114,14 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       variables: {
         name: `${market}-ob-inc`,
       },
+      authToken: READ_ONLY_TOKEN,
     });
-    const observable = subscription
-      .filter((data) => {
-        return filterUserSubscriptionType(data.value, USER_EVENTS.Order);
-      })
-      .map((data) => {
-        const eventData = JSON.parse(
-          data?.value?.data?.websocket_streams?.data as unknown as string
-        ) as BookUpdateEvent;
-        return convertBookUpdatesToPriceLevels(eventData);
-      });
+    const observable = subscription.map((data) => {
+      const eventData = JSON.parse(
+        data?.value?.data?.websocket_streams?.data as unknown as string
+      ) as BookUpdateEvent;
+      return convertBookUpdatesToPriceLevels(eventData);
+    });
     return observable.subscribe(cb);
   }
 
@@ -141,6 +139,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       variables: {
         name: market,
       },
+      authToken: READ_ONLY_TOKEN,
     });
     const observable = subscription
       .filter((data) => {
@@ -150,8 +149,15 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
         const eventData = JSON.parse(
           data?.value?.data?.websocket_streams?.data as unknown as string
         ) as UserTradeEvent;
+        const market = this._marketList.find((x) => x.id === eventData?.m);
+        if (!market) {
+          throw new Error(
+            `[${this.constructor.name}:subscribeUserTrades] cannot find market`
+          );
+        }
         return {
-          tradeId: eventData.tid.toString(),
+          market,
+          tradeId: eventData.trade_id.toString(),
           price: Number(eventData.p),
           qty: Number(eventData.q),
           isReverted: false,
@@ -212,6 +218,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       variables: {
         name: `${market}-recent-trades`,
       },
+      authToken: READ_ONLY_TOKEN,
     });
     const observable = subscription
       .filter((data) => Boolean(data?.value?.data?.websocket_streams?.data))
@@ -243,22 +250,23 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       variables: {
         name: address,
       },
+      authToken: READ_ONLY_TOKEN,
     });
     const observable = subscription
-      .filter((data) => Boolean(data?.value?.data?.websocket_streams?.data))
+      .filter((data) => {
+        return filterUserSubscriptionType(data.value, USER_EVENTS.Order);
+      })
       .map((data): Order => {
         const item = JSON.parse(
           data?.value?.data?.websocket_streams?.data as unknown as string
         ) as OrderUpdateEvent;
-        const marketId = item.pair.base.asset + "-" + item.pair.quote.asset;
+        const marketId =
+          item?.pair?.base?.asset + "-" + item?.pair?.quote?.asset;
         const market = this._marketList.find((item) => item.id === marketId);
-        if (!market) {
-          throw new Error(`${this.constructor.name} ${marketId} not found`);
-        }
         return {
           tradeAddress: item.user,
-          market: market,
-          orderId: item.id.toString(),
+          market: market || ({} as MarketBase),
+          orderId: item.id?.toString(),
           price: Number(item.price),
           averagePrice: item.avg_filled_price,
           type: item.order_type as OrderType,
@@ -266,6 +274,9 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
           isReverted: false,
           fee: Number(item.fee),
           timestamp: new Date(item.timestamp),
+          side: item.side as OrderSide,
+          filledQuantity: String(item.filled_quantity),
+          quantity: String(item.qty),
         };
       });
     return observable.subscribe(onUpdate);
@@ -285,6 +296,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       variables: {
         name: `${market}-ticker`,
       },
+      authToken: READ_ONLY_TOKEN,
     });
     const observable = subscription
       .filter((data) => Boolean(data?.value?.data?.websocket_streams?.data))
@@ -293,6 +305,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
           data?.value?.data?.websocket_streams?.data as unknown as string
         ) as CandleStickUpdateEvent;
         return {
+          market,
           open: Number(item.o),
           close: Number(item.c),
           high: Number(item.h),
@@ -319,6 +332,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       variables: {
         name: address,
       },
+      authToken: READ_ONLY_TOKEN,
     });
     const observable = subscription
       .filter((data) => {
@@ -331,16 +345,22 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
         const item = JSON.parse(
           data?.value?.data?.websocket_streams?.data as unknown as string
         ) as TransactionUpdateEvent;
-        const asset = this._assetList.find((a) => a.id === item.asset);
+
+        const itemAssetId =
+          typeof item?.asset === "string" ? item?.asset : item?.asset?.asset;
+
+        const asset = this._assetList.find((a) => a.id === itemAssetId);
         if (!asset) {
-          throw new Error(`Asset ${item.asset} not found`);
+          throw new Error(`Asset ${itemAssetId} not found`);
         }
         return {
-          amount: 0,
+          stid: Number(item.stid),
+          snapshot_id: Number(item.snapshot_id),
+          amount: item.amount,
           fee: 0,
           isReverted: false,
           status: item.status,
-          timestamp: new Date(item.t),
+          timestamp: new Date(),
           txType: item.txn_type === "DEPOSIT" ? "DEPOSIT" : "WITHDRAW",
           asset,
         };

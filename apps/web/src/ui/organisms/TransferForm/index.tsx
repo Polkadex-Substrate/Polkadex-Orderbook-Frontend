@@ -11,11 +11,10 @@ import { useFormik } from "formik";
 import { depositValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { ExtensionAccount } from "@orderbook/core/providers/types";
-import { useAssetTransfer } from "@orderbook/core/hooks";
+import { useAssetTransfer, useFunds } from "@orderbook/core/hooks";
 import { useTranslation } from "next-i18next";
 import { decodeAddress, encodeAddress } from "@polkadot/keyring";
 import { hexToU8a, isHex } from "@polkadot/util";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
 
 import { CustomAddress } from "../TransferFormWithdraw/types";
@@ -46,7 +45,7 @@ export const TransferForm = ({
 
   const { allAccounts } = useExtensionWallet();
   const { selectedAccount, onUserSelectAccount, userData } = useProfile();
-  const { loading, onChangeChainBalance } = useBalancesProvider();
+  const { loading, onChangeChainBalance } = useFunds();
 
   // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
   const { mutateAsync, isLoading } = useAssetTransfer(onRefetch);
@@ -69,8 +68,8 @@ export const TransferForm = ({
   const amountRef = useRef<HTMLInputElement | null>(null);
 
   const isPolkadexToken = useMemo(
-    () => isAssetPDEX(selectedAsset?.assetId),
-    [selectedAsset?.assetId]
+    () => isAssetPDEX(selectedAsset?.id),
+    [selectedAsset?.id]
   );
 
   const existentialBalance = useMemo(
@@ -185,7 +184,7 @@ export const TransferForm = ({
 
         const asset: T.GenericAsset = isPolkadexToken
           ? { polkadex: null }
-          : { asset: selectedAsset?.assetId || null };
+          : { asset: selectedAsset?.id || null };
 
         // TODO: Fix types or Handle Error
         if (!address || !fundingWallet) return;
@@ -199,9 +198,7 @@ export const TransferForm = ({
       } finally {
         resetForm({ values: initialValues });
         onDisableSwitch();
-        const asset = isPolkadexToken
-          ? "PDEX"
-          : selectedAsset?.assetId || "PDEX";
+        const asset = isPolkadexToken ? "PDEX" : selectedAsset?.id || "PDEX";
         onChangeChainBalance(asset);
       }
     },
@@ -263,8 +260,8 @@ export const TransferForm = ({
         </S.Wallets>
         <S.Form>
           <TokenCard
-            tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
-            tokenTicker={selectedAsset?.symbol ?? ""}
+            tokenIcon={(selectedAsset?.ticker as keyof typeof Tokens) ?? ""}
+            tokenTicker={selectedAsset?.ticker ?? ""}
             availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
             onAction={() => onOpenAssets(resetForm)}
             loading={loading}

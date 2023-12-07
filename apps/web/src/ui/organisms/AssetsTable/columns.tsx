@@ -10,14 +10,14 @@ export const columns = (headers: string[]) => [
   columnHelper.accessor((row) => row, {
     id: "token",
     cell: (e) => {
-      const TokenComponent = Tokens[e.getValue().symbol] || Tokens.UNKN;
+      const TokenComponent = Tokens[e.getValue().ticker] || Tokens.UNKN;
       return (
         <S.Token>
           <div>
             <TokenComponent />
           </div>
           <div>
-            <span>{e.getValue().symbol}</span>
+            <span>{e.getValue().ticker}</span>
             <p> {e.getValue().name}</p>
           </div>
         </S.Token>

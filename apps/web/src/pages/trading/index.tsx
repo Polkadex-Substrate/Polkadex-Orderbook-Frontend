@@ -2,9 +2,9 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useMarkets, useAssets } from "@orderbook/core/hooks";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
+import { getCurrentMarket } from "@orderbook/core/index";
 
 function Home() {
   const router = useRouter();
@@ -14,32 +14,22 @@ function Home() {
       window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_MARKET),
     []
   );
+  const { loading: assetLoading } = useAssets();
 
-  const {
-    currentMarket,
-    list: allMarkets,
-    loading: marketLoading,
-  } = useMarketsProvider();
-
-  const { loading: assetLoading } = useAssetsProvider();
-
-  const findMarket = allMarkets?.find((market) => market.m === persistedMarket);
+  const { loading: marketLoading, list } = useMarkets();
+  const currentMarket = getCurrentMarket(list, persistedMarket as string);
 
   useEffect(() => {
     if (!marketLoading && !assetLoading) {
-      if (findMarket) {
+      if (currentMarket)
         router.push(
-          `/trading/${findMarket.base_ticker + findMarket.quote_ticker}`
+          `/trading/${
+            currentMarket.baseAsset.ticker + currentMarket.quoteAsset.ticker
+          }`
         );
-      } else {
-        if (currentMarket)
-          router.push(
-            `/trading/${currentMarket.base_ticker + currentMarket.quote_ticker}`
-          );
-        else router.push(`/trading/${defaultConfig.landingPageMarket}`);
-      }
+      else router.push(`/trading/${defaultConfig.landingPageMarket}`);
     }
-  }, [assetLoading, currentMarket, findMarket, marketLoading, router]);
+  }, [assetLoading, currentMarket, marketLoading, router]);
 
   // Note: This could be used as masking page
   return <LoadingScreen />; // This is a temporary fix. (Showing loading indicator)

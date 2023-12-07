@@ -63,7 +63,7 @@ export const TransferTemplate = () => {
     <>
       <AssetsInteraction
         open={assetsInteraction}
-        selectedAssetId={selectedAsset?.assetId}
+        selectedAssetId={selectedAsset?.id}
         onClose={onAssetsInteraction}
         onChangeAsset={onChangeAsset}
       />
