@@ -101,10 +101,7 @@ export const Funds = ({ onHideFilters }) => {
                             <S.DepositLink>{tc("deposit")}</S.DepositLink>
                           </Link>
                         </TooltipHeader>
-                        <TooltipContent
-                          style={{ transform: "translateY(-0.8rem)" }}
-                          background="text"
-                        >
+                        <TooltipContent background="text">
                           <S.TooltipMessage>
                             {tc("externalLink")}
                           </S.TooltipMessage>
@@ -125,10 +122,7 @@ export const Funds = ({ onHideFilters }) => {
                             <S.WithdrawLink>{tc("withdraw")}</S.WithdrawLink>
                           </Link>
                         </TooltipHeader>
-                        <TooltipContent
-                          style={{ transform: "translateY(-0.8rem)" }}
-                          background="text"
-                        >
+                        <TooltipContent background="text">
                           <S.TooltipMessage>
                             {tc("externalLink")}
                           </S.TooltipMessage>
