@@ -17,7 +17,7 @@ export const Spinner = ({
 
 export const LoadingSpinner = ({
   color = "text",
-  size = normalizeValue(1),
+  size = normalizeValue(1.4),
   loading = true,
   children,
   ...props

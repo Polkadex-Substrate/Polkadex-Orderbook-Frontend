@@ -69,7 +69,10 @@ export const ButtonStatus = ({
           <li>{heading.success}</li>
         </ul>
       </S.Wrapper>
-      <svg xmlns="http://www.w3.org/2000/svg" style={{ display: "none" }}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ display: "none", width: "100%", height: "100%" }}
+      >
         <symbol
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 16 16"
