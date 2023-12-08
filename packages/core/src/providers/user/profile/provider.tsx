@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useReducer } from "react";
+import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
 import { API } from "aws-amplify";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { sendQueryToAppSync } from "@orderbook/core/helpers";
 import * as queries from "@orderbook/core/graphql/queries";
 
-import { useExtensionWallet } from "../extensionWallet";
+import { ExtensionAccount } from "../../types";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
@@ -14,8 +15,7 @@ import * as A from "./actions";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
-  const { onHandleError } = useSettingsProvider();
-  const { allAccounts } = useExtensionWallet();
+  const { onHandleError, hasExtension } = useSettingsProvider();
 
   const onUserSelectAccount = useCallback(
     (payload: T.UserSelectAccount) => {
@@ -35,28 +35,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       }
     },
     [onHandleError, state.userData?.userAccounts]
-  );
-
-  const getAllMainLinkedAccounts = useCallback(
-    async (email: string, Api = API) => {
-      try {
-        const res = await sendQueryToAppSync({
-          query: queries.listMainAccountsByEmail,
-          variables: {
-            email,
-          },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
-          API: Api,
-        });
-        return res.data.listMainAccountsByEmail ?? { accounts: [] };
-      } catch (error) {
-        console.log("Error: getAllMainLinkedAccounts", error.errors);
-        onHandleError(
-          `Fet all linked accounts error: ${error?.message ?? error}`
-        );
-      }
-    },
-    [onHandleError]
   );
 
   const getAllProxyAccounts = useCallback(
@@ -197,65 +175,36 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
   const fetchDataOnUserAuth = useCallback(async () => {
     try {
-      onUserAuthFetch();
-      // const { attributes, signInUserSession } =
-      //   await Auth.currentAuthenticatedUser();
       onUserChangeInitBanner();
 
-      const mainAccounts = allAccounts.map((a) => a.account.address);
-      // const mainAccounts = [
-      //   "esq2wFkRsic8WM4nstAtkjqWdCDnTrGHMpFjaGN2rEHnQXUNm",
-      // ];
-
-      // const payload = {
-      //   email: "attributes?.email",
-      //   isAuthenticated: true,
-      //   userExists: true,
-      //   isConfirmed: true,
-      //   jwt: "signInUserSession?.accessToken?.jwtToken",
-      // };
-      // onSetUserAuthData(payload);
-      await onUserAuthentication(mainAccounts);
-      // await onUserAuthentication(payload);
+      const { web3AccountsSubscribe, web3FromAddress } = await import(
+        "@polkadot/extension-dapp"
+      );
+      const unsubscribe = await web3AccountsSubscribe(
+        async (injectedAccounts: InjectedAccountWithMeta[]) => {
+          const allAccounts = await Promise.all(
+            injectedAccounts.map(async (account): Promise<ExtensionAccount> => {
+              const { signer } = await web3FromAddress(account.address);
+              return {
+                account,
+                signer,
+              };
+            })
+          );
+          const mainAccounts = allAccounts.map((a) => a.account.address);
+          await onUserAuthentication(mainAccounts);
+        },
+        { ss58Format: 88 }
+      );
+      return () => unsubscribe();
     } catch (error) {
-      console.log("User error", error);
-      // switch (error) {
-      //   case "User is not confirmed.": {
-      //     const payload = {
-      //       email: "",
-      //       isAuthenticated: false,
-      //       userExists: true,
-      //       isConfirmed: false,
-      //     };
-      //     onSetUserAuthData(payload);
-      //     await onUserAuthentication(payload);
-      //     break;
-      //   }
-      //   case "The user is not authenticated": {
-      //     const payload = {
-      //       email: "",
-      //       isAuthenticated: false,
-      //       userExists: false,
-      //       isConfirmed: false,
-      //     };
-      //     onSetUserAuthData(payload);
-      //     break;
-      //   }
-      //   default: {
-      //     console.error("Error=>", `User data fetch error: ${error.message}`);
-      //     onHandleError(`User data fetch error: ${error?.message ?? error}`);
-      //     break;
-      //   }
-      // }
+      onHandleError(`Accounts fetch error: ${error?.message ?? error}`);
     }
-  }, [onUserAuthFetch, onUserAuthentication, allAccounts]);
-
-  console.log(state);
+  }, [onUserAuthentication, onHandleError]);
 
   useEffect(() => {
-    // When User logout, do not fetch the data
-    fetchDataOnUserAuth();
-  }, [fetchDataOnUserAuth]);
+    if (hasExtension) fetchDataOnUserAuth();
+  }, [fetchDataOnUserAuth, hasExtension]);
 
   return (
     <Provider
