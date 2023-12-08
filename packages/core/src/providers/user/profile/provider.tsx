@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useReducer } from "react";
-import { API, Auth } from "aws-amplify";
+import { API } from "aws-amplify";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { sendQueryToAppSync } from "@orderbook/core/helpers";
 import * as queries from "@orderbook/core/graphql/queries";
+
+import { useExtensionWallet } from "../extensionWallet";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
@@ -12,7 +14,8 @@ import * as A from "./actions";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
-  const { onHandleNotification, onHandleError } = useSettingsProvider();
+  const { onHandleError } = useSettingsProvider();
+  const { allAccounts } = useExtensionWallet();
 
   const onUserSelectAccount = useCallback(
     (payload: T.UserSelectAccount) => {
@@ -57,7 +60,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   );
 
   const getAllProxyAccounts = useCallback(
-    async (mainAccounts: [string], Api = API): Promise<T.UserAccount[]> => {
+    async (mainAccounts: string[], Api = API): Promise<T.UserAccount[]> => {
       const promises = mainAccounts?.map(async (mainAccount) => {
         try {
           const res = await sendQueryToAppSync({
@@ -86,19 +89,11 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     []
   );
 
-  const onSetUserAuthData = ({
-    isAuthenticated,
-    userExists,
-    jwt,
-  }: T.UserAuth) => {
-    dispatch(A.userAuthData({ isAuthenticated, userExists, jwt }));
-  };
-
   // TODO: Refactor this function
   const onUserAuthentication = useCallback(
-    async (payload: T.UserAuth) => {
-      dispatch(A.userFetch({ email: payload.email }));
-      const { email, isConfirmed, userExists } = payload;
+    async (mainAccounts: string[]) => {
+      // dispatch(A.userFetch({ email: payload.email }));
+      // const { email, isConfirmed, userExists } = payload;
       const userAccounts = state.userData?.userAccounts;
       const defaultTradeAccountFromStorage = window.localStorage.getItem(
         LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
@@ -110,9 +105,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
       try {
         if (!userAccounts?.length) {
-          const { accounts }: { accounts: [string] } =
-            await getAllMainLinkedAccounts(email);
-          const userAccounts = await getAllProxyAccounts(accounts);
+          const userAccounts = await getAllProxyAccounts(mainAccounts);
           const mainAddress = userAccounts?.find(
             ({ tradeAddress }) => defaultTradeAddress === tradeAddress
           )?.mainAddress;
@@ -124,8 +117,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
                 mainAddress: mainAddress ?? null,
               })
             );
-          if (accounts?.length)
-            dispatch(A.userData({ mainAccounts: accounts }));
+          if (mainAccounts?.length) dispatch(A.userData({ mainAccounts }));
           else
             dispatch(
               A.userError({ code: -1, message: ["No mainAccounts present"] })
@@ -145,26 +137,13 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
           );
           dispatch(A.userSetAvatar());
         }
-        if (!isConfirmed && userExists) {
-          onHandleNotification({
-            type: "Attention",
-            message:
-              "Please confirm your email, sign in again and confirm your email.",
-          });
-        }
       } catch (error) {
         onHandleError(`User auth error:${error?.message ?? error}`);
         dispatch(A.userAuthError(error));
         dispatch(A.userError(error));
       }
     },
-    [
-      onHandleError,
-      onHandleNotification,
-      getAllMainLinkedAccounts,
-      getAllProxyAccounts,
-      state?.userData?.userAccounts,
-    ]
+    [onHandleError, getAllProxyAccounts, state?.userData?.userAccounts]
   );
 
   const onUserLogout = () => {
@@ -219,50 +198,59 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const fetchDataOnUserAuth = useCallback(async () => {
     try {
       onUserAuthFetch();
-      const { attributes, signInUserSession } =
-        await Auth.currentAuthenticatedUser();
+      // const { attributes, signInUserSession } =
+      //   await Auth.currentAuthenticatedUser();
       onUserChangeInitBanner();
-      const payload = {
-        email: attributes?.email,
-        isAuthenticated: true,
-        userExists: true,
-        isConfirmed: attributes?.email_verified,
-        jwt: signInUserSession?.accessToken?.jwtToken,
-      };
-      onSetUserAuthData(payload);
-      await onUserAuthentication(payload);
+
+      const mainAccounts = allAccounts.map((a) => a.account.address);
+      // const mainAccounts = [
+      //   "esq2wFkRsic8WM4nstAtkjqWdCDnTrGHMpFjaGN2rEHnQXUNm",
+      // ];
+
+      // const payload = {
+      //   email: "attributes?.email",
+      //   isAuthenticated: true,
+      //   userExists: true,
+      //   isConfirmed: true,
+      //   jwt: "signInUserSession?.accessToken?.jwtToken",
+      // };
+      // onSetUserAuthData(payload);
+      await onUserAuthentication(mainAccounts);
+      // await onUserAuthentication(payload);
     } catch (error) {
       console.log("User error", error);
-      switch (error) {
-        case "User is not confirmed.": {
-          const payload = {
-            email: "",
-            isAuthenticated: false,
-            userExists: true,
-            isConfirmed: false,
-          };
-          onSetUserAuthData(payload);
-          await onUserAuthentication(payload);
-          break;
-        }
-        case "The user is not authenticated": {
-          const payload = {
-            email: "",
-            isAuthenticated: false,
-            userExists: false,
-            isConfirmed: false,
-          };
-          onSetUserAuthData(payload);
-          break;
-        }
-        default: {
-          console.error("Error=>", `User data fetch error: ${error.message}`);
-          onHandleError(`User data fetch error: ${error?.message ?? error}`);
-          break;
-        }
-      }
+      // switch (error) {
+      //   case "User is not confirmed.": {
+      //     const payload = {
+      //       email: "",
+      //       isAuthenticated: false,
+      //       userExists: true,
+      //       isConfirmed: false,
+      //     };
+      //     onSetUserAuthData(payload);
+      //     await onUserAuthentication(payload);
+      //     break;
+      //   }
+      //   case "The user is not authenticated": {
+      //     const payload = {
+      //       email: "",
+      //       isAuthenticated: false,
+      //       userExists: false,
+      //       isConfirmed: false,
+      //     };
+      //     onSetUserAuthData(payload);
+      //     break;
+      //   }
+      //   default: {
+      //     console.error("Error=>", `User data fetch error: ${error.message}`);
+      //     onHandleError(`User data fetch error: ${error?.message ?? error}`);
+      //     break;
+      //   }
+      // }
     }
-  }, [onHandleError, onUserAuthFetch, onUserAuthentication]);
+  }, [onUserAuthFetch, onUserAuthentication, allAccounts]);
+
+  console.log(state);
 
   useEffect(() => {
     // When User logout, do not fetch the data
@@ -274,7 +262,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       value={{
         ...state,
         onUserSelectAccount,
-        onUserAuth: onUserAuthentication,
         onUserLogout,
         onUserChangeInitBanner,
         onUserAuthFetch,

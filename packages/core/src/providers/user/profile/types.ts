@@ -22,21 +22,15 @@ export interface UserAuth {
 }
 
 export interface AuthInfo {
-  isAuthenticated: boolean;
-  userExists: boolean;
-  session?: any;
-  jwt?: string;
   shouldShowInitialBanner?: boolean;
 }
 
 export interface ProfileState {
   authInfo: AuthInfo;
-  auth: CommonActionState;
   userData: {
     userAccounts?: UserAccount[];
     mainAccounts?: string[];
   };
-  data: CommonActionState;
   userProfile?: {
     avatar?: string;
   };
@@ -53,24 +47,23 @@ export type ProfileProviderProps = PropsWithChildren<{
 
 export type ProfileContextProps = ProfileState & {
   onUserSelectAccount: (value: UserSelectAccount) => void;
-  onUserAuth: (value: UserAuth) => void;
   onUserLogout: () => void;
   onUserChangeInitBanner: (value?: boolean) => void;
   onUserAuthFetch: () => void;
   onUserProfileAccountPush: (value: UserAccount) => void;
   onUserProfileTradeAccountDelete: (
-    value: A.UserProfileTradeAccountDelete["payload"],
+    value: A.UserProfileTradeAccountDelete["payload"]
   ) => void;
   onUserProfileMainAccountPush: (value: string) => void;
   onUserAccountSelectFetch: (
-    value: A.UserAccountSelectFetch["payload"],
+    value: A.UserAccountSelectFetch["payload"]
   ) => void;
   onUserSetDefaultTradeAccount: (
-    value: A.UserSetDefaultTradeAccount["payload"],
+    value: A.UserSetDefaultTradeAccount["payload"]
   ) => void;
   onUserSetAvatar: (value?: A.UserSetAvatar["payload"]) => void;
   onUserFavoriteMarketPush: (
-    value: A.UserFavoriteMarketPush["payload"],
+    value: A.UserFavoriteMarketPush["payload"]
   ) => void;
 };
 

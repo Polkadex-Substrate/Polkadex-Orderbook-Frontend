@@ -79,21 +79,16 @@ export const WalletsTemplate = () => {
     hasRegisteredMainAccount,
   } = useSettings();
 
-  const {
-    onUserSelectAccount,
-    auth: { isLoading: isProfileFetching },
-    data: { isLoading: isAccountsFetching },
-  } = useProfile();
+  const { onUserSelectAccount } = useProfile();
   const tradeWalletState = useTradeWallet();
 
-  const showLoader =
-    tradeWalletState.isFetching || isProfileFetching || isAccountsFetching;
+  const showLoader = tradeWalletState.isFetching;
 
   const { t } = useTranslation("settings");
 
   return (
     <Intro
-      active={isProfileFetching || isAccountsFetching}
+      active
       localStorageName={DEFAULTWALLETSINTRONAME}
       steps={[
         {

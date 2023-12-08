@@ -19,15 +19,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
 }) => {
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
   const {
-    authInfo,
+    selectedAccount: { mainAddress },
     onUserProfileMainAccountPush,
     onUserProfileAccountPush,
     onUserAccountSelectFetch,
   } = useProfile();
   const { onHandleError, onHandleNotification, hasExtension } =
     useSettingsProvider();
-  const profileState = useProfile();
-  const { mainAddress } = profileState.selectedAccount;
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
 
@@ -155,8 +153,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     );
   };
   useEffect(() => {
-    if (authInfo.isAuthenticated && hasExtension) onPolkadotExtensionWallet();
-  }, [onPolkadotExtensionWallet, authInfo.isAuthenticated, hasExtension]);
+    if (hasExtension) onPolkadotExtensionWallet();
+  }, [onPolkadotExtensionWallet, hasExtension]);
 
   useEffect(() => {
     if (mainAddress) {

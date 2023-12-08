@@ -32,7 +32,7 @@ export const BalancesTemplate = () => {
   const { t: tc } = useTranslation("common");
 
   const { connecting } = useNativeApi();
-  const { auth, selectedAccount } = useProfile();
+  const { selectedAccount } = useProfile();
 
   const userHasSelectedAccount = selectedAccount?.mainAddress?.length > 0;
 
@@ -50,8 +50,8 @@ export const BalancesTemplate = () => {
     useAssets();
 
   const showLoader = useMemo(
-    () => auth.isLoading || connecting || loading,
-    [connecting, loading, auth?.isLoading]
+    () => connecting || loading,
+    [connecting, loading]
   );
 
   return (

@@ -6,10 +6,7 @@ import { ProfileAction } from "./actions";
 import {
   PROFILE_RESET_USER,
   PROFILE_USER_DATA,
-  PROFILE_USER_ERROR,
-  PROFILE_USER_FETCH,
   PROFILE_USER_CHANGE_INIT_BANNER,
-  PROFILE_USER_AUTH_FETCH,
   PROFILE_USER_AUTH_DATA,
   PROFILE_USER_SELECT_ACCOUNT_DATA,
   PROFILE_USER_ACCOUNT_PUSH,
@@ -20,18 +17,8 @@ import {
   PROFILE_USER_FAVORITE_MARKET_PUSH,
 } from "./constants";
 
-const initialTemplate = {
-  isLoading: true,
-  isError: false,
-  isSuccess: false,
-};
-
 export const initialState: ProfileState = {
   authInfo: {
-    isAuthenticated: false,
-    userExists: false,
-    session: null,
-    jwt: "",
     shouldShowInitialBanner: false,
   },
   userData: {
@@ -48,22 +35,13 @@ export const initialState: ProfileState = {
   userMarket: {
     favoriteMarkets: [],
   },
-  data: { ...initialTemplate },
-  auth: { ...initialTemplate },
 };
 
 export const profileReducer = (state: ProfileState, action: ProfileAction) => {
   switch (action.type) {
-    case PROFILE_USER_AUTH_FETCH: {
-      return {
-        ...state,
-        auth: { ...state.auth, isLoading: true },
-      };
-    }
     case PROFILE_USER_AUTH_DATA: {
       return {
         ...state,
-        auth: { ...state.auth, isLoading: false, isSuccess: true },
         authInfo: { ...state.authInfo, ...action.payload },
       };
     }
@@ -71,22 +49,9 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
       return {
         ...initialState,
       };
-    case PROFILE_USER_FETCH: {
-      return {
-        ...state,
-        data: { ...state.data, isLaoding: true },
-      };
-    }
-    case PROFILE_USER_ERROR: {
-      return {
-        ...state,
-        data: { ...state.data, isLoading: false, isError: true },
-      };
-    }
     case PROFILE_USER_DATA: {
       return {
         ...state,
-        data: { ...state.data, isLoading: false, isSuccess: true },
         userData: {
           ...state.userData,
           ...action.payload,
@@ -128,7 +93,7 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
       const newAccount = action.payload;
       const userAccounts = [...(state.userData?.userAccounts ?? [])];
       const isPresent = userAccounts.find(
-        ({ tradeAddress }) => tradeAddress === newAccount.tradeAddress,
+        ({ tradeAddress }) => tradeAddress === newAccount.tradeAddress
       );
       if (!isPresent) {
         return {
@@ -147,7 +112,7 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
         ? [...state.userData.mainAccounts]
         : [];
       const isPresent = mainAddresses?.find(
-        (address) => address === newMainAddress,
+        (address) => address === newMainAddress
       );
       if (!isPresent) {
         return {
@@ -165,7 +130,7 @@ export const profileReducer = (state: ProfileState, action: ProfileAction) => {
       tradeAddress &&
         window.localStorage.setItem(
           LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT,
-          tradeAddress,
+          tradeAddress
         );
       return {
         ...state,
