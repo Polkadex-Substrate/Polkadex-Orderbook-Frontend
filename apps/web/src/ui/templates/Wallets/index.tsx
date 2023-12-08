@@ -1,6 +1,5 @@
 import Head from "next/head";
 import React, { Fragment, useRef } from "react";
-import { BigHead } from "@bigheads/core";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { DEFAULTWALLETSINTRONAME } from "@orderbook/core/constants";
@@ -14,7 +13,6 @@ import {
   Intro,
 } from "@polkadex/orderbook-ui/organisms";
 import {
-  AvailableMessage,
   Checkbox,
   Footer,
   Modal,
@@ -36,7 +34,6 @@ import {
   transformAddress,
 } from "@orderbook/core/providers/user/profile/helpers";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
-import { randomAvatars } from "@polkadex/orderbook-ui/organisms/ChangeAvatar/randomAvatars";
 import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
 import { useTour } from "@reactour/tour";
 import Link from "next/link";
@@ -492,29 +489,6 @@ export const WalletsTemplate = () => {
                       )}
                     </S.WalletContainer>
                   </S.Wallet>
-                  <S.Account>
-                    <S.WalletTitle>
-                      <h2>{t("profile")}</h2>
-                    </S.WalletTitle>
-                    <S.AccountContainer>
-                      {/* TODO: Could be removed as email no longer used */}
-                      <Card
-                        label={t("profileCardLabel")}
-                        description={"<User Email>"}
-                        isLocked
-                        hasBadge
-                        isVerified={true}
-                      />
-                      <AvailableMessage message={t("availableMessage")}>
-                        <Card
-                          label={t("deleteAccount")}
-                          description={t("deleteAccountDescription")}
-                          onClick={undefined}
-                          actionTitle={t("deleteAccount")}
-                        />
-                      </AvailableMessage>
-                    </S.AccountContainer>
-                  </S.Account>
                 </S.Container>
               </S.Content>
               <S.Support>
@@ -622,63 +596,6 @@ const ControllerWallets = ({
         )}
       </S.WalletActions>
     </WalletCard>
-  );
-};
-
-const Card = ({
-  label = "",
-  description = "",
-  actionTitle,
-  isLocked = false,
-  hasBadge = false,
-  isAvatar = false,
-  isVerified = false,
-  onClick,
-}: T.Props) => {
-  const profileState = useProfile();
-  const avatarOptions = randomAvatars?.find(
-    (v) => v.id === Number(profileState.userProfile?.avatar)
-  );
-
-  const { t } = useTranslation("settings");
-
-  return (
-    <S.AccountCard>
-      <S.AccountCardWrapper>
-        {isAvatar && (
-          <S.AccountCardAvatar>
-            <BigHead {...avatarOptions?.data} />
-          </S.AccountCardAvatar>
-        )}
-        <S.AccountCardContent>
-          <S.AccountCardFlex>
-            {isLocked && (
-              <div>
-                <Icons.Lock />
-              </div>
-            )}
-            <span>{label}</span>
-          </S.AccountCardFlex>
-          <p>{description}</p>
-        </S.AccountCardContent>
-      </S.AccountCardWrapper>
-      <S.AccountCardActions>
-        {hasBadge && (
-          <>
-            {isVerified ? (
-              <Badge isRegistered={isVerified}>{t("card.verified")}</Badge>
-            ) : (
-              <S.Button type="button">{t("card.verifyNow")}</S.Button>
-            )}
-          </>
-        )}
-        {!!actionTitle?.length && (
-          <S.Button type="button" onClick={onClick}>
-            {actionTitle}
-          </S.Button>
-        )}
-      </S.AccountCardActions>
-    </S.AccountCard>
   );
 };
 
