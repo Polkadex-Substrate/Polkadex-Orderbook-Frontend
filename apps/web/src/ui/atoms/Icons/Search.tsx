@@ -7,7 +7,8 @@ function SvgSearch(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 21 21"
-      {...props}>
+      {...props}
+    >
       <circle
         cx="9.76657"
         cy="9.76663"
@@ -16,12 +17,14 @@ function SvgSearch(props: React.SVGProps<SVGSVGElement>) {
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
+        stroke="currentColor"
       />
       <path
         d="M16.0183 16.4852L19.5423 20.0001"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
+        stroke="currentColor"
       />
     </svg>
   );

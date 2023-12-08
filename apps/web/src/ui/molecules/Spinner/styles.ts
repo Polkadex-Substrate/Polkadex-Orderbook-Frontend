@@ -15,6 +15,10 @@ export const SecondaryWrapper = styled.div<{ color: string; size: string }>`
     height: ${size};
     display: inline-block;
     vertical-align: middle;
+    svg {
+      width: 100%;
+      height: 100%;
+    }
     svg path,
     svg rect {
       fill: ${theme.colors[color]};

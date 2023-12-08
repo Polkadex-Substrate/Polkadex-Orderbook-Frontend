@@ -54,6 +54,7 @@ export const EmptyContent = styled.div`
     p {
       margin: ${normalizeValue(1)} 0 ${normalizeValue(3)} 0;
       color: ${theme.colors.tertiaryText};
+      font-size: ${normalizeValue(1.3)};
     }
   `}
 `;
@@ -89,6 +90,7 @@ export const EmptyActions = styled.div<{ hasLimit?: boolean }>`
       padding: ${normalizeValue(1.5)};
       white-space: nowrap;
       font-weight: 500;
+      font-size: ${normalizeValue(1.3)};
       &:nth-child(1) {
         color: ${theme.colors.white};
       }
