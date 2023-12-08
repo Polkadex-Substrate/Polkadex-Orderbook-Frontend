@@ -70,8 +70,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   // TODO: Refactor this function
   const onUserAuthentication = useCallback(
     async (mainAccounts: string[]) => {
-      // dispatch(A.userFetch({ email: payload.email }));
-      // const { email, isConfirmed, userExists } = payload;
       const userAccounts = state.userData?.userAccounts;
       const defaultTradeAccountFromStorage = window.localStorage.getItem(
         LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
