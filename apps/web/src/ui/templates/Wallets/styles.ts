@@ -246,6 +246,10 @@ export const Empty = styled.div`
   flex-direction: column;
   align-items: center;
   gap: ${normalizeValue(2)};
+  div svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export const EmptyBox = styled.div`
