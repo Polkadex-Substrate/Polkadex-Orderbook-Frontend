@@ -1,4 +1,4 @@
-import { Transaction } from "@orderbook/core/providers/user/transactionsProvider";
+import { Transaction, Asset } from "@orderbook/core/utils/orderbookService";
 
 export type WithdrawGroup = {
   id: number;
@@ -8,7 +8,7 @@ export type WithdrawGroup = {
 
 export type WithdrawGroupItem = {
   id: number;
-  asset: string;
+  asset: Asset;
   time: string | Date;
   stid: number;
   amount: string;
@@ -17,10 +17,10 @@ export type WithdrawGroupItem = {
 
 // use event_id from withdraw list as block and index as id for withdraw item and data
 export const groupWithdrawsBySnapShotIds = (
-  withdrawalsList: Transaction[],
+  withdrawalsList: Transaction[]
 ): WithdrawGroup[] => {
   const readyWithdrawals = withdrawalsList.filter(
-    (txn) => txn.status === "READY",
+    (txn) => txn.status === "READY"
   );
   const withdrawals: WithdrawGroup[] = [];
   const sidsProcessed: Set<number> = new Set();
@@ -36,9 +36,9 @@ export const groupWithdrawsBySnapShotIds = (
           id,
           stid: item.stid,
           asset: item.asset,
-          time: new Date(item.time),
-          amount: item.amount,
-          status: item.status,
+          time: new Date(item.timestamp),
+          amount: String(item.amount),
+          status: String(item.status),
         });
       }
     });

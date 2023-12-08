@@ -19,7 +19,7 @@ export type CandleStickUpdateEvent = {
 export type TransactionUpdateEvent = {
   stid: number;
   user: string;
-  asset: string;
+  asset: string | { asset: string };
   fee: number;
   amount: number;
   status: "PENDING" | "CONFIRMED" | "FAILED";
@@ -58,7 +58,7 @@ export type UserTradeEvent = {
   p: string;
   q: string;
   t: number;
-  tid: number;
+  trade_id: number;
 };
 export type TradeEvent = {
   m: string;

@@ -1,13 +1,7 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import {
-  AssetsProvider,
-  BalancesProvider,
-  TransactionsProvider,
-  DepositProvider,
-  WithdrawsProvider,
-} from "@orderbook/core/providers";
+import { DepositProvider, WithdrawsProvider } from "@orderbook/core/providers";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { GetServerSideProps } from "next";
@@ -38,17 +32,11 @@ const Transfer = () => {
 
   if (!isAuthenticated || isLoading) return <div />;
   return (
-    <AssetsProvider>
-      <BalancesProvider>
-        <TransactionsProvider>
-          <DepositProvider>
-            <WithdrawsProvider>
-              <TransferTemplate />
-            </WithdrawsProvider>
-          </DepositProvider>
-        </TransactionsProvider>
-      </BalancesProvider>
-    </AssetsProvider>
+    <DepositProvider>
+      <WithdrawsProvider>
+        <TransferTemplate />
+      </WithdrawsProvider>
+    </DepositProvider>
   );
 };
 

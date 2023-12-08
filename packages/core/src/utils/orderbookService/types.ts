@@ -1,7 +1,7 @@
 // number type can be used for all calculations as it supports up to 15 digits after decimal point
 // while max precision of backend is 8 digits after decimal point
 
-import { USER_EVENTS, UserEvents } from "@orderbook/core/constants";
+import { USER_EVENTS } from "@orderbook/core/constants";
 
 export interface MarketBase {
   id: string; // eg: "123-231"
@@ -19,6 +19,8 @@ export interface Market extends MarketBase {
   minVolume: number;
   basePrecision: number;
   quotePrecision: number;
+  price_tick_size: number;
+  qty_step_size: number;
 }
 
 export type Asset = {
@@ -48,18 +50,24 @@ export interface Order {
   fee: number;
   timestamp: Date;
   market: MarketBase;
+  side: OrderSide;
+  filledQuantity: string;
+  quantity: string;
 }
 export type MaybePaginated<T> = {
   data: T;
   nextToken: string | null | undefined;
 };
 export interface Trade {
+  market: MarketBase;
   tradeId: string;
   price: number;
   qty: number;
   isReverted: boolean;
   fee: number;
   timestamp: Date;
+  side: OrderSide;
+  quantity: string;
 }
 
 export interface PublicTrade {
@@ -70,6 +78,7 @@ export interface PublicTrade {
 }
 
 export type Ticker = {
+  market: string;
   open: number;
   close: number;
   high: number;
@@ -102,7 +111,7 @@ export type Kline = {
   timestamp: Date;
 };
 export type TransactionType = "DEPOSIT" | "WITHDRAW";
-export type TransactionStatus = "PENDING" | "CONFIRMED" | "FAILED";
+export type TransactionStatus = "PENDING" | "CONFIRMED" | "FAILED" | "READY";
 export type Transaction = {
   txType: TransactionType;
   amount: number;
@@ -111,6 +120,8 @@ export type Transaction = {
   status: TransactionStatus;
   asset: Asset;
   isReverted: boolean;
+  stid: number;
+  snapshot_id?: number;
 };
 
 export type PriceLevel = {

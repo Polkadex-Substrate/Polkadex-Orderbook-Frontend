@@ -8,8 +8,21 @@ export const DEFAULTWALLETSINTRONAME = "WalletsIntro";
 
 export const POLKADEX_ASSET = {
   name: "POLKADEX",
-  symbol: "PDEX",
-  assetId: "PDEX",
+  ticker: "PDEX",
+  id: "PDEX",
+  decimal: 12,
+};
+
+export const defaultTicker = {
+  market: "0-0",
+  open: 0,
+  close: 0,
+  high: 0,
+  low: 0,
+  baseVolume: 0,
+  quoteVolume: 0,
+  currentPrice: 0,
+  priceChangePercent24Hr: 0,
 };
 
 export const READ_ONLY_TOKEN = process.env.READ_ONLY_TOKEN || "READ_ONLY";
@@ -72,5 +85,6 @@ export const TradingView = {
 
 export const SUBSCAN_PER_PAGE_LIMIT = 10;
 export const TRADE_HISTORY_PER_PAGE_LIMIT = 100;
+export const RECENT_TRADES_LIMIT = 30;
 
 export const OTHER_ASSET_EXISTENTIAL = 0.00000001;

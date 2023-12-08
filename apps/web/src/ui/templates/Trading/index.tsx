@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import {
@@ -22,19 +21,21 @@ import {
 } from "@polkadex/orderbook-ui/organisms";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
-import { OrderHistoryProvider } from "@orderbook/core/providers/user/orderHistoryProvider";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { SessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { KlineProvider } from "@orderbook/core/providers/public/klineProvider";
-import { TradesProvider } from "@orderbook/core/providers/user/trades";
 import { defaultConfig } from "@orderbook/core/config";
+import { useMarkets, useTickers } from "@orderbook/core/hooks";
+import { getCurrentMarket } from "@orderbook/core/helpers";
 
 import { ShutdownInteraction } from "../ShutdownInteraction";
 
 import * as S from "./styles";
 
-export function Trading() {
+type Props = {
+  market: string;
+};
+
+export function Trading({ market: id }: Props) {
   const shouldShowDisclaimer = useMemo(
     () =>
       process.browser &&
@@ -56,10 +57,11 @@ export function Trading() {
   const [banner, setBanner] = useState(false);
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
-  const router = useRouter();
-  const { id } = router?.query;
-
-  const { currentMarket: market } = useMarketsProvider();
+  const { list } = useMarkets();
+  const market = getCurrentMarket(list, id);
+  const {
+    currentTicker: { currentPrice: currentTradePrice },
+  } = useTickers(market?.id ?? "");
 
   const {
     authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
@@ -67,7 +69,6 @@ export function Trading() {
     onUserChangeInitBanner,
   } = useProfile();
 
-  const currentTrade = useRecentTradesProvider().getCurrentTradePrice();
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = isSignedIn && hasTradeAccount;
@@ -112,7 +113,9 @@ export function Trading() {
     <>
       <Head>
         <title>
-          {currentTrade && marketName && `${currentTrade} | ${marketName} | `}{" "}
+          {currentTradePrice &&
+            marketName &&
+            `${currentTradePrice} | ${marketName} | `}{" "}
           {tc("polkadexOrderbook")}
         </title>
         <meta name="description" content="The trading engine of Web3" />
@@ -160,7 +163,7 @@ export function Trading() {
         isFullHeight
         isBlur
       >
-        <Markets onClose={() => setState(false)} />
+        <Markets onClose={() => setState(false)} market={id} />
       </Modal>
       <S.Container>
         <S.Wrapper>
@@ -174,24 +177,23 @@ export function Trading() {
                     <S.CenterWrapper>
                       <S.GraphEpmty>
                         <KlineProvider>
-                          <Navbar onOpenMarkets={() => setState(!state)} />
-                          <Graph />
+                          <Navbar
+                            onOpenMarkets={() => setState(!state)}
+                            market={id}
+                          />
+                          <Graph market={id} />
                         </KlineProvider>
                         {hasUser ? (
                           <SessionProvider>
-                            <TradesProvider>
-                              <OrderHistoryProvider>
-                                <Transactions />
-                              </OrderHistoryProvider>
-                            </TradesProvider>
+                            <Transactions market={id} />
                           </SessionProvider>
                         ) : (
                           <EmptyMyAccount hasLimit {...hasSelectedAccount} />
                         )}
                       </S.GraphEpmty>
                       <S.WrapperRight>
-                        <MarketOrder />
-                        <RecentTrades />
+                        <MarketOrder market={id} />
+                        <RecentTrades market={id} />
                       </S.WrapperRight>
                     </S.CenterWrapper>
                   </S.WrapperGraph>

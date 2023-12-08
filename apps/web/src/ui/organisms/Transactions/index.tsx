@@ -39,7 +39,11 @@ const initialFilters: Ifilters = {
   status: "All Orders",
 };
 
-export const Transactions = () => {
+type Props = {
+  market: string;
+};
+
+export const Transactions = ({ market }: Props) => {
   const { t: translation, "2": isReady } = useTranslation("organisms");
   const t = (key: string) => translation(`transactions.${key}`);
 
@@ -193,10 +197,11 @@ export const Transactions = () => {
               onHideTransactionDropdown={(v: boolean) =>
                 setTransactionDropdownVisible(v)
               }
+              market={market}
             />
           </TabContent>
           <TabContent>
-            <OrderHistory filters={filters} />
+            <OrderHistory filters={filters} market={market} />
           </TabContent>
           <TabContent>
             <TradeHistory
@@ -204,6 +209,7 @@ export const Transactions = () => {
                 setTransactionDropdownVisible(v)
               }
               filters={filters}
+              market={market}
             />
           </TabContent>
           <TabContent>

@@ -16,9 +16,8 @@ import { useFormik } from "formik";
 import { withdrawValidations } from "@orderbook/core/validations";
 import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
-import { useTryUnlockTradeAccount } from "@orderbook/core/index";
+import { useFunds, useTryUnlockTradeAccount } from "@orderbook/core/hooks";
 import { useTranslation } from "next-i18next";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
 
 import { UnlockModal } from "../UnlockModal";
 
@@ -49,7 +48,7 @@ export const TransferFormWithdraw = ({
   const { allBrowserAccounts } = useTradeWallet();
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
   const { selectedAccount } = useProfile();
-  const { loading: balancesLoading } = useBalancesProvider();
+  const { loading: balancesLoading } = useFunds();
 
   const { tradeAddress, mainAddress } = selectedAccount;
 
@@ -94,9 +93,9 @@ export const TransferFormWithdraw = ({
     onSubmit: async ({ amount }) => {
       if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
       else {
-        const asset = isAssetPDEX(selectedAsset?.assetId)
+        const asset = isAssetPDEX(selectedAsset?.id)
           ? "PDEX"
-          : selectedAsset?.assetId;
+          : selectedAsset?.id;
         if (!asset) return;
         // TODO: Handle Error...
         try {
@@ -155,8 +154,8 @@ export const TransferFormWithdraw = ({
           </S.Wallets>
           <S.Form>
             <TokenCard
-              tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
-              tokenTicker={selectedAsset?.symbol ?? ""}
+              tokenIcon={(selectedAsset?.ticker as keyof typeof Tokens) ?? ""}
+              tokenTicker={selectedAsset?.ticker ?? ""}
               availableAmount={selectedAsset?.free_balance ?? "0.00"}
               onAction={() => onOpenAssets(resetForm)}
               loading={balancesLoading}

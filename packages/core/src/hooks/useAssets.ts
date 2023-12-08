@@ -1,14 +1,15 @@
 import { useRouter } from "next/router";
-import {
-  useAssetsProvider,
-  IPublicAsset,
-} from "@orderbook/core/providers/public/assetsProvider";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 import { BalanceFormatter } from "@orderbook/format";
+import { Asset } from "@orderbook/core/utils/orderbookService";
 
-export interface AssetsProps extends IPublicAsset {
+import { isAssetPDEX } from "../helpers";
+import { POLKADEX_ASSET } from "../constants";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
+
+import { useFunds } from "./useFunds";
+export interface AssetsProps extends Asset {
   free_balance: string;
   onChainBalance: string;
   inOrdersBalance: string;
@@ -18,22 +19,37 @@ export function useAssets() {
   const { locale } = useRouter();
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
-  const { list, loading } = useAssetsProvider();
-  const { balances, loading: balancesLoading } = useBalancesProvider();
+  const { assets: assetsList, isReady } = useOrderbookService();
+  const { balances, loading: balancesLoading } = useFunds();
+
+  const selectGetAsset = useCallback(
+    (assetId: string | number | Record<string, string>): Asset | undefined => {
+      if (!assetId || !assetsList) {
+        return;
+      }
+      if (typeof assetId === "object" && "asset" in assetId) {
+        assetId = assetId.asset;
+      }
+      return isAssetPDEX(assetId.toString())
+        ? POLKADEX_ASSET
+        : assetsList?.find((asset) => asset.id === assetId.toString());
+    },
+    [assetsList]
+  );
 
   const toHuman = BalanceFormatter.toHuman;
 
   const assets = useMemo(
     () =>
-      list
+      assetsList
         ?.map((e: AssetsProps) => {
           const tokenBalance = balances?.find(
-            (value) => value.assetId === e.assetId
+            (value) => value.asset.id === e.id
           );
           const free_balance =
-            tokenBalance?.free_balance === "0"
+            tokenBalance?.free.toString() === "0"
               ? "0.00"
-              : tokenBalance?.free_balance || "0.00";
+              : tokenBalance?.free || "0.00";
 
           const onChainBalance =
             tokenBalance?.onChainBalance === "0"
@@ -41,9 +57,9 @@ export function useAssets() {
               : tokenBalance?.onChainBalance || "0.00";
 
           const inOrdersBalance =
-            tokenBalance?.reserved_balance === "0"
+            tokenBalance?.reserved.toString() === "0"
               ? "0.00"
-              : tokenBalance?.reserved_balance || "0.00";
+              : tokenBalance?.reserved.toString() || "0.00";
 
           return {
             ...e,
@@ -58,22 +74,22 @@ export function useAssets() {
 
           const matchesNameOrTicker =
             e.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-            e.symbol.toLowerCase().includes(filters.search.toLowerCase());
+            e.ticker.toLowerCase().includes(filters.search.toLowerCase());
 
           return (
             matchesNameOrTicker &&
             !hasZeroAmount &&
-            !defaultConfig.blockedAssets?.some((value) => e.assetId === value)
+            !defaultConfig.blockedAssets?.some((value) => e.id === value)
           );
         })
         ?.sort((a, b) => a.name.localeCompare(b.name)),
-    [filters.search, list, balances, filters.hideZero, locale, toHuman]
+    [filters.search, assetsList, balances, filters.hideZero, locale, toHuman]
   );
 
   return {
     assets,
     filters,
-    loading: loading || balancesLoading,
+    loading: !isReady || balancesLoading,
     onHideZeroBalance: () =>
       setFilters({
         ...filters,
@@ -81,5 +97,6 @@ export function useAssets() {
       }),
     onSearchToken: (e: ChangeEvent<HTMLInputElement>) =>
       setFilters({ ...filters, search: e.target.value }),
+    selectGetAsset,
   };
 }

@@ -1,5 +1,5 @@
 import { TransferForm } from "@polkadex/orderbook-ui/organisms";
-import { useTransferHistory } from "@orderbook/core/index";
+import { useTransferHistory } from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { defaultConfig } from "@orderbook/core/config";
 

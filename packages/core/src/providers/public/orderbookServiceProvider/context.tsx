@@ -1,12 +1,19 @@
 import { createContext } from "react";
 
-import { OrderbookServiceProviderProps, OrderbookServiceState } from "./types";
+import {
+  OrderbookServiceContextProps,
+  OrderbookServiceProviderProps,
+  OrderbookServiceState,
+} from "./types";
 
 export const initialState: OrderbookServiceState = {
-  isReady: false,
+  markets: [],
+  assets: [],
 };
-export const Context = createContext<OrderbookServiceState>({
+export const Context = createContext<OrderbookServiceContextProps>({
   ...initialState,
+  isReady: false,
+  enable: async () => {},
 });
 
 export const Provider = ({
