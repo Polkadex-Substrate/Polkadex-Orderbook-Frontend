@@ -118,8 +118,8 @@ export const Verified = styled.div<{ isActive?: boolean }>`
     padding: ${isActive ? normalizeValue(0.3) : normalizeValue(0.4)};
     border-radius: ${normalizeValue(10)};
     svg {
-      fill: ${theme.colors.text};
-      stroke: ${theme.colors.text};
+      fill: white;
+      stroke: white;
     }
   `}
 `;

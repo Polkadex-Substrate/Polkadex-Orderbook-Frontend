@@ -17,6 +17,9 @@ export const Container = styled.div`
 `;
 
 export const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
   img {
     margin-bottom: ${normalizeValue(1)};

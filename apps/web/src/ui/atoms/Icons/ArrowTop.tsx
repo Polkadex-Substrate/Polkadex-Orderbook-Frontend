@@ -7,11 +7,12 @@ function SvgArrowTop(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       height="1em"
       viewBox="0 0 8.525 5.677"
-      {...props}>
+      {...props}
+    >
       <path
         data-name="Path 6"
         d="M7.818.707L4.263 4.262.707.707"
-        stroke="#fff"
+        stroke="currentColor"
         strokeWidth={2}
       />
     </svg>
