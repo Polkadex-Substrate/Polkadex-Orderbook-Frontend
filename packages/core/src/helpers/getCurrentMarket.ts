@@ -1,7 +1,4 @@
-import { LOCAL_STORAGE_ID } from "../constants";
 import { Market } from "../utils/orderbookService";
-
-import { setToStorage } from "./storage";
 
 export const getCurrentMarket = (markets: Market[], defaultMarket: string) => {
   if (markets?.length && defaultMarket) {
@@ -16,8 +13,6 @@ export const getCurrentMarket = (markets: Market[], defaultMarket: string) => {
 
     const defaultMarketSelected =
       findMarketByName ?? findMarketById ?? markets[0];
-
-    setToStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET, defaultMarketSelected.id);
 
     return defaultMarketSelected;
   }

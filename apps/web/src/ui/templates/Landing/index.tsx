@@ -10,8 +10,7 @@ import Spline from "@splinetool/react-spline";
 import { useMemo, useState } from "react";
 import classNames from "classnames";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
-import { useMarkets } from "@orderbook/core/hooks";
-import { getCurrentMarket } from "@orderbook/core/helpers";
+import { getFromStorage } from "@orderbook/core/helpers";
 import { defaultConfig } from "@orderbook/core/config";
 
 import SpeedImage from "../../../../public/img/speed.webp";
@@ -100,24 +99,18 @@ export function LandingTemplate() {
   const [state, setState] = useState(false);
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
-  const { list: markets } = useMarkets();
 
-  const persistedMarket = useMemo(
-    () =>
-      process.browser &&
-      window.localStorage.getItem(LOCAL_STORAGE_ID.DEFAULT_MARKET),
-    []
-  );
+  const persistedMarket = useMemo(() => {
+    const market = getFromStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET);
+    try {
+      const parsedMarket = JSON.parse(market as string);
+      return parsedMarket.name;
+    } catch {
+      return `${defaultConfig.landingPageMarket}`;
+    }
+  }, []);
 
-  const currentMarket = getCurrentMarket(markets, persistedMarket as string);
-
-  const marketURL = useMemo(() => {
-    if (currentMarket)
-      return `/trading/${
-        currentMarket.baseAsset.ticker + currentMarket.quoteAsset.ticker
-      }`;
-    return `/trading/${defaultConfig.landingPageMarket}`;
-  }, [currentMarket]);
+  const marketURL = `/trading/${persistedMarket}`;
 
   return (
     <>

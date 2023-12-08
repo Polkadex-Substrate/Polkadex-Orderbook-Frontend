@@ -27,7 +27,6 @@ export const defaultConfig: DefaultConfig = {
     "/recovery",
     "/wallets",
     "/transfer",
-    "/",
   ],
   underMaintenance: process.env.UNDER_MAINTENACE?.split(",") ?? [],
   mainUrl: process.env.MAIN_URL || "/trading",
