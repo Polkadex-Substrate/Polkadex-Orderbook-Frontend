@@ -1,6 +1,4 @@
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
-import { useProfile } from "@orderbook/core/providers/user/profile";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 import { GetServerSideProps } from "next";
 
@@ -17,16 +15,6 @@ const WalletsTemplate = dynamic(
   }
 );
 const Wallets = () => {
-  const router = useRouter();
-
-  const {
-    authInfo: { isAuthenticated: hasUser },
-    auth: { isLoading },
-  } = useProfile();
-
-  if (!isLoading && !hasUser) router?.push("/trading/");
-
-  if (!hasUser) return <div />;
   return <WalletsTemplate />;
 };
 

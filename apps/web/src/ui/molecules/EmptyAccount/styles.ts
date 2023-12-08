@@ -52,6 +52,7 @@ export const EmptyContent = styled.div`
       font-weight: 600;
     }
     p {
+      font-size: ${normalizeValue(1.5)};
       margin: ${normalizeValue(1)} 0 ${normalizeValue(3)} 0;
       color: ${theme.colors.tertiaryText};
     }
@@ -68,7 +69,7 @@ export const EmptyActions = styled.div<{ hasLimit?: boolean }>`
       : theme.colors.primaryBackgroundOpacity};
     border-radius: ${normalizeValue(1)};
     position: relative;
-    max-width: ${normalizeValue(25)};
+    max-width: ${normalizeValue(26)};
 
     &:hover a {
       &:nth-child(1) {
@@ -88,6 +89,7 @@ export const EmptyActions = styled.div<{ hasLimit?: boolean }>`
       z-index: 1;
       padding: ${normalizeValue(1.5)};
       white-space: nowrap;
+      font-size: ${normalizeValue(1.4)};
       font-weight: 500;
       &:nth-child(1) {
         color: ${theme.colors.white};

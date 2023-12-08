@@ -38,10 +38,7 @@ export const Header = ({
   const { allBrowserAccounts } = useTradeWallet();
 
   const tradingAccounts = allBrowserAccounts;
-  const {
-    authInfo: { isAuthenticated },
-    selectedAccount,
-  } = useProfile();
+  const { selectedAccount } = useProfile();
 
   const tradeAccountInfo = useMemo(
     () => getTradeAccount(selectedAccount.tradeAddress, tradingAccounts),
@@ -112,36 +109,29 @@ export const Header = ({
           </Popover>
         </S.ActionsWrapper>
         <S.AccountContainer>
-          {isAuthenticated ? (
-            <Popover>
-              <Popover.Trigger>
-                <S.Account>
-                  <S.Avatar>
-                    <Icons.Avatar />
-                  </S.Avatar>
-                  <S.AccountInfo>
-                    {tradeAccountInfo ? (
-                      <p>
-                        {walletName}
-                        <span>{addressName}</span>
-                      </p>
-                    ) : (
-                      <p>{t("noTradeWallet")}</p>
-                    )}
-                  </S.AccountInfo>
-                  <S.AccountMessage>{t("account")}</S.AccountMessage>
-                </S.Account>
-              </Popover.Trigger>
-              <Popover.Content>
-                <Profile />
-              </Popover.Content>
-            </Popover>
-          ) : (
-            <S.UserActions>
-              <Link href="/signIn">{t("login")}</Link>
-              <Link href="/sign">{t("register")}</Link>
-            </S.UserActions>
-          )}
+          <Popover>
+            <Popover.Trigger>
+              <S.Account>
+                <S.Avatar>
+                  <Icons.Avatar />
+                </S.Avatar>
+                <S.AccountInfo>
+                  {tradeAccountInfo ? (
+                    <p>
+                      {walletName}
+                      <span>{addressName}</span>
+                    </p>
+                  ) : (
+                    <p>{t("noTradeWallet")}</p>
+                  )}
+                </S.AccountInfo>
+                <S.AccountMessage>{t("account")}</S.AccountMessage>
+              </S.Account>
+            </Popover.Trigger>
+            <Popover.Content>
+              <Profile />
+            </Popover.Content>
+          </Popover>
         </S.AccountContainer>
       </S.Actions>
     </S.Wrapper>
