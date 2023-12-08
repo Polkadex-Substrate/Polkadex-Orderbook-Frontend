@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { Fragment, useRef } from "react";
+import React, { useRef } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { DEFAULTWALLETSINTRONAME } from "@orderbook/core/constants";
@@ -540,11 +540,6 @@ const ControllerWallets = ({
     ({ account }) => account?.address?.toLowerCase() === address?.toLowerCase()
   );
 
-  // TODO: Could delete this function after connect wallet integration
-  const handleLinkEmail = (extensionAccount: ExtensionAccount) => {
-    console.log(extensionAccount);
-  };
-
   const { t } = useTranslation("settings");
 
   return (
@@ -564,35 +559,16 @@ const ControllerWallets = ({
         {isRegistered && linkedTradeAccounts!.length > 0 ? (
           <Badge isRegistered={true}>{t("registeredBadge")}</Badge>
         ) : (
-          <Fragment>
-            {!isRegistered && (
-              <S.Button
-                type="button"
-                onClick={() => {
-                  if (extensionAccount) {
-                    handleLinkEmail(extensionAccount);
-                  }
-                }}
-              >
-                {t("useInOrderbook")}
-              </S.Button>
-            )}
-            {isRegistered && (
-              <S.Button
-                type="button"
-                onClick={() => {
-                  if (
-                    extensionAccount &&
-                    typeof handleRegister === "function"
-                  ) {
-                    handleRegister(extensionAccount);
-                  }
-                }}
-              >
-                {t("registerNow")}
-              </S.Button>
-            )}
-          </Fragment>
+          <S.Button
+            type="button"
+            onClick={() => {
+              if (extensionAccount && typeof handleRegister === "function") {
+                handleRegister(extensionAccount);
+              }
+            }}
+          >
+            {t("registerNow")}
+          </S.Button>
         )}
       </S.WalletActions>
     </WalletCard>
