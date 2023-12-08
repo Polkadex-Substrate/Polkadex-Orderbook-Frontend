@@ -17,7 +17,7 @@ import { UserActions } from "../../templates/ConnectWallet/userActions";
 
 export const Profile = ({ onClick }: { onClick: () => void }) => {
   const { selectedWallet, selectedAccount, onLogout, localTradingAccounts } =
-    useWalletProvider();
+    useWalletProvider(); // Testing provider
 
   const shortAddress = useMemo(
     () => truncateString(selectedAccount?.address ?? "", 3),

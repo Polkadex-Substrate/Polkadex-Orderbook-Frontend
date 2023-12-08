@@ -33,7 +33,7 @@ export const NewTradingAccount = ({
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(1);
 
-  const { selectedWallet } = useWalletProvider();
+  const { selectedWallet } = useWalletProvider(); // Testing provider
   const loading = false;
 
   const [state, setState] = useState<(string | number)[]>(initialState);
