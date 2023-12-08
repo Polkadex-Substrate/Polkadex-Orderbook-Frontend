@@ -39,4 +39,4 @@ export * from "./variants";
 export * from "./isPageDisabled";
 export * from "./getChainFromTicker";
 export * from "./getCurrentMarket";
-export * from "./isValidJSON";
+export * from "./isValidJson";
