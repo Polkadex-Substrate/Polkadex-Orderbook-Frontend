@@ -224,11 +224,11 @@ export const Transactions = ({ market }: Props) => {
 export const TransactionsSkeleton = () => {
   return (
     <S.SkeletonWrapper>
-      <Skeleton width={"100%"} height={normalizeValue(5)} />
-      <Skeleton width={"100%"} height={normalizeValue(5)} />
-      <Skeleton width={"100%"} height={normalizeValue(5)} />
-      <Skeleton width={"100%"} height={normalizeValue(5)} />
-      <Skeleton width={"100%"} height={normalizeValue(5)} />
+      <Skeleton width={"100%"} height={normalizeValue(5.4)} />
+      <Skeleton width={"100%"} height={normalizeValue(5.4)} />
+      <Skeleton width={"100%"} height={normalizeValue(5.4)} />
+      <Skeleton width={"100%"} height={normalizeValue(5.4)} />
+      <Skeleton width={"100%"} height={normalizeValue(5.4)} />
     </S.SkeletonWrapper>
   );
 };
