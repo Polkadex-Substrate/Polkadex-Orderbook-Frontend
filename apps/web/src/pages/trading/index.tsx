@@ -3,18 +3,15 @@ import { useEffect, useMemo } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
-import { getFromStorage } from "@orderbook/core/index";
+import { getFromStorage, isValidJson } from "@orderbook/core/helpers";
 
 function Home() {
   const router = useRouter();
   const persistedMarket = useMemo(() => {
     const market = getFromStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET);
-    try {
-      const parsedMarket = JSON.parse(market as string);
-      return parsedMarket.name;
-    } catch {
-      return `${defaultConfig.landingPageMarket}`;
-    }
+    return market && isValidJson(market)
+      ? JSON.parse(market)?.name
+      : defaultConfig.landingPageMarket;
   }, []);
 
   useEffect(() => {
