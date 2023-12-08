@@ -7,11 +7,9 @@ import { Slide } from "react-reveal";
 import { useTranslation } from "next-i18next";
 import { Menu } from "@headlessui/react";
 import Spline from "@splinetool/react-spline";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import classNames from "classnames";
-import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
-import { getFromStorage, isValidJson } from "@orderbook/core/helpers";
-import { defaultConfig } from "@orderbook/core/config";
+import { getMarketUrl } from "@orderbook/core/helpers";
 
 import SpeedImage from "../../../../public/img/speed.webp";
 import PadLock from "../../../../public/img/padlock.webp";
@@ -100,15 +98,7 @@ export function LandingTemplate() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
 
-  const persistedMarket = useMemo(() => {
-    const market = getFromStorage(LOCAL_STORAGE_ID.DEFAULT_MARKET);
-
-    return market && isValidJson(market)
-      ? JSON.parse(market)?.name
-      : defaultConfig.landingPageMarket;
-  }, []);
-
-  const marketURL = `/trading/${persistedMarket}`;
+  const marketURL = getMarketUrl();
 
   return (
     <>
