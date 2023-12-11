@@ -4,19 +4,12 @@ import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@orderbook/core/hooks";
-import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import * as S from "./styles";
 
 export const Menu = ({ open = false }) => {
   const router = useRouter();
-
-  const profileState = useProfile();
   const { isDarkTheme, changeTheme } = useAppearance();
-
-  const {
-    authInfo: { isAuthenticated },
-  } = profileState;
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`menu.${key}`);
@@ -36,7 +29,6 @@ export const Menu = ({ open = false }) => {
           active={router.pathname === "/balances"}
           icon="Coins"
           href="/balances"
-          disable={!isAuthenticated}
           open={open}
         >
           {t("balances")}
@@ -45,7 +37,6 @@ export const Menu = ({ open = false }) => {
           active={router.pathname === "/wallets"}
           icon="Wallet"
           href="/wallets"
-          disable={!isAuthenticated}
           open={open}
         >
           {t("wallets")}

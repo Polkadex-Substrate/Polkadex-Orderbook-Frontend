@@ -57,6 +57,7 @@ export const Logo = styled.div<{ borderActive: boolean; hideLogo?: boolean }>`
     svg {
       width: ${normalizeValue(13)};
       height: auto;
+      margin-top: ${normalizeValue(1)};
     }
     span {
       font-weight: 500;

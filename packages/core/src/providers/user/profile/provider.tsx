@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useReducer } from "react";
-import { API, Auth } from "aws-amplify";
+import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
+import { API } from "aws-amplify";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { sendQueryToAppSync } from "@orderbook/core/helpers";
 import * as queries from "@orderbook/core/graphql/queries";
 
-import { useAuth } from "../auth";
+import { ExtensionAccount } from "../../types";
 
 import { Provider } from "./context";
 import { initialState, profileReducer } from "./reducer";
@@ -14,15 +15,14 @@ import * as A from "./actions";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
-  const { onUserAuth, signin, logout } = useAuth();
-  const { onHandleNotification, onHandleError } = useSettingsProvider();
+  const { onHandleError, hasExtension } = useSettingsProvider();
 
   const onUserSelectAccount = useCallback(
     (payload: T.UserSelectAccount) => {
       const { tradeAddress: _tradeAddress } = payload;
       try {
         const mainAddress = state.userData?.userAccounts?.find(
-          ({ tradeAddress }) => _tradeAddress === tradeAddress,
+          ({ tradeAddress }) => _tradeAddress === tradeAddress
         )?.mainAddress;
         if (mainAddress) {
           const data = { tradeAddress: _tradeAddress, mainAddress };
@@ -34,33 +34,11 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         onHandleError(`Invalid funding account, ${e?.message ?? e}`);
       }
     },
-    [onHandleError, state.userData?.userAccounts],
-  );
-
-  const getAllMainLinkedAccounts = useCallback(
-    async (email: string, Api = API) => {
-      try {
-        const res = await sendQueryToAppSync({
-          query: queries.listMainAccountsByEmail,
-          variables: {
-            email,
-          },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
-          API: Api,
-        });
-        return res.data.listMainAccountsByEmail ?? { accounts: [] };
-      } catch (error) {
-        console.log("Error: getAllMainLinkedAccounts", error.errors);
-        onHandleError(
-          `Fet all linked accounts error: ${error?.message ?? error}`,
-        );
-      }
-    },
-    [onHandleError],
+    [onHandleError, state.userData?.userAccounts]
   );
 
   const getAllProxyAccounts = useCallback(
-    async (mainAccounts: [string], Api = API): Promise<T.UserAccount[]> => {
+    async (mainAccounts: string[], Api = API): Promise<T.UserAccount[]> => {
       const promises = mainAccounts?.map(async (mainAccount) => {
         try {
           const res = await sendQueryToAppSync({
@@ -86,25 +64,15 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       });
       return accounts;
     },
-    [],
+    []
   );
-
-  const onSetUserAuthData = ({
-    isAuthenticated,
-    userExists,
-    jwt,
-  }: T.UserAuth) => {
-    dispatch(A.userAuthData({ isAuthenticated, userExists, jwt }));
-  };
 
   // TODO: Refactor this function
   const onUserAuthentication = useCallback(
-    async (payload: T.UserAuth) => {
-      dispatch(A.userFetch({ email: payload.email }));
-      const { email, isConfirmed, userExists } = payload;
+    async (mainAccounts: string[]) => {
       const userAccounts = state.userData?.userAccounts;
       const defaultTradeAccountFromStorage = window.localStorage.getItem(
-        LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT,
+        LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
       );
       const defaultTradeAddress =
         defaultTradeAccountFromStorage === "null"
@@ -113,11 +81,9 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
       try {
         if (!userAccounts?.length) {
-          const { accounts }: { accounts: [string] } =
-            await getAllMainLinkedAccounts(email);
-          const userAccounts = await getAllProxyAccounts(accounts);
+          const userAccounts = await getAllProxyAccounts(mainAccounts);
           const mainAddress = userAccounts?.find(
-            ({ tradeAddress }) => defaultTradeAddress === tradeAddress,
+            ({ tradeAddress }) => defaultTradeAddress === tradeAddress
           )?.mainAddress;
 
           if (mainAddress && defaultTradeAddress)
@@ -125,35 +91,27 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
               A.userAccountSelectData({
                 tradeAddress: defaultTradeAddress ?? null,
                 mainAddress: mainAddress ?? null,
-              }),
+              })
             );
-          if (accounts?.length)
-            dispatch(A.userData({ mainAccounts: accounts }));
+          if (mainAccounts?.length) dispatch(A.userData({ mainAccounts }));
           else
             dispatch(
-              A.userError({ code: -1, message: ["No mainAccounts present"] }),
+              A.userError({ code: -1, message: ["No mainAccounts present"] })
             ); // Need to do it to set isLoading to false
 
           if (userAccounts?.length)
             dispatch(A.userData({ userAccounts: userAccounts }));
           else
             dispatch(
-              A.userError({ code: -1, message: ["No userAccounts present"] }),
+              A.userError({ code: -1, message: ["No userAccounts present"] })
             ); // Need to do it to set isLoading to false
         }
         if (defaultTradeAddress?.length) {
           dispatch(A.userSetDefaultTradeAccount(defaultTradeAddress));
           dispatch(
-            A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress }),
+            A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress })
           );
           dispatch(A.userSetAvatar());
-        }
-        if (!isConfirmed && userExists) {
-          onHandleNotification({
-            type: "Attention",
-            message:
-              "Please confirm your email, sign in again and confirm your email.",
-          });
         }
       } catch (error) {
         onHandleError(`User auth error:${error?.message ?? error}`);
@@ -161,13 +119,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         dispatch(A.userError(error));
       }
     },
-    [
-      onHandleError,
-      onHandleNotification,
-      getAllMainLinkedAccounts,
-      getAllProxyAccounts,
-      state?.userData?.userAccounts,
-    ],
+    [onHandleError, getAllProxyAccounts, state?.userData?.userAccounts]
   );
 
   const onUserLogout = () => {
@@ -198,13 +150,13 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   };
 
   const onUserAccountSelectFetch = (
-    payload: A.UserAccountSelectFetch["payload"],
+    payload: A.UserAccountSelectFetch["payload"]
   ) => {
     dispatch(A.userAccountSelectFetch(payload));
   };
 
   const onUserSetDefaultTradeAccount = (
-    payload: A.UserSetDefaultTradeAccount["payload"],
+    payload: A.UserSetDefaultTradeAccount["payload"]
   ) => {
     dispatch(A.userSetDefaultTradeAccount(payload));
   };
@@ -214,81 +166,49 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   };
 
   const onUserFavoriteMarketPush = (
-    payload: A.UserFavoriteMarketPush["payload"],
+    payload: A.UserFavoriteMarketPush["payload"]
   ) => {
     dispatch(A.userFavoriteMarketPush(payload));
   };
 
-  const signInSuccess = signin.isSuccess;
-  const logoutIsSuccess = logout.isSuccess;
-
   const fetchDataOnUserAuth = useCallback(async () => {
     try {
-      onUserAuthFetch();
-      const { attributes, signInUserSession } =
-        await Auth.currentAuthenticatedUser();
       onUserChangeInitBanner();
-      const payload = {
-        email: attributes?.email,
-        isAuthenticated: true,
-        userExists: true,
-        isConfirmed: attributes?.email_verified,
-        jwt: signInUserSession?.accessToken?.jwtToken,
-      };
-      onUserAuth({
-        email: payload.email,
-        userConfirmed: payload.isConfirmed,
-      });
-      onSetUserAuthData(payload);
-      await onUserAuthentication(payload);
+
+      const { web3AccountsSubscribe, web3FromAddress } = await import(
+        "@polkadot/extension-dapp"
+      );
+      const unsubscribe = await web3AccountsSubscribe(
+        async (injectedAccounts: InjectedAccountWithMeta[]) => {
+          const allAccounts = await Promise.all(
+            injectedAccounts.map(async (account): Promise<ExtensionAccount> => {
+              const { signer } = await web3FromAddress(account.address);
+              return {
+                account,
+                signer,
+              };
+            })
+          );
+          const mainAccounts = allAccounts.map((a) => a.account.address);
+          await onUserAuthentication(mainAccounts);
+        },
+        { ss58Format: 88 }
+      );
+      return () => unsubscribe();
     } catch (error) {
-      console.log("User error", error);
-      switch (error) {
-        case "User is not confirmed.": {
-          const payload = {
-            email: "",
-            isAuthenticated: false,
-            userExists: true,
-            isConfirmed: false,
-          };
-          onSetUserAuthData(payload);
-          await onUserAuthentication(payload);
-          break;
-        }
-        case "The user is not authenticated": {
-          const payload = {
-            email: "",
-            isAuthenticated: false,
-            userExists: false,
-            isConfirmed: false,
-          };
-          onSetUserAuthData(payload);
-          break;
-        }
-        default: {
-          console.error("Error=>", `User data fetch error: ${error.message}`);
-          onHandleError(`User data fetch error: ${error?.message ?? error}`);
-          break;
-        }
-      }
+      onHandleError(`Accounts fetch error: ${error?.message ?? error}`);
     }
-  }, [onUserAuth, onHandleError, onUserAuthFetch, onUserAuthentication]);
+  }, [onUserAuthentication, onHandleError]);
 
   useEffect(() => {
-    // When User logout, do not fetch the data
-    if (!logoutIsSuccess) fetchDataOnUserAuth();
-  }, [logoutIsSuccess, signInSuccess, fetchDataOnUserAuth]);
-
-  useEffect(() => {
-    if (logoutIsSuccess) onUserLogout();
-  }, [logoutIsSuccess]);
+    if (hasExtension) fetchDataOnUserAuth();
+  }, [fetchDataOnUserAuth, hasExtension]);
 
   return (
     <Provider
       value={{
         ...state,
         onUserSelectAccount,
-        onUserAuth: onUserAuthentication,
         onUserLogout,
         onUserChangeInitBanner,
         onUserAuthFetch,

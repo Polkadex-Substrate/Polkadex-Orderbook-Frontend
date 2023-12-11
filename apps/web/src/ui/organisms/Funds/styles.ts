@@ -5,6 +5,9 @@ import { normalizeValue } from "@/utils/normalize";
 
 export const Wrapper = styled.div`
   overflow-x: auto;
+  thead {
+    z-index: -1;
+  }
 `;
 
 // Table Styles
@@ -15,31 +18,44 @@ export const Table = styled.table`
 export const Thead = styled.thead`
   font-size: ${normalizeValue(1.2)};
   color: #8ba1be;
-  tr {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    margin-bottom: ${normalizeValue(1)};
-    padding: 0 ${normalizeValue(1)};
-  }
-`;
-export const Tbody = styled.tbody`
-  font-size: ${normalizeValue(1.3)};
-
-  ${media.greaterThan("large")`
-    height: ${normalizeValue(32)};
-    display: block;
-    overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin-bottom: ${normalizeValue(1)};
+  padding: 0 ${normalizeValue(2)};
+  ${media.lessThan("large")`
+    grid-template-columns: repeat(4,1fr);
+    grid-row-gap: ${normalizeValue(2)};
+    grid-column-gap: ${normalizeValue(1)};
   `}
-  tr {
+`;
+
+export const Tbody = styled.tbody`
+  ${({ theme }) => css`
+    font-size: ${normalizeValue(1.3)};
+
+    max-height: ${normalizeValue(30)};
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    align-items: center;
-    ${media.lessThan("large")`
-      grid-template-columns: repeat(3,1fr);
-      grid-row-gap: ${normalizeValue(2)};
-      grid-column-gap: ${normalizeValue(1)};
-    `}
-  }
+    overflow-y: auto;
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    tr {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: center;
+      &:nth-child(even) {
+        background: ${theme.colors.tertiaryBackgroundOpacity};
+      }
+      padding: ${normalizeValue(1.2)} 0 ${normalizeValue(1.2)}
+        ${normalizeValue(3)};
+      ${media.lessThan("large")`
+        grid-template-columns: repeat(4,1fr);
+     `}
+    }
+  `}
 `;
 
 export const Tr = styled.tr``;
@@ -57,11 +73,8 @@ export const EmptyWrapper = styled.div`
 `;
 
 export const Column = styled.div`
-  ${({ theme }) => css`
-    font-size: ${normalizeValue(1.2)};
-    font-weight: 500;
-    color: ${theme.colors.tertiaryText};
-  `}
+  font-size: ${normalizeValue(1.3)};
+  font-weight: 500;
 `;
 
 export const Cell = styled.div`
@@ -80,7 +93,6 @@ export const Cell = styled.div`
 export const CellFlex = styled.div`
   display: flex;
   align-items: center;
-  padding-left: ${normalizeValue(1)};
 `;
 
 export const TokenIcon = styled.div`
@@ -103,7 +115,6 @@ export const Actions = styled.div`
 `;
 export const Link = styled.div`
   ${({ theme }) => css`
-    padding: ${normalizeValue(0.2)} ${normalizeValue(0.4)};
     font-size: ${normalizeValue(1.3)};
     transition: background 0.4s ease-in-out;
     border: 1px solid ${theme.colors.secondaryBackground};
@@ -121,6 +132,8 @@ export const DepositLink = styled(Link)`
 
 export const TransferLink = styled(Link)`
   ${({ theme }) => css`
+    display: flex;
+    align-items: center;
     background: ${theme.colors.primary};
     color: ${theme.colors.white};
     font-size: ${normalizeValue(1.3)};

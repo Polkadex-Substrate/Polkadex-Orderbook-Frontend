@@ -1,9 +1,7 @@
 import { AllHTMLAttributes } from "react";
 
 export type Props = {
-  address: string;
   onNavigate: (value: string) => void;
-  logout: () => void;
 };
 
 export type Card = {

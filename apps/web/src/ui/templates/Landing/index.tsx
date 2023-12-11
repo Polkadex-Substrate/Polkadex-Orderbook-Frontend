@@ -9,6 +9,7 @@ import { Menu } from "@headlessui/react";
 import Spline from "@splinetool/react-spline";
 import { useState } from "react";
 import classNames from "classnames";
+import { getMarketUrl } from "@orderbook/core/helpers";
 
 import SpeedImage from "../../../../public/img/speed.webp";
 import PadLock from "../../../../public/img/padlock.webp";
@@ -96,6 +97,8 @@ export function LandingTemplate() {
   const [state, setState] = useState(false);
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
+
+  const marketURL = getMarketUrl();
 
   return (
     <>
@@ -185,7 +188,7 @@ export function LandingTemplate() {
                 items={menuItems.community}
               />
             </S.Menu>
-            <S.Button href="/trading">{t("button")}</S.Button>
+            <S.Button href={marketURL}>{t("button")}</S.Button>
             <S.MenuButton onClick={() => setState(true)}>
               <svg width="26" height="26" viewBox="0 0 100 100">
                 <path
@@ -224,7 +227,7 @@ export function LandingTemplate() {
               {t("hero.highlight")}
               <strong>.</strong>
             </p>
-            <S.Button href="/trading">{t("button")}</S.Button>
+            <S.Button href={marketURL}>{t("button")}</S.Button>
           </S.HeroAside>
           <S.Spline>
             <Spline
@@ -287,7 +290,7 @@ export function LandingTemplate() {
                 {t("features.ctaTitle")}
                 <Icons.SingleArrowRight />
               </span>
-              <S.Button href="/trading">{t("button")}</S.Button>
+              <S.Button href={marketURL}>{t("button")}</S.Button>
             </S.StartFooter>
           </Slide>
         </S.Start>
@@ -400,7 +403,7 @@ export function LandingTemplate() {
                     {t("benefits.ctaTitle")}
                     <Icons.SingleArrowRight />
                   </Link>
-                  <S.Button href="/trading">{t("button")}</S.Button>
+                  <S.Button href={marketURL}>{t("button")}</S.Button>
                 </S.FeaturesFooter>
               </Slide>
             </S.FeaturesContent>

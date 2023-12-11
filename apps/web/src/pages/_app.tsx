@@ -13,7 +13,6 @@ import { Work_Sans } from "next/font/google";
 import Head from "next/head";
 import { defaultConfig } from "@orderbook/core/config";
 import {
-  AuthProvider,
   ProfileProvider,
   TradeWalletProvider,
   NativeApiProvider,
@@ -61,17 +60,15 @@ const queryClient = new QueryClient({
 
 const Providers = ({ children }) => {
   return (
-    <AuthProvider>
-      <ProfileProvider>
-        <NativeApiProvider>
-          <TradeWalletProvider>
-            <ExtensionWalletProvider>
-              <OrderbookServiceProvider>{children}</OrderbookServiceProvider>
-            </ExtensionWalletProvider>
-          </TradeWalletProvider>
-        </NativeApiProvider>
-      </ProfileProvider>
-    </AuthProvider>
+    <ProfileProvider>
+      <NativeApiProvider>
+        <TradeWalletProvider>
+          <ExtensionWalletProvider>
+            <OrderbookServiceProvider>{children}</OrderbookServiceProvider>
+          </ExtensionWalletProvider>
+        </TradeWalletProvider>
+      </NativeApiProvider>
+    </ProfileProvider>
   );
 };
 
