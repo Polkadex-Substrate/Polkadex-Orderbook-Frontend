@@ -11,6 +11,7 @@ import {
   Trade,
   Transaction,
   Ticker,
+  Balance,
 } from "@orderbook/core/utils/orderbookService";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
@@ -18,6 +19,7 @@ import { useOrderbookService } from "@orderbook/core/providers/public/orderbookS
 import {
   decimalPlaces,
   deleteFromBook,
+  fetchOnChainBalance,
   getCurrentMarket,
   replaceOrAddToBook,
 } from "@orderbook/core/helpers";
@@ -30,6 +32,7 @@ import { useOrderbook } from "@orderbook/core/hooks";
 import { useProfile } from "../profile";
 import { useSettingsProvider } from "../../public/settings";
 import { useSessionProvider } from "../sessionProvider";
+import { useNativeApi } from "../../public/nativeApi";
 
 import { Provider } from "./context";
 import * as T from "./types";
@@ -39,11 +42,12 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   const path = usePathname();
   const router = useRouter();
   const { onHandleError } = useSettingsProvider();
-  const { isReady, markets } = useOrderbookService();
+  const { isReady, markets, assets } = useOrderbookService();
   const { dateFrom, dateTo } = useSessionProvider();
   const {
     selectedAccount: { tradeAddress, mainAddress },
   } = useProfile();
+  const { api } = useNativeApi();
 
   const isTradingPage = path.startsWith("/trading");
   const marketName = isTradingPage ? (router.query.id as string) : null;
@@ -246,6 +250,86 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
     [markets, queryClient]
   );
 
+  const updateBalanceFromEvent = useCallback(
+    async (msg: Balance) => {
+      const assetId = msg.asset.id;
+
+      const payload = {
+        name: msg?.asset?.name || "",
+        symbol: msg?.asset?.ticker || "",
+        assetId: assetId.toString(),
+        free_balance: msg.free,
+        reserved_balance: msg.reserved,
+      };
+
+      if (!api) return { ...payload, onChainBalance: "0" };
+
+      const onChainBalance = await fetchOnChainBalance(
+        api,
+        assetId,
+        mainAddress
+      );
+      return { ...payload, onChainBalance: onChainBalance.toString() };
+    },
+    [api, mainAddress]
+  );
+
+  const onBalanceUpdate = useCallback(
+    async (payload: Balance) => {
+      try {
+        const assetIds = assets.map((a) => a.id);
+        const { onChainBalance, ...updateBalance } =
+          await updateBalanceFromEvent(payload);
+
+        // Update trading account balance
+        queryClient.setQueryData(
+          QUERY_KEYS.tradingBalances(mainAddress),
+          (oldData): Balance[] => {
+            const prevData = [...(oldData as Balance[])];
+            const old = prevData.find(
+              (i) => i.asset.id.toString() === updateBalance.assetId.toString()
+            );
+            if (!old) {
+              return prevData;
+            }
+            const newBalance: Balance = {
+              asset: {
+                decimal: 8,
+                id: updateBalance.assetId,
+                name: updateBalance.name,
+                ticker: updateBalance.symbol,
+              },
+              free: updateBalance.free_balance,
+              reserved: updateBalance.reserved_balance,
+            };
+
+            // Filter out old balances from the balance state
+            const balanceFiltered = prevData?.filter(
+              (balance) =>
+                balance.asset.id.toString() !== updateBalance.assetId.toString()
+            );
+
+            // Apply updates to the balances in the state
+            return [...balanceFiltered, newBalance];
+          }
+        );
+
+        // Update chain balance
+        queryClient.setQueryData(
+          QUERY_KEYS.onChainBalances(mainAddress, assetIds),
+          (prevData) => {
+            const oldData = new Map(prevData as Map<string, number>);
+            oldData.set(updateBalance.assetId, Number(onChainBalance));
+            return oldData;
+          }
+        );
+      } catch (error) {
+        onHandleError("Something has gone wrong while updating balance");
+      }
+    },
+    [assets, mainAddress, onHandleError, queryClient, updateBalanceFromEvent]
+  );
+
   // Recent Trades subscription
   useEffect(() => {
     if (!isReady || !market) return;
@@ -322,6 +406,19 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
 
     return () => subscription.unsubscribe();
   }, [queryClient, markets, isReady, market, onTickerUpdates]);
+
+  // Balances subscription
+  useEffect(() => {
+    if (mainAddress && isReady) {
+      const subscription = appsyncOrderbookService.subscriber.subscribeBalances(
+        mainAddress,
+        onBalanceUpdate
+      );
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [mainAddress, onBalanceUpdate, isReady]);
 
   return <Provider value={{}}>{children}</Provider>;
 };
