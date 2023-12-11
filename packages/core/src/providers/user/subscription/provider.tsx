@@ -8,6 +8,7 @@ import {
   Order,
   MaybePaginated,
   PriceLevel,
+  Trade,
 } from "@orderbook/core/utils/orderbookService";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
@@ -159,6 +160,31 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
     [asks, bids, market, queryClient]
   );
 
+  const onUserTradeUpdate = useCallback(
+    (trade: Trade) => {
+      try {
+        queryClient.setQueryData(
+          QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
+          (
+            oldTradeHistory: InfiniteData<MaybePaginated<Trade[]>> | undefined
+          ) => {
+            const payload = {
+              data: [trade],
+              nextToken: null,
+            };
+            return {
+              pages: [payload, ...(oldTradeHistory?.pages ?? [])],
+              pageParams: [...(oldTradeHistory?.pageParams ?? [])],
+            };
+          }
+        );
+      } catch (error) {
+        onHandleError(`User trades channel error: ${error?.message ?? error}`);
+      }
+    },
+    [dateFrom, dateTo, onHandleError, queryClient, tradeAddress]
+  );
+
   // Recent Trades subscription
   useEffect(() => {
     if (!isReady || !market) return;
@@ -194,6 +220,20 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
       return () => subscription.unsubscribe();
     }
   }, [tradeAddress, onOrderUpdates, isReady]);
+
+  // Trade history subscription
+  useEffect(() => {
+    if (tradeAddress?.length && isReady) {
+      const subscription =
+        appsyncOrderbookService.subscriber.subscribeUserTrades(
+          tradeAddress,
+          onUserTradeUpdate
+        );
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [tradeAddress, isReady, onUserTradeUpdate]);
 
   return <Provider value={{}}>{children}</Provider>;
 };
