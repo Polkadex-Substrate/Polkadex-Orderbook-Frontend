@@ -25,7 +25,7 @@ export const GenericHorizontalCard = ({
   return (
     <Loading active={!!loading}>
       <div {...elementProps} className="flex flex-col gap-3 group">
-        <div className="flex items-center justify-between px-4 py-3 rounded-md border border-primary group-hover:border-secondary duration-300 transition-colors">
+        <div className="flex items-center justify-between px-4 py-3 rounded-md border border-level-5 group-hover:bg-level-4 duration-300 transition-colors">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4">
               <Icon
