@@ -9,6 +9,7 @@ import {
   MaybePaginated,
   PriceLevel,
   Trade,
+  Transaction,
 } from "@orderbook/core/utils/orderbookService";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
@@ -39,7 +40,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   const { isReady, markets } = useOrderbookService();
   const { dateFrom, dateTo } = useSessionProvider();
   const {
-    selectedAccount: { tradeAddress },
+    selectedAccount: { tradeAddress, mainAddress },
   } = useProfile();
 
   const isTradingPage = path.startsWith("/trading");
@@ -185,6 +186,33 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
     [dateFrom, dateTo, onHandleError, queryClient, tradeAddress]
   );
 
+  const onTransactionsUpdate = useCallback(
+    (payload: Transaction) => {
+      try {
+        if (payload) {
+          queryClient.setQueryData(
+            QUERY_KEYS.transactions(mainAddress),
+            (oldData: MaybePaginated<Transaction[]> | undefined) => {
+              const transactions = _.cloneDeep(oldData?.data as Transaction[]);
+              const index = transactions.findIndex(
+                ({ stid }) => Number(stid) === Number(payload.stid)
+              );
+              if (index !== -1) {
+                transactions[index] = payload;
+              } else {
+                transactions.push(payload);
+              }
+              return { data: transactions, nextToken: null };
+            }
+          );
+        }
+      } catch (error) {
+        onHandleError("Something has gone wrong while updating transactions");
+      }
+    },
+    [mainAddress, onHandleError, queryClient]
+  );
+
   // Recent Trades subscription
   useEffect(() => {
     if (!isReady || !market) return;
@@ -234,6 +262,21 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
       };
     }
   }, [tradeAddress, isReady, onUserTradeUpdate]);
+
+  // Transactions subscription
+  useEffect(() => {
+    if (mainAddress && isReady) {
+      const subscription =
+        appsyncOrderbookService.subscriber.subscribeTransactions(
+          mainAddress,
+          onTransactionsUpdate
+        );
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [mainAddress, onTransactionsUpdate, isReady]);
 
   return <Provider value={{}}>{children}</Provider>;
 };
