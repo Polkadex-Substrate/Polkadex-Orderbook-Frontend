@@ -1,23 +1,25 @@
 import {
   Accordion,
-  Interaction,
   Typography,
   Illustrations,
+  Interaction,
 } from "@polkadex/ux";
 
 import { GenericInfoCard, GenericExternalCard } from "../ReadyToUse";
 
 export const InsufficientBalance = ({
   onClose,
-  onTryAgain,
+  balance,
+  fee = 1,
 }: {
+  balance?: number;
+  fee?: number;
   onClose: () => void;
-  onTryAgain: () => void;
 }) => {
   return (
-    <Interaction className="gap-10">
+    <Interaction>
       <Interaction.Content className="flex flex-col gap-6 flex-1">
-        <div className="flex flex-col gap-2 border-b border-primary pb-8">
+        <div className="flex flex-col gap-2 border-b border-primary">
           <div className="py-6 flex flex-col gap-5 items-center text-center">
             <div className="max-w-[8rem]">
               <Illustrations.Error className="max-w-[6rem] w-full" />
@@ -28,11 +30,11 @@ export const InsufficientBalance = ({
             </Typography.Text>
           </div>
           <div className="flex flex-col gap-2">
-            <GenericInfoCard label="Your balance">2.9840201000</GenericInfoCard>
-            <GenericInfoCard label="Fees">1 PDEX</GenericInfoCard>
+            <GenericInfoCard label="Your balance">{balance}</GenericInfoCard>
+            <GenericInfoCard label="Fees">{fee} PDEX</GenericInfoCard>
           </div>
         </div>
-        <Accordion type="multiple">
+        <Accordion type="single" defaultValue="accordion1">
           <Accordion.Item value="accordion1">
             <Accordion.Trigger>
               <Typography.Heading type="h4" size="xs">
@@ -59,9 +61,6 @@ export const InsufficientBalance = ({
         </Accordion>
       </Interaction.Content>
       <Interaction.Footer>
-        <Interaction.Action onClick={onTryAgain} appearance="secondary">
-          Try again
-        </Interaction.Action>
         <Interaction.Close onClick={onClose}>Close</Interaction.Close>
       </Interaction.Footer>
     </Interaction>
