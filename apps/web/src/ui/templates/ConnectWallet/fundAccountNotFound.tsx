@@ -1,9 +1,9 @@
 import {
   Accordion,
-  Interaction,
   Typography,
   WalletCard,
   Illustrations,
+  Interaction,
 } from "@polkadex/ux";
 
 export const FundAccountNotFound = () => {

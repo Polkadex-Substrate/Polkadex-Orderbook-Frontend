@@ -1,8 +1,8 @@
 import {
-  Interaction,
   Typography,
   WalletCard,
   Illustrations,
+  Interaction,
 } from "@polkadex/ux";
 
 export const FundAccountConnected = () => {

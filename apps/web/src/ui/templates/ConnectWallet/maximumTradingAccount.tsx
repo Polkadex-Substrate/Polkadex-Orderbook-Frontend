@@ -1,8 +1,8 @@
 import {
   Accordion,
-  Interaction,
   Typography,
   Illustrations,
+  Interaction,
 } from "@polkadex/ux";
 
 import { RemoveWalletCard } from "../ReadyToUse";

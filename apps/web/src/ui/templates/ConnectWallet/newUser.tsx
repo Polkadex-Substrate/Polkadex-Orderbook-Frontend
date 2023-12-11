@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import { Interaction, Typography, Icon, Illustrations } from "@polkadex/ux";
+import { Typography, Icon, Illustrations, Interaction } from "@polkadex/ux";
 
 export const NewUser = ({
   onContinue,
