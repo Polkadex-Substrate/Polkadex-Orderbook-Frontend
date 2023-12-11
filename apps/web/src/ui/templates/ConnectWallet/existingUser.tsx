@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import { Interaction, Typography, Icon, Illustrations } from "@polkadex/ux";
+import { Typography, Icon, Illustrations, Interaction } from "@polkadex/ux";
 
 import { GenericHorizontalCard } from "../ReadyToUse";
 
@@ -9,10 +9,12 @@ export const ExistingUser = ({
   onBack,
   onCreate,
   onRecover,
+  onTradingAccountList,
 }: {
   onClose: () => void;
   onReadMore: () => void;
   onCreate: () => void;
+  onTradingAccountList: () => void;
   onRecover: () => void;
   onBack: () => void;
 }) => {
@@ -41,7 +43,7 @@ export const ExistingUser = ({
               <Typography.Text className="text-primary-base">
                 Read More
               </Typography.Text>
-              <ChevronRightIcon className="w-4 h-4" />
+              <ChevronRightIcon className="w-3 h-3" />
             </button>
           </div>
           <div className="flex flex-col gap-2">
@@ -54,6 +56,11 @@ export const ExistingUser = ({
               title="Recover trading account"
               icon="Recover"
               onClick={onRecover}
+            />
+            <GenericHorizontalCard
+              title="Trading accounts list"
+              icon="History"
+              onClick={onTradingAccountList}
             />
           </div>
         </div>
