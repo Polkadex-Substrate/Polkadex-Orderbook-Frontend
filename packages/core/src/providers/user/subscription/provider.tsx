@@ -5,8 +5,9 @@ import {
   PublicTrade,
   appsyncOrderbookService,
   Order,
+  MaybePaginated,
 } from "@orderbook/core/utils/orderbookService";
-import { useQueryClient } from "@tanstack/react-query";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
 import { useOrderbookService } from "@orderbook/core/providers/public/orderbookServiceProvider/useOrderbookService";
 import { getCurrentMarket } from "@orderbook/core/helpers";
@@ -17,6 +18,7 @@ import {
 
 import { useProfile } from "../profile";
 import { useSettingsProvider } from "../../public/settings";
+import { useSessionProvider } from "../sessionProvider";
 
 import { Provider } from "./context";
 import * as T from "./types";
@@ -27,6 +29,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   const router = useRouter();
   const { onHandleError } = useSettingsProvider();
   const { isReady, markets } = useOrderbookService();
+  const { dateFrom, dateTo } = useSessionProvider();
   const {
     selectedAccount: { tradeAddress },
   } = useProfile();
@@ -54,11 +57,48 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
             return updatedOpenOrders;
           }
         );
+
+        // Update OrderHistory Realtime
+        queryClient.setQueryData(
+          QUERY_KEYS.orderHistory(dateFrom, dateTo, tradeAddress),
+          (
+            oldOrderHistory: InfiniteData<MaybePaginated<Order[]>> | undefined
+          ) => {
+            const prevOrderHistory = [
+              ...(oldOrderHistory?.pages.flatMap((page) => page.data) ?? []),
+            ];
+            const oldOrderHistoryLength = oldOrderHistory
+              ? oldOrderHistory?.pages.length
+              : 0;
+
+            const nextToken =
+              oldOrderHistory?.pages?.at(oldOrderHistoryLength - 1)
+                ?.nextToken || null;
+
+            // Add to OrderHistory for all cases
+            const updatedOrderHistory = replaceOrPushOrder(
+              prevOrderHistory,
+              payload
+            );
+
+            const newOrderHistory = {
+              pages: [
+                {
+                  data: [...updatedOrderHistory],
+                  nextToken,
+                },
+              ],
+              pageParams: [...(oldOrderHistory?.pageParams ?? [])],
+            };
+
+            return newOrderHistory;
+          }
+        );
       } catch (error) {
         onHandleError(`Order updates channel ${error?.message ?? error}`);
       }
     },
-    [onHandleError, queryClient, tradeAddress]
+    [dateFrom, dateTo, onHandleError, queryClient, tradeAddress]
   );
 
   const onRecentTradeUpdates = useCallback(
@@ -86,7 +126,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
     return () => subscription.unsubscribe();
   }, [isReady, market, onRecentTradeUpdates]);
 
-  // Open Orders subscription
+  // Open Orders & Order history subscription
   useEffect(() => {
     if (tradeAddress?.length && isReady) {
       const subscription = appsyncOrderbookService.subscriber.subscribeOrders(
