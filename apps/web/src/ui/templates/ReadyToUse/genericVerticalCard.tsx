@@ -24,7 +24,12 @@ export const GenericVerticalCard = ({
     <div
       role="button"
       onClick={disabled ? undefined : onSelect}
-      className="relative flex-1 flex flex-col items-center gap-2 px-3 py-7 rounded-md border border-primary  hover:border-secondary duration-300 transition-colors"
+      className={classNames(
+        disabled
+          ? "opacity-50"
+          : " hover:bg-level-2 duration-300 transition-colors",
+        "relative flex-1 flex flex-col items-center gap-2 px-3 py-7 rounded-md border border-secondary"
+      )}
     >
       <div className="flex flex-col items-center gap-2">
         <div className="w-8 h-8">
@@ -34,7 +39,7 @@ export const GenericVerticalCard = ({
       </div>
       {buttonAction && (
         <Button.Solid
-          appearance="secondary"
+          appearance="tertiary"
           rounded
           size="sm"
           onClick={buttonAction}
