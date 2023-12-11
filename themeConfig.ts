@@ -5,8 +5,11 @@ export const commom = {
   "primary-ghost": "#EA268E22",
   "primary-disabled": "#2B303A",
   "secondary-base": "#252932",
-  "secondary-hover": "#373E4A",
-  "secondary-pressed": "#2B303A",
+  "secondary-hover": "#3D4452",
+  "secondary-pressed": "#454E5E",
+  "tertiary-base": "#343A46",
+  "tertiary-hover": "#373E4A",
+  "tertiary-pressed": "#2B303A",
   "danger-base": "#EB5757",
   "danger-hover": "#EE6D6D",
   "danger-pressed": "#A41313",
@@ -27,6 +30,19 @@ const commomBg = {
   "level-2": "#252932",
   "level-3": "#1F2229",
   "level-4": "#2B303A",
+  "level-5": "#3D4452",
+};
+
+const overlay = {
+  "overlay-1": "#0000007F",
+  "overlay-2": "#00000033",
+  "overlay-3": "#000000CC",
+};
+
+const border = {
+  primary: "#1F2229",
+  secondary: "#2B303A",
+  tertiary: "#343A46",
 };
 
 export const themeConfig = {
@@ -59,10 +75,11 @@ export const themeConfig = {
       backgroundColor: {
         ...commom,
         ...commomBg,
+        ...overlay,
         backgroundBase: "#06070A",
-        "overlay-1": "#0000007F",
-        "overlay-2": "##00000033",
-        "overlay-3": "##000000CC",
+      },
+      outlineColor: {
+        ...commom,
       },
       backgroundSize: {
         skeletonSize: "400% 400%",
@@ -77,8 +94,7 @@ export const themeConfig = {
       borderColor: {
         ...commom,
         ...commomBg,
-        primary: "#1F2229",
-        secondary: "#2B303A",
+        ...border,
       },
       backdropBlur: {
         primary: "5px",
