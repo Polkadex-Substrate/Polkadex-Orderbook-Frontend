@@ -9,3 +9,9 @@ export const setToStorage = (key: string, value: any) => {
     window.localStorage.setItem(key, value);
   }
 };
+
+export const removeFromStorage = (key: string) => {
+  if (typeof window !== "undefined") {
+    window.localStorage.removeItem(key);
+  }
+};
