@@ -6,7 +6,6 @@ import { ProfileContextProps, ProfileProviderProps } from "./types";
 export const Context = createContext<ProfileContextProps>({
   ...initialState,
   onUserSelectAccount: () => {},
-  onUserAuth: () => {},
   onUserLogout: () => {},
   onUserChangeInitBanner: () => {},
   onUserAuthFetch: () => {},

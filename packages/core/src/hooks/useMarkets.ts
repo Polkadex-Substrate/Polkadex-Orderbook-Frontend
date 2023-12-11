@@ -2,10 +2,10 @@ import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { Market } from "@orderbook/core/utils/orderbookService";
-import { getCurrentMarket } from "@orderbook/core/helpers";
+import { getCurrentMarket, setToStorage } from "@orderbook/core/helpers";
 import { defaultConfig } from "@orderbook/core/config";
 
-import { defaultTicker } from "../constants";
+import { LOCAL_STORAGE_ID, defaultTicker } from "../constants";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
 import { useTickers } from "./useTickers";
@@ -92,6 +92,16 @@ export function useMarkets(market?: string) {
     (e: string, onClose: () => void): void => {
       const marketToSet = markets?.find((el) => el.name === e);
       if (marketToSet) {
+        setToStorage(
+          LOCAL_STORAGE_ID.DEFAULT_MARKET,
+          JSON.stringify({
+            id: marketToSet.id,
+            name: `${
+              marketToSet.baseAsset.ticker + marketToSet.quoteAsset.ticker
+            }`,
+          })
+        );
+
         router.push(
           `${marketToSet.baseAsset.ticker + marketToSet.quoteAsset.ticker}`,
           undefined,

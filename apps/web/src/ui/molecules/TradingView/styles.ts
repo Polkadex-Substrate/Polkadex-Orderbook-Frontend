@@ -13,6 +13,10 @@ export const LoadingWrapper = styled.div`
     align-items: center;
     justify-content: center;
     background: ${theme.colors.tertiaryBackgroundOpacity};
+    svg {
+      width: ${normalizeValue(3)};
+      height: ${normalizeValue(3)};
+    }
   `}
 `;
 

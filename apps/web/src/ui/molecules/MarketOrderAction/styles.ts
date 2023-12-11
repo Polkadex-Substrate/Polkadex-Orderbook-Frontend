@@ -124,6 +124,7 @@ export const Error = styled.div<{ hasError: boolean }>`
     top: ${normalizeValue(-2.2)};
     left: 15%;
     font-weight: 500;
+    font-size: ${normalizeValue(1.3)};
   `}
 `;
 

@@ -23,7 +23,6 @@ import * as A from "./actions";
 export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
   const {
-    authInfo,
     onUserSelectAccount,
     onUserProfileAccountPush,
     userData,
@@ -36,11 +35,11 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
   // Actions
   const onExportTradeAccount = (
-    payload: A.ExportTradeAccountFetch["payload"],
+    payload: A.ExportTradeAccountFetch["payload"]
   ) => {
     const { address, password = "" } = payload;
     const selectedAccount = state.allBrowserAccounts?.find(
-      (account) => account?.address?.toLowerCase() === address?.toLowerCase(),
+      (account) => account?.address?.toLowerCase() === address?.toLowerCase()
     );
     if (!selectedAccount) return;
     try {
@@ -52,8 +51,8 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       FileSaver.saveAs(
         blob,
         `${selectedAccount?.meta?.name}-${transformAddress(
-          selectedAccount?.address,
-        )}.json`,
+          selectedAccount?.address
+        )}.json`
       );
     } catch (error) {
       onHandleError("Cannot export this account, incorrect password");
@@ -104,7 +103,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   };
 
   const onImportTradeAccount = (
-    payload: A.ImportTradeAccountFetch["payload"],
+    payload: A.ImportTradeAccountFetch["payload"]
   ) => {
     const { mnemonic, name, password } = payload;
     let tradeAddress = "";
@@ -122,7 +121,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
               name,
               address: tradeAddress,
             },
-          }),
+          })
         );
         dispatch(A.importTradeAccountData());
       }, 2000);
@@ -164,11 +163,11 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         dispatch(A.registerTradeAccountError(error));
       }
     },
-    [onHandleError, onHandleNotification, onUserSelectAccount],
+    [onHandleError, onHandleNotification, onUserSelectAccount]
   );
 
   const onRegisterTradeAccount = async (
-    payload: A.RegisterTradeAccountFetch["payload"],
+    payload: A.RegisterTradeAccountFetch["payload"]
   ) => {
     let tradeAddress: string;
     try {
@@ -183,7 +182,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       } = payload;
       const mnemonic = mnemonicGenerate();
       const controllerWallet = controllerWallets?.find(
-        ({ account }) => account.address === address,
+        ({ account }) => account.address === address
       );
       if (!controllerWallet || !api) {
         console.error("controllerWallet or api not found");
@@ -197,7 +196,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         api,
         tradeAddress,
         controllerWallet.signer,
-        controllerWallet.account.address,
+        controllerWallet.account.address
       );
 
       if (res.isSuccess) {
@@ -213,7 +212,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
                 name,
                 address: tradeAddress,
               },
-            }),
+            })
           );
         }, 2000);
       } else {
@@ -231,7 +230,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   };
 
   const onRemoveProxyAccountFromChain = async (
-    payload: A.RemoveProxyAccountFromChainFetch["payload"],
+    payload: A.RemoveProxyAccountFromChainFetch["payload"]
   ) => {
     dispatch(A.removeProxyAccountFromChainFetch(payload));
     try {
@@ -240,7 +239,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       const linkedMainAddress =
         tradeAddress &&
         userData?.userAccounts?.find(
-          ({ tradeAddress: addr }) => addr === tradeAddress,
+          ({ tradeAddress: addr }) => addr === tradeAddress
         )?.mainAddress;
 
       if (!linkedMainAddress || !api) {
@@ -250,7 +249,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         ? allAccounts?.find(
             ({ account }) =>
               account?.address?.toLowerCase() ===
-              linkedMainAddress?.toLowerCase(),
+              linkedMainAddress?.toLowerCase()
           )
         : undefined;
 
@@ -262,7 +261,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
           api,
           tradeAddress,
           account.signer,
-          account.account.address,
+          account.account.address
         );
         if (res.isSuccess) {
           onHandleNotification({
@@ -272,7 +271,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
           });
           dispatch(A.previewAccountModalCancel());
           dispatch(
-            A.removeProxyAccountFromChainData({ address: payload.address }),
+            A.removeProxyAccountFromChainData({ address: payload.address })
           );
           dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
           onUserProfileTradeAccountDelete({ address: tradeAddress });
@@ -292,7 +291,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   };
 
   const onRegisterTradeAccountData = (
-    payload: T.OnRegisterTradeAccountData,
+    payload: T.OnRegisterTradeAccountData
   ) => {
     dispatch(A.registerTradeAccountData(payload));
   };
@@ -307,7 +306,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     try {
       const _allAccounts = [...state.allBrowserAccounts];
       const pair = _allAccounts?.find(
-        (account) => account?.address === address,
+        (account) => account?.address === address
       );
       if (!pair) {
         onHandleError("No such address exists");
@@ -325,7 +324,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   };
 
   const onRegisterAccountModalActive = (
-    payload?: A.RegisterTradeAccountModalActive["payload"],
+    payload?: A.RegisterTradeAccountModalActive["payload"]
   ) => {
     dispatch(A.registerAccountModalActive(payload));
   };
@@ -335,7 +334,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   };
 
   const onPreviewAccountModalActive = (
-    payload?: A.PreviewTradeAccountModalActive["payload"],
+    payload?: A.PreviewTradeAccountModalActive["payload"]
   ) => {
     dispatch(A.previewAccountModalActive(payload));
   };
@@ -377,8 +376,8 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   }, [onTradeAccountUpdate, tradeAddress]);
 
   useEffect(() => {
-    if (authInfo.isAuthenticated && hasExtension) onLoadTradeAccounts();
-  }, [onLoadTradeAccounts, authInfo.isAuthenticated, hasExtension]);
+    if (hasExtension) onLoadTradeAccounts();
+  }, [onLoadTradeAccounts, hasExtension]);
 
   return (
     <Provider

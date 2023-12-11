@@ -24,7 +24,7 @@ export const Tbody = styled.tbody`
   font-size: ${normalizeValue(1.3)};
 
   ${media.greaterThan("large")`
-    height: ${normalizeValue(32)};
+    height: ${normalizeValue(30)};
     display: block;
     overflow-y: auto;
   `}
