@@ -1,6 +1,7 @@
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { MouseEvent } from "react";
 import { Button, Copy, Typography, truncateString } from "@polkadex/ux";
+import classNames from "classnames";
 
 export const TradingAccountCard = ({
   name,
@@ -19,11 +20,18 @@ export const TradingAccountCard = ({
   const hasRemove = typeof onRemove === "function";
   const hasSelect = typeof onSelect === "function";
 
+  const customProps = hasSelect && {
+    role: "button",
+    onClick: onSelect,
+  };
+
   return (
     <div
-      role={hasSelect ? "button" : "none"}
-      onClick={hasSelect ? onSelect : undefined}
-      className="flex flex-col rounded-md border border-primary hover:border-secondary duration-300 transition-colors"
+      {...customProps}
+      className={classNames(
+        "flex flex-col rounded-md border border-level-5 duration-300 transition-colors",
+        hasSelect && "hover:bg-level-4"
+      )}
     >
       <div className="flex flex-1 justify-between gap-2 items-center p-4">
         <div className="flex items-center gap-2">
