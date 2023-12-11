@@ -42,8 +42,8 @@ export const Profile = ({
   localTradingAccounts?: TradeAccount[];
 }) => {
   return (
-    <div className="flex flex-col sm:w-full md:w-[23rem] bg-backgroundBase border border-primary rounded-lg">
-      <div className="flex flex-col gap-6 p-4 border-b border-primary bg-level-0">
+    <div className="flex flex-col sm:w-full md:w-[23rem] bg-level-3 border border-primary rounded-lg">
+      <div className="flex flex-col gap-6 p-4 border-b border-primary bg-level-2">
         <div className="flex items-center justify-between">
           <Typography.Text variant="secondary" size="xs">
             Funding wallet
@@ -104,7 +104,7 @@ export const Profile = ({
             <Button.Icon
               onClick={onActions}
               variant="outline"
-              className="h-auto"
+              className="h-auto bg-level-4"
             >
               <PlusIcon className="w-6 h-6" />
             </Button.Icon>
