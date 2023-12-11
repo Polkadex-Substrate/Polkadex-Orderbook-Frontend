@@ -10,11 +10,13 @@ import {
   PriceLevel,
   Trade,
   Transaction,
+  Ticker,
 } from "@orderbook/core/utils/orderbookService";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
 import { useOrderbookService } from "@orderbook/core/providers/public/orderbookServiceProvider/useOrderbookService";
 import {
+  decimalPlaces,
   deleteFromBook,
   getCurrentMarket,
   replaceOrAddToBook,
@@ -213,6 +215,37 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
     [mainAddress, onHandleError, queryClient]
   );
 
+  const onTickerUpdates = useCallback(
+    (ticker: Ticker) => {
+      queryClient.setQueryData(QUERY_KEYS.tickers(), (prevData: Ticker[]) => {
+        const newTickers = [...prevData];
+        const idx = newTickers?.findIndex((x) => x.market === ticker.market);
+
+        const priceChange = Number(ticker.close) - Number(ticker.open);
+        const priceChangePercent = (priceChange / Number(ticker.open)) * 100;
+        const market = markets?.find((market) => market.id === ticker.market);
+        const pricePrecision = decimalPlaces(market?.price_tick_size || 0);
+
+        const priceChange24Hr = _.round(priceChange, pricePrecision);
+        const priceChangePercent24Hr = _.round(
+          isNaN(priceChangePercent) ? 0 : priceChangePercent,
+          pricePrecision
+        );
+
+        const newTickersData = {
+          ...ticker,
+          priceChange24Hr,
+          priceChangePercent24Hr,
+        };
+
+        if (idx < 0) newTickers.push(newTickersData);
+        else newTickers[idx] = newTickersData;
+        return newTickers;
+      });
+    },
+    [markets, queryClient]
+  );
+
   // Recent Trades subscription
   useEffect(() => {
     if (!isReady || !market) return;
@@ -277,6 +310,18 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
       };
     }
   }, [mainAddress, onTransactionsUpdate, isReady]);
+
+  // Tickers subscription
+  useEffect(() => {
+    if (!market || !isReady) return;
+
+    const subscription = appsyncOrderbookService.subscriber.subscribeTicker(
+      market,
+      onTickerUpdates
+    );
+
+    return () => subscription.unsubscribe();
+  }, [queryClient, markets, isReady, market, onTickerUpdates]);
 
   return <Provider value={{}}>{children}</Provider>;
 };
