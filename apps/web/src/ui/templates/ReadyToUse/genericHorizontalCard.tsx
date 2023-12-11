@@ -23,7 +23,7 @@ export const GenericHorizontalCard = ({
     !children && ({ role: "button", ...props } as ComponentProps<"div">);
 
   return (
-    <Loading active={!!loading}>
+    <Loading.Spinner active={!!loading}>
       <div {...elementProps} className="flex flex-col gap-3 group">
         <div className="flex items-center justify-between px-4 py-3 rounded-md border border-level-5 group-hover:bg-level-4 duration-300 transition-colors">
           <div className="flex items-center gap-2">
@@ -50,6 +50,6 @@ export const GenericHorizontalCard = ({
         </div>
         {error && !loading && <ErrorMessage>{error}</ErrorMessage>}
       </div>
-    </Loading>
+    </Loading.Spinner>
   );
 };
