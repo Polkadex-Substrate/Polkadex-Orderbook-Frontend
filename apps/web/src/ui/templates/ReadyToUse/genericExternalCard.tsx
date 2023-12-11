@@ -14,11 +14,11 @@ export const GenericExternalCard = ({
     <a
       href={href}
       target="_blank"
-      className="group flex items-center justify-between gap-2 rounded-md p-3 border border-primary hover:border-secondary duration-300 transition-colors"
+      className="group flex items-center justify-between gap-2 rounded-md p-3 border border-level-5 hover:bg-level-4 duration-300 transition-colors"
       rel="noreferrer"
     >
       <div className="flex items-center gap-3">
-        <Icon name={icon} className="w-5 h-5 text-primary " />
+        <Icon name={icon} className="w-4 h-4 text-primary " />
         <Typography.Text
           variant="primary"
           className="group-hover:text-current duration-300 transition-colors"
