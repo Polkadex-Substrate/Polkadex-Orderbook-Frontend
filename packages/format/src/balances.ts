@@ -6,7 +6,7 @@ export class BalanceFormatter {
     decimal: number,
     locale?: string
   ): string {
-    let result = value.toString();
+    let result = Number(value).toFixed(decimal);
     // Trim the value (don't round off)
     result = trimFloat({ value: result, digitsAfterDecimal: 8 });
 
