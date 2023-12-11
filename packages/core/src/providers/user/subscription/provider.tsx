@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { useCallback, useEffect } from "react";
 import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
@@ -6,15 +7,21 @@ import {
   appsyncOrderbookService,
   Order,
   MaybePaginated,
+  PriceLevel,
 } from "@orderbook/core/utils/orderbookService";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
 import { useOrderbookService } from "@orderbook/core/providers/public/orderbookServiceProvider/useOrderbookService";
-import { getCurrentMarket } from "@orderbook/core/helpers";
+import {
+  deleteFromBook,
+  getCurrentMarket,
+  replaceOrAddToBook,
+} from "@orderbook/core/helpers";
 import {
   removeOrderFromList,
   replaceOrPushOrder,
 } from "@orderbook/core/utils/orderbookService/appsync_v1/helpers";
+import { useOrderbook } from "@orderbook/core/hooks";
 
 import { useProfile } from "../profile";
 import { useSettingsProvider } from "../../public/settings";
@@ -37,6 +44,8 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   const isTradingPage = path.startsWith("/trading");
   const marketName = isTradingPage ? (router.query.id as string) : null;
   const market = getCurrentMarket(markets, marketName)?.id;
+
+  const { asks, bids } = useOrderbook(market as string);
 
   const onOrderUpdates = useCallback(
     (payload: Order) => {
@@ -113,9 +122,46 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
     [market, queryClient]
   );
 
+  const onOrderbookUpdates = useCallback(
+    (payload: PriceLevel[]) => {
+      if (!market) return;
+
+      let book = {
+        ask: [...asks],
+        bid: [...bids],
+      };
+
+      const incrementalData = payload;
+      incrementalData.forEach((item) => {
+        if (Number(item.qty) === 0) {
+          book = deleteFromBook(
+            book,
+            String(item.price),
+            item.side.toLowerCase()
+          );
+        } else
+          book = replaceOrAddToBook(
+            book,
+            String(item.price),
+            String(item.qty),
+            item.side.toLowerCase()
+          );
+      });
+
+      queryClient.setQueryData(QUERY_KEYS.orderBook(market), () => {
+        const newData = {
+          asks: _.cloneDeep(book.ask),
+          bids: _.cloneDeep(book.bid),
+        };
+        return newData;
+      });
+    },
+    [asks, bids, market, queryClient]
+  );
+
   // Recent Trades subscription
   useEffect(() => {
-    if (!isReady || !market || market?.length <= 0) return;
+    if (!isReady || !market) return;
 
     const subscription =
       appsyncOrderbookService.subscriber.subscribeLatestTrades(
@@ -125,6 +171,17 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
 
     return () => subscription.unsubscribe();
   }, [isReady, market, onRecentTradeUpdates]);
+
+  // Orderbook subscription
+  useEffect(() => {
+    if (!market || !isReady) return;
+
+    const subscription = appsyncOrderbookService.subscriber.subscribeOrderbook(
+      market,
+      onOrderbookUpdates
+    );
+    return () => subscription.unsubscribe();
+  }, [isReady, market, onOrderbookUpdates, queryClient]);
 
   // Open Orders & Order history subscription
   useEffect(() => {
