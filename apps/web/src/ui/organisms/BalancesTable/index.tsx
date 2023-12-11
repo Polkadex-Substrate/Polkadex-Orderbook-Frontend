@@ -88,28 +88,24 @@ export const BalancesTable = ({ assets }: { assets: AssetsProps[] }) => {
             ))}
           </thead>
           <tbody>
-            {table
-              .getRowModel()
-              .rows.slice(0, 10)
-              .map((row, ti) => {
-                return (
-                  <tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => {
-                      const lastCell =
-                        table.getRowModel().rows.length === ti + 1;
-                      const tdClassName = classNames({ last: lastCell });
-                      return (
-                        <td className={tdClassName} key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
+            {table.getRowModel().rows.map((row, ti) => {
+              return (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => {
+                    const lastCell = table.getRowModel().rows.length === ti + 1;
+                    const tdClassName = classNames({ last: lastCell });
+                    return (
+                      <td className={tdClassName} key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       ) : (
