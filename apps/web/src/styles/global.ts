@@ -146,7 +146,7 @@ Reset Link
   a:active,
   a:visited {
     text-decoration: none;
-    color: inherit;
+    /* color: inherit; */
   }
   /* ----------------------------------------------------------------------------------------------------
 Super Form Reset
