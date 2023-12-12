@@ -15,7 +15,10 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const nextConfig = withBundleAnalyzer({
   i18n,
   reactStrictMode: false,
-  transpilePackages: ["@orderbook/core"],
+  transpilePackages: [
+    "@orderbook/core",
+    "@chainsafe/metamask-polkadot-adapter",
+  ],
   compiler: {
     styledComponents: true,
   },
