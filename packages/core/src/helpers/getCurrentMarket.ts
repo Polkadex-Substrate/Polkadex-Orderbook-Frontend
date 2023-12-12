@@ -1,6 +1,9 @@
 import { Market } from "../utils/orderbookService";
 
-export const getCurrentMarket = (markets: Market[], defaultMarket: string) => {
+export const getCurrentMarket = (
+  markets: Market[],
+  defaultMarket: string | null
+) => {
   if (markets?.length && defaultMarket) {
     const findMarketByName = markets?.find((v) =>
       v.name
