@@ -104,9 +104,9 @@ export const ConnectTradingAccount = ({
               <GenericHorizontalCard
                 title="Import with Mnemonic"
                 icon="Mnemonic"
-                onClick={() => window.alert("Connect")}
+                onClick={() => window.alert("Soon")}
               >
-                Connect
+                Import
               </GenericHorizontalCard>
             </div>
           </div>

@@ -11,9 +11,10 @@
   "dependencies": {
     "@bigheads/core": "^0.3.3",
     "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
     "@orderbook/core": "*",
     "@polkadex/react-providers": "^0.0.2",
-    "@polkadex/ux": "^2.0.0",
+    "@polkadex/ux": "^3.0.0",
     "@polkadot/api": "^10.4.1",
     "@polkadot/extension-dapp": "^0.46.1",
     "@polkadot/ui-keyring": "^3.2.1",
@@ -25,7 +26,7 @@
     "@reactour/tour": "^3.6.1",
     "@splinetool/react-spline": "^2.2.6",
     "@splinetool/runtime": "^0.9.457",
-    "@tanstack/react-query": "^4.35.0",
+    "@tanstack/react-query": "^4.30.0",
     "@tanstack/react-table": "^8.9.8",
     "autoprefixer": "^10.4.16",
     "canvas-confetti": "^1.6.0",
@@ -57,7 +58,8 @@
     "tailwind-merge": "^2.1.0",
     "tailwindcss": "^3.3.6",
     "tailwindcss-animate": "^1.0.7",
-    "use-constant": "^1.1.0"
+    "use-constant": "^1.1.0",
+    "usehooks-ts": "^2.9.1"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.4.19",
