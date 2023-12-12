@@ -4,10 +4,21 @@ import {
   Illustrations,
   Interaction,
 } from "@polkadex/ux";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { RemoveWalletCard } from "../ReadyToUse";
 
-export const MaximumTradingAccount = () => {
+export const MaximumTradingAccount = ({
+  tradingAccounts,
+  onRemove,
+  onClose,
+  onRemoveCallback,
+}: {
+  tradingAccounts?: string[];
+  onRemove: (e: TradeAccount) => void;
+  onClose: () => void;
+  onRemoveCallback: () => void;
+}) => {
   return (
     <Interaction className="gap-10">
       <Interaction.Content className="flex flex-col gap-6 flex-1">
@@ -29,26 +40,37 @@ export const MaximumTradingAccount = () => {
           <Accordion.Item value="accordion1">
             <Accordion.Trigger>
               <Typography.Text variant="secondary">
-                Trading wallets
+                Trading accounts
               </Typography.Text>
             </Accordion.Trigger>
             <Accordion.Content>
               <div className="flex flex-col gap-4">
-                <RemoveWalletCard
-                  address="5Cz5p3auaFUFN8FdToic5iVKnrXcnqrMbDs1ZUafzQFYyRw"
-                  onClick={() => window.alert("remove")}
-                />
-                <RemoveWalletCard
-                  address="5GC6vwNE8FdToic5iVKnrZrycMLnGJBJVSdXcnqrMbDs1LJC"
-                  onClick={() => window.alert("remove")}
-                />
+                {tradingAccounts?.map((v) => {
+                  const tradingAccount = {
+                    address: v,
+                    meta: {
+                      name: "Trading Account",
+                    },
+                  };
+                  return (
+                    <RemoveWalletCard
+                      key={v}
+                      address={v}
+                      showTooltip={tradingAccounts.length === 1}
+                      onClick={() => {
+                        onRemove(tradingAccount as TradeAccount);
+                        onRemoveCallback();
+                      }}
+                    />
+                  );
+                })}
               </div>
             </Accordion.Content>
           </Accordion.Item>
         </Accordion>
       </Interaction.Content>
       <Interaction.Footer>
-        <Interaction.Close>Back</Interaction.Close>
+        <Interaction.Close onClick={onClose}>Back</Interaction.Close>
       </Interaction.Footer>
     </Interaction>
   );

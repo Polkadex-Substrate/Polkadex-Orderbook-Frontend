@@ -11,6 +11,8 @@ import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { RemoveTradingAccount } from "../ConnectWallet/removeTradingAccount";
 import { TradingAccountList } from "../ConnectWallet/tradingAccountList";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
+import { MaximumTradingAccount } from "../ConnectWallet/maximumTradingAccount";
+import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
 
 export const ConnectExistingUser = ({
   onClose,
@@ -60,6 +62,14 @@ export const ConnectExistingUser = ({
     onNext("Connect");
   };
 
+  const redirectMaximumAccounts =
+    (proxiesAccounts?.length ?? 0) <= 3
+      ? "MaximumTradingAccount"
+      : "NewTradingAccount";
+
+  const redirectEnoughBalance =
+    (walletBalance ?? 0) >= 1 ? redirectMaximumAccounts : "InsufficientBalance";
+
   return (
     <Multistep.Interactive
       resetOnUnmount
@@ -72,7 +82,7 @@ export const ConnectExistingUser = ({
               onClose={onClose}
               onReadMore={() => {}}
               onBack={handleCloseInteraction}
-              onCreate={() => props?.onPage("NewTradingAccount", true)}
+              onCreate={() => props?.onPage(redirectEnoughBalance, true)}
               onRecover={() => props?.onPage("ConnectTradingAccount", true)}
               onTradingAccountList={() =>
                 props?.onPage("TradingAccountList", true)
@@ -142,6 +152,18 @@ export const ConnectExistingUser = ({
               onClose={() => props?.onPage("ConnectTradingAccount")}
               loading={importFromFileStatus === "loading"}
               whitelistAccounts={proxiesAccounts}
+            />
+            <MaximumTradingAccount
+              key="MaximumTradingAccount"
+              tradingAccounts={proxiesAccounts}
+              onRemove={(e) => onSetTempTrading?.(e)}
+              onClose={() => props?.onChangeInteraction(false)}
+              onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}
+            />
+            <InsufficientBalance
+              key="InsufficientBalance"
+              balance={walletBalance}
+              onClose={() => props?.onChangeInteraction(false)}
             />
           </Multistep.Content>
         </>
