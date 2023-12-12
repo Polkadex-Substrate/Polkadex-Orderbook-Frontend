@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useCallback } from "react";
+import { useMemo } from "react";
 import { Ifilters } from "@orderbook/core/providers/types";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { decimalPlaces, getCurrentMarket } from "../helpers";
 import {
@@ -9,20 +9,15 @@ import {
   QUERY_KEYS,
   TRADE_HISTORY_PER_PAGE_LIMIT,
 } from "../constants";
-import { appsyncOrderbookService, Trade } from "../utils/orderbookService";
+import { appsyncOrderbookService } from "../utils/orderbookService";
 import { useSessionProvider } from "../providers/user/sessionProvider";
-import { useSettingsProvider } from "../providers/public/settings";
-import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
 import { useMarkets } from "./useMarkets";
 
 export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
-  const queryClient = useQueryClient();
   const {
     selectedAccount: { tradeAddress },
   } = useProfile();
-  const { isReady } = useOrderbookService();
-  const { onHandleError } = useSettingsProvider();
   const { dateFrom, dateTo } = useSessionProvider();
   const { list: markets } = useMarkets();
   const currentMarket = getCurrentMarket(markets, defaultMarket);
@@ -113,42 +108,6 @@ export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
   const amountFixed = currentMarket
     ? decimalPlaces(currentMarket.qty_step_size)
     : MIN_DIGITS_AFTER_DECIMAL;
-
-  const onUserTradeUpdate = useCallback(
-    (trade: Trade) => {
-      try {
-        queryClient.setQueryData(
-          QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
-          (oldTradeHistory: any) => {
-            const payload = {
-              data: [trade],
-              nextToken: null,
-            };
-            return {
-              pages: [payload, ...(oldTradeHistory?.pages ?? [])],
-              pageParams: [...oldTradeHistory?.pageParams],
-            };
-          }
-        );
-      } catch (error) {
-        onHandleError(`User trades channel error: ${error?.message ?? error}`);
-      }
-    },
-    [dateFrom, dateTo, onHandleError, queryClient, tradeAddress]
-  );
-
-  useEffect(() => {
-    if (tradeAddress?.length && isReady) {
-      const subscription =
-        appsyncOrderbookService.subscriber.subscribeUserTrades(
-          tradeAddress,
-          onUserTradeUpdate
-        );
-      return () => {
-        subscription.unsubscribe();
-      };
-    }
-  }, [tradeAddress, isReady, onUserTradeUpdate]);
 
   return {
     trades: updatedTradeList,
