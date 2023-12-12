@@ -63,7 +63,7 @@ export const ConnectExistingUser = ({
   };
 
   const redirectMaximumAccounts =
-    (proxiesAccounts?.length ?? 0) <= 3
+    (proxiesAccounts?.length ?? 0) >= 3
       ? "MaximumTradingAccount"
       : "NewTradingAccount";
 
