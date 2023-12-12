@@ -31,39 +31,39 @@ export const SettingProvider: T.SettingComponent = ({
     (value: A.ChangeThemeSettings["payload"]) => {
       dispatch(A.onChangeThemeSettings(value));
     },
-    [],
+    []
   );
 
   const onChangeLanguage = useCallback(
     (value: A.ChangeLanguageSettings["payload"]) =>
       dispatch(A.onChangeLanguageSettings(value)),
-    [],
+    []
   );
 
   const onChangeCurrency = useCallback(
     (value: A.ChangeCurrencySettings["payload"]) =>
       dispatch(A.onChangeCurrencySettings(value)),
-    [],
+    []
   );
 
   const onPushNotification = useCallback(
     (payload: T.NotificationPayload) => dispatch(A.notificationPush(payload)),
-    [],
+    []
   );
 
   const onRemoveNotification = useCallback(
     (value: T.Notification["id"]) => dispatch(A.notificationDeleteById(value)),
-    [],
+    []
   );
 
   const onReadNotification = useCallback(
     (value: T.Notification["id"]) => dispatch(A.notificationMarkAsRead(value)),
-    [],
+    []
   );
 
   const onClearNotifications = useCallback(
     () => dispatch(A.notificationDeleteAll()),
-    [],
+    []
   );
 
   const onHandleNotification = useCallback(
@@ -72,7 +72,7 @@ export const SettingProvider: T.SettingComponent = ({
       else defaultToast.onSuccess(payload.message);
       dispatch(A.notificationPush(payload));
     },
-    [defaultToast],
+    [defaultToast]
   );
 
   const onCheckExtension = useCallback(async () => {
@@ -82,9 +82,9 @@ export const SettingProvider: T.SettingComponent = ({
     if (extensions?.length > 0) dispatch(A.checkHasExtension());
   }, []);
 
-  useEffect(() => {
-    onCheckExtension();
-  }, [onCheckExtension]);
+  // useEffect(() => {
+  //   onCheckExtension();
+  // }, [onCheckExtension]);
 
   return (
     <Provider
