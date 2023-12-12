@@ -22,7 +22,7 @@ export const Thead = styled(Grid)`
   tr {
     display: grid;
     margin-bottom: ${normalizeValue(1)};
-    padding: 0${normalizeValue(1)};
+    padding: 0 ${normalizeValue(1)};
   }
 `;
 
@@ -30,7 +30,7 @@ export const Tbody = styled(Grid)`
   font-size: ${normalizeValue(1.3)};
 
   ${media.greaterThan("large")`
-    height: ${normalizeValue(32)};
+    height: ${normalizeValue(30)};
     display: block;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;

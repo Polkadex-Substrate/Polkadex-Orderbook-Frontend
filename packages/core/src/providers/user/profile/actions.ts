@@ -128,7 +128,7 @@ export const userFetch = (payload: UserFetch["payload"]): UserFetch => ({
 });
 
 export const userChangeInitBanner = (
-  payload = false,
+  payload = false
 ): UserChangeInitBanner => ({
   type: PROFILE_USER_CHANGE_INIT_BANNER,
   payload,
@@ -153,7 +153,7 @@ export const userAuthFetch = (): UserAuthFetch => ({
 });
 
 export const userAuthData = (
-  payload: UserAuthData["payload"],
+  payload: UserAuthData["payload"]
 ): UserAuthData => ({
   type: PROFILE_USER_AUTH_DATA,
   payload,
@@ -165,14 +165,14 @@ export const userAuthError = (error: CommonError): UserAuthError => ({
 });
 
 export const userAccountSelectFetch = (
-  payload: UserAccountSelectFetch["payload"],
+  payload: UserAccountSelectFetch["payload"]
 ): UserAccountSelectFetch => ({
   type: PROFILE_USER_SELECT_ACCOUNT_FETCH,
   payload,
 });
 
 export const userAccountSelectData = (
-  payload: UserAccountSelectData["payload"],
+  payload: UserAccountSelectData["payload"]
 ): UserAccountSelectData => ({
   type: PROFILE_USER_SELECT_ACCOUNT_DATA,
   payload,
@@ -180,7 +180,7 @@ export const userAccountSelectData = (
 
 // adds a new UserAccount to users profile state
 export const userProfileAccountPush = (
-  payload: UserProfileAccountPush["payload"],
+  payload: UserProfileAccountPush["payload"]
 ): UserProfileAccountPush => ({
   type: PROFILE_USER_ACCOUNT_PUSH,
   payload,
@@ -188,35 +188,35 @@ export const userProfileAccountPush = (
 
 // adds a new main address to users profile state
 export const userProfileMainAccountPush = (
-  payload: UserProfileMainAccountPush["payload"],
+  payload: UserProfileMainAccountPush["payload"]
 ): UserProfileMainAccountPush => ({
   type: PROFILE_USER_MAIN_ACCOUNT_PUSH,
   payload,
 });
 
 export const userProfileTradeAccountDelete = (
-  payload: UserProfileTradeAccountDelete["payload"],
+  payload: UserProfileTradeAccountDelete["payload"]
 ): UserProfileTradeAccountDelete => ({
   type: PROFILE_USER_TRADE_ACCOUNT_DELETE,
   payload,
 });
 
 export const userSetDefaultTradeAccount = (
-  payload: UserSetDefaultTradeAccount["payload"],
+  payload: UserSetDefaultTradeAccount["payload"]
 ): UserSetDefaultTradeAccount => ({
   type: PROFILE_SET_DEFAULT_TRADE_ACCOUNT,
   payload,
 });
 
 export const userSetAvatar = (
-  payload?: UserSetAvatar["payload"],
+  payload?: UserSetAvatar["payload"]
 ): UserSetAvatar => ({
   type: PROFILE_SET_PROFILE_AVATAR,
   payload,
 });
 
 export const userFavoriteMarketPush = (
-  payload: UserFavoriteMarketPush["payload"],
+  payload: UserFavoriteMarketPush["payload"]
 ): UserFavoriteMarketPush => ({
   type: PROFILE_USER_FAVORITE_MARKET_PUSH,
   payload,

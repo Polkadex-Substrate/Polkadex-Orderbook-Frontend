@@ -6,72 +6,28 @@ import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
 import { useTradeWallet } from "../tradeWallet";
 import { useProfile } from "../profile";
-import { useAuth } from "../auth";
 import { ExtensionAccount } from "../../types";
 
 import { extensionWalletReducer, initialState } from "./reducer";
 import { Provider } from "./context";
 import * as T from "./types";
 import * as A from "./actions";
-import {
-  createSignedData,
-  executeRegisterEmail,
-  registerMainAccount,
-} from "./helper";
+import { registerMainAccount } from "./helper";
 
 export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
-  const authState = useAuth();
   const {
-    authInfo,
+    selectedAccount: { mainAddress },
     onUserProfileMainAccountPush,
     onUserProfileAccountPush,
     onUserAccountSelectFetch,
   } = useProfile();
   const { onHandleError, onHandleNotification, hasExtension } =
     useSettingsProvider();
-  const profileState = useProfile();
-  const { mainAddress } = profileState.selectedAccount;
   const nativeApiState = useNativeApi();
   const tradeWalletState = useTradeWallet();
-
-  // Actions
-  const onLinkEmail = async (
-    payload: A.RegisterMainAccountLinkEmailFetch["payload"],
-  ) => {
-    const { mainAccount } = payload;
-    try {
-      const email = authState.email;
-
-      const selectedControllerAccount = state.allAccounts?.find(
-        ({ account }) =>
-          account?.address?.toLowerCase() === mainAccount?.toLowerCase(),
-      );
-
-      const hasAddressAndEmail =
-        !!selectedControllerAccount?.account?.address?.length &&
-        !!email?.length;
-
-      if (hasAddressAndEmail) {
-        const signedData = await createSignedData(
-          selectedControllerAccount,
-          email,
-        );
-        const data = signedData.data;
-        const signature: string = signedData.signature;
-        await executeRegisterEmail(data, signature);
-
-        onUserProfileMainAccountPush(mainAccount);
-      } else {
-        throw new Error("Email or address is not valid");
-      }
-    } catch (error) {
-      console.log("error in registration:", error.message);
-      onHandleError(error?.message ?? error);
-    }
-  };
 
   const onRegisterMainAccountReset = () => {
     tradeWalletState.onRegisterTradeAccountReset();
@@ -108,11 +64,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       onUserAccountSelectFetch,
       onUserProfileMainAccountPush,
       onUserProfileAccountPush,
-    ],
+    ]
   );
 
   const onRegisterMainAccount = async (
-    payload: A.RegisterMainAccountFetch["payload"],
+    payload: A.RegisterMainAccountFetch["payload"]
   ) => {
     const { mainAccount, tradeAddress, mnemonic } = payload;
     dispatch(A.registerMainAccountFetch(payload));
@@ -120,9 +76,8 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     try {
       const selectedControllerAccount = state.allAccounts?.find(
         ({ account }) =>
-          account?.address?.toLowerCase() === mainAccount?.toLowerCase(),
+          account?.address?.toLowerCase() === mainAccount?.toLowerCase()
       );
-      const email = authState.email;
       const api = nativeApiState.api;
 
       // listen for events in this new registered main address
@@ -133,15 +88,14 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       });
 
       const hasAddressAndEmail =
-        !!selectedControllerAccount?.account?.address?.length &&
-        !!email?.length;
+        !!selectedControllerAccount?.account?.address?.length;
 
       if (hasAddressAndEmail && api) {
         const res = await registerMainAccount(
           api,
           tradeAddress,
           selectedControllerAccount.signer,
-          selectedControllerAccount.account?.address,
+          selectedControllerAccount.account?.address
         );
 
         if (res.isSuccess) {
@@ -183,11 +137,11 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
               account,
               signer,
             };
-          }),
+          })
         );
         dispatch(A.extensionWalletData({ allAccounts }));
       },
-      { ss58Format: 88 },
+      { ss58Format: 88 }
     );
     return () => unsubscribe();
   }, []);
@@ -195,12 +149,12 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   const selectMainAccount = (address: string): ExtensionAccount | undefined => {
     return state.allAccounts?.find(
       ({ account }) =>
-        account?.address?.toLowerCase() === address?.toLowerCase(),
+        account?.address?.toLowerCase() === address?.toLowerCase()
     );
   };
   useEffect(() => {
-    if (authInfo.isAuthenticated && hasExtension) onPolkadotExtensionWallet();
-  }, [onPolkadotExtensionWallet, authInfo.isAuthenticated, hasExtension]);
+    if (hasExtension) onPolkadotExtensionWallet();
+  }, [onPolkadotExtensionWallet, hasExtension]);
 
   useEffect(() => {
     if (mainAddress) {
@@ -219,7 +173,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     <Provider
       value={{
         ...state,
-        onLinkEmail,
         onRegisterMainAccountReset,
         onRegisterMainAccountUpdate,
         onRegisterMainAccount,

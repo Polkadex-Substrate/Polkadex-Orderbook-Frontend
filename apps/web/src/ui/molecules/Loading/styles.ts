@@ -34,7 +34,7 @@ export const Container = styled.div<{
       border: 1px solid ${hasBg ? theme.colors.secondaryBackground : "none"};
       padding: ${normalizeValue(2)};
       border-radius: ${normalizeValue(1.5)};
-
+      scale: 1.5;
       p {
         text-align: center;
         margin-top: ${normalizeValue(1)};

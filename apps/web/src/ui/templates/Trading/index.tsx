@@ -64,14 +64,14 @@ export function Trading({ market: id }: Props) {
   } = useTickers(market?.id ?? "");
 
   const {
-    authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
+    authInfo: { shouldShowInitialBanner },
     selectedAccount: { mainAddress },
     onUserChangeInitBanner,
   } = useProfile();
 
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
-  const hasUser = isSignedIn && hasTradeAccount;
+  const hasUser = hasTradeAccount;
 
   const userAccounts = profileState.userData?.userAccounts;
   const accounts = userAccounts?.filter(
@@ -83,24 +83,23 @@ export function Trading({ market: id }: Props) {
   const { t } = useTranslation("trading");
   const { t: tc } = useTranslation("common");
 
-  const hasSelectedAccount = isSignedIn &&
-    !hasTradeAccount && {
-      image: "emptyWallet",
-      title: tc("connectTradingAccount.title"),
-      description: tc("connectTradingAccount.description"),
-      primaryLink: "/wallets",
-      primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
-      secondaryLink: "/wallets",
-      secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
-    };
+  const hasSelectedAccount = !hasTradeAccount && {
+    image: "emptyWallet",
+    title: tc("connectTradingAccount.title"),
+    description: tc("connectTradingAccount.description"),
+    primaryLink: "/wallets",
+    primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
+    secondaryLink: "/wallets",
+    secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
+  };
 
   const marketName = market?.name?.replace("/", "");
 
   useEffect(() => {
-    if (isSignedIn && shouldShowInitialBanner && !hasAssociatedAccounts) {
+    if (shouldShowInitialBanner && !hasAssociatedAccounts) {
       setBanner(true);
     }
-  }, [isSignedIn, hasAssociatedAccounts, shouldShowInitialBanner]);
+  }, [hasAssociatedAccounts, shouldShowInitialBanner]);
 
   const closeBanner = () => {
     setBanner(false);
@@ -136,7 +135,7 @@ export function Trading({ market: id }: Props) {
         />
       </Modal>
       <Modal
-        open={isSignedIn && disclaimer}
+        open={disclaimer}
         onClose={handleAcceptDisclaimer}
         placement="start"
       >

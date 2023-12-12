@@ -274,5 +274,5 @@ export const Skeleton = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${normalizeValue(0.5)};
-  padding: ${normalizeValue(0.5)}${normalizeValue(1)};
+  padding: ${normalizeValue(0.5)} ${normalizeValue(1)};
 `;

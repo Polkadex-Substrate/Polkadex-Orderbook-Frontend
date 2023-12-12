@@ -8,7 +8,6 @@ import {
 
 export const Context = createContext<ExtensionWalletContextProps>({
   ...initialState,
-  onLinkEmail: () => {},
   onRegisterMainAccountReset: () => {},
   onRegisterMainAccountUpdate: () => {},
   onRegisterMainAccount: () => {},

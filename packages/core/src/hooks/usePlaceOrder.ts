@@ -58,7 +58,6 @@ export function usePlaceOrder(
 
   const {
     selectedAccount: { tradeAddress },
-    authInfo: { isAuthenticated },
   } = useProfile();
 
   const {
@@ -650,7 +649,7 @@ export function usePlaceOrder(
     isOrderExecuted,
     quoteTicker,
     baseTicker,
-    isSignedIn: isAuthenticated,
+    isSignedIn: tradeAddress?.length > 0,
     orderSide: isSell ? "Sell" : "Buy",
     hasUser: hasTradeAccount,
     showProtectedPassword: hasTradeAccount && showProtectedPassword,
