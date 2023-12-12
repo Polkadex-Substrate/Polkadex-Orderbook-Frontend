@@ -9,7 +9,6 @@ import {
   Popover,
   Multistep,
 } from "@polkadex/ux";
-import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 
@@ -24,8 +23,7 @@ import { TradingAccountSuccessfull } from "@/ui/templates/ConnectWallet/tradingA
 import { TradingAccountMnemonic } from "@/ui/templates/ConnectWallet/tradingAccountMnemonic";
 
 export const Profile = ({ onClick }: { onClick: () => void }) => {
-  const {
-    selectedWallet,
+  let selectedWallet,
     onSelectAccount,
     selectedAccount,
     onLogout,
@@ -44,9 +42,8 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
     onImportFromFile,
     importFromFileStatus,
     proxiesAccounts,
-    onExportTradeAccount,
     tempMnemonic,
-  } = useWalletProvider(); // Testing provider
+    onExportTradeAccount;
 
   const shortAddress = useMemo(
     () => truncateString(selectedAccount?.address ?? "", 3),

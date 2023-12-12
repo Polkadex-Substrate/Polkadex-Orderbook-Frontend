@@ -8,9 +8,22 @@ import { Button, Input, Interaction, Loading, Typography } from "@polkadex/ux";
 import { useFormik } from "formik";
 import { useDropzone } from "react-dropzone";
 import classNames from "classnames";
-import { DecodedFile } from "@orderbook/core/providers/user/walletProvider";
 
 import { ErrorMessage, OptionalField } from "../ReadyToUse";
+
+export interface DecodedFile {
+  encoded: string;
+  encoding: {
+    content: string[];
+    type: string[];
+    version: string;
+  };
+  address: string;
+  meta: {
+    name: string;
+    whenCreated: number;
+  };
+}
 
 const initialValues = {
   file: null,
@@ -18,6 +31,7 @@ const initialValues = {
 
 const initialState = ["", "", "", "", ""];
 
+// Replace De
 const parseFile = (file: File): Promise<DecodedFile | string> =>
   new Promise((resolve) => {
     const blob = new Blob([file], {

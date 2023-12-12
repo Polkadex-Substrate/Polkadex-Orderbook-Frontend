@@ -1,6 +1,5 @@
 // TODO: REPLACE TESTING PROVIDER
 
-import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { Multistep } from "@polkadex/ux";
@@ -21,8 +20,7 @@ export const ConnectExistingUser = ({
   onClose: () => void;
   onNext: (v: "Connect" | "TradingAccountSuccessfull") => void;
 }) => {
-  const {
-    localTradingAccounts,
+  let localTradingAccounts,
     onSelectAccount,
     onResetWallet,
     onResetExtension,
@@ -40,8 +38,7 @@ export const ConnectExistingUser = ({
     selectedExtension,
     onImportFromFile,
     importFromFileStatus,
-    walletBalance,
-  } = useWalletProvider(); // Testing provider
+    walletBalance;
 
   const filteredAccounts = useMemo(
     () =>
