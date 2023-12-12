@@ -102,7 +102,7 @@ export const ConnectExistingUser = ({
               loading={registerStatus === "loading"}
               fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
               errorTitle="Error"
-              errorMessage={(registerError as Error)?.message ?? removingError}
+              errorMessage={(registerError as Error)?.message ?? registerError}
               selectedExtension={selectedExtension}
               balance={walletBalance}
               onCreateCallback={() => onNext("TradingAccountSuccessfull")}

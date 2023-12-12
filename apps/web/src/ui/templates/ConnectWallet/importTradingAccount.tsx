@@ -84,7 +84,7 @@ export const ImportTradingAccount = ({
   const { getRootProps, getInputProps, isDragReject, isDragAccept } =
     useDropzone({
       maxFiles: 1,
-      validator: (file) => null, // Async not working...
+      validator: (file) => null, // Async validation not working...
       accept: { "application/json": [".json"] },
       onDrop: async (acceptedFiles: File[]) => {
         const decodedFile = await parseFile(acceptedFiles[0]);

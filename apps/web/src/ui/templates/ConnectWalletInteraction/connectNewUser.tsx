@@ -19,7 +19,6 @@ export const ConnectNewUser = ({
     onRegisterTradeAccount,
     registerStatus,
     registerError,
-    removingError,
     selectedExtension,
     walletBalance,
   } = useWalletProvider(); // Testing provider
@@ -53,7 +52,7 @@ export const ConnectNewUser = ({
               loading={registerStatus === "loading"}
               fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
               errorTitle="Error"
-              errorMessage={(registerError as Error)?.message ?? removingError}
+              errorMessage={(registerError as Error)?.message ?? registerError}
               selectedExtension={selectedExtension}
               balance={walletBalance}
               onCreateCallback={() => onNext("TradingAccountSuccessfull")}
