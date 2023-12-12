@@ -7,7 +7,12 @@ const { execSync } = require("child_process");
 
 const { i18n } = require("./next-i18next.config");
 
-const nextConfig = {
+// eslint-disable-next-line import/order
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+const nextConfig = withBundleAnalyzer({
   i18n,
   reactStrictMode: false,
   transpilePackages: ["@orderbook/core"],
@@ -90,6 +95,6 @@ const nextConfig = {
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   },
-};
+});
 
 module.exports = nextConfig;
