@@ -1,3 +1,5 @@
+// TODO: REPLACE TESTING PROVIDER
+
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import {
   Button,
@@ -9,15 +11,42 @@ import {
 } from "@polkadex/ux";
 import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 import { useMemo } from "react";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { Profile as ProfileDropdown } from "../../templates/ConnectWallet/profile";
 import { NewTradingAccount } from "../../templates/ConnectWallet/newTradingAccount";
 import { ConnectTradingAccount } from "../../templates/ConnectWallet/connectTradingAccount";
 import { UserActions } from "../../templates/ConnectWallet/userActions";
 
+import { RemoveTradingAccount } from "@/ui/templates/ConnectWallet/removeTradingAccount";
+import { ImportTradingAccount } from "@/ui/templates/ConnectWallet/importTradingAccount";
+import { TradingAccountSuccessfull } from "@/ui/templates/ConnectWallet/tradingAccountSuccessfull";
+import { TradingAccountMnemonic } from "@/ui/templates/ConnectWallet/tradingAccountMnemonic";
+
 export const Profile = ({ onClick }: { onClick: () => void }) => {
-  const { selectedWallet, selectedAccount, onLogout, localTradingAccounts } =
-    useWalletProvider(); // Testing provider
+  const {
+    selectedWallet,
+    onSelectAccount,
+    selectedAccount,
+    onLogout,
+    localTradingAccounts,
+    onSetTempTrading,
+    onRegisterTradeAccount,
+    selectedExtension,
+    registerError,
+    walletBalance,
+    registerStatus,
+    tempTrading,
+    onRemoveTradingAccountFromChain,
+    onRemoveTradingAccountFromDevice,
+    removingStatus,
+    removingError,
+    onImportFromFile,
+    importFromFileStatus,
+    proxiesAccounts,
+    onExportTradeAccount,
+    tempMnemonic,
+  } = useWalletProvider(); // Testing provider
 
   const shortAddress = useMemo(
     () => truncateString(selectedAccount?.address ?? "", 3),
@@ -94,20 +123,38 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                 <Multistep.Content>
                   <NewTradingAccount
                     key="NewTradingAccount"
+                    onCreateAccount={async (e) =>
+                      await onRegisterTradeAccount?.(e)
+                    }
+                    loading={registerStatus === "loading"}
+                    fundWalletPresent={
+                      !!Object.keys(selectedWallet ?? {})?.length
+                    }
+                    errorTitle="Error"
+                    errorMessage={
+                      (registerError as Error)?.message ?? registerError
+                    }
+                    selectedExtension={selectedExtension}
+                    balance={walletBalance}
+                    onCreateCallback={() =>
+                      props?.onPage("TradingAccountSuccessfull", true)
+                    }
                     onClose={() => props?.onChangeInteraction(false)}
-                    onAction={async (e) => {}}
-                    onRedirect={() => props?.onPage("ProcessingTransaction")}
                   />
 
                   <ConnectTradingAccount
                     key="ConnectTradingAccount"
                     accounts={localTradingAccounts}
                     onSelect={(e) => {
-                      console.log(e);
+                      onSelectAccount?.(e);
                     }}
                     onClose={() => props?.onChangeInteraction(false)}
                     onImport={() => props?.onPage("ImportTradingAccount")}
-                    onRemove={() => props?.onPage("RemoveTradingAccount")}
+                    onRemove={(e) => onSetTempTrading?.(e)}
+                    onSelectCallback={() => props?.onChangeInteraction(false)}
+                    onRemoveCallback={() =>
+                      props?.onPage("RemoveTradingAccount")
+                    }
                   />
                   <UserActions
                     key="UserActions"
@@ -116,8 +163,57 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                       props?.onPage("NewTradingAccount")
                     }
                     onImportTradingAccount={() =>
-                      props?.onPage("ImportTradingAccount")
+                      props?.onPage("ConnectTradingAccount")
                     }
+                  />
+                  <RemoveTradingAccount
+                    key="RemoveTradingAccount"
+                    tradingAccount={tempTrading as TradeAccount}
+                    fundWallet={selectedWallet}
+                    onRemoveFromDevice={() =>
+                      onRemoveTradingAccountFromDevice?.(
+                        tempTrading?.address as string
+                      )
+                    }
+                    onRemoveFromChain={async () =>
+                      await onRemoveTradingAccountFromChain?.({
+                        tradeAddress: tempTrading?.address as string,
+                      })
+                    }
+                    loading={removingStatus === "loading"}
+                    errorTitle="Error"
+                    errorMessage={
+                      (removingError as Error)?.message ?? removingError
+                    }
+                    selectedExtension={selectedExtension}
+                    onCancel={() => props?.onChangeInteraction(false)} // onBack not working, rerendering Multistep, prev reseting..
+                  />
+                  <ImportTradingAccount
+                    key="ImportTradingAccount"
+                    onImport={async (e) => await onImportFromFile?.(e)}
+                    onRedirect={() => props?.onPage("ConnectTradingAccount")}
+                    onClose={() => props?.onPage("ConnectTradingAccount")}
+                    loading={importFromFileStatus === "loading"}
+                    whitelistAccounts={proxiesAccounts}
+                  />
+                  <TradingAccountSuccessfull
+                    key="TradingAccountSuccessfull"
+                    tradingAccount={selectedAccount}
+                    onClose={() => props?.onChangeInteraction(false)}
+                    onOpenMnemonic={() =>
+                      props?.onPage("TradingAccountMnemonic", true)
+                    }
+                    onDownloadPdf={() => window.alert("Downloading...")}
+                    onDownloadJson={(e) =>
+                      onExportTradeAccount?.({ tradeAccount: e })
+                    }
+                  />
+                  <TradingAccountMnemonic
+                    key="TradingAccountMnemonic"
+                    onClose={() =>
+                      props?.onPage("TradingAccountMnemonic", true)
+                    }
+                    mnemonic={tempMnemonic?.split(" ") ?? []}
                   />
                 </Multistep.Content>
               </>
