@@ -62,7 +62,7 @@ export function useFunds() {
     isSuccess: isOnChainBalanceSuccess,
     data: onChainBalances,
   } = useQuery({
-    queryKey: QUERY_KEYS.onChainBalances(mainAddress, assets),
+    queryKey: QUERY_KEYS.onChainBalances(mainAddress),
     queryFn: async () =>
       await fetchOnChainBalances(api as ApiPromise, assets, mainAddress),
     enabled: shouldFetchChainBalance,
@@ -124,7 +124,7 @@ export function useFunds() {
 
       // Update chain balance
       queryClient.setQueryData(
-        QUERY_KEYS.onChainBalances(mainAddress, assets),
+        QUERY_KEYS.onChainBalances(mainAddress),
         (prevData) => {
           const oldData = new Map(prevData as Map<string, number>);
           oldData.set(assetId, Number(newOnChainBalance));
@@ -199,7 +199,7 @@ export function useFunds() {
 
         // Update chain balance
         queryClient.setQueryData(
-          QUERY_KEYS.onChainBalances(mainAddress, assets),
+          QUERY_KEYS.onChainBalances(mainAddress),
           (prevData) => {
             const oldData = new Map(prevData as Map<string, number>);
             oldData.set(updateBalance.assetId, Number(onChainBalance));
@@ -210,7 +210,7 @@ export function useFunds() {
         onHandleError("Something has gone wrong while updating balance");
       }
     },
-    [assets, mainAddress, onHandleError, queryClient, updateBalanceFromEvent]
+    [mainAddress, onHandleError, queryClient, updateBalanceFromEvent]
   );
 
   // Balance updates are give to funding address

@@ -6,6 +6,7 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 import FileSaver from "file-saver";
 import { fetchOnChainBalance } from "@orderbook/core/helpers";
 import { ApiPromise } from "@polkadot/api";
+import { QUERY_KEYS } from "@orderbook/core/constants";
 
 import { TradeAccount } from "../../types";
 import { useNativeApi } from "../../public/nativeApi";
@@ -145,7 +146,9 @@ export const WalletProvider = ({ children }) => {
     isLoading: walletLoading,
     isSuccess: walletSuccess,
   } = useQuery({
-    queryKey: [state?.selectedWallet?.address],
+    queryKey: QUERY_KEYS.onChainBalances(
+      state?.selectedWallet?.address as string
+    ),
     enabled: !!state?.selectedWallet?.address,
     queryFn: async () =>
       await fetchOnChainBalance(
@@ -163,7 +166,10 @@ export const WalletProvider = ({ children }) => {
     isSuccess: proxiesSuccess,
     isFetching,
   } = useQuery<string[]>({
-    queryKey: [state?.selectedWallet?.address, state.tempTrading?.address],
+    queryKey: QUERY_KEYS.proxyAccounts(
+      state?.selectedWallet?.address as string,
+      state.tempTrading?.address as string
+    ),
     enabled: !!state?.selectedWallet?.address || !!state.tempTrading?.address,
     queryFn: async () => {
       const accounts = await getAllProxyAccounts(
@@ -174,14 +180,16 @@ export const WalletProvider = ({ children }) => {
     },
   });
 
-  // get tradingAccounts
+  // Get tradingAccounts available in browser
   const {
     data: tradingAccounts,
     isError: tradingHasError,
     isLoading: tradingLoading,
     isSuccess: tradingSuccess,
   } = useQuery({
-    queryKey: [state?.selectedWallet?.address],
+    queryKey: QUERY_KEYS.tradingAccounts(
+      state?.selectedWallet?.address as string
+    ),
     enabled: !!state?.selectedWallet?.address,
     queryFn: async () => {
       const accounts = await getAllTradeAccountsInBrowser();
@@ -189,7 +197,7 @@ export const WalletProvider = ({ children }) => {
     },
   });
 
-  // register trade account
+  // Register trade account
   const {
     mutateAsync: onRegisterTradeAccount,
     status: registerStatus,
