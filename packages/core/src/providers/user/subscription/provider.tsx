@@ -42,7 +42,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   const path = usePathname();
   const router = useRouter();
   const { onHandleError } = useSettingsProvider();
-  const { isReady, markets, assets } = useOrderbookService();
+  const { isReady, markets } = useOrderbookService();
   const { dateFrom, dateTo } = useSessionProvider();
   const {
     selectedAccount: { tradeAddress, mainAddress },
@@ -277,7 +277,6 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   const onBalanceUpdate = useCallback(
     async (payload: Balance) => {
       try {
-        const assetIds = assets.map((a) => a.id);
         const { onChainBalance, ...updateBalance } =
           await updateBalanceFromEvent(payload);
 
@@ -316,7 +315,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
 
         // Update chain balance
         queryClient.setQueryData(
-          QUERY_KEYS.onChainBalances(mainAddress, assetIds),
+          QUERY_KEYS.onChainBalances(mainAddress),
           (prevData) => {
             const oldData = new Map(prevData as Map<string, number>);
             oldData.set(updateBalance.assetId, Number(onChainBalance));
@@ -327,7 +326,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
         onHandleError("Something has gone wrong while updating balance");
       }
     },
-    [assets, mainAddress, onHandleError, queryClient, updateBalanceFromEvent]
+    [mainAddress, onHandleError, queryClient, updateBalanceFromEvent]
   );
 
   // Recent Trades subscription
