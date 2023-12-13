@@ -11,6 +11,7 @@ import { QUERY_KEYS } from "@orderbook/core/constants";
 import { TradeAccount } from "../../types";
 import { useNativeApi } from "../../public/nativeApi";
 import { transformAddress } from "../profile";
+import { useSettingsProvider } from "../../public/settings";
 
 import {
   addProxyToAccount,
@@ -19,6 +20,7 @@ import {
   getAllTradeAccountsInBrowser,
   loadKeyring,
   onImportTradeAccountJson,
+  onImportTradeAccountMnemonic,
 } from "./methods";
 import { Provider } from "./context";
 import { actions } from "./actions";
@@ -52,7 +54,13 @@ export interface RemoveTradeAccountData {
 }
 type CallbackFn = () => void;
 
-type ImportFromFile = { password: string; file: DecodedFile };
+export type ImportFromFile = { password: string; file: DecodedFile };
+export type UnlockTradeAccount = { address: string; password: string };
+export type ImportFromMnemonic = {
+  mnemonic: string;
+  name: string;
+  password?: string;
+};
 export type Actions = {
   onSelectWallet: (payload: ExtensionAccount) => void;
   onSelectAccount: (payload: TradeAccount) => void;
@@ -66,6 +74,7 @@ export type Actions = {
   onResetTempTrading: () => void;
   onLogout: () => void;
   onImportFromFile: (values: ImportFromFile) => Promise<void>;
+  onImportFromMnemonic: (values: ImportFromMnemonic) => Promise<void>;
   onRegisterTradeAccount: (value: RegisterTradeAccountData) => Promise<void>;
   onExportTradeAccount: (value: ExportTradeAccountData) => void;
   onRemoveTradingAccountFromDevice: (value: string) => Promise<void>;
@@ -73,11 +82,13 @@ export type Actions = {
     value: RemoveTradeAccountData
   ) => Promise<void>;
   onSetTempTrading: (value: TradeAccount) => void;
+  onUnlockTradeAccount: (value: UnlockTradeAccount) => void;
 };
 
 export const WalletProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { connected, api } = useNativeApi();
+  const { onHandleError } = useSettingsProvider();
 
   const onSelectWallet: Actions["onSelectWallet"] = (
     payload,
@@ -118,7 +129,7 @@ export const WalletProvider = ({ children }) => {
     dispatch(actions.logout());
   };
 
-  // Import and push trading accounts
+  // Import from JSON file and push trading accounts
   const {
     mutateAsync: onImportFromFile,
     status: importFromFileStatus,
@@ -128,7 +139,26 @@ export const WalletProvider = ({ children }) => {
       const pair = await onImportTradeAccountJson({ file, password });
       dispatch(actions.setLocalTradingAccount(pair));
     },
-    onError: (e) => console.log("Error", e),
+    onError: (e) => {
+      const errorMessage = e instanceof Error ? e.message : (e as string);
+      onHandleError(errorMessage);
+    },
+  });
+
+  // Import from mnemonic and push trading accounts
+  const { mutateAsync: onImportFromMnemonic } = useMutation({
+    mutationFn: async ({ mnemonic, name, password }: ImportFromMnemonic) => {
+      const pair = await onImportTradeAccountMnemonic({
+        name,
+        mnemonic,
+        password,
+      });
+      dispatch(actions.setLocalTradingAccount(pair));
+    },
+    onError: (e) => {
+      const errorMessage = e instanceof Error ? e.message : (e as string);
+      onHandleError(errorMessage);
+    },
   });
 
   // Get initial tradesAccounts
@@ -293,6 +323,26 @@ export const WalletProvider = ({ children }) => {
     }
   };
 
+  // Unlock trading account
+  const onUnlockTradeAccount = (payload: UnlockTradeAccount) => {
+    const { address, password } = payload;
+    try {
+      const pair = state?.localTradingAccounts?.find(
+        (account) => account?.address === address
+      );
+      if (!pair) {
+        onHandleError("No such address exists");
+        return;
+      }
+      pair.unlock(password.toString());
+      dispatch(
+        actions.setLocalTradingAccount(state?.localTradingAccounts || [])
+      );
+    } catch (e) {
+      onHandleError("Invalid Password");
+    }
+  };
+
   useEffect(() => {
     onLoadTradeAccounts();
   }, [onLoadTradeAccounts]);
@@ -316,9 +366,11 @@ export const WalletProvider = ({ children }) => {
         onResetExtension,
         onResetWallet,
         onResetTempMnemonic,
+        onUnlockTradeAccount,
         onImportFromFile,
         importFromFileStatus,
         importFromFileError,
+        onImportFromMnemonic,
         onExportTradeAccount,
         onRegisterTradeAccount,
         onRemoveTradingAccountFromDevice,
