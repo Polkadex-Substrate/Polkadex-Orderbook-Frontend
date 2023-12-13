@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
-import { ExtensionAccount } from "@polkadex/react-providers";
+import { ExtensionAccount, useUserAccounts } from "@polkadex/react-providers";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import FileSaver from "file-saver";
@@ -93,6 +93,7 @@ export const WalletProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { connected, api } = useNativeApi();
   const { onHandleError } = useSettingsProvider();
+  const { isReady } = useUserAccounts();
 
   const onSelectWallet: Actions["onSelectWallet"] = (
     payload,

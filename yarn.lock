@@ -3172,10 +3172,23 @@
     "@polkadex/utils" "*"
     typescript latest
 
-"@polkadex/react-providers@*", "@polkadex/react-providers@^0.1.0":
+"@polkadex/react-providers@*":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@polkadex/react-providers/-/react-providers-0.1.0.tgz#47c5a2cb5fa515a5dc35dce2ed1e81f7c349275f"
   integrity sha512-qdptsg+z52hcd9MwbQhWlpAMrkvSc67/Pgp1/X4aiqrdRYbnXN0xITqJ+K5TMH4DlwtxqlmRU6j0qe/gHpYvCw==
+  dependencies:
+    "@chainsafe/metamask-polkadot-adapter" "^0.5.1"
+    "@polkadex/react-hooks" "*"
+    "@polkadex/trade-wallet" "*"
+    "@polkadex/utils" "*"
+    "@polkadot-cloud/assets" "^0.1.34"
+    "@polkadot/keyring" "^12.5.1"
+    typescript latest
+
+"@polkadex/react-providers@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/react-providers/-/react-providers-0.2.0.tgz#4b5d243bcb91d8c8e1fba52d2791eaa73e7592d5"
+  integrity sha512-IPlReCHWmjA4G+uXLY3QYxkq5FXKQ5nWnfn6KpRNkHsfszGnoFNa+FODpK9mU3aMP9yjGQ5kzM9j8HmJVEIcmw==
   dependencies:
     "@chainsafe/metamask-polkadot-adapter" "^0.5.1"
     "@polkadex/react-hooks" "*"

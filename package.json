@@ -8,11 +8,11 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@orderbook/eslint-config": "*",
     "eslint": "^8.48.0",
     "prettier": "^3.0.3",
     "tsconfig": "*",
-    "turbo": "latest",
-    "@orderbook/eslint-config": "*"
+    "turbo": "latest"
   },
   "packageManager": "yarn@1.22.19",
   "workspaces": [

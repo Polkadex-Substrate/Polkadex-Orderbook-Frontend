@@ -22,7 +22,6 @@ import {
   SubscriptionProvider,
 } from "@orderbook/core/providers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { useInit } from "@orderbook/core/hooks";
 
 import "../styles/globals.scss";
 import "@polkadex/ux/dist/index.css";
@@ -173,8 +172,6 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
 };
 
 const ThemeWrapper = ({ children }: { children: ReactNode }) => {
-  useInit();
-
   return (
     <>
       <NextNProgress
