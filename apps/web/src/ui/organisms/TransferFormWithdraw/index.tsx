@@ -6,7 +6,6 @@ import {
 import {
   getTradeAccount,
   selectTradeAccount,
-  useTradeWallet,
 } from "@orderbook/core/providers/user/tradeWallet";
 import {
   transformAddress,
@@ -18,6 +17,7 @@ import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 import { useFunds, useTryUnlockTradeAccount } from "@orderbook/core/hooks";
 import { useTranslation } from "next-i18next";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import { UnlockModal } from "../UnlockModal";
 
@@ -45,7 +45,7 @@ export const TransferFormWithdraw = ({
   const [showPassword, setShowPassword] = useState(false);
 
   const { allAccounts } = useExtensionWallet();
-  const { allBrowserAccounts } = useTradeWallet();
+  const { localTradingAccounts: allBrowserAccounts } = useWalletProvider();
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
   const { selectedAccount } = useProfile();
   const { loading: balancesLoading } = useFunds();
@@ -53,7 +53,7 @@ export const TransferFormWithdraw = ({
   const { tradeAddress, mainAddress } = selectedAccount;
 
   const tradingWallet = useMemo(
-    () => getTradeAccount(tradeAddress, allBrowserAccounts),
+    () => getTradeAccount(tradeAddress, allBrowserAccounts || []),
     [allBrowserAccounts, tradeAddress]
   );
 
@@ -72,7 +72,11 @@ export const TransferFormWithdraw = ({
   };
 
   const tradingAccountInBrowser = useMemo(
-    () => selectTradeAccount(selectedAccount?.tradeAddress, allBrowserAccounts),
+    () =>
+      selectTradeAccount(
+        selectedAccount?.tradeAddress,
+        allBrowserAccounts || []
+      ),
     [allBrowserAccounts, selectedAccount?.tradeAddress]
   );
 

@@ -8,7 +8,6 @@ import { Dropdown } from "@polkadex/orderbook-ui/molecules";
 import { createAccountValidations } from "@orderbook/core/validations";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
-import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
 import { noop } from "@orderbook/core/helpers/noop";
 import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
@@ -27,7 +26,6 @@ export const CreateAccountForm = ({
 
   const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
-  const tradeWalletState = useTradeWallet();
 
   const { onRegisterTradeAccount } = useWalletProvider();
 
@@ -77,7 +75,6 @@ export const CreateAccountForm = ({
             name,
           }
         );
-        tradeWalletState.onTradeAccountPush({ pair });
         onRegisterMainAccount({
           mainAccount: selectedAccountAddress,
           tradeAddress: pair.address,

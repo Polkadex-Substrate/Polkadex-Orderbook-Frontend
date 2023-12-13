@@ -17,7 +17,7 @@ import { useFunds } from "@orderbook/core/hooks";
 import { useProfile, UserAccount } from "../profile";
 import { useExtensionWallet } from "../extensionWallet";
 import { selectTradeAccount } from "../tradeWallet/helper";
-import { useTradeWallet } from "../tradeWallet";
+import { useWalletProvider } from "../walletProvider";
 
 import * as A from "./actions";
 import * as T from "./types";
@@ -33,8 +33,11 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const { selectMainAccount } = useExtensionWallet();
   const currentAccount: UserAccount = profileState.selectedAccount;
   const { mainAddress, tradeAddress } = currentAccount;
-  const { allBrowserAccounts } = useTradeWallet();
-  const keyringPair = selectTradeAccount(tradeAddress, allBrowserAccounts);
+  const { localTradingAccounts } = useWalletProvider();
+  const keyringPair = selectTradeAccount(
+    tradeAddress,
+    localTradingAccounts || []
+  );
 
   type UserActionLambdaResp = {
     is_success: boolean;

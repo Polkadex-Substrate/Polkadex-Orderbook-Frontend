@@ -10,6 +10,7 @@ import {
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
 import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import * as S from "./styles";
 
@@ -56,9 +57,8 @@ export const NewAccount = ({
   const handleCancel = (value: boolean, isImport: boolean) =>
     setState({ status: value, isImport: isImport });
 
-  const tradeWalletState = useTradeWallet();
-
-  const tradeInfo = tradeWalletState.registerAccountModal;
+  const { registerAccountModal: tradeInfo } = useTradeWallet();
+  const { registerStatus, importFromFileStatus } = useWalletProvider();
 
   const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
@@ -68,10 +68,10 @@ export const NewAccount = ({
     isImport: false,
   });
 
-  const isTradeAccountSuccess = tradeWalletState.registerAccountSuccess;
+  const isTradeAccountSuccess = registerStatus === "success";
   const isControllerAccountSuccess =
     extensionWalletState.registerMainAccountSuccess;
-  const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
+  const isImportAccountSuccess = importFromFileStatus === "success";
 
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
@@ -109,7 +109,7 @@ export const NewAccount = ({
                   ? successData[0].description
                   : successInformation.description
               }
-              mnemonic={tradeWalletState?.registerAccountModal?.mnemonic}
+              mnemonic={tradeInfo?.mnemonic}
               account={tradeInfo?.account}
             />
           ) : (

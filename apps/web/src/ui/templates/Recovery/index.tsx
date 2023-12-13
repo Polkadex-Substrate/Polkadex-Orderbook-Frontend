@@ -12,7 +12,7 @@ import {
   MnemonicImport,
 } from "@polkadex/orderbook-ui/molecules";
 import { importValiations } from "@orderbook/core/validations";
-import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import * as S from "./styles";
 
@@ -22,7 +22,7 @@ const defaultValues = {
 
 export const RecoveryTemplate = () => {
   const [state, setState] = useState<{ tags: string[] }>({ tags: [] });
-  const { onImportTradeAccount } = useTradeWallet();
+  const { onImportFromMnemonic } = useWalletProvider();
 
   const { t } = useTranslation("recovery");
 
@@ -50,11 +50,12 @@ export const RecoveryTemplate = () => {
                       if (state.tags.length === 12) {
                         const { accountName } = values;
                         const mnemonicString = state.tags.join(" ");
-                        onImportTradeAccount({
-                          mnemonic: mnemonicString,
-                          name: accountName,
-                          password: "",
-                        });
+                        typeof onImportFromMnemonic === "function" &&
+                          onImportFromMnemonic({
+                            mnemonic: mnemonicString,
+                            name: accountName,
+                            password: "",
+                          });
                       }
                     }}
                   >

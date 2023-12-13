@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { generateUsername } from "friendly-username-generator";
@@ -8,19 +7,15 @@ import { Button, InputLine, Loading } from "@polkadex/orderbook-ui/molecules";
 import { createAccountValidations } from "@orderbook/core/validations";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Mnemonic, Menu, Header } from "@polkadex/orderbook-ui/organisms";
-import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
-import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import * as S from "./styles";
 
 export const CreateAccountTemplate = () => {
-  const [mnemoicString, setMnemonicString] = useState("");
-  const tradeWalletState = useTradeWallet();
-  const extensionWalletState = useExtensionWallet();
-  const isLoading = tradeWalletState.registerAccountLoading;
+  const { onRegisterTradeAccount, registerStatus } = useWalletProvider();
+  const isLoading = registerStatus === "loading";
 
   const router = useRouter();
-  const handleMnemonicUpdate = (value) => setMnemonicString(value);
 
   const { touched, handleSubmit, errors, getFieldProps, isValid } = useFormik({
     initialValues: {
@@ -29,12 +24,11 @@ export const CreateAccountTemplate = () => {
     } as Record<string, string>,
     validationSchema: createAccountValidations,
     onSubmit: (values) => {
-      tradeWalletState.onRegisterTradeAccount({
-        name: values.name,
-        password: String(values.passcode),
-        address: mnemoicString,
-        allAccounts: extensionWalletState.allAccounts,
-      });
+      typeof onRegisterTradeAccount === "function" &&
+        onRegisterTradeAccount({
+          name: values.name,
+          password: String(values.passcode),
+        });
     },
   });
 
@@ -89,7 +83,7 @@ export const CreateAccountTemplate = () => {
                   isVisible={isLoading}
                 >
                   <form onSubmit={handleSubmit}>
-                    <Mnemonic handleMnemonicUpdate={handleMnemonicUpdate} />
+                    <Mnemonic />
                     <InputLine
                       label={t("inputLabel")}
                       placeholder={t("inputPlaceholder")}

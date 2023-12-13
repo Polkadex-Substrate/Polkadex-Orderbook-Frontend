@@ -6,6 +6,7 @@ import { ExtensionAccount } from "@orderbook/core/providers/types";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { IUserTradeAccount } from "../";
+import { useWalletProvider } from "../providers/user/walletProvider";
 
 export const useSettings = () => {
   const [showRegistered, setShowRegistered] = useState(false);
@@ -26,34 +27,33 @@ export const useSettings = () => {
     account: ExtensionAccount | null
   ) => setCurrentControllerWallet(account);
 
-  const profileState = useProfile();
+  const {
+    userData: { userAccounts: allAccounts, mainAccounts: linkedMainAddress },
+    selectedAccount: currentTradeAccount,
+  } = useProfile();
   const extensionWalletState = useExtensionWallet();
   const tradeWalletState = useTradeWallet();
 
-  const currentTradeAccount = profileState.selectedAccount;
-  const isTradeAccountLoading = tradeWalletState.registerAccountLoading;
+  const {
+    registerStatus,
+    localTradingAccounts: browserTradeAccounts,
+    importFromFileStatus,
+  } = useWalletProvider();
+
+  const isTradeAccountLoading = registerStatus === "loading";
   const isControllerAccountLoading =
     extensionWalletState.registerMainAccountLoading;
   const controllerWallets = extensionWalletState.allAccounts;
-  const browserTradeAccounts = tradeWalletState.allBrowserAccounts;
-  const {
-    userData: { userAccounts: allAccounts },
-  } = useProfile();
 
-  const {
-    userData: { userAccounts },
-  } = useProfile();
-  const linkedMainAddress = profileState.userData?.mainAccounts;
-  const isTradeAccountSuccess = tradeWalletState.registerAccountSuccess;
-  const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
+  const isTradeAccountSuccess = registerStatus === "success";
+  const isImportAccountSuccess = importFromFileStatus === "success";
   const { isActive } = tradeWalletState?.registerAccountModal;
-  const { selectedAccount: usingAccount } = useProfile();
   const isRegisterMainAccountSuccess =
     extensionWalletState?.registerMainAccountSuccess;
-  const defaultTradeAddress = profileState.defaultTradeAccount;
+  const defaultTradeAddress = currentTradeAccount.tradeAddress;
   const defaultFundingAddress =
     defaultTradeAddress &&
-    profileState.userData?.userAccounts?.find(
+    allAccounts?.find(
       ({ tradeAddress }) => tradeAddress === defaultTradeAddress
     )?.mainAddress;
 
@@ -64,7 +64,7 @@ export const useSettings = () => {
   const tradeAccounts = useMemo(
     () =>
       allAccounts?.map(({ tradeAddress }): IUserTradeAccount => {
-        const account = browserTradeAccounts.find(
+        const account = browserTradeAccounts?.find(
           ({ address }) => address === tradeAddress
         );
         if (account) {
@@ -94,7 +94,7 @@ export const useSettings = () => {
           const name = String(account?.meta?.name)?.toLowerCase();
           const filterByController =
             filterTradeAccountsByControllerAccount?.toLowerCase();
-          const isLinkedAccount = !!userAccounts?.some(
+          const isLinkedAccount = !!allAccounts?.some(
             (v) =>
               v.tradeAddress?.toLowerCase() === cv.address?.toLowerCase() &&
               filterByController === v.mainAddress?.toLowerCase()
@@ -121,10 +121,10 @@ export const useSettings = () => {
         })
         .filter((v) => (showPresent ? v.isPresentInBrowser : v)) || [],
     [
-      filterTradeAccounts,
       tradeAccounts,
-      userAccounts,
+      filterTradeAccounts,
       filterTradeAccountsByControllerAccount,
+      allAccounts,
       showPresent,
     ]
   );
@@ -206,13 +206,13 @@ export const useSettings = () => {
     controllerWallets,
     tradeAccounts,
     allFilteredTradeAccounts,
-    userAccounts,
+    userAccounts: allAccounts,
     linkedMainAddress,
     filterControllerWallets: allFilteredControllerWallets,
     isTradeAccountSuccess,
     isImportAccountSuccess,
     isActive,
-    usingAccount,
+    usingAccount: currentTradeAccount,
     isRegisterMainAccountSuccess,
     isLoading,
     isPreviewActive,

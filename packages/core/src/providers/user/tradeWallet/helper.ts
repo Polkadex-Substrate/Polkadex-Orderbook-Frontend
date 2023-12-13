@@ -12,10 +12,10 @@ import * as T from "./types";
 // This is needed as the selector one can not be used inside a function.
 export const getTradeAccount = (
   addr: string,
-  tradeAccounts: TradeAccount[],
+  tradeAccounts: TradeAccount[]
 ) => {
   const acc = tradeAccounts?.find(
-    (tradeAcc) => tradeAcc.address?.toLowerCase() === addr?.toLowerCase(),
+    (tradeAcc) => tradeAcc.address?.toLowerCase() === addr?.toLowerCase()
   );
 
   return acc;
@@ -36,7 +36,7 @@ export const addProxyToAccount = async (
   api: ApiPromise,
   proxyAddress: string,
   signer: Signer,
-  mainAddress: string,
+  mainAddress: string
 ): Promise<ExtrinsicResult> => {
   const ext = api.tx.ocex.addProxyAccount(proxyAddress);
   const res = await signAndSendExtrinsic(
@@ -44,7 +44,7 @@ export const addProxyToAccount = async (
     ext,
     { signer },
     mainAddress,
-    true,
+    true
   );
   return res;
 };
@@ -53,7 +53,7 @@ export const removeProxyFromAccount = async (
   api: ApiPromise,
   proxyAddress: string,
   signer: Signer,
-  mainAddress: string,
+  mainAddress: string
 ): Promise<ExtrinsicResult> => {
   const ext = api.tx.ocex.removeProxyAccount(proxyAddress);
   const res = await signAndSendExtrinsic(
@@ -61,7 +61,7 @@ export const removeProxyFromAccount = async (
     ext,
     { signer },
     mainAddress,
-    true,
+    true
   );
   return res;
 };
@@ -69,18 +69,18 @@ export const removeProxyFromAccount = async (
 // Selectors
 export const selectTradeAccount = (
   address: string,
-  allBrowserAccounts: T.TradeWalletState["allBrowserAccounts"],
+  allBrowserAccounts: TradeAccount[]
 ): TradeAccount | undefined =>
   allBrowserAccounts?.find(
-    (account) => account?.address?.toLowerCase() === address?.toLowerCase(),
+    (account) => account?.address?.toLowerCase() === address?.toLowerCase()
   );
 
 export const selectShouldShowProtectedPassword = (
   tradeWalletState: T.TradeWalletState,
-  profileState: ProfileState,
+  profileState: ProfileState
 ): boolean =>
   tradeWalletState?.allBrowserAccounts?.some(
     (account) =>
       account?.address?.toLowerCase() ===
-      profileState?.selectedAccount?.tradeAddress?.toLowerCase(),
+      profileState?.selectedAccount?.tradeAddress?.toLowerCase()
   );

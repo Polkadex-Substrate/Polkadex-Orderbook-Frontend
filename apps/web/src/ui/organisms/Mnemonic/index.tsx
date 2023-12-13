@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useTranslation } from "next-i18next";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
@@ -8,13 +8,9 @@ import { PaperWallet } from "@polkadex/orderbook-ui/organisms";
 
 import * as S from "./styles";
 
-export const Mnemonic = ({ handleMnemonicUpdate }) => {
+export const Mnemonic = () => {
   const [state, setState] = useState(true);
   const { mnemonic, mnemoicString } = useMnemonic();
-  useEffect(
-    () => handleMnemonicUpdate(mnemoicString),
-    [handleMnemonicUpdate, mnemoicString],
-  );
 
   const componentRef = useRef<HTMLInputElement>(null);
 

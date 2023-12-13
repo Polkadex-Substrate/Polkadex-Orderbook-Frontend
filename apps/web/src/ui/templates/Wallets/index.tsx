@@ -37,6 +37,7 @@ import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWall
 import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
 import { useTour } from "@reactour/tour";
 import Link from "next/link";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import * as T from "./types";
 import * as S from "./styles";
@@ -78,8 +79,7 @@ export const WalletsTemplate = () => {
 
   const { onUserSelectAccount } = useProfile();
   const tradeWalletState = useTradeWallet();
-
-  const showLoader = tradeWalletState.isFetching;
+  const { tradingLoading: showLoader } = useWalletProvider();
 
   const { t } = useTranslation("settings");
 

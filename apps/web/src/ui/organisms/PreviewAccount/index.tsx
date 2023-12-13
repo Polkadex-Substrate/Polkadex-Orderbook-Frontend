@@ -26,6 +26,7 @@ import {
   useProfile,
 } from "@orderbook/core/providers/user/profile";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import { UnlockAccount } from "../UnlockAccount";
 
@@ -47,15 +48,18 @@ export const PreviewAccount = ({
   selected,
   mainAccAddress,
 }: Props) => {
+  const { onExportTradeAccountActive } = useTradeWallet();
+
   const {
     onExportTradeAccount,
-    onRemoveProxyAccountFromChain,
-    onRemoveTradeAccountFromBrowser,
-    onExportTradeAccountActive,
-    allBrowserAccounts,
-    removesInLoading,
-    exportAccountLoading,
-  } = useTradeWallet();
+    onRemoveTradingAccountFromChain,
+    onRemoveTradingAccountFromDevice,
+    localTradingAccounts: allBrowserAccounts,
+    removingStatus,
+  } = useWalletProvider();
+
+  const removesInLoading = removingStatus === "loading";
+
   const [remove, setRemove] = useState<{
     isRemoveDevice: boolean;
     status: boolean;
@@ -75,14 +79,12 @@ export const PreviewAccount = ({
     );
 
   const tradingAccountInBrowser =
-    selected && selectTradeAccount(selected?.address, allBrowserAccounts);
+    selected && selectTradeAccount(selected?.address, allBrowserAccounts || []);
   useTryUnlockTradeAccount(tradingAccountInBrowser);
 
   const { selectedAccount: usingAccount } = useProfile();
-  const isRemoveFromBlockchainLoading =
-    selected && removesInLoading.includes(selected?.address);
+  const isRemoveFromBlockchainLoading = selected && removesInLoading;
 
-  const showProtectedPassword = exportAccountLoading;
   const using = usingAccount.tradeAddress === selected?.address;
   const { onUserSelectAccount } = useProfile();
 
@@ -97,20 +99,22 @@ export const PreviewAccount = ({
     return disableKeysList;
   };
 
+  useTryUnlockTradeAccount(tradingAccountInBrowser);
   const shouldShowProtectedPassword = useMemo(
-    () => tradingAccountInBrowser?.isLocked && showProtectedPassword,
-    [tradingAccountInBrowser, showProtectedPassword]
+    () => tradingAccountInBrowser?.isLocked,
+    [tradingAccountInBrowser]
   );
 
   const handleExportAccount = useCallback(() => {
     tradingAccountInBrowser?.isLocked
       ? onExportTradeAccountActive()
-      : selected?.address &&
-        onExportTradeAccount({ address: selected?.address });
+      : selected?.account &&
+        typeof onExportTradeAccount === "function" &&
+        onExportTradeAccount({ tradeAccount: selected?.account, password: "" });
   }, [
     onExportTradeAccount,
     onExportTradeAccountActive,
-    selected?.address,
+    selected,
     tradingAccountInBrowser?.isLocked,
   ]);
   const handleClose = () =>
@@ -137,7 +141,8 @@ export const PreviewAccount = ({
             <RemoveFromDevice
               onAction={() => {
                 if (selected?.address) {
-                  onRemoveTradeAccountFromBrowser(selected?.address);
+                  typeof onRemoveTradingAccountFromDevice === "function" &&
+                    onRemoveTradingAccountFromDevice(selected?.address);
                   handleClose();
                 }
               }}
@@ -149,10 +154,10 @@ export const PreviewAccount = ({
               onClose={handleClose}
               onAction={() => {
                 if (selected) {
-                  onRemoveProxyAccountFromChain({
-                    address: selected?.address,
-                    allAccounts: extensionWalletState.allAccounts,
-                  });
+                  typeof onRemoveTradingAccountFromChain === "function" &&
+                    onRemoveTradingAccountFromChain({
+                      tradeAddress: selected.address,
+                    });
                   handleClose();
                 }
               }}
@@ -170,11 +175,12 @@ export const PreviewAccount = ({
             <S.UnlockAccount>
               <UnlockAccount
                 onSubmit={({ password }) => {
-                  if (selected?.address)
-                    onExportTradeAccount({
-                      address: selected?.address,
-                      password,
-                    });
+                  if (selected?.account)
+                    typeof onExportTradeAccount === "function" &&
+                      onExportTradeAccount({
+                        tradeAccount: selected?.account,
+                        password,
+                      });
                 }}
                 handleClose={() => onExportTradeAccountActive()}
               />
