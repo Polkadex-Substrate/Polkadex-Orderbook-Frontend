@@ -4,14 +4,15 @@ import {
   ProfileProviderProps,
 } from "@orderbook/core/providers/user/profile/types";
 
-import { initialState } from "./reducer";
-
 export const Context = createContext<ProfileContextInterface>({
-  ...initialState,
   onUserSelectAccount: () => {},
   onUserLogout: () => {},
   onUserChangeInitBanner: () => {},
-  onUserSetDefaultTradeAccount: () => {},
+  allAccounts: [],
+  avatar: "",
+  favoriteMarkets: [],
+  isBannerShown: false,
+  selectedAccount: { mainAddress: "", tradeAddress: "" },
   onUserSetAvatar: () => {},
   onUserFavoriteMarketPush: () => {},
 });

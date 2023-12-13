@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import {
   useUserAccounts,
@@ -12,12 +12,13 @@ import {
 import * as LOCAL_STORE from "./localstore";
 import { Provider } from "./context";
 import * as T from "./types";
+import { UserAccount } from "./types";
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [activeAccount, setActiveAccount] = useState<T.UserAccount>({
     mainAddress: "",
     tradeAddress: "",
   });
-  const [allTradingAddresses, setAllTradingAddresses] = useState<string[]>([]);
+  const [allAccounts, setAllAccounts] = useState<UserAccount[]>([]);
   const [favoriteMarkets, setFavoriteMarkets] = useState<string[]>([]);
   const [isBannerShown, setIsBannerShown] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -81,8 +82,8 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   // sync all tradeAddresses state with extension
   useEffect(() => {
     getAllProxyAccounts(extensionAccounts.map(({ address }) => address)).then(
-      (allTradingAddresses) => {
-        setAllTradingAddresses(allTradingAddresses.map((x) => x.tradeAddress));
+      (accounts) => {
+        setAllAccounts(accounts);
       }
     );
   }, [extensionAccounts]);
@@ -92,7 +93,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       value={{
         onUserSelectAccount,
         selectedAccount: activeAccount,
-        allTradingAddresses,
+        allAccounts,
         favoriteMarkets,
         isBannerShown,
         avatar,
