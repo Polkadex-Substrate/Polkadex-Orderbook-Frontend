@@ -13,12 +13,10 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder, useTryUnlockTradeAccount } from "@orderbook/core/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import {
-  selectTradeAccount,
-  useTradeWallet,
-} from "@orderbook/core/providers/user/tradeWallet";
+import { selectTradeAccount } from "@orderbook/core/providers/user/tradeWallet";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { buySellValidation } from "@orderbook/core/validations";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import * as S from "./styles";
 
@@ -251,11 +249,11 @@ export const MarketOrderAction = ({
 
 const ProtectPassword = () => {
   const profileState = useProfile();
-  const tradeWalletState = useTradeWallet();
+  const { localTradingAccounts, onUnlockTradeAccount } = useWalletProvider();
   const currTradeAddr = profileState.selectedAccount.tradeAddress;
   const tradeAccount = selectTradeAccount(
     currTradeAddr,
-    tradeWalletState.allBrowserAccounts
+    localTradingAccounts || []
   );
   // if account is not protected by password use default password to unlock account.
   useTryUnlockTradeAccount(tradeAccount);
@@ -267,9 +265,10 @@ const ProtectPassword = () => {
     },
     validationSchema: buySellValidation,
     onSubmit: (values) => {
-      isValidSize &&
+      typeof onUnlockTradeAccount === "function" &&
+        isValidSize &&
         tradeAccount?.isLocked &&
-        tradeWalletState.onUnlockTradeAccount({
+        onUnlockTradeAccount({
           address: currTradeAddr,
           password: values.password,
         });

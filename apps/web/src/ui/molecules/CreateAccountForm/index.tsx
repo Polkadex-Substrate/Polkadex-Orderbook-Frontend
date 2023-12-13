@@ -10,6 +10,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
 import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
 import { noop } from "@orderbook/core/helpers/noop";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import { Switch } from "../Switcher";
 
@@ -27,10 +28,13 @@ export const CreateAccountForm = ({
   const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
   const tradeWalletState = useTradeWallet();
+
+  const { onRegisterTradeAccount } = useWalletProvider();
+
   const controllerWallets = extensionWalletState.allAccounts;
   const linkedMainAddresses = profileState.userData?.mainAccounts;
   const registeredAccounts = controllerWallets?.filter(
-    ({ account }) => linkedMainAddresses?.includes(account.address),
+    ({ account }) => linkedMainAddresses?.includes(account.address)
   );
   const hasData = !!selectedAccountAddress?.length;
   const initialMessage = registeredAccounts?.length
@@ -61,7 +65,7 @@ export const CreateAccountForm = ({
     },
     validationSchema: createAccountValidations,
     validateOnChange: true,
-    onSubmit: ({ name, passcode, controllerWallet }) => {
+    onSubmit: ({ name, passcode }) => {
       // TODO: Move to hook
       if (hasData) {
         // if controller account is already selected then register main account called.
@@ -71,7 +75,7 @@ export const CreateAccountForm = ({
           passcode.length > 0 ? passcode : undefined,
           {
             name,
-          },
+          }
         );
         tradeWalletState.onTradeAccountPush({ pair });
         onRegisterMainAccount({
@@ -81,12 +85,11 @@ export const CreateAccountForm = ({
           mnemonic,
         });
       } else {
-        tradeWalletState.onRegisterTradeAccount({
-          address: controllerWallet.address,
-          name,
-          password: String(passcode),
-          allAccounts: extensionWalletState.allAccounts,
-        });
+        typeof onRegisterTradeAccount === "function" &&
+          onRegisterTradeAccount({
+            name,
+            password: String(passcode),
+          });
       }
     },
   });
@@ -162,7 +165,7 @@ export const CreateAccountForm = ({
               onClick={() =>
                 setFieldValue(
                   "name",
-                  generateUsername({ useRandomNumber: false }),
+                  generateUsername({ useRandomNumber: false })
                 )
               }
             >
@@ -204,7 +207,7 @@ export const CreateAccountForm = ({
                   onClick={() =>
                     setFieldValue(
                       "isPasscodeVisible",
-                      !values.isPasscodeVisible,
+                      !values.isPasscodeVisible
                     )
                   }
                 >

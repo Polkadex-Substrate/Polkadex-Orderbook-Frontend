@@ -3,11 +3,9 @@ import { FormikErrors, FormikHelpers } from "formik";
 import { useTranslation } from "next-i18next";
 import { Decimal } from "@orderbook/core/utils";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import {
-  useTradeWallet,
-  selectTradeAccount,
-} from "@orderbook/core/providers/user/tradeWallet";
+import { selectTradeAccount } from "@orderbook/core/providers/user/tradeWallet";
 import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 import {
   cleanPositiveFloatInput,
   decimalPlaces,
@@ -54,7 +52,7 @@ export function usePlaceOrder(
     currentTicker: { currentPrice: lastPriceValue },
   } = useTickers(market);
 
-  const { allBrowserAccounts } = useTradeWallet();
+  const { localTradingAccounts: allBrowserAccounts } = useWalletProvider();
 
   const {
     selectedAccount: { tradeAddress },
@@ -84,7 +82,7 @@ export function usePlaceOrder(
 
   const tradeAccount = selectTradeAccount(
     usingTradeAddress,
-    allBrowserAccounts
+    allBrowserAccounts || []
   );
 
   // if account is not protected by password use default password to unlock account.

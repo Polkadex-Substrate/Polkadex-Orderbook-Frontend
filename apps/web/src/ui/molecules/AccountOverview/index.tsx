@@ -15,15 +15,13 @@ import {
   transformAddress,
   useProfile,
 } from "@orderbook/core/providers/user/profile";
-import {
-  getTradeAccount,
-  useTradeWallet,
-} from "@orderbook/core/providers/user/tradeWallet";
+import { getTradeAccount } from "@orderbook/core/providers/user/tradeWallet";
 import {
   userMainAccountDetails,
   useExtensionWallet,
 } from "@orderbook/core/providers/user/extensionWallet";
 import { ExtensionAccount } from "@orderbook/core/providers/types";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import * as T from "./types";
 import * as S from "./styles";
@@ -34,9 +32,8 @@ export const AccountOverview = ({ onNavigate }: T.Props) => {
 
   const router = useRouter();
   const extensionWalletState = useExtensionWallet();
-  const tradeWalletState = useTradeWallet();
+  const { localTradingAccounts } = useWalletProvider();
 
-  const tradingAccounts = tradeWalletState.allBrowserAccounts;
   const mainAccounts = extensionWalletState.allAccounts;
   const {
     selectedAccount: currentUsingAccount,
@@ -57,7 +54,7 @@ export const AccountOverview = ({ onNavigate }: T.Props) => {
     if (currentUsingAccount) {
       const tradeAcc = getTradeAccount(
         currentUsingAccount.tradeAddress,
-        tradingAccounts
+        localTradingAccounts || []
       );
       const mainAcc = userMainAccountDetails(
         currentUsingAccount.mainAddress,
@@ -66,21 +63,24 @@ export const AccountOverview = ({ onNavigate }: T.Props) => {
       setSelectedTradeAccount(tradeAcc);
       setSelectedMainAccount(mainAcc);
     }
-  }, [currentUsingAccount, mainAccounts, tradingAccounts]);
+  }, [currentUsingAccount, mainAccounts, localTradingAccounts]);
 
   useEffect(() => {
     const accountList: KeyringPair[] = [];
     allUserAccounts?.forEach((data) => {
-      const res = getTradeAccount(data.tradeAddress, tradingAccounts);
+      const res = getTradeAccount(
+        data.tradeAddress,
+        localTradingAccounts || []
+      );
       if (res && accountList.length < 5) {
         accountList.push(res);
       }
     });
     setAccountList(accountList);
-  }, [allUserAccounts, tradingAccounts]);
+  }, [allUserAccounts, localTradingAccounts]);
 
   const handleClick = (addr: string) => {
-    const acc = getTradeAccount(addr, tradingAccounts);
+    const acc = getTradeAccount(addr, localTradingAccounts || []);
     const userAcc = allUserAccounts?.find(
       (acc) => acc.tradeAddress?.toLowerCase() === addr?.toLowerCase()
     );

@@ -7,7 +7,7 @@ import { intlFormat } from "date-fns";
 import { useTranslation } from "next-i18next";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { importAccountJsonValidations } from "@orderbook/core/validations";
-import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import { Switch } from "../Switcher";
 
@@ -84,7 +84,7 @@ type ImportAccountMnemonicProps = {
 const ImportAccountMnemonic = ({
   onCancel = undefined,
 }: ImportAccountMnemonicProps) => {
-  const { onImportTradeAccount } = useTradeWallet();
+  const { onImportFromMnemonic } = useWalletProvider();
   const mnemonicInputRef = useRef<HTMLInputElement | null>(null);
 
   const formik = useFormik({
@@ -96,11 +96,12 @@ const ImportAccountMnemonic = ({
       mnemonic: [],
     },
     onSubmit: ({ mnemonic, name, passcode }) => {
-      onImportTradeAccount({
-        mnemonic: mnemonic.join(" "),
-        name: name,
-        password: passcode,
-      });
+      typeof onImportFromMnemonic === "function" &&
+        onImportFromMnemonic({
+          mnemonic: mnemonic.join(" "),
+          name: name,
+          password: passcode,
+        });
     },
   });
   const {
@@ -298,7 +299,7 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
   const t = (key: string) =>
     translation(`importAccountForm.importAccountJSON.${key}`);
 
-  const { onImportTradeAccountJson } = useTradeWallet();
+  const { onImportFromFile } = useWalletProvider();
   const formik = useFormik<{
     hasPasscode: boolean;
     passcode: string;
@@ -313,10 +314,11 @@ const ImportAccountJson = ({ onCancel = undefined }) => {
     },
     validationSchema: importAccountJsonValidations,
     onSubmit: ({ passcode, file }) => {
-      onImportTradeAccountJson({
-        file,
-        password: passcode,
-      });
+      typeof onImportFromFile === "function" &&
+        onImportFromFile({
+          file,
+          password: passcode,
+        });
     },
   });
   const { getRootProps, getInputProps, isDragReject, isDragAccept } =

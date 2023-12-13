@@ -7,7 +7,8 @@ import { Signer } from "@polkadot/types/types";
 import { ExtrinsicResult, signAndSendExtrinsic } from "@orderbook/core/helpers";
 
 import { TradeAccount } from "../../types";
-import { ImportTradeAccountJsonFetch } from "../tradeWallet";
+
+import { ImportFromFile, ImportFromMnemonic } from "./provider";
 
 export const getAllProxyAccounts = async (
   mainAccount: string,
@@ -43,11 +44,23 @@ export async function getAllTradeAccountsInBrowser(): Promise<TradeAccount[]> {
 export const onImportTradeAccountJson = async ({
   file,
   password,
-}: ImportTradeAccountJsonFetch["payload"]) => {
+}: ImportFromFile) => {
   const { default: keyring } = await import("@polkadot/ui-keyring");
-  const res = keyring?.restoreAccount(file, password || "");
+  const res = keyring?.restoreAccount(file as any, password || "");
   console.log(res);
   return res;
+};
+
+export const onImportTradeAccountMnemonic = async ({
+  name,
+  mnemonic,
+  password,
+}: ImportFromMnemonic) => {
+  const { default: keyring } = await import("@polkadot/ui-keyring");
+  const { pair } = keyring.addUri(mnemonic, password || "", {
+    name,
+  });
+  return pair;
 };
 
 export const addProxyToAccount = async (

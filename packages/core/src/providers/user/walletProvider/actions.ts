@@ -16,7 +16,9 @@ import {
   SET_TEMP_TRADING,
   RESET_TEMP_TRADING,
   REMOVE_LOCAL_TRADING_ACCOUNT,
+  UNLOCK_LOCAL_TRADING_ACCOUNT,
 } from "./constants";
+import { UnlockTradeAccount } from "./provider";
 
 const setSelectWallet = (payload: ExtensionAccount) =>
   ({
@@ -85,6 +87,12 @@ const removeLocalTradingAccount = (payload: string) =>
     payload,
   }) as const;
 
+export const unlockTradeAccount = (payload: UnlockTradeAccount) =>
+  ({
+    type: UNLOCK_LOCAL_TRADING_ACCOUNT,
+    payload: payload,
+  }) as const;
+
 export const actions = {
   setSelectWallet,
   setSelectAccount,
@@ -98,6 +106,7 @@ export const actions = {
   removeLocalTradingAccount,
   setTempTrading,
   resetTempTrading,
+  unlockTradeAccount,
 };
 
 export type ActionsType =
@@ -112,4 +121,5 @@ export type ActionsType =
   | ReturnType<typeof logout>
   | ReturnType<typeof removeLocalTradingAccount>
   | ReturnType<typeof setTempTrading>
-  | ReturnType<typeof resetTempTrading>;
+  | ReturnType<typeof resetTempTrading>
+  | ReturnType<typeof unlockTradeAccount>;
