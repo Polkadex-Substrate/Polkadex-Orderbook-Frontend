@@ -1,9 +1,8 @@
-// TODO: REPLACE TESTING PROVIDER
-
 import { useExtensionAccounts, useExtensions } from "@polkadex/react-providers";
 import { useCallback, useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { Authorization, ConnectWallet, Multistep, Wallets } from "@polkadex/ux";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
@@ -27,7 +26,8 @@ export const Connect = ({
   onClose: () => void;
   onNext: (v: SwitchKeys) => void;
 }) => {
-  let selectedExtension,
+  const {
+    selectedExtension,
     proxiesLoading,
     onSelectWallet,
     onSelectExtension,
@@ -39,7 +39,8 @@ export const Connect = ({
     importFromFileStatus,
     onRemoveTradingAccountFromDevice,
     onSetTempTrading,
-    tempTrading;
+    tempTrading,
+  } = useWalletProvider();
 
   const sourceId = selectedExtension?.id;
   const hasAccount = !!proxiesAccounts?.length;

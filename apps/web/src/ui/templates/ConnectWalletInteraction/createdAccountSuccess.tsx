@@ -1,12 +1,17 @@
-// TODO: REPLACE TESTING PROVIDER
 import { useEffect } from "react";
 import { Multistep } from "@polkadex/ux";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import { TradingAccountSuccessfull } from "../ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "../ConnectWallet/tradingAccountMnemonic";
 
 export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
-  let tempMnemonic, onResetTempMnemonic, onExportTradeAccount, selectedAccount;
+  const {
+    tempMnemonic,
+    onResetTempMnemonic,
+    onExportTradeAccount,
+    selectedAccount,
+  } = useWalletProvider();
 
   useEffect(() => {
     return () => onResetTempMnemonic?.();

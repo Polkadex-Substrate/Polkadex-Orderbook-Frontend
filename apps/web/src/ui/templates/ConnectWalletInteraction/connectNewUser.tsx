@@ -1,5 +1,5 @@
-// TODO: REPLACE TESTING PROVIDER
 import { Multistep } from "@polkadex/ux";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import { NewUser } from "../ConnectWallet/newUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
@@ -11,14 +11,16 @@ export const ConnectNewUser = ({
   onClose: () => void;
   onNext: (v: "Connect" | "TradingAccountSuccessfull") => void;
 }) => {
-  let onResetWallet,
+  const {
+    onResetWallet,
     onResetExtension,
     selectedWallet,
     onRegisterTradeAccount,
     registerStatus,
     registerError,
     selectedExtension,
-    walletBalance;
+    walletBalance,
+  } = useWalletProvider();
 
   const handleCloseInteraction = () => {
     onResetWallet?.();

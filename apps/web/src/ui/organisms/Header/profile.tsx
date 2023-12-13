@@ -1,5 +1,3 @@
-// TODO: REPLACE TESTING PROVIDER
-
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import {
   Button,
@@ -11,6 +9,7 @@ import {
 } from "@polkadex/ux";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 
 import { Profile as ProfileDropdown } from "../../templates/ConnectWallet/profile";
 import { NewTradingAccount } from "../../templates/ConnectWallet/newTradingAccount";
@@ -23,7 +22,8 @@ import { TradingAccountSuccessfull } from "@/ui/templates/ConnectWallet/tradingA
 import { TradingAccountMnemonic } from "@/ui/templates/ConnectWallet/tradingAccountMnemonic";
 
 export const Profile = ({ onClick }: { onClick: () => void }) => {
-  let selectedWallet,
+  const {
+    selectedWallet,
     onSelectAccount,
     selectedAccount,
     onLogout,
@@ -42,8 +42,9 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
     onImportFromFile,
     importFromFileStatus,
     proxiesAccounts,
+    onExportTradeAccount,
     tempMnemonic,
-    onExportTradeAccount;
+  } = useWalletProvider();
 
   const shortAddress = useMemo(
     () => truncateString(selectedAccount?.address ?? "", 3),
