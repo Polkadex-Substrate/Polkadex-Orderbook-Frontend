@@ -83,7 +83,7 @@ export const PreviewAccount = ({
     selected && removesInLoading.includes(selected?.address);
 
   const showProtectedPassword = exportAccountLoading;
-  const using = usingAccount.tradeAddress === selected?.address;
+  const isUsing = Boolean(usingAccount.tradeAddress === selected?.address);
   const { onUserSelectAccount } = useProfile();
 
   const menuDisableKeys = () => {
@@ -235,7 +235,7 @@ export const PreviewAccount = ({
                       }
                       type="button"
                     >
-                      {using ? t("using") : t("use")}
+                      {isUsing ? t("using") : t("use")}
                     </S.Button>
                   )}
                 </S.Container>
@@ -419,11 +419,10 @@ const ProtectedByPassword = ({ label = "", isActive = false }) => {
 
 const DefaultAccount = ({ label = "", tradeAddress }) => {
   const profileState = useProfile();
-  const defaultTradeAddress = profileState.defaultTradeAccount;
+  const defaultTradeAddress = profileState.selectedAccount.tradeAddress;
   const isActive = tradeAddress === defaultTradeAddress;
 
-  const handleChange = () =>
-    !isActive && profileState.onUserSetDefaultTradeAccount(tradeAddress);
+  const handleChange = () => !isActive && {};
 
   return (
     <S.CardWrapper>

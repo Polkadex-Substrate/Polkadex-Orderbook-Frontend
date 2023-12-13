@@ -76,9 +76,7 @@ export const NewAccount = ({
   const hasData = !!selected?.address?.length;
   const information = data[hasData ? 1 : 0];
   const hasExtensionAccounts = extensionWalletState.allAccounts?.length > 0;
-  const hasLinkedAccounts =
-    profileState.userData?.mainAccounts &&
-    profileState.userData?.mainAccounts?.length > 0;
+  const hasLinkedAccounts = false;
   const shouldShowCreateAccount = (state.status && state.isImport) || hasData;
   const successInformation = successData[isControllerAccountSuccess ? 1 : 0];
 

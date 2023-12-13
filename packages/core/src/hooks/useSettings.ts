@@ -1,4 +1,4 @@
-// TODO: Refactor hook
+// TODO: TOBE DEPRECATED
 import { useMemo, useState } from "react";
 import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
 import { useTradeWallet } from "@orderbook/core/providers/user/tradeWallet";
@@ -36,26 +36,15 @@ export const useSettings = () => {
     extensionWalletState.registerMainAccountLoading;
   const controllerWallets = extensionWalletState.allAccounts;
   const browserTradeAccounts = tradeWalletState.allBrowserAccounts;
-  const {
-    userData: { userAccounts: allAccounts },
-  } = useProfile();
-
-  const {
-    userData: { userAccounts },
-  } = useProfile();
-  const linkedMainAddress = profileState.userData?.mainAccounts;
+  const linkedMainAddress = [];
   const isTradeAccountSuccess = tradeWalletState.registerAccountSuccess;
   const isImportAccountSuccess = tradeWalletState.importAccountSuccess;
   const { isActive } = tradeWalletState?.registerAccountModal;
   const { selectedAccount: usingAccount } = useProfile();
   const isRegisterMainAccountSuccess =
     extensionWalletState?.registerMainAccountSuccess;
-  const defaultTradeAddress = profileState.defaultTradeAccount;
-  const defaultFundingAddress =
-    defaultTradeAddress &&
-    profileState.userData?.userAccounts?.find(
-      ({ tradeAddress }) => tradeAddress === defaultTradeAddress
-    )?.mainAddress;
+  const defaultTradeAddress = "";
+  const defaultFundingAddress = "";
 
   const isPreviewActive = tradeWalletState.previewAccountModal.isActive;
   const previewAccountSelected = tradeWalletState.previewAccountModal.selected;
@@ -63,7 +52,7 @@ export const useSettings = () => {
 
   const tradeAccounts = useMemo(
     () =>
-      allAccounts?.map(({ tradeAddress }): IUserTradeAccount => {
+      []?.map(({ tradeAddress }): IUserTradeAccount => {
         const account = browserTradeAccounts.find(
           ({ address }) => address === tradeAddress
         );
@@ -80,84 +69,13 @@ export const useSettings = () => {
           };
         }
       }),
-    [allAccounts, browserTradeAccounts]
+    [browserTradeAccounts]
   );
 
-  const allFilteredTradeAccounts = useMemo(
-    () =>
-      tradeAccounts
-        ?.reduce((pv: IUserTradeAccount[], cv) => {
-          const { account } = cv;
-          const checker = filterTradeAccounts?.toLowerCase();
-          const address = account?.address?.toLowerCase();
-          const cvAddress = cv?.address?.toLowerCase();
-          const name = String(account?.meta?.name)?.toLowerCase();
-          const filterByController =
-            filterTradeAccountsByControllerAccount?.toLowerCase();
-          const isLinkedAccount = !!userAccounts?.some(
-            (v) =>
-              v.tradeAddress?.toLowerCase() === cv.address?.toLowerCase() &&
-              filterByController === v.mainAddress?.toLowerCase()
-          );
-          if (
-            (isLinkedAccount || filterByController?.includes("all")) &&
-            (address?.includes(checker) ||
-              name?.includes(checker) ||
-              cvAddress.includes(checker))
-          ) {
-            pv.push(cv);
-          }
-          return pv;
-        }, [])
-        // sorting the accounts on the basis of their presence in the browser
-        .sort((a, b) => {
-          if (a.isPresentInBrowser && !b.isPresentInBrowser) {
-            return -1;
-          } else if (!a.isPresentInBrowser && b.isPresentInBrowser) {
-            return 1;
-          } else {
-            return 0;
-          }
-        })
-        .filter((v) => (showPresent ? v.isPresentInBrowser : v)) || [],
-    [
-      filterTradeAccounts,
-      tradeAccounts,
-      userAccounts,
-      filterTradeAccountsByControllerAccount,
-      showPresent,
-    ]
-  );
+  const allFilteredTradeAccounts = [] as any;
 
   /* Filtering the controllerWallets array based on the filterControllerWallets string. Sort and filter by registered address */
-  const allFilteredControllerWallets = useMemo(
-    () =>
-      controllerWallets
-        ?.sort((a) => (linkedMainAddress?.includes(a.account.address) ? -1 : 1))
-        ?.filter((value) =>
-          showRegistered
-            ? linkedMainAddress?.includes(value.account.address)
-            : value
-        )
-        ?.reduce((pv: ExtensionAccount[], cv) => {
-          const { account } = cv;
-          const checker = filterControllerWallets?.toLowerCase();
-          const address = account?.address?.toLowerCase();
-          const name = account?.meta?.name?.toLowerCase();
-
-          if (address?.includes(checker) || name?.includes(checker)) {
-            pv.push(cv);
-          }
-          return pv;
-        }, []),
-    [
-      filterControllerWallets,
-      controllerWallets,
-      showRegistered,
-      linkedMainAddress,
-    ]
-  );
-
+  const allFilteredControllerWallets = [] as any;
   const hasRegisteredMainAccount = useMemo(
     () => linkedMainAddress && linkedMainAddress?.length > 0,
     [linkedMainAddress]
@@ -206,7 +124,7 @@ export const useSettings = () => {
     controllerWallets,
     tradeAccounts,
     allFilteredTradeAccounts,
-    userAccounts,
+    userAccounts: [] as any,
     linkedMainAddress,
     filterControllerWallets: allFilteredControllerWallets,
     isTradeAccountSuccess,

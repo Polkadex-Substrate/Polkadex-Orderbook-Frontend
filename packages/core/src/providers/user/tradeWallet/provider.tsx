@@ -22,13 +22,7 @@ import * as A from "./actions";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
-  const {
-    onUserSelectAccount,
-    onUserProfileAccountPush,
-    userData,
-    onUserProfileTradeAccountDelete,
-    selectedAccount,
-  } = useProfile();
+  const { onUserSelectAccount, selectedAccount } = useProfile();
   const nativeApiState = useNativeApi();
   const { onHandleError, onHandleNotification, hasExtension } =
     useSettingsProvider();
@@ -64,21 +58,12 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const onImportTradeAccountJson = (
     payload: A.ImportTradeAccountJsonFetch["payload"]
   ) => {
-    const accounts = userData.userAccounts;
     const { file, password } = payload;
     let tradeAddress = "";
     try {
       const modifiedFile = file;
       const pair = keyring.restoreAccount(modifiedFile, password || "");
       tradeAddress = pair?.address;
-
-      // Check if file exists in userAccounts
-      const accountExists = accounts?.find(
-        (account) => account.tradeAddress === tradeAddress
-      );
-
-      if (!accountExists) throw new Error("Account does not exists");
-
       dispatch(A.tradeAccountPush({ pair }));
       dispatch(
         A.registerTradeAccountData({
@@ -201,8 +186,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
       if (res.isSuccess) {
         dispatch(A.tradeAccountPush({ pair }));
-
-        onUserProfileAccountPush({ tradeAddress, mainAddress: address });
         setTimeout(() => {
           onUserSelectAccount({ tradeAddress });
           dispatch(
@@ -236,49 +219,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     try {
       const api = nativeApiState.api;
       const { address: tradeAddress, allAccounts } = payload;
-      const linkedMainAddress =
-        tradeAddress &&
-        userData?.userAccounts?.find(
-          ({ tradeAddress: addr }) => addr === tradeAddress
-        )?.mainAddress;
-
-      if (!linkedMainAddress || !api) {
-        throw new Error("Invalid trade address or undefined api");
-      }
-      const account = linkedMainAddress
-        ? allAccounts?.find(
-            ({ account }) =>
-              account?.address?.toLowerCase() ===
-              linkedMainAddress?.toLowerCase()
-          )
-        : undefined;
-
-      if (!account?.account.address) {
-        throw new Error("Please select a funding account!");
-      }
-      if (api.isConnected && account?.account.address) {
-        const res = await removeProxyFromAccount(
-          api,
-          tradeAddress,
-          account.signer,
-          account.account.address
-        );
-        if (res.isSuccess) {
-          onHandleNotification({
-            type: "Success",
-            message:
-              "Congratulations! Your trade account has been removed from the chain!",
-          });
-          dispatch(A.previewAccountModalCancel());
-          dispatch(
-            A.removeProxyAccountFromChainData({ address: payload.address })
-          );
-          dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
-          onUserProfileTradeAccountDelete({ address: tradeAddress });
-        } else {
-          throw new Error(res.message);
-        }
-      }
     } catch (error) {
       dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
       onHandleError(error?.message ?? error);
@@ -298,7 +238,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
   const onRemoveTradeAccountFromBrowser = (address: string) => {
     dispatch(A.removeTradeAccountFromBrowser({ address }));
-    onUserProfileTradeAccountDelete({ address, deleteFromBrowser: true });
   };
 
   const onUnlockTradeAccount = (payload: A.UnlockTradeAccount["payload"]) => {

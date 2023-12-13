@@ -41,9 +41,7 @@ export const SuccessCreateAccount = ({
     if (mnemonic) return mnemonic?.split(" ");
     return [];
   }, [mnemonic]);
-  const {
-    userData: { userAccounts },
-  } = useProfile();
+  const { allAccounts: userAccounts } = useProfile();
 
   const controllerAccount = useMemo(
     () =>

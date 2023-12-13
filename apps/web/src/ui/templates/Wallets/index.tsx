@@ -527,10 +527,9 @@ const ControllerWallets = ({
   const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
 
-  const isRegistered =
-    address && profileState.userData?.mainAccounts?.includes(address);
+  const isRegistered = false;
 
-  const userAccounts = profileState.userData?.userAccounts;
+  const userAccounts = profileState.allAccounts;
   const accounts = userAccounts?.filter(
     (account) => account.mainAddress === address
   );

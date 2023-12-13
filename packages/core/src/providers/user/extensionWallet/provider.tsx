@@ -20,9 +20,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
   const {
     selectedAccount: { mainAddress },
-    onUserProfileMainAccountPush,
-    onUserProfileAccountPush,
-    onUserAccountSelectFetch,
   } = useProfile();
   const { onHandleError, onHandleNotification, hasExtension } =
     useSettingsProvider();
@@ -38,15 +35,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     (payload: A.RegisterMainAccountUpdateEvent["payload"]) => {
       try {
         const { proxy, main } = payload;
-        onUserProfileMainAccountPush(main);
-        onUserProfileAccountPush({
-          tradeAddress: proxy,
-          mainAddress: main,
-        });
-
-        onUserAccountSelectFetch({
-          tradeAddress: proxy,
-        });
         onHandleNotification({
           type: "Success",
           message:
@@ -61,9 +49,6 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
     [
       onHandleError,
       onHandleNotification,
-      onUserAccountSelectFetch,
-      onUserProfileMainAccountPush,
-      onUserProfileAccountPush,
     ]
   );
 

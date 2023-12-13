@@ -8,7 +8,6 @@ export * from "./useOrderbook";
 export * from "./useOrderbookTable";
 export * from "./usePlaceOrder";
 export * from "./useAppearance";
-export * from "./useTimer";
 export * from "./useSettings";
 export * from "./useTryUnlockTradeAccount";
 export * from "./types";

@@ -13,7 +13,7 @@ import {
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import {
   transformAddress,
-  useProfile,
+  useProfile, UserAccount,
 } from "@orderbook/core/providers/user/profile";
 import {
   getTradeAccount,
@@ -38,11 +38,9 @@ export const AccountOverview = ({ onNavigate }: T.Props) => {
 
   const tradingAccounts = tradeWalletState.allBrowserAccounts;
   const mainAccounts = extensionWalletState.allAccounts;
-  const {
-    selectedAccount: currentUsingAccount,
-    userData: { userAccounts: allUserAccounts },
-  } = useProfile();
-
+  const { selectedAccount: currentUsingAccount } = useProfile();
+  // TODO: temp fix , entire file is to be depricated
+  const allUserAccounts = [] as UserAccount[];
   const [accountList, setAccountList] = useState<KeyringPair[]>([]);
   const [selectedTradeAccount, setSelectedTradeAccount] = useState<
     KeyringPair | undefined

@@ -12,7 +12,7 @@ type Props = {
 };
 export const ChangeAvatar = ({ onClose = undefined }: Props) => {
   const profileState = useProfile();
-  const currentAvatar = Number(profileState.userProfile?.avatar);
+  const currentAvatar = Number(profileState?.avatar);
 
   const [state, setState] = useState(currentAvatar);
   const handleChange = (id: number) => setState(id);

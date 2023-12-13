@@ -24,13 +24,12 @@ export const CreateAccountForm = ({
   const { t: translation } = useTranslation("molecules");
   const t = (key: string) => translation(`createAccountForm.${key}`);
 
-  const profileState = useProfile();
   const extensionWalletState = useExtensionWallet();
   const tradeWalletState = useTradeWallet();
   const controllerWallets = extensionWalletState.allAccounts;
-  const linkedMainAddresses = profileState.userData?.mainAccounts;
+  const linkedMainAddresses = [] as string[];
   const registeredAccounts = controllerWallets?.filter(
-    ({ account }) => linkedMainAddresses?.includes(account.address),
+    ({ account }) => linkedMainAddresses?.includes("")
   );
   const hasData = !!selectedAccountAddress?.length;
   const initialMessage = registeredAccounts?.length
@@ -71,7 +70,7 @@ export const CreateAccountForm = ({
           passcode.length > 0 ? passcode : undefined,
           {
             name,
-          },
+          }
         );
         tradeWalletState.onTradeAccountPush({ pair });
         onRegisterMainAccount({
@@ -162,7 +161,7 @@ export const CreateAccountForm = ({
               onClick={() =>
                 setFieldValue(
                   "name",
-                  generateUsername({ useRandomNumber: false }),
+                  generateUsername({ useRandomNumber: false })
                 )
               }
             >
@@ -204,7 +203,7 @@ export const CreateAccountForm = ({
                   onClick={() =>
                     setFieldValue(
                       "isPasscodeVisible",
-                      !values.isPasscodeVisible,
+                      !values.isPasscodeVisible
                     )
                   }
                 >
