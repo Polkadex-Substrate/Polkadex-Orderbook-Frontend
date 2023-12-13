@@ -1,5 +1,7 @@
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { ExtensionAccount } from "@polkadex/react-providers";
+import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
+import { removeFromStorage, setToStorage } from "@orderbook/core/helpers";
 
 import { TradeAccount } from "../../types";
 
@@ -41,11 +43,15 @@ export const reducer = (
         selectedWallet: action.payload,
       };
 
-    case SET_SELECT_ACCOUNT:
+    case SET_SELECT_ACCOUNT: {
+      const tradeAddress = action.payload.address;
+      tradeAddress &&
+        setToStorage(LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT, tradeAddress);
       return {
         ...state,
         selectedAccount: action.payload,
       };
+    }
 
     case SET_LOCAL_TRADING_ACCOUNT: {
       return {
@@ -101,13 +107,15 @@ export const reducer = (
         tempTrading: undefined,
       };
 
-    case LOGOUT:
+    case LOGOUT: {
+      removeFromStorage(LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT);
       return {
         ...state,
         selectedWallet: undefined,
         selectedAccount: undefined,
         selectedExtension: undefined,
       };
+    }
 
     case REMOVE_LOCAL_TRADING_ACCOUNT: {
       const newArr = state?.localTradingAccounts?.filter(

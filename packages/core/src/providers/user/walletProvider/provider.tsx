@@ -4,9 +4,13 @@ import { ExtensionAccount } from "@polkadex/react-providers";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import FileSaver from "file-saver";
-import { fetchOnChainBalance } from "@orderbook/core/helpers";
+import {
+  fetchOnChainBalance,
+  getFromStorage,
+  removeFromStorage,
+} from "@orderbook/core/helpers";
 import { ApiPromise } from "@polkadot/api";
-import { QUERY_KEYS } from "@orderbook/core/constants";
+import { LOCAL_STORAGE_ID, QUERY_KEYS } from "@orderbook/core/constants";
 
 import { TradeAccount } from "../../types";
 import { useNativeApi } from "../../public/nativeApi";
@@ -167,6 +171,14 @@ export const WalletProvider = ({ children }) => {
     const tradingAccounts: TradeAccount[] =
       await getAllTradeAccountsInBrowser();
     dispatch(actions.setLocalTradingAccount(tradingAccounts));
+    const defaultTradeAddress = getFromStorage(
+      LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
+    );
+    const tradeAccount = tradingAccounts.find(
+      (account) => account.address === defaultTradeAddress
+    );
+    if (tradeAccount) onSelectAccount(tradeAccount);
+    else removeFromStorage(LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT);
   }, []);
 
   // Get onChain balance
