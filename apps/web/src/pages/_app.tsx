@@ -19,6 +19,7 @@ import {
   ExtensionWalletProvider,
   SettingProvider,
   OrderbookServiceProvider,
+  SubscriptionProvider,
 } from "@orderbook/core/providers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useInit } from "@orderbook/core/hooks";
@@ -64,7 +65,9 @@ const Providers = ({ children }) => {
       <NativeApiProvider>
         <TradeWalletProvider>
           <ExtensionWalletProvider>
-            <OrderbookServiceProvider>{children}</OrderbookServiceProvider>
+            <OrderbookServiceProvider>
+              <SubscriptionProvider>{children}</SubscriptionProvider>
+            </OrderbookServiceProvider>
           </ExtensionWalletProvider>
         </TradeWalletProvider>
       </NativeApiProvider>

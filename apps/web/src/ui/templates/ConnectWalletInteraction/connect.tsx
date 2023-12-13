@@ -2,7 +2,6 @@
 
 import { useExtensionAccounts, useExtensions } from "@polkadex/react-providers";
 import { useCallback, useMemo } from "react";
-import { useWalletProvider } from "@orderbook/core/providers/user/walletProvider";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { Authorization, ConnectWallet, Multistep, Wallets } from "@polkadex/ux";
 
@@ -28,8 +27,7 @@ export const Connect = ({
   onClose: () => void;
   onNext: (v: SwitchKeys) => void;
 }) => {
-  const {
-    selectedExtension,
+  let selectedExtension,
     proxiesLoading,
     onSelectWallet,
     onSelectExtension,
@@ -41,8 +39,7 @@ export const Connect = ({
     importFromFileStatus,
     onRemoveTradingAccountFromDevice,
     onSetTempTrading,
-    tempTrading,
-  } = useWalletProvider(); // Testing provider
+    tempTrading;
 
   const sourceId = selectedExtension?.id;
   const hasAccount = !!proxiesAccounts?.length;

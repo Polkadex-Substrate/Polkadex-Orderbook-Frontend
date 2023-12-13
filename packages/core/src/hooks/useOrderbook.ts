@@ -1,12 +1,6 @@
-import _ from "lodash";
 import { useEffect, useState } from "react";
-import {
-  decimalPlaces,
-  deleteFromBook,
-  getCurrentMarket,
-  replaceOrAddToBook,
-} from "@orderbook/core/helpers";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
+import { useQuery } from "@tanstack/react-query";
 import {
   MAX_DIGITS_AFTER_DECIMAL,
   QUERY_KEYS,
@@ -15,7 +9,7 @@ import { useRecentTrades, useTickers } from "@orderbook/core/hooks";
 
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 import { useSettingsProvider } from "../providers/public/settings";
-import { PriceLevel, appsyncOrderbookService } from "../utils/orderbookService";
+import { appsyncOrderbookService } from "../utils/orderbookService";
 
 const initialState = [
   { size: 0.1, length: 1 },
@@ -30,8 +24,7 @@ export function useOrderbook(defaultMarket: string) {
   const [filterState, setFilterState] = useState("Order");
   const [sizeState, setSizeState] = useState(initialState[1]);
 
-  const queryClient = useQueryClient();
-  const { isReady, markets: list } = useOrderbookService();
+  const { markets: list } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
   const {
     currentTicker: { currentPrice },
@@ -92,46 +85,6 @@ export function useOrderbook(defaultMarket: string) {
     );
     setSizeState(initialState[precision]);
   }, [pricePrecision, setSizeState]);
-
-  useEffect(() => {
-    if (!defaultMarket || !isReady) return;
-
-    const subscription = appsyncOrderbookService.subscriber.subscribeOrderbook(
-      defaultMarket,
-      (payload: PriceLevel[]) => {
-        let book = {
-          ask: [...asks],
-          bid: [...bids],
-        };
-
-        const incrementalData = payload;
-        incrementalData.forEach((item) => {
-          if (Number(item.qty) === 0) {
-            book = deleteFromBook(
-              book,
-              String(item.price),
-              item.side.toLowerCase()
-            );
-          } else
-            book = replaceOrAddToBook(
-              book,
-              String(item.price),
-              String(item.qty),
-              item.side.toLowerCase()
-            );
-        });
-
-        queryClient.setQueryData(QUERY_KEYS.orderBook(defaultMarket), () => {
-          const newData = {
-            asks: _.cloneDeep(book.ask),
-            bids: _.cloneDeep(book.bid),
-          };
-          return newData;
-        });
-      }
-    );
-    return () => subscription.unsubscribe();
-  }, [asks, bids, defaultMarket, isReady, queryClient]);
 
   return {
     isPriceUp,

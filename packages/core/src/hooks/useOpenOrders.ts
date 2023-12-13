@@ -1,23 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { getCurrentMarket, sortOrdersDescendingTime } from "../helpers";
 import { Ifilters } from "../providers/types";
 import { useSettingsProvider } from "../providers/public/settings";
 import { useProfile } from "../providers/user/profile";
-import { appsyncOrderbookService, Order } from "../utils/orderbookService";
+import { appsyncOrderbookService } from "../utils/orderbookService";
 import { QUERY_KEYS } from "../constants";
-import {
-  removeOrderFromList,
-  replaceOrPushOrder,
-} from "../utils/orderbookService/appsync_v1/helpers";
-import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
 import { useMarkets } from "./useMarkets";
 
 export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
-  const queryClient = useQueryClient();
-  const { isReady } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
   const {
     selectedAccount: { tradeAddress },
@@ -84,43 +77,6 @@ export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
     openOrdersSorted,
     currentMarket?.id,
   ]);
-
-  const onOrderUpdates = useCallback(
-    (payload: Order) => {
-      try {
-        // Update OpenOrders Realtime
-        queryClient.setQueryData(
-          QUERY_KEYS.openOrders(tradeAddress),
-          (oldOpenOrders: typeof openOrders) => {
-            const prevOpenOrders = [...oldOpenOrders];
-
-            let updatedOpenOrders: Order[] = [];
-            if (payload.status === "OPEN") {
-              updatedOpenOrders = replaceOrPushOrder(prevOpenOrders, payload);
-            } else {
-              // Remove from Open Orders if it is closed
-              updatedOpenOrders = removeOrderFromList(prevOpenOrders, payload);
-            }
-            return updatedOpenOrders;
-          }
-        );
-      } catch (error) {
-        onHandleError(`Order updates channel ${error?.message ?? error}`);
-      }
-    },
-    [onHandleError, queryClient, tradeAddress]
-  );
-
-  useEffect(() => {
-    if (tradeAddress?.length && isReady) {
-      const subscription = appsyncOrderbookService.subscriber.subscribeOrders(
-        tradeAddress,
-        onOrderUpdates
-      );
-
-      return () => subscription.unsubscribe();
-    }
-  }, [tradeAddress, onOrderUpdates, isReady]);
 
   return {
     openOrders: filteredOpenOrders,

@@ -2,7 +2,6 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Button, Input, Interaction, Loading, Typography } from "@polkadex/ux";
 import { useFormik } from "formik";
-import { RegisterTradeAccountData } from "@orderbook/core/providers/user/walletProvider";
 import { generateUsername } from "friendly-username-generator";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 
@@ -12,6 +11,10 @@ import {
   OptionalField,
   GenericVerticalCard,
 } from "../ReadyToUse";
+export interface RegisterTradeAccountData {
+  password: string;
+  name: string;
+}
 
 const initialValues = {
   name: generateUsername({ useRandomNumber: false }),
