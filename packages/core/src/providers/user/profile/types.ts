@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren } from "react";
+import { ExtensionAccount } from "@orderbook/core/providers/types";
 
 export interface UserAccount {
   mainAddress: string; // the main address linked to the trade address

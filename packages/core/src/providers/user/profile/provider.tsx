@@ -103,7 +103,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         allAccounts,
         favoriteMarkets,
         isBannerShown,
-        getSigner,
+        getSigner, // TODO: to be moved to extension provider
         avatar,
         onUserLogout,
         onUserChangeInitBanner,

@@ -1,1 +1,1 @@
-export * from "./useDisabledPages";
+export * from "./useConnectWalllet";
