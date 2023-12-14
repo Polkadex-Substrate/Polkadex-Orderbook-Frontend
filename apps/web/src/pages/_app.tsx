@@ -21,11 +21,14 @@ import {
   OrderbookServiceProvider,
   SubscriptionProvider,
 } from "@orderbook/core/providers";
-import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { useInit } from "@orderbook/core/hooks";
-
 import "../styles/globals.scss";
 import "@polkadex/ux/dist/index.css";
+import {
+  ExtensionAccountsProvider,
+  ExtensionsProvider,
+  UserAccountsProvider,
+} from "@polkadex/react-providers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import awsconfig from "../../aws-exports";
 
@@ -61,17 +64,27 @@ const queryClient = new QueryClient({
 
 const Providers = ({ children }) => {
   return (
-    <ProfileProvider>
-      <NativeApiProvider>
-        <TradeWalletProvider>
-          <ExtensionWalletProvider>
-            <OrderbookServiceProvider>
-              <SubscriptionProvider>{children}</SubscriptionProvider>
-            </OrderbookServiceProvider>
-          </ExtensionWalletProvider>
-        </TradeWalletProvider>
-      </NativeApiProvider>
-    </ProfileProvider>
+    <ExtensionsProvider>
+      <ExtensionAccountsProvider
+        network={"polkadex"}
+        ss58={88}
+        dappName={"polkadex"}
+      >
+        <UserAccountsProvider>
+          <ProfileProvider>
+            <NativeApiProvider>
+              <TradeWalletProvider>
+                <ExtensionWalletProvider>
+                  <OrderbookServiceProvider>
+                    <SubscriptionProvider>{children}</SubscriptionProvider>
+                  </OrderbookServiceProvider>
+                </ExtensionWalletProvider>
+              </TradeWalletProvider>
+            </NativeApiProvider>
+          </ProfileProvider>
+        </UserAccountsProvider>
+      </ExtensionAccountsProvider>
+    </ExtensionsProvider>
   );
 };
 
@@ -157,7 +170,6 @@ function App({ Component, pageProps }: AppProps) {
 
 const ModifiedThemeProvider = ({ Component, pageProps }) => {
   const { theme } = useSettingsProvider();
-
   return (
     <>
       <ThemeProvider
@@ -173,8 +185,6 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
 };
 
 const ThemeWrapper = ({ children }: { children: ReactNode }) => {
-  useInit();
-
   return (
     <>
       <NextNProgress
