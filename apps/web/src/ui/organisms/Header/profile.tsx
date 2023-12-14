@@ -13,10 +13,10 @@ import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { Profile as ProfileDropdown } from "../../templates/ConnectWallet/profile";
-import { NewTradingAccount } from "../../templates/ConnectWallet/newTradingAccount";
-import { ConnectTradingAccount } from "../../templates/ConnectWallet/connectTradingAccount";
-import { UserActions } from "../../templates/ConnectWallet/userActions";
 
+import { NewTradingAccount } from "@/ui/templates/ConnectWallet/newTradingAccount";
+import { ConnectTradingAccount } from "@/ui/templates/ConnectWallet/connectTradingAccount";
+import { UserActions } from "@/ui/templates/ConnectWallet/userActions";
 import { RemoveTradingAccount } from "@/ui/templates/ConnectWallet/removeTradingAccount";
 import { ImportTradingAccount } from "@/ui/templates/ConnectWallet/importTradingAccount";
 import { TradingAccountSuccessfull } from "@/ui/templates/ConnectWallet/tradingAccountSuccessfull";
