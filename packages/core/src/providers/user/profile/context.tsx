@@ -15,6 +15,7 @@ export const Context = createContext<ProfileContextInterface>({
   selectedAccount: { mainAddress: "", tradeAddress: "" },
   onUserSetAvatar: () => {},
   onUserFavoriteMarketPush: () => {},
+  getSigner: () => {},
 });
 
 export const Provider = ({ value, children }: ProfileProviderProps) => {

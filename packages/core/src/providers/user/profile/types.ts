@@ -19,6 +19,7 @@ export type ProfileContextInterface = ProfileContextState & {
   onUserChangeInitBanner: (value?: boolean) => void;
   onUserSetAvatar: (value?: string) => void;
   onUserFavoriteMarketPush: (value: string) => void;
+  getSigner: (address: string) => any;
 };
 
 export type ProfileProviderProps = PropsWithChildren<{

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import {
   useUserAccounts,
@@ -88,6 +88,13 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     );
   }, [extensionAccounts]);
 
+  const getSigner = useCallback(
+    (address: string) => {
+      return extensionAccounts.find((acc) => acc.address === address)?.signer;
+    },
+    [extensionAccounts]
+  );
+
   return (
     <Provider
       value={{
@@ -96,6 +103,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         allAccounts,
         favoriteMarkets,
         isBannerShown,
+        getSigner,
         avatar,
         onUserLogout,
         onUserChangeInitBanner,
