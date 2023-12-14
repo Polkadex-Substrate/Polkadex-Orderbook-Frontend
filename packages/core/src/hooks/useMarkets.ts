@@ -27,10 +27,7 @@ export function useMarkets(market?: string) {
 
   const router = useRouter();
   const { markets: data, isReady } = useOrderbookService();
-  const {
-    userMarket: { favoriteMarkets: favorites },
-    onUserFavoriteMarketPush,
-  } = useProfile();
+  const { favoriteMarkets, onUserFavoriteMarketPush } = useProfile();
   const { tickers: allMarketTickers } = useTickers(market);
 
   const markets = useMemo(() => {
@@ -135,7 +132,7 @@ export function useMarkets(market?: string) {
         price_change_percent_num: Number.parseFloat(
           String((ticker || defaultTicker).priceChangePercent24Hr)
         ),
-        isFavourite: favorites.includes(item.id),
+        isFavourite: favoriteMarkets.includes(item.id),
       };
     });
     const allFavoriteFilters = allTickets.filter((value) =>
