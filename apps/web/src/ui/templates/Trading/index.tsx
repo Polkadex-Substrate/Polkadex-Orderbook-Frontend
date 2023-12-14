@@ -64,17 +64,17 @@ export function Trading({ market: id }: Props) {
   } = useTickers(market?.id ?? "");
 
   const {
-    authInfo: { shouldShowInitialBanner },
+    isBannerShown: shouldShowInitialBanner,
     selectedAccount: { mainAddress },
     onUserChangeInitBanner,
+    allAccounts,
   } = useProfile();
 
   const profileState = useProfile();
   const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
   const hasUser = hasTradeAccount;
 
-  const userAccounts = profileState.userData?.userAccounts;
-  const accounts = userAccounts?.filter(
+  const accounts = allAccounts?.filter(
     (account) => account.mainAddress === mainAddress
   );
   const hasAssociatedAccounts = accounts?.map((account) => account.tradeAddress)
