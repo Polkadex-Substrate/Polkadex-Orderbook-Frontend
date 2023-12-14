@@ -32,9 +32,9 @@ export const BalancesTemplate = () => {
   const { t: tc } = useTranslation("common");
 
   const { connecting } = useNativeApi();
-  const { selectedAccount } = useProfile();
+  const { selectedAddresses } = useProfile();
 
-  const userHasSelectedAccount = selectedAccount?.mainAddress?.length > 0;
+  const userHasSelectedAccount = selectedAddresses?.mainAddress?.length > 0;
 
   const connectWalletData = {
     image: "emptyWallet",

@@ -15,7 +15,7 @@ export function useFunds() {
   const { isReady, assets: assetsList } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
   const {
-    selectedAccount: { mainAddress },
+    selectedAddresses: { mainAddress },
   } = useProfile();
   const { api, connected } = useNativeApi();
 

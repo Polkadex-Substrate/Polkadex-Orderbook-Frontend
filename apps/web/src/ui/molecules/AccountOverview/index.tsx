@@ -38,7 +38,7 @@ export const AccountOverview = ({ onNavigate }: T.Props) => {
 
   const tradingAccounts = tradeWalletState.allBrowserAccounts;
   const mainAccounts = extensionWalletState.allAccounts;
-  const { selectedAccount: currentUsingAccount } = useProfile();
+  const { selectedAddresses: currentUsingAccount } = useProfile();
   // TODO: temp fix , entire file is to be depricated
   const allUserAccounts = [] as UserAccount[];
   const [accountList, setAccountList] = useState<KeyringPair[]>([]);

@@ -7,7 +7,7 @@ export interface UserAccount {
 }
 
 export type ProfileContextState = {
-  selectedAccount: UserAccount;
+  selectedAddresses: UserAccount;
   allAccounts: UserAccount[];
   favoriteMarkets: string[];
   avatar: string | null;

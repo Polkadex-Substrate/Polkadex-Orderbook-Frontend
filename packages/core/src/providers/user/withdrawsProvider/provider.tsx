@@ -31,7 +31,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const nativeApiState = useNativeApi();
   const settingsState = useSettingsProvider();
   const { selectMainAccount } = useExtensionWallet();
-  const currentAccount: UserAccount = profileState.selectedAccount;
+  const currentAccount: UserAccount = profileState.selectedAddresses;
   const { mainAddress, tradeAddress } = currentAccount;
   const { allBrowserAccounts } = useTradeWallet();
   const keyringPair = selectTradeAccount(tradeAddress, allBrowserAccounts);
@@ -96,7 +96,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   }: A.WithdrawsClaimFetch["payload"]) => {
     try {
       const api = nativeApiState.api;
-      const currentAccount: UserAccount = profileState.selectedAccount;
+      const currentAccount: UserAccount = profileState.selectedAddresses;
       const extensionAccount = selectMainAccount(currentAccount.mainAddress);
       const isApiReady = nativeApiState.connected;
       if (

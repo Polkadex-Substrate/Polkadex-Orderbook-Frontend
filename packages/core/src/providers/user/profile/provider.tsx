@@ -99,7 +99,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     <Provider
       value={{
         onUserSelectAccount,
-        selectedAccount: activeAccount,
+        selectedAddresses: activeAccount,
         allAccounts,
         favoriteMarkets,
         isBannerShown,

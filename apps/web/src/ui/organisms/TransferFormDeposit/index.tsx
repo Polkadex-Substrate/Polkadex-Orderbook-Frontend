@@ -33,10 +33,10 @@ export const TransferFormDeposit = ({
 
   const { allAccounts } = useExtensionWallet();
   const { loading, onFetchDeposit } = useDepositProvider();
-  const { selectedAccount } = useProfile();
+  const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
 
-  const { mainAddress } = selectedAccount;
+  const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
     () => userMainAccountDetails(mainAddress, allAccounts),

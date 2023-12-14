@@ -19,7 +19,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
 }) => {
   const [state, dispatch] = useReducer(extensionWalletReducer, initialState);
   const {
-    selectedAccount: { mainAddress },
+    selectedAddresses: { mainAddress },
   } = useProfile();
   const { onHandleError, onHandleNotification, hasExtension } =
     useSettingsProvider();

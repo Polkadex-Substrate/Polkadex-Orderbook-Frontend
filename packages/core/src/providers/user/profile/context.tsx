@@ -12,7 +12,7 @@ export const Context = createContext<ProfileContextInterface>({
   avatar: "",
   favoriteMarkets: [],
   isBannerShown: false,
-  selectedAccount: { mainAddress: "", tradeAddress: "" },
+  selectedAddresses: { mainAddress: "", tradeAddress: "" },
   onUserSetAvatar: () => {},
   onUserFavoriteMarketPush: () => {},
   getSigner: () => {},

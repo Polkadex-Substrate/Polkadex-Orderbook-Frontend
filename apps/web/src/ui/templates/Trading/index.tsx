@@ -65,13 +65,13 @@ export function Trading({ market: id }: Props) {
 
   const {
     isBannerShown: shouldShowInitialBanner,
-    selectedAccount: { mainAddress },
+    selectedAddresses: { mainAddress },
     onUserChangeInitBanner,
     allAccounts,
   } = useProfile();
 
   const profileState = useProfile();
-  const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
+  const hasTradeAccount = profileState.selectedAddresses.tradeAddress !== "";
   const hasUser = hasTradeAccount;
 
   const accounts = allAccounts?.filter(

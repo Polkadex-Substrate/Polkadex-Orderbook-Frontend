@@ -78,7 +78,7 @@ export const PreviewAccount = ({
     selected && selectTradeAccount(selected?.address, allBrowserAccounts);
   useTryUnlockTradeAccount(tradingAccountInBrowser);
 
-  const { selectedAccount: usingAccount } = useProfile();
+  const { selectedAddresses: usingAccount } = useProfile();
   const isRemoveFromBlockchainLoading =
     selected && removesInLoading.includes(selected?.address);
 
@@ -419,7 +419,7 @@ const ProtectedByPassword = ({ label = "", isActive = false }) => {
 
 const DefaultAccount = ({ label = "", tradeAddress }) => {
   const profileState = useProfile();
-  const defaultTradeAddress = profileState.selectedAccount.tradeAddress;
+  const defaultTradeAddress = profileState.selectedAddresses.tradeAddress;
   const isActive = tradeAddress === defaultTradeAddress;
 
   const handleChange = () => !isActive && {};

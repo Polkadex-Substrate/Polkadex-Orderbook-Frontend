@@ -73,7 +73,7 @@ type ConnectWalletState = {
 };
 export const useConnectWallet = (): ConnectWalletState => {
   const {
-    selectedAccount: { mainAddress, tradeAddress },
+    selectedAddresses: { mainAddress, tradeAddress },
   } = useProfile();
   const { extensionAccounts } = useExtensionAccounts();
   const { wallet } = useUserAccounts();

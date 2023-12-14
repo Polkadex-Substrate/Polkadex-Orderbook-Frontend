@@ -22,7 +22,7 @@ import * as A from "./actions";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
-  const { onUserSelectAccount, selectedAccount } = useProfile();
+  const { onUserSelectAccount, selectedAddresses } = useProfile();
   const nativeApiState = useNativeApi();
   const { onHandleError, onHandleNotification, hasExtension } =
     useSettingsProvider();
@@ -285,7 +285,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const onExportTradeAccountActive = useCallback(() => {
     dispatch(A.exportTradeAccountActive());
   }, []);
-  const { mainAddress, tradeAddress } = selectedAccount;
+  const { mainAddress, tradeAddress } = selectedAddresses;
 
   // subscribe to user account updates notifications
   useEffect(() => {
