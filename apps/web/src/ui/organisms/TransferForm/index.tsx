@@ -46,7 +46,7 @@ export const TransferForm = ({
   const { allAccounts } = useExtensionWallet();
   const {
     selectedAddresses,
-    onUserSelectAccount,
+    onUserSelectTradingAddress,
     allAccounts: userAccounts,
   } = useProfile();
   const { loading, onChangeChainBalance } = useFunds();

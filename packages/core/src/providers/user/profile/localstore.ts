@@ -1,11 +1,11 @@
-import { UserAccount } from "@orderbook/core/providers/user/profile/types";
+import { UserAddressTuple } from "@orderbook/core/providers/user/profile/types";
 import {
   ACTIVE_ACCOUNT_KEY,
   AVATAR_KEY,
   FAVORITE_MARKET_KEY,
 } from "@orderbook/core/providers/user/profile/constants";
 
-export const setLastUsedAccount = (account: UserAccount) => {
+export const setLastUsedAccount = (account: UserAddressTuple) => {
   localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(account));
 };
 

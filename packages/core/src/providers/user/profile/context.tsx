@@ -5,7 +5,7 @@ import {
 } from "@orderbook/core/providers/user/profile/types";
 
 export const Context = createContext<ProfileContextInterface>({
-  onUserSelectAccount: () => {},
+  onUserSelectTradingAddress: () => {},
   onUserLogout: () => {},
   onUserChangeInitBanner: () => {},
   allAccounts: [],

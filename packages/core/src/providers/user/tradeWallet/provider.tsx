@@ -22,7 +22,7 @@ import * as A from "./actions";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
-  const { onUserSelectAccount, selectedAddresses } = useProfile();
+  const { onUserSelectTradingAddress, selectedAddresses } = useProfile();
   const nativeApiState = useNativeApi();
   const { onHandleError, onHandleNotification, hasExtension } =
     useSettingsProvider();

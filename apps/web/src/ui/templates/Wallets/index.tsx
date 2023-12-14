@@ -76,7 +76,7 @@ export const WalletsTemplate = () => {
     hasRegisteredMainAccount,
   } = useSettings();
 
-  const { onUserSelectAccount } = useProfile();
+  const { onUserSelectTradingAddress } = useProfile();
   const tradeWalletState = useTradeWallet();
 
   const showLoader = tradeWalletState.isFetching;

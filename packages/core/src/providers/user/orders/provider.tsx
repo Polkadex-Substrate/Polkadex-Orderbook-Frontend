@@ -9,7 +9,7 @@ import {
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
-import { useProfile, UserAccount } from "../profile";
+import { useProfile, UserAddressTuple } from "../profile";
 import { useTradeWallet, selectTradeAccount } from "../tradeWallet";
 
 import * as A from "./actions";
@@ -39,7 +39,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
   const onPlaceOrders = async (payload: A.OrderExecuteFetch["payload"]) => {
     try {
       const { side, price, order_type: orderType, amount, symbol } = payload;
-      const account: UserAccount = profileState.selectedAddresses;
+      const account: UserAddressTuple = profileState.selectedAddresses;
       const address = account.tradeAddress;
       const mainAddress = account.mainAddress;
       const keyringPair = selectTradeAccount(
@@ -114,7 +114,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
       const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
       const api = nativeApiState.api;
-      const account: UserAccount = profileState.selectedAddresses;
+      const account: UserAddressTuple = profileState.selectedAddresses;
       const { tradeAddress, mainAddress } = account;
       const keyringPair = selectTradeAccount(
         tradeAddress,

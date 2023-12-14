@@ -84,7 +84,7 @@ export const PreviewAccount = ({
 
   const showProtectedPassword = exportAccountLoading;
   const isUsing = Boolean(usingAccount.tradeAddress === selected?.address);
-  const { onUserSelectAccount } = useProfile();
+  const { onUserSelectTradingAddress } = useProfile();
 
   const menuDisableKeys = () => {
     const disableKeysList: string[] = [];

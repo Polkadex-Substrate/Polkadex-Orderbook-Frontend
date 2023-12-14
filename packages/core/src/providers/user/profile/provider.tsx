@@ -12,13 +12,13 @@ import {
 import * as LOCAL_STORE from "./localstore";
 import { Provider } from "./context";
 import * as T from "./types";
-import { UserAccount } from "./types";
+import { UserAddressTuple } from "./types";
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
-  const [activeAccount, setActiveAccount] = useState<T.UserAccount>({
+  const [activeAccount, setActiveAccount] = useState<T.UserAddressTuple>({
     mainAddress: "",
     tradeAddress: "",
   });
-  const [allAccounts, setAllAccounts] = useState<UserAccount[]>([]);
+  const [allAccounts, setAllAccounts] = useState<UserAddressTuple[]>([]);
   const [favoriteMarkets, setFavoriteMarkets] = useState<string[]>([]);
   const [isBannerShown, setIsBannerShown] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -26,7 +26,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const { onHandleError } = useSettingsProvider();
   const { extensionAccounts } = useExtensionAccounts();
 
-  const onUserSelectAccount = async ({ tradeAddress: string }) => {
+  const onUserSelectTradingAddress = async ({ tradeAddress: string }) => {
     const tradeAddress = userAddresses.find((address) => address === string);
     if (!tradeAddress) {
       // TODO: move error to translation
@@ -42,6 +42,18 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     setActiveAccount({ mainAddress, tradeAddress });
   };
 
+  const onUserSelectMainAddress = async ({ mainAddress: string }) => {
+    const mainAccount = extensionAccounts.find((acc) => acc.address === string);
+    if (!mainAccount) {
+      onHandleError("Invalid main Address");
+      return;
+    }
+    LOCAL_STORE.setLastUsedAccount({
+      tradeAddress: "",
+      mainAddress: mainAccount.address,
+    });
+    setActiveAccount({ tradeAddress: "", mainAddress: mainAccount.address });
+  };
   const onUserLogout = () => {
     setActiveAccount({ mainAddress: "", tradeAddress: "" });
   };
@@ -98,8 +110,9 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   return (
     <Provider
       value={{
-        onUserSelectAccount,
+        onUserSelectTradingAddress,
         selectedAddresses: activeAccount,
+        onUserSelectMainAddress,
         allAccounts,
         favoriteMarkets,
         isBannerShown,

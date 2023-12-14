@@ -3,11 +3,11 @@ import * as T from "@orderbook/core/providers/user/profile/types";
 import {sendQueryToAppSync} from "@orderbook/core/helpers";
 import * as queries from "@orderbook/core/graphql/queries";
 
-import {UserAccount} from "./types";
+import {UserAddressTuple} from "./types";
 
 export const getMainAddresssLinkedToTradingAccount = (
   tradeaddress: string,
-  userAccounts: UserAccount[]
+  userAccounts: UserAddressTuple[]
 ) => {
   const account = userAccounts?.find(
     ({ tradeAddress }) =>
@@ -40,10 +40,10 @@ export const getProxiesLinkedToMain = async (mainAccount: string) => {
 
 export const getAllProxyAccounts = async (
   mainAccounts: string[]
-): Promise<T.UserAccount[]> => {
+): Promise<T.UserAddressTuple[]> => {
   const promises = mainAccounts?.map(getProxiesLinkedToMain);
   const list = await Promise.all(promises);
-  const accounts: T.UserAccount[] = [];
+  const accounts: T.UserAddressTuple[] = [];
   list.forEach((item) => {
     item.proxies.forEach((proxy: string) => {
       accounts.push({
