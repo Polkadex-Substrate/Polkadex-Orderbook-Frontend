@@ -38,7 +38,6 @@ export * from "./Loading";
 export * from "./MarketInput";
 export * from "./Footer";
 export * from "./EmptyAccount";
-export * from "./SuccessImport";
 export * from "./Dropdown";
 export * from "./SliderPercentage";
 export * from "./TradingView";
