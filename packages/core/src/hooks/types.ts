@@ -7,6 +7,6 @@ export type IUserTradeAccount = {
 };
 
 export interface MutateHookProps {
-  onSuccess?: () => void;
+  onSuccess?: (message?: unknown) => void;
   onError?: (error: unknown) => void;
 }

@@ -4,21 +4,17 @@ import {
   useUserAccounts,
   useExtensionAccounts,
 } from "@polkadex/react-providers";
-import {
-  getAllProxyAccounts,
-  getMainAccountLinkedToProxy,
-} from "@orderbook/core/providers/user/profile/helpers";
+import { getMainAccountLinkedToProxy } from "@orderbook/core/providers/user/profile/helpers";
+import { useProxyAccounts } from "@orderbook/core/hooks";
 
 import * as LOCAL_STORE from "./localstore";
 import { Provider } from "./context";
 import * as T from "./types";
-import { UserAddressTuple } from "./types";
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [activeAccount, setActiveAccount] = useState<T.UserAddressTuple>({
     mainAddress: "",
     tradeAddress: "",
   });
-  const [allAccounts, setAllAccounts] = useState<UserAddressTuple[]>([]);
   const [favoriteMarkets, setFavoriteMarkets] = useState<string[]>([]);
   const [isBannerShown, setIsBannerShown] = useState<boolean>(false);
   // TODO: remove any type and use a common type for extension accounts
@@ -28,14 +24,24 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const { onHandleError } = useSettingsProvider();
   const { extensionAccounts } = useExtensionAccounts();
 
-  const onUserSelectTradingAddress = async ({ tradeAddress: string }) => {
-    const tradeAddress = userAddresses.find((address) => address === string);
-    if (!tradeAddress) {
+  // sync all tradeAddresses state with extension
+  const { allProxiesAccounts: allAccounts } =
+    useProxyAccounts(extensionAccounts);
+
+  const onUserSelectTradingAddress = async ({
+    tradeAddress,
+  }: {
+    tradeAddress: string;
+  }) => {
+    const _tradeAddress = userAddresses.find(
+      (address) => address === tradeAddress
+    );
+    if (!_tradeAddress) {
       // TODO: move error to translation
       onHandleError("Invalid trade Address");
       return;
     }
-    const mainAddress = await getMainAccountLinkedToProxy(tradeAddress);
+    const mainAddress = await getMainAccountLinkedToProxy(_tradeAddress);
     if (!mainAddress) {
       // TODO: move error to translation
       onHandleError("No main account linked to this trade address");
@@ -111,15 +117,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       setAvatar(avatar);
     }
   }, []);
-
-  // sync all tradeAddresses state with extension
-  useEffect(() => {
-    getAllProxyAccounts(extensionAccounts.map(({ address }) => address)).then(
-      (accounts) => {
-        setAllAccounts(accounts);
-      }
-    );
-  }, [extensionAccounts]);
 
   const getSigner = useCallback(
     (address: string) => {

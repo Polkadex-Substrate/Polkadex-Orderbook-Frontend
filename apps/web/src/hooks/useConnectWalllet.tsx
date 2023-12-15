@@ -5,15 +5,34 @@ import {
   useExtensionAccounts,
   useUserAccounts,
 } from "@polkadex/react-providers";
+import FileSaver from "file-saver";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
-import { useProfile } from "@orderbook/core/providers/user/profile";
+import {
+  transformAddress,
+  useProfile,
+} from "@orderbook/core/providers/user/profile";
 // TODO: should be moved to polkadex-ts types
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import {
+  AddProxyAccountArgs,
+  RemoveProxyAccountArgs,
+  useAddProxyAccount,
+  useOnChainBalances,
+  useProxyAccounts,
+  useRemoveProxyAccount,
+} from "@orderbook/core/hooks";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { POLKADEX_ASSET } from "@orderbook/core/constants";
 
 import { DecodedFile } from "@/ui/templates/ConnectWallet/importTradingAccount";
 
 type GenericStatus = "error" | "idle" | "success" | "loading";
+
+type ExportTradeAccountProps = {
+  account: KeyringPair;
+  password?: string;
+};
 
 type ConnectWalletState = {
   // active extension account
@@ -28,8 +47,7 @@ type ConnectWalletState = {
   localTradingAccounts: KeyringPair[];
   // TODO: rename to onSelectExtensionAccount
   onSelectWallet: (payload: ExtensionAccount) => void;
-  // TODO: rename to onSelectTradingAccount
-  onSelectAccount: (payload: KeyringPair) => void;
+  onSelectTradingAccount: (value: { tradeAddress: string }) => void;
   // TODO: redefine type in polkadex-ts
   onSelectExtension: (
     payload: (typeof ExtensionsArray)[0],
@@ -39,15 +57,13 @@ type ConnectWalletState = {
   onResetExtension: () => void;
   onLogout: () => void;
   onImportFromFile: (file: DecodedFile, password?: string) => Promise<void>;
-  onRegisterTradeAccount: (
-    mnemonic: string,
-    password: string,
-    name: string
-  ) => Promise<void>;
+  onRegisterTradeAccount: (props: AddProxyAccountArgs) => Promise<void>;
   onRemoveTradingAccountFromDevice: (value: string) => Promise<void>;
-  onRemoveTradingAccountFromChain: (address: string) => Promise<void>;
+  onRemoveTradingAccountFromChain: (
+    value: RemoveProxyAccountArgs
+  ) => Promise<void>;
   // TODO: all the below must be moved into local state of ConnectWalletInteraction
-  onExportTradeAccount: (account: KeyringPair, password?: string) => void;
+  onExportTradeAccount: (value: ExportTradeAccountProps) => void;
   onSetTempTrading: (value: KeyringPair) => void;
   onResetTempMnemonic: () => void;
   onResetTempTrading: () => void;
@@ -57,8 +73,6 @@ type ConnectWalletState = {
   proxiesStatus: GenericStatus;
   registerStatus: GenericStatus;
   removingStatus: GenericStatus;
-  tradingAccounts?: KeyringPair[];
-  tradingStatus: GenericStatus;
   walletBalance?: number;
   walletStatus: GenericStatus;
   importFromFileStatus: GenericStatus;
@@ -68,9 +82,6 @@ type ConnectWalletState = {
   proxiesSuccess: boolean;
   registerError: unknown;
   removingError: unknown;
-  tradingHasError: boolean;
-  tradingLoading: boolean;
-  tradingSuccess: boolean;
   walletHasError: boolean;
   walletLoading: boolean;
   walletSuccess: boolean;
@@ -87,10 +98,43 @@ export const useConnectWallet = (): ConnectWalletState => {
     onUserResetTradingAddress,
     onUserResetMainAddress,
     onUserLogout,
+    onUserSelectTradingAddress,
   } = useProfile();
+  const { onHandleAlert: onSuccess, onHandleError: onError } =
+    useSettingsProvider();
   const { extensionAccounts } = useExtensionAccounts();
   // TODO: rename to useBrowserAccounts
   const { wallet } = useUserAccounts();
+  const {
+    error: registerError,
+    mutateAsync: onRegisterTradeAccount,
+    status: registerStatus,
+  } = useAddProxyAccount({
+    onError,
+    onSuccess,
+  });
+
+  const {
+    error: removingError,
+    mutateAsync: onRemoveTradingAccountFromChain,
+    status: removingStatus,
+  } = useRemoveProxyAccount({ onError, onSuccess });
+
+  const {
+    onChainBalances,
+    isOnChainBalanceLoading,
+    isOnChainBalanceSuccess,
+    isOnChainBalanceError,
+    onChainBalanceStatus,
+  } = useOnChainBalances([POLKADEX_ASSET.id]);
+
+  const {
+    allProxiesAccounts,
+    proxiesHasError,
+    proxiesLoading,
+    proxiesSuccess,
+    proxiesStatus,
+  } = useProxyAccounts(extensionAccounts);
 
   const selectedWallet = selectedAddresses.mainAddress
     ? extensionAccounts.find((e) => e.address === selectedAddresses.mainAddress)
@@ -100,6 +144,14 @@ export const useConnectWallet = (): ConnectWalletState => {
     ? wallet.getPair(selectedAddresses.tradeAddress)
     : undefined;
   const localTradingAccounts = wallet.getAll();
+
+  const proxiesAccounts = useMemo(() => {
+    return allProxiesAccounts
+      .filter(({ mainAddress }) =>
+        [selectedWallet?.address, tempTrading?.address].includes(mainAddress)
+      )
+      .map(({ tradeAddress }) => tradeAddress);
+  }, [allProxiesAccounts, selectedWallet?.address, tempTrading?.address]);
 
   // TODO: rename to onSelectExtensionAccount
   const onSelectWallet = (payload: ExtensionAccount) => {
@@ -145,18 +197,64 @@ export const useConnectWallet = (): ConnectWalletState => {
     wallet.remove(value);
   };
 
+  const onExportTradeAccount = ({
+    account: tradeAccount,
+    password,
+  }: ExportTradeAccountProps) => {
+    try {
+      tradeAccount.isLocked && tradeAccount.unlock(password);
+      const blob = new Blob([JSON.stringify(tradeAccount.toJson())], {
+        type: "text/plain;charset=utf-8",
+      });
+      FileSaver.saveAs(
+        blob,
+        `${tradeAccount?.meta?.name}-${transformAddress(
+          tradeAccount?.address
+        )}.json`
+      );
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return {
     selectedWallet,
     selectedAccount,
+    selectedExtension,
     localTradingAccounts,
     onSelectWallet,
+    onSelectTradingAccount: onUserSelectTradingAddress,
+    onExportTradeAccount,
     onRemoveTradingAccountFromDevice,
-    onSelectExtensionAccount,
+    onSelectExtension: onSelectExtensionAccount,
     onSetTempTrading,
     onResetExtension,
     onResetWallet,
     onResetTempMnemonic,
     onResetTempTrading,
     onLogout,
+
+    onRegisterTradeAccount,
+    registerError,
+    registerStatus,
+
+    onRemoveTradingAccountFromChain,
+    removingError,
+    removingStatus,
+
+    tempMnemonic,
+    tempTrading,
+
+    walletBalance: onChainBalances?.get(POLKADEX_ASSET.id) || 0,
+    walletHasError: isOnChainBalanceError,
+    walletLoading: isOnChainBalanceLoading,
+    walletSuccess: isOnChainBalanceSuccess,
+    walletStatus: onChainBalanceStatus,
+
+    proxiesAccounts,
+    proxiesHasError,
+    proxiesLoading,
+    proxiesSuccess,
+    proxiesStatus,
   };
 };
