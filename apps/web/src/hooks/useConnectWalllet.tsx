@@ -198,7 +198,7 @@ export const useConnectWallet = (): ConnectWalletState => {
 
   const onRemoveTradingAccountFromDevice = async (value: string) => {
     if (selectedAddresses.tradeAddress === value) {
-      onResetTempTrading();
+      onUserResetTradingAddress();
     }
     wallet.remove(value);
   };
