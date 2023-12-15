@@ -12,6 +12,8 @@ import { ConnectTradingAccountCard } from "../ReadyToUse/connectTradingAccountCa
 
 import { SwitchKeys } from ".";
 
+import { useConnectWallet } from "@/hooks";
+
 export type ConnectKeys =
   | "ConnectAuthorization"
   | "ConnectWalletOrderbook"
@@ -27,19 +29,21 @@ export const Connect = ({
   onClose: () => void;
   onNext: (v: SwitchKeys) => void;
 }) => {
-  let selectedExtension,
+  const {
+    selectedExtension,
     proxiesLoading,
     onSelectWallet,
     onSelectExtension,
     proxiesSuccess,
     proxiesAccounts,
     localTradingAccounts,
-    onSelectAccount,
+    onSelectTradingAccount,
     onImportFromFile,
     importFromFileStatus,
     onRemoveTradingAccountFromDevice,
     onSetTempTrading,
-    tempTrading;
+    tempTrading,
+  } = useConnectWallet();
 
   const sourceId = selectedExtension?.id;
   const hasAccount = !!proxiesAccounts?.length;
@@ -109,7 +113,9 @@ export const Connect = ({
             <ConnectTradingAccount
               key="ConnectTradingAccount"
               accounts={localTradingAccounts}
-              onSelect={(e) => onSelectAccount?.(e)}
+              onSelect={(e) =>
+                onSelectTradingAccount?.({ tradeAddress: e.address })
+              }
               onRemove={(e) => onSetTempTrading?.(e)}
               onClose={() => props?.onReset()}
               onImport={() => props?.onPage("ImportTradingAccount")}

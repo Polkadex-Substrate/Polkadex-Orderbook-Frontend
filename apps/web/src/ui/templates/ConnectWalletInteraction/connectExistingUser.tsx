@@ -13,6 +13,8 @@ import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { MaximumTradingAccount } from "../ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
 
+import { useConnectWallet } from "@/hooks";
+
 export const ConnectExistingUser = ({
   onClose,
   onNext,
@@ -20,8 +22,9 @@ export const ConnectExistingUser = ({
   onClose: () => void;
   onNext: (v: "Connect" | "TradingAccountSuccessfull") => void;
 }) => {
-  let localTradingAccounts,
-    onSelectAccount,
+  const {
+    localTradingAccounts,
+    onSelectTradingAccount,
     onResetWallet,
     onResetExtension,
     selectedWallet,
@@ -38,7 +41,8 @@ export const ConnectExistingUser = ({
     selectedExtension,
     onImportFromFile,
     importFromFileStatus,
-    walletBalance;
+    walletBalance,
+  } = useConnectWallet();
 
   const filteredAccounts = useMemo(
     () =>
@@ -90,7 +94,9 @@ export const ConnectExistingUser = ({
             <ConnectTradingAccount
               key="ConnectTradingAccount"
               accounts={filteredAccounts as TradeAccount[]}
-              onSelect={(e) => onSelectAccount?.(e)}
+              onSelect={(e) =>
+                onSelectTradingAccount?.({ tradeAddress: e.address })
+              }
               onRemove={(e) => onSetTempTrading?.(e)}
               onClose={
                 hasAccounts
@@ -105,7 +111,12 @@ export const ConnectExistingUser = ({
             />
             <NewTradingAccount
               key="NewTradingAccount"
-              onCreateAccount={async (e) => await onRegisterTradeAccount?.(e)}
+              onCreateAccount={async (e) =>
+                await onRegisterTradeAccount?.({
+                  ...e,
+                  main: selectedWallet?.address as string,
+                })
+              }
               loading={registerStatus === "loading"}
               fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
               errorTitle="Error"
@@ -133,7 +144,8 @@ export const ConnectExistingUser = ({
               }
               onRemoveFromChain={async () =>
                 await onRemoveTradingAccountFromChain?.({
-                  tradeAddress: tempTrading?.address as string,
+                  main: selectedWallet?.address as string,
+                  proxy: tempTrading?.address as string,
                 })
               }
               loading={removingStatus === "loading"}

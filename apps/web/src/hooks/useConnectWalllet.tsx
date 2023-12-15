@@ -16,16 +16,16 @@ import {
 import { useMemo, useState } from "react";
 import {
   AddProxyAccountArgs,
+  ImportFromFile,
   RemoveProxyAccountArgs,
   useAddProxyAccount,
+  useImportProxyAccount,
   useOnChainBalances,
   useProxyAccounts,
   useRemoveProxyAccount,
 } from "@orderbook/core/hooks";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { POLKADEX_ASSET } from "@orderbook/core/constants";
-
-import { DecodedFile } from "@/ui/templates/ConnectWallet/importTradingAccount";
 
 type GenericStatus = "error" | "idle" | "success" | "loading";
 
@@ -56,7 +56,7 @@ type ConnectWalletState = {
   onResetWallet: () => void;
   onResetExtension: () => void;
   onLogout: () => void;
-  onImportFromFile: (file: DecodedFile, password?: string) => Promise<void>;
+  onImportFromFile: (value: ImportFromFile) => Promise<void>;
   onRegisterTradeAccount: (props: AddProxyAccountArgs) => Promise<void>;
   onRemoveTradingAccountFromDevice: (value: string) => Promise<void>;
   onRemoveTradingAccountFromChain: (
@@ -135,6 +135,12 @@ export const useConnectWallet = (): ConnectWalletState => {
     proxiesSuccess,
     proxiesStatus,
   } = useProxyAccounts(extensionAccounts);
+
+  const {
+    error: importFromFileError,
+    mutateAsync: onImportFromFile,
+    status: importFromFileStatus,
+  } = useImportProxyAccount();
 
   const selectedWallet = selectedAddresses.mainAddress
     ? extensionAccounts.find((e) => e.address === selectedAddresses.mainAddress)
@@ -256,5 +262,9 @@ export const useConnectWallet = (): ConnectWalletState => {
     proxiesLoading,
     proxiesSuccess,
     proxiesStatus,
+
+    importFromFileError,
+    importFromFileStatus,
+    onImportFromFile,
   };
 };

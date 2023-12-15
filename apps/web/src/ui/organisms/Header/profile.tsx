@@ -19,10 +19,12 @@ import { RemoveTradingAccount } from "@/ui/templates/ConnectWallet/removeTrading
 import { ImportTradingAccount } from "@/ui/templates/ConnectWallet/importTradingAccount";
 import { TradingAccountSuccessfull } from "@/ui/templates/ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "@/ui/templates/ConnectWallet/tradingAccountMnemonic";
+import { useConnectWallet } from "@/hooks";
 
 export const Profile = ({ onClick }: { onClick: () => void }) => {
-  let selectedWallet,
-    onSelectAccount,
+  const {
+    selectedWallet,
+    onSelectTradingAccount,
     selectedAccount,
     onLogout,
     localTradingAccounts,
@@ -41,7 +43,8 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
     importFromFileStatus,
     proxiesAccounts,
     tempMnemonic,
-    onExportTradeAccount;
+    onExportTradeAccount,
+  } = useConnectWallet();
 
   const shortAddress = useMemo(
     () => truncateString(selectedAccount?.address ?? "", 3),
@@ -119,7 +122,10 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                   <NewTradingAccount
                     key="NewTradingAccount"
                     onCreateAccount={async (e) =>
-                      await onRegisterTradeAccount?.(e)
+                      await onRegisterTradeAccount?.({
+                        ...e,
+                        main: selectedWallet?.address as string,
+                      })
                     }
                     loading={registerStatus === "loading"}
                     fundWalletPresent={
@@ -141,7 +147,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     key="ConnectTradingAccount"
                     accounts={localTradingAccounts}
                     onSelect={(e) => {
-                      onSelectAccount?.(e);
+                      onSelectTradingAccount?.({ tradeAddress: e.address });
                     }}
                     onClose={() => props?.onChangeInteraction(false)}
                     onImport={() => props?.onPage("ImportTradingAccount")}
@@ -172,7 +178,8 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     }
                     onRemoveFromChain={async () =>
                       await onRemoveTradingAccountFromChain?.({
-                        tradeAddress: tempTrading?.address as string,
+                        proxy: tempTrading?.address as string,
+                        main: selectedWallet?.address as string,
                       })
                     }
                     loading={removingStatus === "loading"}
@@ -200,7 +207,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     }
                     onDownloadPdf={() => window.alert("Downloading...")}
                     onDownloadJson={(e) =>
-                      onExportTradeAccount?.({ tradeAccount: e })
+                      onExportTradeAccount?.({ account: e })
                     }
                   />
                   <TradingAccountMnemonic

@@ -22,3 +22,4 @@ export * from "./useAddProxyAccount";
 export * from "./useRemoveProxyAcccount";
 export * from "./useOnChainBalances";
 export * from "./useProxyAccounts";
+export * from "./useImportProxyAccount";

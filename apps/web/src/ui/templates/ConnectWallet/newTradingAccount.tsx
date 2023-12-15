@@ -4,6 +4,7 @@ import { Button, Input, Interaction, Loading, Typography } from "@polkadex/ux";
 import { useFormik } from "formik";
 import { generateUsername } from "friendly-username-generator";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
+import { mnemonicGenerate } from "@polkadot/util-crypto";
 
 import {
   ErrorMessage,
@@ -14,6 +15,7 @@ import {
 export interface RegisterTradeAccountData {
   password: string;
   name: string;
+  mnemonic: string;
 }
 
 const initialValues = {
@@ -57,9 +59,11 @@ export const NewTradingAccount = ({
       onSubmit: async ({ name }) => {
         try {
           const password = state.join("");
+          const mnemonic = mnemonicGenerate();
           await onCreateAccount({
             name,
             password,
+            mnemonic,
           });
           onCreateCallback();
         } catch (error) {
@@ -88,12 +92,13 @@ export const NewTradingAccount = ({
                   {...getFieldProps("name")}
                   label="Account name"
                   placeholder="Enter a name"
-                  action={() =>
+                  action={(e) => {
+                    e.preventDefault();
                     setFieldValue(
                       "name",
                       generateUsername({ useRandomNumber: false })
-                    )
-                  }
+                    );
+                  }}
                   actionTitle="Random"
                 />
               </div>
@@ -158,7 +163,9 @@ export const NewTradingAccount = ({
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <GenericInfoCard label="Your balance">{balance}</GenericInfoCard>
+              <GenericInfoCard label="Your balance">
+                {balance} PDEX
+              </GenericInfoCard>
               <GenericInfoCard label="Fees">{fee} PDEX</GenericInfoCard>
             </div>
           </Interaction.Content>
