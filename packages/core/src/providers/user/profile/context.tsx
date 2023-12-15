@@ -8,14 +8,20 @@ export const Context = createContext<ProfileContextInterface>({
   onUserSelectTradingAddress: () => {},
   onUserLogout: () => {},
   onUserChangeInitBanner: () => {},
+  onUserSetAvatar: () => {},
+  onUserFavoriteMarketPush: () => {},
+  getSigner: () => {},
+  onUserSelectMainAddress: () => {},
+  onUserResetMainAddress: () => {},
+  onUserResetTradingAddress: () => {},
+  onResetSelectedExtension: () => {},
+  setSelectedExtension: () => {},
   allAccounts: [],
   avatar: "",
   favoriteMarkets: [],
   isBannerShown: false,
   selectedAddresses: { mainAddress: "", tradeAddress: "" },
-  onUserSetAvatar: () => {},
-  onUserFavoriteMarketPush: () => {},
-  getSigner: () => {},
+  selectedExtension: null,
 });
 
 export const Provider = ({ value, children }: ProfileProviderProps) => {
