@@ -94,6 +94,7 @@ export const useConnectWallet = (): ConnectWalletState => {
     selectedAddresses,
     onUserSelectMainAddress,
     selectedExtension,
+    setSelectedExtension,
     onResetSelectedExtension,
     onUserResetTradingAddress,
     onUserResetMainAddress,
@@ -159,17 +160,16 @@ export const useConnectWallet = (): ConnectWalletState => {
       .map(({ tradeAddress }) => tradeAddress);
   }, [allProxiesAccounts, selectedWallet?.address, tempTrading?.address]);
 
-  // TODO: rename to onSelectExtensionAccount
-  const onSelectWallet = (payload: ExtensionAccount) => {
+  const onSelectExtensionAccount = (payload: ExtensionAccount) => {
     const mainAddress = payload.address;
     onUserSelectMainAddress({ mainAddress });
   };
 
-  const onSelectExtensionAccount = (
+  const onSelectExtension = (
     payload: (typeof ExtensionsArray)[0],
     callbackFn?: () => void
   ) => {
-    selectedExtension(payload);
+    setSelectedExtension(payload);
     callbackFn?.();
   };
 
@@ -228,11 +228,11 @@ export const useConnectWallet = (): ConnectWalletState => {
     selectedAccount,
     selectedExtension,
     localTradingAccounts,
-    onSelectWallet,
+    onSelectExtension,
     onSelectTradingAccount: onUserSelectTradingAddress,
     onExportTradeAccount,
     onRemoveTradingAccountFromDevice,
-    onSelectExtension: onSelectExtensionAccount,
+    onSelectWallet: onSelectExtensionAccount,
     onSetTempTrading,
     onResetExtension,
     onResetWallet,
