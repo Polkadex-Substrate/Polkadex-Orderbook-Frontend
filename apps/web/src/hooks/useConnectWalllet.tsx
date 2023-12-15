@@ -8,8 +8,9 @@ import {
 import { KeyringPair } from "@polkadot/keyring/types";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-
 // TODO: should be moved to polkadex-ts types
+import { useState } from "react";
+
 import { DecodedFile } from "@/ui/templates/ConnectWallet/importTradingAccount";
 
 type GenericStatus = "error" | "idle" | "success" | "loading";
@@ -29,9 +30,10 @@ type ConnectWalletState = {
   onSelectWallet: (payload: ExtensionAccount) => void;
   // TODO: rename to onSelectTradingAccount
   onSelectAccount: (payload: KeyringPair) => void;
+  // TODO: redefine type in polkadex-ts
   onSelectExtension: (
     payload: (typeof ExtensionsArray)[0],
-    callbackFn?: CallbackFn
+    callbackFn?: () => void
   ) => void;
   onResetWallet: () => void;
   onResetExtension: () => void;
@@ -42,10 +44,10 @@ type ConnectWalletState = {
     password: string,
     name: string
   ) => Promise<void>;
-  onExportTradeAccount: (account: KeyringPair, password?: string) => void;
   onRemoveTradingAccountFromDevice: (value: string) => Promise<void>;
   onRemoveTradingAccountFromChain: (address: string) => Promise<void>;
   // TODO: all the below must be moved into local state of ConnectWalletInteraction
+  onExportTradeAccount: (account: KeyringPair, password?: string) => void;
   onSetTempTrading: (value: KeyringPair) => void;
   onResetTempMnemonic: () => void;
   onResetTempTrading: () => void;
@@ -60,25 +62,79 @@ type ConnectWalletState = {
   walletBalance?: number;
   walletStatus: GenericStatus;
   importFromFileStatus: GenericStatus;
+  // mutation status
+  proxiesHasError: boolean;
+  proxiesLoading: boolean;
+  proxiesSuccess: boolean;
+  registerError: unknown;
+  removingError: unknown;
+  tradingHasError: boolean;
+  tradingLoading: boolean;
+  tradingSuccess: boolean;
+  walletHasError: boolean;
+  walletLoading: boolean;
+  walletSuccess: boolean;
+  importFromFileError: unknown;
 };
 export const useConnectWallet = (): ConnectWalletState => {
+  const [tempMnemonic, setTempMnemonic] = useState<string>("");
+  const [tempTrading, setTempTrading] = useState<KeyringPair>();
   const {
     selectedAddresses: { mainAddress, tradeAddress },
     onUserSelectMainAddress,
+    selectedExtension,
+    onResetSelectedExtension,
+    onUserResetTradingAddress,
+    onUserResetMainAddress,
+    onUserLogout,
   } = useProfile();
   const { extensionAccounts } = useExtensionAccounts();
   const { wallet } = useUserAccounts();
 
-  const selectedWallet =
-    mainAddress && extensionAccounts.find((e) => e.address === mainAddress);
+  const selectedWallet = mainAddress
+    ? extensionAccounts.find((e) => e.address === mainAddress)
+    : undefined;
 
-  const selectedAccount = tradeAddress && wallet.getPair(tradeAddress);
+  const selectedAccount = tradeAddress
+    ? wallet.getPair(tradeAddress)
+    : undefined;
   const localTradingAccounts = wallet.getAll();
 
   // TODO: rename to onSelectExtensionAccount
   const onSelectWallet = (payload: ExtensionAccount) => {
     const mainAddress = payload.address;
-    onUserSelectMainAddress(mainAddress);
+    onUserSelectMainAddress({ mainAddress });
+  };
+
+  const onSelectExtensionAccount = (
+    payload: (typeof ExtensionsArray)[0],
+    callbackFn?: () => void
+  ) => {
+    selectedExtension(payload);
+    callbackFn?.();
+  };
+
+  const onSetTempTrading = (value: KeyringPair) => {
+    setTempTrading(value);
+  };
+
+  const onResetExtension = () => {
+    onResetSelectedExtension();
+  };
+
+  const onResetWallet = () => {
+    onUserResetMainAddress();
+  };
+
+  const onResetTempMnemonic = () => {
+    setTempMnemonic("");
+  };
+
+  const onResetTempTrading = () => {
+    onUserResetTradingAddress();
+  };
+  const onLogout = () => {
+    onUserLogout();
   };
 
   return {
@@ -86,5 +142,12 @@ export const useConnectWallet = (): ConnectWalletState => {
     selectedAccount,
     localTradingAccounts,
     onSelectWallet,
+    onSelectExtensionAccount,
+    onSetTempTrading,
+    onResetExtension,
+    onResetWallet,
+    onResetTempMnemonic,
+    onResetTempTrading,
+    onLogout,
   };
 };

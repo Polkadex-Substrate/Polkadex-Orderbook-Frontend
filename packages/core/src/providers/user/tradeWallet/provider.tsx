@@ -15,7 +15,6 @@ import {
   loadKeyring,
   getAllTradeAccountsInBrowser,
   addProxyToAccount,
-  removeProxyFromAccount,
 } from "./helper";
 import * as T from "./types";
 import * as A from "./actions";
@@ -74,7 +73,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         })
       );
       dispatch(A.importTradeAccountData());
-      onUserSelectAccount({ tradeAddress });
     } catch (error) {
       const errorMessage =
         error instanceof Error
@@ -136,9 +134,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     (payload: A.TradeAccountUpdate["payload"]) => {
       try {
         const { proxy } = payload;
-        onUserSelectAccount({
-          tradeAddress: proxy,
-        });
         onHandleNotification({
           type: "Success",
           message: "Trade account added,new trade account created",
@@ -148,7 +143,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         dispatch(A.registerTradeAccountError(error));
       }
     },
-    [onHandleError, onHandleNotification, onUserSelectAccount]
+    [onHandleError, onHandleNotification]
   );
 
   const onRegisterTradeAccount = async (
@@ -187,7 +182,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
       if (res.isSuccess) {
         dispatch(A.tradeAccountPush({ pair }));
         setTimeout(() => {
-          onUserSelectAccount({ tradeAddress });
           dispatch(
             A.registerTradeAccountData({
               mnemonic,
