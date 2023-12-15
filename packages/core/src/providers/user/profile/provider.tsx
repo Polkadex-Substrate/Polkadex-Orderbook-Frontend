@@ -21,6 +21,8 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [allAccounts, setAllAccounts] = useState<UserAddressTuple[]>([]);
   const [favoriteMarkets, setFavoriteMarkets] = useState<string[]>([]);
   const [isBannerShown, setIsBannerShown] = useState<boolean>(false);
+  // TODO: remove any type and use a common type for extension accounts
+  const [selectedExtension, setSelectedExtension] = useState<any | null>(null);
   const [avatar, setAvatar] = useState<string | null>(null);
   const { userAddresses } = useUserAccounts();
   const { onHandleError } = useSettingsProvider();
@@ -41,7 +43,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     LOCAL_STORE.setLastUsedAccount({ mainAddress, tradeAddress });
     setActiveAccount({ mainAddress, tradeAddress });
   };
-
   const onUserSelectMainAddress = async ({ mainAddress: string }) => {
     const mainAccount = extensionAccounts.find((acc) => acc.address === string);
     if (!mainAccount) {
@@ -49,12 +50,28 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       return;
     }
     LOCAL_STORE.setLastUsedAccount({
-      tradeAddress: "",
+      tradeAddress: "", // TODO: we can set this the first local account linked to this main account
       mainAddress: mainAccount.address,
     });
     setActiveAccount({ tradeAddress: "", mainAddress: mainAccount.address });
   };
+
+  const onUserResetMainAddress = () => {
+    setActiveAccount((prev) => {
+      LOCAL_STORE.setLastUsedAccount({ ...prev, mainAddress: "" });
+      return { ...prev, mainAddress: "" };
+    });
+  };
+
+  const onUserResetTradingAddress = () => {
+    setActiveAccount((prev) => {
+      LOCAL_STORE.setLastUsedAccount({ ...prev, tradeAddress: "" });
+      return { ...prev, tradeAddress: "" };
+    });
+  };
+
   const onUserLogout = () => {
+    LOCAL_STORE.setLastUsedAccount({ mainAddress: "", tradeAddress: "" });
     setActiveAccount({ mainAddress: "", tradeAddress: "" });
   };
 
@@ -65,6 +82,10 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const onUserSetAvatar = (payload?: string) => {
     setAvatar(payload || null);
     payload && LOCAL_STORE.setAvatar(payload);
+  };
+
+  const onResetSelectedExtension = () => {
+    setSelectedExtension(null);
   };
 
   const onUserFavoriteMarketPush = (payload: string) => {
@@ -113,12 +134,17 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         onUserSelectTradingAddress,
         selectedAddresses: activeAccount,
         onUserSelectMainAddress,
+        selectedExtension,
+        setSelectedExtension,
         allAccounts,
         favoriteMarkets,
         isBannerShown,
         getSigner, // TODO: to be moved to extension provider
         avatar,
+        onResetSelectedExtension,
         onUserLogout,
+        onUserResetMainAddress,
+        onUserResetTradingAddress,
         onUserChangeInitBanner,
         onUserSetAvatar,
         onUserFavoriteMarketPush,
