@@ -5,16 +5,17 @@ import {
 } from "@orderbook/core/providers/user/profile/types";
 
 export const Context = createContext<ProfileContextInterface>({
-  onUserSelectAccount: () => {},
+  onUserSelectTradingAddress: () => {},
   onUserLogout: () => {},
   onUserChangeInitBanner: () => {},
   allAccounts: [],
   avatar: "",
   favoriteMarkets: [],
   isBannerShown: false,
-  selectedAccount: { mainAddress: "", tradeAddress: "" },
+  selectedAddresses: { mainAddress: "", tradeAddress: "" },
   onUserSetAvatar: () => {},
   onUserFavoriteMarketPush: () => {},
+  getSigner: () => {},
 });
 
 export const Provider = ({ value, children }: ProfileProviderProps) => {

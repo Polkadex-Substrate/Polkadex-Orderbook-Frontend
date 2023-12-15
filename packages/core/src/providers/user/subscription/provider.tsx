@@ -45,7 +45,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   const { isReady, markets, assets } = useOrderbookService();
   const { dateFrom, dateTo } = useSessionProvider();
   const {
-    selectedAccount: { tradeAddress, mainAddress },
+    selectedAddresses: { tradeAddress, mainAddress },
   } = useProfile();
   const { api } = useNativeApi();
 

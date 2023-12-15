@@ -12,7 +12,7 @@ import { useMarkets } from "./useMarkets";
 
 export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
   const {
-    selectedAccount: { tradeAddress },
+    selectedAddresses: { tradeAddress },
   } = useProfile();
   const { dateFrom, dateTo } = useSessionProvider();
   const { list: markets } = useMarkets();

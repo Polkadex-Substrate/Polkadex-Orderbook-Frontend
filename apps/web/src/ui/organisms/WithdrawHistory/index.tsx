@@ -30,10 +30,10 @@ export const WithdrawHistory = ({
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
 
   const { allWithdrawals, readyWithdrawals, loading } = useTransactions();
-  const { selectedAccount } = useProfile();
+  const { selectedAddresses } = useProfile();
   const { allAccounts } = useExtensionWallet();
 
-  const { mainAddress } = selectedAccount;
+  const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
     () => userMainAccountDetails(mainAddress, allAccounts),

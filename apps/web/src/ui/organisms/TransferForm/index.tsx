@@ -45,15 +45,15 @@ export const TransferForm = ({
 
   const { allAccounts } = useExtensionWallet();
   const {
-    selectedAccount,
-    onUserSelectAccount,
+    selectedAddresses,
+    onUserSelectTradingAddress,
     allAccounts: userAccounts,
   } = useProfile();
   const { loading, onChangeChainBalance } = useFunds();
 
   // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
   const { mutateAsync, isLoading } = useAssetTransfer(onRefetch);
-  const { mainAddress } = selectedAccount;
+  const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
     () => userMainAccountDetails(mainAddress, allAccounts),
