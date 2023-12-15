@@ -80,7 +80,7 @@ export const useConnectWallet = (): ConnectWalletState => {
   const [tempMnemonic, setTempMnemonic] = useState<string>("");
   const [tempTrading, setTempTrading] = useState<KeyringPair>();
   const {
-    selectedAddresses: { mainAddress, tradeAddress },
+    selectedAddresses,
     onUserSelectMainAddress,
     selectedExtension,
     onResetSelectedExtension,
@@ -89,14 +89,15 @@ export const useConnectWallet = (): ConnectWalletState => {
     onUserLogout,
   } = useProfile();
   const { extensionAccounts } = useExtensionAccounts();
+  // TODO: rename to useBrowserAccounts
   const { wallet } = useUserAccounts();
 
-  const selectedWallet = mainAddress
-    ? extensionAccounts.find((e) => e.address === mainAddress)
+  const selectedWallet = selectedAddresses.mainAddress
+    ? extensionAccounts.find((e) => e.address === selectedAddresses.mainAddress)
     : undefined;
 
-  const selectedAccount = tradeAddress
-    ? wallet.getPair(tradeAddress)
+  const selectedAccount = selectedAddresses.tradeAddress
+    ? wallet.getPair(selectedAddresses.tradeAddress)
     : undefined;
   const localTradingAccounts = wallet.getAll();
 
@@ -137,11 +138,19 @@ export const useConnectWallet = (): ConnectWalletState => {
     onUserLogout();
   };
 
+  const onRemoveTradingAccountFromDevice = async (value: string) => {
+    if (selectedAddresses.tradeAddress === value) {
+      onResetTempTrading();
+    }
+    wallet.remove(value);
+  };
+
   return {
     selectedWallet,
     selectedAccount,
     localTradingAccounts,
     onSelectWallet,
+    onRemoveTradingAccountFromDevice,
     onSelectExtensionAccount,
     onSetTempTrading,
     onResetExtension,
