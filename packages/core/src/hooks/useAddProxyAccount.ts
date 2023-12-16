@@ -17,7 +17,7 @@ export type AddProxyAccountArgs = {
 export function useAddProxyAccount(props: MutateHookProps) {
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
-  const { getSigner } = useProfile();
+  const { getSigner, onUserSelectTradingAddress } = useProfile();
 
   const { mutateAsync, status, error } = useMutation({
     mutationFn: async ({
@@ -26,14 +26,16 @@ export function useAddProxyAccount(props: MutateHookProps) {
       name,
       password,
     }: AddProxyAccountArgs) => {
-      if (!api || !wallet) throw new Error("api or wallet is not defined");
+      if (!api || !wallet)
+        throw new Error("You are not connected to blockchain ");
 
       const signer = getSigner(main);
       if (!signer) throw new Error("signer is not defined");
 
       const proxy = getAddressFromMnemonic(mnemonic);
       await addProxyToAccount(api, proxy, signer, main);
-      wallet.add(mnemonic, name, password);
+      const { pair } = wallet.add(mnemonic, name, password);
+      onUserSelectTradingAddress({ tradeAddress: pair.address });
       props?.onSuccess?.();
     },
     onError: (error) => {

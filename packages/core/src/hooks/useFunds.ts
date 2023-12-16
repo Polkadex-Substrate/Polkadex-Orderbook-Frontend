@@ -137,7 +137,8 @@ export function useFunds() {
   return {
     balances,
     loading: Boolean(
-      (isTradingBalanceLoading || isOnChainBalanceLoading) && mainAddress.length
+      (isTradingBalanceLoading || isOnChainBalanceLoading) &&
+        mainAddress?.length
     ),
     success: isTradingBalanceSuccess || isOnChainBalanceSuccess,
     getFreeProxyBalance,

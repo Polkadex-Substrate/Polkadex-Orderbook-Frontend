@@ -3,7 +3,11 @@ import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useUserAccounts } from "@polkadex/react-providers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation } from "@tanstack/react-query";
-import { removeProxyFromAccount } from "@orderbook/core/helpers";
+import {
+  removeFromStorage,
+  removeProxyFromAccount,
+} from "@orderbook/core/helpers";
+import { ACTIVE_ACCOUNT_KEY } from "@orderbook/core/providers/user/profile/constants";
 
 export type RemoveProxyAccountArgs = {
   proxy: string;
@@ -13,7 +17,7 @@ export type RemoveProxyAccountArgs = {
 export function useRemoveProxyAccount(props: MutateHookProps) {
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
-  const { getSigner } = useProfile();
+  const { getSigner, selectedAddresses, onUserLogout } = useProfile();
 
   const { mutateAsync, status, error } = useMutation({
     mutationFn: async ({ proxy, main }: RemoveProxyAccountArgs) => {
@@ -24,6 +28,12 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
       if (!signer) throw new Error("signer is not defined");
 
       await removeProxyFromAccount(api, proxy, signer, main);
+
+      if (proxy === selectedAddresses.tradeAddress) {
+        onUserLogout();
+        removeFromStorage(ACTIVE_ACCOUNT_KEY);
+      }
+
       wallet.remove(proxy);
       props?.onSuccess?.("Trading account removed from blockchain");
     },
