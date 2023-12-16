@@ -125,8 +125,8 @@ export const Profile = ({
                 </WalletCard.Inverted>
               </Dropdown.Trigger>
               <Dropdown.Content className="min-w-[20rem]">
-                <div className="flex flex-col gap-2 p-2 rounded-md">
-                  <Typography.Text variant="secondary" size="xs">
+                <div className="flex flex-col gap-0 p-2 rounded-md">
+                  <Typography.Text variant="primary" size="sm">
                     Available trading account(s)
                   </Typography.Text>
                   <div
