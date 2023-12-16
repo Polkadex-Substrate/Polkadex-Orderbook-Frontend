@@ -1,5 +1,3 @@
-// TODO: REPLACE TESTING PROVIDER
-
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { Multistep } from "@polkadex/ux";

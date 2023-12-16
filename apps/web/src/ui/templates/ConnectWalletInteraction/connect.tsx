@@ -32,6 +32,7 @@ export const Connect = ({
   const {
     selectedExtension,
     proxiesLoading,
+    selectedWallet,
     onSelectWallet,
     onSelectExtension,
     proxiesSuccess,
@@ -58,8 +59,9 @@ export const Connect = ({
   );
 
   const onRedirect = useCallback(
-    () => onNext(hasAccount ? "ExistingUser" : "NewUser"),
-    [onNext, hasAccount]
+    () =>
+      selectedWallet ? onNext(hasAccount ? "ExistingUser" : "NewUser") : null,
+    [selectedWallet, onNext, hasAccount]
   );
 
   return (
