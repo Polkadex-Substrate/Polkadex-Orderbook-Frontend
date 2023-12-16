@@ -17,14 +17,15 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
 
   const { mutateAsync, status, error } = useMutation({
     mutationFn: async ({ proxy, main }: RemoveProxyAccountArgs) => {
-      if (!api || !wallet) throw new Error("api or wallet is not defined");
+      if (!api || !wallet)
+        throw new Error("You are not connected to blockchain ");
 
       const signer = getSigner(main);
       if (!signer) throw new Error("signer is not defined");
 
       await removeProxyFromAccount(api, proxy, signer, main);
       wallet.remove(proxy);
-      props?.onSuccess?.();
+      props?.onSuccess?.("Trading account removed from blockchain");
     },
     onError: (error) => {
       props?.onError?.(error as Error);

@@ -15,6 +15,7 @@ import {
   WalletCard,
   Illustrations,
 } from "@polkadex/ux";
+import { KeyringPair } from "@polkadot/keyring/types";
 
 export const Profile = ({
   onCreateTradingAccount,
@@ -36,7 +37,7 @@ export const Profile = ({
   onLogout: () => void;
   onActions: () => void;
   onSwitch: () => void;
-  onRemove: () => void;
+  onRemove: (e: KeyringPair) => void;
   tradingWalletPresent?: boolean;
   fundWalletPresent?: boolean;
   fundWallet?: ExtensionAccount;
@@ -47,7 +48,7 @@ export const Profile = ({
     <div className="flex flex-col sm:w-full md:w-[23rem] bg-level-3 border border-primary rounded-lg">
       <div className="flex flex-col gap-6 p-4 border-b border-primary bg-level-2">
         <div className="flex items-center justify-between">
-          <Typography.Text variant="secondary" size="xs">
+          <Typography.Text variant="secondary" size="sm">
             Funding wallet
           </Typography.Text>
           <Button.Icon
@@ -98,7 +99,7 @@ export const Profile = ({
         </div>
       </div>
       <div className="flex flex-col gap-6 p-4">
-        <Typography.Text variant="secondary" size="xs">
+        <Typography.Text variant="secondary" size="sm">
           Trading account
         </Typography.Text>
         {tradingWalletPresent ? (
@@ -126,7 +127,7 @@ export const Profile = ({
               </Dropdown.Trigger>
               <Dropdown.Content className="min-w-[20rem]">
                 <div className="flex flex-col gap-0 p-2 rounded-md">
-                  <Typography.Text variant="primary" size="sm">
+                  <Typography.Text variant="secondary" size="sm">
                     Available trading account(s)
                   </Typography.Text>
                   <div
@@ -148,7 +149,14 @@ export const Profile = ({
                           address={v.address}
                           withIcon={false}
                         >
-                          <Button.Icon onClick={onRemove} variant="ghost">
+                          <Button.Icon
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              onRemove(v);
+                            }}
+                            variant="ghost"
+                          >
                             <TrashIcon className="w-5 h-5" />
                           </Button.Icon>
                         </WalletCard.Inverted>

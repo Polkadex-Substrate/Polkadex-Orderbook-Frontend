@@ -113,7 +113,10 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onSwitch={() => {}}
                     onLogout={() => onLogout?.()}
                     onActions={() => props?.onPage("UserActions", true)}
-                    onRemove={() => {}}
+                    onRemove={(e) => {
+                      onSetTempTrading?.(e);
+                      props?.onPage("RemoveTradingAccount", true);
+                    }}
                     tradingWalletPresent={!!selectedAccount?.address}
                     fundWalletPresent={!!selectedWallet?.name}
                     fundWallet={selectedWallet}
