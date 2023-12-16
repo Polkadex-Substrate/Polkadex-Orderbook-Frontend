@@ -81,7 +81,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
           <div className="flex items-center gap-2 bg-level-4 px-2 py-1 rounded-md">
             {tradingWalletPresent ? (
               <Typography.Text size="xs" bold>
-                Trading account ({shortAddress})
+                {selectedAccount?.meta.name} ({shortAddress})
               </Typography.Text>
             ) : (
               <Typography.Text size="xs" bold variant="secondary">
@@ -106,6 +106,9 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     }
                     onImportTradingAccount={() =>
                       props?.onPage("ConnectTradingAccount", true)
+                    }
+                    onSelectTradingAccount={(tradeAddress) =>
+                      onSelectTradingAccount({ tradeAddress })
                     }
                     onSwitch={() => {}}
                     onLogout={() => onLogout?.()}

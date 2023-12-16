@@ -201,6 +201,7 @@ export const useConnectWallet = (): ConnectWalletState => {
       onUserResetTradingAddress();
     }
     wallet.remove(value);
+    onSuccess("Trading account removed from device");
   };
 
   const onExportTradeAccount = ({

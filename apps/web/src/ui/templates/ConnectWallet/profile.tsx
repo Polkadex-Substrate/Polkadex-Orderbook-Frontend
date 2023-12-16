@@ -18,6 +18,7 @@ import {
 
 export const Profile = ({
   onCreateTradingAccount,
+  onSelectTradingAccount,
   onImportTradingAccount,
   onLogout,
   onActions,
@@ -30,6 +31,7 @@ export const Profile = ({
   localTradingAccounts,
 }: {
   onCreateTradingAccount: () => void;
+  onSelectTradingAccount: (value: string) => void;
   onImportTradingAccount: () => void;
   onLogout: () => void;
   onActions: () => void;
@@ -135,6 +137,11 @@ export const Profile = ({
                       <div
                         className="flex items-center gap-5 justify-between"
                         key={v.address}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          onSelectTradingAccount(v.address);
+                        }}
                       >
                         <WalletCard.Inverted
                           name={v.meta.name}

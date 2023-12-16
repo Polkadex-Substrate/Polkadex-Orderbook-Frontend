@@ -46,7 +46,7 @@ export const ConnectTradingAccount = ({
                     key={i}
                     address={value.address}
                     name={value.meta.name as string}
-                    type="Brower"
+                    type="Browser"
                     onRemove={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
