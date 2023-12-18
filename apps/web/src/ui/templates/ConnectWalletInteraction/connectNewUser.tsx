@@ -5,20 +5,24 @@ import { NewUser } from "../ConnectWallet/newUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
 
+import { useConnectWallet } from "@/hooks";
+
 export const ConnectNewUser = ({
   onNext,
 }: {
   onClose: () => void;
   onNext: (v: "Connect" | "TradingAccountSuccessfull") => void;
 }) => {
-  let onResetWallet,
+  const {
+    onResetWallet,
     onResetExtension,
     selectedWallet,
     onRegisterTradeAccount,
     registerStatus,
     registerError,
     selectedExtension,
-    walletBalance;
+    walletBalance,
+  } = useConnectWallet();
 
   const handleCloseInteraction = () => {
     onResetWallet?.();
@@ -45,7 +49,12 @@ export const ConnectNewUser = ({
           <Multistep.Content>
             <NewTradingAccount
               key="NewTradingAccount"
-              onCreateAccount={async (e) => await onRegisterTradeAccount?.(e)}
+              onCreateAccount={async (e) =>
+                await onRegisterTradeAccount?.({
+                  ...e,
+                  main: selectedWallet?.address as string,
+                })
+              }
               loading={registerStatus === "loading"}
               fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
               errorTitle="Error"

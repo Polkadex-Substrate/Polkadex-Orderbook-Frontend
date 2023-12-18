@@ -13,7 +13,7 @@ import {
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import {
   transformAddress,
-  useProfile, UserAddressTuple,
+  useProfile,
 } from "@orderbook/core/providers/user/profile";
 import {
   getTradeAccount,
@@ -40,7 +40,6 @@ export const AccountOverview = ({ onNavigate }: T.Props) => {
   const mainAccounts = extensionWalletState.allAccounts;
   const { selectedAddresses: currentUsingAccount } = useProfile();
   // TODO: temp fix , entire file is to be depricated
-  const allUserAccounts = [] as UserAddressTuple[];
   const [accountList, setAccountList] = useState<KeyringPair[]>([]);
   const [selectedTradeAccount, setSelectedTradeAccount] = useState<
     KeyringPair | undefined
@@ -48,7 +47,8 @@ export const AccountOverview = ({ onNavigate }: T.Props) => {
   const [selectedMainAccount, setSelectedMainAccount] = useState<
     ExtensionAccount | undefined
   >();
-  const { onUserSelectTradingAddress } = useProfile();
+  const { onUserSelectTradingAddress, allAccounts: allUserAccounts } =
+    useProfile();
 
   // TODO: Missing dependencies
   useEffect(() => {
@@ -86,7 +86,7 @@ export const AccountOverview = ({ onNavigate }: T.Props) => {
       userAcc && userMainAccountDetails(userAcc.mainAddress, mainAccounts);
     setSelectedTradeAccount(acc);
     setSelectedMainAccount(mainAcc);
-    onUserSelectAccount({ tradeAddress: addr });
+    onUserSelectTradingAddress({ tradeAddress: addr });
   };
 
   const headerMessage = !allUserAccounts?.length

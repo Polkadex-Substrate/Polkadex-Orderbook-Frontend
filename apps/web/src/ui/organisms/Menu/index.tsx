@@ -33,14 +33,6 @@ export const Menu = ({ open = false }) => {
         >
           {t("balances")}
         </Card>
-        <Card
-          active={router.pathname === "/wallets"}
-          icon="Wallet"
-          href="/wallets"
-          open={open}
-        >
-          {t("wallets")}
-        </Card>
         <Help open={open} title={t("help")}>
           <Link
             href="https://discord.gg/G4KMw2sGGe"

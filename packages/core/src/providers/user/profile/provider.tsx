@@ -4,33 +4,41 @@ import {
   useUserAccounts,
   useExtensionAccounts,
 } from "@polkadex/react-providers";
-import {
-  getAllProxyAccounts,
-  getMainAccountLinkedToProxy,
-} from "@orderbook/core/providers/user/profile/helpers";
+import { getMainAccountLinkedToProxy } from "@orderbook/core/providers/user/profile/helpers";
+import { useProxyAccounts } from "@orderbook/core/hooks";
 
 import * as LOCAL_STORE from "./localstore";
 import { Provider } from "./context";
 import * as T from "./types";
-import { UserAddressTuple } from "./types";
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [activeAccount, setActiveAccount] = useState<T.UserAddressTuple>({
     mainAddress: "",
     tradeAddress: "",
   });
-  const [allAccounts, setAllAccounts] = useState<UserAddressTuple[]>([]);
   const [favoriteMarkets, setFavoriteMarkets] = useState<string[]>([]);
   const [isBannerShown, setIsBannerShown] = useState<boolean>(false);
   // TODO: remove any type and use a common type for extension accounts
   const [selectedExtension, setSelectedExtension] = useState<any | null>(null);
   const [avatar, setAvatar] = useState<string | null>(null);
-  const { userAddresses } = useUserAccounts();
+  const { localAddresses } = useUserAccounts();
   const { onHandleError } = useSettingsProvider();
   const { extensionAccounts } = useExtensionAccounts();
 
-  const onUserSelectTradingAddress = async ({ tradeAddress: string }) => {
-    const tradeAddress = userAddresses.find((address) => address === string);
-    if (!tradeAddress) {
+  // sync all tradeAddresses state with extension
+  const { allProxiesAccounts: allAccounts } =
+    useProxyAccounts(extensionAccounts);
+
+  const onUserSelectTradingAddress = async ({
+    tradeAddress,
+    isNew,
+  }: {
+    tradeAddress: string;
+    isNew?: boolean;
+  }) => {
+    const _tradeAddress = localAddresses.find(
+      (address) => address === tradeAddress
+    );
+    if (!_tradeAddress && !isNew) {
       // TODO: move error to translation
       onHandleError("Invalid trade Address");
       return;
@@ -111,15 +119,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       setAvatar(avatar);
     }
   }, []);
-
-  // sync all tradeAddresses state with extension
-  useEffect(() => {
-    getAllProxyAccounts(extensionAccounts.map(({ address }) => address)).then(
-      (accounts) => {
-        setAllAccounts(accounts);
-      }
-    );
-  }, [extensionAccounts]);
 
   const getSigner = useCallback(
     (address: string) => {

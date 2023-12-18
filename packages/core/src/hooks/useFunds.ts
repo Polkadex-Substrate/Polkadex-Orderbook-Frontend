@@ -62,7 +62,7 @@ export function useFunds() {
     isSuccess: isOnChainBalanceSuccess,
     data: onChainBalances,
   } = useQuery({
-    queryKey: QUERY_KEYS.onChainBalances(mainAddress, assets),
+    queryKey: QUERY_KEYS.onChainBalances(mainAddress),
     queryFn: async () =>
       await fetchOnChainBalances(api as ApiPromise, assets, mainAddress),
     enabled: shouldFetchChainBalance,
@@ -124,7 +124,7 @@ export function useFunds() {
 
       // Update chain balance
       queryClient.setQueryData(
-        QUERY_KEYS.onChainBalances(mainAddress, assets),
+        QUERY_KEYS.onChainBalances(mainAddress),
         (prevData) => {
           const oldData = new Map(prevData as Map<string, number>);
           oldData.set(assetId, Number(newOnChainBalance));
@@ -137,7 +137,8 @@ export function useFunds() {
   return {
     balances,
     loading: Boolean(
-      (isTradingBalanceLoading || isOnChainBalanceLoading) && mainAddress.length
+      (isTradingBalanceLoading || isOnChainBalanceLoading) &&
+        mainAddress?.length
     ),
     success: isTradingBalanceSuccess || isOnChainBalanceSuccess,
     getFreeProxyBalance,

@@ -18,3 +18,8 @@ export * from "./useTransferHistory";
 export * from "./useOrderHistory";
 export * from "./useTickers";
 export * from "./useTransactions";
+export * from "./useAddProxyAccount";
+export * from "./useRemoveProxyAcccount";
+export * from "./useOnChainBalances";
+export * from "./useProxyAccounts";
+export * from "./useImportProxyAccount";

@@ -5,8 +5,15 @@ import { Multistep } from "@polkadex/ux";
 import { TradingAccountSuccessfull } from "../ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "../ConnectWallet/tradingAccountMnemonic";
 
+import { useConnectWallet } from "@/hooks";
+
 export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
-  let tempMnemonic, onResetTempMnemonic, onExportTradeAccount, selectedAccount;
+  const {
+    tempMnemonic,
+    onResetTempMnemonic,
+    onExportTradeAccount,
+    selectedAccount,
+  } = useConnectWallet();
 
   useEffect(() => {
     return () => onResetTempMnemonic?.();
@@ -24,9 +31,7 @@ export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
                 props?.onPage("TradingAccountMnemonic", true)
               }
               onDownloadPdf={() => window.alert("Downloading...")}
-              onDownloadJson={(e) =>
-                onExportTradeAccount?.({ tradeAccount: e })
-              }
+              onDownloadJson={(e) => onExportTradeAccount?.({ account: e })}
             />
           </Multistep.Trigger>
           <Multistep.Content>

@@ -230,11 +230,11 @@ export const TransferForm = ({
               selectedAccount={fundingWallet}
               onQuery={(e) => setFromQuery(e)}
               onSelectAccount={(e) => {
-                const tradeAddress = userAccounts?.find(
+                const account = userAccounts?.find(
                   (v) => v.mainAddress === e.account.address
                 );
                 // TODO: Fix types
-                if (tradeAddress) onUserSelectAccount(tradeAddress);
+                if (account) onUserSelectTradingAddress(account);
               }}
               data={filteredFundingWallets}
               placeholder={t("funding.betweenPlaceholder")}
