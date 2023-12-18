@@ -57,7 +57,7 @@ export function usePlaceOrder(
   const { allBrowserAccounts } = useTradeWallet();
 
   const {
-    selectedAccount: { tradeAddress },
+    selectedAddresses: { tradeAddress },
   } = useProfile();
 
   const {

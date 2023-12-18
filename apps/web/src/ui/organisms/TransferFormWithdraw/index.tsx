@@ -47,10 +47,10 @@ export const TransferFormWithdraw = ({
   const { allAccounts } = useExtensionWallet();
   const { allBrowserAccounts } = useTradeWallet();
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
-  const { selectedAccount } = useProfile();
+  const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
 
-  const { tradeAddress, mainAddress } = selectedAccount;
+  const { tradeAddress, mainAddress } = selectedAddresses;
 
   const tradingWallet = useMemo(
     () => getTradeAccount(tradeAddress, allBrowserAccounts),
@@ -72,8 +72,8 @@ export const TransferFormWithdraw = ({
   };
 
   const tradingAccountInBrowser = useMemo(
-    () => selectTradeAccount(selectedAccount?.tradeAddress, allBrowserAccounts),
-    [allBrowserAccounts, selectedAccount?.tradeAddress]
+    () => selectTradeAccount(selectedAddresses?.tradeAddress, allBrowserAccounts),
+    [allBrowserAccounts, selectedAddresses?.tradeAddress]
   );
 
   const {

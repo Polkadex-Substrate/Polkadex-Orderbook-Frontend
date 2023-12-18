@@ -16,7 +16,7 @@ import { useMarkets } from "./useMarkets";
 
 export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
   const {
-    selectedAccount: { tradeAddress },
+    selectedAddresses: { tradeAddress },
   } = useProfile();
   const { dateFrom, dateTo } = useSessionProvider();
   const { list: markets } = useMarkets();

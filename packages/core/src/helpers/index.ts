@@ -37,3 +37,5 @@ export * from "./isPageDisabled";
 export * from "./getChainFromTicker";
 export * from "./getCurrentMarket";
 export * from "./getMarketUrl";
+export * from "./extrinsics";
+export * from "./getAddressFromMnemonic";

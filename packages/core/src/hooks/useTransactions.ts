@@ -17,7 +17,7 @@ const DEPOSIT = "DEPOSIT";
 
 export function useTransactions() {
   const {
-    selectedAccount: { mainAddress },
+    selectedAddresses: { mainAddress },
   } = useProfile();
   const { onHandleError } = useSettingsProvider();
 

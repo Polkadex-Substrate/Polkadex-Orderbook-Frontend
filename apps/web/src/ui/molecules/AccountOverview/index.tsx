@@ -38,11 +38,8 @@ export const AccountOverview = ({ onNavigate }: T.Props) => {
 
   const tradingAccounts = tradeWalletState.allBrowserAccounts;
   const mainAccounts = extensionWalletState.allAccounts;
-  const {
-    selectedAccount: currentUsingAccount,
-    userData: { userAccounts: allUserAccounts },
-  } = useProfile();
-
+  const { selectedAddresses: currentUsingAccount } = useProfile();
+  // TODO: temp fix , entire file is to be depricated
   const [accountList, setAccountList] = useState<KeyringPair[]>([]);
   const [selectedTradeAccount, setSelectedTradeAccount] = useState<
     KeyringPair | undefined
@@ -50,7 +47,8 @@ export const AccountOverview = ({ onNavigate }: T.Props) => {
   const [selectedMainAccount, setSelectedMainAccount] = useState<
     ExtensionAccount | undefined
   >();
-  const { onUserSelectAccount } = useProfile();
+  const { onUserSelectTradingAddress, allAccounts: allUserAccounts } =
+    useProfile();
 
   // TODO: Missing dependencies
   useEffect(() => {
@@ -88,7 +86,7 @@ export const AccountOverview = ({ onNavigate }: T.Props) => {
       userAcc && userMainAccountDetails(userAcc.mainAddress, mainAccounts);
     setSelectedTradeAccount(acc);
     setSelectedMainAccount(mainAcc);
-    onUserSelectAccount({ tradeAddress: addr });
+    onUserSelectTradingAddress({ tradeAddress: addr });
   };
 
   const headerMessage = !allUserAccounts?.length

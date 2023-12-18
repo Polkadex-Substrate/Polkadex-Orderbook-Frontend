@@ -4,9 +4,8 @@ import FileSaver from "file-saver";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import { eventHandler } from "@orderbook/core/helpers";
 
-import { transformAddress, useProfile } from "../profile";
+import { transformAddress } from "../profile";
 import { TradeAccount } from "../../types";
 
 import { Provider } from "./context";
@@ -15,20 +14,12 @@ import {
   loadKeyring,
   getAllTradeAccountsInBrowser,
   addProxyToAccount,
-  removeProxyFromAccount,
 } from "./helper";
 import * as T from "./types";
 import * as A from "./actions";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
-  const {
-    onUserSelectAccount,
-    onUserProfileAccountPush,
-    userData,
-    onUserProfileTradeAccountDelete,
-    selectedAccount,
-  } = useProfile();
   const nativeApiState = useNativeApi();
   const { onHandleError, onHandleNotification, hasExtension } =
     useSettingsProvider();
@@ -64,21 +55,12 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const onImportTradeAccountJson = (
     payload: A.ImportTradeAccountJsonFetch["payload"]
   ) => {
-    const accounts = userData.userAccounts;
     const { file, password } = payload;
     let tradeAddress = "";
     try {
       const modifiedFile = file;
       const pair = keyring.restoreAccount(modifiedFile, password || "");
       tradeAddress = pair?.address;
-
-      // Check if file exists in userAccounts
-      const accountExists = accounts?.find(
-        (account) => account.tradeAddress === tradeAddress
-      );
-
-      if (!accountExists) throw new Error("Account does not exists");
-
       dispatch(A.tradeAccountPush({ pair }));
       dispatch(
         A.registerTradeAccountData({
@@ -89,7 +71,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         })
       );
       dispatch(A.importTradeAccountData());
-      onUserSelectAccount({ tradeAddress });
     } catch (error) {
       const errorMessage =
         error instanceof Error
@@ -151,9 +132,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     (payload: A.TradeAccountUpdate["payload"]) => {
       try {
         const { proxy } = payload;
-        onUserSelectAccount({
-          tradeAddress: proxy,
-        });
         onHandleNotification({
           type: "Success",
           message: "Trade account added,new trade account created",
@@ -163,7 +141,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
         dispatch(A.registerTradeAccountError(error));
       }
     },
-    [onHandleError, onHandleNotification, onUserSelectAccount]
+    [onHandleError, onHandleNotification]
   );
 
   const onRegisterTradeAccount = async (
@@ -201,10 +179,7 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
       if (res.isSuccess) {
         dispatch(A.tradeAccountPush({ pair }));
-
-        onUserProfileAccountPush({ tradeAddress, mainAddress: address });
         setTimeout(() => {
-          onUserSelectAccount({ tradeAddress });
           dispatch(
             A.registerTradeAccountData({
               mnemonic,
@@ -236,49 +211,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
     try {
       const api = nativeApiState.api;
       const { address: tradeAddress, allAccounts } = payload;
-      const linkedMainAddress =
-        tradeAddress &&
-        userData?.userAccounts?.find(
-          ({ tradeAddress: addr }) => addr === tradeAddress
-        )?.mainAddress;
-
-      if (!linkedMainAddress || !api) {
-        throw new Error("Invalid trade address or undefined api");
-      }
-      const account = linkedMainAddress
-        ? allAccounts?.find(
-            ({ account }) =>
-              account?.address?.toLowerCase() ===
-              linkedMainAddress?.toLowerCase()
-          )
-        : undefined;
-
-      if (!account?.account.address) {
-        throw new Error("Please select a funding account!");
-      }
-      if (api.isConnected && account?.account.address) {
-        const res = await removeProxyFromAccount(
-          api,
-          tradeAddress,
-          account.signer,
-          account.account.address
-        );
-        if (res.isSuccess) {
-          onHandleNotification({
-            type: "Success",
-            message:
-              "Congratulations! Your trade account has been removed from the chain!",
-          });
-          dispatch(A.previewAccountModalCancel());
-          dispatch(
-            A.removeProxyAccountFromChainData({ address: payload.address })
-          );
-          dispatch(A.removeTradeAccountFromBrowser({ address: tradeAddress }));
-          onUserProfileTradeAccountDelete({ address: tradeAddress });
-        } else {
-          throw new Error(res.message);
-        }
-      }
     } catch (error) {
       dispatch(A.removeProxyAccountFromChainData({ address: payload.address }));
       onHandleError(error?.message ?? error);
@@ -298,7 +230,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
 
   const onRemoveTradeAccountFromBrowser = (address: string) => {
     dispatch(A.removeTradeAccountFromBrowser({ address }));
-    onUserProfileTradeAccountDelete({ address, deleteFromBrowser: true });
   };
 
   const onUnlockTradeAccount = (payload: A.UnlockTradeAccount["payload"]) => {
@@ -346,34 +277,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const onExportTradeAccountActive = useCallback(() => {
     dispatch(A.exportTradeAccountActive());
   }, []);
-  const { mainAddress, tradeAddress } = selectedAccount;
-
-  // subscribe to user account updates notifications
-  useEffect(() => {
-    if (mainAddress?.length) {
-      const updateSubscription = eventHandler({
-        cb: onTradeAccountUpdate,
-        name: mainAddress,
-        eventType: "AddProxy",
-      });
-      return () => {
-        updateSubscription.unsubscribe();
-      };
-    }
-  }, [mainAddress, onTradeAccountUpdate]);
-
-  useEffect(() => {
-    if (tradeAddress?.length) {
-      const subscription = eventHandler({
-        cb: onTradeAccountUpdate,
-        name: tradeAddress,
-        eventType: "AddProxy",
-      });
-      return () => {
-        subscription.unsubscribe();
-      };
-    }
-  }, [onTradeAccountUpdate, tradeAddress]);
 
   useEffect(() => {
     if (hasExtension) onLoadTradeAccounts();

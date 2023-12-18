@@ -5,3 +5,8 @@ export type IUserTradeAccount = {
   isPresentInBrowser: boolean;
   account?: TradeAccount;
 };
+
+export interface MutateHookProps {
+  onSuccess?: (message?: unknown) => void;
+  onError?: (error: unknown) => void;
+}

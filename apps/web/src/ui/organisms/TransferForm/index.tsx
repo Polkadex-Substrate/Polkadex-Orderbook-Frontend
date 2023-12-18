@@ -44,12 +44,16 @@ export const TransferForm = ({
   const { t } = useTranslation("transfer");
 
   const { allAccounts } = useExtensionWallet();
-  const { selectedAccount, onUserSelectAccount, userData } = useProfile();
+  const {
+    selectedAddresses,
+    onUserSelectTradingAddress,
+    allAccounts: userAccounts,
+  } = useProfile();
   const { loading, onChangeChainBalance } = useFunds();
 
   // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
   const { mutateAsync, isLoading } = useAssetTransfer(onRefetch);
-  const { mainAddress } = selectedAccount;
+  const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
     () => userMainAccountDetails(mainAddress, allAccounts),
@@ -60,9 +64,9 @@ export const TransferForm = ({
     () =>
       allAccounts.filter(
         ({ account }) =>
-          userData?.userAccounts?.find((v) => v.mainAddress === account.address)
+          userAccounts?.find((v) => v.mainAddress === account.address)
       ),
-    [allAccounts, userData?.userAccounts]
+    [allAccounts, userAccounts]
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
@@ -226,11 +230,11 @@ export const TransferForm = ({
               selectedAccount={fundingWallet}
               onQuery={(e) => setFromQuery(e)}
               onSelectAccount={(e) => {
-                const tradeAddress = userData?.userAccounts?.find(
+                const account = userAccounts?.find(
                   (v) => v.mainAddress === e.account.address
                 );
                 // TODO: Fix types
-                if (tradeAddress) onUserSelectAccount(tradeAddress);
+                if (account) onUserSelectTradingAddress(account);
               }}
               data={filteredFundingWallets}
               placeholder={t("funding.betweenPlaceholder")}

@@ -32,11 +32,11 @@ export function useDepositHistory({
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const { selectedAccount } = useProfile();
+  const { selectedAddresses } = useProfile();
   const { allAccounts } = useExtensionWallet();
   const { deposits, loading } = useTransactions();
 
-  const { mainAddress } = selectedAccount;
+  const { mainAddress } = selectedAddresses;
   const fundingWallet = useMemo(
     () => userMainAccountDetails(mainAddress, allAccounts),
     [allAccounts, mainAddress]

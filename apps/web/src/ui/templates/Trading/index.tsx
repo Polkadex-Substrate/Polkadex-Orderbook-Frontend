@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import {
   AccountBanner,
   EmptyMyAccount,
@@ -31,11 +32,9 @@ import { ShutdownInteraction } from "../ShutdownInteraction";
 
 import * as S from "./styles";
 
-type Props = {
-  market: string;
-};
-
-export function Trading({ market: id }: Props) {
+export function Trading() {
+  const router = useRouter();
+  const query = router.query;
   const shouldShowDisclaimer = useMemo(
     () =>
       process.browser &&
@@ -58,23 +57,25 @@ export function Trading({ market: id }: Props) {
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
   const { list } = useMarkets();
-  const market = getCurrentMarket(list, id);
+  const market = getCurrentMarket(list, query?.id as string);
+  const id = market?.id;
+
   const {
     currentTicker: { currentPrice: currentTradePrice },
   } = useTickers(market?.id ?? "");
 
   const {
-    authInfo: { shouldShowInitialBanner },
-    selectedAccount: { mainAddress },
+    isBannerShown: shouldShowInitialBanner,
+    selectedAddresses: { mainAddress },
     onUserChangeInitBanner,
+    allAccounts,
   } = useProfile();
 
   const profileState = useProfile();
-  const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
+  const hasTradeAccount = profileState.selectedAddresses.tradeAddress !== "";
   const hasUser = hasTradeAccount;
 
-  const userAccounts = profileState.userData?.userAccounts;
-  const accounts = userAccounts?.filter(
+  const accounts = allAccounts?.filter(
     (account) => account.mainAddress === mainAddress
   );
   const hasAssociatedAccounts = accounts?.map((account) => account.tradeAddress)

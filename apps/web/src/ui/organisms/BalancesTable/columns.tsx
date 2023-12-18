@@ -91,7 +91,7 @@ export const columns = (headers: string[]) => [
               style={{ transform: "translateY(-0.8rem)" }}
               background="text"
             >
-              <S.TooltipMessage>Extenal link</S.TooltipMessage>
+              <S.TooltipMessage>External link</S.TooltipMessage>
             </TooltipContent>
           </Tooltip>
 
@@ -114,7 +114,7 @@ export const columns = (headers: string[]) => [
               style={{ transform: "translateY(-0.8rem)" }}
               background="text"
             >
-              <S.TooltipMessage>Extenal link</S.TooltipMessage>
+              <S.TooltipMessage>External link</S.TooltipMessage>
             </TooltipContent>
           </Tooltip>
           <Link

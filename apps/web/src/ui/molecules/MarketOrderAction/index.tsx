@@ -252,7 +252,7 @@ export const MarketOrderAction = ({
 const ProtectPassword = () => {
   const profileState = useProfile();
   const tradeWalletState = useTradeWallet();
-  const currTradeAddr = profileState.selectedAccount.tradeAddress;
+  const currTradeAddr = profileState.selectedAddresses.tradeAddress;
   const tradeAccount = selectTradeAccount(
     currTradeAddr,
     tradeWalletState.allBrowserAccounts

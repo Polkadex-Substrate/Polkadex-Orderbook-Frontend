@@ -1,21 +1,27 @@
 import { createContext } from "react";
+import {
+  ProfileContextInterface,
+  ProfileProviderProps,
+} from "@orderbook/core/providers/user/profile/types";
 
-import { initialState } from "./reducer";
-import { ProfileContextProps, ProfileProviderProps } from "./types";
-
-export const Context = createContext<ProfileContextProps>({
-  ...initialState,
-  onUserSelectAccount: () => {},
+export const Context = createContext<ProfileContextInterface>({
+  onUserSelectTradingAddress: () => {},
   onUserLogout: () => {},
   onUserChangeInitBanner: () => {},
-  onUserAuthFetch: () => {},
-  onUserProfileAccountPush: () => {},
-  onUserProfileTradeAccountDelete: () => {},
-  onUserProfileMainAccountPush: () => {},
-  onUserAccountSelectFetch: () => {},
-  onUserSetDefaultTradeAccount: () => {},
   onUserSetAvatar: () => {},
   onUserFavoriteMarketPush: () => {},
+  getSigner: () => {},
+  onUserSelectMainAddress: () => {},
+  onUserResetMainAddress: () => {},
+  onUserResetTradingAddress: () => {},
+  onResetSelectedExtension: () => {},
+  setSelectedExtension: () => {},
+  allAccounts: [],
+  avatar: "",
+  favoriteMarkets: [],
+  isBannerShown: false,
+  selectedAddresses: { mainAddress: "", tradeAddress: "" },
+  selectedExtension: null,
 });
 
 export const Provider = ({ value, children }: ProfileProviderProps) => {

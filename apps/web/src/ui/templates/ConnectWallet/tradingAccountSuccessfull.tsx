@@ -46,8 +46,8 @@ export const TradingAccountSuccessfull = ({
           </Typography.Text>
           <div className="flex flex-col gap-2">
             <TradingAccountCard
-              address={tradingAccount?.address as string}
-              name={tradingAccount?.meta?.name as string}
+              address={tradingAccount?.address || ""}
+              name={tradingAccount?.meta?.name || ""}
               type="Browser"
             />
             <GenericHorizontalCard title="Download file" icon="Download">
