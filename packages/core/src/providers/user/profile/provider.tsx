@@ -20,7 +20,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   // TODO: remove any type and use a common type for extension accounts
   const [selectedExtension, setSelectedExtension] = useState<any | null>(null);
   const [avatar, setAvatar] = useState<string | null>(null);
-  const { userAddresses } = useUserAccounts();
+  const { localAddresses } = useUserAccounts();
   const { onHandleError } = useSettingsProvider();
   const { extensionAccounts } = useExtensionAccounts();
 
@@ -33,7 +33,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   }: {
     tradeAddress: string;
   }) => {
-    const _tradeAddress = userAddresses.find(
+    const _tradeAddress = localAddresses.find(
       (address) => address === tradeAddress
     );
     if (!_tradeAddress) {
