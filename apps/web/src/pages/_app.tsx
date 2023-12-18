@@ -11,30 +11,35 @@ import { useRouter } from "next/router";
 import { Amplify, Analytics } from "aws-amplify";
 import { Work_Sans } from "next/font/google";
 import Head from "next/head";
+// eslint-disable-next-line import/order
 import { defaultConfig } from "@orderbook/core/config";
-import {
-  ProfileProvider,
-  TradeWalletProvider,
-  NativeApiProvider,
-  ExtensionWalletProvider,
-  SettingProvider,
-  OrderbookServiceProvider,
-  SubscriptionProvider,
-} from "@orderbook/core/providers";
+
 import "../styles/globals.scss";
 import "@polkadex/ux/dist/index.css";
-import {
-  ExtensionAccountsProvider,
-  ExtensionsProvider,
-  UserAccountsProvider,
-} from "@polkadex/react-providers";
+
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import dynamic from "next/dynamic";
 
 import awsconfig from "../../aws-exports";
 
 import * as gtag from "@/lib/gtag";
 import { defaultThemes, GlobalStyles } from "@/styles";
 
+const SettingProvider = dynamic(
+  () => import("@orderbook/core/providers").then((mod) => mod.SettingProvider),
+  {
+    ssr: false,
+  }
+);
+const DynamicProviders = dynamic(
+  () =>
+    import("@/ui/templates/DynamicProviders").then(
+      (mod) => mod.DynamicProviders
+    ),
+  {
+    ssr: false,
+  }
+);
 const analyticsConfig = {
   AWSPinpoint: {
     // Amazon Pinpoint App Client ID
@@ -61,32 +66,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-const Providers = ({ children }) => {
-  return (
-    <ExtensionsProvider>
-      <ExtensionAccountsProvider
-        network={"polkadex"}
-        ss58={88}
-        dappName={"polkadex"}
-      >
-        <UserAccountsProvider>
-          <ProfileProvider>
-            <NativeApiProvider>
-              <TradeWalletProvider>
-                <ExtensionWalletProvider>
-                  <OrderbookServiceProvider>
-                    <SubscriptionProvider>{children}</SubscriptionProvider>
-                  </OrderbookServiceProvider>
-                </ExtensionWalletProvider>
-              </TradeWalletProvider>
-            </NativeApiProvider>
-          </ProfileProvider>
-        </UserAccountsProvider>
-      </ExtensionAccountsProvider>
-    </ExtensionsProvider>
-  );
-};
 
 function App({ Component, pageProps }: AppProps) {
   // Removes all console from production environment
@@ -142,12 +121,12 @@ function App({ Component, pageProps }: AppProps) {
         >
           <OverlayProvider>
             {isActive ? (
-              <Providers>
+              <DynamicProviders>
                 <ModifiedThemeProvider
                   Component={Component}
                   pageProps={pageProps}
                 />
-              </Providers>
+              </DynamicProviders>
             ) : (
               <ModifiedThemeProvider
                 Component={Component}
