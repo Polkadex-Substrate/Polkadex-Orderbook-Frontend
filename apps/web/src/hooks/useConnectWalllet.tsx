@@ -127,7 +127,7 @@ export const useConnectWallet = (): ConnectWalletState => {
     isOnChainBalanceSuccess,
     isOnChainBalanceError,
     onChainBalanceStatus,
-  } = useOnChainBalances([POLKADEX_ASSET.id]);
+  } = useOnChainBalances();
 
   const {
     allProxiesAccounts,

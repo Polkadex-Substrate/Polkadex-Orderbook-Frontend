@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ApiPromise } from "@polkadot/api";
 
@@ -8,13 +9,15 @@ import { useNativeApi } from "../providers/public/nativeApi";
 import { useProfile } from "../providers/user/profile";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
-export const useOnChainBalances = (assets: string[]) => {
+export const useOnChainBalances = () => {
   const { onHandleError } = useSettingsProvider();
   const { api, connected } = useNativeApi();
-  const { isReady } = useOrderbookService();
+  const { isReady, assets } = useOrderbookService();
   const {
     selectedAddresses: { mainAddress },
   } = useProfile();
+
+  const assetIds = useMemo(() => assets?.map((a) => a.id), [assets]);
 
   const shouldFetchChainBalance = Boolean(
     mainAddress &&
@@ -34,7 +37,7 @@ export const useOnChainBalances = (assets: string[]) => {
   } = useQuery({
     queryKey: QUERY_KEYS.onChainBalances(mainAddress),
     queryFn: async () =>
-      await fetchOnChainBalances(api as ApiPromise, assets, mainAddress),
+      await fetchOnChainBalances(api as ApiPromise, assetIds, mainAddress),
     enabled: shouldFetchChainBalance,
     onError: (error) => {
       const errorMessage =
