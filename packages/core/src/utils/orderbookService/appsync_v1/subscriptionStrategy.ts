@@ -382,6 +382,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       variables: {
         name: address,
       },
+      authToken: READ_ONLY_TOKEN,
     });
     const observable = subscription
       .filter((data) => Boolean(data?.value?.data?.websocket_streams?.data))

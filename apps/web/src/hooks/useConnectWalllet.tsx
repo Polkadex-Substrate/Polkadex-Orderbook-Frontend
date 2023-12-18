@@ -141,7 +141,7 @@ export const useConnectWallet = (): ConnectWalletState => {
     error: importFromFileError,
     mutateAsync: onImportFromFile,
     status: importFromFileStatus,
-  } = useImportProxyAccount();
+  } = useImportProxyAccount({ onSuccess });
 
   const selectedWallet = selectedAddresses.mainAddress
     ? extensionAccounts.find((e) => e.address === selectedAddresses.mainAddress)

@@ -30,18 +30,20 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
   const onUserSelectTradingAddress = async ({
     tradeAddress,
+    isNew,
   }: {
     tradeAddress: string;
+    isNew?: boolean;
   }) => {
     const _tradeAddress = localAddresses.find(
       (address) => address === tradeAddress
     );
-    if (!_tradeAddress) {
+    if (!_tradeAddress && !isNew) {
       // TODO: move error to translation
       onHandleError("Invalid trade Address");
       return;
     }
-    const mainAddress = await getMainAccountLinkedToProxy(_tradeAddress);
+    const mainAddress = await getMainAccountLinkedToProxy(tradeAddress);
     if (!mainAddress) {
       // TODO: move error to translation
       onHandleError("No main account linked to this trade address");

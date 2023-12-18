@@ -4,9 +4,8 @@ import FileSaver from "file-saver";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import { eventHandler } from "@orderbook/core/helpers";
 
-import { transformAddress, useProfile } from "../profile";
+import { transformAddress } from "../profile";
 import { TradeAccount } from "../../types";
 
 import { Provider } from "./context";
@@ -21,7 +20,6 @@ import * as A from "./actions";
 
 export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const [state, dispatch] = useReducer(tradeWalletReducer, initialState);
-  const { onUserSelectTradingAddress, selectedAddresses } = useProfile();
   const nativeApiState = useNativeApi();
   const { onHandleError, onHandleNotification, hasExtension } =
     useSettingsProvider();
@@ -279,34 +277,6 @@ export const TradeWalletProvider: T.TradeWalletComponent = ({ children }) => {
   const onExportTradeAccountActive = useCallback(() => {
     dispatch(A.exportTradeAccountActive());
   }, []);
-  const { mainAddress, tradeAddress } = selectedAddresses;
-
-  // subscribe to user account updates notifications
-  useEffect(() => {
-    if (mainAddress?.length) {
-      const updateSubscription = eventHandler({
-        cb: onTradeAccountUpdate,
-        name: mainAddress,
-        eventType: "AddProxy",
-      });
-      return () => {
-        updateSubscription.unsubscribe();
-      };
-    }
-  }, [mainAddress, onTradeAccountUpdate]);
-
-  useEffect(() => {
-    if (tradeAddress?.length) {
-      const subscription = eventHandler({
-        cb: onTradeAccountUpdate,
-        name: tradeAddress,
-        eventType: "AddProxy",
-      });
-      return () => {
-        subscription.unsubscribe();
-      };
-    }
-  }, [onTradeAccountUpdate, tradeAddress]);
 
   useEffect(() => {
     if (hasExtension) onLoadTradeAccounts();

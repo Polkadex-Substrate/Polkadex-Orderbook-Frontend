@@ -1,12 +1,18 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserAccounts } from "@polkadex/react-providers";
 import {
   addProxyToAccount,
   getAddressFromMnemonic,
 } from "@orderbook/core/helpers";
-import { useProfile } from "@orderbook/core/providers/user/profile";
+import {
+  UserAddressTuple,
+  useProfile,
+} from "@orderbook/core/providers/user/profile";
 import { MutateHookProps } from "@orderbook/core/hooks/types";
+
+import { appsyncOrderbookService } from "../utils/orderbookService";
+import { QUERY_KEYS } from "../constants";
 
 export type AddProxyAccountArgs = {
   mnemonic: string;
@@ -15,6 +21,7 @@ export type AddProxyAccountArgs = {
   password?: string;
 };
 export function useAddProxyAccount(props: MutateHookProps) {
+  const queryClient = useQueryClient();
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
   const { getSigner, onUserSelectTradingAddress } = useProfile();
@@ -35,8 +42,23 @@ export function useAddProxyAccount(props: MutateHookProps) {
       const proxy = getAddressFromMnemonic(mnemonic);
       await addProxyToAccount(api, proxy, signer, main);
       const { pair } = wallet.add(mnemonic, name, password);
-      onUserSelectTradingAddress({ tradeAddress: pair.address });
-      props?.onSuccess?.();
+
+      appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
+        queryClient.setQueryData(
+          QUERY_KEYS.proxyAccounts(),
+          (proxies: UserAddressTuple[]) => {
+            return [
+              ...proxies,
+              {
+                mainAddress: main,
+                tradeAddress: pair.address,
+              },
+            ];
+          }
+        );
+        onUserSelectTradingAddress({ tradeAddress: pair.address, isNew: true });
+        props?.onSuccess?.("Trading account created");
+      });
     },
     onError: (error) => {
       props?.onError?.(error);
