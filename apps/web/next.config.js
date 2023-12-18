@@ -10,7 +10,7 @@ const { i18n } = require("./next-i18next.config");
 const nextConfig = {
   i18n,
   reactStrictMode: false,
-  transpilePackages: ["@orderbook/core"],
+  transpilePackages: ["@orderbook/core", "@polkadot-cloud/assets/extensions"],
   compiler: {
     styledComponents: true,
   },

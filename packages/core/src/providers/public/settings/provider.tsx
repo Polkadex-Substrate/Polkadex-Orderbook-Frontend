@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useReducer } from "react";
 
 import { Provider } from "./context";
 import { settingReducer, initialState } from "./reducer";
 import * as A from "./actions";
 import * as T from "./types";
-import { APP_NAME } from "./constants";
 
 export const SettingProvider: T.SettingComponent = ({
   defaultToast,
@@ -31,39 +30,39 @@ export const SettingProvider: T.SettingComponent = ({
     (value: A.ChangeThemeSettings["payload"]) => {
       dispatch(A.onChangeThemeSettings(value));
     },
-    [],
+    []
   );
 
   const onChangeLanguage = useCallback(
     (value: A.ChangeLanguageSettings["payload"]) =>
       dispatch(A.onChangeLanguageSettings(value)),
-    [],
+    []
   );
 
   const onChangeCurrency = useCallback(
     (value: A.ChangeCurrencySettings["payload"]) =>
       dispatch(A.onChangeCurrencySettings(value)),
-    [],
+    []
   );
 
   const onPushNotification = useCallback(
     (payload: T.NotificationPayload) => dispatch(A.notificationPush(payload)),
-    [],
+    []
   );
 
   const onRemoveNotification = useCallback(
     (value: T.Notification["id"]) => dispatch(A.notificationDeleteById(value)),
-    [],
+    []
   );
 
   const onReadNotification = useCallback(
     (value: T.Notification["id"]) => dispatch(A.notificationMarkAsRead(value)),
-    [],
+    []
   );
 
   const onClearNotifications = useCallback(
     () => dispatch(A.notificationDeleteAll()),
-    [],
+    []
   );
 
   const onHandleNotification = useCallback(
@@ -72,19 +71,8 @@ export const SettingProvider: T.SettingComponent = ({
       else defaultToast.onSuccess(payload.message);
       dispatch(A.notificationPush(payload));
     },
-    [defaultToast],
+    [defaultToast]
   );
-
-  const onCheckExtension = useCallback(async () => {
-    const { web3Enable } = await import("@polkadot/extension-dapp");
-
-    const extensions = await web3Enable(APP_NAME);
-    if (extensions?.length > 0) dispatch(A.checkHasExtension());
-  }, []);
-
-  // useEffect(() => {
-  //   onCheckExtension();
-  // }, [onCheckExtension]);
 
   return (
     <Provider
@@ -103,7 +91,6 @@ export const SettingProvider: T.SettingComponent = ({
         onHandleError: defaultToast.onError,
         onHandleAlert: defaultToast.onSuccess,
         onHandleNotification,
-        onCheckExtension,
       }}
     >
       {children}
