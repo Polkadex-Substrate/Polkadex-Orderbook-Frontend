@@ -1,19 +1,22 @@
 import { MouseEvent, useMemo, useRef, useState } from "react";
 import {
-  useExtensionWallet,
-  userMainAccountDetails,
-} from "@orderbook/core/providers/user/extensionWallet";
-import {
   transformAddress,
   useProfile,
 } from "@orderbook/core/providers/user/profile";
 import { useFormik } from "formik";
 import { withdrawValidations } from "@orderbook/core/validations";
-import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
+import {
+  getFundingAccountDetail,
+  isAssetPDEX,
+  trimFloat,
+} from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 import { useFunds, useTryUnlockTradeAccount } from "@orderbook/core/hooks";
 import { useTranslation } from "next-i18next";
-import { useUserAccounts } from "@polkadex/react-providers";
+import {
+  useExtensionAccounts,
+  useUserAccounts,
+} from "@polkadex/react-providers";
 
 import { UnlockModal } from "../UnlockModal";
 
@@ -40,7 +43,7 @@ export const TransferFormWithdraw = ({
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const { allAccounts } = useExtensionWallet();
+  const { extensionAccounts: allAccounts } = useExtensionAccounts();
   const { wallet } = useUserAccounts();
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
   const { selectedAddresses } = useProfile();
@@ -54,7 +57,7 @@ export const TransferFormWithdraw = ({
   );
 
   const fundingWallet = useMemo(
-    () => userMainAccountDetails(mainAddress, allAccounts),
+    () => getFundingAccountDetail(mainAddress, allAccounts),
     [allAccounts, mainAddress]
   );
 
@@ -142,10 +145,8 @@ export const TransferFormWithdraw = ({
             <WalletCard
               label={t("to")}
               walletType={t("funding.type")}
-              walletName={fundingWallet?.account?.meta.name ?? ""}
-              walletAddress={transformAddress(
-                fundingWallet?.account?.address ?? ""
-              )}
+              walletName={fundingWallet?.name ?? ""}
+              walletAddress={transformAddress(fundingWallet?.address ?? "")}
             />
           </S.Wallets>
           <S.Form>

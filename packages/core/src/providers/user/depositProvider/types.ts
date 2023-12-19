@@ -1,7 +1,8 @@
 import { FC, PropsWithChildren } from "react";
 import { ApiPromise } from "@polkadot/api";
+import { ExtensionAccount } from "@polkadex/react-providers";
 
-import { CommonError, ExtensionAccount } from "../../types";
+import { CommonError } from "../../types";
 // todo: replace when providers are ready
 
 export interface DepositsState {

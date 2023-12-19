@@ -8,10 +8,8 @@
 
 import { useTransactions } from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import {
-  useExtensionWallet,
-  userMainAccountDetails,
-} from "@orderbook/core/providers/user/extensionWallet";
+import { getFundingAccountDetail } from "@orderbook/core/helpers";
+import { useExtensionAccounts } from "@polkadex/react-providers";
 import { useMemo, useState } from "react";
 import { SortingState } from "@tanstack/react-table";
 import { useTranslation } from "next-i18next";
@@ -33,13 +31,13 @@ export function useDepositHistory({
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const { selectedAddresses } = useProfile();
-  const { allAccounts } = useExtensionWallet();
+  const { extensionAccounts } = useExtensionAccounts();
   const { deposits, loading } = useTransactions();
 
   const { mainAddress } = selectedAddresses;
   const fundingWallet = useMemo(
-    () => userMainAccountDetails(mainAddress, allAccounts),
-    [allAccounts, mainAddress]
+    () => getFundingAccountDetail(mainAddress, extensionAccounts),
+    [extensionAccounts, mainAddress]
   );
 
   const data = useMemo(
@@ -72,16 +70,16 @@ export function useDepositHistory({
               name: e.asset?.name,
             },
             wallets: {
-              fromWalletName: fundingWallet?.account?.meta?.name ?? "",
-              fromWalletAddress: fundingWallet?.account?.address ?? "",
+              fromWalletName: fundingWallet?.name ?? "",
+              fromWalletAddress: fundingWallet?.address ?? "",
               toWalletType: t("trading.type"),
             },
           } as T.Props;
         }),
     [
       deposits,
-      fundingWallet?.account?.meta?.name,
-      fundingWallet?.account?.address,
+      fundingWallet?.name,
+      fundingWallet?.address,
       selectedAsset?.name,
       showSelectedCoins,
       t,

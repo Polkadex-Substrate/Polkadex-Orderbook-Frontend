@@ -5,11 +5,11 @@ import { useTransactions } from "@orderbook/core/hooks";
 import { Tab } from "@headlessui/react";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
-  useExtensionWallet,
-  userMainAccountDetails,
-} from "@orderbook/core/providers/user/extensionWallet";
-import { WithdrawGroupItem } from "@orderbook/core/helpers";
+  WithdrawGroupItem,
+  getFundingAccountDetail,
+} from "@orderbook/core/helpers";
 import { useTranslation } from "next-i18next";
+import { useExtensionAccounts } from "@polkadex/react-providers";
 
 import * as S from "./styles";
 import { PendingTable } from "./pendingTable";
@@ -31,13 +31,13 @@ export const WithdrawHistory = ({
 
   const { allWithdrawals, readyWithdrawals, loading } = useTransactions();
   const { selectedAddresses } = useProfile();
-  const { allAccounts } = useExtensionWallet();
+  const { extensionAccounts } = useExtensionAccounts();
 
   const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
-    () => userMainAccountDetails(mainAddress, allAccounts),
-    [allAccounts, mainAddress]
+    () => getFundingAccountDetail(mainAddress, extensionAccounts),
+    [extensionAccounts, mainAddress]
   );
 
   const selectedWithdraw = useCallback(
@@ -64,8 +64,8 @@ export const WithdrawHistory = ({
               name: token?.name,
             },
             wallets: {
-              fromWalletName: fundingWallet?.account?.meta?.name ?? "",
-              fromWalletAddress: fundingWallet?.account?.address ?? "",
+              fromWalletName: fundingWallet?.name ?? "",
+              fromWalletAddress: fundingWallet?.address ?? "",
               toWalletType: t("trading.type"),
             },
           };
@@ -81,8 +81,8 @@ export const WithdrawHistory = ({
       allWithdrawals,
       showSelectedCoins,
       selectedAsset?.name,
-      fundingWallet?.account?.address,
-      fundingWallet?.account?.meta?.name,
+      fundingWallet?.address,
+      fundingWallet?.name,
       t,
     ]
   );
@@ -111,8 +111,8 @@ export const WithdrawHistory = ({
               assetId: token?.id,
             },
             wallets: {
-              fromWalletName: fundingWallet?.account?.meta?.name ?? "",
-              fromWalletAddress: fundingWallet?.account?.address ?? "",
+              fromWalletName: fundingWallet?.name ?? "",
+              fromWalletAddress: fundingWallet?.address ?? "",
               toWalletType: t("trading.type"),
             },
           };
@@ -122,12 +122,7 @@ export const WithdrawHistory = ({
           items,
         } as ReadyToClaimDataProps;
       }),
-    [
-      readyWithdrawals,
-      fundingWallet?.account?.meta?.name,
-      fundingWallet?.account?.address,
-      t,
-    ]
+    [readyWithdrawals, fundingWallet?.name, fundingWallet?.address, t]
   );
 
   const readyToClaim = useMemo(() => {

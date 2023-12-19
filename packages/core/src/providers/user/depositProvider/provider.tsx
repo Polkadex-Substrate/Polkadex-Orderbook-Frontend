@@ -22,7 +22,7 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
     account,
   }: T.onFetchDeposit) => {
     try {
-      if (api && isApiReady && account?.account?.address !== "") {
+      if (api && isApiReady && account?.address !== "") {
         onHandleNotification({
           type: "Information",
           message: "Processing Deposit...",
@@ -68,7 +68,7 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
       api,
       ext,
       { signer: account.signer },
-      account?.account.address,
+      account?.address,
       true
     );
     return res;

@@ -1,15 +1,16 @@
 import { MouseEvent, useMemo, useRef } from "react";
 import {
-  useExtensionWallet,
-  userMainAccountDetails,
-} from "@orderbook/core/providers/user/extensionWallet";
-import {
   transformAddress,
   useProfile,
 } from "@orderbook/core/providers/user/profile";
+import { useExtensionAccounts } from "@polkadex/react-providers";
 import { useFormik } from "formik";
 import { depositValidations } from "@orderbook/core/validations";
-import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
+import {
+  getFundingAccountDetail,
+  isAssetPDEX,
+  trimFloat,
+} from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useTranslation } from "next-i18next";
 import { useFunds } from "@orderbook/core/index";
@@ -31,7 +32,7 @@ export const TransferFormDeposit = ({
 }: T.Props) => {
   const { t } = useTranslation("transfer");
 
-  const { allAccounts } = useExtensionWallet();
+  const { extensionAccounts: allAccounts } = useExtensionAccounts();
   const { loading, onFetchDeposit } = useDepositProvider();
   const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
@@ -39,7 +40,7 @@ export const TransferFormDeposit = ({
   const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
-    () => userMainAccountDetails(mainAddress, allAccounts),
+    () => getFundingAccountDetail(mainAddress, allAccounts),
     [allAccounts, mainAddress]
   );
 
@@ -66,10 +67,10 @@ export const TransferFormDeposit = ({
     // TODO: Handle Error...
   };
 
-  const fundingWalletName = fundingWallet?.account?.meta.name ?? "";
+  const fundingWalletName = fundingWallet?.name ?? "";
   const fundingWalletAddress = useMemo(
-    () => transformAddress(fundingWallet?.account?.address ?? ""),
-    [fundingWallet?.account?.address]
+    () => transformAddress(fundingWallet?.address ?? ""),
+    [fundingWallet?.address]
   );
 
   const {
@@ -95,7 +96,7 @@ export const TransferFormDeposit = ({
       // TODO: Handle Error...
 
       try {
-        const address = fundingWallet.account.address;
+        const address = fundingWallet.address;
 
         const asset: T.GenericAsset = isPolkadexToken
           ? { polkadex: null }

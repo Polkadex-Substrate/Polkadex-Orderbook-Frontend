@@ -129,8 +129,10 @@ export const OptionsItem = styled(Combobox.Option)`
     cursor: pointer;
     transition: background-color ease 0.4s;
     div {
-      width: 2.5em;
-      height: ${normalizeValue(2.5)};
+      svg {
+        width: ${normalizeValue(2.5)};
+        height: ${normalizeValue(2.5)};
+      }
     }
     span {
       opacity: 0.5;
