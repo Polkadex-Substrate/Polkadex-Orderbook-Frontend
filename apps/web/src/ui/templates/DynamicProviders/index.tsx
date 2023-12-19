@@ -5,7 +5,6 @@ import {
 } from "@polkadex/react-providers";
 import {
   ProfileProvider,
-  TradeWalletProvider,
   NativeApiProvider,
   ExtensionWalletProvider,
   OrderbookServiceProvider,
@@ -22,13 +21,11 @@ export const DynamicProviders = ({ children }) => {
         <UserAccountsProvider>
           <ProfileProvider>
             <NativeApiProvider>
-              <TradeWalletProvider>
-                <ExtensionWalletProvider>
-                  <OrderbookServiceProvider>
-                    <SubscriptionProvider>{children}</SubscriptionProvider>
-                  </OrderbookServiceProvider>
-                </ExtensionWalletProvider>
-              </TradeWalletProvider>
+              <ExtensionWalletProvider>
+                <OrderbookServiceProvider>
+                  <SubscriptionProvider>{children}</SubscriptionProvider>
+                </OrderbookServiceProvider>
+              </ExtensionWalletProvider>
             </NativeApiProvider>
           </ProfileProvider>
         </UserAccountsProvider>

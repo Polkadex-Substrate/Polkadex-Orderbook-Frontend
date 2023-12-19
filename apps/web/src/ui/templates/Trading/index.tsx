@@ -113,10 +113,7 @@ export function Trading() {
     <>
       <Head>
         <title>
-          {currentTradePrice &&
-            marketName &&
-            `${currentTradePrice} | ${marketName} | `}{" "}
-          {tc("polkadexOrderbook")}
+          {`${currentTradePrice} | ${marketName} | `} {tc("polkadexOrderbook")}
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>

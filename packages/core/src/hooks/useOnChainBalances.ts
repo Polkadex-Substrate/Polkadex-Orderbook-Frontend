@@ -44,6 +44,7 @@ export const useOnChainBalances = () => {
         error instanceof Error ? error.message : (error as string);
       onHandleError(errorMessage);
     },
+    refetchOnMount: false,
   });
 
   return {

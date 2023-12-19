@@ -13,11 +13,10 @@ import {
   signPayload,
 } from "@orderbook/core/helpers";
 import { useFunds } from "@orderbook/core/hooks";
+import { useUserAccounts } from "@polkadex/react-providers";
 
 import { useProfile, UserAddressTuple } from "../profile";
 import { useExtensionWallet } from "../extensionWallet";
-import { selectTradeAccount } from "../tradeWallet/helper";
-import { useTradeWallet } from "../tradeWallet";
 
 import * as A from "./actions";
 import * as T from "./types";
@@ -33,8 +32,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const { selectMainAccount } = useExtensionWallet();
   const currentAccount: UserAddressTuple = profileState.selectedAddresses;
   const { mainAddress, tradeAddress } = currentAccount;
-  const { allBrowserAccounts } = useTradeWallet();
-  const keyringPair = selectTradeAccount(tradeAddress, allBrowserAccounts);
+  const { wallet } = useUserAccounts();
 
   type UserActionLambdaResp = {
     is_success: boolean;
@@ -43,6 +41,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const onFetchWithdraws = async ({ asset, amount }) => {
     dispatch(A.withdrawsFetch({ asset, amount }));
     try {
+      const keyringPair = wallet.getPair(tradeAddress);
       const nonce = getNonce();
       const api = nativeApiState.api;
 

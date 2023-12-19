@@ -4,7 +4,7 @@ import { eventHandler, eventHandlerCallback } from "@orderbook/core/helpers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
-import { useTradeWallet } from "../tradeWallet";
+// import { useTradeWallet } from "../tradeWallet";
 import { useProfile } from "../profile";
 import { ExtensionAccount } from "../../types";
 
@@ -24,10 +24,10 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
   const { onHandleError, onHandleNotification, hasExtension } =
     useSettingsProvider();
   const nativeApiState = useNativeApi();
-  const tradeWalletState = useTradeWallet();
+  // const tradeWalletState = useTradeWallet();
 
   const onRegisterMainAccountReset = () => {
-    tradeWalletState.onRegisterTradeAccountReset();
+    // tradeWalletState.onRegisterTradeAccountReset();
     dispatch(A.registerMainAccountReset());
   };
 
@@ -46,10 +46,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         dispatch(A.registerMainAccountError());
       }
     },
-    [
-      onHandleError,
-      onHandleNotification,
-    ]
+    [onHandleError, onHandleNotification]
   );
 
   const onRegisterMainAccount = async (
@@ -84,13 +81,13 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
         );
 
         if (res.isSuccess) {
-          tradeWalletState.onRegisterTradeAccountData({
-            mnemonic,
-            account: {
-              name: selectedControllerAccount.account.meta.name || "",
-              address: selectedControllerAccount.account.address,
-            },
-          });
+          // tradeWalletState.onRegisterTradeAccountData({
+          //   mnemonic,
+          //   account: {
+          //     name: selectedControllerAccount.account.meta.name || "",
+          //     address: selectedControllerAccount.account.address,
+          //   },
+          // });
           dispatch(A.registerMainAccountData());
         } else {
           throw new Error("Extrinsic failed");
@@ -100,7 +97,7 @@ export const ExtensionWalletProvider: T.ExtensionWalletComponent = ({
       }
     } catch (error) {
       console.log("error in registration:", error.message);
-      tradeWalletState.onRemoveTradeAccountFromBrowser(tradeAddress);
+      // tradeWalletState.onRemoveTradeAccountFromBrowser(tradeAddress);
       dispatch(A.registerMainAccountError());
       onHandleNotification({
         message: `Cannot Register Account: ${error?.message ?? error}`,

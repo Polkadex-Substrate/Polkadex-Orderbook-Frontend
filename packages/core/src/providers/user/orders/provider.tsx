@@ -8,9 +8,9 @@ import {
 } from "@orderbook/core/helpers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
+import { useUserAccounts } from "@polkadex/react-providers";
 
 import { useProfile, UserAddressTuple } from "../profile";
-import { useTradeWallet, selectTradeAccount } from "../tradeWallet";
 
 import * as A from "./actions";
 import * as T from "./types";
@@ -31,7 +31,7 @@ type UserActionLambdaResp = {
 export const OrdersProvider: T.OrdersComponent = ({ children }) => {
   const [state, dispatch] = useReducer(ordersReducer, initialState);
   const profileState = useProfile();
-  const tradeWalletState = useTradeWallet();
+  const { wallet } = useUserAccounts();
   const nativeApiState = useNativeApi();
   const settingsState = useSettingsProvider();
 
@@ -42,10 +42,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       const account: UserAddressTuple = profileState.selectedAddresses;
       const address = account.tradeAddress;
       const mainAddress = account.mainAddress;
-      const keyringPair = selectTradeAccount(
-        address,
-        tradeWalletState.allBrowserAccounts
-      );
+      const keyringPair = wallet.getPair(address);
       const timestamp = getNonce();
       const isApiConnected = nativeApiState.connected;
       const api = nativeApiState.api;
@@ -116,10 +113,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       const api = nativeApiState.api;
       const account: UserAddressTuple = profileState.selectedAddresses;
       const { tradeAddress, mainAddress } = account;
-      const keyringPair = selectTradeAccount(
-        tradeAddress,
-        tradeWalletState.allBrowserAccounts
-      );
+      const keyringPair = wallet.getPair(tradeAddress);
       if (keyringPair?.isLocked)
         throw new Error("Please unlock your account with password");
       if (tradeAddress !== "" && keyringPair && api) {

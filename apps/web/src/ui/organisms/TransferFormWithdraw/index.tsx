@@ -4,11 +4,6 @@ import {
   userMainAccountDetails,
 } from "@orderbook/core/providers/user/extensionWallet";
 import {
-  getTradeAccount,
-  selectTradeAccount,
-  useTradeWallet,
-} from "@orderbook/core/providers/user/tradeWallet";
-import {
   transformAddress,
   useProfile,
 } from "@orderbook/core/providers/user/profile";
@@ -18,6 +13,7 @@ import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 import { useFunds, useTryUnlockTradeAccount } from "@orderbook/core/hooks";
 import { useTranslation } from "next-i18next";
+import { useUserAccounts } from "@polkadex/react-providers";
 
 import { UnlockModal } from "../UnlockModal";
 
@@ -45,7 +41,7 @@ export const TransferFormWithdraw = ({
   const [showPassword, setShowPassword] = useState(false);
 
   const { allAccounts } = useExtensionWallet();
-  const { allBrowserAccounts } = useTradeWallet();
+  const { wallet } = useUserAccounts();
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
   const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
@@ -53,8 +49,8 @@ export const TransferFormWithdraw = ({
   const { tradeAddress, mainAddress } = selectedAddresses;
 
   const tradingWallet = useMemo(
-    () => getTradeAccount(tradeAddress, allBrowserAccounts),
-    [allBrowserAccounts, tradeAddress]
+    () => wallet.getPair(tradeAddress),
+    [tradeAddress, wallet]
   );
 
   const fundingWallet = useMemo(
@@ -71,9 +67,9 @@ export const TransferFormWithdraw = ({
     setFieldValue("amount", trimmedBalance);
   };
 
-  const tradingAccountInBrowser = useMemo(
-    () => selectTradeAccount(selectedAddresses?.tradeAddress, allBrowserAccounts),
-    [allBrowserAccounts, selectedAddresses?.tradeAddress]
+  const selectedTradingAccount = useMemo(
+    () => wallet.getPair(selectedAddresses?.tradeAddress),
+    [selectedAddresses?.tradeAddress, wallet]
   );
 
   const {
@@ -91,7 +87,7 @@ export const TransferFormWithdraw = ({
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: async ({ amount }) => {
-      if (tradingAccountInBrowser?.isLocked) setShowPassword(true);
+      if (selectedTradingAccount?.isLocked) setShowPassword(true);
       else {
         const asset = isAssetPDEX(selectedAsset?.id)
           ? "PDEX"
@@ -108,14 +104,14 @@ export const TransferFormWithdraw = ({
   });
 
   const formRef = useRef<HTMLFormElement | null>(null);
-  useTryUnlockTradeAccount(tradingAccountInBrowser);
+  useTryUnlockTradeAccount(selectedTradingAccount);
 
   return (
     <>
       <UnlockModal
         open={showPassword}
         onClose={() => setShowPassword(false)}
-        tradingAccountInBrowser={tradingAccountInBrowser}
+        tradingAccountInBrowser={selectedTradingAccount}
         dispatchAction={() =>
           formRef?.current?.dispatchEvent(
             new Event("submit", { cancelable: true, bubbles: true })
