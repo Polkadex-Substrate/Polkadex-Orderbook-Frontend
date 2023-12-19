@@ -11,15 +11,12 @@ import { useRouter } from "next/router";
 import { Amplify, Analytics } from "aws-amplify";
 import { Work_Sans } from "next/font/google";
 import Head from "next/head";
-// eslint-disable-next-line import/order
 import { defaultConfig } from "@orderbook/core/config";
-
-import "../styles/globals.scss";
-import "@polkadex/ux/dist/index.css";
-
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import dynamic from "next/dynamic";
+import "@polkadex/ux/dist/index.css";
 
+import "../styles/globals.scss";
 import awsconfig from "../../aws-exports";
 
 import * as gtag from "@/lib/gtag";

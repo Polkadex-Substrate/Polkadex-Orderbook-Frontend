@@ -58,7 +58,7 @@ type ConnectWalletState = {
   onLogout: () => void;
   onImportFromFile: (value: ImportFromFile) => Promise<void>;
   onRegisterTradeAccount: (props: AddProxyAccountArgs) => Promise<void>;
-  onRemoveTradingAccountFromDevice: (value: string) => Promise<void>;
+  onRemoveTradingAccountFromDevice: (value: string) => void;
   onRemoveTradingAccountFromChain: (
     value: RemoveProxyAccountArgs
   ) => Promise<void>;
@@ -196,7 +196,7 @@ export const useConnectWallet = (): ConnectWalletState => {
     onUserLogout();
   };
 
-  const onRemoveTradingAccountFromDevice = async (value: string) => {
+  const onRemoveTradingAccountFromDevice = (value: string) => {
     if (selectedAddresses.tradeAddress === value) {
       onUserResetTradingAddress();
     }
