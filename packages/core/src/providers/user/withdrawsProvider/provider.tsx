@@ -11,12 +11,15 @@ import {
   getNonce,
   sendQueryToAppSync,
   signPayload,
+  getFundingAccountDetail,
 } from "@orderbook/core/helpers";
 import { useFunds } from "@orderbook/core/hooks";
-import { useUserAccounts } from "@polkadex/react-providers";
+import {
+  useUserAccounts,
+  useExtensionAccounts,
+} from "@polkadex/react-providers";
 
-import { useProfile, UserAddressTuple } from "../profile";
-import { useExtensionWallet } from "../extensionWallet";
+import { useProfile } from "../profile";
 
 import * as A from "./actions";
 import * as T from "./types";
@@ -26,12 +29,11 @@ import { initialState, withdrawsReducer } from "./reducer";
 export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(withdrawsReducer, initialState);
   const { onChangeChainBalance } = useFunds();
-  const profileState = useProfile();
+  const { selectedAddresses, getSigner } = useProfile();
   const nativeApiState = useNativeApi();
   const settingsState = useSettingsProvider();
-  const { selectMainAccount } = useExtensionWallet();
-  const currentAccount: UserAddressTuple = profileState.selectedAddresses;
-  const { mainAddress, tradeAddress } = currentAccount;
+  const { extensionAccounts } = useExtensionAccounts();
+  const { mainAddress, tradeAddress } = selectedAddresses;
   const { wallet } = useUserAccounts();
 
   type UserActionLambdaResp = {
@@ -95,45 +97,50 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   }: A.WithdrawsClaimFetch["payload"]) => {
     try {
       const api = nativeApiState.api;
-      const currentAccount: UserAddressTuple = profileState.selectedAddresses;
-      const extensionAccount = selectMainAccount(currentAccount.mainAddress);
+      const extensionAccount = getFundingAccountDetail(
+        selectedAddresses.mainAddress,
+        extensionAccounts
+      );
       const isApiReady = nativeApiState.connected;
-      if (
-        api &&
-        isApiReady &&
-        extensionAccount?.account?.address !== "" &&
-        extensionAccount?.signer
-      ) {
-        // TODO: Move this toast as callback to signAndSendExtrinsic,
-        settingsState.onHandleNotification({
-          type: "Information",
-          message:
-            "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
-        });
-        dispatch(A.withdrawsClaimFetch({ sid, assetIds }));
+      const signer = getSigner(selectedAddresses.mainAddress);
 
-        const res = await claimWithdrawal(
-          api,
-          extensionAccount.signer,
-          extensionAccount.account.address,
-          sid
-        );
-        if (res.isSuccess) {
-          dispatch(A.withdrawsClaimData({ sid }));
-          // TODO?: Check delay
-          // for ux
-          setTimeout(() => {
-            settingsState.onHandleNotification({
-              type: "Success",
-              message:
-                "Congratulations! You have successfully withdrawn your assets to your funding account.",
-            });
+      if (!api || !isApiReady)
+        throw new Error("You are not connected to blockchain");
 
-            dispatch(A.withdrawClaimReset());
-          }, 3000);
-        } else {
-          throw new Error("Claim Withdraw failed");
-        }
+      if (!extensionAccount?.address)
+        throw new Error("Funding account doesn't exists");
+
+      if (!signer) throw new Error("Signer is not defined");
+
+      // TODO: Move this toast as callback to signAndSendExtrinsic,
+      settingsState.onHandleNotification({
+        type: "Information",
+        message:
+          "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
+      });
+      dispatch(A.withdrawsClaimFetch({ sid, assetIds }));
+
+      const res = await claimWithdrawal(
+        api,
+        signer,
+        extensionAccount?.address,
+        sid
+      );
+      if (res.isSuccess) {
+        dispatch(A.withdrawsClaimData({ sid }));
+        // TODO?: Check delay
+        // for ux
+        setTimeout(() => {
+          settingsState.onHandleNotification({
+            type: "Success",
+            message:
+              "Congratulations! You have successfully withdrawn your assets to your funding account.",
+          });
+
+          dispatch(A.withdrawClaimReset());
+        }, 3000);
+      } else {
+        throw new Error("Claim Withdraw failed");
       }
     } catch (error) {
       dispatch(A.withdrawClaimCancel(sid));

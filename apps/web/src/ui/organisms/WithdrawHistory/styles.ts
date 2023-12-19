@@ -235,8 +235,10 @@ export const Token = styled.div`
     gap: ${normalizeValue(0.5)};
     div {
       &:first-child {
-        width: ${normalizeValue(3.5)};
-        height: ${normalizeValue(3.5)};
+        svg {
+          width: ${normalizeValue(3)};
+          height: ${normalizeValue(3)};
+        }
         padding: ${normalizeValue(0.5)};
         border-radius: ${normalizeValue(100)};
         border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
