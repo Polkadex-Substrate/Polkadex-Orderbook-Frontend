@@ -18,6 +18,7 @@ export type IColors =
   | "white";
 
 export type IIcons =
+  | "Coins"
   | "ArrowTop"
   | "Appearance"
   | "SupportCenter"
