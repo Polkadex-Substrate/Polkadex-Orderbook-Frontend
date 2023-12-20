@@ -29,8 +29,10 @@ export const AsideLeft = styled.div`
 
 export const TokenWrapper = styled.div`
   ${({ theme }) => css`
-    width: ${normalizeValue(4.2)};
-    height: ${normalizeValue(4.2)};
+    svg {
+      width: ${normalizeValue(3.5)};
+      height: ${normalizeValue(3.5)};
+    }
     padding: ${normalizeValue(0.7)};
     border: 1px solid ${theme.colors.secondaryBackground};
     border-radius: ${normalizeValue(10)};

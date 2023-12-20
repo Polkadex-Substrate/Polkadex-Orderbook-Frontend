@@ -9,9 +9,9 @@ import { useMemo, useState } from "react";
 import classNames from "classnames";
 import { intlFormat } from "date-fns";
 import { useAssets } from "@orderbook/core/hooks";
-import { useExtensionWallet } from "@orderbook/core/providers/user/extensionWallet";
 import { useTranslation } from "next-i18next";
 import { TransferHistory as TransferHistoryProps } from "@orderbook/core/helpers";
+import { useExtensionAccounts } from "@polkadex/react-providers";
 
 import { columns as getColumns } from "./columns";
 import * as S from "./styles";
@@ -37,7 +37,7 @@ export const TransferHistory = ({
   const { t } = useTranslation("transfer");
 
   const { selectGetAsset } = useAssets();
-  const { allAccounts } = useExtensionWallet();
+  const { extensionAccounts } = useExtensionAccounts();
   const columns = useMemo(
     () => getColumns(["Date", "Token", "Amount", "From/To", "Hash"]),
     []
@@ -59,11 +59,11 @@ export const TransferHistory = ({
         ?.map((e) => {
           const tokenId = e.asset_unique_id.split("standard_assets/").join("");
           const token = selectGetAsset(tokenId);
-          const fromData = allAccounts?.find(
-            (from) => from.account.address === e.from
+          const fromData = extensionAccounts?.find(
+            (from) => from.address === e.from
           );
-          const toData = allAccounts?.find(
-            (wallet) => wallet.account.address === e.to
+          const toData = extensionAccounts?.find(
+            (wallet) => wallet.address === e.to
           );
 
           return {
@@ -85,19 +85,19 @@ export const TransferHistory = ({
               name: token?.name,
             },
             wallets: {
-              fromWalletName: fromData?.account?.meta?.name ?? "Custom wallet",
+              fromWalletName: fromData?.name ?? "Custom wallet",
               fromWalletAddress: e.from,
-              toWalletName: toData?.account.meta?.name ?? "Custom wallet",
+              toWalletName: toData?.name ?? "Custom wallet",
               toWalletAddress: e.to,
             },
           } as T.TransferHistoryProps;
         }),
     [
-      selectGetAsset,
-      selectedAsset?.id,
-      showSelectedCoins,
-      allAccounts,
       transactions,
+      showSelectedCoins,
+      selectedAsset?.id,
+      selectGetAsset,
+      extensionAccounts,
     ]
   );
   const table = useReactTable({

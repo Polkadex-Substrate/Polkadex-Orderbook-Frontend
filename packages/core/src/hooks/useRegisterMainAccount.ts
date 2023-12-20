@@ -4,8 +4,10 @@ import { useUserAccounts } from "@polkadex/react-providers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation } from "@tanstack/react-query";
 import { AddProxyAccountArgs } from "@orderbook/core/hooks/useAddProxyAccount";
-import { registerMainAccount } from "@orderbook/core/providers/user/extensionWallet";
-import { getAddressFromMnemonic } from "@orderbook/core/helpers";
+import {
+  getAddressFromMnemonic,
+  registerMainAccount,
+} from "@orderbook/core/helpers";
 
 export function useRegisterMainAccount(props: MutateHookProps) {
   const { api } = useNativeApi();

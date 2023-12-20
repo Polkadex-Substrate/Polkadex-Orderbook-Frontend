@@ -6,7 +6,6 @@ import {
 import {
   ProfileProvider,
   NativeApiProvider,
-  ExtensionWalletProvider,
   OrderbookServiceProvider,
   SubscriptionProvider,
 } from "@orderbook/core/providers";
@@ -21,11 +20,9 @@ export const DynamicProviders = ({ children }) => {
         <UserAccountsProvider>
           <ProfileProvider>
             <NativeApiProvider>
-              <ExtensionWalletProvider>
-                <OrderbookServiceProvider>
-                  <SubscriptionProvider>{children}</SubscriptionProvider>
-                </OrderbookServiceProvider>
-              </ExtensionWalletProvider>
+              <OrderbookServiceProvider>
+                <SubscriptionProvider>{children}</SubscriptionProvider>
+              </OrderbookServiceProvider>
             </NativeApiProvider>
           </ProfileProvider>
         </UserAccountsProvider>
