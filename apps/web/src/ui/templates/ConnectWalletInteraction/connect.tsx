@@ -31,12 +31,9 @@ export const Connect = ({
 }) => {
   const {
     selectedExtension,
-    proxiesLoading,
     selectedWallet,
     onSelectWallet,
     onSelectExtension,
-    proxiesSuccess,
-    proxiesAccounts,
     localTradingAccounts,
     onSelectTradingAccount,
     onImportFromFile,
@@ -44,10 +41,16 @@ export const Connect = ({
     onRemoveTradingAccountFromDevice,
     onSetTempTrading,
     tempTrading,
+    mainProxiesAccounts,
+    mainProxiesLoading,
+    mainProxiesSuccess,
   } = useConnectWallet();
 
   const sourceId = selectedExtension?.id;
-  const hasAccount = !!proxiesAccounts?.length;
+  const hasAccount = useMemo(
+    () => !!mainProxiesAccounts?.length,
+    [mainProxiesAccounts?.length]
+  );
 
   const { extensionsStatus } = useExtensions();
   const { connectExtensionAccounts, extensionAccounts } =
@@ -98,8 +101,8 @@ export const Connect = ({
             <Wallets
               key="ConnectFundingWallets"
               wallets={walletsFiltered}
-              loading={!!proxiesLoading}
-              success={!!proxiesSuccess}
+              loading={!!mainProxiesLoading}
+              success={!!mainProxiesSuccess}
               onSelectWallet={(e) => onSelectWallet?.(e)}
               onTryAgain={() =>
                 selectedExtension && onSelectExtension?.(selectedExtension)

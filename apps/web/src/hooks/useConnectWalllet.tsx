@@ -23,6 +23,7 @@ import {
   useOnChainBalances,
   useProxyAccounts,
   useRemoveProxyAccount,
+  useSingleProxyAccount,
 } from "@orderbook/core/hooks";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { POLKADEX_ASSET } from "@orderbook/core/constants";
@@ -86,6 +87,9 @@ type ConnectWalletState = {
   walletLoading: boolean;
   walletSuccess: boolean;
   importFromFileError: unknown;
+  mainProxiesAccounts: string[];
+  mainProxiesLoading: boolean;
+  mainProxiesSuccess: boolean;
 };
 export const useConnectWallet = (): ConnectWalletState => {
   const [tempMnemonic, setTempMnemonic] = useState<string>("");
@@ -136,6 +140,9 @@ export const useConnectWallet = (): ConnectWalletState => {
     proxiesSuccess,
     proxiesStatus,
   } = useProxyAccounts(extensionAccounts);
+
+  const { mainProxiesAccounts, mainProxiesLoading, mainProxiesSuccess } =
+    useSingleProxyAccount(selectedAddresses?.mainAddress);
 
   const {
     error: importFromFileError,
@@ -267,5 +274,9 @@ export const useConnectWallet = (): ConnectWalletState => {
     importFromFileError,
     importFromFileStatus,
     onImportFromFile,
+
+    mainProxiesAccounts,
+    mainProxiesLoading,
+    mainProxiesSuccess,
   };
 };
