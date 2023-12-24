@@ -87,7 +87,7 @@ export const Header = ({
             </Popover>
           </S.ActionsWrapper>
           <S.AccountContainer>
-            <ConnectWalletButton />
+            <ConnectWalletButton showFundingWallet={true} />
           </S.AccountContainer>
         </S.Actions>
       </S.Wrapper>

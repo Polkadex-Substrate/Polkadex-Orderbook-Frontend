@@ -74,6 +74,8 @@ export const TransferTemplate = () => {
     title: tc("connectTradingAccount.title"),
   };
 
+  const userExists = Boolean(tradeAddress?.length > 0);
+
   return (
     <>
       <AssetsInteraction
@@ -97,7 +99,7 @@ export const TransferTemplate = () => {
                   <h1>{t("heading")}</h1>
                   <h2>{t("subheading")}</h2>
                 </S.Heading>
-                <S.Title>
+                <S.Title show={userExists}>
                   <Switch
                     disable={loading || switchEnable}
                     isActive={type === "transfer"}
@@ -108,7 +110,7 @@ export const TransferTemplate = () => {
                   <span>{t("switcher")}</span>
                 </S.Title>
               </S.Header>
-              {tradeAddress ? (
+              {userExists ? (
                 RenderComponent
               ) : (
                 <EmptyMyAccount balances hasLimit {...hasSelectedAccount} />

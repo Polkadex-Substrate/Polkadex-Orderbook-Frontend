@@ -4,13 +4,20 @@ import { Profile } from "./profile";
 
 import { ConnectWalletInteraction } from "@/ui/templates/ConnectWalletInteraction";
 
-const ConnectWallet = () => {
+const ConnectWallet = ({
+  showFundingWallet = false,
+}: {
+  showFundingWallet?: boolean;
+}) => {
   const [state, setState] = useState(false);
 
   return (
     <>
       <ConnectWalletInteraction open={state} onChange={setState} />
-      <Profile onClick={() => setState(!state)} />
+      <Profile
+        onClick={() => setState(!state)}
+        showFundingWallet={showFundingWallet}
+      />
     </>
   );
 };

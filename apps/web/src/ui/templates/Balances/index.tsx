@@ -34,7 +34,7 @@ export const BalancesTemplate = () => {
   const { connecting } = useNativeApi();
   const { selectedAddresses } = useProfile();
 
-  const userHasSelectedAccount = selectedAddresses?.mainAddress?.length > 0;
+  const userHasSelectedAccount = selectedAddresses?.tradeAddress?.length > 0;
 
   const connectWalletData = {
     image: "emptyWallet",

@@ -21,7 +21,13 @@ import { TradingAccountSuccessfull } from "@/ui/templates/ConnectWallet/tradingA
 import { TradingAccountMnemonic } from "@/ui/templates/ConnectWallet/tradingAccountMnemonic";
 import { useConnectWallet } from "@/hooks";
 
-export const Profile = ({ onClick }: { onClick: () => void }) => {
+export const Profile = ({
+  onClick,
+  showFundingWallet,
+}: {
+  onClick: () => void;
+  showFundingWallet: boolean;
+}) => {
   const {
     selectedWallet,
     onSelectTradingAccount,
@@ -63,28 +69,30 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
   if (tradingWalletPresent || fundWalletPresent)
     return (
       <Popover>
-        <Popover.Trigger className="bg-level-1 transition-colors duration-300 pl-2 flex items-center gap-2 rounded-md">
-          <div className="flex items-center gap-1">
-            <div className="w-4 h-4">
-              <Icons.Avatar />
+        <Popover.Trigger className="bg-level-1 transition-colors duration-300 flex items-center gap-2 rounded-md">
+          {showFundingWallet && (
+            <div className="flex items-center gap-1 pl-1">
+              <div className="w-4 h-4">
+                <Icons.Avatar />
+              </div>
+              {fundWalletPresent ? (
+                <Typography.Text size="xs" bold>
+                  {selectedWallet?.name}
+                </Typography.Text>
+              ) : (
+                <Typography.Text size="xs" bold variant="secondary">
+                  Wallet not present
+                </Typography.Text>
+              )}
             </div>
-            {fundWalletPresent ? (
-              <Typography.Text size="xs" bold>
-                {selectedWallet?.name}
-              </Typography.Text>
-            ) : (
-              <Typography.Text size="xs" bold variant="secondary">
-                Wallet not present
-              </Typography.Text>
-            )}
-          </div>
+          )}
           <div className="flex items-center gap-2 bg-level-4 px-2 py-1 rounded-md">
             {tradingWalletPresent ? (
               <Typography.Text size="xs" bold>
                 {selectedAccount?.meta.name} ({shortAddress})
               </Typography.Text>
             ) : (
-              <Typography.Text size="xs" bold variant="secondary">
+              <Typography.Text size="xs" bold variant="primary">
                 No trading account
               </Typography.Text>
             )}

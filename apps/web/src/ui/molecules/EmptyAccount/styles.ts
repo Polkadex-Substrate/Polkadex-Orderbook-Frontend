@@ -57,6 +57,7 @@ export const EmptyContent = styled.div`
       color: ${theme.colors.tertiaryText};
       font-size: ${normalizeValue(1.3)};
     }
+    margin-bottom: -${normalizeValue(1)};
   `}
 `;
 export const EmptyActions = styled.div<{ hasLimit?: boolean }>`

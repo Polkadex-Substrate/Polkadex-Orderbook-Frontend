@@ -55,15 +55,17 @@ export const Header = styled.div`
   }
 `;
 
-export const Title = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${normalizeValue(1)};
-  align-self: flex-end;
-  span {
-    font-size: ${normalizeValue(1.5)};
-    font-weight: 500;
-  }
+export const Title = styled.div<{ show: boolean }>`
+  ${({ show }) => css`
+    display: ${show ? "flex" : "none"};
+    align-items: center;
+    gap: ${normalizeValue(1)};
+    align-self: flex-end;
+    span {
+      font-size: ${normalizeValue(1.5)};
+      font-weight: 500;
+    }
+  `}
 `;
 
 export const Heading = styled.div`
