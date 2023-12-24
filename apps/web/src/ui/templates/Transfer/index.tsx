@@ -7,14 +7,20 @@ import {
   CustomWithdraw,
   CustomTransfer,
 } from "@polkadex/orderbook-ui/organisms";
-import { Footer, Switch } from "@polkadex/orderbook-ui/molecules";
+import {
+  EmptyMyAccount,
+  Footer,
+  Switch,
+} from "@polkadex/orderbook-ui/molecules";
 import { useTranslation } from "next-i18next";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import * as S from "./styles";
 import { useTransfer } from "./useTransfer";
 
 export const TransferTemplate = () => {
   const { t } = useTranslation("transfer");
+  const { t: tc } = useTranslation("common");
 
   const {
     loading,
@@ -27,6 +33,10 @@ export const TransferTemplate = () => {
     switchEnable,
     onDisableSwitch,
   } = useTransfer();
+
+  const {
+    selectedAddresses: { tradeAddress },
+  } = useProfile();
 
   const customComponent = {
     deposit: (
@@ -58,6 +68,11 @@ export const TransferTemplate = () => {
   };
 
   const RenderComponent = customComponent[type];
+
+  const hasSelectedAccount = {
+    image: "emptyWallet",
+    title: tc("connectTradingAccount.title"),
+  };
 
   return (
     <>
@@ -93,7 +108,11 @@ export const TransferTemplate = () => {
                   <span>{t("switcher")}</span>
                 </S.Title>
               </S.Header>
-              {RenderComponent}
+              {tradeAddress ? (
+                RenderComponent
+              ) : (
+                <EmptyMyAccount balances hasLimit {...hasSelectedAccount} />
+              )}
             </S.ContainerMain>
             <Footer />
           </S.Wrapper>
