@@ -1,4 +1,4 @@
-import { ReactNode, isValidElement, useState } from "react";
+import { ReactNode, isValidElement } from "react";
 import Link from "next/link";
 import {
   Dropdown,
@@ -14,10 +14,8 @@ import {
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useRouter } from "next/router";
 
-import { Profile } from "./profile";
 import * as S from "./styles";
-
-import { ConnectWalletInteraction } from "@/ui/templates/ConnectWalletInteraction";
+import ConnectWalletButton from "./connect";
 
 export const Header = ({
   dark = false,
@@ -33,11 +31,9 @@ export const Header = ({
 
   const router = useRouter();
   const { locales, locale } = router;
-  const [state, setState] = useState(false);
 
   return (
     <>
-      <ConnectWalletInteraction open={state} onChange={setState} />
       <S.Wrapper dark={dark}>
         <S.Content>
           <S.Logo borderActive={isValidChild} hideLogo>
@@ -91,7 +87,7 @@ export const Header = ({
             </Popover>
           </S.ActionsWrapper>
           <S.AccountContainer>
-            <Profile onClick={() => setState(!state)} />
+            <ConnectWalletButton />
           </S.AccountContainer>
         </S.Actions>
       </S.Wrapper>

@@ -66,14 +66,10 @@ export function Trading() {
 
   const {
     isBannerShown: shouldShowInitialBanner,
-    selectedAddresses: { mainAddress },
+    selectedAddresses: { mainAddress, tradeAddress },
     onUserChangeInitBanner,
     allAccounts,
   } = useProfile();
-
-  const profileState = useProfile();
-  const hasTradeAccount = profileState.selectedAddresses.tradeAddress !== "";
-  const hasUser = hasTradeAccount;
 
   const accounts = allAccounts?.filter(
     (account) => account.mainAddress === mainAddress
@@ -84,14 +80,9 @@ export function Trading() {
   const { t } = useTranslation("trading");
   const { t: tc } = useTranslation("common");
 
-  const hasSelectedAccount = !hasTradeAccount && {
+  const hasSelectedAccount = {
     image: "emptyWallet",
     title: tc("connectTradingAccount.title"),
-    description: tc("connectTradingAccount.description"),
-    primaryLink: "/wallets",
-    primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
-    secondaryLink: "/wallets",
-    secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
   };
 
   const marketName = market?.name?.replace("/", "");
@@ -180,7 +171,7 @@ export function Trading() {
                           />
                           <Graph market={id} />
                         </KlineProvider>
-                        {hasUser ? (
+                        {tradeAddress ? (
                           <SessionProvider>
                             <Transactions market={id} />
                           </SessionProvider>

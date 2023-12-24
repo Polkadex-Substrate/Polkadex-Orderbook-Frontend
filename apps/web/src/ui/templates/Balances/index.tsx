@@ -39,11 +39,6 @@ export const BalancesTemplate = () => {
   const connectWalletData = {
     image: "emptyWallet",
     title: tc("connectTradingAccount.title"),
-    description: tc("connectTradingAccount.description"),
-    primaryLink: "/wallets",
-    primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
-    secondaryLink: "/wallets",
-    secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
   };
 
   const { assets, filters, loading, onHideZeroBalance, onSearchToken } =
