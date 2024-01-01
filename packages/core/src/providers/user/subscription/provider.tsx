@@ -82,15 +82,17 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
             oldOrderHistory: InfiniteData<MaybePaginated<Order[]>> | undefined
           ) => {
             const prevOrderHistory = [
-              ...(oldOrderHistory?.pages.flatMap((page) => page.data) ?? []),
+              ...(oldOrderHistory?.pages?.flatMap((page) => page.data) ?? []),
             ];
             const oldOrderHistoryLength = oldOrderHistory
-              ? oldOrderHistory?.pages.length
+              ? oldOrderHistory?.pages?.length
               : 0;
 
             const nextToken =
-              oldOrderHistory?.pages?.at(oldOrderHistoryLength - 1)
-                ?.nextToken || null;
+              (oldOrderHistoryLength > 0 &&
+                oldOrderHistory?.pages?.at(oldOrderHistoryLength - 1)
+                  ?.nextToken) ||
+              null;
 
             // Add to OrderHistory for all cases
             const updatedOrderHistory = replaceOrPushOrder(
@@ -168,21 +170,35 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   );
 
   const onUserTradeUpdate = useCallback(
-    (trade: Trade) => {
+    (payload: Trade) => {
       try {
         queryClient.setQueryData(
           QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
           (
             oldTradeHistory: InfiniteData<MaybePaginated<Trade[]>> | undefined
           ) => {
-            const payload = {
-              data: [trade],
-              nextToken: null,
-            };
-            return {
-              pages: [payload, ...(oldTradeHistory?.pages ?? [])],
+            const prevTradeHistory = [
+              ...(oldTradeHistory?.pages?.flatMap((page) => page.data) ?? []),
+            ];
+            const oldTradeHistoryLength = oldTradeHistory?.pages?.length || 0;
+
+            const nextToken =
+              (oldTradeHistoryLength > 0 &&
+                oldTradeHistory?.pages?.at(oldTradeHistoryLength - 1)
+                  ?.nextToken) ||
+              null;
+
+            const newTradeHistory = {
+              pages: [
+                {
+                  data: [payload, ...prevTradeHistory],
+                  nextToken,
+                },
+              ],
               pageParams: [...(oldTradeHistory?.pageParams ?? [])],
             };
+
+            return newTradeHistory;
           }
         );
       } catch (error) {

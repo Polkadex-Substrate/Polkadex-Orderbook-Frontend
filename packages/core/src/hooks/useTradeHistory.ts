@@ -56,7 +56,7 @@ export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
   });
 
   const list = useMemo(() => {
-    const tradeHistory = data?.pages.flatMap((page) => page.data) ?? [];
+    const tradeHistory = data?.pages?.flatMap((page) => page.data) ?? [];
     return tradeHistory.sort((a, b) => {
       const timestampA = new Date(a.timestamp).getTime();
       const timestampB = new Date(b.timestamp).getTime();
