@@ -97,9 +97,10 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   };
 
   const onUserFavoriteMarketPush = (payload: string) => {
-    if (favoriteMarkets.includes(payload)) return;
-    const newFavoriteMarkets = [...favoriteMarkets, payload];
-    // remove duplicates
+    const shouldInclude = !favoriteMarkets.includes(payload);
+    const newFavoriteMarkets = shouldInclude
+      ? [...favoriteMarkets, payload]
+      : favoriteMarkets.filter((favoriteMarket) => favoriteMarket !== payload);
     setFavoriteMarkets(newFavoriteMarkets);
     LOCAL_STORE.setFavoriteMarkets(newFavoriteMarkets);
   };
