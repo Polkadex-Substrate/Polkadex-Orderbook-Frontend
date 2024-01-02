@@ -43,14 +43,28 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       onHandleError("Invalid trade Address");
       return;
     }
-    const mainAddress = await getMainAccountLinkedToProxy(tradeAddress);
-    if (!mainAddress) {
-      // TODO: move error to translation
-      onHandleError("No main account linked to this trade address");
+    const maxAttempts = 5;
+    let attempt = 0;
+    while (attempt < maxAttempts) {
+      try {
+        const mainAddress = await getMainAccountLinkedToProxy(tradeAddress);
+        if (!mainAddress)
+          // TODO: move error to translation
+          throw new Error("No main account linked to this trade address");
+
+        LOCAL_STORE.setLastUsedAccount({ mainAddress, tradeAddress });
+        setActiveAccount({ mainAddress, tradeAddress });
+        break;
+      } catch (error) {
+        console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
+      } finally {
+        attempt++;
+        await new Promise((resolve) => setTimeout(resolve, 8000));
+      }
     }
-    LOCAL_STORE.setLastUsedAccount({ mainAddress, tradeAddress });
-    setActiveAccount({ mainAddress, tradeAddress });
+    debugger;
   };
+
   const onUserSelectMainAddress = async ({ mainAddress: string }) => {
     const mainAccount = extensionAccounts.find((acc) => acc.address === string);
     if (!mainAccount) {

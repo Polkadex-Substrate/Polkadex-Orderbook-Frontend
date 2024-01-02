@@ -20,7 +20,15 @@ export type AddProxyAccountArgs = {
   name: string;
   password?: string;
 };
-export function useAddProxyAccount(props: MutateHookProps) {
+
+interface UseAddProxyAccount extends MutateHookProps {
+  onSetTempMnemonic: (value: string) => void;
+}
+export function useAddProxyAccount({
+  onSetTempMnemonic,
+  onSuccess,
+  onError,
+}: UseAddProxyAccount) {
   const queryClient = useQueryClient();
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
@@ -43,27 +51,25 @@ export function useAddProxyAccount(props: MutateHookProps) {
       await addProxyToAccount(api, proxy, signer, main);
       const { pair } = wallet.add(mnemonic, name, password);
 
+      await onUserSelectTradingAddress({
+        tradeAddress: pair.address,
+        isNew: true,
+      });
+      onSetTempMnemonic(mnemonic);
       appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
         queryClient.setQueryData(
-          QUERY_KEYS.proxyAccounts(),
+          QUERY_KEYS.singleProxyAccounts(main),
           (proxies: UserAddressTuple[]) => {
-            return [
-              ...proxies,
-              {
-                mainAddress: main,
-                tradeAddress: pair.address,
-              },
-            ];
+            return [...proxies, pair.address];
           }
         );
-        onUserSelectTradingAddress({ tradeAddress: pair.address, isNew: true });
-        props?.onSuccess?.("Trading account created");
       });
     },
     onError: (error) => {
-      props?.onError?.(error);
+      onError?.(error);
       console.log(error);
     },
+    onSuccess: () => onSuccess?.("Trading account created"),
   });
 
   return {
