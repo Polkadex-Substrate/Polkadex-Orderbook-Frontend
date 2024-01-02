@@ -19,7 +19,7 @@ import { RemoveTradingAccount } from "@/ui/templates/ConnectWallet/removeTrading
 import { ImportTradingAccount } from "@/ui/templates/ConnectWallet/importTradingAccount";
 import { TradingAccountSuccessfull } from "@/ui/templates/ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "@/ui/templates/ConnectWallet/tradingAccountMnemonic";
-import { useConnectWallet } from "@/hooks";
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export const Profile = ({
   onClick,
@@ -50,7 +50,7 @@ export const Profile = ({
     proxiesAccounts,
     tempMnemonic,
     onExportTradeAccount,
-  } = useConnectWallet();
+  } = useConnectWalletProvider();
 
   const shortAddress = useMemo(
     () => truncateString(selectedAccount?.address ?? "", 3),

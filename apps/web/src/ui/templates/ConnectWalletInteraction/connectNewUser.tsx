@@ -5,7 +5,7 @@ import { NewUser } from "../ConnectWallet/newUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
 
-import { useConnectWallet } from "@/hooks";
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export const ConnectNewUser = ({
   onNext,
@@ -22,7 +22,7 @@ export const ConnectNewUser = ({
     registerError,
     selectedExtension,
     walletBalance,
-  } = useConnectWallet();
+  } = useConnectWalletProvider();
 
   const handleCloseInteraction = () => {
     onResetWallet?.();

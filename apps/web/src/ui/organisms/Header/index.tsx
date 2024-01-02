@@ -17,6 +17,8 @@ import { useRouter } from "next/router";
 import * as S from "./styles";
 import ConnectWalletButton from "./connect";
 
+import { ConnectWalletProvider } from "@/providers/connectWalletProvider";
+
 export const Header = ({
   dark = false,
   children,
@@ -33,7 +35,7 @@ export const Header = ({
   const { locales, locale } = router;
 
   return (
-    <>
+    <ConnectWalletProvider>
       <S.Wrapper dark={dark}>
         <S.Content>
           <S.Logo borderActive={isValidChild} hideLogo>
@@ -91,6 +93,6 @@ export const Header = ({
           </S.AccountContainer>
         </S.Actions>
       </S.Wrapper>
-    </>
+    </ConnectWalletProvider>
   );
 };

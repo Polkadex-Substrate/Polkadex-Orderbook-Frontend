@@ -11,7 +11,7 @@ import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { MaximumTradingAccount } from "../ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
 
-import { useConnectWallet } from "@/hooks";
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export const ConnectExistingUser = ({
   onClose,
@@ -31,7 +31,7 @@ export const ConnectExistingUser = ({
     registerError,
     removingError,
     onSetTempTrading,
-    proxiesAccounts,
+    mainProxiesAccounts,
     removingStatus,
     tempTrading,
     onRemoveTradingAccountFromDevice,
@@ -40,14 +40,14 @@ export const ConnectExistingUser = ({
     onImportFromFile,
     importFromFileStatus,
     walletBalance,
-  } = useConnectWallet();
+  } = useConnectWalletProvider();
 
   const filteredAccounts = useMemo(
     () =>
       localTradingAccounts?.filter(
-        (item) => proxiesAccounts?.includes(item.address)
+        (item) => mainProxiesAccounts?.includes(item.address)
       ),
-    [localTradingAccounts, proxiesAccounts]
+    [localTradingAccounts, mainProxiesAccounts]
   );
 
   const hasAccounts = useMemo(
@@ -62,7 +62,7 @@ export const ConnectExistingUser = ({
   };
 
   const redirectMaximumAccounts =
-    (proxiesAccounts?.length ?? 0) >= 3
+    (mainProxiesAccounts?.length ?? 0) >= 3
       ? "MaximumTradingAccount"
       : "NewTradingAccount";
 
@@ -126,7 +126,7 @@ export const ConnectExistingUser = ({
             />
             <TradingAccountList
               key="TradingAccountList"
-              tradingAccounts={proxiesAccounts}
+              tradingAccounts={mainProxiesAccounts}
               onRemove={(e) => onSetTempTrading?.(e)}
               onClose={() => props?.onChangeInteraction(false)}
               onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}
@@ -158,11 +158,11 @@ export const ConnectExistingUser = ({
               onRedirect={() => props?.onPage("ConnectTradingAccount")}
               onClose={() => props?.onPage("ConnectTradingAccount")}
               loading={importFromFileStatus === "loading"}
-              whitelistAccounts={proxiesAccounts}
+              whitelistAccounts={mainProxiesAccounts}
             />
             <MaximumTradingAccount
               key="MaximumTradingAccount"
-              tradingAccounts={proxiesAccounts}
+              tradingAccounts={mainProxiesAccounts}
               onRemove={(e) => onSetTempTrading?.(e)}
               onClose={() => props?.onChangeInteraction(false)}
               onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}
