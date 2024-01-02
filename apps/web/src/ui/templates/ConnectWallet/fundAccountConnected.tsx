@@ -1,6 +1,6 @@
 import {
   Typography,
-  WalletCard,
+  AccountCard,
   Illustrations,
   Interaction,
 } from "@polkadex/ux";
@@ -23,7 +23,7 @@ export const FundAccountConnected = () => {
             </Typography.Text>
           </div>
         </div>
-        <WalletCard.Inverted
+        <AccountCard.Inverted
           name="Alice"
           address="5Cz5p3auaFUFN8FdToic5iVKnrXcnqrMbDs1ZUafzQFYyRw"
         />

@@ -1,7 +1,7 @@
 import {
   Accordion,
   Typography,
-  WalletCard,
+  AccountCard,
   Illustrations,
   Interaction,
 } from "@polkadex/ux";
@@ -33,11 +33,11 @@ export const FundAccountNotFound = () => {
             </Accordion.Trigger>
             <Accordion.Content>
               <div className="flex flex-col gap-3">
-                <WalletCard
+                <AccountCard
                   name="Alice"
                   address="5Cz5p3auaFUFN8FdToic5iVKnrXcnqrMbDs1ZUafzQFYyRw"
                 />
-                <WalletCard
+                <AccountCard
                   name="Bob"
                   address="5GC6vwNE8FdToic5iVKnrZrycMLnGJBJVSdXcnqrMbDs1LJC"
                 />

@@ -12,7 +12,7 @@ import {
   Button,
   Dropdown,
   Typography,
-  WalletCard,
+  AccountCard,
   Illustrations,
 } from "@polkadex/ux";
 import { KeyringPair } from "@polkadot/keyring/types";
@@ -62,7 +62,7 @@ export const Profile = ({
         </div>
         <div className="flex flex-col gap-6">
           <div className="flex justify-between items-center">
-            <WalletCard.Inverted
+            <AccountCard.Inverted
               name={fundWallet?.name ?? "Wallet not present"}
               address={fundWallet?.address ?? "0x0000000000000"}
               withIcon={false}
@@ -81,7 +81,7 @@ export const Profile = ({
                 />
                 Switch
               </Button.Solid>
-            </WalletCard.Inverted>
+            </AccountCard.Inverted>
           </div>
           {!fundWalletPresent && (
             <div className="flex flex-col gap-2">
@@ -116,14 +116,14 @@ export const Profile = ({
                 asChild
                 className="flex justify-between items-center gap-2 flex-1 py-3 [&[data-state=open]>div>svg]:rotate-180"
               >
-                <WalletCard.Inverted
+                <AccountCard.Inverted
                   name={tradeAccount?.meta?.name}
                   address={tradeAccount?.address as string}
                   withIcon={false}
                   hoverable={false}
                 >
                   <ChevronDownIcon className="h-3 w-3 transition-transform duration-300 text-primary" />
-                </WalletCard.Inverted>
+                </AccountCard.Inverted>
               </Dropdown.Trigger>
               <Dropdown.Content className="min-w-[20rem]">
                 <div className="flex flex-col gap-0 p-2 rounded-md">
@@ -144,7 +144,7 @@ export const Profile = ({
                           onSelectTradingAccount(v.address);
                         }}
                       >
-                        <WalletCard.Inverted
+                        <AccountCard.Inverted
                           name={v.meta.name}
                           address={v.address}
                           withIcon={false}
@@ -159,7 +159,7 @@ export const Profile = ({
                           >
                             <TrashIcon className="w-5 h-5" />
                           </Button.Icon>
-                        </WalletCard.Inverted>
+                        </AccountCard.Inverted>
                       </div>
                     ))}
                   </div>

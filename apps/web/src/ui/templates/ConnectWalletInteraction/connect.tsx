@@ -3,7 +3,12 @@
 import { useExtensionAccounts, useExtensions } from "@polkadex/react-providers";
 import { useCallback, useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
-import { Authorization, ConnectWallet, Multistep, Wallets } from "@polkadex/ux";
+import {
+  Authorization,
+  ConnectWallet,
+  Multistep,
+  ExtensionAccounts,
+} from "@polkadex/ux";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
@@ -12,7 +17,7 @@ import { ConnectTradingAccountCard } from "../ReadyToUse/connectTradingAccountCa
 
 import { SwitchKeys } from ".";
 
-import { useConnectWallet } from "@/hooks";
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export type ConnectKeys =
   | "ConnectAuthorization"
@@ -44,7 +49,7 @@ export const Connect = ({
     mainProxiesAccounts,
     mainProxiesLoading,
     mainProxiesSuccess,
-  } = useConnectWallet();
+  } = useConnectWalletProvider();
 
   const sourceId = selectedExtension?.id;
   const hasAccount = useMemo(
@@ -98,12 +103,12 @@ export const Connect = ({
               onActionCallback={() => props?.onPage("ConnectFundingWallets")}
               onClose={props?.onReset}
             />
-            <Wallets
+            <ExtensionAccounts
               key="ConnectFundingWallets"
-              wallets={walletsFiltered}
+              extensionAccounts={walletsFiltered}
               loading={!!mainProxiesLoading}
               success={!!mainProxiesSuccess}
-              onSelectWallet={(e) => onSelectWallet?.(e)}
+              onSelectExtensionAccount={(e) => onSelectWallet?.(e)}
               onTryAgain={() =>
                 selectedExtension && onSelectExtension?.(selectedExtension)
               }
