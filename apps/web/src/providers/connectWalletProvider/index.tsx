@@ -126,11 +126,7 @@ export const ConnectWalletProvider = ({
     mutateAsync: onRegisterTradeAccount,
     status: registerStatus,
   } = useAddProxyAccount({
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     onError,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     onSuccess,
     onSetTempMnemonic,
   });
@@ -140,11 +136,7 @@ export const ConnectWalletProvider = ({
     mutateAsync: onRemoveTradingAccountFromChain,
     status: removingStatus,
   } = useRemoveProxyAccount({
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     onError,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     onSuccess,
   });
 
@@ -172,8 +164,6 @@ export const ConnectWalletProvider = ({
     mutateAsync: onImportFromFile,
     status: importFromFileStatus,
   } = useImportProxyAccount({
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     onSuccess,
   });
 

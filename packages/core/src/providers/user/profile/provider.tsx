@@ -62,7 +62,6 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         await new Promise((resolve) => setTimeout(resolve, 8000));
       }
     }
-    debugger;
   };
 
   const onUserSelectMainAddress = async ({ mainAddress: string }) => {
