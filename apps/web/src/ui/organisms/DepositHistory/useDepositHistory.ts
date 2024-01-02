@@ -10,7 +10,7 @@ import { useTransactions } from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { getFundingAccountDetail } from "@orderbook/core/helpers";
 import { useExtensionAccounts } from "@polkadex/react-providers";
-import { useMemo, useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
 import { SortingState } from "@tanstack/react-table";
 import { useTranslation } from "next-i18next";
 import { intlFormat } from "date-fns";
@@ -29,6 +29,7 @@ export function useDepositHistory({
 
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [search, setSearch] = useState("");
 
   const { selectedAddresses } = useProfile();
   const { extensionAccounts } = useExtensionAccounts();
@@ -44,11 +45,17 @@ export function useDepositHistory({
     () =>
       deposits
         ?.filter((e) => {
-          if (showSelectedCoins) {
-            const assetName = e.asset.name;
-            return assetName === selectedAsset?.name;
+          const isMatch =
+            e.asset.name.toLowerCase().includes(search) ||
+            e.asset.ticker.toLowerCase().includes(search);
+          if (isMatch) {
+            if (showSelectedCoins) {
+              const assetName = e.asset.name;
+              return assetName === selectedAsset?.name;
+            }
+            return e;
           }
-          return e;
+          return null;
         })
         ?.map((e) => {
           return {
@@ -84,6 +91,7 @@ export function useDepositHistory({
       showSelectedCoins,
       t,
       mainAddress,
+      search,
     ]
   );
 
@@ -102,6 +110,8 @@ export function useDepositHistory({
   return {
     showSelectedCoins,
     onShowSelectedCoins: () => setShowSelectedCoins(!showSelectedCoins),
+    onSetSearch: (e: ChangeEvent<HTMLInputElement>) =>
+      setSearch(e.target.value.toLowerCase()),
     sorting,
     setSorting,
     columns,
