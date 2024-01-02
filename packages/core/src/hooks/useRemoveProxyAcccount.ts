@@ -1,10 +1,7 @@
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useUserAccounts } from "@polkadex/react-providers";
-import {
-  UserAddressTuple,
-  useProfile,
-} from "@orderbook/core/providers/user/profile";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   removeFromStorage,
@@ -40,17 +37,12 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
         onUserLogout();
         removeFromStorage(ACTIVE_ACCOUNT_KEY);
       }
-
       wallet.remove(proxy);
-      props?.onSuccess?.("Trading account removed from blockchain");
-
       appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
         queryClient.setQueryData(
-          QUERY_KEYS.proxyAccounts(),
-          (proxies: UserAddressTuple[]) => {
-            return proxies?.filter(
-              ({ tradeAddress }) => tradeAddress !== proxy
-            );
+          QUERY_KEYS.singleProxyAccounts(main),
+          (proxies: string[]) => {
+            return proxies?.filter((value) => value !== proxy);
           }
         );
       });
@@ -59,6 +51,8 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
       props?.onError?.(error as Error);
       console.log(error);
     },
+    onSuccess: () =>
+      props?.onSuccess?.("Trading account removed from blockchain"),
   });
 
   return {
