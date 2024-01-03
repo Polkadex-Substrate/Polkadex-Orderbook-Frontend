@@ -44,6 +44,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       return;
     }
     const maxAttempts = 5;
+    // TODO: Temp solution, backend issue
     let attempt = 0;
     while (attempt < maxAttempts) {
       try {

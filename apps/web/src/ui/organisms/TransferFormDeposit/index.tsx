@@ -30,7 +30,7 @@ export const TransferFormDeposit = ({
   onTransferInteraction,
   onOpenAssets,
   selectedAsset,
-  hasUser,
+  fundWalletPresent,
 }: T.Props) => {
   const { t } = useTranslation("transfer");
 
@@ -39,7 +39,6 @@ export const TransferFormDeposit = ({
   const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
   const { onToogleConnectWallet } = useSettingsProvider();
-
   const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
@@ -70,10 +69,9 @@ export const TransferFormDeposit = ({
     // TODO: Handle Error...
   };
 
-  const fundingWalletName = fundingWallet?.name ?? "";
   const fundingWalletAddress = useMemo(
-    () => transformAddress(fundingWallet?.address ?? ""),
-    [fundingWallet?.address]
+    () => transformAddress((mainAddress || fundingWallet?.address) ?? ""),
+    [mainAddress, fundingWallet?.address]
   );
 
   const {
@@ -119,7 +117,7 @@ export const TransferFormDeposit = ({
     },
   });
 
-  const buttonMessage = hasUser ? "transferButton" : "userButton";
+  const buttonMessage = fundWalletPresent ? "transferButton" : "userButton";
 
   return (
     <Loading
@@ -134,9 +132,9 @@ export const TransferFormDeposit = ({
           <WalletCard
             label={t("from")}
             walletType={t("funding.type")}
-            walletName={fundingWalletName}
+            walletName={fundingWallet?.name ?? "Wallet not present"}
             walletAddress={fundingWalletAddress}
-            hasUser={hasUser}
+            hasUser={fundWalletPresent}
           />
           <S.WalletsButton type="button" onClick={onTransferInteraction}>
             <div>
@@ -148,7 +146,7 @@ export const TransferFormDeposit = ({
             label={t("to")}
             walletType={t("trading.type")}
             walletName={t("trading.message")}
-            hasUser={hasUser}
+            hasUser
           />
         </S.Wallets>
         <S.Form>
@@ -181,20 +179,28 @@ export const TransferFormDeposit = ({
                 ref={amountRef}
                 autoComplete="off"
                 placeholder={t("amountPlaceholder")}
-                disabled={!hasUser}
+                disabled={!fundWalletPresent}
                 {...getFieldProps("amount")}
               />
             </div>
-            <button type="button" onClick={handleMax}>
+            <button
+              disabled={!fundWalletPresent}
+              type="button"
+              onClick={handleMax}
+            >
               {t("maxButton")}
             </button>
           </S.Amount>
         </S.Form>
-        <S.Footer hasUser={hasUser}>
+        <S.Footer hasUser={fundWalletPresent}>
           <button
-            type={hasUser ? "submit" : "button"}
-            disabled={hasUser ? !(isValid && dirty) || loading : false}
-            onClick={hasUser ? undefined : () => onToogleConnectWallet()}
+            type={fundWalletPresent ? "submit" : "button"}
+            disabled={
+              fundWalletPresent ? !(isValid && dirty) || loading : false
+            }
+            onClick={
+              fundWalletPresent ? undefined : () => onToogleConnectWallet()
+            }
           >
             {t(buttonMessage)}
           </button>

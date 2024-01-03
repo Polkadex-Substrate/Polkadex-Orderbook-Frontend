@@ -35,40 +35,38 @@ export const WalletCard = ({
       </S.Header>
       {hasUser && (
         <S.Footer>
-          <Skeleton
-            height="4px"
-            width={normalizeValue(5)}
-            loading={!walletName}
-          >
-            {walletAddress && (
-              <>
-                <S.Icon>
-                  <Icons.Wallet />
-                </S.Icon>
-                <Skeleton
-                  height="4px"
-                  width={normalizeValue(5)}
-                  loading={!walletAddress}
-                >
-                  {searchable ? (
-                    <span>{walletAddress}</span>
-                  ) : (
-                    <p>
-                      {walletName} <span>• {walletAddress}</span>
-                    </p>
-                  )}
-                </Skeleton>
-              </>
-            )}
-            {!searchable && !walletAddress && (
-              <S.Message>
-                <div>
-                  <Icons.InformationAlert />
-                </div>
-                <p>{walletName}</p>
-              </S.Message>
-            )}
-          </Skeleton>
+          {walletAddress && (
+            <>
+              <S.Icon>
+                <Icons.Wallet />
+              </S.Icon>
+              <Skeleton
+                height="4px"
+                width={normalizeValue(5)}
+                loading={!walletAddress}
+              >
+                {searchable ? (
+                  <span>{walletAddress}</span>
+                ) : (
+                  <p>
+                    {walletName}
+                    <span>
+                      {walletName && " • "}
+                      {walletAddress}
+                    </span>
+                  </p>
+                )}
+              </Skeleton>
+            </>
+          )}
+          {!searchable && !walletAddress && walletName && (
+            <S.Message>
+              <div>
+                <Icons.InformationAlert />
+              </div>
+              <p>{walletName}</p>
+            </S.Message>
+          )}{" "}
         </S.Footer>
       )}
     </S.Wrapper>

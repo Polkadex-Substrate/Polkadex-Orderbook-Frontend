@@ -35,12 +35,14 @@ export const TransferFormWithdraw = ({
   onOpenAssets,
   selectedAsset,
   hasUser,
+  fundWalletPresent,
 }: {
   isDeposit?: boolean;
   onTransferInteraction: () => void;
   onOpenAssets: (callback?: () => void) => void;
   selectedAsset?: FilteredAssetProps;
   hasUser: boolean;
+  fundWalletPresent: boolean;
 }) => {
   const { t } = useTranslation("transfer");
 
@@ -54,7 +56,6 @@ export const TransferFormWithdraw = ({
   const { onToogleConnectWallet } = useSettingsProvider();
 
   const { tradeAddress, mainAddress } = selectedAddresses;
-
   const tradingWallet = useMemo(
     () => (isReady && tradeAddress ? wallet.getPair(tradeAddress) : undefined),
     [tradeAddress, wallet, isReady]
@@ -64,9 +65,12 @@ export const TransferFormWithdraw = ({
     () => getFundingAccountDetail(mainAddress, allAccounts),
     [allAccounts, mainAddress]
   );
+  const fundingWalletAddress = useMemo(
+    () => transformAddress((mainAddress || fundingWallet?.address) ?? ""),
+    [mainAddress, fundingWallet?.address]
+  );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
-
   const handleMax = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
     const availableAmount = Number(selectedAsset?.free_balance);
@@ -112,9 +116,8 @@ export const TransferFormWithdraw = ({
 
   const formRef = useRef<HTMLFormElement | null>(null);
   useTryUnlockTradeAccount(selectedTradingAccount);
-
-  const buttonMessage = hasUser ? "transferButton" : "userButton";
-
+  const hasSelectedUser = hasUser || fundWalletPresent;
+  const buttonMessage = hasSelectedUser ? "transferButton" : "userButton";
   return (
     <>
       <UnlockModal
@@ -139,7 +142,7 @@ export const TransferFormWithdraw = ({
             <WalletCard
               label={t("from")}
               walletType={t("trading.type")}
-              walletName={tradingWallet?.meta.name ?? ""}
+              walletName={tradingWallet?.meta.name ?? "Account"}
               walletAddress={transformAddress(tradingWallet?.address ?? "")}
               hasUser={hasUser}
             />
@@ -152,9 +155,9 @@ export const TransferFormWithdraw = ({
             <WalletCard
               label={t("to")}
               walletType={t("funding.type")}
-              walletName={fundingWallet?.name ?? ""}
-              walletAddress={transformAddress(fundingWallet?.address ?? "")}
-              hasUser={hasUser}
+              walletName={fundingWallet?.name ?? "Wallet not present"}
+              walletAddress={fundingWalletAddress}
+              hasUser={fundWalletPresent}
             />
           </S.Wallets>
           <S.Form>
@@ -198,9 +201,13 @@ export const TransferFormWithdraw = ({
           </S.Form>
           <S.Footer>
             <button
-              type={hasUser ? "submit" : "button"}
-              disabled={hasUser ? !(isValid && dirty) || loading : false}
-              onClick={hasUser ? undefined : () => onToogleConnectWallet()}
+              type={hasSelectedUser ? "submit" : "button"}
+              disabled={
+                hasSelectedUser ? !(isValid && dirty) || loading : false
+              }
+              onClick={
+                hasSelectedUser ? undefined : () => onToogleConnectWallet()
+              }
             >
               {t(buttonMessage)}
             </button>

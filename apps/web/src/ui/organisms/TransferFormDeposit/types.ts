@@ -6,5 +6,5 @@ export type Props = {
   onTransferInteraction: () => void;
   onOpenAssets: (callback?: () => void) => void;
   selectedAsset?: FilteredAssetProps;
-  hasUser: boolean;
+  fundWalletPresent: boolean;
 };

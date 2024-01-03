@@ -12,11 +12,13 @@ export const CustomWithdraw = ({
   selectedAsset,
   onChangeType,
   hasUser,
+  fundWalletPresent,
 }: {
   onOpenAssets: () => void;
   selectedAsset?: FilteredAssetProps;
   onChangeType: () => void;
   hasUser: boolean;
+  fundWalletPresent: boolean;
 }) => {
   return (
     <S.Content>
@@ -27,11 +29,15 @@ export const CustomWithdraw = ({
             onOpenAssets={onOpenAssets}
             selectedAsset={selectedAsset}
             hasUser={hasUser}
+            fundWalletPresent={fundWalletPresent}
           />
         </S.Container>
       </S.Form>
       <S.History>
-        <WithdrawHistory selectedAsset={selectedAsset} hasUser={hasUser} />
+        <WithdrawHistory
+          selectedAsset={selectedAsset}
+          hasUser={hasUser || fundWalletPresent}
+        />
       </S.History>
     </S.Content>
   );

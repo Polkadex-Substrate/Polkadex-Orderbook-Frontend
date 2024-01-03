@@ -85,7 +85,7 @@ export const Profile = ({
           </div>
           {!fundWalletPresent && (
             <div className="flex flex-col gap-2">
-              <Button.Solid appearance="secondary">Connect Wallet</Button.Solid>
+              <Button.Solid appearance="tertiary">Connect Wallet</Button.Solid>
               <div className="flex items-center gap-2">
                 <InformationCircleIcon className="w-7 h-7 text-attention-base" />
                 <Typography.Paragraph variant="primary" size="xs">

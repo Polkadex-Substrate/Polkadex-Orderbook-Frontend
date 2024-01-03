@@ -176,6 +176,7 @@ export const ConnectWalletProvider = ({
     : undefined;
 
   // UPDATE-CORE
+  // TODO: Not updating after remove
   const localTradingAccounts = useMemo(
     () => (isReady ? wallet.getAll() : []),
     [isReady, wallet]

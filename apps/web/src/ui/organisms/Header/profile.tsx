@@ -9,6 +9,8 @@ import {
 } from "@polkadex/ux";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { useProfile } from "@orderbook/core/providers/user/profile";
+import { ExtensionAccount } from "@polkadex/react-providers";
 
 import { Profile as ProfileDropdown } from "../../templates/ConnectWallet/profile";
 
@@ -52,6 +54,8 @@ export const Profile = ({
     onExportTradeAccount,
   } = useConnectWalletProvider();
 
+  const { selectedAddresses } = useProfile();
+  const { mainAddress } = selectedAddresses;
   const shortAddress = useMemo(
     () => truncateString(selectedAccount?.address ?? "", 3),
     [selectedAccount?.address]
@@ -64,6 +68,16 @@ export const Profile = ({
   const fundWalletPresent = useMemo(
     () => !!Object.keys(selectedWallet ?? {})?.length,
     [selectedWallet]
+  );
+
+  const selectedFundingWallet = useMemo(
+    () =>
+      selectedWallet ||
+      ({
+        name: "Wallet not present",
+        address: mainAddress,
+      } as ExtensionAccount),
+    [selectedWallet, mainAddress]
   );
 
   if (tradingWalletPresent || fundWalletPresent)
@@ -126,8 +140,8 @@ export const Profile = ({
                       props?.onPage("RemoveTradingAccount", true);
                     }}
                     tradingWalletPresent={!!selectedAccount?.address}
-                    fundWalletPresent={!!selectedWallet?.name}
-                    fundWallet={selectedWallet}
+                    fundWalletPresent={fundWalletPresent}
+                    fundWallet={selectedFundingWallet}
                     tradeAccount={selectedAccount}
                     localTradingAccounts={localTradingAccounts}
                   />
