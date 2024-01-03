@@ -9,6 +9,8 @@ import {
   OrderbookServiceProvider,
   SubscriptionProvider,
 } from "@orderbook/core/providers";
+
+import { ConnectWalletProvider } from "@/providers/connectWalletProvider";
 export const DynamicProviders = ({ children }) => {
   return (
     <ExtensionsProvider>
@@ -21,7 +23,9 @@ export const DynamicProviders = ({ children }) => {
           <ProfileProvider>
             <NativeApiProvider>
               <OrderbookServiceProvider>
-                <SubscriptionProvider>{children}</SubscriptionProvider>
+                <SubscriptionProvider>
+                  <ConnectWalletProvider>{children}</ConnectWalletProvider>
+                </SubscriptionProvider>
               </OrderbookServiceProvider>
             </NativeApiProvider>
           </ProfileProvider>

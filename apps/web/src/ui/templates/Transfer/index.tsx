@@ -10,8 +10,6 @@ import {
 import { Footer, Switch } from "@polkadex/orderbook-ui/molecules";
 import { useTranslation } from "next-i18next";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { Dispatch, SetStateAction } from "react";
 
 import { ConnectWalletInteraction } from "../ConnectWalletInteraction";
 
@@ -36,7 +34,6 @@ export const TransferTemplate = () => {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
-  const { connectWallet, onToogleConnectWallet } = useSettingsProvider();
   const userExists = Boolean(tradeAddress?.length > 0);
 
   const customComponent = {
@@ -74,10 +71,7 @@ export const TransferTemplate = () => {
 
   return (
     <>
-      <ConnectWalletInteraction
-        open={!!connectWallet}
-        onChange={onToogleConnectWallet as Dispatch<SetStateAction<boolean>>}
-      />
+      <ConnectWalletInteraction />
       <AssetsInteraction
         open={assetsInteraction}
         selectedAssetId={selectedAsset?.id}

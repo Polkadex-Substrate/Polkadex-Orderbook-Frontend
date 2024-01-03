@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction } from "react";
 import { Modal, Multistep } from "@polkadex/ux";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { Connect } from "./connect";
 import { ConnectNewUser } from "./connectNewUser";
@@ -12,17 +12,12 @@ export type SwitchKeys =
   | "TradingAccountSuccessfull"
   | "ExistingUser";
 
-export const ConnectWalletInteraction = ({
-  open,
-  onChange,
-}: {
-  open: boolean;
-  onChange: Dispatch<SetStateAction<boolean>>;
-}) => {
-  const onClose = () => onChange(false);
+export const ConnectWalletInteraction = () => {
+  const { connectWallet, onToogleConnectWallet } = useSettingsProvider();
+  const onClose = () => onToogleConnectWallet(false);
 
   return (
-    <Modal open={open} onOpenChange={onChange}>
+    <Modal open={!!connectWallet} onOpenChange={onToogleConnectWallet}>
       <Modal.Content>
         <Multistep.Switch>
           {(swithProps) => (
