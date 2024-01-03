@@ -27,6 +27,7 @@ import { KlineProvider } from "@orderbook/core/providers/public/klineProvider";
 import { defaultConfig } from "@orderbook/core/config";
 import { useMarkets, useTickers } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { ShutdownInteraction } from "../ShutdownInteraction";
 
@@ -57,6 +58,8 @@ export function Trading() {
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
   const { list } = useMarkets();
+  const { onToogleConnectWallet } = useSettingsProvider();
+
   const market = getCurrentMarket(list, query?.id as string);
   const id = market?.id;
 
@@ -176,7 +179,11 @@ export function Trading() {
                             <Transactions market={id} />
                           </SessionProvider>
                         ) : (
-                          <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                          <EmptyMyAccount
+                            buttonAction={onToogleConnectWallet}
+                            hasLimit
+                            {...hasSelectedAccount}
+                          />
                         )}
                       </S.GraphEpmty>
                       <S.WrapperRight>
