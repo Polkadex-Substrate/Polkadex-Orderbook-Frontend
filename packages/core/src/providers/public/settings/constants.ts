@@ -25,3 +25,4 @@ export const NOTIFICATION_MARK_AS_READ =
 
 export const CHECK_HAS_EXTENSION = "Settings Provider/CHECK_HAS_EXTENSION";
 export const APP_NAME = "Polkadex Orderbook";
+export const TOOGLE_CONNECT_WALLET = "Settings Provider/TOOGLE_CONNECT_WALLET";

@@ -13,6 +13,12 @@ export interface ToggleOpenOrdersPairsSwitcher {
   type: string;
   payload: boolean;
 }
+
+export interface ToogleConnectWallet {
+  type: string;
+  payload?: boolean;
+}
+
 export interface ChangeThemeSettings {
   type: typeof C.SETTINGS_CHANGE_THEME;
   payload: T.SettingState["theme"];
@@ -61,7 +67,8 @@ export type SettingActions =
   | NotificationDeleteAll
   | NotificationDeleteById
   | NotificationMarkAsRead
-  | CheckHasExtension;
+  | CheckHasExtension
+  | ToogleConnectWallet;
 
 export const toggleChartRebuild = (): ToggleChartRebuildAction => ({
   type: C.TOGGLE_CHART_REBUILD,
@@ -72,35 +79,42 @@ export const toggleMarketSelector = (): ToggleMarketSelectorAction => ({
 });
 
 export const toggleOpenOrdersPairsSwitcher = (
-  payload: boolean,
+  payload: boolean
 ): ToggleOpenOrdersPairsSwitcher => ({
   type: C.TOGGLE_ORDERS_PAIRS_SWITCHER,
   payload,
 });
 
+export const toogleConnectWallet = (
+  payload: ToogleConnectWallet["payload"]
+): ToogleConnectWallet => ({
+  type: C.TOOGLE_CONNECT_WALLET,
+  payload,
+});
+
 export const onChangeThemeSettings = (
-  payload: ChangeThemeSettings["payload"],
+  payload: ChangeThemeSettings["payload"]
 ): ChangeThemeSettings => ({
   type: C.SETTINGS_CHANGE_THEME,
   payload,
 });
 
 export const onChangeLanguageSettings = (
-  payload: ChangeLanguageSettings["payload"],
+  payload: ChangeLanguageSettings["payload"]
 ): ChangeLanguageSettings => ({
   type: C.SETTINGS_CHANGE_LANGUAGE,
   payload,
 });
 
 export const onChangeCurrencySettings = (
-  payload: ChangeCurrencySettings["payload"],
+  payload: ChangeCurrencySettings["payload"]
 ): ChangeCurrencySettings => ({
   type: C.SETTINGS_CHANGE_CURRENCY,
   payload,
 });
 
 export const notificationPush = (
-  payload: NotificationPush["payload"],
+  payload: NotificationPush["payload"]
 ): NotificationPush => ({
   type: C.NOTIFICATION_PUSH,
   payload,
@@ -111,14 +125,14 @@ export const notificationDeleteAll = (): NotificationDeleteAll => ({
 });
 
 export const notificationDeleteById = (
-  payload: NotificationDeleteById["payload"],
+  payload: NotificationDeleteById["payload"]
 ): NotificationDeleteById => ({
   type: C.NOTIFICATION_DELETE_BY_ID,
   payload,
 });
 
 export const notificationMarkAsRead = (
-  payload: NotificationMarkAsRead["payload"],
+  payload: NotificationMarkAsRead["payload"]
 ): NotificationMarkAsRead => ({
   type: C.NOTIFICATION_MARK_AS_READ,
   payload,

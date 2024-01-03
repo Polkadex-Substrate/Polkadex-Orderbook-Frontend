@@ -14,6 +14,9 @@ export const SettingProvider: T.SettingComponent = ({
   // Actions
 
   // Global Setting Actions
+  const onToogleConnectWallet = (payload?: boolean) =>
+    dispatch(A.toogleConnectWallet(payload));
+
   const onToggleChartRebuild = useCallback(() => {
     dispatch(A.toggleChartRebuild());
   }, []);
@@ -91,6 +94,7 @@ export const SettingProvider: T.SettingComponent = ({
         onHandleError: defaultToast.onError,
         onHandleAlert: defaultToast.onSuccess,
         onHandleNotification,
+        onToogleConnectWallet,
       }}
     >
       {children}

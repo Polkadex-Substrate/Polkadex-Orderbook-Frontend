@@ -10,6 +10,7 @@ import {
 } from "@orderbook/core/helpers";
 import { useTranslation } from "next-i18next";
 import { useExtensionAccounts } from "@polkadex/react-providers";
+import { GenericMessage } from "@polkadex/ux";
 
 import * as S from "./styles";
 import { PendingTable } from "./pendingTable";
@@ -22,8 +23,10 @@ import { FilteredAssetProps } from "@/ui/templates/Transfer/types";
 
 export const WithdrawHistory = ({
   selectedAsset,
+  hasUser,
 }: {
   selectedAsset?: FilteredAssetProps;
+  hasUser: boolean;
 }) => {
   const { t } = useTranslation("transfer");
 
@@ -165,67 +168,78 @@ export const WithdrawHistory = ({
 
   return (
     <S.Wrapper>
-      <S.Header>
-        <h3>{t("historyTitle")}</h3>
-      </S.Header>
-      <Tab.Group>
-        <S.Container>
-          <S.Title>
-            <S.TabList>
-              <S.TabItemPending>
-                {pendingWithdraws?.length > 0 && (
-                  <div>{pendingWithdraws.length}</div>
-                )}
-                {t("tabs.pending")}
-              </S.TabItemPending>
-              <S.TabItemPending>
-                {pendingClaims > 0 && <div>{pendingClaims}</div>}
-                {t("tabs.readyToClaim")}
-              </S.TabItemPending>
-              <S.TabItem>{t("tabs.claimed")}</S.TabItem>
-            </S.TabList>
-            <S.TitleWrapper>
-              <Search isFull placeholder={t("searchPlaceholder")} />
-              <CheckboxCustom
-                checked={showSelectedCoins}
-                onChange={() => setShowSelectedCoins(!showSelectedCoins)}
-                labelProps={{ style: { whiteSpace: "nowrap" } }}
-              >
-                {t("historyFilterByToken")}
-              </CheckboxCustom>
-            </S.TitleWrapper>
-          </S.Title>
-          <Tab.Panels className="flex-1">
-            <Tab.Panel className="flex-1">
-              <S.Table>
-                <PendingTable
-                  data={pendingWithdraws}
-                  loading={loading}
-                  hasData={!!pendingWithdraws?.length}
-                />
-              </S.Table>
-            </Tab.Panel>
-            <Tab.Panel className="flex-1">
-              <S.Table>
-                <ReadyToClaimTable
-                  data={readyToClaim}
-                  loading={loading}
-                  hasData={!!readyToClaim?.length}
-                />
-              </S.Table>
-            </Tab.Panel>
-            <Tab.Panel className="flex-1">
-              <S.Table>
-                <ClaimedTable
-                  data={claimedWithdraws}
-                  loading={loading}
-                  hasData={!!claimedWithdraws?.length}
-                />
-              </S.Table>
-            </Tab.Panel>
-          </Tab.Panels>
-        </S.Container>
-      </Tab.Group>
+      {hasUser ? (
+        <>
+          <S.Header>
+            <h3>{t("historyTitle")}</h3>
+          </S.Header>
+          <Tab.Group>
+            <S.Container>
+              <S.Title>
+                <S.TabList>
+                  <S.TabItemPending>
+                    {pendingWithdraws?.length > 0 && (
+                      <div>{pendingWithdraws.length}</div>
+                    )}
+                    {t("tabs.pending")}
+                  </S.TabItemPending>
+                  <S.TabItemPending>
+                    {pendingClaims > 0 && <div>{pendingClaims}</div>}
+                    {t("tabs.readyToClaim")}
+                  </S.TabItemPending>
+                  <S.TabItem>{t("tabs.claimed")}</S.TabItem>
+                </S.TabList>
+                <S.TitleWrapper>
+                  <Search isFull placeholder={t("searchPlaceholder")} />
+                  <CheckboxCustom
+                    checked={showSelectedCoins}
+                    onChange={() => setShowSelectedCoins(!showSelectedCoins)}
+                    labelProps={{ style: { whiteSpace: "nowrap" } }}
+                  >
+                    {t("historyFilterByToken")}
+                  </CheckboxCustom>
+                </S.TitleWrapper>
+              </S.Title>
+              <Tab.Panels className="flex-1">
+                <Tab.Panel className="flex-1">
+                  <S.Table>
+                    <PendingTable
+                      data={pendingWithdraws}
+                      loading={loading}
+                      hasData={!!pendingWithdraws?.length}
+                    />
+                  </S.Table>
+                </Tab.Panel>
+                <Tab.Panel className="flex-1">
+                  <S.Table>
+                    <ReadyToClaimTable
+                      data={readyToClaim}
+                      loading={loading}
+                      hasData={!!readyToClaim?.length}
+                    />
+                  </S.Table>
+                </Tab.Panel>
+                <Tab.Panel className="flex-1">
+                  <S.Table>
+                    <ClaimedTable
+                      data={claimedWithdraws}
+                      loading={loading}
+                      hasData={!!claimedWithdraws?.length}
+                    />
+                  </S.Table>
+                </Tab.Panel>
+              </Tab.Panels>
+            </S.Container>
+          </Tab.Group>
+        </>
+      ) : (
+        <GenericMessage
+          title="No transactions found"
+          illustration="NoData"
+          className="bg-level-2"
+          imageProps={{ className: "w-12 mx-auto" }}
+        />
+      )}
     </S.Wrapper>
   );
 };

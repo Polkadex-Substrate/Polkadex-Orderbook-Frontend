@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { Profile } from "./profile";
 
@@ -9,13 +10,15 @@ const ConnectWallet = ({
 }: {
   showFundingWallet?: boolean;
 }) => {
-  const [state, setState] = useState(false);
-
+  const { connectWallet, onToogleConnectWallet } = useSettingsProvider();
   return (
     <>
-      <ConnectWalletInteraction open={state} onChange={setState} />
+      <ConnectWalletInteraction
+        open={!!connectWallet}
+        onChange={onToogleConnectWallet as Dispatch<SetStateAction<boolean>>}
+      />
       <Profile
-        onClick={() => setState(!state)}
+        onClick={() => onToogleConnectWallet(!connectWallet)}
         showFundingWallet={showFundingWallet}
       />
     </>

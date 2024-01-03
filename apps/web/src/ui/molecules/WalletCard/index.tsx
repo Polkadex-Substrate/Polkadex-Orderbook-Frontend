@@ -14,12 +14,14 @@ export const WalletCard = ({
   walletAddress,
   searchable,
   children,
+  hasUser,
 }: PropsWithChildren<{
   label: string;
   walletType: string;
   walletName: string;
   searchable?: boolean;
   walletAddress?: string;
+  hasUser?: boolean;
 }>) => {
   return (
     <S.Wrapper>
@@ -31,38 +33,44 @@ export const WalletCard = ({
           <S.Paragraph>{walletType}</S.Paragraph>
         )}
       </S.Header>
-      <S.Footer>
-        <Skeleton height="4px" width={normalizeValue(5)} loading={!walletName}>
-          {walletAddress && (
-            <>
-              <S.Icon>
-                <Icons.Wallet />
-              </S.Icon>
-              <Skeleton
-                height="4px"
-                width={normalizeValue(5)}
-                loading={!walletAddress}
-              >
-                {searchable ? (
-                  <span>{walletAddress}</span>
-                ) : (
-                  <p>
-                    {walletName} <span>• {walletAddress}</span>
-                  </p>
-                )}
-              </Skeleton>
-            </>
-          )}
-          {!searchable && !walletAddress && (
-            <S.Message>
-              <div>
-                <Icons.InformationAlert />
-              </div>
-              <p>{walletName}</p>
-            </S.Message>
-          )}
-        </Skeleton>
-      </S.Footer>
+      {hasUser && (
+        <S.Footer>
+          <Skeleton
+            height="4px"
+            width={normalizeValue(5)}
+            loading={!walletName}
+          >
+            {walletAddress && (
+              <>
+                <S.Icon>
+                  <Icons.Wallet />
+                </S.Icon>
+                <Skeleton
+                  height="4px"
+                  width={normalizeValue(5)}
+                  loading={!walletAddress}
+                >
+                  {searchable ? (
+                    <span>{walletAddress}</span>
+                  ) : (
+                    <p>
+                      {walletName} <span>• {walletAddress}</span>
+                    </p>
+                  )}
+                </Skeleton>
+              </>
+            )}
+            {!searchable && !walletAddress && (
+              <S.Message>
+                <div>
+                  <Icons.InformationAlert />
+                </div>
+                <p>{walletName}</p>
+              </S.Message>
+            )}
+          </Skeleton>
+        </S.Footer>
+      )}
     </S.Wrapper>
   );
 };

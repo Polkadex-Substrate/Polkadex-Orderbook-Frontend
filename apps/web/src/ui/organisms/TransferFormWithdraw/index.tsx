@@ -17,6 +17,7 @@ import {
   useExtensionAccounts,
   useUserAccounts,
 } from "@polkadex/react-providers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { UnlockModal } from "../UnlockModal";
 
@@ -33,27 +34,30 @@ export const TransferFormWithdraw = ({
   onTransferInteraction,
   onOpenAssets,
   selectedAsset,
+  hasUser,
 }: {
   isDeposit?: boolean;
   onTransferInteraction: () => void;
   onOpenAssets: (callback?: () => void) => void;
   selectedAsset?: FilteredAssetProps;
+  hasUser: boolean;
 }) => {
   const { t } = useTranslation("transfer");
 
   const [showPassword, setShowPassword] = useState(false);
 
   const { extensionAccounts: allAccounts } = useExtensionAccounts();
-  const { wallet } = useUserAccounts();
+  const { wallet, isReady } = useUserAccounts();
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
   const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
+  const { onToogleConnectWallet } = useSettingsProvider();
 
   const { tradeAddress, mainAddress } = selectedAddresses;
 
   const tradingWallet = useMemo(
-    () => wallet.getPair(tradeAddress),
-    [tradeAddress, wallet]
+    () => (isReady && tradeAddress ? wallet.getPair(tradeAddress) : undefined),
+    [tradeAddress, wallet, isReady]
   );
 
   const fundingWallet = useMemo(
@@ -71,8 +75,8 @@ export const TransferFormWithdraw = ({
   };
 
   const selectedTradingAccount = useMemo(
-    () => wallet.getPair(selectedAddresses?.tradeAddress),
-    [selectedAddresses?.tradeAddress, wallet]
+    () => (isReady && tradeAddress ? wallet.getPair(tradeAddress) : undefined),
+    [tradeAddress, wallet, isReady]
   );
 
   const {
@@ -109,6 +113,8 @@ export const TransferFormWithdraw = ({
   const formRef = useRef<HTMLFormElement | null>(null);
   useTryUnlockTradeAccount(selectedTradingAccount);
 
+  const buttonMessage = hasUser ? "transferButton" : "userButton";
+
   return (
     <>
       <UnlockModal
@@ -135,6 +141,7 @@ export const TransferFormWithdraw = ({
               walletType={t("trading.type")}
               walletName={tradingWallet?.meta.name ?? ""}
               walletAddress={transformAddress(tradingWallet?.address ?? "")}
+              hasUser={hasUser}
             />
             <S.WalletsButton type="button" onClick={onTransferInteraction}>
               <div>
@@ -147,6 +154,7 @@ export const TransferFormWithdraw = ({
               walletType={t("funding.type")}
               walletName={fundingWallet?.name ?? ""}
               walletAddress={transformAddress(fundingWallet?.address ?? "")}
+              hasUser={hasUser}
             />
           </S.Wallets>
           <S.Form>
@@ -179,6 +187,7 @@ export const TransferFormWithdraw = ({
                   ref={amountRef}
                   placeholder={t("amountPlaceholder")}
                   autoComplete="off"
+                  disabled={!hasUser}
                   {...getFieldProps("amount")}
                 />
               </div>
@@ -188,8 +197,12 @@ export const TransferFormWithdraw = ({
             </S.Amount>
           </S.Form>
           <S.Footer>
-            <button disabled={!(isValid && dirty) || loading} type="submit">
-              {t("transferButton")}
+            <button
+              type={hasUser ? "submit" : "button"}
+              disabled={hasUser ? !(isValid && dirty) || loading : false}
+              onClick={hasUser ? undefined : () => onToogleConnectWallet()}
+            >
+              {t(buttonMessage)}
             </button>
           </S.Footer>
         </S.Content>

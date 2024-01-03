@@ -15,6 +15,7 @@ import { useDepositProvider } from "@orderbook/core/providers/user/depositProvid
 import { useTranslation } from "next-i18next";
 import { useFunds } from "@orderbook/core/index";
 import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -29,6 +30,7 @@ export const TransferFormDeposit = ({
   onTransferInteraction,
   onOpenAssets,
   selectedAsset,
+  hasUser,
 }: T.Props) => {
   const { t } = useTranslation("transfer");
 
@@ -36,6 +38,7 @@ export const TransferFormDeposit = ({
   const { loading, onFetchDeposit } = useDepositProvider();
   const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
+  const { onToogleConnectWallet } = useSettingsProvider();
 
   const { mainAddress } = selectedAddresses;
 
@@ -116,6 +119,8 @@ export const TransferFormDeposit = ({
     },
   });
 
+  const buttonMessage = hasUser ? "transferButton" : "userButton";
+
   return (
     <Loading
       style={{ maxWidth: normalizeValue(100) }}
@@ -131,6 +136,7 @@ export const TransferFormDeposit = ({
             walletType={t("funding.type")}
             walletName={fundingWalletName}
             walletAddress={fundingWalletAddress}
+            hasUser={hasUser}
           />
           <S.WalletsButton type="button" onClick={onTransferInteraction}>
             <div>
@@ -142,6 +148,7 @@ export const TransferFormDeposit = ({
             label={t("to")}
             walletType={t("trading.type")}
             walletName={t("trading.message")}
+            hasUser={hasUser}
           />
         </S.Wallets>
         <S.Form>
@@ -174,6 +181,7 @@ export const TransferFormDeposit = ({
                 ref={amountRef}
                 autoComplete="off"
                 placeholder={t("amountPlaceholder")}
+                disabled={!hasUser}
                 {...getFieldProps("amount")}
               />
             </div>
@@ -182,9 +190,13 @@ export const TransferFormDeposit = ({
             </button>
           </S.Amount>
         </S.Form>
-        <S.Footer>
-          <button disabled={!(isValid && dirty) || loading} type="submit">
-            {t("transferButton")}
+        <S.Footer hasUser={hasUser}>
+          <button
+            type={hasUser ? "submit" : "button"}
+            disabled={hasUser ? !(isValid && dirty) || loading : false}
+            onClick={hasUser ? undefined : () => onToogleConnectWallet()}
+          >
+            {t(buttonMessage)}
           </button>
         </S.Footer>
       </S.Content>

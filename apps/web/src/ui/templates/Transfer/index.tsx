@@ -7,20 +7,19 @@ import {
   CustomWithdraw,
   CustomTransfer,
 } from "@polkadex/orderbook-ui/organisms";
-import {
-  EmptyMyAccount,
-  Footer,
-  Switch,
-} from "@polkadex/orderbook-ui/molecules";
+import { Footer, Switch } from "@polkadex/orderbook-ui/molecules";
 import { useTranslation } from "next-i18next";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { Dispatch, SetStateAction } from "react";
+
+import { ConnectWalletInteraction } from "../ConnectWalletInteraction";
 
 import * as S from "./styles";
 import { useTransfer } from "./useTransfer";
 
 export const TransferTemplate = () => {
   const { t } = useTranslation("transfer");
-  const { t: tc } = useTranslation("common");
 
   const {
     loading,
@@ -37,6 +36,8 @@ export const TransferTemplate = () => {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
+  const { connectWallet, onToogleConnectWallet } = useSettingsProvider();
+  const userExists = Boolean(tradeAddress?.length > 0);
 
   const customComponent = {
     deposit: (
@@ -46,6 +47,7 @@ export const TransferTemplate = () => {
         onChangeType={() =>
           onChangeType(type === "deposit" ? "withdraw" : "deposit")
         }
+        hasUser={userExists}
       />
     ),
     withdraw: (
@@ -55,6 +57,7 @@ export const TransferTemplate = () => {
         onChangeType={() =>
           onChangeType(type === "withdraw" ? "deposit" : "withdraw")
         }
+        hasUser={userExists}
       />
     ),
     transfer: (
@@ -69,15 +72,12 @@ export const TransferTemplate = () => {
 
   const RenderComponent = customComponent[type];
 
-  const hasSelectedAccount = {
-    image: "emptyWallet",
-    title: tc("connectTradingAccount.title"),
-  };
-
-  const userExists = Boolean(tradeAddress?.length > 0);
-
   return (
     <>
+      <ConnectWalletInteraction
+        open={!!connectWallet}
+        onChange={onToogleConnectWallet as Dispatch<SetStateAction<boolean>>}
+      />
       <AssetsInteraction
         open={assetsInteraction}
         selectedAssetId={selectedAsset?.id}
@@ -110,11 +110,7 @@ export const TransferTemplate = () => {
                   <span>{t("switcher")}</span>
                 </S.Title>
               </S.Header>
-              {userExists ? (
-                RenderComponent
-              ) : (
-                <EmptyMyAccount balances hasLimit {...hasSelectedAccount} />
-              )}
+              {RenderComponent}
             </S.ContainerMain>
             <Footer />
           </S.Wrapper>
