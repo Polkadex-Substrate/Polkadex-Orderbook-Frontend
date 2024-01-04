@@ -19,7 +19,8 @@ export interface SettingState {
   currency: "USD" | "EUR" | "CNY" | "INR";
   notifications: Notification[];
   hasExtension?: boolean;
-  connectWallet?: boolean;
+  connectExtension?: boolean;
+  connectTrading?: boolean;
 }
 
 export type SettingProviderProps = PropsWithChildren<{
@@ -45,7 +46,8 @@ export type SettingContextProps = SettingState & {
   onHandleError: ToastActions["onError"];
   onHandleAlert: ToastActions["onSuccess"];
   onHandleNotification: (value: NotificationPayload) => void;
-  onToogleConnectWallet: (value?: boolean) => void;
+  onToogleConnectExtension: (value?: boolean) => void;
+  onToogleConnectTrading: (value?: boolean) => void;
 };
 
 export type SettingsProps = {

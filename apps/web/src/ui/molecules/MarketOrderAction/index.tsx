@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ChangeEvent, useMemo } from "react";
 import { useFormik } from "formik";
 import { useTranslation } from "next-i18next";
@@ -81,6 +80,7 @@ export const MarketOrderAction = ({
   );
   const { t: translation } = useTranslation("molecules");
   const t = (key: string) => translation(`marketOrderAction.${key}`);
+  const { onToogleConnectTrading } = useSettingsProvider();
 
   const handleCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
@@ -235,9 +235,9 @@ export const MarketOrderAction = ({
                   }
                 />
               ) : (
-                <Link href="/wallets">
-                  <S.Connect>{t("connectTradingAccount")}</S.Connect>
-                </Link>
+                <S.Connect onClick={onToogleConnectTrading} type="button">
+                  {t("connectTradingAccount")}
+                </S.Connect>
               )}
             </form>
           </S.ContainerForm>

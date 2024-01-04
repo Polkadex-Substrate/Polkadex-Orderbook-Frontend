@@ -34,7 +34,7 @@ export const BalancesTemplate = () => {
 
   const { connecting } = useNativeApi();
   const { selectedAddresses } = useProfile();
-  const { onToogleConnectWallet } = useSettingsProvider();
+  const { onToogleConnectExtension } = useSettingsProvider();
 
   const userHasSelectedAccount = selectedAddresses?.tradeAddress?.length > 0;
 
@@ -152,7 +152,7 @@ export const BalancesTemplate = () => {
                     <BalancesTable assets={assets} />
                   ) : (
                     <EmptyMyAccount
-                      buttonAction={onToogleConnectWallet}
+                      buttonAction={onToogleConnectExtension}
                       balances
                       hasLimit
                       {...connectWalletData}

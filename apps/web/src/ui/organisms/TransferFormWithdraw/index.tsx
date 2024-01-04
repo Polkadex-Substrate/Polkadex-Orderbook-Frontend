@@ -53,7 +53,7 @@ export const TransferFormWithdraw = ({
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
   const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
-  const { onToogleConnectWallet } = useSettingsProvider();
+  const { onToogleConnectExtension } = useSettingsProvider();
 
   const { tradeAddress, mainAddress } = selectedAddresses;
   const tradingWallet = useMemo(
@@ -206,7 +206,7 @@ export const TransferFormWithdraw = ({
                 hasSelectedUser ? !(isValid && dirty) || loading : false
               }
               onClick={
-                hasSelectedUser ? undefined : () => onToogleConnectWallet()
+                hasSelectedUser ? undefined : () => onToogleConnectExtension()
               }
             >
               {t(buttonMessage)}

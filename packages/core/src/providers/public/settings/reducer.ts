@@ -30,7 +30,8 @@ export const initialState: T.SettingState = {
   marketSelectorActive: false,
   ordersHideOtherPairs: true,
   hasExtension: false,
-  connectWallet: false,
+  connectExtension: false,
+  connectTrading: false,
 };
 
 export const settingReducer = (state: T.SettingState, action) => {
@@ -112,10 +113,16 @@ export const settingReducer = (state: T.SettingState, action) => {
         notifications: [],
       };
 
-    case C.TOOGLE_CONNECT_WALLET:
+    case C.TOOGLE_CONNECT_EXTENSION:
       return {
         ...state,
-        connectWallet: action.payload || !state.connectWallet,
+        connectExtension: action.payload || !state.connectExtension,
+      };
+
+    case C.TOOGLE_CONNECT_TRADING:
+      return {
+        ...state,
+        connectTrading: action.payload || !state.connectTrading,
       };
 
     case C.NOTIFICATION_DELETE_BY_ID: {

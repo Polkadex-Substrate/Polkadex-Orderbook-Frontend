@@ -14,8 +14,13 @@ export interface ToggleOpenOrdersPairsSwitcher {
   payload: boolean;
 }
 
-export interface ToogleConnectWallet {
-  type: string;
+export interface ToogleConnectExtension {
+  type: typeof C.TOOGLE_CONNECT_EXTENSION;
+  payload?: boolean;
+}
+
+export interface ToogleConnectTrading {
+  type: typeof C.TOOGLE_CONNECT_TRADING;
   payload?: boolean;
 }
 
@@ -68,7 +73,8 @@ export type SettingActions =
   | NotificationDeleteById
   | NotificationMarkAsRead
   | CheckHasExtension
-  | ToogleConnectWallet;
+  | ToogleConnectExtension
+  | ToogleConnectTrading;
 
 export const toggleChartRebuild = (): ToggleChartRebuildAction => ({
   type: C.TOGGLE_CHART_REBUILD,
@@ -85,10 +91,17 @@ export const toggleOpenOrdersPairsSwitcher = (
   payload,
 });
 
-export const toogleConnectWallet = (
-  payload: ToogleConnectWallet["payload"]
-): ToogleConnectWallet => ({
-  type: C.TOOGLE_CONNECT_WALLET,
+export const toogleConnectExtension = (
+  payload: ToogleConnectExtension["payload"]
+): ToogleConnectExtension => ({
+  type: C.TOOGLE_CONNECT_EXTENSION,
+  payload,
+});
+
+export const toogleConnectTrading = (
+  payload: ToogleConnectTrading["payload"]
+): ToogleConnectTrading => ({
+  type: C.TOOGLE_CONNECT_TRADING,
   payload,
 });
 

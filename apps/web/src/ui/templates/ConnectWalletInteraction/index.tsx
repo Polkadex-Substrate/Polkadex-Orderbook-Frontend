@@ -13,11 +13,11 @@ export type SwitchKeys =
   | "ExistingUser";
 
 export const ConnectWalletInteraction = () => {
-  const { connectWallet, onToogleConnectWallet } = useSettingsProvider();
-  const onClose = () => onToogleConnectWallet(false);
+  const { connectExtension, onToogleConnectExtension } = useSettingsProvider();
+  const onClose = () => onToogleConnectExtension(false);
 
   return (
-    <Modal open={!!connectWallet} onOpenChange={onToogleConnectWallet}>
+    <Modal open={!!connectExtension} onOpenChange={onToogleConnectExtension}>
       <Modal.Content>
         <Multistep.Switch>
           {(swithProps) => (

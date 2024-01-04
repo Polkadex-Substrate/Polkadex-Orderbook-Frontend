@@ -30,6 +30,7 @@ import { getCurrentMarket } from "@orderbook/core/helpers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { ShutdownInteraction } from "../ShutdownInteraction";
+import { ConnectTradingInteraction } from "../ConnectTradingInteraction";
 
 import * as S from "./styles";
 
@@ -58,7 +59,7 @@ export function Trading() {
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
   const { list } = useMarkets();
-  const { onToogleConnectWallet } = useSettingsProvider();
+  const { onToogleConnectTrading } = useSettingsProvider();
 
   const market = getCurrentMarket(list, query?.id as string);
   const id = market?.id;
@@ -111,6 +112,7 @@ export function Trading() {
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
+      <ConnectTradingInteraction />
       <Modal
         open={shutdownBanner}
         isBlur
@@ -180,7 +182,8 @@ export function Trading() {
                           </SessionProvider>
                         ) : (
                           <EmptyMyAccount
-                            buttonAction={onToogleConnectWallet}
+                            buttonAction={onToogleConnectTrading}
+                            buttonTitle="Connect Trading Account"
                             hasLimit
                             {...hasSelectedAccount}
                           />

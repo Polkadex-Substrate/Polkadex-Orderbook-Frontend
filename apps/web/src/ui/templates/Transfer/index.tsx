@@ -13,6 +13,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMemo } from "react";
 
 import { ConnectWalletInteraction } from "../ConnectWalletInteraction";
+import { ConnectTradingInteraction } from "../ConnectTradingInteraction";
 
 import * as S from "./styles";
 import { useTransfer } from "./useTransfer";
@@ -82,6 +83,7 @@ export const TransferTemplate = () => {
   return (
     <>
       <ConnectWalletInteraction />
+      <ConnectTradingInteraction />
       <AssetsInteraction
         open={assetsInteraction}
         selectedAssetId={selectedAsset?.id}

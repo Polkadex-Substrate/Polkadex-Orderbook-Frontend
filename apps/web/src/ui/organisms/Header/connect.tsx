@@ -9,12 +9,12 @@ const ConnectWallet = ({
 }: {
   showFundingWallet?: boolean;
 }) => {
-  const { connectWallet, onToogleConnectWallet } = useSettingsProvider();
+  const { connectExtension, onToogleConnectExtension } = useSettingsProvider();
   return (
     <>
       <ConnectWalletInteraction />
       <Profile
-        onClick={() => onToogleConnectWallet(!connectWallet)}
+        onClick={() => onToogleConnectExtension(!connectExtension)}
         showFundingWallet={showFundingWallet}
       />
     </>

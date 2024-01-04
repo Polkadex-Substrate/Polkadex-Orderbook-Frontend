@@ -38,7 +38,7 @@ export const TransferFormDeposit = ({
   const { loading, onFetchDeposit } = useDepositProvider();
   const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
-  const { onToogleConnectWallet } = useSettingsProvider();
+  const { onToogleConnectExtension } = useSettingsProvider();
   const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
@@ -199,7 +199,7 @@ export const TransferFormDeposit = ({
               fundWalletPresent ? !(isValid && dirty) || loading : false
             }
             onClick={
-              fundWalletPresent ? undefined : () => onToogleConnectWallet()
+              fundWalletPresent ? undefined : () => onToogleConnectExtension()
             }
           >
             {t(buttonMessage)}
