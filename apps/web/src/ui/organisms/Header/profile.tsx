@@ -6,11 +6,18 @@ import {
   Icons,
   Popover,
   Multistep,
+  Authorization,
+  ConnectWallet,
+  ExtensionAccounts,
 } from "@polkadex/ux";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { ExtensionAccount } from "@polkadex/react-providers";
+import {
+  ExtensionAccount,
+  useExtensionAccounts,
+  useExtensions,
+} from "@polkadex/react-providers";
 
 import { Profile as ProfileDropdown } from "../../templates/ConnectWallet/profile";
 
@@ -22,6 +29,8 @@ import { ImportTradingAccount } from "@/ui/templates/ConnectWallet/importTrading
 import { TradingAccountSuccessfull } from "@/ui/templates/ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "@/ui/templates/ConnectWallet/tradingAccountMnemonic";
 import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
+import { ConnectExtensionAccount } from "@/ui/templates/ConnectWallet/connnectExtensionAccount";
+import { FundAccount } from "@/ui/templates/ConnectWallet/fundAccount";
 
 export const Profile = ({
   onClick,
@@ -52,8 +61,16 @@ export const Profile = ({
     proxiesAccounts,
     tempMnemonic,
     onExportTradeAccount,
+    onSelectExtension,
+    mainProxiesLoading,
+    mainProxiesSuccess,
+    onSelectWallet,
   } = useConnectWalletProvider();
+  const sourceId = selectedExtension?.id;
 
+  const { extensionsStatus } = useExtensions();
+  const { connectExtensionAccounts, extensionAccounts } =
+    useExtensionAccounts();
   const { selectedAddresses } = useProfile();
   const { mainAddress } = selectedAddresses;
   const shortAddress = useMemo(
@@ -78,6 +95,19 @@ export const Profile = ({
         address: mainAddress,
       } as ExtensionAccount),
     [selectedWallet, mainAddress]
+  );
+
+  const walletsFiltered = useMemo(
+    () => extensionAccounts?.filter(({ source }) => source === sourceId),
+    [extensionAccounts, sourceId]
+  );
+
+  const isPresent = useMemo(
+    () =>
+      extensionAccounts?.some(
+        (account) => account.address === selectedFundingWallet.address
+      ),
+    [extensionAccounts, selectedFundingWallet.address]
   );
 
   if (tradingWalletPresent || fundWalletPresent)
@@ -144,6 +174,7 @@ export const Profile = ({
                     fundWallet={selectedFundingWallet}
                     tradeAccount={selectedAccount}
                     localTradingAccounts={localTradingAccounts}
+                    onConnectWallet={() => props?.onPage("ConnectWallet", true)}
                   />
                 </Multistep.Trigger>
                 <Multistep.Content>
@@ -170,7 +201,6 @@ export const Profile = ({
                     }
                     onClose={() => props?.onChangeInteraction(false)}
                   />
-
                   <ConnectTradingAccount
                     key="ConnectTradingAccount"
                     accounts={localTradingAccounts}
@@ -244,6 +274,35 @@ export const Profile = ({
                       props?.onPage("TradingAccountMnemonic", true)
                     }
                     mnemonic={tempMnemonic?.split(" ") ?? []}
+                  />
+                  <ConnectExtensionAccount
+                    key="ConnectWallet"
+                    installedExtensions={extensionsStatus}
+                    onConnectProvider={(e) => onSelectExtension?.(e)}
+                    onClose={() => props?.onChangeInteraction(false)}
+                    onConnectCallback={() =>
+                      props?.onPage("Authorization", true)
+                    }
+                  />
+                  <Authorization
+                    key="ConnectAuthorization"
+                    onAction={async () =>
+                      await connectExtensionAccounts(
+                        selectedExtension?.id as string
+                      )
+                    }
+                    extensionIcon={selectedExtension?.id as string}
+                    extensionName={selectedExtension?.title}
+                    onActionCallback={() => props?.onPage("FundAccount")}
+                    onClose={props?.onReset}
+                  />
+                  <FundAccount
+                    key="FundAccount"
+                    extensionAccounts={walletsFiltered}
+                    selectdAccount={selectedFundingWallet}
+                    onClose={() => props?.onChangeInteraction(false)}
+                    isPresent={isPresent}
+                    selectedExtension={selectedExtension}
                   />
                 </Multistep.Content>
               </>

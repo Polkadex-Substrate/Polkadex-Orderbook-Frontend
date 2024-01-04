@@ -30,6 +30,7 @@ export const Profile = ({
   tradeAccount,
   onSwitch,
   localTradingAccounts,
+  onConnectWallet,
 }: {
   onCreateTradingAccount: () => void;
   onSelectTradingAccount: (value: string) => void;
@@ -43,6 +44,7 @@ export const Profile = ({
   fundWallet?: ExtensionAccount;
   tradeAccount?: TradeAccount;
   localTradingAccounts?: TradeAccount[];
+  onConnectWallet: () => void;
 }) => {
   return (
     <div className="flex flex-col sm:w-full md:w-[23rem] bg-level-3 border border-primary rounded-lg">
@@ -85,7 +87,9 @@ export const Profile = ({
           </div>
           {!fundWalletPresent && (
             <div className="flex flex-col gap-2">
-              <Button.Solid appearance="tertiary">Connect Wallet</Button.Solid>
+              <Button.Solid appearance="tertiary" onClick={onConnectWallet}>
+                Connect Wallet
+              </Button.Solid>
               <div className="flex items-center gap-2">
                 <InformationCircleIcon className="w-7 h-7 text-attention-base" />
                 <Typography.Paragraph variant="primary" size="xs">
