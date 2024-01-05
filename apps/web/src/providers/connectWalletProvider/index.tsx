@@ -118,7 +118,7 @@ export const ConnectWalletProvider = ({
     useSettingsProvider();
   const { extensionAccounts } = useExtensionAccounts();
   // TODO: rename to useBrowserAccounts
-  const { wallet, isReady } = useUserAccounts();
+  const { wallet, isReady, localAddresses } = useUserAccounts();
   const onSetTempMnemonic = (value: string) => setTempMnemonic(value);
 
   const {
@@ -176,10 +176,11 @@ export const ConnectWalletProvider = ({
     : undefined;
 
   // UPDATE-CORE
-  // TODO: Not updating after remove
+  // TODO: Not updating after creating a trading account
   const localTradingAccounts = useMemo(
-    () => (isReady ? wallet.getAll() : []),
-    [isReady, wallet]
+    () =>
+      isReady ? localAddresses?.map((value) => wallet.getPair(value)) : [],
+    [isReady, wallet, localAddresses]
   );
 
   const proxiesAccounts = useMemo(() => {
