@@ -1,4 +1,3 @@
-// TODO: REPLACE TESTING PROVIDER
 import { useEffect, useRef } from "react";
 import { Multistep } from "@polkadex/ux";
 

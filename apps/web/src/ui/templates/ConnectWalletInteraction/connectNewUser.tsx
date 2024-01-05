@@ -1,4 +1,3 @@
-// TODO: REPLACE TESTING PROVIDER
 import { Multistep } from "@polkadex/ux";
 
 import { NewUser } from "../ConnectWallet/newUser";

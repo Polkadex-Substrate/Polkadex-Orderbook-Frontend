@@ -1,5 +1,3 @@
-// TODO: REPLACE TESTING PROVIDER
-
 import { useExtensionAccounts, useExtensions } from "@polkadex/react-providers";
 import { useCallback, useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
