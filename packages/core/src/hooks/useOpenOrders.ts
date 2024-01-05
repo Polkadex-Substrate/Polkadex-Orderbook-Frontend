@@ -13,7 +13,7 @@ import { useMarkets } from "./useMarkets";
 export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
   const { onHandleError } = useSettingsProvider();
   const {
-    selectedAccount: { tradeAddress },
+    selectedAddresses: { tradeAddress },
   } = useProfile();
 
   const { list: markets } = useMarkets();

@@ -1,21 +1,24 @@
 import { MouseEvent, useMemo, useRef, useState } from "react";
 import {
-  useExtensionWallet,
-  userMainAccountDetails,
-} from "@orderbook/core/providers/user/extensionWallet";
-import {
   transformAddress,
   useProfile,
 } from "@orderbook/core/providers/user/profile";
 import { useFormik } from "formik";
 import { depositValidations } from "@orderbook/core/validations";
-import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
-import { ExtensionAccount } from "@orderbook/core/providers/types";
+import {
+  getFundingAccountDetail,
+  isAssetPDEX,
+  trimFloat,
+} from "@orderbook/core/helpers";
 import { useAssetTransfer, useFunds } from "@orderbook/core/hooks";
 import { useTranslation } from "next-i18next";
 import { decodeAddress, encodeAddress } from "@polkadot/keyring";
 import { hexToU8a, isHex } from "@polkadot/util";
 import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
+import {
+  useExtensionAccounts,
+  ExtensionAccount,
+} from "@polkadex/react-providers";
 
 import { CustomAddress } from "../TransferFormWithdraw/types";
 
@@ -43,26 +46,29 @@ export const TransferForm = ({
 }: T.Props) => {
   const { t } = useTranslation("transfer");
 
-  const { allAccounts } = useExtensionWallet();
-  const { selectedAccount, onUserSelectAccount, userData } = useProfile();
+  const { extensionAccounts: allAccounts } = useExtensionAccounts();
+  const {
+    selectedAddresses,
+    onUserSelectTradingAddress,
+    allAccounts: userAccounts,
+  } = useProfile();
   const { loading, onChangeChainBalance } = useFunds();
 
   // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
   const { mutateAsync, isLoading } = useAssetTransfer(onRefetch);
-  const { mainAddress } = selectedAccount;
+  const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
-    () => userMainAccountDetails(mainAddress, allAccounts),
+    () => getFundingAccountDetail(mainAddress, allAccounts),
     [allAccounts, mainAddress]
   );
 
   const allFilteresAccounts = useMemo(
     () =>
       allAccounts.filter(
-        ({ account }) =>
-          userData?.userAccounts?.find((v) => v.mainAddress === account.address)
+        ({ address }) => userAccounts?.find((v) => v.mainAddress === address)
       ),
-    [allAccounts, userData?.userAccounts]
+    [allAccounts, userAccounts]
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
@@ -88,7 +94,7 @@ export const TransferForm = ({
     // TODO: Handle Error...
   };
 
-  const fundingWalletName = fundingWallet?.account?.meta.name ?? "";
+  const fundingWalletName = fundingWallet?.name ?? "";
 
   const [selectedWallet, setSelectedWallet] = useState<
     ExtensionAccount | CustomAddress
@@ -99,21 +105,18 @@ export const TransferForm = ({
   const filteredWallets: ExtensionAccount[] | CustomAddress[] = useMemo(() => {
     if (toQuery === "") return allAccounts;
 
-    const filteredAccounts = allAccounts?.filter((e) => {
-      const { address, meta } = e.account;
+    const filteredAccounts = allAccounts?.filter(({ address, name }) => {
       const queryRes = toQuery.toLowerCase();
       return (
         address.toLowerCase().includes(queryRes) ||
-        meta?.name?.toLowerCase().includes(queryRes)
+        name?.toLowerCase().includes(queryRes)
       );
     });
 
     if (filteredAccounts.length) return filteredAccounts;
 
     const customAddress = {
-      account: {
-        address: toQuery,
-      },
+      address: toQuery,
     };
 
     setSelectedWallet(customAddress);
@@ -121,14 +124,13 @@ export const TransferForm = ({
   }, [toQuery, allAccounts]);
 
   const toAccountAddress = useMemo(
-    () => transformAddress(selectedWallet?.account?.address ?? "", 20),
-    [selectedWallet?.account?.address]
+    () => transformAddress(selectedWallet?.address ?? "", 20),
+    [selectedWallet?.address]
   );
 
   const [fromQuery, setFromQuery] = useState("");
   const filteredFundingWallets: ExtensionAccount[] = useMemo(() => {
-    const queryRes = allFilteresAccounts?.filter((e) => {
-      const { address, meta } = e.account;
+    const queryRes = allFilteresAccounts?.filter(({ address, meta }) => {
       return (
         address?.toLowerCase().includes(fromQuery) ||
         meta?.name?.toLowerCase().includes(fromQuery)
@@ -140,15 +142,15 @@ export const TransferForm = ({
   }, [fromQuery, allFilteresAccounts]);
 
   const fromAccountAddress = useMemo(
-    () => transformAddress(fundingWallet?.account?.address ?? "", 20),
-    [fundingWallet?.account?.address]
+    () => transformAddress(fundingWallet?.address ?? "", 20),
+    [fundingWallet?.address]
   );
 
   const isValidAddress = useMemo(() => {
-    const address = selectedWallet?.account?.address;
+    const address = selectedWallet?.address;
     try {
       encodeAddress(
-        isHex(selectedWallet?.account?.address)
+        isHex(selectedWallet?.address)
           ? hexToU8a(address)
           : decodeAddress(address)
       );
@@ -156,7 +158,7 @@ export const TransferForm = ({
     } catch {
       return false;
     }
-  }, [selectedWallet?.account?.address]);
+  }, [selectedWallet?.address]);
 
   const {
     values,
@@ -180,7 +182,7 @@ export const TransferForm = ({
       // TODO: Handle Error...
 
       try {
-        const address = selectedWallet?.account?.address;
+        const address = selectedWallet?.address;
 
         const asset: T.GenericAsset = isPolkadexToken
           ? { polkadex: null }
@@ -226,11 +228,11 @@ export const TransferForm = ({
               selectedAccount={fundingWallet}
               onQuery={(e) => setFromQuery(e)}
               onSelectAccount={(e) => {
-                const tradeAddress = userData?.userAccounts?.find(
-                  (v) => v.mainAddress === e.account.address
+                const account = userAccounts?.find(
+                  (v) => v.mainAddress === e?.address
                 );
                 // TODO: Fix types
-                if (tradeAddress) onUserSelectAccount(tradeAddress);
+                if (account) onUserSelectTradingAddress(account);
               }}
               data={filteredFundingWallets}
               placeholder={t("funding.betweenPlaceholder")}

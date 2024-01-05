@@ -1,19 +1,21 @@
 import { MouseEvent, useMemo, useRef } from "react";
 import {
-  useExtensionWallet,
-  userMainAccountDetails,
-} from "@orderbook/core/providers/user/extensionWallet";
-import {
   transformAddress,
   useProfile,
 } from "@orderbook/core/providers/user/profile";
+import { useExtensionAccounts } from "@polkadex/react-providers";
 import { useFormik } from "formik";
 import { depositValidations } from "@orderbook/core/validations";
-import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
+import {
+  getFundingAccountDetail,
+  isAssetPDEX,
+  trimFloat,
+} from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useTranslation } from "next-i18next";
 import { useFunds } from "@orderbook/core/index";
 import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -28,18 +30,19 @@ export const TransferFormDeposit = ({
   onTransferInteraction,
   onOpenAssets,
   selectedAsset,
+  fundWalletPresent,
 }: T.Props) => {
   const { t } = useTranslation("transfer");
 
-  const { allAccounts } = useExtensionWallet();
+  const { extensionAccounts: allAccounts } = useExtensionAccounts();
   const { loading, onFetchDeposit } = useDepositProvider();
-  const { selectedAccount } = useProfile();
+  const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
-
-  const { mainAddress } = selectedAccount;
+  const { onToogleConnectExtension } = useSettingsProvider();
+  const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
-    () => userMainAccountDetails(mainAddress, allAccounts),
+    () => getFundingAccountDetail(mainAddress, allAccounts),
     [allAccounts, mainAddress]
   );
 
@@ -66,10 +69,9 @@ export const TransferFormDeposit = ({
     // TODO: Handle Error...
   };
 
-  const fundingWalletName = fundingWallet?.account?.meta.name ?? "";
   const fundingWalletAddress = useMemo(
-    () => transformAddress(fundingWallet?.account?.address ?? ""),
-    [fundingWallet?.account?.address]
+    () => transformAddress((mainAddress || fundingWallet?.address) ?? ""),
+    [mainAddress, fundingWallet?.address]
   );
 
   const {
@@ -95,7 +97,7 @@ export const TransferFormDeposit = ({
       // TODO: Handle Error...
 
       try {
-        const address = fundingWallet.account.address;
+        const address = fundingWallet.address;
 
         const asset: T.GenericAsset = isPolkadexToken
           ? { polkadex: null }
@@ -115,6 +117,8 @@ export const TransferFormDeposit = ({
     },
   });
 
+  const buttonMessage = fundWalletPresent ? "transferButton" : "userButton";
+
   return (
     <Loading
       style={{ maxWidth: normalizeValue(100) }}
@@ -128,8 +132,9 @@ export const TransferFormDeposit = ({
           <WalletCard
             label={t("from")}
             walletType={t("funding.type")}
-            walletName={fundingWalletName}
+            walletName={fundingWallet?.name ?? "Wallet not present"}
             walletAddress={fundingWalletAddress}
+            hasUser={fundWalletPresent}
           />
           <S.WalletsButton type="button" onClick={onTransferInteraction}>
             <div>
@@ -141,6 +146,7 @@ export const TransferFormDeposit = ({
             label={t("to")}
             walletType={t("trading.type")}
             walletName={t("trading.message")}
+            hasUser
           />
         </S.Wallets>
         <S.Form>
@@ -173,17 +179,30 @@ export const TransferFormDeposit = ({
                 ref={amountRef}
                 autoComplete="off"
                 placeholder={t("amountPlaceholder")}
+                disabled={!fundWalletPresent}
                 {...getFieldProps("amount")}
               />
             </div>
-            <button type="button" onClick={handleMax}>
+            <button
+              disabled={!fundWalletPresent}
+              type="button"
+              onClick={handleMax}
+            >
               {t("maxButton")}
             </button>
           </S.Amount>
         </S.Form>
-        <S.Footer>
-          <button disabled={!(isValid && dirty) || loading} type="submit">
-            {t("transferButton")}
+        <S.Footer hasUser={fundWalletPresent}>
+          <button
+            type={fundWalletPresent ? "submit" : "button"}
+            disabled={
+              fundWalletPresent ? !(isValid && dirty) || loading : false
+            }
+            onClick={
+              fundWalletPresent ? undefined : () => onToogleConnectExtension()
+            }
+          >
+            {t(buttonMessage)}
           </button>
         </S.Footer>
       </S.Content>

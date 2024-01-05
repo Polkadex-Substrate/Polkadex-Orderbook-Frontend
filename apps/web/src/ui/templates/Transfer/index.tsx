@@ -9,9 +9,16 @@ import {
 } from "@polkadex/orderbook-ui/organisms";
 import { Footer, Switch } from "@polkadex/orderbook-ui/molecules";
 import { useTranslation } from "next-i18next";
+import { useProfile } from "@orderbook/core/providers/user/profile";
+import { useMemo } from "react";
+
+import { ConnectWalletInteraction } from "../ConnectWalletInteraction";
+import { ConnectTradingInteraction } from "../ConnectTradingInteraction";
 
 import * as S from "./styles";
 import { useTransfer } from "./useTransfer";
+
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export const TransferTemplate = () => {
   const { t } = useTranslation("transfer");
@@ -27,6 +34,16 @@ export const TransferTemplate = () => {
     switchEnable,
     onDisableSwitch,
   } = useTransfer();
+  const { selectedWallet } = useConnectWalletProvider();
+
+  const {
+    selectedAddresses: { tradeAddress },
+  } = useProfile();
+  const userExists = Boolean(tradeAddress?.length > 0);
+  const fundWalletPresent = useMemo(
+    () => !!Object.keys(selectedWallet ?? {})?.length,
+    [selectedWallet]
+  );
 
   const customComponent = {
     deposit: (
@@ -36,6 +53,8 @@ export const TransferTemplate = () => {
         onChangeType={() =>
           onChangeType(type === "deposit" ? "withdraw" : "deposit")
         }
+        hasUser={userExists}
+        fundWalletPresent={fundWalletPresent}
       />
     ),
     withdraw: (
@@ -45,6 +64,8 @@ export const TransferTemplate = () => {
         onChangeType={() =>
           onChangeType(type === "withdraw" ? "deposit" : "withdraw")
         }
+        hasUser={userExists}
+        fundWalletPresent={fundWalletPresent}
       />
     ),
     transfer: (
@@ -61,6 +82,8 @@ export const TransferTemplate = () => {
 
   return (
     <>
+      <ConnectWalletInteraction />
+      <ConnectTradingInteraction />
       <AssetsInteraction
         open={assetsInteraction}
         selectedAssetId={selectedAsset?.id}
@@ -82,9 +105,9 @@ export const TransferTemplate = () => {
                   <h1>{t("heading")}</h1>
                   <h2>{t("subheading")}</h2>
                 </S.Heading>
-                <S.Title>
+                <S.Title show={userExists}>
                   <Switch
-                    disable={loading || switchEnable}
+                    disable={loading || switchEnable || !fundWalletPresent}
                     isActive={type === "transfer"}
                     onChange={() =>
                       onChangeType(type === "transfer" ? "deposit" : "transfer")

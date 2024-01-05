@@ -45,15 +45,16 @@ export const EmptyContent = styled.div`
     text-align: center;
     display: flex;
     flex-direction: column;
+    gap: 0.3rem;
     align-items: center;
     justify-content: center;
+    margin-bottom: 1rem;
     h2 {
       font-size: ${normalizeValue(1.8)};
       font-weight: 600;
     }
     p {
       font-size: ${normalizeValue(1.5)};
-      margin: ${normalizeValue(1)} 0 ${normalizeValue(3)} 0;
       color: ${theme.colors.tertiaryText};
       font-size: ${normalizeValue(1.3)};
     }

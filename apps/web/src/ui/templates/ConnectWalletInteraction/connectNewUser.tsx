@@ -1,9 +1,10 @@
-// TODO: REPLACE TESTING PROVIDER
 import { Multistep } from "@polkadex/ux";
 
 import { NewUser } from "../ConnectWallet/newUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
+
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export const ConnectNewUser = ({
   onNext,
@@ -11,14 +12,16 @@ export const ConnectNewUser = ({
   onClose: () => void;
   onNext: (v: "Connect" | "TradingAccountSuccessfull") => void;
 }) => {
-  let onResetWallet,
+  const {
+    onResetWallet,
     onResetExtension,
     selectedWallet,
     onRegisterTradeAccount,
     registerStatus,
     registerError,
     selectedExtension,
-    walletBalance;
+    walletBalance,
+  } = useConnectWalletProvider();
 
   const handleCloseInteraction = () => {
     onResetWallet?.();
@@ -45,7 +48,12 @@ export const ConnectNewUser = ({
           <Multistep.Content>
             <NewTradingAccount
               key="NewTradingAccount"
-              onCreateAccount={async (e) => await onRegisterTradeAccount?.(e)}
+              onCreateAccount={async (e) =>
+                await onRegisterTradeAccount?.({
+                  ...e,
+                  main: selectedWallet?.address as string,
+                })
+              }
               loading={registerStatus === "loading"}
               fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
               errorTitle="Error"

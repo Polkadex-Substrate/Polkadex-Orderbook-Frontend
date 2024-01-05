@@ -1,9 +1,12 @@
-// TODO: REPLACE TESTING PROVIDER
-
 import { useExtensionAccounts, useExtensions } from "@polkadex/react-providers";
 import { useCallback, useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
-import { Authorization, ConnectWallet, Multistep, Wallets } from "@polkadex/ux";
+import {
+  Authorization,
+  ConnectWallet,
+  Multistep,
+  ExtensionAccounts,
+} from "@polkadex/ux";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
@@ -11,6 +14,8 @@ import { RemoveTradingAccount } from "../ConnectWallet/removeTradingAccount";
 import { ConnectTradingAccountCard } from "../ReadyToUse/connectTradingAccountCard";
 
 import { SwitchKeys } from ".";
+
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export type ConnectKeys =
   | "ConnectAuthorization"
@@ -27,22 +32,28 @@ export const Connect = ({
   onClose: () => void;
   onNext: (v: SwitchKeys) => void;
 }) => {
-  let selectedExtension,
-    proxiesLoading,
+  const {
+    selectedExtension,
+    selectedWallet,
     onSelectWallet,
     onSelectExtension,
-    proxiesSuccess,
-    proxiesAccounts,
     localTradingAccounts,
-    onSelectAccount,
+    onSelectTradingAccount,
     onImportFromFile,
     importFromFileStatus,
     onRemoveTradingAccountFromDevice,
     onSetTempTrading,
-    tempTrading;
+    tempTrading,
+    mainProxiesAccounts,
+    mainProxiesLoading,
+    mainProxiesSuccess,
+  } = useConnectWalletProvider();
 
   const sourceId = selectedExtension?.id;
-  const hasAccount = !!proxiesAccounts?.length;
+  const hasAccount = useMemo(
+    () => !!mainProxiesAccounts?.length,
+    [mainProxiesAccounts?.length]
+  );
 
   const { extensionsStatus } = useExtensions();
   const { connectExtensionAccounts, extensionAccounts } =
@@ -54,8 +65,9 @@ export const Connect = ({
   );
 
   const onRedirect = useCallback(
-    () => onNext(hasAccount ? "ExistingUser" : "NewUser"),
-    [onNext, hasAccount]
+    () =>
+      selectedWallet ? onNext(hasAccount ? "ExistingUser" : "NewUser") : null,
+    [selectedWallet, onNext, hasAccount]
   );
 
   return (
@@ -89,12 +101,12 @@ export const Connect = ({
               onActionCallback={() => props?.onPage("ConnectFundingWallets")}
               onClose={props?.onReset}
             />
-            <Wallets
+            <ExtensionAccounts
               key="ConnectFundingWallets"
-              wallets={walletsFiltered}
-              loading={!!proxiesLoading}
-              success={!!proxiesSuccess}
-              onSelectWallet={(e) => onSelectWallet?.(e)}
+              extensionAccounts={walletsFiltered}
+              loading={!!mainProxiesLoading}
+              success={!!mainProxiesSuccess}
+              onSelectExtensionAccount={(e) => onSelectWallet?.(e)}
               onTryAgain={() =>
                 selectedExtension && onSelectExtension?.(selectedExtension)
               }
@@ -109,7 +121,9 @@ export const Connect = ({
             <ConnectTradingAccount
               key="ConnectTradingAccount"
               accounts={localTradingAccounts}
-              onSelect={(e) => onSelectAccount?.(e)}
+              onSelect={(e) =>
+                onSelectTradingAccount?.({ tradeAddress: e.address })
+              }
               onRemove={(e) => onSetTempTrading?.(e)}
               onClose={() => props?.onReset()}
               onImport={() => props?.onPage("ImportTradingAccount")}

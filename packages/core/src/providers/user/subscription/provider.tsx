@@ -42,10 +42,10 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   const path = usePathname();
   const router = useRouter();
   const { onHandleError } = useSettingsProvider();
-  const { isReady, markets, assets } = useOrderbookService();
+  const { isReady, markets } = useOrderbookService();
   const { dateFrom, dateTo } = useSessionProvider();
   const {
-    selectedAccount: { tradeAddress, mainAddress },
+    selectedAddresses: { tradeAddress, mainAddress },
   } = useProfile();
   const { api } = useNativeApi();
 
@@ -82,15 +82,17 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
             oldOrderHistory: InfiniteData<MaybePaginated<Order[]>> | undefined
           ) => {
             const prevOrderHistory = [
-              ...(oldOrderHistory?.pages.flatMap((page) => page.data) ?? []),
+              ...(oldOrderHistory?.pages?.flatMap((page) => page.data) ?? []),
             ];
             const oldOrderHistoryLength = oldOrderHistory
-              ? oldOrderHistory?.pages.length
+              ? oldOrderHistory?.pages?.length
               : 0;
 
             const nextToken =
-              oldOrderHistory?.pages?.at(oldOrderHistoryLength - 1)
-                ?.nextToken || null;
+              (oldOrderHistoryLength > 0 &&
+                oldOrderHistory?.pages?.at(oldOrderHistoryLength - 1)
+                  ?.nextToken) ||
+              null;
 
             // Add to OrderHistory for all cases
             const updatedOrderHistory = replaceOrPushOrder(
@@ -168,21 +170,35 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   );
 
   const onUserTradeUpdate = useCallback(
-    (trade: Trade) => {
+    (payload: Trade) => {
       try {
         queryClient.setQueryData(
           QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
           (
             oldTradeHistory: InfiniteData<MaybePaginated<Trade[]>> | undefined
           ) => {
-            const payload = {
-              data: [trade],
-              nextToken: null,
-            };
-            return {
-              pages: [payload, ...(oldTradeHistory?.pages ?? [])],
+            const prevTradeHistory = [
+              ...(oldTradeHistory?.pages?.flatMap((page) => page.data) ?? []),
+            ];
+            const oldTradeHistoryLength = oldTradeHistory?.pages?.length || 0;
+
+            const nextToken =
+              (oldTradeHistoryLength > 0 &&
+                oldTradeHistory?.pages?.at(oldTradeHistoryLength - 1)
+                  ?.nextToken) ||
+              null;
+
+            const newTradeHistory = {
+              pages: [
+                {
+                  data: [payload, ...prevTradeHistory],
+                  nextToken,
+                },
+              ],
               pageParams: [...(oldTradeHistory?.pageParams ?? [])],
             };
+
+            return newTradeHistory;
           }
         );
       } catch (error) {
@@ -277,7 +293,6 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   const onBalanceUpdate = useCallback(
     async (payload: Balance) => {
       try {
-        const assetIds = assets.map((a) => a.id);
         const { onChainBalance, ...updateBalance } =
           await updateBalanceFromEvent(payload);
 
@@ -316,7 +331,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
 
         // Update chain balance
         queryClient.setQueryData(
-          QUERY_KEYS.onChainBalances(mainAddress, assetIds),
+          QUERY_KEYS.onChainBalances(mainAddress),
           (prevData) => {
             const oldData = new Map(prevData as Map<string, number>);
             oldData.set(updateBalance.assetId, Number(onChainBalance));
@@ -327,7 +342,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
         onHandleError("Something has gone wrong while updating balance");
       }
     },
-    [assets, mainAddress, onHandleError, queryClient, updateBalanceFromEvent]
+    [mainAddress, onHandleError, queryClient, updateBalanceFromEvent]
   );
 
   // Recent Trades subscription

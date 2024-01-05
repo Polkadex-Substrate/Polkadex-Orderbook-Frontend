@@ -3,21 +3,22 @@ import { ChangeEvent, useMemo, useState } from "react";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import { ApiPromise } from "@polkadot/api";
 
 import { QUERY_KEYS } from "../constants";
 import { appsyncOrderbookService } from "../utils/orderbookService";
-import { fetchOnChainBalance, fetchOnChainBalances } from "../helpers";
+import { fetchOnChainBalance } from "../helpers";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
+
+import { useOnChainBalances } from "./useOnChainBalances";
 
 export function useFunds() {
   const queryClient = useQueryClient();
   const { isReady, assets: assetsList } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
   const {
-    selectedAccount: { mainAddress },
+    selectedAddresses: { mainAddress },
   } = useProfile();
-  const { api, connected } = useNativeApi();
+  const { api } = useNativeApi();
 
   const isAssetsFetched = isReady;
   const [state, setState] = useState("");
@@ -26,19 +27,6 @@ export function useFunds() {
 
   const shouldFetchTradingBalance = Boolean(
     isAssetsFetched && mainAddress && mainAddress?.length > 0
-  );
-
-  const shouldFetchChainBalance = Boolean(
-    mainAddress &&
-      mainAddress?.length > 0 &&
-      api?.isConnected &&
-      connected &&
-      isAssetsFetched
-  );
-
-  const assets = useMemo(
-    () => (isAssetsFetched ? assetsList.map((a) => a.id) : []),
-    [isAssetsFetched, assetsList]
   );
 
   const {
@@ -57,21 +45,8 @@ export function useFunds() {
     },
   });
 
-  const {
-    isLoading: isOnChainBalanceLoading,
-    isSuccess: isOnChainBalanceSuccess,
-    data: onChainBalances,
-  } = useQuery({
-    queryKey: QUERY_KEYS.onChainBalances(mainAddress, assets),
-    queryFn: async () =>
-      await fetchOnChainBalances(api as ApiPromise, assets, mainAddress),
-    enabled: shouldFetchChainBalance,
-    onError: (error) => {
-      const errorMessage =
-        error instanceof Error ? error.message : (error as string);
-      onHandleError(errorMessage);
-    },
-  });
+  const { onChainBalances, isOnChainBalanceLoading, isOnChainBalanceSuccess } =
+    useOnChainBalances();
 
   const balances = useMemo(() => {
     if (!isAssetsFetched) return [];
@@ -124,7 +99,7 @@ export function useFunds() {
 
       // Update chain balance
       queryClient.setQueryData(
-        QUERY_KEYS.onChainBalances(mainAddress, assets),
+        QUERY_KEYS.onChainBalances(mainAddress),
         (prevData) => {
           const oldData = new Map(prevData as Map<string, number>);
           oldData.set(assetId, Number(newOnChainBalance));
@@ -137,7 +112,8 @@ export function useFunds() {
   return {
     balances,
     loading: Boolean(
-      (isTradingBalanceLoading || isOnChainBalanceLoading) && mainAddress.length
+      (isTradingBalanceLoading || isOnChainBalanceLoading) &&
+        mainAddress?.length
     ),
     success: isTradingBalanceSuccess || isOnChainBalanceSuccess,
     getFreeProxyBalance,

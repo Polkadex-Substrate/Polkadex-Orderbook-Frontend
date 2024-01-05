@@ -8,7 +8,7 @@ export const Wrapper = styled.div<{ isFull?: boolean; hasBorder?: boolean }>`
     align-items: center;
     justify-content: flex-start;
     overflow: hidden;
-    width: ${isFull ? "100%" : normalizeValue(2.5)};
+    width: ${isFull ? "100%" : normalizeValue(3)};
     height: ${normalizeValue(3)};
     border-radius: ${normalizeValue(20)};
     border: ${hasBorder

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@orderbook/core/hooks";
+import { IIcons } from "@orderbook/core/utils";
 
 import * as S from "./styles";
 
@@ -32,14 +33,14 @@ export const Menu = ({ open = false }) => {
           open={open}
         >
           {t("balances")}
-        </Card>
+        </Card>{" "}
         <Card
-          active={router.pathname === "/wallets"}
-          icon="Wallet"
-          href="/wallets"
+          active={router.pathname === "/transfer"}
+          icon="DoubleExchange"
+          href="/transfer"
           open={open}
         >
-          {t("wallets")}
+          {t("transfer")}
         </Card>
         <Help open={open} title={t("help")}>
           <Link
@@ -196,7 +197,7 @@ interface Props
     "href" | "target" | "rel"
   > {
   active?: boolean;
-  icon: "Exchange" | "Coins" | "Wallet" | "Help" | "Question";
+  icon: IIcons;
   disable?: boolean;
   open?: boolean;
 }

@@ -1,222 +1,165 @@
-import { useCallback, useEffect, useReducer } from "react";
-import { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
-import { API } from "aws-amplify";
+import { useCallback, useEffect, useState } from "react";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
-import { sendQueryToAppSync } from "@orderbook/core/helpers";
-import * as queries from "@orderbook/core/graphql/queries";
+import {
+  useUserAccounts,
+  useExtensionAccounts,
+} from "@polkadex/react-providers";
+import { getMainAccountLinkedToProxy } from "@orderbook/core/providers/user/profile/helpers";
+import { useProxyAccounts } from "@orderbook/core/hooks";
 
-import { ExtensionAccount } from "../../types";
-
+import * as LOCAL_STORE from "./localstore";
 import { Provider } from "./context";
-import { initialState, profileReducer } from "./reducer";
 import * as T from "./types";
-import * as A from "./actions";
-
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
-  const [state, dispatch] = useReducer(profileReducer, initialState);
-  const { onHandleError, hasExtension } = useSettingsProvider();
+  const [activeAccount, setActiveAccount] = useState<T.UserAddressTuple>({
+    mainAddress: "",
+    tradeAddress: "",
+  });
+  const [favoriteMarkets, setFavoriteMarkets] = useState<string[]>([]);
+  const [isBannerShown, setIsBannerShown] = useState<boolean>(false);
+  // TODO: remove any type and use a common type for extension accounts
+  const [selectedExtension, setSelectedExtension] = useState<any | null>(null);
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const { localAddresses } = useUserAccounts();
+  const { onHandleError } = useSettingsProvider();
+  const { extensionAccounts } = useExtensionAccounts();
 
-  const onUserSelectAccount = useCallback(
-    (payload: T.UserSelectAccount) => {
-      const { tradeAddress: _tradeAddress } = payload;
+  // sync all tradeAddresses state with extension
+  const { allProxiesAccounts: allAccounts } =
+    useProxyAccounts(extensionAccounts);
+
+  const onUserSelectTradingAddress = async ({
+    tradeAddress,
+    isNew,
+  }: {
+    tradeAddress: string;
+    isNew?: boolean;
+  }) => {
+    const _tradeAddress = localAddresses.find(
+      (address) => address === tradeAddress
+    );
+    if (!_tradeAddress && !isNew) {
+      // TODO: move error to translation
+      onHandleError("Invalid trade Address");
+      return;
+    }
+    const maxAttempts = 5;
+    // TODO: Temp solution, backend issue
+    let attempt = 0;
+    while (attempt < maxAttempts) {
       try {
-        const mainAddress = state.userData?.userAccounts?.find(
-          ({ tradeAddress }) => _tradeAddress === tradeAddress
-        )?.mainAddress;
-        if (mainAddress) {
-          const data = { tradeAddress: _tradeAddress, mainAddress };
-          dispatch(A.userSetDefaultTradeAccount(_tradeAddress));
-          dispatch(A.userAccountSelectData(data));
-        }
-      } catch (e) {
-        console.log("error: ", e);
-        onHandleError(`Invalid funding account, ${e?.message ?? e}`);
-      }
-    },
-    [onHandleError, state.userData?.userAccounts]
-  );
+        const mainAddress = await getMainAccountLinkedToProxy(tradeAddress);
+        if (!mainAddress)
+          // TODO: move error to translation
+          throw new Error("No main account linked to this trade address");
 
-  const getAllProxyAccounts = useCallback(
-    async (mainAccounts: string[], Api = API): Promise<T.UserAccount[]> => {
-      const promises = mainAccounts?.map(async (mainAccount) => {
-        try {
-          const res = await sendQueryToAppSync({
-            query: queries.findUserByMainAccount,
-            variables: { main_account: mainAccount },
-            API: Api,
-          });
-          const proxies = res?.data?.findUserByMainAccount?.proxies ?? [];
-          return { main_account: mainAccount, proxies };
-        } catch (error) {
-          return { main_account: mainAccount, proxies: [] };
-        }
-      });
-      const list = await Promise.all(promises);
-      const accounts: T.UserAccount[] = [];
-      list.forEach((item) => {
-        item.proxies.forEach((proxy) => {
-          accounts.push({
-            mainAddress: item.main_account,
-            tradeAddress: proxy,
-          });
-        });
-      });
-      return accounts;
-    },
-    []
-  );
-
-  // TODO: Refactor this function
-  const onUserAuthentication = useCallback(
-    async (mainAccounts: string[]) => {
-      const userAccounts = state.userData?.userAccounts;
-      const defaultTradeAccountFromStorage = window.localStorage.getItem(
-        LOCAL_STORAGE_ID.DEFAULT_TRADE_ACCOUNT
-      );
-      const defaultTradeAddress =
-        defaultTradeAccountFromStorage === "null"
-          ? null
-          : defaultTradeAccountFromStorage;
-
-      try {
-        if (!userAccounts?.length) {
-          const userAccounts = await getAllProxyAccounts(mainAccounts);
-          const mainAddress = userAccounts?.find(
-            ({ tradeAddress }) => defaultTradeAddress === tradeAddress
-          )?.mainAddress;
-
-          if (mainAddress && defaultTradeAddress)
-            dispatch(
-              A.userAccountSelectData({
-                tradeAddress: defaultTradeAddress ?? null,
-                mainAddress: mainAddress ?? null,
-              })
-            );
-          if (mainAccounts?.length) dispatch(A.userData({ mainAccounts }));
-          else
-            dispatch(
-              A.userError({ code: -1, message: ["No mainAccounts present"] })
-            ); // Need to do it to set isLoading to false
-
-          if (userAccounts?.length)
-            dispatch(A.userData({ userAccounts: userAccounts }));
-          else
-            dispatch(
-              A.userError({ code: -1, message: ["No userAccounts present"] })
-            ); // Need to do it to set isLoading to false
-        }
-        if (defaultTradeAddress?.length) {
-          dispatch(A.userSetDefaultTradeAccount(defaultTradeAddress));
-          dispatch(
-            A.userAccountSelectFetch({ tradeAddress: defaultTradeAddress })
-          );
-          dispatch(A.userSetAvatar());
-        }
+        LOCAL_STORE.setLastUsedAccount({ mainAddress, tradeAddress });
+        setActiveAccount({ mainAddress, tradeAddress });
+        break;
       } catch (error) {
-        onHandleError(`User auth error:${error?.message ?? error}`);
-        dispatch(A.userAuthError(error));
-        dispatch(A.userError(error));
+        console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
+      } finally {
+        attempt++;
+        await new Promise((resolve) => setTimeout(resolve, 8000));
       }
-    },
-    [onHandleError, getAllProxyAccounts, state?.userData?.userAccounts]
-  );
+    }
+  };
+
+  const onUserSelectMainAddress = async ({ mainAddress: string }) => {
+    const mainAccount = extensionAccounts.find((acc) => acc.address === string);
+    if (!mainAccount) {
+      onHandleError("Invalid main Address");
+      return;
+    }
+    LOCAL_STORE.setLastUsedAccount({
+      tradeAddress: "", // TODO: we can set this the first local account linked to this main account
+      mainAddress: mainAccount.address,
+    });
+    setActiveAccount({ tradeAddress: "", mainAddress: mainAccount.address });
+  };
+
+  const onUserResetMainAddress = () => {
+    setActiveAccount((prev) => {
+      LOCAL_STORE.setLastUsedAccount({ ...prev, mainAddress: "" });
+      return { ...prev, mainAddress: "" };
+    });
+  };
+
+  const onUserResetTradingAddress = () => {
+    setActiveAccount((prev) => {
+      LOCAL_STORE.setLastUsedAccount({ ...prev, tradeAddress: "" });
+      return { ...prev, tradeAddress: "" };
+    });
+  };
 
   const onUserLogout = () => {
-    dispatch(A.userReset());
+    LOCAL_STORE.setLastUsedAccount({ mainAddress: "", tradeAddress: "" });
+    setActiveAccount({ mainAddress: "", tradeAddress: "" });
   };
 
   const onUserChangeInitBanner = (payload = false) => {
-    dispatch(A.userChangeInitBanner(payload));
+    setIsBannerShown(payload);
   };
 
-  const onUserAuthFetch = useCallback(() => {
-    dispatch(A.userAuthFetch());
+  const onUserSetAvatar = (payload?: string) => {
+    setAvatar(payload || null);
+    payload && LOCAL_STORE.setAvatar(payload);
+  };
+
+  const onResetSelectedExtension = () => {
+    setSelectedExtension(null);
+  };
+
+  const onUserFavoriteMarketPush = (payload: string) => {
+    const shouldInclude = !favoriteMarkets.includes(payload);
+    const newFavoriteMarkets = shouldInclude
+      ? [...favoriteMarkets, payload]
+      : favoriteMarkets.filter((favoriteMarket) => favoriteMarket !== payload);
+    setFavoriteMarkets(newFavoriteMarkets);
+    LOCAL_STORE.setFavoriteMarkets(newFavoriteMarkets);
+  };
+
+  // sync state with localstorage
+  useEffect(() => {
+    const lastUsedAccount = LOCAL_STORE.getLastUsedAccount();
+    if (lastUsedAccount) {
+      setActiveAccount(lastUsedAccount);
+    }
+    const favoriteMarkets = LOCAL_STORE.getFavoriteMarkets();
+    if (favoriteMarkets) {
+      setFavoriteMarkets(favoriteMarkets);
+    }
+    const avatar = LOCAL_STORE.getAvatar();
+    if (avatar) {
+      setAvatar(avatar);
+    }
   }, []);
 
-  const onUserProfileMainAccountPush = (payload: string) => {
-    dispatch(A.userProfileMainAccountPush(payload));
-  };
-
-  const onUserProfileAccountPush = (payload: T.UserAccount) => {
-    dispatch(A.userProfileAccountPush(payload));
-  };
-
-  const onUserProfileTradeAccountDelete = ({
-    address,
-    deleteFromBrowser = false,
-  }: A.UserProfileTradeAccountDelete["payload"]) => {
-    dispatch(A.userProfileTradeAccountDelete({ address, deleteFromBrowser }));
-  };
-
-  const onUserAccountSelectFetch = (
-    payload: A.UserAccountSelectFetch["payload"]
-  ) => {
-    dispatch(A.userAccountSelectFetch(payload));
-  };
-
-  const onUserSetDefaultTradeAccount = (
-    payload: A.UserSetDefaultTradeAccount["payload"]
-  ) => {
-    dispatch(A.userSetDefaultTradeAccount(payload));
-  };
-
-  const onUserSetAvatar = (payload?: A.UserSetAvatar["payload"]) => {
-    dispatch(A.userSetAvatar(payload));
-  };
-
-  const onUserFavoriteMarketPush = (
-    payload: A.UserFavoriteMarketPush["payload"]
-  ) => {
-    dispatch(A.userFavoriteMarketPush(payload));
-  };
-
-  const fetchDataOnUserAuth = useCallback(async () => {
-    try {
-      onUserChangeInitBanner();
-
-      const { web3AccountsSubscribe, web3FromAddress } = await import(
-        "@polkadot/extension-dapp"
-      );
-      const unsubscribe = await web3AccountsSubscribe(
-        async (injectedAccounts: InjectedAccountWithMeta[]) => {
-          const allAccounts = await Promise.all(
-            injectedAccounts.map(async (account): Promise<ExtensionAccount> => {
-              const { signer } = await web3FromAddress(account.address);
-              return {
-                account,
-                signer,
-              };
-            })
-          );
-          const mainAccounts = allAccounts.map((a) => a.account.address);
-          await onUserAuthentication(mainAccounts);
-        },
-        { ss58Format: 88 }
-      );
-      return () => unsubscribe();
-    } catch (error) {
-      onHandleError(`Accounts fetch error: ${error?.message ?? error}`);
-    }
-  }, [onUserAuthentication, onHandleError]);
-
-  useEffect(() => {
-    if (hasExtension) fetchDataOnUserAuth();
-  }, [fetchDataOnUserAuth, hasExtension]);
+  const getSigner = useCallback(
+    (address: string) => {
+      return extensionAccounts.find((acc) => acc.address === address)?.signer;
+    },
+    [extensionAccounts]
+  );
 
   return (
     <Provider
       value={{
-        ...state,
-        onUserSelectAccount,
+        onUserSelectTradingAddress,
+        selectedAddresses: activeAccount,
+        onUserSelectMainAddress,
+        selectedExtension,
+        setSelectedExtension,
+        allAccounts,
+        favoriteMarkets,
+        isBannerShown,
+        getSigner, // TODO: to be moved to extension provider
+        avatar,
+        onResetSelectedExtension,
         onUserLogout,
+        onUserResetMainAddress,
+        onUserResetTradingAddress,
         onUserChangeInitBanner,
-        onUserAuthFetch,
-        onUserProfileAccountPush,
-        onUserProfileTradeAccountDelete,
-        onUserProfileMainAccountPush,
-        onUserAccountSelectFetch,
-        onUserSetDefaultTradeAccount,
         onUserSetAvatar,
         onUserFavoriteMarketPush,
       }}

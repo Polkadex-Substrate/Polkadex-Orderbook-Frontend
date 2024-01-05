@@ -2,11 +2,8 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { FormikErrors, FormikHelpers } from "formik";
 import { useTranslation } from "next-i18next";
 import { Decimal } from "@orderbook/core/utils";
+import { useUserAccounts } from "@polkadex/react-providers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import {
-  useTradeWallet,
-  selectTradeAccount,
-} from "@orderbook/core/providers/user/tradeWallet";
 import { useOrders } from "@orderbook/core/providers/user/orders";
 import {
   cleanPositiveFloatInput,
@@ -21,6 +18,7 @@ import {
   useOrderbook,
   useMarkets,
   useTickers,
+  useTryUnlockTradeAccount,
 } from "@orderbook/core/hooks";
 
 type FormValues = {
@@ -54,10 +52,10 @@ export function usePlaceOrder(
     currentTicker: { currentPrice: lastPriceValue },
   } = useTickers(market);
 
-  const { allBrowserAccounts } = useTradeWallet();
+  const { wallet } = useUserAccounts();
 
   const {
-    selectedAccount: { tradeAddress },
+    selectedAddresses: { tradeAddress },
   } = useProfile();
 
   const {
@@ -80,22 +78,12 @@ export function usePlaceOrder(
   const bestBidPrice = bids.length > 0 ? parseFloat(bids[0][0]) : 0;
 
   const hasTradeAccount = tradeAddress !== "";
-  const usingTradeAddress = tradeAddress;
 
-  const tradeAccount = selectTradeAccount(
-    usingTradeAddress,
-    allBrowserAccounts
-  );
+  const tradeAccount = hasTradeAccount
+    ? wallet.getPair(tradeAddress)
+    : undefined;
 
-  // if account is not protected by password use default password to unlock account.
-  try {
-    if (tradeAccount && tradeAccount.isLocked) {
-      tradeAccount.unlock("");
-    }
-  } catch (e) {
-    // We don't need to handle this error, because we are just trying to unlock it
-    console.log(e);
-  }
+  useTryUnlockTradeAccount(tradeAccount);
 
   const showProtectedPassword = Boolean(tradeAccount?.isLocked);
 

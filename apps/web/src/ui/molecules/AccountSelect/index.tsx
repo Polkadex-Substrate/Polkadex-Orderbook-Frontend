@@ -1,6 +1,6 @@
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { Combobox } from "@headlessui/react";
-import { ExtensionAccount } from "@orderbook/core/providers/types";
+import { ExtensionAccount } from "@polkadex/react-providers";
 import { transformAddress } from "@orderbook/core/providers/user/profile";
 
 import { Skeleton } from "../Skeleton";
@@ -73,10 +73,12 @@ export const AccountSelect = ({
                     </Popover>
                     <Combobox.Input
                       displayValue={(e: ExtensionAccount | CustomAddress) => {
-                        const addressName = e?.account?.meta?.name;
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        const addressName = e?.name || e?.meta?.name;
                         const address = addressName
-                          ? transformAddress(e?.account?.address)
-                          : e?.account?.address;
+                          ? transformAddress(e?.address)
+                          : e?.address;
 
                         return addressName ?? address;
                       }}
@@ -105,11 +107,11 @@ export const AccountSelect = ({
             <S.OptionsItemsWrapper>
               {data?.length ? (
                 data.map((e) => {
-                  const name = e?.account?.meta?.name;
-                  const address = transformAddress(e?.account?.address ?? "");
+                  const name = e?.name;
+                  const address = transformAddress(e?.address ?? "");
 
                   return (
-                    <S.OptionsItem key={e.account.address} value={e}>
+                    <S.OptionsItem key={e?.address} value={e}>
                       <div>
                         <Icons.Avatar />
                       </div>

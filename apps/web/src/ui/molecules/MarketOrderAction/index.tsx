@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ChangeEvent, useMemo } from "react";
 import { useFormik } from "formik";
 import { useTranslation } from "next-i18next";
@@ -13,12 +12,10 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { usePlaceOrder, useTryUnlockTradeAccount } from "@orderbook/core/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
-import {
-  selectTradeAccount,
-  useTradeWallet,
-} from "@orderbook/core/providers/user/tradeWallet";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { buySellValidation } from "@orderbook/core/validations";
+import { useUserAccounts } from "@polkadex/react-providers";
 
 import * as S from "./styles";
 
@@ -83,6 +80,7 @@ export const MarketOrderAction = ({
   );
   const { t: translation } = useTranslation("molecules");
   const t = (key: string) => translation(`marketOrderAction.${key}`);
+  const { onToogleConnectTrading } = useSettingsProvider();
 
   const handleCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
@@ -237,9 +235,12 @@ export const MarketOrderAction = ({
                   }
                 />
               ) : (
-                <Link href="/wallets">
-                  <S.Connect>{t("connectTradingAccount")}</S.Connect>
-                </Link>
+                <S.Connect
+                  onClick={() => onToogleConnectTrading(true)}
+                  type="button"
+                >
+                  {t("connectTradingAccount")}
+                </S.Connect>
               )}
             </form>
           </S.ContainerForm>
@@ -250,14 +251,13 @@ export const MarketOrderAction = ({
 };
 
 const ProtectPassword = () => {
-  const profileState = useProfile();
-  const tradeWalletState = useTradeWallet();
-  const currTradeAddr = profileState.selectedAccount.tradeAddress;
-  const tradeAccount = selectTradeAccount(
-    currTradeAddr,
-    tradeWalletState.allBrowserAccounts
-  );
-  // if account is not protected by password use default password to unlock account.
+  const {
+    selectedAddresses: { tradeAddress },
+  } = useProfile();
+  const { onHandleError } = useSettingsProvider();
+  const { wallet } = useUserAccounts();
+  const tradeAccount = wallet.getPair(tradeAddress);
+
   useTryUnlockTradeAccount(tradeAccount);
 
   const { values, setFieldValue, handleSubmit, errors } = useFormik({
@@ -267,16 +267,15 @@ const ProtectPassword = () => {
     },
     validationSchema: buySellValidation,
     onSubmit: (values) => {
-      isValidSize &&
-        tradeAccount?.isLocked &&
-        tradeWalletState.onUnlockTradeAccount({
-          address: currTradeAddr,
-          password: values.password,
-        });
+      try {
+        isValidSize &&
+          tradeAccount?.isLocked &&
+          tradeAccount.unlock(values.password);
+      } catch (error) {
+        onHandleError("Invalid Password");
+      }
     },
   });
-
-  const isLoading = false;
 
   const isValidSize = useMemo(
     () => values?.password?.length === 5,
@@ -288,7 +287,7 @@ const ProtectPassword = () => {
     translation(`marketOrderAction.protectPassword.${key}`);
 
   return (
-    <LoadingSection isActive={isLoading} color="transparent">
+    <LoadingSection isActive={false} color="transparent">
       <form onChange={handleSubmit}>
         <S.ProtectPassword>
           <S.ProtectPasswordTitle>

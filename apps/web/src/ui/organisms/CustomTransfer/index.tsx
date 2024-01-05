@@ -22,9 +22,9 @@ export const CustomTransfer = ({
   onDisableSwitch: () => void;
   switchEnable: boolean;
 }) => {
-  const { selectedAccount } = useProfile();
+  const { selectedAddresses } = useProfile();
 
-  const { mainAddress } = selectedAccount;
+  const { mainAddress } = selectedAddresses;
 
   const { data, isLoading, refetch } = useTransferHistory(
     defaultConfig.subscanApi,

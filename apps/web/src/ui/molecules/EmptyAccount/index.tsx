@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Button } from "@polkadex/ux";
 
 import * as S from "./styles";
 
@@ -8,10 +8,8 @@ export const EmptyMyAccount = ({
   image = "loginEmpty",
   title = "Looks like you're not logged in",
   description = "Explore a new way of trading with your own wallet!",
-  primaryLink = "/sign",
-  primaryLinkTitle = "Sign Up",
-  secondaryLink = "/signIn",
-  secondaryLinkTitle = "Login",
+  buttonTitle = "Connect wallet",
+  buttonAction = () => {},
 }) => (
   <S.Empty balances={balances} hasLimit={hasLimit}>
     <S.EmptyContainer>
@@ -26,12 +24,10 @@ export const EmptyMyAccount = ({
       <S.EmptyContent>
         <h2>{title}</h2>
         <p>{description}</p>
-        <S.EmptyActions hasLimit={hasLimit}>
-          <Link href={primaryLink}>{primaryLinkTitle}</Link>
-          <Link href={secondaryLink}>{secondaryLinkTitle}</Link>
-          <div />
-        </S.EmptyActions>
       </S.EmptyContent>
+      {buttonTitle && (
+        <Button.Solid onClick={buttonAction}>{buttonTitle}</Button.Solid>
+      )}
     </S.EmptyContainer>
   </S.Empty>
 );

@@ -8,7 +8,6 @@ export const Main = styled.main`
     background: ${theme.colors.primaryBackground};
     height: 100vh;
     display: flex;
-    max-width: ${normalizeValue(160)};
     box-shadow: 0px -36px 99px rgba(0, 0, 0, 0.15);
     flex-direction: column;
   `}

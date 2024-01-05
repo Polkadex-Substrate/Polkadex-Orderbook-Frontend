@@ -107,7 +107,6 @@ export const Head = styled.div`
   ${({ theme }) => css`
     position: sticky;
     top: 0;
-    z-index: 2;
     background: ${theme.colors.tertiaryBackground};
     display: grid;
     grid-template-columns: repeat(3, 1fr);

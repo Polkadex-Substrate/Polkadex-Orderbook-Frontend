@@ -3,8 +3,8 @@ import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { signAndSendExtrinsic } from "@orderbook/core/helpers";
 import BigNumber from "bignumber.js";
 import { UNIT_BN } from "@orderbook/core/constants";
+import { ExtensionAccount } from "@polkadex/react-providers";
 
-import { ExtensionAccount } from "../providers/types";
 import { useSettingsProvider } from "../providers/public/settings";
 
 interface AssetTransferParams {
@@ -36,7 +36,7 @@ export const useAssetTransfer = (onRefetch: () => Promise<void>) => {
           api,
           tx,
           account,
-          account.account.address,
+          account.address,
           true
         );
       }

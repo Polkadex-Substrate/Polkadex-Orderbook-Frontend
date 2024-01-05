@@ -12,26 +12,31 @@ import { Amplify, Analytics } from "aws-amplify";
 import { Work_Sans } from "next/font/google";
 import Head from "next/head";
 import { defaultConfig } from "@orderbook/core/config";
-import {
-  ProfileProvider,
-  TradeWalletProvider,
-  NativeApiProvider,
-  ExtensionWalletProvider,
-  SettingProvider,
-  OrderbookServiceProvider,
-  SubscriptionProvider,
-} from "@orderbook/core/providers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { useInit } from "@orderbook/core/hooks";
-
-import "../styles/globals.scss";
+import dynamic from "next/dynamic";
 import "@polkadex/ux/dist/index.css";
 
+import "../styles/globals.scss";
 import awsconfig from "../../aws-exports";
 
 import * as gtag from "@/lib/gtag";
 import { defaultThemes, GlobalStyles } from "@/styles";
 
+const SettingProvider = dynamic(
+  () => import("@orderbook/core/providers").then((mod) => mod.SettingProvider),
+  {
+    ssr: false,
+  }
+);
+const DynamicProviders = dynamic(
+  () =>
+    import("@/ui/templates/DynamicProviders").then(
+      (mod) => mod.DynamicProviders
+    ),
+  {
+    ssr: false,
+  }
+);
 const analyticsConfig = {
   AWSPinpoint: {
     // Amazon Pinpoint App Client ID
@@ -58,22 +63,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-const Providers = ({ children }) => {
-  return (
-    <ProfileProvider>
-      <NativeApiProvider>
-        <TradeWalletProvider>
-          <ExtensionWalletProvider>
-            <OrderbookServiceProvider>
-              <SubscriptionProvider>{children}</SubscriptionProvider>
-            </OrderbookServiceProvider>
-          </ExtensionWalletProvider>
-        </TradeWalletProvider>
-      </NativeApiProvider>
-    </ProfileProvider>
-  );
-};
 
 function App({ Component, pageProps }: AppProps) {
   // Removes all console from production environment
@@ -129,12 +118,12 @@ function App({ Component, pageProps }: AppProps) {
         >
           <OverlayProvider>
             {isActive ? (
-              <Providers>
+              <DynamicProviders>
                 <ModifiedThemeProvider
                   Component={Component}
                   pageProps={pageProps}
                 />
-              </Providers>
+              </DynamicProviders>
             ) : (
               <ModifiedThemeProvider
                 Component={Component}
@@ -157,7 +146,6 @@ function App({ Component, pageProps }: AppProps) {
 
 const ModifiedThemeProvider = ({ Component, pageProps }) => {
   const { theme } = useSettingsProvider();
-
   return (
     <>
       <ThemeProvider
@@ -173,8 +161,6 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
 };
 
 const ThemeWrapper = ({ children }: { children: ReactNode }) => {
-  useInit();
-
   return (
     <>
       <NextNProgress

@@ -13,6 +13,17 @@ export interface ToggleOpenOrdersPairsSwitcher {
   type: string;
   payload: boolean;
 }
+
+export interface ToogleConnectExtension {
+  type: typeof C.TOOGLE_CONNECT_EXTENSION;
+  payload?: boolean;
+}
+
+export interface ToogleConnectTrading {
+  type: typeof C.TOOGLE_CONNECT_TRADING;
+  payload?: boolean;
+}
+
 export interface ChangeThemeSettings {
   type: typeof C.SETTINGS_CHANGE_THEME;
   payload: T.SettingState["theme"];
@@ -61,7 +72,9 @@ export type SettingActions =
   | NotificationDeleteAll
   | NotificationDeleteById
   | NotificationMarkAsRead
-  | CheckHasExtension;
+  | CheckHasExtension
+  | ToogleConnectExtension
+  | ToogleConnectTrading;
 
 export const toggleChartRebuild = (): ToggleChartRebuildAction => ({
   type: C.TOGGLE_CHART_REBUILD,
@@ -72,35 +85,49 @@ export const toggleMarketSelector = (): ToggleMarketSelectorAction => ({
 });
 
 export const toggleOpenOrdersPairsSwitcher = (
-  payload: boolean,
+  payload: boolean
 ): ToggleOpenOrdersPairsSwitcher => ({
   type: C.TOGGLE_ORDERS_PAIRS_SWITCHER,
   payload,
 });
 
+export const toogleConnectExtension = (
+  payload: ToogleConnectExtension["payload"]
+): ToogleConnectExtension => ({
+  type: C.TOOGLE_CONNECT_EXTENSION,
+  payload,
+});
+
+export const toogleConnectTrading = (
+  payload: ToogleConnectTrading["payload"]
+): ToogleConnectTrading => ({
+  type: C.TOOGLE_CONNECT_TRADING,
+  payload,
+});
+
 export const onChangeThemeSettings = (
-  payload: ChangeThemeSettings["payload"],
+  payload: ChangeThemeSettings["payload"]
 ): ChangeThemeSettings => ({
   type: C.SETTINGS_CHANGE_THEME,
   payload,
 });
 
 export const onChangeLanguageSettings = (
-  payload: ChangeLanguageSettings["payload"],
+  payload: ChangeLanguageSettings["payload"]
 ): ChangeLanguageSettings => ({
   type: C.SETTINGS_CHANGE_LANGUAGE,
   payload,
 });
 
 export const onChangeCurrencySettings = (
-  payload: ChangeCurrencySettings["payload"],
+  payload: ChangeCurrencySettings["payload"]
 ): ChangeCurrencySettings => ({
   type: C.SETTINGS_CHANGE_CURRENCY,
   payload,
 });
 
 export const notificationPush = (
-  payload: NotificationPush["payload"],
+  payload: NotificationPush["payload"]
 ): NotificationPush => ({
   type: C.NOTIFICATION_PUSH,
   payload,
@@ -111,14 +138,14 @@ export const notificationDeleteAll = (): NotificationDeleteAll => ({
 });
 
 export const notificationDeleteById = (
-  payload: NotificationDeleteById["payload"],
+  payload: NotificationDeleteById["payload"]
 ): NotificationDeleteById => ({
   type: C.NOTIFICATION_DELETE_BY_ID,
   payload,
 });
 
 export const notificationMarkAsRead = (
-  payload: NotificationMarkAsRead["payload"],
+  payload: NotificationMarkAsRead["payload"]
 ): NotificationMarkAsRead => ({
   type: C.NOTIFICATION_MARK_AS_READ,
   payload,

@@ -1,16 +1,34 @@
-// TODO: REPLACE TESTING PROVIDER
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Multistep } from "@polkadex/ux";
 
 import { TradingAccountSuccessfull } from "../ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "../ConnectWallet/tradingAccountMnemonic";
 
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
+
 export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
-  let tempMnemonic, onResetTempMnemonic, onExportTradeAccount, selectedAccount;
+  const isMounted = useRef(true);
+
+  const {
+    tempMnemonic,
+    onResetTempMnemonic,
+    onExportTradeAccount,
+    selectedAccount,
+  } = useConnectWalletProvider();
 
   useEffect(() => {
-    return () => onResetTempMnemonic?.();
+    return () => {
+      if (isMounted.current) {
+        onResetTempMnemonic?.();
+      }
+    };
   }, [onResetTempMnemonic]);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   return (
     <Multistep.Interactive>
@@ -24,9 +42,7 @@ export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
                 props?.onPage("TradingAccountMnemonic", true)
               }
               onDownloadPdf={() => window.alert("Downloading...")}
-              onDownloadJson={(e) =>
-                onExportTradeAccount?.({ tradeAccount: e })
-              }
+              onDownloadJson={(e) => onExportTradeAccount?.({ account: e })}
             />
           </Multistep.Trigger>
           <Multistep.Content>

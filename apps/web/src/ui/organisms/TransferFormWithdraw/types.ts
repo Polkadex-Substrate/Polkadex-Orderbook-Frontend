@@ -1,8 +1,6 @@
 export type CustomAddress = {
-  account: {
-    address: string;
-    meta?: {
-      name?: string;
-    };
+  address: string;
+  meta?: {
+    name?: string;
   };
 };

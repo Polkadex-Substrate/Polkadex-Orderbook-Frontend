@@ -8,11 +8,9 @@
 
 import { useTransactions } from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import {
-  useExtensionWallet,
-  userMainAccountDetails,
-} from "@orderbook/core/providers/user/extensionWallet";
-import { useMemo, useState } from "react";
+import { getFundingAccountDetail } from "@orderbook/core/helpers";
+import { useExtensionAccounts } from "@polkadex/react-providers";
+import { ChangeEvent, useMemo, useState } from "react";
 import { SortingState } from "@tanstack/react-table";
 import { useTranslation } from "next-i18next";
 import { intlFormat } from "date-fns";
@@ -31,26 +29,33 @@ export function useDepositHistory({
 
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [search, setSearch] = useState("");
 
-  const { selectedAccount } = useProfile();
-  const { allAccounts } = useExtensionWallet();
+  const { selectedAddresses } = useProfile();
+  const { extensionAccounts } = useExtensionAccounts();
   const { deposits, loading } = useTransactions();
 
-  const { mainAddress } = selectedAccount;
+  const { mainAddress } = selectedAddresses;
   const fundingWallet = useMemo(
-    () => userMainAccountDetails(mainAddress, allAccounts),
-    [allAccounts, mainAddress]
+    () => getFundingAccountDetail(mainAddress, extensionAccounts),
+    [extensionAccounts, mainAddress]
   );
 
   const data = useMemo(
     () =>
       deposits
         ?.filter((e) => {
-          if (showSelectedCoins) {
-            const assetName = e.asset.name;
-            return assetName === selectedAsset?.name;
+          const isMatch =
+            e.asset.name.toLowerCase().includes(search) ||
+            e.asset.ticker.toLowerCase().includes(search);
+          if (isMatch) {
+            if (showSelectedCoins) {
+              const assetName = e.asset.name;
+              return assetName === selectedAsset?.name;
+            }
+            return e;
           }
-          return e;
+          return null;
         })
         ?.map((e) => {
           return {
@@ -72,20 +77,21 @@ export function useDepositHistory({
               name: e.asset?.name,
             },
             wallets: {
-              fromWalletName: fundingWallet?.account?.meta?.name ?? "",
-              fromWalletAddress: fundingWallet?.account?.address ?? "",
+              fromWalletName: fundingWallet?.name ?? "",
+              fromWalletAddress: fundingWallet?.address ?? "",
               toWalletType: t("trading.type"),
             },
           } as T.Props;
         }),
     [
       deposits,
-      fundingWallet?.account?.meta?.name,
-      fundingWallet?.account?.address,
+      fundingWallet?.name,
+      fundingWallet?.address,
       selectedAsset?.name,
       showSelectedCoins,
       t,
       mainAddress,
+      search,
     ]
   );
 
@@ -104,6 +110,8 @@ export function useDepositHistory({
   return {
     showSelectedCoins,
     onShowSelectedCoins: () => setShowSelectedCoins(!showSelectedCoins),
+    onSetSearch: (e: ChangeEvent<HTMLInputElement>) =>
+      setSearch(e.target.value.toLowerCase()),
     sorting,
     setSorting,
     columns,
