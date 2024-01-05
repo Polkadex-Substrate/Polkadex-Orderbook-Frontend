@@ -7,20 +7,21 @@ import {
   CustomWithdraw,
   CustomTransfer,
 } from "@polkadex/orderbook-ui/organisms";
-import {
-  EmptyMyAccount,
-  Footer,
-  Switch,
-} from "@polkadex/orderbook-ui/molecules";
+import { Footer, Switch } from "@polkadex/orderbook-ui/molecules";
 import { useTranslation } from "next-i18next";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { useMemo } from "react";
+
+import { ConnectWalletInteraction } from "../ConnectWalletInteraction";
+import { ConnectTradingInteraction } from "../ConnectTradingInteraction";
 
 import * as S from "./styles";
 import { useTransfer } from "./useTransfer";
 
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
+
 export const TransferTemplate = () => {
   const { t } = useTranslation("transfer");
-  const { t: tc } = useTranslation("common");
 
   const {
     loading,
@@ -33,10 +34,16 @@ export const TransferTemplate = () => {
     switchEnable,
     onDisableSwitch,
   } = useTransfer();
+  const { selectedWallet } = useConnectWalletProvider();
 
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
+  const userExists = Boolean(tradeAddress?.length > 0);
+  const fundWalletPresent = useMemo(
+    () => !!Object.keys(selectedWallet ?? {})?.length,
+    [selectedWallet]
+  );
 
   const customComponent = {
     deposit: (
@@ -46,6 +53,8 @@ export const TransferTemplate = () => {
         onChangeType={() =>
           onChangeType(type === "deposit" ? "withdraw" : "deposit")
         }
+        hasUser={userExists}
+        fundWalletPresent={fundWalletPresent}
       />
     ),
     withdraw: (
@@ -55,6 +64,8 @@ export const TransferTemplate = () => {
         onChangeType={() =>
           onChangeType(type === "withdraw" ? "deposit" : "withdraw")
         }
+        hasUser={userExists}
+        fundWalletPresent={fundWalletPresent}
       />
     ),
     transfer: (
@@ -69,15 +80,10 @@ export const TransferTemplate = () => {
 
   const RenderComponent = customComponent[type];
 
-  const hasSelectedAccount = {
-    image: "emptyWallet",
-    title: tc("connectTradingAccount.title"),
-  };
-
-  const userExists = Boolean(tradeAddress?.length > 0);
-
   return (
     <>
+      <ConnectWalletInteraction />
+      <ConnectTradingInteraction />
       <AssetsInteraction
         open={assetsInteraction}
         selectedAssetId={selectedAsset?.id}
@@ -101,7 +107,7 @@ export const TransferTemplate = () => {
                 </S.Heading>
                 <S.Title show={userExists}>
                   <Switch
-                    disable={loading || switchEnable}
+                    disable={loading || switchEnable || !fundWalletPresent}
                     isActive={type === "transfer"}
                     onChange={() =>
                       onChangeType(type === "transfer" ? "deposit" : "transfer")
@@ -110,11 +116,7 @@ export const TransferTemplate = () => {
                   <span>{t("switcher")}</span>
                 </S.Title>
               </S.Header>
-              {userExists ? (
-                RenderComponent
-              ) : (
-                <EmptyMyAccount balances hasLimit {...hasSelectedAccount} />
-              )}
+              {RenderComponent}
             </S.ContainerMain>
             <Footer />
           </S.Wrapper>

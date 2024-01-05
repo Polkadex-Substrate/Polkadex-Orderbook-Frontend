@@ -29,6 +29,7 @@
   "amountPlaceholder": "Enter an amount",
   "maxButton": "MAX",
   "transferButton": "Transfer",
+  "userButton": "Connect wallet" ,
   "historyTitle": "History",
   "historyFilterByToken": "Show only selected token",
   "resultEmpty": "No result found",

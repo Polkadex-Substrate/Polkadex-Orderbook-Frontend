@@ -11,10 +11,14 @@ export const CustomDeposit = ({
   onOpenAssets,
   selectedAsset,
   onChangeType,
+  hasUser,
+  fundWalletPresent,
 }: {
   onOpenAssets: () => void;
   selectedAsset?: FilteredAssetProps;
   onChangeType: () => void;
+  hasUser: boolean;
+  fundWalletPresent: boolean;
 }) => {
   return (
     <S.Content>
@@ -24,11 +28,15 @@ export const CustomDeposit = ({
             onTransferInteraction={onChangeType}
             onOpenAssets={onOpenAssets}
             selectedAsset={selectedAsset}
+            fundWalletPresent={fundWalletPresent}
           />
         </S.Container>
       </S.Form>
       <S.History>
-        <DepositHistory selectedAsset={selectedAsset} />
+        <DepositHistory
+          selectedAsset={selectedAsset}
+          hasUser={hasUser || fundWalletPresent}
+        />
       </S.History>
     </S.Content>
   );

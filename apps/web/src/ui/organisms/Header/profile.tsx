@@ -6,9 +6,18 @@ import {
   Icons,
   Popover,
   Multistep,
+  Authorization,
+  ConnectWallet,
+  ExtensionAccounts,
 } from "@polkadex/ux";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { useProfile } from "@orderbook/core/providers/user/profile";
+import {
+  ExtensionAccount,
+  useExtensionAccounts,
+  useExtensions,
+} from "@polkadex/react-providers";
 
 import { Profile as ProfileDropdown } from "../../templates/ConnectWallet/profile";
 
@@ -19,7 +28,10 @@ import { RemoveTradingAccount } from "@/ui/templates/ConnectWallet/removeTrading
 import { ImportTradingAccount } from "@/ui/templates/ConnectWallet/importTradingAccount";
 import { TradingAccountSuccessfull } from "@/ui/templates/ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "@/ui/templates/ConnectWallet/tradingAccountMnemonic";
-import { useConnectWallet } from "@/hooks";
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
+import { ConnectExtensionAccount } from "@/ui/templates/ConnectWallet/connnectExtensionAccount";
+import { FundAccount } from "@/ui/templates/ConnectWallet/fundAccount";
+import { TradingAccountList } from "@/ui/templates/ConnectWallet/tradingAccountList";
 
 export const Profile = ({
   onClick,
@@ -50,8 +62,16 @@ export const Profile = ({
     proxiesAccounts,
     tempMnemonic,
     onExportTradeAccount,
-  } = useConnectWallet();
+    onSelectExtension,
+    mainProxiesAccounts,
+  } = useConnectWalletProvider();
+  const sourceId = selectedExtension?.id;
 
+  const { extensionsStatus } = useExtensions();
+  const { connectExtensionAccounts, extensionAccounts } =
+    useExtensionAccounts();
+  const { selectedAddresses } = useProfile();
+  const { mainAddress } = selectedAddresses;
   const shortAddress = useMemo(
     () => truncateString(selectedAccount?.address ?? "", 3),
     [selectedAccount?.address]
@@ -64,6 +84,37 @@ export const Profile = ({
   const fundWalletPresent = useMemo(
     () => !!Object.keys(selectedWallet ?? {})?.length,
     [selectedWallet]
+  );
+
+  const selectedFundingWallet = useMemo(
+    () =>
+      selectedWallet ||
+      ({
+        name: "Wallet not present",
+        address: mainAddress,
+      } as ExtensionAccount),
+    [selectedWallet, mainAddress]
+  );
+
+  const walletsFiltered = useMemo(
+    () => extensionAccounts?.filter(({ source }) => source === sourceId),
+    [extensionAccounts, sourceId]
+  );
+
+  const isPresent = useMemo(
+    () =>
+      extensionAccounts?.some(
+        (account) => account.address === selectedFundingWallet.address
+      ),
+    [extensionAccounts, selectedFundingWallet.address]
+  );
+
+  const filteredAccounts = useMemo(
+    () =>
+      localTradingAccounts?.filter(
+        (item) => mainProxiesAccounts?.includes(item.address)
+      ),
+    [localTradingAccounts, mainProxiesAccounts]
   );
 
   if (tradingWalletPresent || fundWalletPresent)
@@ -126,10 +177,11 @@ export const Profile = ({
                       props?.onPage("RemoveTradingAccount", true);
                     }}
                     tradingWalletPresent={!!selectedAccount?.address}
-                    fundWalletPresent={!!selectedWallet?.name}
-                    fundWallet={selectedWallet}
+                    fundWalletPresent={fundWalletPresent}
+                    fundWallet={selectedFundingWallet}
                     tradeAccount={selectedAccount}
                     localTradingAccounts={localTradingAccounts}
+                    onConnectWallet={() => props?.onPage("ConnectWallet", true)}
                   />
                 </Multistep.Trigger>
                 <Multistep.Content>
@@ -156,10 +208,9 @@ export const Profile = ({
                     }
                     onClose={() => props?.onChangeInteraction(false)}
                   />
-
                   <ConnectTradingAccount
                     key="ConnectTradingAccount"
-                    accounts={localTradingAccounts}
+                    accounts={filteredAccounts as TradeAccount[]}
                     onSelect={(e) => {
                       onSelectTradingAccount?.({ tradeAddress: e.address });
                     }}
@@ -179,6 +230,19 @@ export const Profile = ({
                     }
                     onImportTradingAccount={() =>
                       props?.onPage("ConnectTradingAccount")
+                    }
+                    fundWalletIsPresent={isPresent}
+                    onTradingAccountList={() =>
+                      props?.onPage("TradingAccountList")
+                    }
+                  />
+                  <TradingAccountList
+                    key="TradingAccountList"
+                    tradingAccounts={mainProxiesAccounts}
+                    onRemove={(e) => onSetTempTrading?.(e)}
+                    onClose={() => props?.onChangeInteraction(false)}
+                    onRemoveCallback={() =>
+                      props?.onPage("RemoveTradingAccount")
                     }
                   />
                   <RemoveTradingAccount
@@ -230,6 +294,35 @@ export const Profile = ({
                       props?.onPage("TradingAccountMnemonic", true)
                     }
                     mnemonic={tempMnemonic?.split(" ") ?? []}
+                  />
+                  <ConnectExtensionAccount
+                    key="ConnectWallet"
+                    installedExtensions={extensionsStatus}
+                    onConnectProvider={(e) => onSelectExtension?.(e)}
+                    onClose={() => props?.onChangeInteraction(false)}
+                    onConnectCallback={() =>
+                      props?.onPage("Authorization", true)
+                    }
+                  />
+                  <Authorization
+                    key="ConnectAuthorization"
+                    onAction={async () =>
+                      await connectExtensionAccounts(
+                        selectedExtension?.id as string
+                      )
+                    }
+                    extensionIcon={selectedExtension?.id as string}
+                    extensionName={selectedExtension?.title}
+                    onActionCallback={() => props?.onPage("FundAccount")}
+                    onClose={props?.onReset}
+                  />
+                  <FundAccount
+                    key="FundAccount"
+                    extensionAccounts={walletsFiltered}
+                    selectdAccount={selectedFundingWallet}
+                    onClose={() => props?.onChangeInteraction(false)}
+                    isPresent={isPresent}
+                    selectedExtension={selectedExtension}
                   />
                 </Multistep.Content>
               </>

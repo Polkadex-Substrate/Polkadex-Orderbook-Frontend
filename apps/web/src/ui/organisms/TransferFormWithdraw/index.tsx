@@ -17,6 +17,7 @@ import {
   useExtensionAccounts,
   useUserAccounts,
 } from "@polkadex/react-providers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { UnlockModal } from "../UnlockModal";
 
@@ -33,36 +34,43 @@ export const TransferFormWithdraw = ({
   onTransferInteraction,
   onOpenAssets,
   selectedAsset,
+  hasUser,
+  fundWalletPresent,
 }: {
   isDeposit?: boolean;
   onTransferInteraction: () => void;
   onOpenAssets: (callback?: () => void) => void;
   selectedAsset?: FilteredAssetProps;
+  hasUser: boolean;
+  fundWalletPresent: boolean;
 }) => {
   const { t } = useTranslation("transfer");
 
   const [showPassword, setShowPassword] = useState(false);
 
   const { extensionAccounts: allAccounts } = useExtensionAccounts();
-  const { wallet } = useUserAccounts();
+  const { wallet, isReady } = useUserAccounts();
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
   const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
+  const { onToogleConnectExtension } = useSettingsProvider();
 
   const { tradeAddress, mainAddress } = selectedAddresses;
-
   const tradingWallet = useMemo(
-    () => wallet.getPair(tradeAddress),
-    [tradeAddress, wallet]
+    () => (isReady && tradeAddress ? wallet.getPair(tradeAddress) : undefined),
+    [tradeAddress, wallet, isReady]
   );
 
   const fundingWallet = useMemo(
     () => getFundingAccountDetail(mainAddress, allAccounts),
     [allAccounts, mainAddress]
   );
+  const fundingWalletAddress = useMemo(
+    () => transformAddress((mainAddress || fundingWallet?.address) ?? ""),
+    [mainAddress, fundingWallet?.address]
+  );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
-
   const handleMax = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
     const availableAmount = Number(selectedAsset?.free_balance);
@@ -71,8 +79,8 @@ export const TransferFormWithdraw = ({
   };
 
   const selectedTradingAccount = useMemo(
-    () => wallet.getPair(selectedAddresses?.tradeAddress),
-    [selectedAddresses?.tradeAddress, wallet]
+    () => (isReady && tradeAddress ? wallet.getPair(tradeAddress) : undefined),
+    [tradeAddress, wallet, isReady]
   );
 
   const {
@@ -108,7 +116,8 @@ export const TransferFormWithdraw = ({
 
   const formRef = useRef<HTMLFormElement | null>(null);
   useTryUnlockTradeAccount(selectedTradingAccount);
-
+  const hasSelectedUser = hasUser || fundWalletPresent;
+  const buttonMessage = hasSelectedUser ? "transferButton" : "userButton";
   return (
     <>
       <UnlockModal
@@ -133,8 +142,9 @@ export const TransferFormWithdraw = ({
             <WalletCard
               label={t("from")}
               walletType={t("trading.type")}
-              walletName={tradingWallet?.meta.name ?? ""}
+              walletName={tradingWallet?.meta.name ?? "Account"}
               walletAddress={transformAddress(tradingWallet?.address ?? "")}
+              hasUser={hasUser}
             />
             <S.WalletsButton type="button" onClick={onTransferInteraction}>
               <div>
@@ -145,8 +155,9 @@ export const TransferFormWithdraw = ({
             <WalletCard
               label={t("to")}
               walletType={t("funding.type")}
-              walletName={fundingWallet?.name ?? ""}
-              walletAddress={transformAddress(fundingWallet?.address ?? "")}
+              walletName={fundingWallet?.name ?? "Wallet not present"}
+              walletAddress={fundingWalletAddress}
+              hasUser={fundWalletPresent}
             />
           </S.Wallets>
           <S.Form>
@@ -179,6 +190,7 @@ export const TransferFormWithdraw = ({
                   ref={amountRef}
                   placeholder={t("amountPlaceholder")}
                   autoComplete="off"
+                  disabled={!hasUser}
                   {...getFieldProps("amount")}
                 />
               </div>
@@ -188,8 +200,16 @@ export const TransferFormWithdraw = ({
             </S.Amount>
           </S.Form>
           <S.Footer>
-            <button disabled={!(isValid && dirty) || loading} type="submit">
-              {t("transferButton")}
+            <button
+              type={hasSelectedUser ? "submit" : "button"}
+              disabled={
+                hasSelectedUser ? !(isValid && dirty) || loading : false
+              }
+              onClick={
+                hasSelectedUser ? undefined : () => onToogleConnectExtension()
+              }
+            >
+              {t(buttonMessage)}
             </button>
           </S.Footer>
         </S.Content>

@@ -12,7 +12,7 @@ import {
   Button,
   Dropdown,
   Typography,
-  WalletCard,
+  AccountCard,
   Illustrations,
 } from "@polkadex/ux";
 import { KeyringPair } from "@polkadot/keyring/types";
@@ -30,6 +30,7 @@ export const Profile = ({
   tradeAccount,
   onSwitch,
   localTradingAccounts,
+  onConnectWallet,
 }: {
   onCreateTradingAccount: () => void;
   onSelectTradingAccount: (value: string) => void;
@@ -43,6 +44,7 @@ export const Profile = ({
   fundWallet?: ExtensionAccount;
   tradeAccount?: TradeAccount;
   localTradingAccounts?: TradeAccount[];
+  onConnectWallet: () => void;
 }) => {
   return (
     <div className="flex flex-col sm:w-full md:w-[23rem] bg-level-3 border border-primary rounded-lg">
@@ -62,7 +64,7 @@ export const Profile = ({
         </div>
         <div className="flex flex-col gap-6">
           <div className="flex justify-between items-center">
-            <WalletCard.Inverted
+            <AccountCard.Inverted
               name={fundWallet?.name ?? "Wallet not present"}
               address={fundWallet?.address ?? "0x0000000000000"}
               withIcon={false}
@@ -81,11 +83,13 @@ export const Profile = ({
                 />
                 Switch
               </Button.Solid>
-            </WalletCard.Inverted>
+            </AccountCard.Inverted>
           </div>
           {!fundWalletPresent && (
             <div className="flex flex-col gap-2">
-              <Button.Solid appearance="secondary">Connect Wallet</Button.Solid>
+              <Button.Solid appearance="tertiary" onClick={onConnectWallet}>
+                Connect Wallet
+              </Button.Solid>
               <div className="flex items-center gap-2">
                 <InformationCircleIcon className="w-7 h-7 text-attention-base" />
                 <Typography.Paragraph variant="primary" size="xs">
@@ -116,14 +120,14 @@ export const Profile = ({
                 asChild
                 className="flex justify-between items-center gap-2 flex-1 py-3 [&[data-state=open]>div>svg]:rotate-180"
               >
-                <WalletCard.Inverted
+                <AccountCard.Inverted
                   name={tradeAccount?.meta?.name}
                   address={tradeAccount?.address as string}
                   withIcon={false}
                   hoverable={false}
                 >
                   <ChevronDownIcon className="h-3 w-3 transition-transform duration-300 text-primary" />
-                </WalletCard.Inverted>
+                </AccountCard.Inverted>
               </Dropdown.Trigger>
               <Dropdown.Content className="min-w-[20rem]">
                 <div className="flex flex-col gap-0 p-2 rounded-md">
@@ -144,7 +148,7 @@ export const Profile = ({
                           onSelectTradingAccount(v.address);
                         }}
                       >
-                        <WalletCard.Inverted
+                        <AccountCard.Inverted
                           name={v.meta.name}
                           address={v.address}
                           withIcon={false}
@@ -159,7 +163,7 @@ export const Profile = ({
                           >
                             <TrashIcon className="w-5 h-5" />
                           </Button.Icon>
-                        </WalletCard.Inverted>
+                        </AccountCard.Inverted>
                       </div>
                     ))}
                   </div>
@@ -193,9 +197,9 @@ export const Profile = ({
                 <Button.Light
                   onClick={onImportTradingAccount}
                   appearance="primary"
-                  className="p-1"
+                  className="px-2"
                 >
-                  Import it
+                  Select / Import
                 </Button.Light>
               </div>
             </div>
