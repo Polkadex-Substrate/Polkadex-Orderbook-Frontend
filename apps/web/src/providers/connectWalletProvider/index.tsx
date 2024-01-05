@@ -179,7 +179,9 @@ export const ConnectWalletProvider = ({
   // TODO: Not updating after creating a trading account
   const localTradingAccounts = useMemo(
     () =>
-      isReady ? localAddresses?.map((value) => wallet.getPair(value)) : [],
+      isReady
+        ? localAddresses?.map((value) => wallet.getPair(value) as KeyringPair)
+        : [],
     [isReady, wallet, localAddresses]
   );
 

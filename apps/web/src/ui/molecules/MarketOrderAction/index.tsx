@@ -235,7 +235,10 @@ export const MarketOrderAction = ({
                   }
                 />
               ) : (
-                <S.Connect onClick={onToogleConnectTrading} type="button">
+                <S.Connect
+                  onClick={() => onToogleConnectTrading(true)}
+                  type="button"
+                >
                   {t("connectTradingAccount")}
                 </S.Connect>
               )}
