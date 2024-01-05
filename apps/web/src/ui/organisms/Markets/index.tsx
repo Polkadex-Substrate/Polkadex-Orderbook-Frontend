@@ -102,40 +102,38 @@ export const HeaderMarket = ({
   format = true,
 }: HeaderMarketProps) => {
   const now = new Date();
-  const from = subDays(now, 7);
-  const to = endOfDay(now);
+  const from = subDays(now, 1);
+  const to = now;
   const { graphPoints, isIncreasing } = useMiniGraph(id, from, to);
   const chainName = getChainFromTicker(pairTicker) || pairSymbol;
 
+  if (isLoading) return <MarketsSkeleton />;
+
   return (
     <S.Header onClick={onOpenMarkets}>
-      {isLoading ? (
-        <MarketsSkeleton />
-      ) : (
-        <S.HeaderAsideContainer background={format}>
-          <S.HeaderAsideLeft>
-            <S.HeaderToken>
-              <Icon isToken name={pairTicker} size="extraMedium" color="text" />
-            </S.HeaderToken>
-            <S.HeaderInfo>
-              <S.HeaderInfoContainer>
-                <span>{pair}</span>
-              </S.HeaderInfoContainer>
-              <p>{chainName}</p>
-            </S.HeaderInfo>
-          </S.HeaderAsideLeft>
-          <S.HeaderAsideCenter>
-            <Sparklines data={graphPoints}>
-              <SparklinesLine color={isIncreasing ? "#E6007A" : "green"} />
-            </Sparklines>
-          </S.HeaderAsideCenter>
-          {format && (
-            <S.ArrowBottom>
-              <ArrowBottom />
-            </S.ArrowBottom>
-          )}
-        </S.HeaderAsideContainer>
-      )}
+      <S.HeaderAsideContainer background={format}>
+        <S.HeaderAsideLeft>
+          <S.HeaderToken>
+            <Icon isToken name={pairTicker} size="extraMedium" color="text" />
+          </S.HeaderToken>
+          <S.HeaderInfo>
+            <S.HeaderInfoContainer>
+              <span>{pair}</span>
+            </S.HeaderInfoContainer>
+            <p>{chainName}</p>
+          </S.HeaderInfo>
+        </S.HeaderAsideLeft>
+        <S.HeaderAsideCenter>
+          <Sparklines data={graphPoints}>
+            <SparklinesLine color={isIncreasing ? "green" : "#E6007A"} />
+          </Sparklines>
+        </S.HeaderAsideCenter>
+        {format && (
+          <S.ArrowBottom>
+            <ArrowBottom />
+          </S.ArrowBottom>
+        )}
+      </S.HeaderAsideContainer>
     </S.Header>
   );
 };

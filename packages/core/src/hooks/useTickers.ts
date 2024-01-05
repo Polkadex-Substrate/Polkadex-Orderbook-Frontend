@@ -49,6 +49,7 @@ export function useTickers(defaultMarket?: string) {
         error instanceof Error ? error.message : (error as string);
       onHandleError(errorMessage);
     },
+    refetchOnMount: false,
   });
 
   const currentTicker = useMemo(() => {
