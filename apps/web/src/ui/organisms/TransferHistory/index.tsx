@@ -33,6 +33,7 @@ export const TransferHistory = ({
 }) => {
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [search, setSearch] = useState("");
 
   const { t } = useTranslation("transfer");
 
@@ -91,13 +92,19 @@ export const TransferHistory = ({
               toWalletAddress: e.to,
             },
           } as T.TransferHistoryProps;
-        }),
+        })
+        .filter(
+          (e) =>
+            e.token.name.toLowerCase().includes(search) ||
+            e.token.ticker.toLowerCase().includes(search)
+        ),
     [
       transactions,
       showSelectedCoins,
       selectedAsset?.id,
       selectGetAsset,
       extensionAccounts,
+      search,
     ]
   );
   const table = useReactTable({
@@ -116,7 +123,11 @@ export const TransferHistory = ({
       <S.Title>
         <h3>{t("historyTitle")}</h3>
         <S.TitleWrapper>
-          <Search isFull placeholder="Search" />
+          <Search
+            isFull
+            placeholder="Search"
+            onChange={(e) => setSearch(e.target.value.toLowerCase())}
+          />
           <CheckboxCustom
             labelProps={{ style: { whiteSpace: "nowrap" } }}
             checked={showSelectedCoins}

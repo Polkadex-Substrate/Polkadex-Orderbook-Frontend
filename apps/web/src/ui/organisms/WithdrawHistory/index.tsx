@@ -28,6 +28,7 @@ export const WithdrawHistory = ({
   const { t } = useTranslation("transfer");
 
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
+  const [search, setSearch] = useState("");
 
   const { allWithdrawals, readyWithdrawals, loading } = useTransactions();
   const { selectedAddresses } = useProfile();
@@ -43,7 +44,12 @@ export const WithdrawHistory = ({
   const selectedWithdraw = useCallback(
     (status: Transaction["status"]): WithdrawTableProps[] =>
       allWithdrawals
-        ?.filter((txn) => txn.status === status)
+        ?.filter(
+          (txn) =>
+            txn.status === status &&
+            (txn.asset.name.toLowerCase().includes(search) ||
+              txn.asset.ticker.toLowerCase().includes(search))
+        )
         ?.map((e) => {
           const token = e.asset;
           return {
@@ -84,6 +90,7 @@ export const WithdrawHistory = ({
       fundingWallet?.address,
       fundingWallet?.name,
       t,
+      search,
     ]
   );
 
@@ -185,7 +192,11 @@ export const WithdrawHistory = ({
               <S.TabItem>{t("tabs.claimed")}</S.TabItem>
             </S.TabList>
             <S.TitleWrapper>
-              <Search isFull placeholder={t("searchPlaceholder")} />
+              <Search
+                isFull
+                placeholder={t("searchPlaceholder")}
+                onChange={(e) => setSearch(e.target.value.toLowerCase())}
+              />
               <CheckboxCustom
                 checked={showSelectedCoins}
                 onChange={() => setShowSelectedCoins(!showSelectedCoins)}
