@@ -197,9 +197,9 @@ export const Profile = ({
                 <Button.Light
                   onClick={onImportTradingAccount}
                   appearance="primary"
-                  className="p-1"
+                  className="px-2"
                 >
-                  Import it
+                  Select / Import
                 </Button.Light>
               </div>
             </div>

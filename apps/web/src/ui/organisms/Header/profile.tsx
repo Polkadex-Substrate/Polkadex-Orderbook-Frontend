@@ -31,6 +31,7 @@ import { TradingAccountMnemonic } from "@/ui/templates/ConnectWallet/tradingAcco
 import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 import { ConnectExtensionAccount } from "@/ui/templates/ConnectWallet/connnectExtensionAccount";
 import { FundAccount } from "@/ui/templates/ConnectWallet/fundAccount";
+import { TradingAccountList } from "@/ui/templates/ConnectWallet/tradingAccountList";
 
 export const Profile = ({
   onClick,
@@ -62,9 +63,7 @@ export const Profile = ({
     tempMnemonic,
     onExportTradeAccount,
     onSelectExtension,
-    mainProxiesLoading,
-    mainProxiesSuccess,
-    onSelectWallet,
+    mainProxiesAccounts,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
 
@@ -108,6 +107,14 @@ export const Profile = ({
         (account) => account.address === selectedFundingWallet.address
       ),
     [extensionAccounts, selectedFundingWallet.address]
+  );
+
+  const filteredAccounts = useMemo(
+    () =>
+      localTradingAccounts?.filter(
+        (item) => mainProxiesAccounts?.includes(item.address)
+      ),
+    [localTradingAccounts, mainProxiesAccounts]
   );
 
   if (tradingWalletPresent || fundWalletPresent)
@@ -203,7 +210,7 @@ export const Profile = ({
                   />
                   <ConnectTradingAccount
                     key="ConnectTradingAccount"
-                    accounts={localTradingAccounts}
+                    accounts={filteredAccounts as TradeAccount[]}
                     onSelect={(e) => {
                       onSelectTradingAccount?.({ tradeAddress: e.address });
                     }}
@@ -223,6 +230,19 @@ export const Profile = ({
                     }
                     onImportTradingAccount={() =>
                       props?.onPage("ConnectTradingAccount")
+                    }
+                    fundWalletIsPresent={isPresent}
+                    onTradingAccountList={() =>
+                      props?.onPage("TradingAccountList")
+                    }
+                  />
+                  <TradingAccountList
+                    key="TradingAccountList"
+                    tradingAccounts={mainProxiesAccounts}
+                    onRemove={(e) => onSetTempTrading?.(e)}
+                    onClose={() => props?.onChangeInteraction(false)}
+                    onRemoveCallback={() =>
+                      props?.onPage("RemoveTradingAccount")
                     }
                   />
                   <RemoveTradingAccount
