@@ -32,6 +32,7 @@ export const DepositHistory = ({
     data,
     columns,
     loading,
+    onSetSearch,
   } = useDepositHistory({ selectedAsset });
 
   const table = useReactTable({
@@ -52,7 +53,7 @@ export const DepositHistory = ({
           <S.Title>
             <h3>{t("historyTitle")}</h3>
             <S.TitleWrapper>
-              <Search isFull placeholder="Search" />
+              <Search isFull placeholder="Search" onChange={onSetSearch} />
               <CheckboxCustom
                 labelProps={{ style: { whiteSpace: "nowrap" } }}
                 checked={showSelectedCoins}
