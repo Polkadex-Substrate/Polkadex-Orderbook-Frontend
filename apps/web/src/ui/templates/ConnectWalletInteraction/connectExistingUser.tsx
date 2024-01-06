@@ -70,10 +70,7 @@ export const ConnectExistingUser = ({
     (walletBalance ?? 0) >= 1 ? redirectMaximumAccounts : "InsufficientBalance";
 
   return (
-    <Multistep.Interactive
-      resetOnUnmount
-      // defaultActive={hasAccounts} // TODO: Fails, necessary if exist accounts in local
-    >
+    <Multistep.Interactive resetOnUnmount defaultActive={hasAccounts}>
       {(props) => (
         <>
           <Multistep.Trigger>
@@ -86,7 +83,14 @@ export const ConnectExistingUser = ({
               onTradingAccountList={() =>
                 props?.onPage("TradingAccountList", true)
               }
-            />
+              accounts={filteredAccounts as TradeAccount[]}
+              onSelect={(e) =>
+                onSelectTradingAccount?.({
+                  tradeAddress: e.address,
+                })
+              }
+              onSelectCallback={onClose}
+            ></ExistingUser>
           </Multistep.Trigger>
           <Multistep.Content>
             <ConnectTradingAccount
@@ -98,8 +102,8 @@ export const ConnectExistingUser = ({
               onRemove={(e) => onSetTempTrading?.(e)}
               onClose={
                 hasAccounts
-                  ? handleCloseInteraction
-                  : () => props?.onChangeInteraction(false)
+                  ? () => props?.onChangeInteraction(false)
+                  : handleCloseInteraction
               }
               onImport={() => props?.onPage("ImportTradingAccount", true)}
               onSelectCallback={onClose}
