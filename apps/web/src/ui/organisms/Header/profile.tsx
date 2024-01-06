@@ -5,10 +5,9 @@ import {
   truncateString,
   Icons,
   Popover,
-  Multistep,
   Authorization,
-  ConnectWallet,
-  ExtensionAccounts,
+  Multistep,
+  HoverCard,
 } from "@polkadex/ux";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
@@ -18,6 +17,7 @@ import {
   useExtensionAccounts,
   useExtensions,
 } from "@polkadex/react-providers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { Profile as ProfileDropdown } from "../../templates/ConnectWallet/profile";
 
@@ -66,7 +66,7 @@ export const Profile = ({
     mainProxiesAccounts,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
-
+  const { onToogleConnectExtension } = useSettingsProvider();
   const { extensionsStatus } = useExtensions();
   const { connectExtensionAccounts, extensionAccounts } =
     useExtensionAccounts();
@@ -122,20 +122,32 @@ export const Profile = ({
       <Popover>
         <Popover.Trigger className="bg-level-1 transition-colors duration-300 flex items-center gap-2 rounded-md">
           {showFundingWallet && (
-            <div className="flex items-center gap-1 pl-1">
-              <div className="w-4 h-4">
-                <Icons.Avatar />
-              </div>
-              {fundWalletPresent ? (
-                <Typography.Text size="xs" bold>
-                  {selectedWallet?.name}
-                </Typography.Text>
-              ) : (
-                <Typography.Text size="xs" bold variant="secondary">
-                  Wallet not present
-                </Typography.Text>
-              )}
-            </div>
+            <HoverCard>
+              <HoverCard.Trigger>
+                <div className="flex items-center gap-1">
+                  <div className="w-4 h-4">
+                    <Icons.Avatar />
+                  </div>
+                  {fundWalletPresent ? (
+                    <Typography.Text size="xs" bold>
+                      {selectedWallet?.name}
+                    </Typography.Text>
+                  ) : (
+                    <Typography.Text size="xs" bold variant="secondary">
+                      Wallet not present
+                    </Typography.Text>
+                  )}
+                </div>
+              </HoverCard.Trigger>
+              <HoverCard.Content
+                side="left"
+                withArrow={true}
+                className="bg-level-5"
+                arrowProps={{ className: "stroke-0 fill-level-5" }}
+              >
+                Fund wallet
+              </HoverCard.Content>
+            </HoverCard>
           )}
           <div className="flex items-center gap-2 bg-level-4 px-2 py-1 rounded-md">
             {tradingWalletPresent ? (
@@ -154,7 +166,7 @@ export const Profile = ({
         <Popover.Content>
           <Multistep.Interactive
             className="h-auto overflow-auto max-h-screen"
-            placement="top center"
+            closeOnClickOutside
           >
             {(props) => (
               <>
@@ -169,7 +181,10 @@ export const Profile = ({
                     onSelectTradingAccount={(tradeAddress) =>
                       onSelectTradingAccount({ tradeAddress })
                     }
-                    onSwitch={() => {}}
+                    onSwitch={() => {
+                      onToogleConnectExtension();
+                      onLogout?.();
+                    }}
                     onLogout={() => onLogout?.()}
                     onActions={() => props?.onPage("UserActions", true)}
                     onRemove={(e) => {
@@ -266,7 +281,7 @@ export const Profile = ({
                       (removingError as Error)?.message ?? removingError
                     }
                     selectedExtension={selectedExtension}
-                    onCancel={() => props?.onChangeInteraction(false)} // onBack not working, rerendering Multistep, prev reseting..
+                    onCancel={() => props?.onChangeInteraction(false)}
                   />
                   <ImportTradingAccount
                     key="ImportTradingAccount"
