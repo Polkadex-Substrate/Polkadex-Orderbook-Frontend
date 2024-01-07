@@ -28,7 +28,7 @@ export const ConnectTradingAccount = ({
   return (
     <Interaction>
       <Interaction.Title onClose={onClose}>
-        Connect trading account
+        Recover trading account
       </Interaction.Title>
       <Interaction.Content>
         <div className="flex flex-col gap-6">
@@ -78,7 +78,6 @@ export const ConnectTradingAccount = ({
               </div>
             </div>
           )}
-
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <Separator.Horizontal className="bg-level-5" />
