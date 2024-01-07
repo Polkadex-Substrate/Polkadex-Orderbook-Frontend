@@ -69,8 +69,14 @@ export const ConnectExistingUser = ({
   const redirectEnoughBalance =
     (walletBalance ?? 0) >= 1 ? redirectMaximumAccounts : "InsufficientBalance";
 
+  const availableOnDevice = useMemo(
+    () =>
+      filteredAccounts?.some((value) => value.address === tempTrading?.address),
+    [tempTrading?.address, filteredAccounts]
+  );
+
   return (
-    <Multistep.Interactive resetOnUnmount defaultActive={hasAccounts}>
+    <Multistep.Interactive resetOnUnmount>
       {(props) => (
         <>
           <Multistep.Trigger>
@@ -139,6 +145,7 @@ export const ConnectExistingUser = ({
               key="RemoveTradingAccount"
               tradingAccount={tempTrading as TradeAccount}
               fundWallet={selectedWallet}
+              availableOnDevice={availableOnDevice}
               onRemoveFromDevice={() =>
                 onRemoveTradingAccountFromDevice?.(
                   tempTrading?.address as string
