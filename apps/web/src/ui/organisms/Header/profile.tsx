@@ -6,8 +6,8 @@ import {
   Icons,
   Popover,
   Authorization,
-  Multistep,
   HoverCard,
+  Multistep,
 } from "@polkadex/ux";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
@@ -143,9 +143,8 @@ export const Profile = ({
                 side="left"
                 withArrow={true}
                 className="bg-level-5"
-                arrowProps={{ className: "stroke-0 fill-level-5" }}
               >
-                Fund wallet
+                Funding wallet
               </HoverCard.Content>
             </HoverCard>
           )}
@@ -164,10 +163,7 @@ export const Profile = ({
           </div>
         </Popover.Trigger>
         <Popover.Content>
-          <Multistep.Interactive
-            className="h-auto overflow-auto max-h-screen"
-            closeOnClickOutside
-          >
+          <Multistep.Interactive className="h-auto overflow-auto max-h-screen">
             {(props) => (
               <>
                 <Multistep.Trigger>
