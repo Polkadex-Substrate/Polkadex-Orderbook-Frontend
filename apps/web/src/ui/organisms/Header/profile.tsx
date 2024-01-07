@@ -32,6 +32,8 @@ import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useC
 import { ConnectExtensionAccount } from "@/ui/templates/ConnectWallet/connnectExtensionAccount";
 import { FundAccount } from "@/ui/templates/ConnectWallet/fundAccount";
 import { TradingAccountList } from "@/ui/templates/ConnectWallet/tradingAccountList";
+import { MaximumTradingAccount } from "@/ui/templates/ConnectWallet/maximumTradingAccount";
+import { InsufficientBalance } from "@/ui/templates/ConnectWallet/insufficientBalance";
 
 export const Profile = ({
   onClick,
@@ -117,6 +119,20 @@ export const Profile = ({
     [localTradingAccounts, mainProxiesAccounts]
   );
 
+  const redirectMaximumAccounts =
+    (mainProxiesAccounts?.length ?? 0) >= 3
+      ? "MaximumTradingAccount"
+      : "NewTradingAccount";
+
+  const redirectEnoughBalance =
+    (walletBalance ?? 0) >= 1 ? redirectMaximumAccounts : "InsufficientBalance";
+
+  const availableOnDevice = useMemo(
+    () =>
+      filteredAccounts?.some((value) => value.address === tempTrading?.address),
+    [tempTrading?.address, filteredAccounts]
+  );
+
   if (tradingWalletPresent || fundWalletPresent)
     return (
       <Popover>
@@ -169,7 +185,7 @@ export const Profile = ({
                 <Multistep.Trigger>
                   <ProfileDropdown
                     onCreateTradingAccount={() =>
-                      props?.onPage("NewTradingAccount", true)
+                      props?.onPage(redirectEnoughBalance, true)
                     }
                     onImportTradingAccount={() =>
                       props?.onPage("ConnectTradingAccount", true)
@@ -260,6 +276,7 @@ export const Profile = ({
                     key="RemoveTradingAccount"
                     tradingAccount={tempTrading as TradeAccount}
                     fundWallet={selectedWallet}
+                    availableOnDevice={availableOnDevice}
                     onRemoveFromDevice={() =>
                       onRemoveTradingAccountFromDevice?.(
                         tempTrading?.address as string
@@ -334,6 +351,20 @@ export const Profile = ({
                     onClose={() => props?.onChangeInteraction(false)}
                     isPresent={isPresent}
                     selectedExtension={selectedExtension}
+                  />
+                  <MaximumTradingAccount
+                    key="MaximumTradingAccount"
+                    tradingAccounts={mainProxiesAccounts}
+                    onRemove={(e) => onSetTempTrading?.(e)}
+                    onClose={() => props?.onChangeInteraction(false)}
+                    onRemoveCallback={() =>
+                      props?.onPage("RemoveTradingAccount")
+                    }
+                  />
+                  <InsufficientBalance
+                    key="InsufficientBalance"
+                    balance={walletBalance}
+                    onClose={() => props?.onChangeInteraction(false)}
                   />
                 </Multistep.Content>
               </>
