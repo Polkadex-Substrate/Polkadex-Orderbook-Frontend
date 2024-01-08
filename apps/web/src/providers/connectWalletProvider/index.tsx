@@ -167,13 +167,14 @@ export const ConnectWalletProvider = ({
     onSuccess,
   });
 
-  const selectedWallet = selectedAddresses.mainAddress
+  const selectedWallet = selectedAddresses?.mainAddress
     ? extensionAccounts.find((e) => e.address === selectedAddresses.mainAddress)
     : undefined;
 
-  const selectedAccount = selectedAddresses.tradeAddress
-    ? wallet.getPair(selectedAddresses.tradeAddress)
-    : undefined;
+  const selectedAccount =
+    selectedAddresses?.tradeAddress && isReady
+      ? wallet.getPair(selectedAddresses.tradeAddress)
+      : undefined;
 
   // UPDATE-CORE
   // TODO: Not updating after creating a trading account
