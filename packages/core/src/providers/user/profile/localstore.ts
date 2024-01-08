@@ -4,6 +4,7 @@ import {
   AVATAR_KEY,
   FAVORITE_MARKET_KEY,
 } from "@orderbook/core/providers/user/profile/constants";
+import { isValidAddressAddress } from "@orderbook/core/helpers";
 
 export const setLastUsedAccount = (account: UserAddressTuple) => {
   localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(account));
@@ -12,7 +13,15 @@ export const setLastUsedAccount = (account: UserAddressTuple) => {
 export const getLastUsedAccount = () => {
   const account = localStorage.getItem(ACTIVE_ACCOUNT_KEY);
   if (!account) return null;
-  return JSON.parse(account);
+  const accounts: UserAddressTuple = JSON.parse(account);
+  return {
+    tradeAddress: isValidAddressAddress(accounts.tradeAddress)
+      ? accounts.tradeAddress
+      : "",
+    mainAddress: isValidAddressAddress(accounts.mainAddress)
+      ? accounts.mainAddress
+      : "",
+  };
 };
 
 export const setFavoriteMarkets = (markets: string[]) => {

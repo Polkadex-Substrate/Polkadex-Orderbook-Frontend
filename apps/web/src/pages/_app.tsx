@@ -21,12 +21,7 @@ import awsconfig from "../../aws-exports";
 
 import * as gtag from "@/lib/gtag";
 import { defaultThemes, GlobalStyles } from "@/styles";
-const ErrorBoundary = dynamic(
-  () => import("@/ui/molecules").then((mod) => mod.ErrorBoundary),
-  {
-    ssr: false,
-  }
-);
+
 const SettingProvider = dynamic(
   () => import("@orderbook/core/providers").then((mod) => mod.SettingProvider),
   {
@@ -71,13 +66,13 @@ const queryClient = new QueryClient({
 
 function App({ Component, pageProps }: AppProps) {
   // Removes all console from production environment
-  // if (process.env.NODE_ENV === "production") {
-  //   console.log = () => {};
-  //   console.debug = () => {};
-  //   console.info = () => {};
-  //   console.warn = () => {};
-  //   console.error = () => {};
-  // }
+  if (process.env.NODE_ENV === "production") {
+    console.log = () => {};
+    console.debug = () => {};
+    console.info = () => {};
+    console.warn = () => {};
+    console.error = () => {};
+  }
   const router = useRouter();
   const availableRoutes = defaultConfig.availableRoutes;
   const isActive = useMemo(() => {
@@ -157,9 +152,7 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
         theme={theme === "light" ? defaultThemes.light : defaultThemes.dark}
       >
         <ThemeWrapper>
-          <ErrorBoundary>
-            <Layout Component={Component} pageProps={pageProps} />
-          </ErrorBoundary>
+          <Layout Component={Component} pageProps={pageProps} />
         </ThemeWrapper>
         <GlobalStyles />
       </ThemeProvider>

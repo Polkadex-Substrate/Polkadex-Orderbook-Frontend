@@ -43,3 +43,4 @@ export * from "./getMarketUrl";
 export * from "./extrinsics";
 export * from "./getAddressFromMnemonic";
 export * from "./extensions";
+export * from "./validateAddress";
