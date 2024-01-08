@@ -1,6 +1,6 @@
 import { Sparklines, SparklinesLine } from "react-sparklines";
 import { FC } from "react";
-import { endOfDay, subDays } from "date-fns";
+import { subDays } from "date-fns";
 import { useTranslation } from "next-i18next";
 import {
   Icon,
