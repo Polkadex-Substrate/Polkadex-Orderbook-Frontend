@@ -21,8 +21,12 @@ import awsconfig from "../../aws-exports";
 
 import * as gtag from "@/lib/gtag";
 import { defaultThemes, GlobalStyles } from "@/styles";
-import { ErrorBoundary } from "@/ui/molecules";
-
+const ErrorBoundary = dynamic(
+  () => import("@/ui/molecules").then((mod) => mod.ErrorBoundary),
+  {
+    ssr: false,
+  }
+);
 const SettingProvider = dynamic(
   () => import("@orderbook/core/providers").then((mod) => mod.SettingProvider),
   {
