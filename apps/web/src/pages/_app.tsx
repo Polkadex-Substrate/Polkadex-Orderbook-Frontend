@@ -21,6 +21,7 @@ import awsconfig from "../../aws-exports";
 
 import * as gtag from "@/lib/gtag";
 import { defaultThemes, GlobalStyles } from "@/styles";
+import { ErrorBoundary } from "@/ui/molecules";
 
 const SettingProvider = dynamic(
   () => import("@orderbook/core/providers").then((mod) => mod.SettingProvider),
@@ -152,7 +153,9 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
         theme={theme === "light" ? defaultThemes.light : defaultThemes.dark}
       >
         <ThemeWrapper>
-          <Layout Component={Component} pageProps={pageProps} />
+          <ErrorBoundary>
+            <Layout Component={Component} pageProps={pageProps} />
+          </ErrorBoundary>
         </ThemeWrapper>
         <GlobalStyles />
       </ThemeProvider>
