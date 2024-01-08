@@ -4,6 +4,8 @@ import { KlineEvent } from "@orderbook/core/providers/public/klineProvider";
 
 import { QUERY_KEYS } from "../constants";
 
+import { useTickers } from "./useTickers";
+
 export const useMiniGraph = (market: string, from: Date, to: Date) => {
   const dailyKline: UseQueryResult<KlineEvent[], Error> = useQuery({
     queryKey: QUERY_KEYS.miniGraph(market),
@@ -11,8 +13,13 @@ export const useMiniGraph = (market: string, from: Date, to: Date) => {
     refetchOnWindowFocus: false,
   });
 
+  const {
+    currentTicker: { priceChange24Hr },
+  } = useTickers(market);
+  const isPriceChangeNegative = priceChange24Hr < 0;
+  const isIncreasing = !isPriceChangeNegative;
+
   const points = dailyKline?.data?.map((i) => i.close) || [];
-  const isIncreasing = points?.length > 1 ? points[0] > points[1] : false;
 
   return {
     graphPoints: points.reverse(),
