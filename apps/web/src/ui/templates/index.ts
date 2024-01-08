@@ -7,3 +7,5 @@ export * from "./Recovery";
 export * from "./ShutdownInteraction";
 export * from "./Trading";
 export * from "./Landing";
+export * from "./ConnectTradingInteraction";
+export * from "./ConnectWalletInteraction";

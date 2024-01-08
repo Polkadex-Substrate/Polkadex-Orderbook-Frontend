@@ -21,6 +21,7 @@ import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMemo } from "react";
 import { useAssets } from "@orderbook/core/hooks";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import * as S from "./styles";
 import { TableSkeleton } from "./skeleton";
@@ -33,6 +34,7 @@ export const BalancesTemplate = () => {
 
   const { connecting } = useNativeApi();
   const { selectedAddresses } = useProfile();
+  const { onToogleConnectExtension } = useSettingsProvider();
 
   const userHasSelectedAccount = selectedAddresses?.tradeAddress?.length > 0;
 
@@ -149,7 +151,12 @@ export const BalancesTemplate = () => {
                   ) : userHasSelectedAccount ? (
                     <BalancesTable assets={assets} />
                   ) : (
-                    <EmptyMyAccount balances hasLimit {...connectWalletData} />
+                    <EmptyMyAccount
+                      buttonAction={onToogleConnectExtension}
+                      balances
+                      hasLimit
+                      {...connectWalletData}
+                    />
                   )}
                 </S.Content>
               </S.Container>

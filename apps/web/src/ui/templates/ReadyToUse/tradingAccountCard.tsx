@@ -1,6 +1,12 @@
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { MouseEvent } from "react";
-import { Button, Copy, Typography, truncateString } from "@polkadex/ux";
+import {
+  Button,
+  Copy,
+  Skeleton,
+  Typography,
+  truncateString,
+} from "@polkadex/ux";
 import classNames from "classnames";
 
 export const TradingAccountCard = ({
@@ -36,9 +42,11 @@ export const TradingAccountCard = ({
       <div className="flex flex-1 justify-between gap-2 items-center p-4">
         <div className="flex items-center gap-2">
           <Copy value={address} />
-          <Typography.Text bold size="md">
-            {shortAddress}
-          </Typography.Text>
+          <Skeleton loading={!address}>
+            <Typography.Text bold size="md">
+              {shortAddress}
+            </Typography.Text>
+          </Skeleton>
         </div>
         {hasRemove && (
           <div className="flex gap-1">
@@ -49,7 +57,9 @@ export const TradingAccountCard = ({
         )}
       </div>
       <div className="flex items-center justify-between p-4 bg-grayscale">
-        <Typography.Text variant="primary">{name}</Typography.Text>
+        <Skeleton loading={!address}>
+          <Typography.Text variant="primary">{name}</Typography.Text>
+        </Skeleton>
         <div className="bg-level-3 px-2 py-1 rounded-full text-xs text-secondary">
           {type}
         </div>

@@ -27,8 +27,10 @@ import { KlineProvider } from "@orderbook/core/providers/public/klineProvider";
 import { defaultConfig } from "@orderbook/core/config";
 import { useMarkets, useTickers } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { ShutdownInteraction } from "../ShutdownInteraction";
+import { ConnectTradingInteraction } from "../ConnectTradingInteraction";
 
 import * as S from "./styles";
 
@@ -57,6 +59,8 @@ export function Trading() {
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
   const { list } = useMarkets();
+  const { onToogleConnectTrading } = useSettingsProvider();
+
   const market = getCurrentMarket(list, query?.id as string);
   const id = market?.id;
 
@@ -108,6 +112,7 @@ export function Trading() {
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
+      <ConnectTradingInteraction />
       <Modal
         open={shutdownBanner}
         isBlur
@@ -176,7 +181,12 @@ export function Trading() {
                             <Transactions market={id} />
                           </SessionProvider>
                         ) : (
-                          <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                          <EmptyMyAccount
+                            buttonAction={onToogleConnectTrading}
+                            buttonTitle="Connect Trading Account"
+                            hasLimit
+                            {...hasSelectedAccount}
+                          />
                         )}
                       </S.GraphEpmty>
                       <S.WrapperRight>

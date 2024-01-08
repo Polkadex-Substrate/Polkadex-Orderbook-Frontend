@@ -1,5 +1,3 @@
-// wrapper hook for connecting wallet state
-
 import {
   ExtensionAccount,
   useExtensionAccounts,
@@ -13,7 +11,13 @@ import {
   useProfile,
 } from "@orderbook/core/providers/user/profile";
 // TODO: should be moved to polkadex-ts types
-import { useMemo, useState } from "react";
+import {
+  PropsWithChildren,
+  ReactNode,
+  createContext,
+  useMemo,
+  useState,
+} from "react";
 import {
   AddProxyAccountArgs,
   ImportFromFile,
@@ -91,7 +95,12 @@ type ConnectWalletState = {
   mainProxiesLoading: boolean;
   mainProxiesSuccess: boolean;
 };
-export const useConnectWallet = (): ConnectWalletState => {
+
+export const ConnectWalletProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   const [tempMnemonic, setTempMnemonic] = useState<string>("");
   const [tempTrading, setTempTrading] = useState<KeyringPair>();
   const {
@@ -109,7 +118,9 @@ export const useConnectWallet = (): ConnectWalletState => {
     useSettingsProvider();
   const { extensionAccounts } = useExtensionAccounts();
   // TODO: rename to useBrowserAccounts
-  const { wallet } = useUserAccounts();
+  const { wallet, isReady, localAddresses } = useUserAccounts();
+  const onSetTempMnemonic = (value: string) => setTempMnemonic(value);
+
   const {
     error: registerError,
     mutateAsync: onRegisterTradeAccount,
@@ -117,13 +128,17 @@ export const useConnectWallet = (): ConnectWalletState => {
   } = useAddProxyAccount({
     onError,
     onSuccess,
+    onSetTempMnemonic,
   });
 
   const {
     error: removingError,
     mutateAsync: onRemoveTradingAccountFromChain,
     status: removingStatus,
-  } = useRemoveProxyAccount({ onError, onSuccess });
+  } = useRemoveProxyAccount({
+    onError,
+    onSuccess,
+  });
 
   const {
     onChainBalances,
@@ -148,7 +163,9 @@ export const useConnectWallet = (): ConnectWalletState => {
     error: importFromFileError,
     mutateAsync: onImportFromFile,
     status: importFromFileStatus,
-  } = useImportProxyAccount({ onSuccess });
+  } = useImportProxyAccount({
+    onSuccess,
+  });
 
   const selectedWallet = selectedAddresses.mainAddress
     ? extensionAccounts.find((e) => e.address === selectedAddresses.mainAddress)
@@ -157,7 +174,16 @@ export const useConnectWallet = (): ConnectWalletState => {
   const selectedAccount = selectedAddresses.tradeAddress
     ? wallet.getPair(selectedAddresses.tradeAddress)
     : undefined;
-  const localTradingAccounts = wallet.getAll();
+
+  // UPDATE-CORE
+  // TODO: Not updating after creating a trading account
+  const localTradingAccounts = useMemo(
+    () =>
+      isReady
+        ? localAddresses?.map((value) => wallet.getPair(value) as KeyringPair)
+        : [],
+    [isReady, wallet, localAddresses]
+  );
 
   const proxiesAccounts = useMemo(() => {
     return allProxiesAccounts
@@ -230,53 +256,102 @@ export const useConnectWallet = (): ConnectWalletState => {
       console.log("error", error);
     }
   };
+  return (
+    <Provider
+      value={{
+        selectedWallet,
+        selectedAccount,
+        selectedExtension,
+        localTradingAccounts,
+        onSelectExtension,
+        onSelectTradingAccount: onUserSelectTradingAddress,
+        onExportTradeAccount,
+        onRemoveTradingAccountFromDevice,
+        onSelectWallet: onSelectExtensionAccount,
+        onSetTempTrading,
+        onResetExtension,
+        onResetWallet,
+        onResetTempMnemonic,
+        onResetTempTrading,
+        onLogout,
 
-  return {
-    selectedWallet,
-    selectedAccount,
-    selectedExtension,
-    localTradingAccounts,
-    onSelectExtension,
-    onSelectTradingAccount: onUserSelectTradingAddress,
-    onExportTradeAccount,
-    onRemoveTradingAccountFromDevice,
-    onSelectWallet: onSelectExtensionAccount,
-    onSetTempTrading,
-    onResetExtension,
-    onResetWallet,
-    onResetTempMnemonic,
-    onResetTempTrading,
-    onLogout,
+        onRegisterTradeAccount,
+        registerError,
+        registerStatus,
 
-    onRegisterTradeAccount,
-    registerError,
-    registerStatus,
+        onRemoveTradingAccountFromChain,
+        removingError,
+        removingStatus,
 
-    onRemoveTradingAccountFromChain,
-    removingError,
-    removingStatus,
+        tempMnemonic,
+        tempTrading,
 
-    tempMnemonic,
-    tempTrading,
+        walletBalance: onChainBalances?.get(POLKADEX_ASSET.id) || 0,
+        walletHasError: isOnChainBalanceError,
+        walletLoading: isOnChainBalanceLoading,
+        walletSuccess: isOnChainBalanceSuccess,
+        walletStatus: onChainBalanceStatus,
 
-    walletBalance: onChainBalances?.get(POLKADEX_ASSET.id) || 0,
-    walletHasError: isOnChainBalanceError,
-    walletLoading: isOnChainBalanceLoading,
-    walletSuccess: isOnChainBalanceSuccess,
-    walletStatus: onChainBalanceStatus,
+        proxiesAccounts,
+        proxiesHasError,
+        proxiesLoading,
+        proxiesSuccess,
+        proxiesStatus,
 
-    proxiesAccounts,
-    proxiesHasError,
-    proxiesLoading,
-    proxiesSuccess,
-    proxiesStatus,
+        importFromFileError,
+        importFromFileStatus,
+        onImportFromFile,
 
-    importFromFileError,
-    importFromFileStatus,
-    onImportFromFile,
+        mainProxiesAccounts,
+        mainProxiesLoading,
+        mainProxiesSuccess,
+      }}
+    >
+      {children}
+    </Provider>
+  );
+};
 
-    mainProxiesAccounts,
-    mainProxiesLoading,
-    mainProxiesSuccess,
-  };
+export const Context = createContext<ConnectWalletState>({
+  localTradingAccounts: [],
+  onSelectWallet: () => {},
+  onSelectTradingAccount: () => {},
+  onSelectExtension: () => {},
+  onResetWallet: () => {},
+  onResetExtension: () => {},
+  onLogout: () => {},
+  onImportFromFile: async () => {},
+  onRegisterTradeAccount: async () => {},
+  onRemoveTradingAccountFromDevice: () => {},
+  onRemoveTradingAccountFromChain: async () => {},
+  onExportTradeAccount: () => {},
+  onSetTempTrading: () => {},
+  onResetTempMnemonic: () => {},
+  onResetTempTrading: () => {},
+  proxiesAccounts: [],
+  proxiesStatus: "idle",
+  registerStatus: "idle",
+  removingStatus: "idle",
+  walletBalance: 0,
+  walletStatus: "idle",
+  importFromFileStatus: "idle",
+  proxiesHasError: false,
+  proxiesLoading: false,
+  proxiesSuccess: false,
+  registerError: undefined,
+  removingError: undefined,
+  walletHasError: false,
+  walletLoading: false,
+  walletSuccess: false,
+  importFromFileError: undefined,
+  mainProxiesAccounts: [],
+  mainProxiesLoading: false,
+  mainProxiesSuccess: false,
+});
+
+const Provider = ({
+  value,
+  children,
+}: PropsWithChildren<{ value: ConnectWalletState }>) => {
+  return <Context.Provider value={value}>{children}</Context.Provider>;
 };

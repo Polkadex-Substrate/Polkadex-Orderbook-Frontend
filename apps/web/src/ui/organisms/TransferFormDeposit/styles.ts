@@ -138,11 +138,11 @@ export const Amount = styled.div`
   `}
 `;
 
-export const Footer = styled.div`
-  ${({ theme }) => css`
+export const Footer = styled.div<{ hasUser: boolean }>`
+  ${({ theme, hasUser }) => css`
     flex: 1;
     button {
-      background: ${theme.colors.green};
+      background: ${hasUser ? theme.colors.green : theme.colors.primary};
       padding: ${normalizeValue(1.4)};
       border-radius: ${normalizeValue(0.5)};
       width: 100%;
@@ -151,9 +151,12 @@ export const Footer = styled.div`
         background: gray;
         cursor: not-allowed;
       }
-      &:hover:not(:disabled) {
-        background: ${theme.colors.gradientGreen};
-      }
+      ${hasUser &&
+      css`
+        &:hover:not(:disabled) {
+          background: ${theme.colors.gradientGreen};
+        }
+      `}
     }
   `}
 `;

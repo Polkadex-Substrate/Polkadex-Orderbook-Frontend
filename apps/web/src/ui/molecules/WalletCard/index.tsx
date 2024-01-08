@@ -14,12 +14,14 @@ export const WalletCard = ({
   walletAddress,
   searchable,
   children,
+  hasUser,
 }: PropsWithChildren<{
   label: string;
   walletType: string;
   walletName: string;
   searchable?: boolean;
   walletAddress?: string;
+  hasUser?: boolean;
 }>) => {
   return (
     <S.Wrapper>
@@ -31,8 +33,8 @@ export const WalletCard = ({
           <S.Paragraph>{walletType}</S.Paragraph>
         )}
       </S.Header>
-      <S.Footer>
-        <Skeleton height="4px" width={normalizeValue(5)} loading={!walletName}>
+      {hasUser && (
+        <S.Footer>
           {walletAddress && (
             <>
               <S.Icon>
@@ -47,22 +49,26 @@ export const WalletCard = ({
                   <span>{walletAddress}</span>
                 ) : (
                   <p>
-                    {walletName} <span>• {walletAddress}</span>
+                    {walletName}
+                    <span>
+                      {walletName && " • "}
+                      {walletAddress}
+                    </span>
                   </p>
                 )}
               </Skeleton>
             </>
           )}
-          {!searchable && !walletAddress && (
+          {!searchable && !walletAddress && walletName && (
             <S.Message>
               <div>
                 <Icons.InformationAlert />
               </div>
               <p>{walletName}</p>
             </S.Message>
-          )}
-        </Skeleton>
-      </S.Footer>
+          )}{" "}
+        </S.Footer>
+      )}
     </S.Wrapper>
   );
 };

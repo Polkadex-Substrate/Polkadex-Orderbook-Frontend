@@ -40,4 +40,9 @@ export const QUERY_KEYS = {
   ],
   transactions: (mainAddress: string) => [PREFIX, "transactions", mainAddress],
   proxyAccounts: () => [PREFIX, "proxyAccounts"],
+  singleProxyAccounts: (mainAddress: string) => [
+    PREFIX,
+    "proxyAccount",
+    mainAddress,
+  ],
 };

@@ -1,6 +1,6 @@
-import * as S from "./styles";
+import { Button } from "@polkadex/ux";
 
-import ConnectWalletButton from "@/ui/organisms/Header/connect";
+import * as S from "./styles";
 
 export const EmptyMyAccount = ({
   balances = false,
@@ -8,6 +8,8 @@ export const EmptyMyAccount = ({
   image = "loginEmpty",
   title = "Looks like you're not logged in",
   description = "Explore a new way of trading with your own wallet!",
+  buttonTitle = "Connect wallet",
+  buttonAction = () => {},
 }) => (
   <S.Empty balances={balances} hasLimit={hasLimit}>
     <S.EmptyContainer>
@@ -23,7 +25,9 @@ export const EmptyMyAccount = ({
         <h2>{title}</h2>
         <p>{description}</p>
       </S.EmptyContent>
-      <ConnectWalletButton />
+      {buttonTitle && (
+        <Button.Solid onClick={buttonAction}>{buttonTitle}</Button.Solid>
+      )}
     </S.EmptyContainer>
   </S.Empty>
 );

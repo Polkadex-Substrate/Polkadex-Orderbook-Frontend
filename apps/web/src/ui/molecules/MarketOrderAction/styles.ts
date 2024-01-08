@@ -59,7 +59,7 @@ export const SliderWrapper = styled.div`
   `}
 `;
 
-export const Connect = styled.div`
+export const Connect = styled.button`
   ${({ theme }) => css`
     cursor: pointer;
     display: block;

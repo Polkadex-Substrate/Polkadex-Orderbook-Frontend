@@ -18,6 +18,8 @@ export const Context = createContext<SettingContextProps>({
   onRemoveNotification: () => {},
   onReadNotification: () => {},
   onClearNotifications: () => {},
+  onToogleConnectExtension: () => {},
+  onToogleConnectTrading: () => {},
 });
 
 export const Provider = ({ value, children }: SettingProviderProps) => (
