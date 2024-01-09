@@ -69,11 +69,14 @@ export const ConnectExistingUser = ({
   const redirectEnoughBalance =
     (walletBalance ?? 0) >= 1 ? redirectMaximumAccounts : "InsufficientBalance";
 
+  const availableOnDevice = useMemo(
+    () =>
+      filteredAccounts?.some((value) => value.address === tempTrading?.address),
+    [tempTrading?.address, filteredAccounts]
+  );
+
   return (
-    <Multistep.Interactive
-      resetOnUnmount
-      // defaultActive={hasAccounts} // TODO: Fails, necessary if exist accounts in local
-    >
+    <Multistep.Interactive resetOnUnmount>
       {(props) => (
         <>
           <Multistep.Trigger>
@@ -86,7 +89,14 @@ export const ConnectExistingUser = ({
               onTradingAccountList={() =>
                 props?.onPage("TradingAccountList", true)
               }
-            />
+              accounts={filteredAccounts as TradeAccount[]}
+              onSelect={(e) =>
+                onSelectTradingAccount?.({
+                  tradeAddress: e.address,
+                })
+              }
+              onSelectCallback={onClose}
+            ></ExistingUser>
           </Multistep.Trigger>
           <Multistep.Content>
             <ConnectTradingAccount
@@ -98,8 +108,8 @@ export const ConnectExistingUser = ({
               onRemove={(e) => onSetTempTrading?.(e)}
               onClose={
                 hasAccounts
-                  ? handleCloseInteraction
-                  : () => props?.onChangeInteraction(false)
+                  ? () => props?.onChangeInteraction(false)
+                  : handleCloseInteraction
               }
               onImport={() => props?.onPage("ImportTradingAccount", true)}
               onSelectCallback={onClose}
@@ -135,6 +145,7 @@ export const ConnectExistingUser = ({
               key="RemoveTradingAccount"
               tradingAccount={tempTrading as TradeAccount}
               fundWallet={selectedWallet}
+              availableOnDevice={availableOnDevice}
               onRemoveFromDevice={() =>
                 onRemoveTradingAccountFromDevice?.(
                   tempTrading?.address as string

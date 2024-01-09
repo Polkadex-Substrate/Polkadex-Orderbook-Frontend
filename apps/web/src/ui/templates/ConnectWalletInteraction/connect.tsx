@@ -70,6 +70,14 @@ export const Connect = ({
     [selectedWallet, onNext, hasAccount]
   );
 
+  const availableOnDevice = useMemo(
+    () =>
+      localTradingAccounts?.some(
+        (value) => value.address === tempTrading?.address
+      ),
+    [tempTrading?.address, localTradingAccounts]
+  );
+
   return (
     <Multistep.Interactive resetOnUnmount>
       {(props) => (
@@ -146,6 +154,7 @@ export const Connect = ({
                 )
               }
               selectedExtension={selectedExtension}
+              availableOnDevice={availableOnDevice}
               onCancel={() => props?.onPage("ConnectTradingAccount")}
             />
           </Multistep.Content>

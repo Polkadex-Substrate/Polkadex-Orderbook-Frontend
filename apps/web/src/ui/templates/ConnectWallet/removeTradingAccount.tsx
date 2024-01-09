@@ -16,6 +16,7 @@ export const RemoveTradingAccount = ({
   selectedExtension,
   errorMessage,
   errorTitle,
+  availableOnDevice,
 }: {
   tradingAccount: TradeAccount;
   fundWallet?: ExtensionAccount;
@@ -26,6 +27,7 @@ export const RemoveTradingAccount = ({
   selectedExtension?: (typeof ExtensionsArray)[0];
   errorTitle?: string;
   errorMessage?: string;
+  availableOnDevice?: boolean;
 }) => {
   const [state, setState] = useState({
     removeDevice: false,
@@ -80,6 +82,7 @@ export const RemoveTradingAccount = ({
                 title="Remove from your device"
                 icon="Device"
                 checked={state.removeDevice}
+                disabled={!availableOnDevice}
                 onChange={() =>
                   setState({
                     ...state,
@@ -94,12 +97,11 @@ export const RemoveTradingAccount = ({
                 icon="Blockchain"
                 checked={state.removeBlockchain}
                 onChange={() =>
-                  setState({
-                    removeDevice: state.removeBlockchain
-                      ? state.removeDevice
-                      : true,
-                    removeBlockchain: !state.removeBlockchain,
-                  })
+                  setState((prevState) => ({
+                    removeDevice:
+                      !!availableOnDevice && !state.removeBlockchain,
+                    removeBlockchain: !prevState.removeBlockchain,
+                  }))
                 }
                 disabled={!fundWallet}
               />
