@@ -248,6 +248,7 @@ export const Profile = ({
                     onRemoveCallback={() =>
                       props?.onPage("RemoveTradingAccount")
                     }
+                    onExportBrowserAccount={onExportTradeAccount}
                   />
                   <UserActions
                     key="UserActions"

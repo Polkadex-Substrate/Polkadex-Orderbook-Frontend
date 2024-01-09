@@ -8,6 +8,8 @@ import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
 
+import { ExportTradeAccountProps } from "@/providers/connectWalletProvider";
+
 export const ConnectTradingAccount = ({
   accounts = [],
   onClose,
@@ -16,6 +18,8 @@ export const ConnectTradingAccount = ({
   onRemove,
   onSelectCallback,
   onRemoveCallback,
+  onExportBrowserAccount,
+  enabledExtensionAccount = false,
 }: {
   accounts?: TradeAccount[];
   onClose: () => void;
@@ -24,6 +28,8 @@ export const ConnectTradingAccount = ({
   onRemove: (e: TradeAccount) => void;
   onSelectCallback: () => void;
   onRemoveCallback: () => void;
+  onExportBrowserAccount: (value: ExportTradeAccountProps) => void;
+  enabledExtensionAccount?: boolean;
 }) => {
   return (
     <Interaction>
@@ -47,6 +53,7 @@ export const ConnectTradingAccount = ({
                     address={value.address}
                     name={value.meta.name as string}
                     type="Browser"
+                    enabledExtensionAccount={enabledExtensionAccount}
                     onRemove={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -58,6 +65,11 @@ export const ConnectTradingAccount = ({
                       e.stopPropagation();
                       onSelect(value);
                       onSelectCallback();
+                    }}
+                    onExport={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onExportBrowserAccount({ account: value });
                     }}
                   />
                 ))}

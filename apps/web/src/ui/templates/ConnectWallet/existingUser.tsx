@@ -33,6 +33,7 @@ export const ExistingUser = ({
   onSelectCallback: () => void;
 }) => {
   const hasTradingAccounts = !!accounts?.length;
+
   return (
     <Interaction className="gap-10 overflow-hidden">
       {hasTradingAccounts && (
@@ -53,8 +54,8 @@ export const ExistingUser = ({
               <div
                 className={classNames(
                   accounts?.length > 1 &&
-                    "border-b border-secondary overflow-hidden hover:overflow-auto px-7 ",
-                  "flex flex-col gap-3 max-h-[11rem] "
+                    "border-b border-secondary overflow-hidden hover:overflow-auto",
+                  "flex flex-col gap-3 max-h-[11rem] px-7"
                 )}
                 style={{ scrollbarGutter: "stable" }}
               >

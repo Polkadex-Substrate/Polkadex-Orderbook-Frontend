@@ -40,6 +40,7 @@ export const ConnectExistingUser = ({
     onImportFromFile,
     importFromFileStatus,
     walletBalance,
+    onExportTradeAccount,
   } = useConnectWalletProvider();
 
   const filteredAccounts = useMemo(
@@ -116,6 +117,7 @@ export const ConnectExistingUser = ({
               onRemoveCallback={() =>
                 props?.onPage("RemoveTradingAccount", true)
               }
+              onExportBrowserAccount={onExportTradeAccount}
             />
             <NewTradingAccount
               key="NewTradingAccount"
@@ -165,7 +167,10 @@ export const ConnectExistingUser = ({
             />
             <ImportTradingAccount
               key="ImportTradingAccount"
-              onImport={async (e) => await onImportFromFile?.(e)}
+              onImport={async (e) => {
+                await onImportFromFile?.(e);
+                onClose();
+              }}
               onRedirect={() => props?.onPage("ConnectTradingAccount")}
               onClose={() => props?.onPage("ConnectTradingAccount")}
               loading={importFromFileStatus === "loading"}

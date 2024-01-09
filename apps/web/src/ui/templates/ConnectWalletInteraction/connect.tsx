@@ -47,6 +47,7 @@ export const Connect = ({
     mainProxiesAccounts,
     mainProxiesLoading,
     mainProxiesSuccess,
+    onExportTradeAccount,
   } = useConnectWalletProvider();
 
   const sourceId = selectedExtension?.id;
@@ -137,10 +138,15 @@ export const Connect = ({
               onImport={() => props?.onPage("ImportTradingAccount")}
               onSelectCallback={onClose}
               onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}
+              onExportBrowserAccount={onExportTradeAccount}
+              enabledExtensionAccount
             />
             <ImportTradingAccount
               key="ImportTradingAccount"
-              onImport={async (e) => await onImportFromFile?.(e)}
+              onImport={async (e) => {
+                await onImportFromFile?.(e);
+                onClose();
+              }}
               onRedirect={() => props?.onPage("ConnectTradingAccount")}
               onClose={() => props?.onPage("ConnectTradingAccount")}
               loading={importFromFileStatus === "loading"}

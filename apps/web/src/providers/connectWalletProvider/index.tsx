@@ -34,7 +34,7 @@ import { POLKADEX_ASSET } from "@orderbook/core/constants";
 
 type GenericStatus = "error" | "idle" | "success" | "loading";
 
-type ExportTradeAccountProps = {
+export type ExportTradeAccountProps = {
   account: KeyringPair;
   password?: string;
 };
