@@ -48,5 +48,6 @@
     "readyToClaim": "Ready to claim",
     "claimed": "Claimed"
   },
-  "withdrawalError": "To withdraw funds, you must choose or open a trading account."
+  "withdrawalError": "Please select a trading account first",
+  "tradingAccountError": "There is no trading account available for this funding account. Please create a trading account first."
 }

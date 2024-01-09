@@ -23,6 +23,7 @@ import * as T from "./types";
 import { Loading, Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { normalizeValue } from "@/utils/normalize";
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 const initialValues = { amount: 0.0 };
 
@@ -36,10 +37,12 @@ export const TransferFormDeposit = ({
 
   const { extensionAccounts: allAccounts } = useExtensionAccounts();
   const { loading, onFetchDeposit } = useDepositProvider();
-  const { selectedAddresses } = useProfile();
+  const {
+    selectedAddresses: { mainAddress },
+  } = useProfile();
   const { loading: balancesLoading } = useFunds();
   const { onToogleConnectExtension } = useSettingsProvider();
-  const { mainAddress } = selectedAddresses;
+  const { mainProxiesAccounts } = useConnectWalletProvider();
 
   const fundingWallet = useMemo(
     () => getFundingAccountDetail(mainAddress, allAccounts),
@@ -118,6 +121,10 @@ export const TransferFormDeposit = ({
   });
 
   const buttonMessage = fundWalletPresent ? "transferButton" : "userButton";
+  const tradingAccountError =
+    fundWalletPresent && mainProxiesAccounts.length === 0
+      ? "tradingAccountError"
+      : null;
 
   return (
     <Loading
@@ -127,6 +134,14 @@ export const TransferFormDeposit = ({
       message=""
       spinner="Keyboard"
     >
+      {tradingAccountError && (
+        <S.Errors style={{ marginBottom: normalizeValue(1) }}>
+          <div>
+            <Icons.Alert />
+          </div>
+          <p>{t(tradingAccountError)}</p>
+        </S.Errors>
+      )}
       <S.Content onSubmit={handleSubmit}>
         <S.Wallets>
           <WalletCard
