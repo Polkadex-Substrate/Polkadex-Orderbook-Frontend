@@ -18,7 +18,9 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [favoriteMarkets, setFavoriteMarkets] = useState<string[]>([]);
   const [isBannerShown, setIsBannerShown] = useState<boolean>(false);
   // TODO: remove any type and use a common type for extension accounts
-  const [selectedExtension, setSelectedExtension] = useState<any | null>(null);
+  const [selectedExtension, setSelectedExtension] = useState<unknown | null>(
+    null
+  );
   const [avatar, setAvatar] = useState<string | null>(null);
   const { localAddresses } = useUserAccounts();
   const { onHandleError } = useSettingsProvider();

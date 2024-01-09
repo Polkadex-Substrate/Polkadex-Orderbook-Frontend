@@ -34,6 +34,7 @@ import {
 } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { normalizeValue } from "@/utils/normalize";
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 const initialValues = { amount: 0.0 };
 
@@ -47,6 +48,7 @@ export const TransferForm = ({
   const { t } = useTranslation("transfer");
 
   const { extensionAccounts: allAccounts } = useExtensionAccounts();
+  const { localTradingAccounts } = useConnectWalletProvider();
   const {
     selectedAddresses,
     onUserSelectTradingAddress,
@@ -66,9 +68,16 @@ export const TransferForm = ({
   const allFilteresAccounts = useMemo(
     () =>
       allAccounts.filter(
-        ({ address }) => userAccounts?.find((v) => v.mainAddress === address)
+        ({ address }) =>
+          userAccounts?.find(
+            (v) =>
+              v.mainAddress === address &&
+              localTradingAccounts
+                .map((l) => l.address)
+                .includes(v.tradeAddress)
+          )
       ),
-    [allAccounts, userAccounts]
+    [allAccounts, localTradingAccounts, userAccounts]
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
@@ -229,10 +238,19 @@ export const TransferForm = ({
               onQuery={(e) => setFromQuery(e)}
               onSelectAccount={(e) => {
                 const account = userAccounts?.find(
-                  (v) => v.mainAddress === e?.address
+                  (v) =>
+                    v.mainAddress === e?.address &&
+                    localTradingAccounts
+                      .map((l) => l.address)
+                      .includes(v.tradeAddress)
                 );
+
+                console.log(account);
                 // TODO: Fix types
-                if (account) onUserSelectTradingAddress(account);
+                if (account)
+                  onUserSelectTradingAddress({
+                    tradeAddress: account.tradeAddress,
+                  });
               }}
               data={filteredFundingWallets}
               placeholder={t("funding.betweenPlaceholder")}

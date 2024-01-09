@@ -16,11 +16,12 @@ export const useProxyAccounts = (extensionAccounts: ExtensionAccount[]) => {
     isFetching,
     status: proxiesStatus,
   } = useQuery<UserAddressTuple[]>({
-    queryKey: QUERY_KEYS.proxyAccounts(),
+    queryKey: QUERY_KEYS.proxyAccounts(extensionAccounts),
     queryFn: async () =>
       await getAllProxyAccounts(
         extensionAccounts.map(({ address }) => address)
       ),
+    enabled: Boolean(extensionAccounts?.length > 0),
   });
 
   return {
