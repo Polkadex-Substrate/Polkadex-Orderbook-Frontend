@@ -124,7 +124,7 @@ export const TransferFormDeposit = ({
   const tradingAccountError =
     fundWalletPresent && mainProxiesAccounts.length === 0
       ? "tradingAccountError"
-      : null;
+      : "";
 
   return (
     <Loading
@@ -211,7 +211,11 @@ export const TransferFormDeposit = ({
           <button
             type={fundWalletPresent ? "submit" : "button"}
             disabled={
-              fundWalletPresent ? !(isValid && dirty) || loading : false
+              fundWalletPresent
+                ? !(isValid && dirty) ||
+                  loading ||
+                  Boolean(tradingAccountError?.length > 0)
+                : false
             }
             onClick={
               fundWalletPresent ? undefined : () => onToogleConnectExtension()
