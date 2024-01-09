@@ -50,7 +50,7 @@ export const TransferForm = ({
   const { extensionAccounts: allAccounts } = useExtensionAccounts();
   const { localTradingAccounts } = useConnectWalletProvider();
   const {
-    selectedAddresses,
+    selectedAddresses: { mainAddress },
     onUserSelectTradingAddress,
     allAccounts: userAccounts,
   } = useProfile();
@@ -58,7 +58,6 @@ export const TransferForm = ({
 
   // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
   const { mutateAsync, isLoading } = useAssetTransfer(onRefetch);
-  const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
     () => getFundingAccountDetail(mainAddress, allAccounts),
