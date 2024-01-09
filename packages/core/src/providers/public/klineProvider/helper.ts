@@ -5,6 +5,7 @@ export const getAbsoluteResolution = (currentResolution: string) => {
     "15": "15m",
     "30": "30m",
     "60": "1h",
+    "120": "2h",
     "360": "6h",
   };
   return getCorrectResolutions[currentResolution] || currentResolution;

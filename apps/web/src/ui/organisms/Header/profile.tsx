@@ -7,8 +7,6 @@ import {
   Popover,
   Multistep,
   Authorization,
-  ConnectWallet,
-  ExtensionAccounts,
 } from "@polkadex/ux";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
@@ -152,10 +150,7 @@ export const Profile = ({
           </div>
         </Popover.Trigger>
         <Popover.Content>
-          <Multistep.Interactive
-            className="h-auto overflow-auto max-h-screen"
-            placement="top center"
-          >
+          <Multistep.Interactive className="h-auto overflow-auto max-h-screen">
             {(props) => (
               <>
                 <Multistep.Trigger>
