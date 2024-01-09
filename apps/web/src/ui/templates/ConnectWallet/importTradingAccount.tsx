@@ -2,12 +2,22 @@ import {
   EyeIcon,
   EyeSlashIcon,
   FolderPlusIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useMemo, useState } from "react";
-import { Button, Input, Interaction, Loading, Typography } from "@polkadex/ux";
+import {
+  Button,
+  Input,
+  Interaction,
+  Loading,
+  Typography,
+  truncateString,
+} from "@polkadex/ux";
 import { useFormik } from "formik";
 import { useDropzone } from "react-dropzone";
 import classNames from "classnames";
+import { useExtensionAccountFromBrowserAccount } from "@orderbook/core/hooks";
+import { useExtensionAccounts } from "@polkadex/react-providers";
 
 import { ErrorMessage, OptionalField } from "../ReadyToUse";
 
@@ -55,13 +65,13 @@ export const ImportTradingAccount = ({
   onClose,
   onImport,
   onRedirect,
-  whitelistAccounts,
+  whitelistBrowserAccounts,
 }: {
   onClose: () => void;
   onImport: (values: { password: string; file: DecodedFile }) => Promise<void>;
   onRedirect: () => void;
   loading: boolean;
-  whitelistAccounts?: string[];
+  whitelistBrowserAccounts?: string[];
 }) => {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
@@ -86,25 +96,44 @@ export const ImportTradingAccount = ({
       },
     });
 
-  // Move to validation
-  // const isValidFile = useMemo(() => {
-  //   if (!whitelistAccounts) return true;
-  //   return (
-  //     values.file?.address && whitelistAccounts.includes(values.file?.address)
-  //   );
-  // }, [values.file?.address, whitelistAccounts]);
+  const isValidFile = useMemo(() => {
+    if (!whitelistBrowserAccounts) return true;
+    return (
+      values.file?.address &&
+      whitelistBrowserAccounts.includes(values.file?.address)
+    );
+  }, [values.file?.address, whitelistBrowserAccounts]);
 
   const hasFile = useMemo(() => !!values.file, [values.file]);
   const { getRootProps, getInputProps, isDragReject, isDragAccept } =
     useDropzone({
       maxFiles: 1,
-      validator: (file) => null, // Async validation not working...
       accept: { "application/json": [".json"] },
       onDrop: async (acceptedFiles: File[]) => {
         const decodedFile = await parseFile(acceptedFiles[0]);
         setFieldValue("file", decodedFile || "");
       },
     });
+
+  const { extensionAccounts } = useExtensionAccounts();
+  const { data, isError, isSuccess } = useExtensionAccountFromBrowserAccount(
+    values?.file?.address ?? ""
+  );
+
+  const browserAccountAddress =
+    values?.file?.address && truncateString(values?.file?.address);
+
+  const extensionAccountAddress = data && truncateString(data);
+  const extensionAccountName = extensionAccounts?.find(
+    (value) => value.address === data
+  )?.name;
+
+  const extensionAccountInput = extensionAccountName
+    ? `${extensionAccountName} • ${extensionAccountAddress}`
+    : extensionAccountAddress;
+
+  const buttonDisabled =
+    !(isValid && dirty) || !isValidFile || isError || !isSuccess;
 
   return (
     <Loading.Spinner active={loading}>
@@ -120,21 +149,57 @@ export const ImportTradingAccount = ({
                   label="Account name"
                   defaultValue={values?.file?.meta?.name}
                   placeholder="Account name"
+                  disabled
+                  className="text-sm flex-1"
                 />
-                <OptionalField label="Protected by password?">
-                  <div className="flex items-center justify-between">
-                    <Input.Passcode
-                      focusOnInit
-                      type={show ? "password" : "text"}
-                      values={state}
-                      onValuesChange={setState}
-                      className="bg-level-4"
-                    />
-                    <Button.Icon variant="ghost" onClick={() => setShow(!show)}>
-                      {show ? <EyeIcon /> : <EyeSlashIcon />}
-                    </Button.Icon>
-                  </div>
-                </OptionalField>
+                {browserAccountAddress && (
+                  <Input.Vertical
+                    label="Account address"
+                    defaultValue={browserAccountAddress}
+                    placeholder="Account address"
+                    disabled
+                    className="text-sm flex-1"
+                  />
+                )}
+                {extensionAccountAddress && (
+                  <Input.Vertical
+                    label="Funding wallet"
+                    defaultValue={extensionAccountInput ?? ""}
+                    placeholder="Funding wallet"
+                    disabled
+                    className="text-sm flex-1"
+                  />
+                )}
+                {!isValidFile && (
+                  <ErrorMessage withIcon={false}>
+                    Selected trade account not linked to funding.
+                  </ErrorMessage>
+                )}
+                {isValidFile && !isError && (
+                  <OptionalField label="Protected by password?">
+                    <div className="flex items-center justify-between">
+                      <Input.Passcode
+                        focusOnInit
+                        type={show ? "password" : "text"}
+                        values={state}
+                        onValuesChange={setState}
+                        className="bg-level-4"
+                      />
+                      <Button.Icon
+                        variant="ghost"
+                        onClick={() => setShow(!show)}
+                      >
+                        {show ? <EyeIcon /> : <EyeSlashIcon />}
+                      </Button.Icon>
+                    </div>
+                  </OptionalField>
+                )}
+
+                {isValidFile && isError && (
+                  <ErrorMessage withIcon={false}>
+                    No funding linked to trade account.
+                  </ErrorMessage>
+                )}
               </div>
             ) : (
               <div
@@ -160,9 +225,21 @@ export const ImportTradingAccount = ({
             )}
           </Interaction.Content>
           <Interaction.Footer>
-            <Interaction.Action type="submit" disabled={!(isValid && dirty)}>
-              Import account
-            </Interaction.Action>
+            <div className="flex items-center gap-3">
+              {!!values?.file && (
+                <Button.Icon onClick={() => resetForm()}>
+                  <TrashIcon />
+                </Button.Icon>
+              )}
+              <Interaction.Action
+                type="submit"
+                disabled={buttonDisabled}
+                className="flex-1"
+              >
+                Import account
+              </Interaction.Action>
+            </div>
+
             <Interaction.Close onClick={onClose}>Back</Interaction.Close>
           </Interaction.Footer>
         </Interaction>

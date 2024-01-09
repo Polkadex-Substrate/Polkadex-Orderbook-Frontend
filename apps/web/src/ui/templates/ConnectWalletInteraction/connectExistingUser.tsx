@@ -169,7 +169,7 @@ export const ConnectExistingUser = ({
               onRedirect={() => props?.onPage("ConnectTradingAccount")}
               onClose={() => props?.onPage("ConnectTradingAccount")}
               loading={importFromFileStatus === "loading"}
-              whitelistAccounts={mainProxiesAccounts}
+              whitelistBrowserAccounts={mainProxiesAccounts}
             />
             <MaximumTradingAccount
               key="MaximumTradingAccount"

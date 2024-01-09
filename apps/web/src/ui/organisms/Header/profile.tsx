@@ -302,7 +302,7 @@ export const Profile = ({
                     onRedirect={() => props?.onPage("ConnectTradingAccount")}
                     onClose={() => props?.onPage("ConnectTradingAccount")}
                     loading={importFromFileStatus === "loading"}
-                    whitelistAccounts={proxiesAccounts}
+                    whitelistBrowserAccounts={proxiesAccounts}
                   />
                   <TradingAccountSuccessfull
                     key="TradingAccountSuccessfull"

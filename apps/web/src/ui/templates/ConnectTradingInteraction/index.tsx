@@ -20,6 +20,7 @@ export const ConnectTradingInteraction = () => {
     onRemoveTradingAccountFromDevice,
     onSetTempTrading,
     tempTrading,
+    mainProxiesAccounts,
   } = useConnectWalletProvider();
 
   return (
@@ -51,6 +52,7 @@ export const ConnectTradingInteraction = () => {
                   onRedirect={() => props?.onPage("ConnectTradingAccount")}
                   onClose={() => props?.onChangeInteraction(false)}
                   loading={importFromFileStatus === "loading"}
+                  whitelistBrowserAccounts={mainProxiesAccounts}
                 />
                 <RemoveTradingAccount
                   key="RemoveTradingAccount"
