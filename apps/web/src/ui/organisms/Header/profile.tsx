@@ -5,8 +5,9 @@ import {
   truncateString,
   Icons,
   Popover,
-  Multistep,
   Authorization,
+  HoverCard,
+  Multistep,
 } from "@polkadex/ux";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
@@ -16,6 +17,7 @@ import {
   useExtensionAccounts,
   useExtensions,
 } from "@polkadex/react-providers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { Profile as ProfileDropdown } from "../../templates/ConnectWallet/profile";
 
@@ -30,6 +32,8 @@ import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useC
 import { ConnectExtensionAccount } from "@/ui/templates/ConnectWallet/connnectExtensionAccount";
 import { FundAccount } from "@/ui/templates/ConnectWallet/fundAccount";
 import { TradingAccountList } from "@/ui/templates/ConnectWallet/tradingAccountList";
+import { MaximumTradingAccount } from "@/ui/templates/ConnectWallet/maximumTradingAccount";
+import { InsufficientBalance } from "@/ui/templates/ConnectWallet/insufficientBalance";
 
 export const Profile = ({
   onClick,
@@ -64,7 +68,7 @@ export const Profile = ({
     mainProxiesAccounts,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
-
+  const { onToogleConnectExtension } = useSettingsProvider();
   const { extensionsStatus } = useExtensions();
   const { connectExtensionAccounts, extensionAccounts } =
     useExtensionAccounts();
@@ -115,25 +119,50 @@ export const Profile = ({
     [localTradingAccounts, mainProxiesAccounts]
   );
 
+  const redirectMaximumAccounts =
+    (mainProxiesAccounts?.length ?? 0) >= 3
+      ? "MaximumTradingAccount"
+      : "NewTradingAccount";
+
+  const redirectEnoughBalance =
+    (walletBalance ?? 0) >= 1 ? redirectMaximumAccounts : "InsufficientBalance";
+
+  const availableOnDevice = useMemo(
+    () =>
+      filteredAccounts?.some((value) => value.address === tempTrading?.address),
+    [tempTrading?.address, filteredAccounts]
+  );
+
   if (tradingWalletPresent || fundWalletPresent)
     return (
       <Popover>
         <Popover.Trigger className="bg-level-1 transition-colors duration-300 flex items-center gap-2 rounded-md">
           {showFundingWallet && (
-            <div className="flex items-center gap-1 pl-1">
-              <div className="w-4 h-4">
-                <Icons.Avatar />
-              </div>
-              {fundWalletPresent ? (
-                <Typography.Text size="xs" bold>
-                  {selectedWallet?.name}
-                </Typography.Text>
-              ) : (
-                <Typography.Text size="xs" bold variant="secondary">
-                  Wallet not present
-                </Typography.Text>
-              )}
-            </div>
+            <HoverCard>
+              <HoverCard.Trigger>
+                <div className="flex items-center gap-1">
+                  <div className="w-4 h-4">
+                    <Icons.Avatar />
+                  </div>
+                  {fundWalletPresent ? (
+                    <Typography.Text size="xs" bold>
+                      {selectedWallet?.name}
+                    </Typography.Text>
+                  ) : (
+                    <Typography.Text size="xs" bold variant="secondary">
+                      Wallet not present
+                    </Typography.Text>
+                  )}
+                </div>
+              </HoverCard.Trigger>
+              <HoverCard.Content
+                side="left"
+                withArrow={true}
+                className="bg-level-5"
+              >
+                Funding wallet
+              </HoverCard.Content>
+            </HoverCard>
           )}
           <div className="flex items-center gap-2 bg-level-4 px-2 py-1 rounded-md">
             {tradingWalletPresent ? (
@@ -156,7 +185,7 @@ export const Profile = ({
                 <Multistep.Trigger>
                   <ProfileDropdown
                     onCreateTradingAccount={() =>
-                      props?.onPage("NewTradingAccount", true)
+                      props?.onPage(redirectEnoughBalance, true)
                     }
                     onImportTradingAccount={() =>
                       props?.onPage("ConnectTradingAccount", true)
@@ -164,7 +193,10 @@ export const Profile = ({
                     onSelectTradingAccount={(tradeAddress) =>
                       onSelectTradingAccount({ tradeAddress })
                     }
-                    onSwitch={() => {}}
+                    onSwitch={() => {
+                      onToogleConnectExtension();
+                      onLogout?.();
+                    }}
                     onLogout={() => onLogout?.()}
                     onActions={() => props?.onPage("UserActions", true)}
                     onRemove={(e) => {
@@ -244,6 +276,7 @@ export const Profile = ({
                     key="RemoveTradingAccount"
                     tradingAccount={tempTrading as TradeAccount}
                     fundWallet={selectedWallet}
+                    availableOnDevice={availableOnDevice}
                     onRemoveFromDevice={() =>
                       onRemoveTradingAccountFromDevice?.(
                         tempTrading?.address as string
@@ -261,7 +294,7 @@ export const Profile = ({
                       (removingError as Error)?.message ?? removingError
                     }
                     selectedExtension={selectedExtension}
-                    onCancel={() => props?.onChangeInteraction(false)} // onBack not working, rerendering Multistep, prev reseting..
+                    onCancel={() => props?.onChangeInteraction(false)}
                   />
                   <ImportTradingAccount
                     key="ImportTradingAccount"
@@ -318,6 +351,20 @@ export const Profile = ({
                     onClose={() => props?.onChangeInteraction(false)}
                     isPresent={isPresent}
                     selectedExtension={selectedExtension}
+                  />
+                  <MaximumTradingAccount
+                    key="MaximumTradingAccount"
+                    tradingAccounts={mainProxiesAccounts}
+                    onRemove={(e) => onSetTempTrading?.(e)}
+                    onClose={() => props?.onChangeInteraction(false)}
+                    onRemoveCallback={() =>
+                      props?.onPage("RemoveTradingAccount")
+                    }
+                  />
+                  <InsufficientBalance
+                    key="InsufficientBalance"
+                    balance={walletBalance}
+                    onClose={() => props?.onChangeInteraction(false)}
                   />
                 </Multistep.Content>
               </>
