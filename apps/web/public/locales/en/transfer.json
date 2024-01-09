@@ -29,7 +29,7 @@
   "amountPlaceholder": "Enter an amount",
   "maxButton": "MAX",
   "transferButton": "Transfer",
-  "userButton": "Connect wallet" ,
+  "userButton": "Connect wallet",
   "historyTitle": "History",
   "historyFilterByToken": "Show only selected token",
   "resultEmpty": "No result found",
@@ -47,5 +47,6 @@
     "pending": "Pending",
     "readyToClaim": "Ready to claim",
     "claimed": "Claimed"
-  }
+  },
+  "withdrawalError": "To withdraw funds, you must choose or open a trading account."
 }
