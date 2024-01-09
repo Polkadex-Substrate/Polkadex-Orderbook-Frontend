@@ -26,6 +26,7 @@ const configurationData: DatafeedConfiguration = {
     "15",
     "30",
     "60",
+    "120",
     "360",
     "1D",
     "1W",
