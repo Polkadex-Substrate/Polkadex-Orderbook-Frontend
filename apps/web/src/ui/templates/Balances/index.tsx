@@ -36,7 +36,7 @@ export const BalancesTemplate = () => {
   const { selectedAddresses } = useProfile();
   const { onToogleConnectExtension } = useSettingsProvider();
 
-  const userHasSelectedAccount = selectedAddresses?.tradeAddress?.length > 0;
+  const userHasSelectedAccount = selectedAddresses?.mainAddress?.length > 0;
 
   const connectWalletData = {
     image: "emptyWallet",
