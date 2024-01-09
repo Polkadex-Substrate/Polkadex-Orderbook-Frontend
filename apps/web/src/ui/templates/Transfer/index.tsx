@@ -105,7 +105,7 @@ export const TransferTemplate = () => {
                   <h1>{t("heading")}</h1>
                   <h2>{t("subheading")}</h2>
                 </S.Heading>
-                <S.Title show={userExists}>
+                <S.Title show={fundWalletPresent}>
                   <Switch
                     disable={loading || switchEnable || !fundWalletPresent}
                     isActive={type === "transfer"}
