@@ -18,6 +18,7 @@ import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
 import {
   useExtensionAccounts,
   ExtensionAccount,
+  useUserAccounts,
 } from "@polkadex/react-providers";
 
 import { CustomAddress } from "../TransferFormWithdraw/types";
@@ -34,7 +35,6 @@ import {
 } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { normalizeValue } from "@/utils/normalize";
-import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 const initialValues = { amount: 0.0 };
 
@@ -48,7 +48,7 @@ export const TransferForm = ({
   const { t } = useTranslation("transfer");
 
   const { extensionAccounts: allAccounts } = useExtensionAccounts();
-  const { localTradingAccounts } = useConnectWalletProvider();
+  const { localAddresses } = useUserAccounts();
   const {
     selectedAddresses: { mainAddress },
     onUserSelectTradingAddress,
@@ -71,12 +71,10 @@ export const TransferForm = ({
           userAccounts?.find(
             (v) =>
               v.mainAddress === address &&
-              localTradingAccounts
-                .map((l) => l.address)
-                .includes(v.tradeAddress)
+              localAddresses?.includes(v.tradeAddress)
           )
       ),
-    [allAccounts, localTradingAccounts, userAccounts]
+    [allAccounts, localAddresses, userAccounts]
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
@@ -235,19 +233,15 @@ export const TransferForm = ({
               pasteable={false}
               selectedAccount={fundingWallet}
               onQuery={(e) => setFromQuery(e)}
-              onSelectAccount={(e) => {
+              onSelectAccount={async (e) => {
                 const account = userAccounts?.find(
                   (v) =>
                     v.mainAddress === e?.address &&
-                    localTradingAccounts
-                      .map((l) => l.address)
-                      .includes(v.tradeAddress)
+                    localAddresses?.includes(v.tradeAddress)
                 );
 
-                console.log(account);
-                // TODO: Fix types
                 if (account)
-                  onUserSelectTradingAddress({
+                  await onUserSelectTradingAddress({
                     tradeAddress: account.tradeAddress,
                   });
               }}

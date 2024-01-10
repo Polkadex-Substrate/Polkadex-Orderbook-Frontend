@@ -129,8 +129,10 @@ export const Profile = ({
 
   const availableOnDevice = useMemo(
     () =>
-      filteredAccounts?.some((value) => value.address === tempTrading?.address),
-    [tempTrading?.address, filteredAccounts]
+      localTradingAccounts?.some(
+        (value) => value.address === tempTrading?.address
+      ),
+    [localTradingAccounts, tempTrading?.address]
   );
 
   if (tradingWalletPresent || fundWalletPresent)
