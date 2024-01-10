@@ -117,7 +117,8 @@ export const ImportTradingAccount = ({
 
   const { extensionAccounts } = useExtensionAccounts();
   const { data, isError, isSuccess } = useExtensionAccountFromBrowserAccount(
-    values?.file?.address ?? ""
+    values?.file?.address ?? "",
+    true
   );
 
   const browserAccountAddress =
