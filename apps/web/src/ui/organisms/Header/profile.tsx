@@ -131,7 +131,6 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
     [localTradingAccounts, tempTrading?.address]
   );
 
-  console.log("selectedAccount", selectedAccount);
   if (tradingWalletPresent || fundWalletPresent)
     return (
       <Popover>
