@@ -5,19 +5,19 @@ import {
   Typography,
 } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { KeyringPair } from "@polkadot/keyring/types";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
-
-import { ExportTradeAccountProps } from "@/providers/connectWalletProvider";
 
 export const ConnectTradingAccount = ({
   accounts = [],
   onClose,
   onImport,
   onSelect,
-  onRemove,
+  onTempBrowserAccount,
   onSelectCallback,
   onRemoveCallback,
+  onExportBrowserAccountCallback,
   onExportBrowserAccount,
   enabledExtensionAccount = false,
 }: {
@@ -25,10 +25,11 @@ export const ConnectTradingAccount = ({
   onClose: () => void;
   onImport: () => void;
   onSelect: (e: TradeAccount) => void;
-  onRemove: (e: TradeAccount) => void;
+  onTempBrowserAccount: (e: TradeAccount) => void;
   onSelectCallback: () => void;
   onRemoveCallback: () => void;
-  onExportBrowserAccount: (value: ExportTradeAccountProps) => void;
+  onExportBrowserAccountCallback: () => void;
+  onExportBrowserAccount: (account: KeyringPair) => void;
   enabledExtensionAccount?: boolean;
 }) => {
   return (
@@ -57,7 +58,7 @@ export const ConnectTradingAccount = ({
                     onRemove={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      onRemove(value);
+                      onTempBrowserAccount(value);
                       onRemoveCallback();
                     }}
                     onSelect={(e) => {
@@ -69,7 +70,13 @@ export const ConnectTradingAccount = ({
                     onExport={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      onExportBrowserAccount({ account: value });
+                      try {
+                        if (value.isLocked) value.unlock("");
+                        onExportBrowserAccount(value);
+                      } catch (error) {
+                        onTempBrowserAccount(value);
+                        onExportBrowserAccountCallback();
+                      }
                     }}
                   />
                 ))}

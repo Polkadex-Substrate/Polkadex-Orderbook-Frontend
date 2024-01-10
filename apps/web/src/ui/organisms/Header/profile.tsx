@@ -34,6 +34,7 @@ import { FundAccount } from "@/ui/templates/ConnectWallet/fundAccount";
 import { TradingAccountList } from "@/ui/templates/ConnectWallet/tradingAccountList";
 import { MaximumTradingAccount } from "@/ui/templates/ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "@/ui/templates/ConnectWallet/insufficientBalance";
+import { UnlockBrowserAccount } from "@/ui/templates/ConnectWallet/unlockBrowserAccount";
 
 export const Profile = ({
   onClick,
@@ -66,6 +67,7 @@ export const Profile = ({
     onExportTradeAccount,
     onSelectExtension,
     mainProxiesAccounts,
+    onResetTempTrading,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
   const { onToogleConnectExtension } = useSettingsProvider();
@@ -235,6 +237,13 @@ export const Profile = ({
                     }
                     onClose={() => props?.onChangeInteraction(false)}
                   />
+                  <UnlockBrowserAccount
+                    key="UnlockBrowserAccount"
+                    tempBrowserAccount={tempTrading}
+                    onClose={() => props?.onPage("ConnectTradingAccount")}
+                    onAction={(account) => onExportTradeAccount({ account })}
+                    onResetTempBrowserAccount={onResetTempTrading}
+                  />
                   <ConnectTradingAccount
                     key="ConnectTradingAccount"
                     accounts={filteredAccounts as TradeAccount[]}
@@ -243,12 +252,17 @@ export const Profile = ({
                     }}
                     onClose={() => props?.onChangeInteraction(false)}
                     onImport={() => props?.onPage("ImportTradingAccount")}
-                    onRemove={(e) => onSetTempTrading?.(e)}
+                    onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
                     onSelectCallback={() => props?.onChangeInteraction(false)}
                     onRemoveCallback={() =>
                       props?.onPage("RemoveTradingAccount")
                     }
-                    onExportBrowserAccount={onExportTradeAccount}
+                    onExportBrowserAccount={(account) =>
+                      onExportTradeAccount({ account })
+                    }
+                    onExportBrowserAccountCallback={() =>
+                      props?.onPage("UnlockBrowserAccount")
+                    }
                   />
                   <UserActions
                     key="UserActions"

@@ -5,6 +5,7 @@ import { TradeAccount } from "@orderbook/core/providers/types";
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { RemoveTradingAccount } from "../ConnectWallet/removeTradingAccount";
+import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 
 import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
@@ -22,6 +23,7 @@ export const ConnectTradingInteraction = () => {
     tempTrading,
     mainProxiesAccounts,
     onExportTradeAccount,
+    onResetTempTrading,
   } = useConnectWalletProvider();
 
   return (
@@ -37,17 +39,30 @@ export const ConnectTradingInteraction = () => {
                   onSelect={(e) =>
                     onSelectTradingAccount?.({ tradeAddress: e.address })
                   }
-                  onRemove={(e) => onSetTempTrading?.(e)}
+                  onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
                   onClose={onClose}
                   onImport={() => props?.onPage("ImportTradingAccount", true)}
                   onSelectCallback={onClose}
                   onRemoveCallback={() =>
                     props?.onPage("RemoveTradingAccount", true)
                   }
-                  onExportBrowserAccount={onExportTradeAccount}
+                  onExportBrowserAccount={(account) =>
+                    onExportTradeAccount({ account })
+                  }
+                  onExportBrowserAccountCallback={() =>
+                    props?.onPage("UnlockBrowserAccount", true)
+                  }
+                  enabledExtensionAccount
                 />
               </Multistep.Trigger>
               <Multistep.Content>
+                <UnlockBrowserAccount
+                  key="UnlockBrowserAccount"
+                  tempBrowserAccount={tempTrading}
+                  onClose={() => props?.onChangeInteraction(false)}
+                  onAction={(account) => onExportTradeAccount({ account })}
+                  onResetTempBrowserAccount={onResetTempTrading}
+                />
                 <ImportTradingAccount
                   key="ImportTradingAccount"
                   onImport={async (e) => await onImportFromFile?.(e)}

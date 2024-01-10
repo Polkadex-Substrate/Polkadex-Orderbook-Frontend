@@ -10,6 +10,7 @@ import { TradingAccountList } from "../ConnectWallet/tradingAccountList";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { MaximumTradingAccount } from "../ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
+import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 
 import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
@@ -41,6 +42,7 @@ export const ConnectExistingUser = ({
     importFromFileStatus,
     walletBalance,
     onExportTradeAccount,
+    onResetTempTrading,
   } = useConnectWalletProvider();
 
   const filteredAccounts = useMemo(
@@ -106,7 +108,7 @@ export const ConnectExistingUser = ({
               onSelect={(e) =>
                 onSelectTradingAccount?.({ tradeAddress: e.address })
               }
-              onRemove={(e) => onSetTempTrading?.(e)}
+              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
               onClose={
                 hasAccounts
                   ? () => props?.onChangeInteraction(false)
@@ -117,7 +119,19 @@ export const ConnectExistingUser = ({
               onRemoveCallback={() =>
                 props?.onPage("RemoveTradingAccount", true)
               }
-              onExportBrowserAccount={onExportTradeAccount}
+              onExportBrowserAccount={(account) =>
+                onExportTradeAccount({ account })
+              }
+              onExportBrowserAccountCallback={() =>
+                props?.onPage("UnlockBrowserAccount")
+              }
+            />
+            <UnlockBrowserAccount
+              key="UnlockBrowserAccount"
+              tempBrowserAccount={tempTrading}
+              onClose={() => props?.onPage("ConnectTradingAccount")}
+              onAction={(account) => onExportTradeAccount({ account })}
+              onResetTempBrowserAccount={onResetTempTrading}
             />
             <NewTradingAccount
               key="NewTradingAccount"

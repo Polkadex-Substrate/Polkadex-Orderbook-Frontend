@@ -12,6 +12,7 @@ import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { RemoveTradingAccount } from "../ConnectWallet/removeTradingAccount";
 import { ConnectTradingAccountCard } from "../ReadyToUse/connectTradingAccountCard";
+import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 
 import { SwitchKeys } from ".";
 
@@ -48,6 +49,7 @@ export const Connect = ({
     mainProxiesLoading,
     mainProxiesSuccess,
     onExportTradeAccount,
+    onResetTempTrading,
   } = useConnectWalletProvider();
 
   const sourceId = selectedExtension?.id;
@@ -127,18 +129,30 @@ export const Connect = ({
               onClose={props?.onReset}
               onRedirect={onRedirect}
             />
+            <UnlockBrowserAccount
+              key="UnlockBrowserAccount"
+              tempBrowserAccount={tempTrading}
+              onClose={() => props?.onPage("ConnectTradingAccount")}
+              onAction={(account) => onExportTradeAccount({ account })}
+              onResetTempBrowserAccount={onResetTempTrading}
+            />
             <ConnectTradingAccount
               key="ConnectTradingAccount"
               accounts={localTradingAccounts}
               onSelect={(e) =>
                 onSelectTradingAccount?.({ tradeAddress: e.address })
               }
-              onRemove={(e) => onSetTempTrading?.(e)}
+              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
               onClose={() => props?.onReset()}
               onImport={() => props?.onPage("ImportTradingAccount")}
               onSelectCallback={onClose}
               onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}
-              onExportBrowserAccount={onExportTradeAccount}
+              onExportBrowserAccount={(account) =>
+                onExportTradeAccount({ account })
+              }
+              onExportBrowserAccountCallback={() =>
+                props?.onPage("UnlockBrowserAccount")
+              }
               enabledExtensionAccount
             />
             <ImportTradingAccount

@@ -46,9 +46,7 @@ export const TradingAccountCard = ({
     role: "button",
     onClick: onSelect,
   };
-  // const { isReady, wallet } = useUserAccounts();
-  // const tradeAccount = address && isReady ? wallet.getPair(address) : undefined;
-  // useTryUnlockTradeAccount(tradeAccount);
+
   const { extensionAccounts } = useExtensionAccounts();
   const { data, isLoading } = useExtensionAccountFromBrowserAccount(
     address,
