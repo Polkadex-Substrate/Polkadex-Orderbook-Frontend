@@ -224,7 +224,7 @@ export const ConnectWalletProvider = ({
   };
 
   const onResetTempTrading = () => {
-    onUserResetTradingAddress();
+    setTempTrading(undefined);
   };
   const onLogout = () => {
     onUserLogout();

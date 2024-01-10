@@ -10,16 +10,8 @@ import {
   truncateString,
 } from "@polkadex/ux";
 import classNames from "classnames";
-import {
-  useExtensionAccounts,
-  useUserAccounts,
-} from "@polkadex/react-providers";
-import {
-  useExtensionAccountFromBrowserAccount,
-  useTryUnlockTradeAccount,
-} from "@orderbook/core/hooks";
-
-import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
+import { useExtensionAccounts } from "@polkadex/react-providers";
+import { useExtensionAccountFromBrowserAccount } from "@orderbook/core/hooks";
 
 export const TradingAccountCard = ({
   name,

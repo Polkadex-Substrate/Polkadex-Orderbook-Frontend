@@ -131,6 +131,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
     [localTradingAccounts, tempTrading?.address]
   );
 
+  console.log("selectedAccount", selectedAccount);
   if (tradingWalletPresent || fundWalletPresent)
     return (
       <Popover>
@@ -195,10 +196,16 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     }}
                     onLogout={() => onLogout?.()}
                     onActions={() => props?.onPage("UserActions", true)}
-                    onRemove={(e) => {
-                      onSetTempTrading?.(e);
-                      props?.onPage("RemoveTradingAccount", true);
-                    }}
+                    onRemoveCallback={() =>
+                      props?.onPage("RemoveTradingAccount", true)
+                    }
+                    onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
+                    onExportBrowserAccount={(account) =>
+                      onExportTradeAccount({ account })
+                    }
+                    onExportBrowserAccountCallback={() =>
+                      props?.onPage("UnlockBrowserAccount", true)
+                    }
                     tradingWalletPresent={!!selectedAccount?.address}
                     fundWalletPresent={fundWalletPresent}
                     fundWallet={selectedFundingWallet}
@@ -234,7 +241,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                   <UnlockBrowserAccount
                     key="UnlockBrowserAccount"
                     tempBrowserAccount={tempTrading}
-                    onClose={() => props?.onPage("ConnectTradingAccount")}
+                    onClose={() => props?.onChangeInteraction(false)}
                     onAction={(account) => onExportTradeAccount({ account })}
                     onResetTempBrowserAccount={onResetTempTrading}
                   />
