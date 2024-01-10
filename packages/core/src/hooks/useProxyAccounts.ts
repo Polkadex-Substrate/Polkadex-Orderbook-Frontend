@@ -21,7 +21,7 @@ export const useProxyAccounts = (extensionAccounts: ExtensionAccount[]) => {
       await getAllProxyAccounts(
         extensionAccounts.map(({ address }) => address)
       ),
-    enabled: Boolean(extensionAccounts?.length > 0),
+    enabled: !!extensionAccounts?.length,
   });
 
   return {

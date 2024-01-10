@@ -121,10 +121,14 @@ export const TransferFormDeposit = ({
   });
 
   const buttonMessage = fundWalletPresent ? "transferButton" : "userButton";
-  const tradingAccountError =
+  const localAccountError =
     fundWalletPresent && mainProxiesAccounts.length === 0
-      ? "tradingAccountError"
+      ? "localAccountError"
       : "";
+
+  const disabled = fundWalletPresent
+    ? !(isValid && dirty) || loading || !!localAccountError?.length
+    : false;
 
   return (
     <Loading
@@ -134,12 +138,12 @@ export const TransferFormDeposit = ({
       message=""
       spinner="Keyboard"
     >
-      {tradingAccountError && (
+      {localAccountError && (
         <S.Errors style={{ marginBottom: normalizeValue(1) }}>
           <div>
             <Icons.Alert />
           </div>
-          <p>{t(tradingAccountError)}</p>
+          <p>{t(localAccountError)}</p>
         </S.Errors>
       )}
       <S.Content onSubmit={handleSubmit}>
@@ -210,13 +214,7 @@ export const TransferFormDeposit = ({
         <S.Footer hasUser={fundWalletPresent}>
           <button
             type={fundWalletPresent ? "submit" : "button"}
-            disabled={
-              fundWalletPresent
-                ? !(isValid && dirty) ||
-                  loading ||
-                  Boolean(tradingAccountError?.length > 0)
-                : false
-            }
+            disabled={disabled}
             onClick={
               fundWalletPresent ? undefined : () => onToogleConnectExtension()
             }
