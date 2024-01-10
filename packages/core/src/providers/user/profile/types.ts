@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren } from "react";
+import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 
 export interface UserAddressTuple {
   mainAddress: string; // the main address linked to the trade address
@@ -28,7 +29,7 @@ export type ProfileContextInterface = ProfileContextState & {
   onUserSetAvatar: (value?: string) => void;
   onUserFavoriteMarketPush: (value: string) => void;
   getSigner: (address: string) => any;
-  setSelectedExtension: (value: any) => void;
+  setSelectedExtension: (value: (typeof ExtensionsArray)[0]) => void;
 };
 
 export type ProfileProviderProps = PropsWithChildren<{

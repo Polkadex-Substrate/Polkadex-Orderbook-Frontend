@@ -23,6 +23,7 @@ import * as T from "./types";
 import { Loading, Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { normalizeValue } from "@/utils/normalize";
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 const initialValues = { amount: 0.0 };
 
@@ -36,10 +37,12 @@ export const TransferFormDeposit = ({
 
   const { extensionAccounts: allAccounts } = useExtensionAccounts();
   const { loading, onFetchDeposit } = useDepositProvider();
-  const { selectedAddresses } = useProfile();
+  const {
+    selectedAddresses: { mainAddress },
+  } = useProfile();
   const { loading: balancesLoading } = useFunds();
   const { onToogleConnectExtension } = useSettingsProvider();
-  const { mainAddress } = selectedAddresses;
+  const { mainProxiesAccounts } = useConnectWalletProvider();
 
   const fundingWallet = useMemo(
     () => getFundingAccountDetail(mainAddress, allAccounts),
@@ -118,6 +121,14 @@ export const TransferFormDeposit = ({
   });
 
   const buttonMessage = fundWalletPresent ? "transferButton" : "userButton";
+  const localAccountError =
+    fundWalletPresent && mainProxiesAccounts.length === 0
+      ? "localAccountError"
+      : "";
+
+  const disabled = fundWalletPresent
+    ? !(isValid && dirty) || loading || !!localAccountError?.length
+    : false;
 
   return (
     <Loading
@@ -127,6 +138,14 @@ export const TransferFormDeposit = ({
       message=""
       spinner="Keyboard"
     >
+      {localAccountError && (
+        <S.Errors style={{ marginBottom: normalizeValue(1) }}>
+          <div>
+            <Icons.Alert />
+          </div>
+          <p>{t(localAccountError)}</p>
+        </S.Errors>
+      )}
       <S.Content onSubmit={handleSubmit}>
         <S.Wallets>
           <WalletCard
@@ -195,9 +214,7 @@ export const TransferFormDeposit = ({
         <S.Footer hasUser={fundWalletPresent}>
           <button
             type={fundWalletPresent ? "submit" : "button"}
-            disabled={
-              fundWalletPresent ? !(isValid && dirty) || loading : false
-            }
+            disabled={disabled}
             onClick={
               fundWalletPresent ? undefined : () => onToogleConnectExtension()
             }

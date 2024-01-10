@@ -35,13 +35,7 @@ import { TradingAccountList } from "@/ui/templates/ConnectWallet/tradingAccountL
 import { MaximumTradingAccount } from "@/ui/templates/ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "@/ui/templates/ConnectWallet/insufficientBalance";
 
-export const Profile = ({
-  onClick,
-  showFundingWallet,
-}: {
-  onClick: () => void;
-  showFundingWallet: boolean;
-}) => {
+export const Profile = ({ onClick }: { onClick: () => void }) => {
   const {
     selectedWallet,
     onSelectTradingAccount,
@@ -129,41 +123,41 @@ export const Profile = ({
 
   const availableOnDevice = useMemo(
     () =>
-      filteredAccounts?.some((value) => value.address === tempTrading?.address),
-    [tempTrading?.address, filteredAccounts]
+      localTradingAccounts?.some(
+        (value) => value.address === tempTrading?.address
+      ),
+    [localTradingAccounts, tempTrading?.address]
   );
 
   if (tradingWalletPresent || fundWalletPresent)
     return (
       <Popover>
         <Popover.Trigger className="bg-level-1 transition-colors duration-300 flex items-center gap-2 rounded-md">
-          {showFundingWallet && (
-            <HoverCard>
-              <HoverCard.Trigger>
-                <div className="flex items-center gap-1">
-                  <div className="w-4 h-4">
-                    <Icons.Avatar />
-                  </div>
-                  {fundWalletPresent ? (
-                    <Typography.Text size="xs" bold>
-                      {selectedWallet?.name}
-                    </Typography.Text>
-                  ) : (
-                    <Typography.Text size="xs" bold variant="secondary">
-                      Wallet not present
-                    </Typography.Text>
-                  )}
+          <HoverCard>
+            <HoverCard.Trigger>
+              <div className="flex items-center gap-1 pl-1">
+                <div className="w-4 h-4">
+                  <Icons.Avatar />
                 </div>
-              </HoverCard.Trigger>
-              <HoverCard.Content
-                side="left"
-                withArrow={true}
-                className="bg-level-5"
-              >
-                Funding wallet
-              </HoverCard.Content>
-            </HoverCard>
-          )}
+                {fundWalletPresent ? (
+                  <Typography.Text size="xs" bold>
+                    {selectedWallet?.name}
+                  </Typography.Text>
+                ) : (
+                  <Typography.Text size="xs" bold variant="secondary">
+                    Wallet not present
+                  </Typography.Text>
+                )}
+              </div>
+            </HoverCard.Trigger>
+            <HoverCard.Content
+              side="left"
+              withArrow={true}
+              className="bg-level-5"
+            >
+              Funding wallet
+            </HoverCard.Content>
+          </HoverCard>
           <div className="flex items-center gap-2 bg-level-4 px-2 py-1 rounded-md">
             {tradingWalletPresent ? (
               <Typography.Text size="xs" bold>
