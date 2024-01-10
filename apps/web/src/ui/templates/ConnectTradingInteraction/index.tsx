@@ -21,6 +21,7 @@ export const ConnectTradingInteraction = () => {
     onSetTempTrading,
     tempTrading,
     mainProxiesAccounts,
+    onExportTradeAccount,
   } = useConnectWalletProvider();
 
   return (
@@ -43,6 +44,7 @@ export const ConnectTradingInteraction = () => {
                   onRemoveCallback={() =>
                     props?.onPage("RemoveTradingAccount", true)
                   }
+                  onExportBrowserAccount={onExportTradeAccount}
                 />
               </Multistep.Trigger>
               <Multistep.Content>

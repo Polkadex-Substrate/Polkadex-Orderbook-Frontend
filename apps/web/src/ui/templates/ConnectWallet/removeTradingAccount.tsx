@@ -78,7 +78,7 @@ export const RemoveTradingAccount = ({
               address={tradingAccount?.address ?? ""}
               name={tradingAccount?.meta?.name as string}
               type="Browser"
-              enabledExtensionAccount
+              enabledExtensionAccount={enabledExtensionAccount}
             />
             <div className="flex flex-col gap-2">
               <GenericSelectCard

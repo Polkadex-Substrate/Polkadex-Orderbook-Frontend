@@ -162,6 +162,7 @@ export const Connect = ({
               selectedExtension={selectedExtension}
               availableOnDevice={availableOnDevice}
               onCancel={() => props?.onPage("ConnectTradingAccount")}
+              enabledExtensionAccount
             />
           </Multistep.Content>
         </>
