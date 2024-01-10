@@ -29,7 +29,7 @@
   "amountPlaceholder": "Enter an amount",
   "maxButton": "MAX",
   "transferButton": "Transfer",
-  "userButton": "Connect wallet" ,
+  "userButton": "Connect wallet",
   "historyTitle": "History",
   "historyFilterByToken": "Show only selected token",
   "resultEmpty": "No result found",
@@ -47,5 +47,7 @@
     "pending": "Pending",
     "readyToClaim": "Ready to claim",
     "claimed": "Claimed"
-  }
+  },
+  "withdrawalError": "Please select a trading account first",
+  "localAccountError": "There is no trading account available for this funding account. Please create a trading account first."
 }

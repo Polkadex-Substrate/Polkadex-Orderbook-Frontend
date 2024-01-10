@@ -18,6 +18,7 @@ import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
 import {
   useExtensionAccounts,
   ExtensionAccount,
+  useUserAccounts,
 } from "@polkadex/react-providers";
 
 import { CustomAddress } from "../TransferFormWithdraw/types";
@@ -47,8 +48,9 @@ export const TransferForm = ({
   const { t } = useTranslation("transfer");
 
   const { extensionAccounts: allAccounts } = useExtensionAccounts();
+  const { localAddresses } = useUserAccounts();
   const {
-    selectedAddresses,
+    selectedAddresses: { mainAddress },
     onUserSelectTradingAddress,
     allAccounts: userAccounts,
   } = useProfile();
@@ -56,7 +58,6 @@ export const TransferForm = ({
 
   // TODO: Check why isLoading is not working in mutateAsync - using switchEnable as loading checker
   const { mutateAsync, isLoading } = useAssetTransfer(onRefetch);
-  const { mainAddress } = selectedAddresses;
 
   const fundingWallet = useMemo(
     () => getFundingAccountDetail(mainAddress, allAccounts),
@@ -66,9 +67,14 @@ export const TransferForm = ({
   const allFilteresAccounts = useMemo(
     () =>
       allAccounts.filter(
-        ({ address }) => userAccounts?.find((v) => v.mainAddress === address)
+        ({ address }) =>
+          userAccounts?.find(
+            (v) =>
+              v.mainAddress === address &&
+              localAddresses?.includes(v.tradeAddress)
+          )
       ),
-    [allAccounts, userAccounts]
+    [allAccounts, localAddresses, userAccounts]
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
@@ -227,12 +233,17 @@ export const TransferForm = ({
               pasteable={false}
               selectedAccount={fundingWallet}
               onQuery={(e) => setFromQuery(e)}
-              onSelectAccount={(e) => {
+              onSelectAccount={async (e) => {
                 const account = userAccounts?.find(
-                  (v) => v.mainAddress === e?.address
+                  (v) =>
+                    v.mainAddress === e?.address &&
+                    localAddresses?.includes(v.tradeAddress)
                 );
-                // TODO: Fix types
-                if (account) onUserSelectTradingAddress(account);
+
+                if (account)
+                  await onUserSelectTradingAddress({
+                    tradeAddress: account.tradeAddress,
+                  });
               }}
               data={filteredFundingWallets}
               placeholder={t("funding.betweenPlaceholder")}

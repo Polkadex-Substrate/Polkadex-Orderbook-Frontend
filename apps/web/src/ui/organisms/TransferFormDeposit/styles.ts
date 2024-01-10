@@ -73,9 +73,9 @@ export const Errors = styled.div`
     align-items: center;
     gap: ${normalizeValue(0.5)};
     div {
-      width: ${normalizeValue(1.3)};
-      height: ${normalizeValue(1.3)};
       svg {
+        width: ${normalizeValue(1.3)};
+        height: ${normalizeValue(1.3)};
         fill: ${theme.colors.primary};
       }
     }
@@ -83,7 +83,8 @@ export const Errors = styled.div`
     border-radius: ${normalizeValue(0.5)};
     padding: ${normalizeValue(0.8)};
     p {
-      color: ${theme.colors.inverse};
+      font-size: ${normalizeValue(1.5)};
+      color: ${theme.colors.black};
     }
   `}
 `;

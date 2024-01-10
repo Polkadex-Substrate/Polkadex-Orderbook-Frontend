@@ -9,6 +9,7 @@ import {
 } from "@polkadex/orderbook-ui/organisms";
 import { Footer, Switch } from "@polkadex/orderbook-ui/molecules";
 import { useTranslation } from "next-i18next";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMemo } from "react";
 
@@ -35,6 +36,7 @@ export const TransferTemplate = () => {
     onDisableSwitch,
   } = useTransfer();
   const { selectedWallet } = useConnectWalletProvider();
+  const { onHandleError } = useSettingsProvider();
 
   const {
     selectedAddresses: { tradeAddress },
@@ -50,9 +52,13 @@ export const TransferTemplate = () => {
       <CustomDeposit
         selectedAsset={selectedAsset}
         onOpenAssets={onAssetsInteraction}
-        onChangeType={() =>
-          onChangeType(type === "deposit" ? "withdraw" : "deposit")
-        }
+        onChangeType={() => {
+          if (!userExists) {
+            onHandleError(t("withdrawalError"));
+            return;
+          }
+          onChangeType(type === "deposit" ? "withdraw" : "deposit");
+        }}
         hasUser={userExists}
         fundWalletPresent={fundWalletPresent}
       />
@@ -105,7 +111,7 @@ export const TransferTemplate = () => {
                   <h1>{t("heading")}</h1>
                   <h2>{t("subheading")}</h2>
                 </S.Heading>
-                <S.Title show={userExists}>
+                <S.Title show={fundWalletPresent}>
                   <Switch
                     disable={loading || switchEnable || !fundWalletPresent}
                     isActive={type === "transfer"}

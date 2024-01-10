@@ -3210,7 +3210,7 @@
     "@polkadot/util" "^12.5.1"
     typescript latest
 
-"@polkadex/ux@latest":
+"@polkadex/ux@^4.3.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-4.4.0.tgz#1abbbd8293abb83cb2782bb614244bb907b8998e"
   integrity sha512-+d/SkRy5uAcNg1+V8EvZKXFIr7lfbiZcJbECdoN+FOEs7dbK5FCtYmBhtIp+gGiE9l4vRffBN7rUCPd7ZDX1Ww==

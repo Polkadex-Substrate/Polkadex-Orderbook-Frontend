@@ -6,6 +6,7 @@ import {
 } from "@polkadex/react-providers";
 import { getMainAccountLinkedToProxy } from "@orderbook/core/providers/user/profile/helpers";
 import { useProxyAccounts } from "@orderbook/core/hooks";
+import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 
 import * as LOCAL_STORE from "./localstore";
 import { Provider } from "./context";
@@ -17,8 +18,9 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   });
   const [favoriteMarkets, setFavoriteMarkets] = useState<string[]>([]);
   const [isBannerShown, setIsBannerShown] = useState<boolean>(false);
-  // TODO: remove any type and use a common type for extension accounts
-  const [selectedExtension, setSelectedExtension] = useState<any | null>(null);
+  const [selectedExtension, setSelectedExtension] = useState<
+    (typeof ExtensionsArray)[0] | null
+  >(null);
   const [avatar, setAvatar] = useState<string | null>(null);
   const { localAddresses } = useUserAccounts();
   const { onHandleError } = useSettingsProvider();
