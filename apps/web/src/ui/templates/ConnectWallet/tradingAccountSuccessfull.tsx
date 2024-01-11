@@ -7,6 +7,7 @@ import {
   Interaction,
 } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { useRouter } from "next/router";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
 
@@ -23,6 +24,7 @@ export const TradingAccountSuccessfull = ({
   onDownloadJson: (e: TradeAccount) => void;
   onDownloadPdf: () => void;
 }) => {
+  const router = useRouter();
   return (
     <Interaction>
       <Interaction.Content className="flex flex-col gap-6 flex-1 mb-4">
@@ -88,7 +90,9 @@ export const TradingAccountSuccessfull = ({
         </div>
       </Interaction.Content>
       <Interaction.Footer>
-        <Interaction.Action>Transfer funds</Interaction.Action>
+        <Interaction.Action onClick={() => router.push("/transfer")}>
+          Transfer funds
+        </Interaction.Action>
         <Interaction.Close onClick={onClose}>Close</Interaction.Close>
       </Interaction.Footer>
     </Interaction>
