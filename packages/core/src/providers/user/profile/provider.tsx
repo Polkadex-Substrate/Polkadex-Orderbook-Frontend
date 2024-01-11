@@ -45,10 +45,9 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       onHandleError("Invalid trade Address");
       return;
     }
-    const maxAttempts = 5;
+    const maxAttempts = 10;
     // TODO: Temp solution, backend issue
-    let attempt = 0;
-    while (attempt < maxAttempts) {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
         const mainAddress = await getMainAccountLinkedToProxy(tradeAddress);
         if (!mainAddress)
@@ -60,10 +59,9 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         break;
       } catch (error) {
         console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
-      } finally {
-        attempt++;
-        await new Promise((resolve) => setTimeout(resolve, 8000));
       }
+      if (attempt < maxAttempts)
+        await new Promise((resolve) => setTimeout(resolve, 10000));
     }
   };
 

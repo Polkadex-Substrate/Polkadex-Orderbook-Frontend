@@ -17,7 +17,10 @@ export const useImportProxyAccount = (props: MutateHookProps) => {
   const { mutateAsync, status, error } = useMutation({
     mutationFn: async ({ file, password }: ImportFromFile) => {
       const pair = wallet.import(file as any, password);
-      onUserSelectTradingAddress({ tradeAddress: pair.address, isNew: true });
+      await onUserSelectTradingAddress({
+        tradeAddress: pair.address,
+        isNew: true,
+      });
       props?.onSuccess?.("Trading account imported successfully");
     },
     onError: (e) => console.log("Error", e),

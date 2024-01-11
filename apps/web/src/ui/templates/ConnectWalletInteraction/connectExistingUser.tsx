@@ -10,6 +10,7 @@ import { TradingAccountList } from "../ConnectWallet/tradingAccountList";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { MaximumTradingAccount } from "../ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
+import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 
 import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
@@ -40,6 +41,8 @@ export const ConnectExistingUser = ({
     onImportFromFile,
     importFromFileStatus,
     walletBalance,
+    onExportTradeAccount,
+    onResetTempTrading,
   } = useConnectWalletProvider();
 
   const filteredAccounts = useMemo(
@@ -96,6 +99,16 @@ export const ConnectExistingUser = ({
                 })
               }
               onSelectCallback={onClose}
+              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
+              onRemoveCallback={() =>
+                props?.onPage("RemoveTradingAccount", true)
+              }
+              onExportBrowserAccount={(account) =>
+                onExportTradeAccount({ account })
+              }
+              onExportBrowserAccountCallback={() =>
+                props?.onPage("UnlockBrowserAccount")
+              }
             ></ExistingUser>
           </Multistep.Trigger>
           <Multistep.Content>
@@ -105,7 +118,7 @@ export const ConnectExistingUser = ({
               onSelect={(e) =>
                 onSelectTradingAccount?.({ tradeAddress: e.address })
               }
-              onRemove={(e) => onSetTempTrading?.(e)}
+              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
               onClose={
                 hasAccounts
                   ? () => props?.onChangeInteraction(false)
@@ -116,6 +129,19 @@ export const ConnectExistingUser = ({
               onRemoveCallback={() =>
                 props?.onPage("RemoveTradingAccount", true)
               }
+              onExportBrowserAccount={(account) =>
+                onExportTradeAccount({ account })
+              }
+              onExportBrowserAccountCallback={() =>
+                props?.onPage("UnlockBrowserAccount")
+              }
+            />
+            <UnlockBrowserAccount
+              key="UnlockBrowserAccount"
+              tempBrowserAccount={tempTrading}
+              onClose={() => props?.onPage("ConnectTradingAccount")}
+              onAction={(account) => onExportTradeAccount({ account })}
+              onResetTempBrowserAccount={onResetTempTrading}
             />
             <NewTradingAccount
               key="NewTradingAccount"
@@ -165,11 +191,14 @@ export const ConnectExistingUser = ({
             />
             <ImportTradingAccount
               key="ImportTradingAccount"
-              onImport={async (e) => await onImportFromFile?.(e)}
+              onImport={async (e) => {
+                await onImportFromFile?.(e);
+                onClose();
+              }}
               onRedirect={() => props?.onPage("ConnectTradingAccount")}
               onClose={() => props?.onPage("ConnectTradingAccount")}
               loading={importFromFileStatus === "loading"}
-              whitelistAccounts={mainProxiesAccounts}
+              whitelistBrowserAccounts={mainProxiesAccounts}
             />
             <MaximumTradingAccount
               key="MaximumTradingAccount"

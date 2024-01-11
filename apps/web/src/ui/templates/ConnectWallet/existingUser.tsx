@@ -7,6 +7,8 @@ import {
   Separator,
 } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import classNames from "classnames";
+import { KeyringPair } from "@polkadot/keyring/types";
 
 import { GenericHorizontalCard, TradingAccountCard } from "../ReadyToUse";
 
@@ -20,6 +22,10 @@ export const ExistingUser = ({
   accounts,
   onSelect,
   onSelectCallback,
+  onTempBrowserAccount,
+  onRemoveCallback,
+  onExportBrowserAccountCallback,
+  onExportBrowserAccount,
 }: {
   onClose: () => void;
   onReadMore: () => void;
@@ -30,8 +36,13 @@ export const ExistingUser = ({
   accounts?: TradeAccount[];
   onSelect: (e: TradeAccount) => void;
   onSelectCallback: () => void;
+  onRemoveCallback: () => void;
+  onExportBrowserAccountCallback: () => void;
+  onExportBrowserAccount: (account: KeyringPair) => void;
+  onTempBrowserAccount: (e: TradeAccount) => void;
 }) => {
   const hasTradingAccounts = !!accounts?.length;
+
   return (
     <Interaction className="gap-10 overflow-hidden">
       {hasTradingAccounts && (
@@ -50,7 +61,11 @@ export const ExistingUser = ({
                 Available trading account(s)
               </Typography.Text>
               <div
-                className="flex flex-col gap-3 max-h-[11rem] overflow-hidden hover:overflow-auto px-7 border-b border-secondary"
+                className={classNames(
+                  accounts?.length > 1 &&
+                    "border-b border-secondary overflow-hidden hover:overflow-auto",
+                  "flex flex-col gap-3 max-h-[11rem] px-7"
+                )}
                 style={{ scrollbarGutter: "stable" }}
               >
                 {accounts.map((value, i) => (
@@ -64,6 +79,23 @@ export const ExistingUser = ({
                       e.stopPropagation();
                       onSelect(value);
                       onSelectCallback();
+                    }}
+                    onRemove={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onTempBrowserAccount(value);
+                      onRemoveCallback();
+                    }}
+                    onExport={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      try {
+                        if (value.isLocked) value.unlock("");
+                        onExportBrowserAccount(value);
+                      } catch (error) {
+                        onTempBrowserAccount(value);
+                        onExportBrowserAccountCallback();
+                      }
                     }}
                   />
                 ))}

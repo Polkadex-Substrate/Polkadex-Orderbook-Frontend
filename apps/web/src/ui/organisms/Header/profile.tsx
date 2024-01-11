@@ -34,6 +34,7 @@ import { FundAccount } from "@/ui/templates/ConnectWallet/fundAccount";
 import { TradingAccountList } from "@/ui/templates/ConnectWallet/tradingAccountList";
 import { MaximumTradingAccount } from "@/ui/templates/ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "@/ui/templates/ConnectWallet/insufficientBalance";
+import { UnlockBrowserAccount } from "@/ui/templates/ConnectWallet/unlockBrowserAccount";
 
 export const Profile = ({ onClick }: { onClick: () => void }) => {
   const {
@@ -60,6 +61,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
     onExportTradeAccount,
     onSelectExtension,
     mainProxiesAccounts,
+    onResetTempTrading,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
   const { onToogleConnectExtension } = useSettingsProvider();
@@ -193,10 +195,16 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     }}
                     onLogout={() => onLogout?.()}
                     onActions={() => props?.onPage("UserActions", true)}
-                    onRemove={(e) => {
-                      onSetTempTrading?.(e);
-                      props?.onPage("RemoveTradingAccount", true);
-                    }}
+                    onRemoveCallback={() =>
+                      props?.onPage("RemoveTradingAccount", true)
+                    }
+                    onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
+                    onExportBrowserAccount={(account) =>
+                      onExportTradeAccount({ account })
+                    }
+                    onExportBrowserAccountCallback={() =>
+                      props?.onPage("UnlockBrowserAccount", true)
+                    }
                     tradingWalletPresent={!!selectedAccount?.address}
                     fundWalletPresent={fundWalletPresent}
                     fundWallet={selectedFundingWallet}
@@ -229,6 +237,13 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     }
                     onClose={() => props?.onChangeInteraction(false)}
                   />
+                  <UnlockBrowserAccount
+                    key="UnlockBrowserAccount"
+                    tempBrowserAccount={tempTrading}
+                    onClose={() => props?.onChangeInteraction(false)}
+                    onAction={(account) => onExportTradeAccount({ account })}
+                    onResetTempBrowserAccount={onResetTempTrading}
+                  />
                   <ConnectTradingAccount
                     key="ConnectTradingAccount"
                     accounts={filteredAccounts as TradeAccount[]}
@@ -237,10 +252,16 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     }}
                     onClose={() => props?.onChangeInteraction(false)}
                     onImport={() => props?.onPage("ImportTradingAccount")}
-                    onRemove={(e) => onSetTempTrading?.(e)}
+                    onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
                     onSelectCallback={() => props?.onChangeInteraction(false)}
                     onRemoveCallback={() =>
                       props?.onPage("RemoveTradingAccount")
+                    }
+                    onExportBrowserAccount={(account) =>
+                      onExportTradeAccount({ account })
+                    }
+                    onExportBrowserAccountCallback={() =>
+                      props?.onPage("UnlockBrowserAccount")
                     }
                   />
                   <UserActions
@@ -296,7 +317,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onRedirect={() => props?.onPage("ConnectTradingAccount")}
                     onClose={() => props?.onPage("ConnectTradingAccount")}
                     loading={importFromFileStatus === "loading"}
-                    whitelistAccounts={proxiesAccounts}
+                    whitelistBrowserAccounts={proxiesAccounts}
                   />
                   <TradingAccountSuccessfull
                     key="TradingAccountSuccessfull"

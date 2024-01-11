@@ -17,6 +17,7 @@ export const RemoveTradingAccount = ({
   errorMessage,
   errorTitle,
   availableOnDevice,
+  enabledExtensionAccount = false,
 }: {
   tradingAccount: TradeAccount;
   fundWallet?: ExtensionAccount;
@@ -28,6 +29,7 @@ export const RemoveTradingAccount = ({
   errorTitle?: string;
   errorMessage?: string;
   availableOnDevice?: boolean;
+  enabledExtensionAccount?: boolean;
 }) => {
   const [state, setState] = useState({
     removeDevice: false,
@@ -76,6 +78,7 @@ export const RemoveTradingAccount = ({
               address={tradingAccount?.address ?? ""}
               name={tradingAccount?.meta?.name as string}
               type="Browser"
+              enabledExtensionAccount={enabledExtensionAccount}
             />
             <div className="flex flex-col gap-2">
               <GenericSelectCard

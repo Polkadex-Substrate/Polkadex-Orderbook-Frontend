@@ -45,4 +45,9 @@ export const QUERY_KEYS = {
     "proxyAccount",
     mainAddress,
   ],
+  extensionAccountFromBrowserAccount: (address: string) => [
+    PREFIX,
+    "extensionAccountFromBrowserAccount",
+    address,
+  ],
 };

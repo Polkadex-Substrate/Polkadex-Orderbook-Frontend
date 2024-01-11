@@ -24,3 +24,4 @@ export * from "./useOnChainBalances";
 export * from "./useProxyAccounts";
 export * from "./useImportProxyAccount";
 export * from "./useSingleProxyAccount";
+export * from "./useExtensionAccountFromBrowserAccount";

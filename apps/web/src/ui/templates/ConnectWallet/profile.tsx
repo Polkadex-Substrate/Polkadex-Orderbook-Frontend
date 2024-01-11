@@ -1,9 +1,9 @@
+import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import {
   ArrowsRightLeftIcon,
   ChevronDownIcon,
   PlusIcon,
   PowerIcon,
-  TrashIcon,
   InformationCircleIcon,
 } from "@heroicons/react/24/solid";
 import { TradeAccount } from "@orderbook/core/providers/types";
@@ -16,6 +16,7 @@ import {
   Illustrations,
 } from "@polkadex/ux";
 import { KeyringPair } from "@polkadot/keyring/types";
+import { useState } from "react";
 
 export const Profile = ({
   onCreateTradingAccount,
@@ -23,8 +24,11 @@ export const Profile = ({
   onImportTradingAccount,
   onLogout,
   onActions,
-  onRemove,
+  onRemoveCallback,
+  onExportBrowserAccountCallback,
+  onExportBrowserAccount,
   tradingWalletPresent,
+  onTempBrowserAccount,
   fundWalletPresent,
   fundWallet,
   tradeAccount,
@@ -38,7 +42,10 @@ export const Profile = ({
   onLogout: () => void;
   onActions: () => void;
   onSwitch: () => void;
-  onRemove: (e: KeyringPair) => void;
+  onTempBrowserAccount: (e: TradeAccount) => void;
+  onRemoveCallback: () => void;
+  onExportBrowserAccountCallback: () => void;
+  onExportBrowserAccount: (account: KeyringPair) => void;
   tradingWalletPresent?: boolean;
   fundWalletPresent?: boolean;
   fundWallet?: ExtensionAccount;
@@ -46,6 +53,8 @@ export const Profile = ({
   localTradingAccounts?: TradeAccount[];
   onConnectWallet: () => void;
 }) => {
+  const [state, setState] = useState(false);
+
   return (
     <div className="flex flex-col sm:w-full md:w-[23rem] bg-level-3 border border-primary rounded-lg">
       <div className="flex flex-col gap-6 p-4 border-b border-primary bg-level-2">
@@ -115,7 +124,7 @@ export const Profile = ({
             >
               <PlusIcon className="w-6 h-6" />
             </Button.Icon>
-            <Dropdown>
+            <Dropdown open={state} onOpenChange={setState}>
               <Dropdown.Trigger
                 asChild
                 className="flex justify-between items-center gap-2 flex-1 py-3 [&[data-state=open]>div>svg]:rotate-180"
@@ -146,6 +155,7 @@ export const Profile = ({
                           e.preventDefault();
                           e.stopPropagation();
                           onSelectTradingAccount(v.address);
+                          setState(false);
                         }}
                       >
                         <AccountCard.Inverted
@@ -153,16 +163,44 @@ export const Profile = ({
                           address={v.address}
                           withIcon={false}
                         >
-                          <Button.Icon
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              onRemove(v);
-                            }}
-                            variant="ghost"
-                          >
-                            <TrashIcon className="w-5 h-5" />
-                          </Button.Icon>
+                          <div className="flex gap-1">
+                            <Dropdown>
+                              <Dropdown.Trigger>
+                                <Button.Icon asChild size="sm" variant="ghost">
+                                  <EllipsisVerticalIcon className="text-primary group-hover:text-current duration-300 transition-colors" />
+                                </Button.Icon>
+                              </Dropdown.Trigger>
+                              <Dropdown.Content>
+                                <Dropdown.Item
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    onTempBrowserAccount(v);
+                                    onRemoveCallback();
+                                    setState(false);
+                                  }}
+                                >
+                                  Remove
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    try {
+                                      if (v.isLocked) v.unlock("");
+                                      onExportBrowserAccount(v);
+                                    } catch (error) {
+                                      onTempBrowserAccount(v);
+                                      onExportBrowserAccountCallback();
+                                    }
+                                    setState(false);
+                                  }}
+                                >
+                                  Export as JSON
+                                </Dropdown.Item>
+                              </Dropdown.Content>
+                            </Dropdown>
+                          </div>
                         </AccountCard.Inverted>
                       </div>
                     ))}

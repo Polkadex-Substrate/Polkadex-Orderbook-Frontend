@@ -420,7 +420,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         proxy_account: tradeAddress,
       },
     });
-    return queryResult?.data?.findUserByProxyAccount?.items?.[0]?.hash_key;
+    return queryResult?.data?.findUserByProxyAccount?.items?.[0]?.range_key;
   }
 
   private mapApiOrderToOrder(item: APIOrder, marketList: Market[]): Order {
