@@ -18,6 +18,10 @@ import { useDropzone } from "react-dropzone";
 import classNames from "classnames";
 import { useExtensionAccountFromBrowserAccount } from "@orderbook/core/hooks";
 import { useExtensionAccounts } from "@polkadex/react-providers";
+import {
+  EncryptedJsonEncoding,
+  EncryptedJsonVersion,
+} from "@polkadot/util-crypto/types";
 
 import { ErrorMessage, OptionalField } from "../ReadyToUse";
 
@@ -25,8 +29,8 @@ export interface DecodedFile {
   encoded: string;
   encoding: {
     content: string[];
-    type: string[];
-    version: string;
+    type: EncryptedJsonEncoding | EncryptedJsonEncoding[];
+    version: EncryptedJsonVersion;
   };
   address: string;
   meta: {
@@ -188,7 +192,10 @@ export const ImportTradingAccount = ({
                       />
                       <Button.Icon
                         variant="ghost"
-                        onClick={() => setShow(!show)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShow(!show);
+                        }}
                       >
                         {show ? <EyeIcon /> : <EyeSlashIcon />}
                       </Button.Icon>
