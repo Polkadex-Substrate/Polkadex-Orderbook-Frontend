@@ -268,7 +268,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     key="UserActions"
                     onClose={() => props?.onChangeInteraction(false)}
                     onNewTradingAccount={() =>
-                      props?.onPage("NewTradingAccount")
+                      props?.onPage(redirectEnoughBalance, true)
                     }
                     onImportTradingAccount={() =>
                       props?.onPage("ConnectTradingAccount")
