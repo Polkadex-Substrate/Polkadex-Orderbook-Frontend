@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 15px;
 `;
 
 export const Title = styled.div`
@@ -15,7 +15,7 @@ export const Title = styled.div`
       display: flex;
       flex-direction: column;
       font-weight: 550;
-      font-size: 1rem;
+      font-size: 14px;
       align-items: flex-start;
 
       @media screen and (min-width: 440px) {
@@ -33,9 +33,9 @@ export const Title = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 2rem;
-      height: 2rem;
-      padding: 0.4rem;
+      width: 25px;
+      height: 25px;
+      padding: 6px;
       border-radius: 10rem;
       background: ${theme.colors.white};
       svg {
@@ -48,7 +48,7 @@ export const Container = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 15px;
     p {
       line-height: 1.7;
     }
