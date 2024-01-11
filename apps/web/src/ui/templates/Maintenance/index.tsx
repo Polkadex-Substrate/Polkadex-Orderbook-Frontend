@@ -71,6 +71,7 @@ export const Maintenance = () => {
                 </strong>
                 In order to prepare for the release of upcoming features,
                 <strong>
+                  {" "}
                   Polkadex Orderbook will undergo a scheduled downtime this
                   upcoming Thursday, January 11th at 5:30 AM UTC
                 </strong>
