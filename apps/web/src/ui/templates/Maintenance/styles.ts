@@ -82,3 +82,22 @@ export const SocialIcons = styled.div`
     }
   `}
 `;
+
+export const Message = styled.div`
+  ${({ theme }) => css`
+    border: 1px solid ${theme.colors.text}55;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    text-align: left;
+    & h3 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      line-height: 1;
+      color: ${theme.colors.orange};
+    }
+  `}
+`;
