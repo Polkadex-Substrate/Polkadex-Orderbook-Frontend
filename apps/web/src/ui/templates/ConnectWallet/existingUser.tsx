@@ -8,6 +8,7 @@ import {
 } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import classNames from "classnames";
+import { KeyringPair } from "@polkadot/keyring/types";
 
 import { GenericHorizontalCard, TradingAccountCard } from "../ReadyToUse";
 
@@ -21,6 +22,10 @@ export const ExistingUser = ({
   accounts,
   onSelect,
   onSelectCallback,
+  onTempBrowserAccount,
+  onRemoveCallback,
+  onExportBrowserAccountCallback,
+  onExportBrowserAccount,
 }: {
   onClose: () => void;
   onReadMore: () => void;
@@ -31,6 +36,10 @@ export const ExistingUser = ({
   accounts?: TradeAccount[];
   onSelect: (e: TradeAccount) => void;
   onSelectCallback: () => void;
+  onRemoveCallback: () => void;
+  onExportBrowserAccountCallback: () => void;
+  onExportBrowserAccount: (account: KeyringPair) => void;
+  onTempBrowserAccount: (e: TradeAccount) => void;
 }) => {
   const hasTradingAccounts = !!accounts?.length;
 
@@ -70,6 +79,23 @@ export const ExistingUser = ({
                       e.stopPropagation();
                       onSelect(value);
                       onSelectCallback();
+                    }}
+                    onRemove={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onTempBrowserAccount(value);
+                      onRemoveCallback();
+                    }}
+                    onExport={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      try {
+                        if (value.isLocked) value.unlock("");
+                        onExportBrowserAccount(value);
+                      } catch (error) {
+                        onTempBrowserAccount(value);
+                        onExportBrowserAccountCallback();
+                      }
                     }}
                   />
                 ))}

@@ -99,6 +99,16 @@ export const ConnectExistingUser = ({
                 })
               }
               onSelectCallback={onClose}
+              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
+              onRemoveCallback={() =>
+                props?.onPage("RemoveTradingAccount", true)
+              }
+              onExportBrowserAccount={(account) =>
+                onExportTradeAccount({ account })
+              }
+              onExportBrowserAccountCallback={() =>
+                props?.onPage("UnlockBrowserAccount")
+              }
             ></ExistingUser>
           </Multistep.Trigger>
           <Multistep.Content>
