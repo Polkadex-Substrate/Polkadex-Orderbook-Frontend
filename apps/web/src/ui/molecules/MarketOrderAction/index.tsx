@@ -90,17 +90,19 @@ export const MarketOrderAction = ({
     else changeTotal(value);
   };
 
-  const showPriceError = Boolean(
-    isSell
-      ? values.priceSell && errors.priceSell && errors.priceSell.length > 0
-      : values.priceBuy && errors.priceBuy && errors.priceBuy.length > 0
-  );
+  const showPriceError =
+    Boolean(
+      isSell
+        ? values.priceSell && errors.priceSell && errors.priceSell.length > 0
+        : values.priceBuy && errors.priceBuy && errors.priceBuy.length > 0
+    ) && isSignedIn;
 
-  const showAmountError = Boolean(
-    isSell
-      ? values.amountSell && errors.amountSell && errors.amountSell.length > 0
-      : values.amountBuy && errors.amountBuy && errors.amountBuy.length > 0
-  );
+  const showAmountError =
+    Boolean(
+      isSell
+        ? values.amountSell && errors.amountSell && errors.amountSell.length > 0
+        : values.amountBuy && errors.amountBuy && errors.amountBuy.length > 0
+    ) && isSignedIn;
 
   return (
     <S.WrapperOrder>
