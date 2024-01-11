@@ -63,7 +63,7 @@ export const Maintenance = () => {
             </a>
           </S.SocialIcons>
           <S.Message>
-            <h3>Announcement</h3>
+            <h3>{t("announcement")}</h3>
             <TwitterMessage name="Polkadex" username="@polkadex • Jan 9">
               <p>
                 <strong style={{ display: "block", marginBottom: "10px" }}>
@@ -87,7 +87,7 @@ export const Maintenance = () => {
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                Read the announcement to learn more.
+                {t("announcementButton")}
               </a>
             </TwitterMessage>
           </S.Message>
