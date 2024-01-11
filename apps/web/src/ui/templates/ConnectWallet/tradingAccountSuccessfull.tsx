@@ -64,7 +64,12 @@ export const TradingAccountSuccessfull = ({
                   </Button.Solid>
                 </Dropdown.Trigger>
                 <Dropdown.Content>
-                  <Dropdown.Item onClick={() => onDownloadPdf?.()}>
+                  <Dropdown.Item
+                    onClick={() => onDownloadPdf?.()}
+                    // TODO: Remove these once we enabled functionality to download PDF
+                    className="pointer-events-none"
+                    disabled
+                  >
                     PDF
                   </Dropdown.Item>
                   <Dropdown.Item
