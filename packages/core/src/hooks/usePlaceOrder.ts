@@ -52,7 +52,7 @@ export function usePlaceOrder(
     currentTicker: { currentPrice: lastPriceValue },
   } = useTickers(market);
 
-  const { wallet } = useUserAccounts();
+  const { wallet, isReady } = useUserAccounts();
 
   const {
     selectedAddresses: { tradeAddress },
@@ -79,9 +79,8 @@ export function usePlaceOrder(
 
   const hasTradeAccount = tradeAddress !== "";
 
-  const tradeAccount = hasTradeAccount
-    ? wallet.getPair(tradeAddress)
-    : undefined;
+  const tradeAccount =
+    hasTradeAccount && isReady ? wallet.getPair(tradeAddress) : undefined;
 
   useEffect(() => {
     tryUnlockTradeAccount(tradeAccount);

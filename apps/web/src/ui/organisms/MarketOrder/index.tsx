@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useFormik } from "formik";
 import {
@@ -10,10 +10,12 @@ import {
   MarketOrderAction,
 } from "@polkadex/orderbook-ui/molecules";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
+import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
 
 import * as S from "./styles";
 
 import { normalizeValue } from "@/utils/normalize";
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 type FormValues = {
   priceSell: string;
@@ -30,6 +32,7 @@ type Props = {
 
 export const MarketOrder = ({ market }: Props) => {
   const [isLimit, setIsLimit] = useState(true);
+  const { selectedAccount } = useConnectWalletProvider();
   const handleChangeType = (value: boolean) => setIsLimit(value);
   const orderType = isLimit ? "Limit" : "Market";
 
@@ -51,6 +54,10 @@ export const MarketOrder = ({ market }: Props) => {
     initialValues,
     onSubmit: () => {},
   });
+
+  useEffect(() => {
+    tryUnlockTradeAccount(selectedAccount);
+  }, [selectedAccount]);
 
   return (
     <S.Section>

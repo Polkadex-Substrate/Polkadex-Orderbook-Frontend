@@ -316,7 +316,7 @@ const ProtectPassword = () => {
             />
             <S.UnlockButton
               type="submit"
-              disabled={loading || !(isValid && dirty)}
+              disabled={loading || !(isValid && dirty) || !isValidSize}
             >
               {t("unlock")}
             </S.UnlockButton>

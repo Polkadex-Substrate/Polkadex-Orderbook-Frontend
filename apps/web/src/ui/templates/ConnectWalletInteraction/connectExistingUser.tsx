@@ -107,7 +107,7 @@ export const ConnectExistingUser = ({
                 onExportTradeAccount({ account })
               }
               onExportBrowserAccountCallback={() =>
-                props?.onPage("UnlockBrowserAccount")
+                props?.onPage("UnlockBrowserAccount", true)
               }
             ></ExistingUser>
           </Multistep.Trigger>
