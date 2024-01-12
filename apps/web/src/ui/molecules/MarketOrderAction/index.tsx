@@ -261,24 +261,25 @@ const ProtectPassword = () => {
   const tradeAccount = isReady ? wallet.getPair(tradeAddress) : undefined;
   const [loading, setLoading] = useState(false);
 
-  const { values, setFieldValue, handleSubmit, errors } = useFormik({
-    initialValues: {
-      showPassword: false,
-      password: "",
-    },
-    validationSchema: buySellValidation,
-    onSubmit: (values) => {
-      try {
-        setLoading(true);
-        isValidSize &&
-          tradeAccount?.isLocked &&
-          tradeAccount.unlock(values.password);
-      } catch (error) {
-        setLoading(false);
-        onHandleError("Invalid Password");
-      }
-    },
-  });
+  const { values, setFieldValue, handleSubmit, errors, isValid, dirty } =
+    useFormik({
+      initialValues: {
+        showPassword: false,
+        password: "",
+      },
+      validationSchema: buySellValidation,
+      onSubmit: (values) => {
+        try {
+          setLoading(true);
+          isValidSize &&
+            tradeAccount?.isLocked &&
+            tradeAccount.unlock(values.password);
+        } catch (error) {
+          setLoading(false);
+          onHandleError("Invalid Password");
+        }
+      },
+    });
 
   const isValidSize = useMemo(
     () => values?.password?.length === 5,
@@ -313,7 +314,10 @@ const ProtectPassword = () => {
               error={errors.password}
               type={!values.showPassword ? "password" : "tel"}
             />
-            <S.UnlockButton type="submit" disabled={loading}>
+            <S.UnlockButton
+              type="submit"
+              disabled={loading || !(isValid && dirty)}
+            >
               {t("unlock")}
             </S.UnlockButton>
           </S.ProtectPasswordContent>

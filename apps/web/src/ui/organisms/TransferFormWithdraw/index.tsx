@@ -54,7 +54,7 @@ export const TransferFormWithdraw = ({
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
   const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
-  const { onToogleConnectExtension } = useSettingsProvider();
+  const { onToogleConnectExtension, onHandleError } = useSettingsProvider();
 
   const { tradeAddress, mainAddress } = selectedAddresses;
   const tradingWallet = useMemo(
@@ -134,6 +134,7 @@ export const TransferFormWithdraw = ({
             new Event("submit", { cancelable: true, bubbles: true })
           )
         }
+        onError={onHandleError}
       />
       <Loading
         style={{ maxWidth: normalizeValue(100) }}

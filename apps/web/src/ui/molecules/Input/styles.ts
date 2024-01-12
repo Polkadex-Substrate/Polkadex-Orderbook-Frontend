@@ -87,7 +87,7 @@ export const Box = styled.div`
 export const PassCodeWrapper = styled.div`
   ${({ theme }) => css`
     span {
-      margin-bottom: ${normalizeValue(1)};
+      margin-bottom: ${normalizeValue(-1)};
       display: block;
       color: ${theme.colors.tertiaryText};
     }
