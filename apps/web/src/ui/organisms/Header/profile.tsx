@@ -62,6 +62,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
     onSelectExtension,
     mainProxiesAccounts,
     onResetTempTrading,
+    onResetTempMnemonic,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
   const { onToogleConnectExtension } = useSettingsProvider();
@@ -322,7 +323,10 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                   <TradingAccountSuccessfull
                     key="TradingAccountSuccessfull"
                     tradingAccount={selectedAccount}
-                    onClose={() => props?.onChangeInteraction(false)}
+                    onClose={() => {
+                      onResetTempMnemonic?.();
+                      props?.onChangeInteraction(false);
+                    }}
                     onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
                     onOpenMnemonic={() =>
                       props?.onPage("TradingAccountMnemonic", true)
@@ -338,7 +342,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                   <TradingAccountMnemonic
                     key="TradingAccountMnemonic"
                     onClose={() =>
-                      props?.onPage("TradingAccountMnemonic", true)
+                      props?.onPage("TradingAccountSuccessfull", true)
                     }
                     mnemonic={tempMnemonic?.split(" ") ?? []}
                   />

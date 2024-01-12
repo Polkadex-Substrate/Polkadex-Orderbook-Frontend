@@ -62,7 +62,7 @@ export const NewTradingAccount = ({
           const mnemonic = mnemonicGenerate();
           await onCreateAccount({
             name,
-            password,
+            password: password.length === 5 ? password : "",
             mnemonic,
           });
           onCreateCallback();

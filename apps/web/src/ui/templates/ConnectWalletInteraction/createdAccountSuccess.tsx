@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { Multistep } from "@polkadex/ux";
 
 import { TradingAccountSuccessfull } from "../ConnectWallet/tradingAccountSuccessfull";
@@ -8,8 +7,6 @@ import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
-  const isMounted = useRef(true);
-
   const {
     tempMnemonic,
     onResetTempMnemonic,
@@ -20,20 +17,6 @@ export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
     onResetTempTrading,
   } = useConnectWalletProvider();
 
-  useEffect(() => {
-    return () => {
-      if (isMounted.current) {
-        onResetTempMnemonic?.();
-      }
-    };
-  }, [onResetTempMnemonic]);
-
-  useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
   return (
     <Multistep.Interactive>
       {(props) => (
@@ -41,7 +24,10 @@ export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
           <Multistep.Trigger>
             <TradingAccountSuccessfull
               tradingAccount={selectedAccount}
-              onClose={onClose}
+              onClose={() => {
+                onResetTempMnemonic?.();
+                onClose();
+              }}
               onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
               onOpenMnemonic={() =>
                 props?.onPage("TradingAccountMnemonic", true)
