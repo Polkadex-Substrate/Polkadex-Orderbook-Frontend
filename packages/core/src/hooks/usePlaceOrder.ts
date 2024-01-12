@@ -46,6 +46,7 @@ export function usePlaceOrder(
       translation(`marketOrderAction.errors.${key}`, args),
     [translation]
   );
+  const [showProtectedPassword, setShowProtectedPassword] = useState(false);
 
   const { asks, bids } = useOrderbook(market);
   const {
@@ -84,9 +85,8 @@ export function usePlaceOrder(
 
   useEffect(() => {
     tryUnlockTradeAccount(tradeAccount);
+    setShowProtectedPassword(Boolean(tradeAccount?.isLocked));
   }, [tradeAccount]);
-
-  const showProtectedPassword = Boolean(tradeAccount?.isLocked);
 
   const [tab, setTab] = useState({
     priceLimit: 0,

@@ -138,7 +138,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
   // Select extension if user is logged in
   useEffect(() => {
-    if (activeAccount?.mainAddress && !selectedExtension) {
+    if (activeAccount?.mainAddress && activeAccount?.tradeAddress) {
       const sourceExtension = extensionAccounts?.find(
         (acc) => acc.address === activeAccount?.mainAddress
       )?.source;
@@ -147,7 +147,12 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       );
       extension && setSelectedExtension(extension);
     }
-  }, [activeAccount?.mainAddress, extensionAccounts, selectedExtension]);
+  }, [
+    activeAccount?.mainAddress,
+    activeAccount?.tradeAddress,
+    extensionAccounts,
+    selectedExtension,
+  ]);
 
   const getSigner = useCallback(
     (address: string) => {
