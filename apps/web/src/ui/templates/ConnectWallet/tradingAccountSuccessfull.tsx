@@ -8,23 +8,29 @@ import {
 } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
 
 export const TradingAccountSuccessfull = ({
   tradingAccount,
   onClose,
+  onTempBrowserAccount,
   onOpenMnemonic,
   onDownloadJson,
   onDownloadPdf,
+  onDownloadJsonCallback,
 }: {
   tradingAccount?: TradeAccount;
   onClose: () => void;
+  onTempBrowserAccount: (e: TradeAccount) => void;
   onOpenMnemonic: () => void;
   onDownloadJson: (e: TradeAccount) => void;
   onDownloadPdf: () => void;
+  onDownloadJsonCallback: () => void;
 }) => {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   return (
     <Interaction>
       <Interaction.Content className="flex flex-col gap-6 flex-1 mb-4">
@@ -53,7 +59,7 @@ export const TradingAccountSuccessfull = ({
               type="Browser"
             />
             <GenericHorizontalCard title="Download file" icon="Download">
-              <Dropdown>
+              <Dropdown open={open} onOpenChange={setOpen}>
                 <Dropdown.Trigger
                   asChild
                   className="[&[data-state=open]>button>svg]:rotate-180"
@@ -73,9 +79,19 @@ export const TradingAccountSuccessfull = ({
                     PDF
                   </Dropdown.Item>
                   <Dropdown.Item
-                    onClick={() =>
-                      tradingAccount && onDownloadJson(tradingAccount)
-                    }
+                    onClick={(e) => {
+                      setOpen(false);
+                      if (!tradingAccount) return;
+                      e.preventDefault();
+                      e.stopPropagation();
+                      try {
+                        if (tradingAccount.isLocked) tradingAccount.unlock("");
+                        onDownloadJson(tradingAccount);
+                      } catch (error) {
+                        onTempBrowserAccount(tradingAccount);
+                        onDownloadJsonCallback();
+                      }
+                    }}
                   >
                     JSON
                   </Dropdown.Item>

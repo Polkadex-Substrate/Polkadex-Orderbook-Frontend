@@ -323,12 +323,16 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     key="TradingAccountSuccessfull"
                     tradingAccount={selectedAccount}
                     onClose={() => props?.onChangeInteraction(false)}
+                    onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
                     onOpenMnemonic={() =>
                       props?.onPage("TradingAccountMnemonic", true)
                     }
                     onDownloadPdf={() => window.alert("Downloading...")}
                     onDownloadJson={(e) =>
                       onExportTradeAccount?.({ account: e })
+                    }
+                    onDownloadJsonCallback={() =>
+                      props?.onPage("UnlockBrowserAccount", true)
                     }
                   />
                   <TradingAccountMnemonic

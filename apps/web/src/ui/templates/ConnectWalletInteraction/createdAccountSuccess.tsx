@@ -3,6 +3,7 @@ import { Multistep } from "@polkadex/ux";
 
 import { TradingAccountSuccessfull } from "../ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "../ConnectWallet/tradingAccountMnemonic";
+import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 
 import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
@@ -14,6 +15,9 @@ export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
     onResetTempMnemonic,
     onExportTradeAccount,
     selectedAccount,
+    onSetTempTrading,
+    tempTrading,
+    onResetTempTrading,
   } = useConnectWalletProvider();
 
   useEffect(() => {
@@ -38,11 +42,15 @@ export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
             <TradingAccountSuccessfull
               tradingAccount={selectedAccount}
               onClose={onClose}
+              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
               onOpenMnemonic={() =>
                 props?.onPage("TradingAccountMnemonic", true)
               }
               onDownloadPdf={() => window.alert("Downloading...")}
               onDownloadJson={(e) => onExportTradeAccount?.({ account: e })}
+              onDownloadJsonCallback={() =>
+                props?.onPage("UnlockBrowserAccount", true)
+              }
             />
           </Multistep.Trigger>
           <Multistep.Content>
@@ -50,6 +58,13 @@ export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
               key="TradingAccountMnemonic"
               onClose={() => props?.onChangeInteraction(false)}
               mnemonic={tempMnemonic?.split(" ") ?? []}
+            />
+            <UnlockBrowserAccount
+              key="UnlockBrowserAccount"
+              tempBrowserAccount={tempTrading}
+              onClose={() => props?.onChangeInteraction(false)}
+              onAction={(account) => onExportTradeAccount({ account })}
+              onResetTempBrowserAccount={onResetTempTrading}
             />
           </Multistep.Content>
         </>

@@ -11,6 +11,7 @@ import {
   precisionRegExp,
   getAbsoluteNumber,
   getCurrentMarket,
+  tryUnlockTradeAccount,
 } from "@orderbook/core/helpers";
 import BigNumber from "bignumber.js";
 import {
@@ -18,7 +19,6 @@ import {
   useOrderbook,
   useMarkets,
   useTickers,
-  useTryUnlockTradeAccount,
 } from "@orderbook/core/hooks";
 
 type FormValues = {
@@ -83,7 +83,9 @@ export function usePlaceOrder(
     ? wallet.getPair(tradeAddress)
     : undefined;
 
-  useTryUnlockTradeAccount(tradeAccount);
+  useEffect(() => {
+    tryUnlockTradeAccount(tradeAccount);
+  }, [tradeAccount]);
 
   const showProtectedPassword = Boolean(tradeAccount?.isLocked);
 

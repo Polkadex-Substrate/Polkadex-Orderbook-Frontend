@@ -68,7 +68,10 @@
     }
   },
   "marketOrderAction": {
-    "protectPassword": { "title": "Input 5-digit trading password" },
+    "protectPassword": {
+      "title": "Input 5-digit trading password",
+      "unlock": "Unlock"
+    },
     "avaliable": "Available",
     "priceLabel": "Price",
     "amountLabel": "Amount",

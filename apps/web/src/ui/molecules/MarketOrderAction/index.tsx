@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import { useTranslation } from "next-i18next";
 import {
@@ -10,7 +10,7 @@ import {
   SliderPercentage,
   Skeleton,
 } from "@polkadex/orderbook-ui/molecules";
-import { usePlaceOrder, useTryUnlockTradeAccount } from "@orderbook/core/hooks";
+import { usePlaceOrder } from "@orderbook/core/hooks";
 import { Decimal, Icons } from "@polkadex/orderbook-ui/atoms";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
@@ -257,10 +257,9 @@ const ProtectPassword = () => {
     selectedAddresses: { tradeAddress },
   } = useProfile();
   const { onHandleError } = useSettingsProvider();
-  const { wallet } = useUserAccounts();
-  const tradeAccount = wallet.getPair(tradeAddress);
-
-  useTryUnlockTradeAccount(tradeAccount);
+  const { wallet, isReady } = useUserAccounts();
+  const tradeAccount = isReady ? wallet.getPair(tradeAddress) : undefined;
+  const [loading, setLoading] = useState(false);
 
   const { values, setFieldValue, handleSubmit, errors } = useFormik({
     initialValues: {
@@ -270,10 +269,12 @@ const ProtectPassword = () => {
     validationSchema: buySellValidation,
     onSubmit: (values) => {
       try {
+        setLoading(true);
         isValidSize &&
           tradeAccount?.isLocked &&
           tradeAccount.unlock(values.password);
       } catch (error) {
+        setLoading(false);
         onHandleError("Invalid Password");
       }
     },
@@ -289,8 +290,8 @@ const ProtectPassword = () => {
     translation(`marketOrderAction.protectPassword.${key}`);
 
   return (
-    <LoadingSection isActive={false} color="transparent">
-      <form onChange={handleSubmit}>
+    <LoadingSection isActive={loading} color="transparent">
+      <form onSubmit={handleSubmit}>
         <S.ProtectPassword>
           <S.ProtectPasswordTitle>
             <span>{t("title")}</span>
@@ -312,6 +313,9 @@ const ProtectPassword = () => {
               error={errors.password}
               type={!values.showPassword ? "password" : "tel"}
             />
+            <S.UnlockButton type="submit" disabled={loading}>
+              {t("unlock")}
+            </S.UnlockButton>
           </S.ProtectPasswordContent>
         </S.ProtectPassword>
       </form>

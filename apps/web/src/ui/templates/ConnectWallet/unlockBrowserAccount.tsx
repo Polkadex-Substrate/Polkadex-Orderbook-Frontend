@@ -59,10 +59,6 @@ export const UnlockBrowserAccount = ({
     if (error && !!values.password) setError("");
   }, [error, values.password]);
 
-  useEffect(() => {
-    return () => onResetTempBrowserAccount();
-  }, [onResetTempBrowserAccount]);
-
   return (
     <form onSubmit={handleSubmit}>
       <Interaction>
