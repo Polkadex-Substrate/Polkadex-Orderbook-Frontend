@@ -73,7 +73,7 @@ const isTradingAccountRemovedFromDb = async (
   tradeAddress: string,
   mainAddress: string
 ) => {
-  const maxAttempts = 10;
+  const maxAttempts = 15;
 
   // TODO: Temp solution, backend issue
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -83,6 +83,7 @@ const isTradingAccountRemovedFromDb = async (
       if (!proxies.includes(tradeAddress)) {
         break;
       }
+      throw new Error("Proxy not removed yet from database");
     } catch (error) {
       console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
     }

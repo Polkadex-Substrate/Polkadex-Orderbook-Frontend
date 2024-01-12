@@ -46,7 +46,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       onHandleError("Invalid trade Address");
       return;
     }
-    const maxAttempts = 10;
+    const maxAttempts = 15;
     // TODO: Temp solution, backend issue
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
@@ -138,7 +138,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
 
   // Select extension if user is logged in
   useEffect(() => {
-    if (activeAccount?.mainAddress && activeAccount?.tradeAddress) {
+    if (activeAccount?.mainAddress) {
       const sourceExtension = extensionAccounts?.find(
         (acc) => acc.address === activeAccount?.mainAddress
       )?.source;
@@ -147,12 +147,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       );
       extension && setSelectedExtension(extension);
     }
-  }, [
-    activeAccount?.mainAddress,
-    activeAccount?.tradeAddress,
-    extensionAccounts,
-    selectedExtension,
-  ]);
+  }, [activeAccount?.mainAddress, extensionAccounts, selectedExtension]);
 
   const getSigner = useCallback(
     (address: string) => {
