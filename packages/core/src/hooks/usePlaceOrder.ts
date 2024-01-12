@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { FormikErrors, FormikHelpers } from "formik";
 import { useTranslation } from "next-i18next";
 import { Decimal } from "@orderbook/core/utils";
-import { useUserAccounts } from "@polkadex/react-providers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useOrders } from "@orderbook/core/providers/user/orders";
 import {
@@ -11,7 +10,6 @@ import {
   precisionRegExp,
   getAbsoluteNumber,
   getCurrentMarket,
-  tryUnlockTradeAccount,
 } from "@orderbook/core/helpers";
 import BigNumber from "bignumber.js";
 import {
@@ -46,14 +44,11 @@ export function usePlaceOrder(
       translation(`marketOrderAction.errors.${key}`, args),
     [translation]
   );
-  const [showProtectedPassword, setShowProtectedPassword] = useState(false);
 
   const { asks, bids } = useOrderbook(market);
   const {
     currentTicker: { currentPrice: lastPriceValue },
   } = useTickers(market);
-
-  const { wallet, isReady } = useUserAccounts();
 
   const {
     selectedAddresses: { tradeAddress },
@@ -79,14 +74,6 @@ export function usePlaceOrder(
   const bestBidPrice = bids.length > 0 ? parseFloat(bids[0][0]) : 0;
 
   const hasTradeAccount = tradeAddress !== "";
-
-  const tradeAccount =
-    hasTradeAccount && isReady ? wallet.getPair(tradeAddress) : undefined;
-
-  useEffect(() => {
-    tryUnlockTradeAccount(tradeAccount);
-    setShowProtectedPassword(Boolean(tradeAccount?.isLocked));
-  }, [tradeAccount]);
 
   const [tab, setTab] = useState({
     priceLimit: 0,
@@ -641,7 +628,6 @@ export function usePlaceOrder(
     isSignedIn: tradeAddress?.length > 0,
     orderSide: isSell ? "Sell" : "Buy",
     hasUser: hasTradeAccount,
-    showProtectedPassword: hasTradeAccount && showProtectedPassword,
     slider,
     handleSliderClick,
     pricePrecision,
