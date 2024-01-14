@@ -16,7 +16,7 @@ export const UnlockBrowserAccount = ({
   onResetTempBrowserAccount,
 }: {
   onClose: () => void;
-  onAction: (account: KeyringPair) => void;
+  onAction: (account: KeyringPair, password?: string) => void;
   tempBrowserAccount?: KeyringPair;
   onResetTempBrowserAccount: () => void;
 }) => {
@@ -35,7 +35,7 @@ export const UnlockBrowserAccount = ({
         try {
           tempBrowserAccount?.unlock(password);
           if (tempBrowserAccount) {
-            onAction(tempBrowserAccount);
+            onAction(tempBrowserAccount, password);
             handleClose();
           }
         } catch (error) {

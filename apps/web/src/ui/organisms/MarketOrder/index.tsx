@@ -63,10 +63,8 @@ export const MarketOrder = ({ market }: Props) => {
   });
 
   useEffect(() => {
-    if (selectedAccount) {
-      tryUnlockTradeAccount(selectedAccount);
-      setIsPasswordProtected(selectedAccount?.isLocked);
-    }
+    tryUnlockTradeAccount(selectedAccount);
+    setIsPasswordProtected(Boolean(selectedAccount?.isLocked));
   }, [selectedAccount]);
 
   return (
@@ -151,30 +149,35 @@ const ProtectPassword = ({
   } = useProfile();
   const { onHandleError } = useSettingsProvider();
   const { wallet, isReady } = useUserAccounts();
-  const tradeAccount = isReady ? wallet.getPair(tradeAddress) : undefined;
-  const [loading, setLoading] = useState(false);
+  const tradeAccount =
+    isReady && tradeAddress ? wallet.getPair(tradeAddress) : undefined;
 
-  const { values, setFieldValue, handleSubmit, errors, isValid, dirty } =
-    useFormik({
-      initialValues: {
-        showPassword: false,
-        password: "",
-      },
-      validationSchema: buySellValidation,
-      onSubmit: async (values) => {
-        try {
-          setLoading(true);
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          if (isValidSize && tradeAccount?.isLocked) {
-            tradeAccount.unlock(values.password);
-            if (!tradeAccount?.isLocked) dispatchAction();
-          }
-        } catch (error) {
-          setLoading(false);
-          onHandleError("Invalid Password");
+  const {
+    values,
+    setFieldValue,
+    handleSubmit,
+    errors,
+    isValid,
+    dirty,
+    isSubmitting,
+  } = useFormik({
+    initialValues: {
+      showPassword: false,
+      password: "",
+    },
+    validationSchema: buySellValidation,
+    onSubmit: async (values) => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        if (isValidSize && tradeAccount?.isLocked) {
+          tradeAccount.unlock(values.password);
+          if (!tradeAccount?.isLocked) dispatchAction();
         }
-      },
-    });
+      } catch (error) {
+        onHandleError("Invalid Password");
+      }
+    },
+  });
 
   const isValidSize = useMemo(
     () => values?.password?.length === 5,
@@ -186,7 +189,7 @@ const ProtectPassword = ({
     translation(`marketOrderAction.protectPassword.${key}`);
 
   return (
-    <LoadingSection isActive={loading} color="transparent">
+    <LoadingSection isActive={isSubmitting} color="transparent">
       <form onSubmit={handleSubmit}>
         <S.ProtectPassword>
           <S.ProtectPasswordTitle>
@@ -211,7 +214,7 @@ const ProtectPassword = ({
             />
             <S.UnlockButton
               type="submit"
-              disabled={loading || !(isValid && dirty) || !isValidSize}
+              disabled={isSubmitting || !(isValid && dirty) || !isValidSize}
             >
               {t("unlock")}
             </S.UnlockButton>
