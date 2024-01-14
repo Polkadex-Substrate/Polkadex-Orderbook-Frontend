@@ -37,6 +37,9 @@ export const defaultConfig: DefaultConfig = {
   ],
   underMaintenance: process.env.UNDER_MAINTENACE?.split(",") ?? [],
   mainUrl: process.env.MAIN_URL || "/trading",
-  blockedAssets: process.env.BLOCKED_ASSETS?.split(",") || [],
+  // TODO: Must remove it once done from backend
+  blockedAssets: (process.env.BLOCKED_ASSETS?.split(",") || []).concat(
+    "182269558229932594457975666948556356791"
+  ),
   subscanApi: process.env.SUBSCAN_API || "",
 };
