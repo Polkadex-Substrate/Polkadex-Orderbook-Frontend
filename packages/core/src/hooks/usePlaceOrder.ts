@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { FormikErrors, FormikHelpers } from "formik";
 import { useTranslation } from "next-i18next";
 import { Decimal } from "@orderbook/core/utils";
-import { useUserAccounts } from "@polkadex/react-providers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useOrders } from "@orderbook/core/providers/user/orders";
 import {
@@ -18,7 +17,6 @@ import {
   useOrderbook,
   useMarkets,
   useTickers,
-  useTryUnlockTradeAccount,
 } from "@orderbook/core/hooks";
 
 type FormValues = {
@@ -52,8 +50,6 @@ export function usePlaceOrder(
     currentTicker: { currentPrice: lastPriceValue },
   } = useTickers(market);
 
-  const { wallet } = useUserAccounts();
-
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
@@ -78,14 +74,6 @@ export function usePlaceOrder(
   const bestBidPrice = bids.length > 0 ? parseFloat(bids[0][0]) : 0;
 
   const hasTradeAccount = tradeAddress !== "";
-
-  const tradeAccount = hasTradeAccount
-    ? wallet.getPair(tradeAddress)
-    : undefined;
-
-  useTryUnlockTradeAccount(tradeAccount);
-
-  const showProtectedPassword = Boolean(tradeAccount?.isLocked);
 
   const [tab, setTab] = useState({
     priceLimit: 0,
@@ -640,7 +628,6 @@ export function usePlaceOrder(
     isSignedIn: tradeAddress?.length > 0,
     orderSide: isSell ? "Sell" : "Buy",
     hasUser: hasTradeAccount,
-    showProtectedPassword: hasTradeAccount && showProtectedPassword,
     slider,
     handleSliderClick,
     pricePrecision,

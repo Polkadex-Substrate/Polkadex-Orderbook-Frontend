@@ -11,6 +11,7 @@ import {
 } from "@polkadex/ux";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
   ExtensionAccount,
@@ -62,14 +63,17 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
     onSelectExtension,
     mainProxiesAccounts,
     onResetTempTrading,
+    onResetTempMnemonic,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
   const { onToogleConnectExtension } = useSettingsProvider();
   const { extensionsStatus } = useExtensions();
   const { connectExtensionAccounts, extensionAccounts } =
     useExtensionAccounts();
-  const { selectedAddresses } = useProfile();
-  const { mainAddress } = selectedAddresses;
+  const {
+    selectedAddresses: { mainAddress },
+    allAccounts,
+  } = useProfile();
   const shortAddress = useMemo(
     () => truncateString(selectedAccount?.address ?? "", 3),
     [selectedAccount?.address]
@@ -130,6 +134,27 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
       ),
     [localTradingAccounts, tempTrading?.address]
   );
+
+  // Choose extensionAccount according to tempTrading address
+  const tempExtensionAccount = useMemo(() => {
+    const mainAddress = allAccounts?.find(
+      (acc) => acc.tradeAddress === tempTrading?.address
+    )?.mainAddress;
+
+    const extensionAccount = extensionAccounts?.find(
+      (acc) => acc.address === mainAddress
+    );
+
+    return extensionAccount;
+  }, [allAccounts, extensionAccounts, tempTrading?.address]);
+
+  // Choose extension according to tempFundingWallet
+  const tempSelectedExtension = useMemo(() => {
+    const currentExtension = ExtensionsArray?.find(
+      (value) => value.id === tempExtensionAccount?.source
+    );
+    return currentExtension;
+  }, [tempExtensionAccount?.source]);
 
   if (tradingWalletPresent || fundWalletPresent)
     return (
@@ -241,7 +266,9 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     key="UnlockBrowserAccount"
                     tempBrowserAccount={tempTrading}
                     onClose={() => props?.onChangeInteraction(false)}
-                    onAction={(account) => onExportTradeAccount({ account })}
+                    onAction={(account, password) =>
+                      onExportTradeAccount({ account, password })
+                    }
                     onResetTempBrowserAccount={onResetTempTrading}
                   />
                   <ConnectTradingAccount
@@ -268,7 +295,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     key="UserActions"
                     onClose={() => props?.onChangeInteraction(false)}
                     onNewTradingAccount={() =>
-                      props?.onPage("NewTradingAccount")
+                      props?.onPage(redirectEnoughBalance, true)
                     }
                     onImportTradingAccount={() =>
                       props?.onPage("ConnectTradingAccount")
@@ -277,6 +304,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onTradingAccountList={() =>
                       props?.onPage("TradingAccountList")
                     }
+                    registeredProxies={mainProxiesAccounts}
                   />
                   <TradingAccountList
                     key="TradingAccountList"
@@ -290,7 +318,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                   <RemoveTradingAccount
                     key="RemoveTradingAccount"
                     tradingAccount={tempTrading as TradeAccount}
-                    fundWallet={selectedWallet}
+                    fundWallet={tempExtensionAccount}
                     availableOnDevice={availableOnDevice}
                     onRemoveFromDevice={() =>
                       onRemoveTradingAccountFromDevice?.(
@@ -300,7 +328,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onRemoveFromChain={async () =>
                       await onRemoveTradingAccountFromChain?.({
                         proxy: tempTrading?.address as string,
-                        main: selectedWallet?.address as string,
+                        main: tempExtensionAccount?.address as string,
                       })
                     }
                     loading={removingStatus === "loading"}
@@ -308,7 +336,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     errorMessage={
                       (removingError as Error)?.message ?? removingError
                     }
-                    selectedExtension={selectedExtension}
+                    selectedExtension={tempSelectedExtension}
                     onCancel={() => props?.onChangeInteraction(false)}
                   />
                   <ImportTradingAccount
@@ -322,7 +350,11 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                   <TradingAccountSuccessfull
                     key="TradingAccountSuccessfull"
                     tradingAccount={selectedAccount}
-                    onClose={() => props?.onChangeInteraction(false)}
+                    onClose={() => {
+                      onResetTempMnemonic?.();
+                      props?.onChangeInteraction(false);
+                    }}
+                    onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
                     onOpenMnemonic={() =>
                       props?.onPage("TradingAccountMnemonic", true)
                     }
@@ -330,11 +362,14 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onDownloadJson={(e) =>
                       onExportTradeAccount?.({ account: e })
                     }
+                    onDownloadJsonCallback={() =>
+                      props?.onPage("UnlockBrowserAccount", true)
+                    }
                   />
                   <TradingAccountMnemonic
                     key="TradingAccountMnemonic"
                     onClose={() =>
-                      props?.onPage("TradingAccountMnemonic", true)
+                      props?.onPage("TradingAccountSuccessfull", true)
                     }
                     mnemonic={tempMnemonic?.split(" ") ?? []}
                   />

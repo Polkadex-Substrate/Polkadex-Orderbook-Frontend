@@ -133,7 +133,9 @@ export const Connect = ({
               key="UnlockBrowserAccount"
               tempBrowserAccount={tempTrading}
               onClose={() => props?.onPage("ConnectTradingAccount")}
-              onAction={(account) => onExportTradeAccount({ account })}
+              onAction={(account, password) =>
+                onExportTradeAccount({ account, password })
+              }
               onResetTempBrowserAccount={onResetTempTrading}
             />
             <ConnectTradingAccount

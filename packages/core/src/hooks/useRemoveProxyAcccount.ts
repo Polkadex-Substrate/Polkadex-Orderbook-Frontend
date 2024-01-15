@@ -1,7 +1,10 @@
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useUserAccounts } from "@polkadex/react-providers";
-import { useProfile } from "@orderbook/core/providers/user/profile";
+import {
+  getProxiesLinkedToMain,
+  useProfile,
+} from "@orderbook/core/providers/user/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   removeFromStorage,
@@ -31,13 +34,6 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
       const signer = getSigner(main);
       if (!signer) throw new Error("signer is not defined");
 
-      await removeProxyFromAccount(api, proxy, signer, main);
-
-      if (proxy === selectedAddresses.tradeAddress) {
-        onUserLogout();
-        removeFromStorage(ACTIVE_ACCOUNT_KEY);
-      }
-      wallet.remove(proxy);
       appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
         queryClient.setQueryData(
           QUERY_KEYS.singleProxyAccounts(main),
@@ -46,6 +42,17 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
           }
         );
       });
+
+      await removeProxyFromAccount(api, proxy, signer, main);
+
+      // TODO: Temp solution, backend issue. Remove it when it resolved in backend
+      await isTradingAccountRemovedFromDb(proxy, main);
+
+      if (proxy === selectedAddresses.tradeAddress) {
+        onUserLogout();
+        removeFromStorage(ACTIVE_ACCOUNT_KEY);
+      }
+      wallet.remove(proxy);
     },
     onError: (error) => {
       props?.onError?.(error as Error);
@@ -61,3 +68,26 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
     error,
   };
 }
+
+const isTradingAccountRemovedFromDb = async (
+  tradeAddress: string,
+  mainAddress: string
+) => {
+  const maxAttempts = 15;
+
+  // TODO: Temp solution, backend issue
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      const { proxies }: { proxies: string[] } =
+        await getProxiesLinkedToMain(mainAddress);
+      if (!proxies.includes(tradeAddress)) {
+        break;
+      }
+      throw new Error("Proxy not removed yet from database");
+    } catch (error) {
+      console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
+    }
+    if (attempt < maxAttempts)
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+  }
+};

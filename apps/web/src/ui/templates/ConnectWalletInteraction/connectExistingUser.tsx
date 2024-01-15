@@ -93,6 +93,7 @@ export const ConnectExistingUser = ({
                 props?.onPage("TradingAccountList", true)
               }
               accounts={filteredAccounts as TradeAccount[]}
+              registeredProxies={mainProxiesAccounts}
               onSelect={(e) =>
                 onSelectTradingAccount?.({
                   tradeAddress: e.address,
@@ -107,7 +108,7 @@ export const ConnectExistingUser = ({
                 onExportTradeAccount({ account })
               }
               onExportBrowserAccountCallback={() =>
-                props?.onPage("UnlockBrowserAccount")
+                props?.onPage("UnlockBrowserAccount", true)
               }
             ></ExistingUser>
           </Multistep.Trigger>
@@ -140,7 +141,9 @@ export const ConnectExistingUser = ({
               key="UnlockBrowserAccount"
               tempBrowserAccount={tempTrading}
               onClose={() => props?.onPage("ConnectTradingAccount")}
-              onAction={(account) => onExportTradeAccount({ account })}
+              onAction={(account, password) =>
+                onExportTradeAccount({ account, password })
+              }
               onResetTempBrowserAccount={onResetTempTrading}
             />
             <NewTradingAccount

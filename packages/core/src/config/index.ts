@@ -3,7 +3,11 @@ export * from "./types";
 
 export const defaultConfig: DefaultConfig = {
   polkadexFeature: process.env.POLKADEX_FEATURE,
-  polkadexChain: process.env.POLKADEX_CHAIN || "wss://mainnet.polkadex.trade",
+  polkadexChain: [
+    process.env.POLKADEX_CHAIN as string,
+    // This is a backup chain
+    "wss://polkadex.api.onfinality.io/public-ws",
+  ],
   gaTrackerKey: process.env.GA_MEASUREMENT_ID ?? "G-PWZK8JEFLX",
   landingPageMarket: process.env.LANDING_PAGE || "PDEXCUSDT",
   withCredentials: false,

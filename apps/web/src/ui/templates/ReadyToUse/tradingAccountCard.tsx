@@ -1,5 +1,5 @@
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import { MouseEvent } from "react";
+import { MouseEvent, useState } from "react";
 import {
   Button,
   Copy,
@@ -30,6 +30,7 @@ export const TradingAccountCard = ({
   onExport?: (e: MouseEvent<HTMLDivElement>) => void;
   enabledExtensionAccount?: boolean;
 }) => {
+  const [open, setOpen] = useState(false);
   const shortAddress = truncateString(address);
   const hasRemove = typeof onRemove === "function";
   const hasSelect = typeof onSelect === "function";
@@ -76,7 +77,7 @@ export const TradingAccountCard = ({
 
         {(hasRemove || onExport) && (
           <div className="flex gap-1">
-            <Dropdown>
+            <Dropdown open={open} onOpenChange={setOpen}>
               <Dropdown.Trigger>
                 <Button.Icon asChild size="sm" variant="ghost">
                   <EllipsisVerticalIcon className="text-primary group-hover:text-current duration-300 transition-colors" />
@@ -84,10 +85,22 @@ export const TradingAccountCard = ({
               </Dropdown.Trigger>
               <Dropdown.Content>
                 {hasRemove && (
-                  <Dropdown.Item onClick={onRemove}>Remove</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(e) => {
+                      onRemove(e);
+                      setOpen(false);
+                    }}
+                  >
+                    Remove
+                  </Dropdown.Item>
                 )}
                 {onExport && (
-                  <Dropdown.Item onClick={onExport}>
+                  <Dropdown.Item
+                    onClick={(e) => {
+                      onExport(e);
+                      setOpen(false);
+                    }}
+                  >
                     Export as JSON
                   </Dropdown.Item>
                 )}

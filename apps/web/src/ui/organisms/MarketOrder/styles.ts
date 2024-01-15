@@ -70,4 +70,71 @@ export const ActionItem = styled.div<{ isActive?: boolean }>`
   `}
 `;
 
-export const Content = styled.div``;
+export const Content = styled.div<{ show: boolean }>`
+  ${({ show }) => css`
+    display: ${show ? "initial" : "none"};
+  `}
+`;
+
+export const ProtectPassword = styled.div`
+  ${({ theme }) => css`
+    background: ${theme.colors.tertiaryBackground};
+    border-radius: 0 ${normalizeValue(2)} ${normalizeValue(2)}
+      ${normalizeValue(2)};
+    padding: ${normalizeValue(1)};
+  `}
+`;
+
+export const ProtectPasswordTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${normalizeValue(1.5)};
+  span {
+    display: block;
+    font-weight: 500;
+  }
+`;
+export const ProtectPasswordContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: ${normalizeValue(2)};
+`;
+
+export const Show = styled.button`
+  ${({ theme }) => css`
+    width: ${normalizeValue(2.2)};
+    height: ${normalizeValue(2.2)};
+    padding: ${normalizeValue(0.3)};
+    transition: background 0.5s ease-in;
+    border-radius: ${normalizeValue(10)};
+    &:hover {
+      background: ${theme.colors.secondaryBackground};
+    }
+    svg {
+      stroke: ${theme.colors.text};
+    }
+  `}
+`;
+
+export const UnlockButton = styled.button`
+  ${({ theme }) => css`
+    background: ${theme.colors.primary};
+    color: ${theme.colors.white};
+    padding: ${normalizeValue(1.2)} ${normalizeValue(10)};
+    font-size: ${normalizeValue(1.4)};
+    font-weight: 500;
+    border-radius: ${normalizeValue(1)};
+    transition: background-color 0.3s ease-in-out;
+    &:hover {
+      background: ${theme.colors.primary}99;
+    }
+    &:disabled {
+      color: ${theme.colors.text};
+      background: ${theme.colors.primaryBackground}99;
+    }
+  `}
+`;

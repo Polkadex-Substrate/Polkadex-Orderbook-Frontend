@@ -65,11 +65,12 @@ export const Actions = styled.div`
   margin: ${normalizeValue(2)} auto 0 auto;
   width: 100%;
 `;
-export const Span = styled.span<{ color?: string }>`
+export const Button = styled.button<{ color?: string }>`
   ${({ theme, color }) => css`
     display: block;
-    padding: ${normalizeValue(1.2)};
+    padding: ${normalizeValue(1.5)} ${normalizeValue(1.2)};
     border-radius: ${normalizeValue(0.8)};
+    font-size: ${normalizeValue(1.6)};
     background: ${color ? theme.colors[color] : "transparent"};
     flex: 1;
   `}

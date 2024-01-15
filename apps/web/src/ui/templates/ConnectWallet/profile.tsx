@@ -217,7 +217,7 @@ export const Profile = ({
               </div>
               <div className="flex flex-col text-center items-center">
                 <Typography.Text size="sm">
-                  No trading account detected.
+                  No trading account avaliable in browser.
                 </Typography.Text>
                 <Typography.Text variant="primary" size="xs">
                   Try refreshing the page or creating a new one.

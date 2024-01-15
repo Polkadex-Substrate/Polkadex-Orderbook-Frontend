@@ -4,9 +4,10 @@ import { useUserAccounts } from "@polkadex/react-providers";
 import {
   addProxyToAccount,
   getAddressFromMnemonic,
+  registerMainAccount,
 } from "@orderbook/core/helpers";
 import {
-  UserAddressTuple,
+  getProxiesLinkedToMain,
   useProfile,
 } from "@orderbook/core/providers/user/profile";
 import { MutateHookProps } from "@orderbook/core/hooks/types";
@@ -47,23 +48,32 @@ export function useAddProxyAccount({
       const signer = getSigner(main);
       if (!signer) throw new Error("signer is not defined");
 
-      const proxy = getAddressFromMnemonic(mnemonic);
-      await addProxyToAccount(api, proxy, signer, main);
-      const { pair } = wallet.add(mnemonic, name, password);
+      appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
+        queryClient.setQueryData(
+          QUERY_KEYS.singleProxyAccounts(main),
+          (proxies: string[]) => {
+            return [...proxies, pair.address];
+          }
+        );
+      });
 
+      const proxy = getAddressFromMnemonic(mnemonic);
+
+      const registeredProxies =
+        (await getProxiesLinkedToMain(main))?.proxies || [];
+
+      if (registeredProxies.length === 0) {
+        await registerMainAccount(api, proxy, signer, main);
+      } else {
+        await addProxyToAccount(api, proxy, signer, main);
+      }
+
+      const { pair } = wallet.add(mnemonic, name, password);
       await onUserSelectTradingAddress({
         tradeAddress: pair.address,
         isNew: true,
       });
       onSetTempMnemonic(mnemonic);
-      appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
-        queryClient.setQueryData(
-          QUERY_KEYS.singleProxyAccounts(main),
-          (proxies: UserAddressTuple[]) => {
-            return [...proxies, pair.address];
-          }
-        );
-      });
     },
     onError: (error) => {
       onError?.(error);

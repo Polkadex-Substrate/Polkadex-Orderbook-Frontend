@@ -11,6 +11,7 @@ import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import * as LOCAL_STORE from "./localstore";
 import { Provider } from "./context";
 import * as T from "./types";
+
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
   const [activeAccount, setActiveAccount] = useState<T.UserAddressTuple>({
     mainAddress: "",
@@ -45,7 +46,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       onHandleError("Invalid trade Address");
       return;
     }
-    const maxAttempts = 10;
+    const maxAttempts = 15;
     // TODO: Temp solution, backend issue
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
@@ -134,6 +135,19 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
       setAvatar(avatar);
     }
   }, []);
+
+  // Select extension if user is logged in
+  useEffect(() => {
+    if (activeAccount?.mainAddress) {
+      const sourceExtension = extensionAccounts?.find(
+        (acc) => acc.address === activeAccount?.mainAddress
+      )?.source;
+      const extension = ExtensionsArray?.find(
+        (value) => value.id === sourceExtension
+      );
+      extension && setSelectedExtension(extension);
+    }
+  }, [activeAccount?.mainAddress, extensionAccounts, selectedExtension]);
 
   const getSigner = useCallback(
     (address: string) => {

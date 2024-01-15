@@ -1,6 +1,6 @@
 import { TradeAccount } from "@orderbook/core/providers/types";
 
-export function useTryUnlockTradeAccount(account: TradeAccount | undefined) {
+export function tryUnlockTradeAccount(account: TradeAccount | undefined) {
   try {
     if (account && account.isLocked) {
       account.unlock("");
@@ -9,5 +9,4 @@ export function useTryUnlockTradeAccount(account: TradeAccount | undefined) {
     // We don't need to handle this error, because we are just trying to unlock it
     console.log(e);
   }
-  return {};
 }

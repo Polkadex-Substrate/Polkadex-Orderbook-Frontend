@@ -10,7 +10,7 @@ export const statics: Statics = {
   api: undefined as unknown as ApiPromise,
 };
 
-export async function createApi(apiUrl: string): Promise<void> {
+export async function createApi(apiUrl: string[]): Promise<void> {
   const provider = new WsProvider(apiUrl, RECONNECT_TIME_MS);
   statics.api = new ApiPromise({
     provider,

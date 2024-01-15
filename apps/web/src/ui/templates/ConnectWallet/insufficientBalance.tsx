@@ -30,7 +30,9 @@ export const InsufficientBalance = ({
             </Typography.Text>
           </div>
           <div className="flex flex-col gap-2">
-            <GenericInfoCard label="Your balance">{balance}</GenericInfoCard>
+            <GenericInfoCard label="Your balance">
+              {balance} PDEX
+            </GenericInfoCard>
             <GenericInfoCard label="Fees">{fee} PDEX</GenericInfoCard>
           </div>
         </div>

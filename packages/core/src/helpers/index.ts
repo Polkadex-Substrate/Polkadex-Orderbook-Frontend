@@ -44,3 +44,4 @@ export * from "./extrinsics";
 export * from "./getAddressFromMnemonic";
 export * from "./extensions";
 export * from "./validateAddress";
+export * from "./tryUnlockTradeAccount";

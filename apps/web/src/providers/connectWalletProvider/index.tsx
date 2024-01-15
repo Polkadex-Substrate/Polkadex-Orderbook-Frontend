@@ -244,7 +244,7 @@ export const ConnectWalletProvider = ({
   }: ExportTradeAccountProps) => {
     try {
       tradeAccount.isLocked && tradeAccount.unlock(password);
-      const blob = new Blob([JSON.stringify(tradeAccount.toJson())], {
+      const blob = new Blob([JSON.stringify(tradeAccount.toJson(password))], {
         type: "text/plain;charset=utf-8",
       });
       FileSaver.saveAs(

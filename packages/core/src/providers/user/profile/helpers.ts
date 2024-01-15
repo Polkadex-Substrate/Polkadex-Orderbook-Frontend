@@ -1,9 +1,9 @@
-import {API} from "aws-amplify";
+import { API } from "aws-amplify";
 import * as T from "@orderbook/core/providers/user/profile/types";
-import {sendQueryToAppSync} from "@orderbook/core/helpers";
+import { sendQueryToAppSync } from "@orderbook/core/helpers";
 import * as queries from "@orderbook/core/graphql/queries";
 
-import {UserAddressTuple} from "./types";
+import { UserAddressTuple } from "./types";
 
 export const getMainAddresssLinkedToTradingAccount = (
   tradeaddress: string,
@@ -31,7 +31,7 @@ export const getProxiesLinkedToMain = async (mainAccount: string) => {
       variables: { main_account: mainAccount },
       API,
     });
-    const proxies = res?.data?.findUserByMainAccount?.proxies ?? [];
+    const proxies: string[] = res?.data?.findUserByMainAccount?.proxies ?? [];
     return { main_account: mainAccount, proxies };
   } catch (error) {
     return { main_account: mainAccount, proxies: [] };

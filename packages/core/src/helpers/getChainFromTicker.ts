@@ -7,6 +7,7 @@ export const getChainFromTicker = (ticker: string) => {
     DOT: "Polkadot",
     IBTC: "Interlay",
     PHA: "Phala Network",
+    GLMR: "Moonbeam",
   };
 
   return chains[ticker];

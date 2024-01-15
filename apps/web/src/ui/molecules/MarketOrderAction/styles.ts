@@ -98,6 +98,7 @@ export const ProtectPasswordContent = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+  gap: ${normalizeValue(2)};
 `;
 
 export const Show = styled.button`
@@ -159,4 +160,23 @@ export const ButtonSkeletonWrapper = styled.div`
   border-radius: ${normalizeValue(1)};
   margin-inline: ${normalizeValue(0.3)};
   overflow: hidden;
+`;
+
+export const UnlockButton = styled.button`
+  ${({ theme }) => css`
+    background: ${theme.colors.primary};
+    color: ${theme.colors.white};
+    padding: ${normalizeValue(1.2)} ${normalizeValue(10)};
+    font-size: ${normalizeValue(1.4)};
+    font-weight: 500;
+    border-radius: ${normalizeValue(1)};
+    transition: background-color 0.3s ease-in-out;
+    &:hover {
+      background: ${theme.colors.primary}99;
+    }
+    &:disabled {
+      color: ${theme.colors.text};
+      background: ${theme.colors.primaryBackground}99;
+    }
+  `}
 `;

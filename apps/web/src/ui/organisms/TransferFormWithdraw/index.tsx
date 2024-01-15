@@ -1,4 +1,4 @@
-import { MouseEvent, useMemo, useRef, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   transformAddress,
   useProfile,
@@ -9,9 +9,10 @@ import {
   getFundingAccountDetail,
   isAssetPDEX,
   trimFloat,
+  tryUnlockTradeAccount,
 } from "@orderbook/core/helpers";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
-import { useFunds, useTryUnlockTradeAccount } from "@orderbook/core/hooks";
+import { useFunds } from "@orderbook/core/hooks";
 import { useTranslation } from "next-i18next";
 import {
   useExtensionAccounts,
@@ -53,7 +54,7 @@ export const TransferFormWithdraw = ({
   const { onFetchWithdraws, loading } = useWithdrawsProvider();
   const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
-  const { onToogleConnectExtension } = useSettingsProvider();
+  const { onToogleConnectExtension, onHandleError } = useSettingsProvider();
 
   const { tradeAddress, mainAddress } = selectedAddresses;
   const tradingWallet = useMemo(
@@ -115,7 +116,11 @@ export const TransferFormWithdraw = ({
   });
 
   const formRef = useRef<HTMLFormElement | null>(null);
-  useTryUnlockTradeAccount(selectedTradingAccount);
+
+  useEffect(() => {
+    tryUnlockTradeAccount(selectedTradingAccount);
+  }, [selectedTradingAccount]);
+
   const hasSelectedUser = hasUser || fundWalletPresent;
   const buttonMessage = hasSelectedUser ? "transferButton" : "userButton";
   return (
@@ -129,6 +134,7 @@ export const TransferFormWithdraw = ({
             new Event("submit", { cancelable: true, bubbles: true })
           )
         }
+        onError={onHandleError}
       />
       <Loading
         style={{ maxWidth: normalizeValue(100) }}

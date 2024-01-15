@@ -60,7 +60,9 @@ export const ConnectTradingInteraction = () => {
                   key="UnlockBrowserAccount"
                   tempBrowserAccount={tempTrading}
                   onClose={() => props?.onChangeInteraction(false)}
-                  onAction={(account) => onExportTradeAccount({ account })}
+                  onAction={(account, password) =>
+                    onExportTradeAccount({ account, password })
+                  }
                   onResetTempBrowserAccount={onResetTempTrading}
                 />
                 <ImportTradingAccount
