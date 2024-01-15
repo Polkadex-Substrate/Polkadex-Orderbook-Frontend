@@ -11,6 +11,7 @@ import {
 } from "@polkadex/ux";
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
   ExtensionAccount,
@@ -69,8 +70,10 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
   const { extensionsStatus } = useExtensions();
   const { connectExtensionAccounts, extensionAccounts } =
     useExtensionAccounts();
-  const { selectedAddresses } = useProfile();
-  const { mainAddress } = selectedAddresses;
+  const {
+    selectedAddresses: { mainAddress },
+    allAccounts,
+  } = useProfile();
   const shortAddress = useMemo(
     () => truncateString(selectedAccount?.address ?? "", 3),
     [selectedAccount?.address]
@@ -131,6 +134,27 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
       ),
     [localTradingAccounts, tempTrading?.address]
   );
+
+  // Choose extensionAccount according to tempTrading address
+  const tempExtensionAccount = useMemo(() => {
+    const mainAddress = allAccounts?.find(
+      (acc) => acc.tradeAddress === tempTrading?.address
+    )?.mainAddress;
+
+    const extensionAccount = extensionAccounts?.find(
+      (acc) => acc.address === mainAddress
+    );
+
+    return extensionAccount;
+  }, [allAccounts, extensionAccounts, tempTrading?.address]);
+
+  // Choose extension according to tempFundingWallet
+  const tempSelectedExtension = useMemo(() => {
+    const currentExtension = ExtensionsArray?.find(
+      (value) => value.id === tempExtensionAccount?.source
+    );
+    return currentExtension;
+  }, [tempExtensionAccount?.source]);
 
   if (tradingWalletPresent || fundWalletPresent)
     return (
@@ -294,7 +318,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                   <RemoveTradingAccount
                     key="RemoveTradingAccount"
                     tradingAccount={tempTrading as TradeAccount}
-                    fundWallet={selectedWallet}
+                    fundWallet={tempExtensionAccount}
                     availableOnDevice={availableOnDevice}
                     onRemoveFromDevice={() =>
                       onRemoveTradingAccountFromDevice?.(
@@ -304,7 +328,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onRemoveFromChain={async () =>
                       await onRemoveTradingAccountFromChain?.({
                         proxy: tempTrading?.address as string,
-                        main: selectedWallet?.address as string,
+                        main: tempExtensionAccount?.address as string,
                       })
                     }
                     loading={removingStatus === "loading"}
@@ -312,7 +336,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     errorMessage={
                       (removingError as Error)?.message ?? removingError
                     }
-                    selectedExtension={selectedExtension}
+                    selectedExtension={tempSelectedExtension}
                     onCancel={() => props?.onChangeInteraction(false)}
                   />
                   <ImportTradingAccount

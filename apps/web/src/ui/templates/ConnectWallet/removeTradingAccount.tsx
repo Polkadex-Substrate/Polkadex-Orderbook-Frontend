@@ -54,7 +54,7 @@ export const RemoveTradingAccount = ({
   return (
     <Loading.Processing
       logo={selectedExtension?.id as string}
-      active={!!loading || !!errorMessage}
+      active={!!loading}
       errorTitle={errorTitle}
       errorMessage={errorMessage}
     >
