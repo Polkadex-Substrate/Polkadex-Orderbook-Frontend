@@ -4,8 +4,12 @@ import { useUserAccounts } from "@polkadex/react-providers";
 import {
   addProxyToAccount,
   getAddressFromMnemonic,
+  registerMainAccount,
 } from "@orderbook/core/helpers";
-import { useProfile } from "@orderbook/core/providers/user/profile";
+import {
+  getProxiesLinkedToMain,
+  useProfile,
+} from "@orderbook/core/providers/user/profile";
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
@@ -54,9 +58,17 @@ export function useAddProxyAccount({
       });
 
       const proxy = getAddressFromMnemonic(mnemonic);
-      await addProxyToAccount(api, proxy, signer, main);
-      const { pair } = wallet.add(mnemonic, name, password);
 
+      const registeredProxies =
+        (await getProxiesLinkedToMain(main))?.proxies || [];
+
+      if (registeredProxies.length === 0) {
+        await registerMainAccount(api, proxy, signer, main);
+      } else {
+        await addProxyToAccount(api, proxy, signer, main);
+      }
+
+      const { pair } = wallet.add(mnemonic, name, password);
       await onUserSelectTradingAddress({
         tradeAddress: pair.address,
         isNew: true,

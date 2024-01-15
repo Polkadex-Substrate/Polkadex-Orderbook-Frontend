@@ -1,6 +1,6 @@
 export type DefaultConfig = {
   polkadexFeature?: string;
-  polkadexChain: string;
+  polkadexChain: string[];
   gaTrackerKey: string;
   landingPageMarket: string;
   withCredentials: boolean;
