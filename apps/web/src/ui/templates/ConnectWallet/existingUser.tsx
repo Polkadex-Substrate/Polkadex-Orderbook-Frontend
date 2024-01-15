@@ -111,7 +111,7 @@ export const ExistingUser = ({
               <div className="flex flex-col gap-5 px-7">
                 <div className="flex flex-col gap-1">
                   <Typography.Text bold size="xl">
-                    Oops, no trading account found in browser
+                    No trading account found in browser
                   </Typography.Text>
                   <Typography.Paragraph variant="primary">
                     You must have a trading account in browser to access
