@@ -8,12 +8,14 @@ export const UserActions = ({
   onImportTradingAccount,
   onTradingAccountList,
   fundWalletIsPresent,
+  registeredProxies,
 }: {
   onClose: () => void;
   onNewTradingAccount: () => void;
   onImportTradingAccount: () => void;
   onTradingAccountList: () => void;
   fundWalletIsPresent: boolean;
+  registeredProxies: string[];
 }) => {
   return (
     <Interaction>
@@ -32,7 +34,7 @@ export const UserActions = ({
           onClick={onImportTradingAccount}
         />
         <GenericHorizontalCard
-          title="Trading accounts list"
+          title={`Registered trading accounts (${registeredProxies.length})`}
           icon="History"
           onClick={onTradingAccountList}
         />

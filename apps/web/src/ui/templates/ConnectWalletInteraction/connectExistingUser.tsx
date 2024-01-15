@@ -93,6 +93,7 @@ export const ConnectExistingUser = ({
                 props?.onPage("TradingAccountList", true)
               }
               accounts={filteredAccounts as TradeAccount[]}
+              registeredProxies={mainProxiesAccounts}
               onSelect={(e) =>
                 onSelectTradingAccount?.({
                   tradeAddress: e.address,

@@ -280,6 +280,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onTradingAccountList={() =>
                       props?.onPage("TradingAccountList")
                     }
+                    registeredProxies={mainProxiesAccounts}
                   />
                   <TradingAccountList
                     key="TradingAccountList"

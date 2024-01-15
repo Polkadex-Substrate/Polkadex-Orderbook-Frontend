@@ -20,6 +20,7 @@ export const ExistingUser = ({
   onRecover,
   onTradingAccountList,
   accounts,
+  registeredProxies,
   onSelect,
   onSelectCallback,
   onTempBrowserAccount,
@@ -34,6 +35,7 @@ export const ExistingUser = ({
   onRecover: () => void;
   onBack: () => void;
   accounts?: TradeAccount[];
+  registeredProxies: string[];
   onSelect: (e: TradeAccount) => void;
   onSelectCallback: () => void;
   onRemoveCallback: () => void;
@@ -109,11 +111,11 @@ export const ExistingUser = ({
               <div className="flex flex-col gap-5 px-7">
                 <div className="flex flex-col gap-1">
                   <Typography.Text bold size="xl">
-                    Oops, no trading account found
+                    Oops, no trading account found in browser
                   </Typography.Text>
                   <Typography.Paragraph variant="primary">
-                    You must have a trading account to access Orderbook. Import
-                    your current account or set up a new one.
+                    You must have a trading account in browser to access
+                    Orderbook. Import your current account or set up a new one.
                   </Typography.Paragraph>
                 </div>
                 <button
@@ -151,7 +153,7 @@ export const ExistingUser = ({
                 onClick={onRecover}
               />
               <GenericHorizontalCard
-                title="Trading accounts list"
+                title={`Registered trading accounts (${registeredProxies.length})`}
                 icon="History"
                 onClick={onTradingAccountList}
               />
