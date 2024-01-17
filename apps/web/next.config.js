@@ -5,9 +5,14 @@
 const path = require("path");
 const { execSync } = require("child_process");
 
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
-});
+const identityFn = (a) => a;
+
+const withBundleAnalyzer =
+  process.env.NODE_ENV === "production"
+    ? identityFn
+    : require("@next/bundle-analyzer")({
+        enabled: process.env.ANALYZE === "true",
+      });
 
 const { i18n } = require("./next-i18next.config");
 
