@@ -2,6 +2,9 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
 import { getMarketUrl } from "@orderbook/core/helpers";
+import { GetServerSideProps } from "next";
+
+import { getServerSidePropsWithTranslations } from "@/utils";
 
 function Home() {
   const router = useRouter();
@@ -16,3 +19,7 @@ function Home() {
 }
 
 export default Home;
+
+const translations = ["common"];
+export const getServerSideProps: GetServerSideProps =
+  getServerSidePropsWithTranslations(translations);
