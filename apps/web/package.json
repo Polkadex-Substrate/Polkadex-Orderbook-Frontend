@@ -6,7 +6,10 @@
     "dev": "NODE_OPTIONS=--max_old_space_size=8192 next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "cross-env ANALYZE=true next build",
+    "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
+    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
   },
   "dependencies": {
     "@bigheads/core": "^0.3.3",
@@ -62,6 +65,7 @@
     "use-constant": "^1.1.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^14.0.4",
     "@next/eslint-plugin-next": "^13.4.19",
     "@orderbook/eslint-config": "*",
     "@orderbook/tsconfig": "*",
@@ -74,6 +78,7 @@
     "@types/react-sparklines": "^1.7.2",
     "@types/react-transition-group": "^4.4.6",
     "@types/styled-components": "^5.1.14",
+    "cross-env": "^7.0.3",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "react-stately": "^3.16.0",
