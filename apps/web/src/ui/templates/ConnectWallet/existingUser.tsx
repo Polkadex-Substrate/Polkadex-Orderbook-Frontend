@@ -162,9 +162,7 @@ export const ExistingUser = ({
         </div>
       </Interaction.Content>
       <Interaction.Footer>
-        <Interaction.Action onClick={onClose}>
-          Connect trading account later
-        </Interaction.Action>
+        <Interaction.Action onClick={onClose}>Skip</Interaction.Action>
         <Interaction.Close onClick={onBack}>
           Connect other wallet
         </Interaction.Close>
