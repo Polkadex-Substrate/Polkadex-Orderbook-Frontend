@@ -13,9 +13,9 @@ export const NewUser = ({
   onClose: () => void;
 }) => {
   return (
-    <Interaction className="gap- pt-2" withAnimation={false}>
+    <Interaction className="gap-10 pt-2" withAnimation={false}>
       <Interaction.Title
-        className="justify-start -mb-4 px-0"
+        className="justify-start -mb-8 px-0"
         onClose={onClose}
       />
       <Interaction.Content
