@@ -78,8 +78,6 @@
     "i18next": "^23.2.8",
     "i18next-browser-languagedetector": "^7.1.0",
     "i18next-http-backend": "^2.2.1",
-    "moment": "^2.29.4",
-    "moment-timezone": "^0.5.35",
     "react": "^18.2.0",
     "react-i18next": "^13.0.1",
     "styled-components": "^5.3.1",

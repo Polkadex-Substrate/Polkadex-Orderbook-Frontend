@@ -5,9 +5,18 @@
 const path = require("path");
 const { execSync } = require("child_process");
 
+const identityFn = (a) => a;
+
+const withBundleAnalyzer =
+  process.env.NODE_ENV === "production"
+    ? identityFn
+    : require("@next/bundle-analyzer")({
+        enabled: process.env.ANALYZE === "true",
+      });
+
 const { i18n } = require("./next-i18next.config");
 
-const nextConfig = {
+const nextConfig = withBundleAnalyzer({
   i18n,
   reactStrictMode: false,
   transpilePackages: ["@orderbook/core"],
@@ -90,6 +99,6 @@ const nextConfig = {
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   },
-};
+});
 
 module.exports = nextConfig;
