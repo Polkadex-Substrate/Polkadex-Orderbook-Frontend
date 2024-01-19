@@ -8,6 +8,7 @@ import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useC
 
 export const ConnectNewUser = ({
   onNext,
+  onClose,
 }: {
   onClose: () => void;
   onNext: (v: "Connect" | "TradingAccountSuccessfull") => void;
@@ -43,6 +44,7 @@ export const ConnectNewUser = ({
               }
               onReadMore={() => {}}
               onBack={handleCloseInteraction}
+              onClose={onClose}
             />
           </Multistep.Trigger>
           <Multistep.Content>
