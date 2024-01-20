@@ -1,18 +1,13 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
-import { getMarketUrl } from "@orderbook/core/helpers";
+import { GetServerSideProps } from "next";
+import { defaultConfig } from "@orderbook/core/config";
 
 function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const marketUrl = getMarketUrl();
-    router.push(marketUrl);
-  }, [router]);
-
-  // Note: This could be used as masking page
-  return <LoadingScreen />; // This is a temporary fix. (Showing loading indicator)
+  return <></>;
 }
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const destination = `trading/${defaultConfig.landingPageMarket}`;
+  return { redirect: { destination, permanent: true }, props: {} };
+};

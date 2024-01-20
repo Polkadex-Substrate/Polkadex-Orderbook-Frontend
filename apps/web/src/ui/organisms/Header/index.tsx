@@ -36,9 +36,9 @@ export const Header = ({
     <S.Wrapper dark={dark}>
       <S.Content>
         <S.Logo borderActive={isValidChild} hideLogo>
-          <Link href="/">
+          <a href="/">
             <PolkadexLogo />
-          </Link>
+          </a>
           <span>BETA</span>
         </S.Logo>
         <S.ContentFull>{children}</S.ContentFull>

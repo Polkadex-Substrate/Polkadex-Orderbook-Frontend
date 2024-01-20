@@ -5,12 +5,14 @@ import { useTranslation } from "next-i18next";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@orderbook/core/hooks";
 import { IIcons } from "@orderbook/core/utils";
+import { getMarketUrl } from "@orderbook/core/helpers";
 
 import * as S from "./styles";
 
 export const Menu = ({ open = false }) => {
   const router = useRouter();
   const { isDarkTheme, changeTheme } = useAppearance();
+  const marketUrl = getMarketUrl();
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`menu.${key}`);
@@ -21,7 +23,7 @@ export const Menu = ({ open = false }) => {
         <Card
           active={router.pathname === "/trading/[id]"}
           icon="Exchange"
-          href="/trading"
+          href={marketUrl}
           open={open}
         >
           {t("exchange")}
