@@ -57,7 +57,6 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
     removingError,
     onImportFromFile,
     importFromFileStatus,
-    proxiesAccounts,
     tempMnemonic,
     onExportTradeAccount,
     onSelectExtension,
@@ -235,6 +234,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     fundWallet={selectedFundingWallet}
                     tradeAccount={selectedAccount}
                     localTradingAccounts={localTradingAccounts}
+                    mainProxiesAccounts={mainProxiesAccounts}
                     onConnectWallet={() => props?.onPage("ConnectWallet", true)}
                   />
                 </Multistep.Trigger>
@@ -345,7 +345,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onRedirect={() => props?.onPage("ConnectTradingAccount")}
                     onClose={() => props?.onPage("ConnectTradingAccount")}
                     loading={importFromFileStatus === "loading"}
-                    whitelistBrowserAccounts={proxiesAccounts}
+                    whitelistBrowserAccounts={mainProxiesAccounts}
                   />
                   <TradingAccountSuccessfull
                     key="TradingAccountSuccessfull"
