@@ -36,6 +36,7 @@ import { TradingAccountList } from "@/ui/templates/ConnectWallet/tradingAccountL
 import { MaximumTradingAccount } from "@/ui/templates/ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "@/ui/templates/ConnectWallet/insufficientBalance";
 import { UnlockBrowserAccount } from "@/ui/templates/ConnectWallet/unlockBrowserAccount";
+import { ImportTradingAccountMnemonic } from "@/ui/templates/ConnectWallet/importTradingAccountMnemonic";
 
 export const Profile = ({ onClick }: { onClick: () => void }) => {
   const {
@@ -63,6 +64,9 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
     mainProxiesAccounts,
     onResetTempTrading,
     onResetTempMnemonic,
+    importFromMnemonicError,
+    importFromMnemonicStatus,
+    onImportFromMnemonic,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
   const { onToogleConnectExtension } = useSettingsProvider();
@@ -290,6 +294,9 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onExportBrowserAccountCallback={() =>
                       props?.onPage("UnlockBrowserAccount")
                     }
+                    onImportMnemonic={() =>
+                      props?.onPage("ImportTradingAccountMnemonic")
+                    }
                   />
                   <UserActions
                     key="UserActions"
@@ -346,6 +353,19 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onClose={() => props?.onPage("ConnectTradingAccount")}
                     loading={importFromFileStatus === "loading"}
                     whitelistBrowserAccounts={mainProxiesAccounts}
+                  />
+                  <ImportTradingAccountMnemonic
+                    key="ImportTradingAccountMnemonic"
+                    onImport={async (e) => {
+                      await onImportFromMnemonic?.(e);
+                      props?.onChangeInteraction(false);
+                    }}
+                    onCancel={() => props?.onPage("ConnectTradingAccount")}
+                    loading={importFromMnemonicStatus === "loading"}
+                    errorMessage={
+                      (importFromMnemonicError as Error)?.message ??
+                      importFromMnemonicError
+                    }
                   />
                   <TradingAccountSuccessfull
                     key="TradingAccountSuccessfull"
