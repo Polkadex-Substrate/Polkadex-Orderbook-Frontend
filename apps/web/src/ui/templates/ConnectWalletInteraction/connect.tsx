@@ -10,6 +10,7 @@ import {
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
+import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAccountMnemonic";
 import { RemoveTradingAccount } from "../ConnectWallet/removeTradingAccount";
 import { ConnectTradingAccountCard } from "../ReadyToUse/connectTradingAccountCard";
 import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
@@ -24,7 +25,8 @@ export type ConnectKeys =
   | "ConnectFundingWallets"
   | "ConnectTradingAccount"
   | "RemoveTradingAccount"
-  | "ImportTradingAccount";
+  | "ImportTradingAccount"
+  | "ImportTradingAccountMnemonic";
 
 export const Connect = ({
   onClose,
@@ -50,6 +52,9 @@ export const Connect = ({
     mainProxiesSuccess,
     onExportTradeAccount,
     onResetTempTrading,
+    importFromMnemonicError,
+    importFromMnemonicStatus,
+    onImportFromMnemonic,
   } = useConnectWalletProvider();
 
   const sourceId = selectedExtension?.id;
@@ -155,6 +160,9 @@ export const Connect = ({
               onExportBrowserAccountCallback={() =>
                 props?.onPage("UnlockBrowserAccount")
               }
+              onImportMnemonic={() =>
+                props?.onPage("ImportTradingAccountMnemonic")
+              }
               enabledExtensionAccount
             />
             <ImportTradingAccount
@@ -166,6 +174,19 @@ export const Connect = ({
               onRedirect={() => props?.onPage("ConnectTradingAccount")}
               onClose={() => props?.onPage("ConnectTradingAccount")}
               loading={importFromFileStatus === "loading"}
+            />
+            <ImportTradingAccountMnemonic
+              key="ImportTradingAccountMnemonic"
+              onImport={async (e) => {
+                await onImportFromMnemonic?.(e);
+                onClose();
+              }}
+              onCancel={() => props?.onPage("ConnectTradingAccount")}
+              loading={importFromMnemonicStatus === "loading"}
+              errorMessage={
+                (importFromMnemonicError as Error)?.message ??
+                importFromMnemonicError
+              }
             />
             <RemoveTradingAccount
               key="RemoveTradingAccount"

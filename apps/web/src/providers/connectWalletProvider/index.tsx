@@ -21,9 +21,11 @@ import {
 import {
   AddProxyAccountArgs,
   ImportFromFile,
+  ImportFromMnemonic,
   RemoveProxyAccountArgs,
   useAddProxyAccount,
   useImportProxyAccount,
+  useImportProxyAccountMnemonic,
   useOnChainBalances,
   useProxyAccounts,
   useRemoveProxyAccount,
@@ -62,6 +64,7 @@ type ConnectWalletState = {
   onResetExtension: () => void;
   onLogout: () => void;
   onImportFromFile: (value: ImportFromFile) => Promise<void>;
+  onImportFromMnemonic: (value: ImportFromMnemonic) => Promise<void>;
   onRegisterTradeAccount: (props: AddProxyAccountArgs) => Promise<void>;
   onRemoveTradingAccountFromDevice: (value: string) => void;
   onRemoveTradingAccountFromChain: (
@@ -81,6 +84,7 @@ type ConnectWalletState = {
   walletBalance?: number;
   walletStatus: GenericStatus;
   importFromFileStatus: GenericStatus;
+  importFromMnemonicStatus: GenericStatus;
   // mutation status
   proxiesHasError: boolean;
   proxiesLoading: boolean;
@@ -94,6 +98,7 @@ type ConnectWalletState = {
   mainProxiesAccounts: string[];
   mainProxiesLoading: boolean;
   mainProxiesSuccess: boolean;
+  importFromMnemonicError: unknown;
 };
 
 export const ConnectWalletProvider = ({
@@ -164,6 +169,14 @@ export const ConnectWalletProvider = ({
     mutateAsync: onImportFromFile,
     status: importFromFileStatus,
   } = useImportProxyAccount({
+    onSuccess,
+  });
+
+  const {
+    error: importFromMnemonicError,
+    mutateAsync: onImportFromMnemonic,
+    status: importFromMnemonicStatus,
+  } = useImportProxyAccountMnemonic({
     onSuccess,
   });
 
@@ -303,6 +316,10 @@ export const ConnectWalletProvider = ({
         importFromFileStatus,
         onImportFromFile,
 
+        importFromMnemonicError,
+        importFromMnemonicStatus,
+        onImportFromMnemonic,
+
         mainProxiesAccounts,
         mainProxiesLoading,
         mainProxiesSuccess,
@@ -322,6 +339,7 @@ export const Context = createContext<ConnectWalletState>({
   onResetExtension: () => {},
   onLogout: () => {},
   onImportFromFile: async () => {},
+  onImportFromMnemonic: async () => {},
   onRegisterTradeAccount: async () => {},
   onRemoveTradingAccountFromDevice: () => {},
   onRemoveTradingAccountFromChain: async () => {},
@@ -336,6 +354,7 @@ export const Context = createContext<ConnectWalletState>({
   walletBalance: 0,
   walletStatus: "idle",
   importFromFileStatus: "idle",
+  importFromMnemonicStatus: "idle",
   proxiesHasError: false,
   proxiesLoading: false,
   proxiesSuccess: false,
@@ -345,6 +364,7 @@ export const Context = createContext<ConnectWalletState>({
   walletLoading: false,
   walletSuccess: false,
   importFromFileError: undefined,
+  importFromMnemonicError: undefined,
   mainProxiesAccounts: [],
   mainProxiesLoading: false,
   mainProxiesSuccess: false,

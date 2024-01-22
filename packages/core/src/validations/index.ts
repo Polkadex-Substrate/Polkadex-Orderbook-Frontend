@@ -192,11 +192,11 @@ export const importAccountValidations = Yup.object().shape({
     .min(5, "Must be exactly 5 digits")
     .max(5, "Must be exactly 5 digits")
     .nullable(),
-  mnemonic: Yup.array()
-    .of(Yup.string())
+  mnemonic: Yup.string()
     .required("Required")
-    .min(12, "Must be exactly 12 digits")
-    .max(12, "Must be exactly 12 digits"),
+    .test("Invalid Mnemonic", "Invalid Mnemonic", (value) => {
+      return value?.split(" ").length === 12;
+    }),
 });
 
 export const importAccountJsonValidations = Yup.object().shape({

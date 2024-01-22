@@ -13,6 +13,7 @@ export const ConnectTradingAccount = ({
   accounts = [],
   onClose,
   onImport,
+  onImportMnemonic,
   onSelect,
   onTempBrowserAccount,
   onSelectCallback,
@@ -24,6 +25,7 @@ export const ConnectTradingAccount = ({
   accounts?: TradeAccount[];
   onClose: () => void;
   onImport: () => void;
+  onImportMnemonic: () => void;
   onSelect: (e: TradeAccount) => void;
   onTempBrowserAccount: (e: TradeAccount) => void;
   onSelectCallback: () => void;
@@ -122,7 +124,7 @@ export const ConnectTradingAccount = ({
               <GenericHorizontalCard
                 title="Import with Mnemonic"
                 icon="Mnemonic"
-                onClick={() => window.alert("Soon")}
+                onClick={onImportMnemonic}
               >
                 Import
               </GenericHorizontalCard>
