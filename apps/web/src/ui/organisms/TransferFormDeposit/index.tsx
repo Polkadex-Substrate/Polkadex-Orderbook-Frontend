@@ -42,7 +42,8 @@ export const TransferFormDeposit = ({
   } = useProfile();
   const { loading: balancesLoading } = useFunds();
   const { onToogleConnectExtension } = useSettingsProvider();
-  const { mainProxiesAccounts } = useConnectWalletProvider();
+  const { mainProxiesAccounts, mainProxiesLoading } =
+    useConnectWalletProvider();
 
   const fundingWallet = useMemo(
     () => getFundingAccountDetail(mainAddress, allAccounts),
@@ -122,7 +123,7 @@ export const TransferFormDeposit = ({
 
   const buttonMessage = fundWalletPresent ? "transferButton" : "userButton";
   const localAccountError =
-    fundWalletPresent && mainProxiesAccounts.length === 0
+    fundWalletPresent && mainProxiesAccounts.length === 0 && !mainProxiesLoading
       ? "localAccountError"
       : "";
 
@@ -211,16 +212,26 @@ export const TransferFormDeposit = ({
             </button>
           </S.Amount>
         </S.Form>
-        <S.Footer hasUser={fundWalletPresent}>
-          <button
-            type={fundWalletPresent ? "submit" : "button"}
-            disabled={disabled}
-            onClick={
-              fundWalletPresent ? undefined : () => onToogleConnectExtension()
-            }
-          >
-            {t(buttonMessage)}
-          </button>
+        <S.Footer hasUser={fundWalletPresent && localAccountError.length === 0}>
+          {localAccountError?.length === 0 ? (
+            <button
+              type={fundWalletPresent ? "submit" : "button"}
+              disabled={disabled}
+              onClick={
+                fundWalletPresent ? undefined : () => onToogleConnectExtension()
+              }
+            >
+              {t(buttonMessage)}
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="bg-primary-base"
+              onClick={() => console.log("here it is")}
+            >
+              {t("createTradingAccount")}
+            </button>
+          )}
         </S.Footer>
       </S.Content>
     </Loading>

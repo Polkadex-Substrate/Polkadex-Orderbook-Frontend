@@ -49,5 +49,6 @@
     "claimed": "Claimed"
   },
   "withdrawalError": "Please select a trading account first",
-  "localAccountError": "There is no trading account available for this funding account. Please create a trading account first."
+  "localAccountError": "There is no trading account available for this funding account. Please create a trading account first.",
+  "createTradingAccount": "Create trading account"
 }
