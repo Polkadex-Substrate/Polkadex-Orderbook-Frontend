@@ -227,7 +227,7 @@ export const TransferFormDeposit = ({
             <button
               type="button"
               className="bg-primary-base"
-              onClick={() => console.log("here it is")}
+              onClick={() => onToogleConnectExtension()}
             >
               {t("createTradingAccount")}
             </button>
