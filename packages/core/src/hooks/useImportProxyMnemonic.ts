@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useUserAccounts } from "@polkadex/react-providers";
 
 import { useProfile } from "../providers/user/profile";
+import { appsyncOrderbookService } from "../utils/orderbookService";
 
 import { MutateHookProps } from "./types";
 
@@ -20,6 +21,16 @@ export const useImportProxyAccountMnemonic = (props: MutateHookProps) => {
       if (!isReady) throw new Error("Can't import before initialization");
 
       const { pair } = wallet.add(mnemonic, name, password);
+
+      const isValidPair = await appsyncOrderbookService.query.getFundingAddress(
+        pair.address
+      );
+
+      if (!isValidPair) {
+        wallet.remove(pair.address);
+        throw new Error("No funding account linked to this trade account.");
+      }
+
       await onUserSelectTradingAddress({
         tradeAddress: pair.address,
         isNew: true,
