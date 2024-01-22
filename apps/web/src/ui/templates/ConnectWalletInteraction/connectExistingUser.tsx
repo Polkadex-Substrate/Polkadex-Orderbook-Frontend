@@ -214,7 +214,7 @@ export const ConnectExistingUser = ({
               key="ImportTradingAccountMnemonic"
               onImport={async (e) => {
                 await onImportFromMnemonic?.(e);
-                props?.onChangeInteraction(false);
+                onClose();
               }}
               onCancel={() => props?.onPage("ConnectTradingAccount")}
               loading={importFromMnemonicStatus === "loading"}
