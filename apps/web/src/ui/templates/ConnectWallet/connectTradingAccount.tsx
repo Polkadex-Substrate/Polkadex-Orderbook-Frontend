@@ -43,7 +43,7 @@ export const ConnectTradingAccount = ({
         <div className="flex flex-col gap-6">
           {accounts.length ? (
             <div className="flex flex-col gap-3">
-              <Typography.Text variant="secondary" size="xs">
+              <Typography.Text variant="secondary" size="sm">
                 Available trading account(s)
               </Typography.Text>
               <div

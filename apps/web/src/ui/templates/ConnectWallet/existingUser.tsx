@@ -59,7 +59,7 @@ export const ExistingUser = ({
         <div className="flex flex-col gap-8">
           {hasTradingAccounts ? (
             <div className="flex flex-col gap-3">
-              <Typography.Text variant="secondary" size="xs" className="px-7">
+              <Typography.Text variant="secondary" size="sm" className="px-7">
                 Available trading account(s)
               </Typography.Text>
               <div
