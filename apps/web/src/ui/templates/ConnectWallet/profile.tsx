@@ -207,7 +207,9 @@ export const Profile = ({
               </div>
               <div className="flex flex-col text-center items-center">
                 <Typography.Text size="sm">
-                  No trading account avaliable in browser.
+                  {linkedBrowserAccounts.length > 0
+                    ? "No trading account selected."
+                    : "No trading account avaliable in browser."}
                 </Typography.Text>
                 <Typography.Text variant="primary" size="xs">
                   Try refreshing the page or creating a new one.
