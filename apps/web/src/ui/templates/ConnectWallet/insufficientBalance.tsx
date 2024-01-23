@@ -51,10 +51,16 @@ export const InsufficientBalance = ({
                 <GenericExternalCard href="/" icon="CreditCard">
                   Credit card
                 </GenericExternalCard>
-                <GenericExternalCard href="/" icon="DecentralizedBridge">
+                <GenericExternalCard
+                  href="https://thea.polkadex.trade/"
+                  icon="DecentralizedBridge"
+                >
                   Decentralized bridge
                 </GenericExternalCard>
-                <GenericExternalCard href="/" icon="Exchange">
+                <GenericExternalCard
+                  href="https://www.kucoin.com/trade/PDEX-USDT"
+                  icon="Exchange"
+                >
                   Centralized exchanges
                 </GenericExternalCard>
               </div>
