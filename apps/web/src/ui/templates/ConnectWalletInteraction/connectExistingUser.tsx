@@ -89,7 +89,13 @@ export const ConnectExistingUser = ({
           <Multistep.Trigger>
             <ExistingUser
               onClose={onClose}
-              onReadMore={() => {}}
+              onReadMore={() =>
+                window.open(
+                  "https://docs.polkadex.trade/orderbookPolkadexFAQHowToTradeStep3",
+                  "_blank",
+                  "noopener, noreferrer"
+                )
+              }
               onBack={handleCloseInteraction}
               onCreate={() => props?.onPage(redirectEnoughBalance, true)}
               onRecover={() => props?.onPage("ConnectTradingAccount", true)}

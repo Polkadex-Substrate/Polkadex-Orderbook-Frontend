@@ -42,7 +42,13 @@ export const ConnectNewUser = ({
                   true
                 )
               }
-              onReadMore={() => {}}
+              onReadMore={() =>
+                window.open(
+                  "https://docs.polkadex.trade/orderbookPolkadexFAQHowToTradeStep3",
+                  "_blank",
+                  "noopener, noreferrer"
+                )
+              }
               onBack={handleCloseInteraction}
               onClose={onClose}
             />
