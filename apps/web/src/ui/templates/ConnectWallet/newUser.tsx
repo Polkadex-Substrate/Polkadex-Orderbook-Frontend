@@ -5,13 +5,19 @@ export const NewUser = ({
   onContinue,
   onReadMore,
   onBack,
+  onClose,
 }: {
   onContinue: () => void;
   onReadMore: () => void;
   onBack: () => void;
+  onClose: () => void;
 }) => {
   return (
-    <Interaction className="gap-10" withAnimation={false}>
+    <Interaction className="gap-10 pt-2" withAnimation={false}>
+      <Interaction.Title
+        className="-mb-8 [&>button>svg]:scale-125"
+        onClose={onClose}
+      />
       <Interaction.Content
         className="flex flex-col gap-1 flex-1"
         withPadding={false}

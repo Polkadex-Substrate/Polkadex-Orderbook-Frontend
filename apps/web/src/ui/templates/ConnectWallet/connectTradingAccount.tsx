@@ -13,6 +13,7 @@ export const ConnectTradingAccount = ({
   accounts = [],
   onClose,
   onImport,
+  onImportMnemonic,
   onSelect,
   onTempBrowserAccount,
   onSelectCallback,
@@ -24,6 +25,7 @@ export const ConnectTradingAccount = ({
   accounts?: TradeAccount[];
   onClose: () => void;
   onImport: () => void;
+  onImportMnemonic: () => void;
   onSelect: (e: TradeAccount) => void;
   onTempBrowserAccount: (e: TradeAccount) => void;
   onSelectCallback: () => void;
@@ -41,7 +43,7 @@ export const ConnectTradingAccount = ({
         <div className="flex flex-col gap-6">
           {accounts.length ? (
             <div className="flex flex-col gap-3">
-              <Typography.Text variant="secondary" size="xs">
+              <Typography.Text variant="secondary" size="sm">
                 Available trading account(s)
               </Typography.Text>
               <div
@@ -122,7 +124,7 @@ export const ConnectTradingAccount = ({
               <GenericHorizontalCard
                 title="Import with Mnemonic"
                 icon="Mnemonic"
-                onClick={() => window.alert("Soon")}
+                onClick={onImportMnemonic}
               >
                 Import
               </GenericHorizontalCard>

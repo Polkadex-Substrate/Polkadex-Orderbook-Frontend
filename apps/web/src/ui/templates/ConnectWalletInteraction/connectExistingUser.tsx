@@ -11,6 +11,7 @@ import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { MaximumTradingAccount } from "../ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
 import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
+import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAccountMnemonic";
 
 import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
@@ -43,6 +44,9 @@ export const ConnectExistingUser = ({
     walletBalance,
     onExportTradeAccount,
     onResetTempTrading,
+    importFromMnemonicError,
+    importFromMnemonicStatus,
+    onImportFromMnemonic,
   } = useConnectWalletProvider();
 
   const filteredAccounts = useMemo(
@@ -85,7 +89,13 @@ export const ConnectExistingUser = ({
           <Multistep.Trigger>
             <ExistingUser
               onClose={onClose}
-              onReadMore={() => {}}
+              onReadMore={() =>
+                window.open(
+                  "https://docs.polkadex.trade/orderbookPolkadexFAQHowToTradeStep3",
+                  "_blank",
+                  "noopener, noreferrer"
+                )
+              }
               onBack={handleCloseInteraction}
               onCreate={() => props?.onPage(redirectEnoughBalance, true)}
               onRecover={() => props?.onPage("ConnectTradingAccount", true)}
@@ -136,6 +146,9 @@ export const ConnectExistingUser = ({
               onExportBrowserAccountCallback={() =>
                 props?.onPage("UnlockBrowserAccount")
               }
+              onImportMnemonic={() => {
+                props?.onPage("ImportTradingAccountMnemonic", true);
+              }}
             />
             <UnlockBrowserAccount
               key="UnlockBrowserAccount"
@@ -202,6 +215,19 @@ export const ConnectExistingUser = ({
               onClose={() => props?.onPage("ConnectTradingAccount")}
               loading={importFromFileStatus === "loading"}
               whitelistBrowserAccounts={mainProxiesAccounts}
+            />
+            <ImportTradingAccountMnemonic
+              key="ImportTradingAccountMnemonic"
+              onImport={async (e) => {
+                await onImportFromMnemonic?.(e);
+                onClose();
+              }}
+              onCancel={() => props?.onPage("ConnectTradingAccount")}
+              loading={importFromMnemonicStatus === "loading"}
+              errorMessage={
+                (importFromMnemonicError as Error)?.message ??
+                importFromMnemonicError
+              }
             />
             <MaximumTradingAccount
               key="MaximumTradingAccount"

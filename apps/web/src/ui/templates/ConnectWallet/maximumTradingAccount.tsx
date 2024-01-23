@@ -32,7 +32,8 @@ export const MaximumTradingAccount = ({
             </Typography.Text>
             <Typography.Text variant="primary">
               Each Funding account within the Orderbook can be linked to a
-              maximum of 3 distinct Trading accounts.
+              maximum of 3 distinct Trading accounts. Please delete one to
+              continue.
             </Typography.Text>
           </div>
         </div>

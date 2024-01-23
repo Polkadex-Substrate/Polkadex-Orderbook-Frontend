@@ -59,7 +59,7 @@ export const ExistingUser = ({
         <div className="flex flex-col gap-8">
           {hasTradingAccounts ? (
             <div className="flex flex-col gap-3">
-              <Typography.Text variant="secondary" size="xs" className="px-7">
+              <Typography.Text variant="secondary" size="sm" className="px-7">
                 Available trading account(s)
               </Typography.Text>
               <div
@@ -162,9 +162,7 @@ export const ExistingUser = ({
         </div>
       </Interaction.Content>
       <Interaction.Footer>
-        <Interaction.Action onClick={onClose}>
-          Connect trading account later
-        </Interaction.Action>
+        <Interaction.Action onClick={onClose}>Skip</Interaction.Action>
         <Interaction.Close onClick={onBack}>
           Connect other wallet
         </Interaction.Close>

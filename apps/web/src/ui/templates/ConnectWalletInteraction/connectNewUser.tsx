@@ -8,6 +8,7 @@ import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useC
 
 export const ConnectNewUser = ({
   onNext,
+  onClose,
 }: {
   onClose: () => void;
   onNext: (v: "Connect" | "TradingAccountSuccessfull") => void;
@@ -41,8 +42,15 @@ export const ConnectNewUser = ({
                   true
                 )
               }
-              onReadMore={() => {}}
+              onReadMore={() =>
+                window.open(
+                  "https://docs.polkadex.trade/orderbookPolkadexFAQHowToTradeStep3",
+                  "_blank",
+                  "noopener, noreferrer"
+                )
+              }
               onBack={handleCloseInteraction}
+              onClose={onClose}
             />
           </Multistep.Trigger>
           <Multistep.Content>

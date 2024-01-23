@@ -36,6 +36,7 @@ import { TradingAccountList } from "@/ui/templates/ConnectWallet/tradingAccountL
 import { MaximumTradingAccount } from "@/ui/templates/ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "@/ui/templates/ConnectWallet/insufficientBalance";
 import { UnlockBrowserAccount } from "@/ui/templates/ConnectWallet/unlockBrowserAccount";
+import { ImportTradingAccountMnemonic } from "@/ui/templates/ConnectWallet/importTradingAccountMnemonic";
 
 export const Profile = ({ onClick }: { onClick: () => void }) => {
   const {
@@ -57,13 +58,15 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
     removingError,
     onImportFromFile,
     importFromFileStatus,
-    proxiesAccounts,
     tempMnemonic,
     onExportTradeAccount,
     onSelectExtension,
     mainProxiesAccounts,
     onResetTempTrading,
     onResetTempMnemonic,
+    importFromMnemonicError,
+    importFromMnemonicStatus,
+    onImportFromMnemonic,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
   const { onToogleConnectExtension } = useSettingsProvider();
@@ -235,6 +238,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     fundWallet={selectedFundingWallet}
                     tradeAccount={selectedAccount}
                     localTradingAccounts={localTradingAccounts}
+                    mainProxiesAccounts={mainProxiesAccounts}
                     onConnectWallet={() => props?.onPage("ConnectWallet", true)}
                   />
                 </Multistep.Trigger>
@@ -289,6 +293,9 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     }
                     onExportBrowserAccountCallback={() =>
                       props?.onPage("UnlockBrowserAccount")
+                    }
+                    onImportMnemonic={() =>
+                      props?.onPage("ImportTradingAccountMnemonic")
                     }
                   />
                   <UserActions
@@ -345,7 +352,20 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onRedirect={() => props?.onPage("ConnectTradingAccount")}
                     onClose={() => props?.onPage("ConnectTradingAccount")}
                     loading={importFromFileStatus === "loading"}
-                    whitelistBrowserAccounts={proxiesAccounts}
+                    whitelistBrowserAccounts={mainProxiesAccounts}
+                  />
+                  <ImportTradingAccountMnemonic
+                    key="ImportTradingAccountMnemonic"
+                    onImport={async (e) => {
+                      await onImportFromMnemonic?.(e);
+                      props?.onChangeInteraction(false);
+                    }}
+                    onCancel={() => props?.onPage("ConnectTradingAccount")}
+                    loading={importFromMnemonicStatus === "loading"}
+                    errorMessage={
+                      (importFromMnemonicError as Error)?.message ??
+                      importFromMnemonicError
+                    }
                   />
                   <TradingAccountSuccessfull
                     key="TradingAccountSuccessfull"

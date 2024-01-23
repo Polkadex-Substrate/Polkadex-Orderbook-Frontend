@@ -22,5 +22,6 @@ export * from "./useRemoveProxyAcccount";
 export * from "./useOnChainBalances";
 export * from "./useProxyAccounts";
 export * from "./useImportProxyAccount";
+export * from "./useImportProxyMnemonic";
 export * from "./useSingleProxyAccount";
 export * from "./useExtensionAccountFromBrowserAccount";

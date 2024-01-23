@@ -6,6 +6,7 @@ import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { RemoveTradingAccount } from "../ConnectWallet/removeTradingAccount";
 import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
+import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAccountMnemonic";
 
 import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
@@ -24,6 +25,9 @@ export const ConnectTradingInteraction = () => {
     mainProxiesAccounts,
     onExportTradeAccount,
     onResetTempTrading,
+    importFromMnemonicError,
+    importFromMnemonicStatus,
+    onImportFromMnemonic,
   } = useConnectWalletProvider();
 
   return (
@@ -52,6 +56,9 @@ export const ConnectTradingInteraction = () => {
                   onExportBrowserAccountCallback={() =>
                     props?.onPage("UnlockBrowserAccount", true)
                   }
+                  onImportMnemonic={() => {
+                    props?.onPage("ImportTradingAccountMnemonic", true);
+                  }}
                   enabledExtensionAccount
                 />
               </Multistep.Trigger>
@@ -72,6 +79,19 @@ export const ConnectTradingInteraction = () => {
                   onClose={() => props?.onChangeInteraction(false)}
                   loading={importFromFileStatus === "loading"}
                   whitelistBrowserAccounts={mainProxiesAccounts}
+                />
+                <ImportTradingAccountMnemonic
+                  key="ImportTradingAccountMnemonic"
+                  onImport={async (e) => {
+                    await onImportFromMnemonic?.(e);
+                    props?.onChangeInteraction(false);
+                  }}
+                  onCancel={() => props?.onPage("ConnectTradingAccount")}
+                  loading={importFromMnemonicStatus === "loading"}
+                  errorMessage={
+                    (importFromMnemonicError as Error)?.message ??
+                    importFromMnemonicError
+                  }
                 />
                 <RemoveTradingAccount
                   key="RemoveTradingAccount"
