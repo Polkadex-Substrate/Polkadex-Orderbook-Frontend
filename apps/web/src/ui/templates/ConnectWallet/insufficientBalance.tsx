@@ -45,12 +45,6 @@ export const InsufficientBalance = ({
             </Accordion.Trigger>
             <Accordion.Content>
               <div className="flex flex-col gap-3">
-                <GenericExternalCard href="/" icon="Free">
-                  Get 1 PDEX for free
-                </GenericExternalCard>
-                <GenericExternalCard href="/" icon="CreditCard">
-                  Credit card
-                </GenericExternalCard>
                 <GenericExternalCard
                   href="https://thea.polkadex.trade/"
                   icon="DecentralizedBridge"
