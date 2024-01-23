@@ -15,7 +15,7 @@ export const NewUser = ({
   return (
     <Interaction className="gap-10 pt-2" withAnimation={false}>
       <Interaction.Title
-        className="justify-start -mb-8 px-0 [&>button>svg]:scale-125"
+        className="-mb-8 [&>button>svg]:scale-125"
         onClose={onClose}
       />
       <Interaction.Content
