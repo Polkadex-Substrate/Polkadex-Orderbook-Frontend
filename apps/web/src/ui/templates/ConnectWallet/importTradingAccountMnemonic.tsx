@@ -1,3 +1,4 @@
+// TODO: Create a component (Input.Mnemonic) in @polkadex/ux.
 import { useState } from "react";
 import { Interaction, Loading, Input, Button, Typography } from "@polkadex/ux";
 import { useFormik } from "formik";
