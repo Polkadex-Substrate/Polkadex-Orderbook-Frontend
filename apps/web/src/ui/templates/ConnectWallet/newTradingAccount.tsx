@@ -166,7 +166,9 @@ export const NewTradingAccount = ({
               <GenericInfoCard label="Your balance">
                 {balance} PDEX
               </GenericInfoCard>
-              <GenericInfoCard label="Fees">{fee} PDEX</GenericInfoCard>
+              <GenericInfoCard label="Transaction fee">
+                {fee} PDEX
+              </GenericInfoCard>
             </div>
           </Interaction.Content>
           <Interaction.Footer>
