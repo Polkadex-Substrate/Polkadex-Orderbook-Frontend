@@ -1,8 +1,8 @@
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
 import { READ_ONLY_TOKEN, USER_EVENTS } from "@orderbook/core/constants";
-import { appsyncReader } from "@orderbook/core/utils/orderbookService/appsync_v1/readStrategy";
-import { KlineIntervals } from "@orderbook/core/utils/orderbookService/appsync_v1/constants";
+import { appsyncReader } from "@orderbook/core/utils/orderbookService/appsync/readStrategy";
+import { KlineIntervals } from "@orderbook/core/utils/orderbookService/appsync/constants";
 
 import {
   AccountUpdateEvent,

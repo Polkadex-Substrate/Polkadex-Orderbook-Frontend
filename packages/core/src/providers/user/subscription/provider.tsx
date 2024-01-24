@@ -26,7 +26,7 @@ import {
 import {
   removeOrderFromList,
   replaceOrPushOrder,
-} from "@orderbook/core/utils/orderbookService/appsync_v1/helpers";
+} from "@orderbook/core/utils/orderbookService/appsync/helpers";
 import { useOrderbook } from "@orderbook/core/hooks";
 
 import { useProfile } from "../profile";

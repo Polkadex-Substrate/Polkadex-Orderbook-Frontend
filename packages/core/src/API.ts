@@ -14,12 +14,12 @@ export type Channel = {
 
 export type Orderbook = {
   __typename: "Orderbook",
-  items?:  Array<SetPriceLevel | null > | null,
+  items?:  Array<PriceLevel | null > | null,
   nextToken?: string | null,
 };
 
-export type SetPriceLevel = {
-  __typename: "SetPriceLevel",
+export type PriceLevel = {
+  __typename: "PriceLevel",
   p: string,
   q: string,
   s?: OrderSide | null,
@@ -62,21 +62,22 @@ export type Asset = {
   asset_id: string,
 };
 
-export type RecentTradesConnection = {
-  __typename: "RecentTradesConnection",
-  items?:  Array<RawTrade | null > | null,
+export type TradesConnection = {
+  __typename: "TradesConnection",
+  items?:  Array<Trade | null > | null,
   nextToken?: string | null,
 };
 
-export type RawTrade = {
-  __typename: "RawTrade",
-  m?: string | null,
-  t: string,
+export type Trade = {
+  __typename: "Trade",
+  m: string,
   p: string,
   q: string,
-  stid: number,
-  t_id?: string | null,
-  m_id?: string | null,
+  t: string,
+  stid: string,
+  taker_id?: string | null,
+  maker_id?: string | null,
+  trade_id?: string | null,
   isReverted?: boolean | null,
 };
 
@@ -114,22 +115,17 @@ export type Market = {
   quote_asset_precision: string,
 };
 
-export type ProxyConnection = {
-  __typename: "ProxyConnection",
-  items?:  Array<ProxyConnectionItem | null > | null,
+export type AccountConnection = {
+  __typename: "AccountConnection",
+  items?:  Array<Account | null > | null,
   nextToken?: string | null,
 };
 
-export type ProxyConnectionItem = {
-  __typename: "ProxyConnectionItem",
-  hash_key?: string | null,
-  range_key?: string | null,
+export type Account = {
+  __typename: "Account",
+  main?: string | null,
+  proxy?: string | null,
   stid?: string | null,
-};
-
-export type User = {
-  __typename: "User",
-  proxies?: Array< string | null > | null,
 };
 
 export type Balance = {
@@ -137,7 +133,6 @@ export type Balance = {
   a: string,
   f: string,
   r: string,
-  p: string,
 };
 
 export type BalanceConnection = {
@@ -171,6 +166,12 @@ export type OrdersConnection = {
   nextToken?: string | null,
 };
 
+export enum TransactionType {
+  DEPOSIT = "DEPOSIT",
+  WITHDRAW = "WITHDRAW",
+}
+
+
 export type TransactionsConnection = {
   __typename: "TransactionsConnection",
   items?:  Array<Transaction | null > | null,
@@ -190,38 +191,22 @@ export type Transaction = {
   isReverted?: boolean | null,
 };
 
-export type TradesConnection = {
-  __typename: "TradesConnection",
-  items?:  Array<Trade | null > | null,
+export type UserTradesConnection = {
+  __typename: "UserTradesConnection",
+  items?:  Array<UserTrade | null > | null,
   nextToken?: string | null,
 };
 
-export type Trade = {
-  __typename: "Trade",
+export type UserTrade = {
+  __typename: "UserTrade",
   m: string,
   p: string,
   q: string,
   s: string,
   t: string,
   stid: string,
-  t_id?: string | null,
-  m_id?: string | null,
+  trade_id?: string | null,
   isReverted?: boolean | null,
-};
-
-export type MainAddressConnection = {
-  __typename: "MainAddressConnection",
-  hash_key?: string | null,
-  range_key?: string | null,
-  accounts?: Array< string | null > | null,
-};
-
-export type Register_userMutationVariables = {
-  input: UserActionInput,
-};
-
-export type Register_userMutation = {
-  register_user?: string | null,
 };
 
 export type Place_orderMutationVariables = {
@@ -238,6 +223,14 @@ export type Cancel_orderMutationVariables = {
 
 export type Cancel_orderMutation = {
   cancel_order?: string | null,
+};
+
+export type Cancel_allMutationVariables = {
+  input: UserActionInput,
+};
+
+export type Cancel_allMutation = {
+  cancel_all?: string | null,
 };
 
 export type WithdrawMutationVariables = {
@@ -261,8 +254,10 @@ export type PublishMutation = {
   } | null,
 };
 
+export type GetTimeQueryVariables = {
+};
+
 export type GetTimeQuery = {
-  // Get Enclave time
   getTime: string,
 };
 
@@ -273,11 +268,10 @@ export type GetOrderbookQueryVariables = {
 };
 
 export type GetOrderbookQuery = {
-  // Get orderbook
   getOrderbook?:  {
     __typename: "Orderbook",
     items?:  Array< {
-      __typename: "SetPriceLevel",
+      __typename: "PriceLevel",
       p: string,
       q: string,
       s?: OrderSide | null,
@@ -287,16 +281,15 @@ export type GetOrderbookQuery = {
   } | null,
 };
 
-export type GetKlinesbyMarketIntervalQueryVariables = {
+export type GetKlinesByMarketIntervalQueryVariables = {
   market: string,
   interval: string,
   from: string,
   to: string,
 };
 
-export type GetKlinesbyMarketIntervalQuery = {
-  // Get Klines
-  getKlinesbyMarketInterval?:  {
+export type GetKlinesByMarketIntervalQuery = {
+  getKlinesByMarketInterval?:  {
     __typename: "KlinesConnection",
     items?:  Array< {
       __typename: "CandleStick",
@@ -317,7 +310,6 @@ export type GetAllAssetsQueryVariables = {
 };
 
 export type GetAllAssetsQuery = {
-  // Gets all assets available in Orderbook
   getAllAssets?:  {
     __typename: "AssetsConnection",
     items?:  Array< {
@@ -331,25 +323,52 @@ export type GetAllAssetsQuery = {
   } | null,
 };
 
-export type GetRecentTradesQueryVariables = {
+export type ListTradesByMarketQueryVariables = {
+  m: string,
+  from: string,
+  to?: string | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListTradesByMarketQuery = {
+  listTradesByMarket?:  {
+    __typename: "TradesConnection",
+    items?:  Array< {
+      __typename: "Trade",
+      m: string,
+      p: string,
+      q: string,
+      t: string,
+      stid: string,
+      taker_id?: string | null,
+      maker_id?: string | null,
+      trade_id?: string | null,
+      isReverted?: boolean | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListRecentTradesQueryVariables = {
   m: string,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type GetRecentTradesQuery = {
-  // Gets recent trades
-  getRecentTrades?:  {
-    __typename: "RecentTradesConnection",
+export type ListRecentTradesQuery = {
+  listRecentTrades?:  {
+    __typename: "TradesConnection",
     items?:  Array< {
-      __typename: "RawTrade",
-      m?: string | null,
-      t: string,
+      __typename: "Trade",
+      m: string,
       p: string,
       q: string,
-      stid: number,
-      t_id?: string | null,
-      m_id?: string | null,
+      t: string,
+      stid: string,
+      taker_id?: string | null,
+      maker_id?: string | null,
+      trade_id?: string | null,
       isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
@@ -363,7 +382,6 @@ export type GetMarketTickersQueryVariables = {
 };
 
 export type GetMarketTickersQuery = {
-  // Get all market tickers
   getMarketTickers?:  {
     __typename: "TickersConnection",
     items?:  {
@@ -379,8 +397,10 @@ export type GetMarketTickersQuery = {
   } | null,
 };
 
+export type GetAllMarketsQueryVariables = {
+};
+
 export type GetAllMarketsQuery = {
-  // Get all active market configs
   getAllMarkets?:  {
     __typename: "MarketsConnection",
     items?:  Array< {
@@ -398,18 +418,17 @@ export type GetAllMarketsQuery = {
   } | null,
 };
 
-export type FindUserByProxyAccountQueryVariables = {
-  proxy_account: string,
+export type FindUserByTradeAccountQueryVariables = {
+  trade_account: string,
 };
 
-export type FindUserByProxyAccountQuery = {
-  // Finds User by proxy account
-  findUserByProxyAccount?:  {
-    __typename: "ProxyConnection",
+export type FindUserByTradeAccountQuery = {
+  findUserByTradeAccount?:  {
+    __typename: "AccountConnection",
     items?:  Array< {
-      __typename: "ProxyConnectionItem",
-      hash_key?: string | null,
-      range_key?: string | null,
+      __typename: "Account",
+      main?: string | null,
+      proxy?: string | null,
       stid?: string | null,
     } | null > | null,
     nextToken?: string | null,
@@ -421,10 +440,15 @@ export type FindUserByMainAccountQueryVariables = {
 };
 
 export type FindUserByMainAccountQuery = {
-  // Finds User by main account
   findUserByMainAccount?:  {
-    __typename: "User",
-    proxies?: Array< string | null > | null,
+    __typename: "AccountConnection",
+    items?:  Array< {
+      __typename: "Account",
+      main?: string | null,
+      proxy?: string | null,
+      stid?: string | null,
+    } | null > | null,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -434,13 +458,11 @@ export type FindBalanceByMainAccountQueryVariables = {
 };
 
 export type FindBalanceByMainAccountQuery = {
-  // Find Asset Balance by Main Account
   findBalanceByMainAccount?:  {
     __typename: "Balance",
     a: string,
     f: string,
     r: string,
-    p: string,
   } | null,
 };
 
@@ -449,7 +471,6 @@ export type GetAllBalancesByMainAccountQueryVariables = {
 };
 
 export type GetAllBalancesByMainAccountQuery = {
-  // Get all Asset Balances by Main Account
   getAllBalancesByMainAccount?:  {
     __typename: "BalanceConnection",
     items?:  Array< {
@@ -457,21 +478,17 @@ export type GetAllBalancesByMainAccountQuery = {
       a: string,
       f: string,
       r: string,
-      p: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,
 };
 
-export type FindOrderByMainAccountQueryVariables = {
-  main_account: string,
+export type FindOrderByIdQueryVariables = {
   order_id: string,
-  market: string,
 };
 
-export type FindOrderByMainAccountQuery = {
-  // Find Order by Main Account
-  findOrderByMainAccount?:  {
+export type FindOrderByIdQuery = {
+  findOrderById?:  {
     __typename: "Order",
     u: string,
     cid: string,
@@ -491,17 +508,49 @@ export type FindOrderByMainAccountQuery = {
   } | null,
 };
 
-export type ListOrderHistorybyMainAccountQueryVariables = {
+export type ListOrderHistoryByMainAccountQueryVariables = {
   main_account: string,
   from: string,
-  to: string,
+  to?: string | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListOrderHistorybyMainAccountQuery = {
-  // Get Order history based on time
-  listOrderHistorybyMainAccount?:  {
+export type ListOrderHistoryByMainAccountQuery = {
+  listOrderHistoryByMainAccount?:  {
+    __typename: "OrdersConnection",
+    items?:  Array< {
+      __typename: "Order",
+      u: string,
+      cid: string,
+      id: string,
+      t: string,
+      m: string,
+      s: string,
+      ot: string,
+      st: string,
+      p: string,
+      q: string,
+      afp: string,
+      fq: string,
+      fee: string,
+      stid: string,
+      isReverted?: boolean | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListOrderHistoryByTradeAccountQueryVariables = {
+  trade_account: string,
+  from: string,
+  to?: string | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListOrderHistoryByTradeAccountQuery = {
+  listOrderHistoryByTradeAccount?:  {
     __typename: "OrdersConnection",
     items?:  Array< {
       __typename: "Order",
@@ -532,8 +581,38 @@ export type ListOpenOrdersByMainAccountQueryVariables = {
 };
 
 export type ListOpenOrdersByMainAccountQuery = {
-  // List open orders
   listOpenOrdersByMainAccount?:  {
+    __typename: "OrdersConnection",
+    items?:  Array< {
+      __typename: "Order",
+      u: string,
+      cid: string,
+      id: string,
+      t: string,
+      m: string,
+      s: string,
+      ot: string,
+      st: string,
+      p: string,
+      q: string,
+      afp: string,
+      fq: string,
+      fee: string,
+      stid: string,
+      isReverted?: boolean | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListOpenOrdersByTradeAccountQueryVariables = {
+  trade_account: string,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListOpenOrdersByTradeAccountQuery = {
+  listOpenOrdersByTradeAccount?:  {
     __typename: "OrdersConnection",
     items?:  Array< {
       __typename: "Order",
@@ -560,13 +639,13 @@ export type ListOpenOrdersByMainAccountQuery = {
 export type ListTransactionsByMainAccountQueryVariables = {
   main_account: string,
   from: string,
-  to: string,
+  to?: string | null,
+  transaction_type: TransactionType,
   limit?: number | null,
   nextToken?: string | null,
 };
 
 export type ListTransactionsByMainAccountQuery = {
-  // List transactions
   listTransactionsByMainAccount?:  {
     __typename: "TransactionsConnection",
     items?:  Array< {
@@ -588,41 +667,52 @@ export type ListTransactionsByMainAccountQuery = {
 export type ListTradesByMainAccountQueryVariables = {
   main_account: string,
   from: string,
-  to: string,
+  to?: string | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
 export type ListTradesByMainAccountQuery = {
-  // List trades
   listTradesByMainAccount?:  {
-    __typename: "TradesConnection",
+    __typename: "UserTradesConnection",
     items?:  Array< {
-      __typename: "Trade",
+      __typename: "UserTrade",
       m: string,
       p: string,
       q: string,
       s: string,
       t: string,
       stid: string,
-      t_id?: string | null,
-      m_id?: string | null,
+      trade_id?: string | null,
       isReverted?: boolean | null,
     } | null > | null,
     nextToken?: string | null,
   } | null,
 };
 
-export type ListMainAccountsByEmailQueryVariables = {
-  email: string,
+export type ListTradesByTradeAccountQueryVariables = {
+  trade_account: string,
+  from: string,
+  to?: string | null,
+  limit?: number | null,
+  nextToken?: string | null,
 };
 
-export type ListMainAccountsByEmailQuery = {
-  listMainAccountsByEmail?:  {
-    __typename: "MainAddressConnection",
-    hash_key?: string | null,
-    range_key?: string | null,
-    accounts?: Array< string | null > | null,
+export type ListTradesByTradeAccountQuery = {
+  listTradesByTradeAccount?:  {
+    __typename: "UserTradesConnection",
+    items?:  Array< {
+      __typename: "UserTrade",
+      m: string,
+      p: string,
+      q: string,
+      s: string,
+      t: string,
+      stid: string,
+      trade_id?: string | null,
+      isReverted?: boolean | null,
+    } | null > | null,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -631,7 +721,6 @@ export type Websocket_streamsSubscriptionVariables = {
 };
 
 export type Websocket_streamsSubscription = {
-  // General Trade streams
   websocket_streams?:  {
     __typename: "Channel",
     name: string,
