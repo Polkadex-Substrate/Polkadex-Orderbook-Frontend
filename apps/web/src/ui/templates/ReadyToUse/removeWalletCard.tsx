@@ -33,7 +33,7 @@ export const RemoveWalletCard = ({
           <TrashIcon />
         </Button.Icon>
       )}
-      <Typography.Text variant="primary" className="truncate">
+      <Typography.Text variant="primary" className="truncate max-w-64">
         {shortAddress} {name && `(${name})`}
       </Typography.Text>
     </div>
