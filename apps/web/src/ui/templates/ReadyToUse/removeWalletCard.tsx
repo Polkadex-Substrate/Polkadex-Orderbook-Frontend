@@ -31,7 +31,7 @@ export const RemoveWalletCard = ({
           <TrashIcon />
         </Button.Icon>
       )}
-      <Typography.Text variant="primary">{shortAddress}</Typography.Text>
+      <Typography.Text appearance="primary">{shortAddress}</Typography.Text>
     </div>
   );
 };

@@ -126,7 +126,7 @@ export const NewTradingAccount = ({
                     Store my trading account
                     <span className="opacity-30 text-xs"> (Recommended)</span>
                   </Typography.Text>
-                  <Typography.Text variant="primary">
+                  <Typography.Text appearance="primary">
                     Trade freely without the need for your extension.
                   </Typography.Text>
                 </div>

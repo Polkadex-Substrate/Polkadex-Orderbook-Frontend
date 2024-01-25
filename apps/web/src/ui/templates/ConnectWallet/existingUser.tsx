@@ -59,7 +59,11 @@ export const ExistingUser = ({
         <div className="flex flex-col gap-8">
           {hasTradingAccounts ? (
             <div className="flex flex-col gap-3">
-              <Typography.Text variant="secondary" size="sm" className="px-7">
+              <Typography.Text
+                appearance="secondary"
+                size="sm"
+                className="px-7"
+              >
                 Available trading account(s)
               </Typography.Text>
               <div
@@ -113,7 +117,7 @@ export const ExistingUser = ({
                   <Typography.Text bold size="xl">
                     No trading account found in browser
                   </Typography.Text>
-                  <Typography.Paragraph variant="primary">
+                  <Typography.Paragraph appearance="primary">
                     You must have a trading account in browser to access
                     Orderbook. Import your current account or set up a new one.
                   </Typography.Paragraph>
@@ -135,7 +139,7 @@ export const ExistingUser = ({
             {hasTradingAccounts && (
               <div className="flex items-center gap-2">
                 <Separator.Horizontal className="bg-level-5" />
-                <Typography.Text variant="secondary" size="xs">
+                <Typography.Text appearance="secondary" size="xs">
                   More options
                 </Typography.Text>
               </div>

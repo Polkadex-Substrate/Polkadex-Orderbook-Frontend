@@ -222,7 +222,7 @@ export const ImportTradingAccount = ({
                 <FolderPlusIcon className="w-7 h-7 text-primary" />
                 <div className="flex flex-col">
                   <Typography.Text>Choose a file</Typography.Text>
-                  <Typography.Text variant="primary">
+                  <Typography.Text appearance="primary">
                     or drag and drop it here
                   </Typography.Text>
                 </div>

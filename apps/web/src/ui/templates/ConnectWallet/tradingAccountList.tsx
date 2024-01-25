@@ -20,7 +20,7 @@ export const TradingAccountList = ({
         <Accordion type="single" defaultValue="accordion1">
           <Accordion.Item value="accordion1">
             <Accordion.Trigger>
-              <Typography.Text variant="secondary">
+              <Typography.Text appearance="secondary">
                 Trading accounts
               </Typography.Text>
             </Accordion.Trigger>

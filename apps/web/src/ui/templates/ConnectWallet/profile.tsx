@@ -68,7 +68,7 @@ export const Profile = ({
     <div className="flex flex-col sm:w-full md:w-[23rem] bg-level-3 border border-primary rounded-lg">
       <div className="flex flex-col gap-6 p-4 border-b border-primary bg-level-2">
         <div className="flex items-center justify-between">
-          <Typography.Text variant="secondary" size="sm">
+          <Typography.Text appearance="secondary" size="sm">
             Funding wallet
           </Typography.Text>
           <Button.Icon
@@ -110,7 +110,7 @@ export const Profile = ({
               </Button.Solid>
               <div className="flex items-center gap-2">
                 <InformationCircleIcon className="w-7 h-7 text-attention-base" />
-                <Typography.Paragraph variant="primary" size="xs">
+                <Typography.Paragraph appearance="primary" size="xs">
                   <span className="text-attention-base">(Optional)</span> Your
                   funding wallet is only required for signing transactions and
                   account management.
@@ -121,7 +121,7 @@ export const Profile = ({
         </div>
       </div>
       <div className="flex flex-col gap-6 p-4">
-        <Typography.Text variant="secondary" size="sm">
+        <Typography.Text appearance="secondary" size="sm">
           Trading account
         </Typography.Text>
         {tradingWalletPresent ? (
@@ -149,7 +149,7 @@ export const Profile = ({
               </Dropdown.Trigger>
               <Dropdown.Content className="min-w-[20rem]">
                 <div className="flex flex-col gap-0 p-2 rounded-md">
-                  <Typography.Text variant="secondary" size="sm">
+                  <Typography.Text appearance="secondary" size="sm">
                     Available trading account(s)
                   </Typography.Text>
                   <div
@@ -174,7 +174,7 @@ export const Profile = ({
                     {otherBrowserAccounts?.length > 0 && (
                       <div className="flex items-center gap-2 mr-2">
                         <Separator.Horizontal className="bg-level-5" />
-                        <Typography.Text variant="secondary" size="xs">
+                        <Typography.Text appearance="secondary" size="xs">
                           other trading account(s)
                         </Typography.Text>
                       </div>
@@ -211,7 +211,7 @@ export const Profile = ({
                     ? "No trading account selected."
                     : "No trading account avaliable in browser."}
                 </Typography.Text>
-                <Typography.Text variant="primary" size="xs">
+                <Typography.Text appearance="primary" size="xs">
                   Try refreshing the page or creating a new one.
                 </Typography.Text>
               </div>
@@ -221,13 +221,12 @@ export const Profile = ({
                 Create new account
               </Button.Solid>
               <div className="flex items-center self-center gap-1">
-                <Typography.Text variant="primary">
+                <Typography.Text appearance="primary">
                   Already have a trading account?
                 </Typography.Text>
                 <Button.Light
                   onClick={onImportTradingAccount}
                   appearance="primary"
-                  className="px-2"
                 >
                   Select / Import
                 </Button.Light>

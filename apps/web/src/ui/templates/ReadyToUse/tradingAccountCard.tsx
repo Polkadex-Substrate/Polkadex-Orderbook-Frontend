@@ -71,7 +71,7 @@ export const TradingAccountCard = ({
             </Skeleton>
           </div>
           <Skeleton loading={!address}>
-            <Typography.Text variant="primary">{name}</Typography.Text>
+            <Typography.Text appearance="primary">{name}</Typography.Text>
           </Skeleton>
         </div>
 
@@ -117,7 +117,7 @@ export const TradingAccountCard = ({
           <Skeleton loading={isLoading} className="w-20 h-4">
             <HoverCard>
               <HoverCard.Trigger>
-                <Typography.Text variant="primary" size="xs">
+                <Typography.Text appearance="primary" size="xs">
                   {extensionAccounName ?? shortExtensionAccountAddress}
                 </Typography.Text>
               </HoverCard.Trigger>

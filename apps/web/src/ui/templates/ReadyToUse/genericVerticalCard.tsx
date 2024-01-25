@@ -35,7 +35,7 @@ export const GenericVerticalCard = ({
         <div className="w-8 h-8">
           <Icon name={icon} />
         </div>
-        <Typography.Text variant="primary">{title}</Typography.Text>
+        <Typography.Text appearance="primary">{title}</Typography.Text>
       </div>
       {buttonAction && (
         <Button.Solid

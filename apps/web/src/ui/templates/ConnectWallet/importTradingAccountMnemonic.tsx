@@ -72,7 +72,11 @@ export const ImportTradingAccountMnemonic = ({
                 autoComplete="off"
               />
               {errors.mnemonic && (
-                <Typography.Text size="xs" variant="danger" className="-my-2">
+                <Typography.Text
+                  size="xs"
+                  appearance="danger"
+                  className="-my-2"
+                >
                   {errors.mnemonic}
                 </Typography.Text>
               )}
@@ -91,7 +95,11 @@ export const ImportTradingAccountMnemonic = ({
                 autoComplete="off"
               />
               {errors.name && (
-                <Typography.Text size="xs" variant="danger" className="-my-2">
+                <Typography.Text
+                  size="xs"
+                  appearance="danger"
+                  className="-my-2"
+                >
                   {errors.name}
                 </Typography.Text>
               )}
@@ -116,7 +124,7 @@ export const ImportTradingAccountMnemonic = ({
             </div>
           </Interaction.Content>
           <Interaction.Footer>
-            <Typography.Text size="sm" variant="danger">
+            <Typography.Text size="sm" appearance="danger">
               {errorMessage}
             </Typography.Text>
             <Interaction.Action

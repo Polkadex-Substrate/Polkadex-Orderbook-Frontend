@@ -42,14 +42,14 @@ export const TradingAccountSuccessfull = ({
             <Typography.Text bold size="xl">
               New Trading account created!
             </Typography.Text>
-            <Typography.Text variant="primary">
+            <Typography.Text appearance="primary">
               You’re set to trade on Orderbook! Transfer funds to your trading
               account to start trading.
             </Typography.Text>
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          <Typography.Text variant="secondary" size="xs">
+          <Typography.Text appearance="secondary" size="xs">
             Trading account details
           </Typography.Text>
           <div className="flex flex-col gap-2">
