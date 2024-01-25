@@ -12,6 +12,7 @@ import { useFormik } from "formik";
 import { generateUsername } from "friendly-username-generator";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
+import { createAccountValidations } from "@orderbook/core/validations";
 import { useTradingAccountFee } from "@orderbook/core/hooks";
 
 import {
@@ -60,25 +61,33 @@ export const NewTradingAccount = ({
   const error = false;
   const [state, setState] = useState<(string | number)[]>(initialState);
 
-  const { isValid, resetForm, setFieldValue, getFieldProps, handleSubmit } =
-    useFormik({
-      initialValues,
-      onSubmit: async ({ name }) => {
-        try {
-          const password = state.join("");
-          const mnemonic = mnemonicGenerate();
-          await onCreateAccount({
-            name,
-            password: password.length === 5 ? password : "",
-            mnemonic,
-          });
-          onCreateCallback();
-        } catch (error) {
-          resetForm();
-          setState(initialState);
-        }
-      },
-    });
+  const {
+    isValid,
+    resetForm,
+    setFieldValue,
+    getFieldProps,
+    handleSubmit,
+    errors,
+  } = useFormik({
+    initialValues,
+    validationSchema: createAccountValidations,
+    validateOnChange: true,
+    onSubmit: async ({ name }) => {
+      try {
+        const password = state.join("");
+        const mnemonic = mnemonicGenerate();
+        await onCreateAccount({
+          name,
+          password: password.length === 5 ? password : "",
+          mnemonic,
+        });
+        onCreateCallback();
+      } catch (error) {
+        resetForm();
+        setState(initialState);
+      }
+    },
+  });
 
   return (
     <Loading.Processing
@@ -108,6 +117,7 @@ export const NewTradingAccount = ({
                   }}
                   actionTitle="Random"
                 />
+                <ErrorMessage withIcon={false}>{errors.name}</ErrorMessage>
               </div>
               <OptionalField label="Protected by password">
                 <div className="flex items-center justify-between">
