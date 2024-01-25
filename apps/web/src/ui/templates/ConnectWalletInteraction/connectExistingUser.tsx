@@ -179,6 +179,7 @@ export const ConnectExistingUser = ({
             <TradingAccountList
               key="TradingAccountList"
               tradingAccounts={mainProxiesAccounts}
+              browserAccounts={localTradingAccounts}
               onRemove={(e) => onSetTempTrading?.(e)}
               onClose={() => props?.onChangeInteraction(false)}
               onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}

@@ -316,6 +316,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                   <TradingAccountList
                     key="TradingAccountList"
                     tradingAccounts={mainProxiesAccounts}
+                    browserAccounts={localTradingAccounts}
                     onRemove={(e) => onSetTempTrading?.(e)}
                     onClose={() => props?.onChangeInteraction(false)}
                     onRemoveCallback={() =>
