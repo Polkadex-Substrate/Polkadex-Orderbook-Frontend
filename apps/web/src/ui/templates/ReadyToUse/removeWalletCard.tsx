@@ -2,6 +2,7 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 import { Button, Typography, truncateString, Tooltip } from "@polkadex/ux";
 
 export const RemoveWalletCard = ({
+  name,
   address,
   onClick,
   showTooltip,
@@ -9,8 +10,9 @@ export const RemoveWalletCard = ({
   onClick: () => void;
   address: string;
   showTooltip?: boolean;
+  name?: string;
 }) => {
-  const shortAddress = truncateString(address, 12);
+  const shortAddress = truncateString(address, name ? 6 : 12);
 
   return (
     <div className="flex items-center gap-2">
@@ -31,7 +33,9 @@ export const RemoveWalletCard = ({
           <TrashIcon />
         </Button.Icon>
       )}
-      <Typography.Text variant="primary">{shortAddress}</Typography.Text>
+      <Typography.Text variant="primary" className="truncate">
+        {shortAddress} {name && `(${name})`}
+      </Typography.Text>
     </div>
   );
 };

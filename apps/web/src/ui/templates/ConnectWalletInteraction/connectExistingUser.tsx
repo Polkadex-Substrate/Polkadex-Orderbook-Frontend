@@ -232,6 +232,7 @@ export const ConnectExistingUser = ({
             <MaximumTradingAccount
               key="MaximumTradingAccount"
               tradingAccounts={mainProxiesAccounts}
+              browserAccounts={localTradingAccounts}
               onRemove={(e) => onSetTempTrading?.(e)}
               onClose={() => props?.onChangeInteraction(false)}
               onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}
