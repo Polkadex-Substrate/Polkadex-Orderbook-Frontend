@@ -37,6 +37,7 @@ import {
   MaybePaginated,
   LatestTradesPropsForMarket,
   OrderSide,
+  TransactionHistoryProps,
 } from "./../types";
 import {
   fetchBatchFromAppSync,
@@ -368,7 +369,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
   }
 
   async getTransactions(
-    args: UserHistoryProps
+    args: TransactionHistoryProps
   ): Promise<MaybePaginated<Transaction[]>> {
     if (!this.isReady()) {
       await this.init();
@@ -380,6 +381,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         limit: args.limit,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
+        transaction_type: args.transaction_type,
       },
       "listTransactionsByMainAccount"
     );

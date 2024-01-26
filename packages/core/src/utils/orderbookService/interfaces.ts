@@ -16,6 +16,7 @@ import {
   Ticker,
   Trade,
   Transaction,
+  TransactionHistoryProps,
   UserHistoryProps,
 } from "./types";
 
@@ -42,7 +43,7 @@ export interface OrderbookReadStrategy extends BaseStrategy {
   ) => Promise<string | null | undefined>;
   getCandles: (args: KlineHistoryProps) => Promise<Kline[]>;
   getTransactions: (
-    args: UserHistoryProps
+    args: TransactionHistoryProps
   ) => Promise<MaybePaginated<Transaction[]>>;
 }
 
