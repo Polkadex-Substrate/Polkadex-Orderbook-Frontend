@@ -62,7 +62,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
         queryClient.setQueryData(
           QUERY_KEYS.openOrders(tradeAddress),
           (oldOpenOrders: Order[]) => {
-            const prevOpenOrders = [...oldOpenOrders];
+            const prevOpenOrders = [...(oldOpenOrders || [])];
 
             let updatedOpenOrders: Order[] = [];
             if (payload.status === "OPEN") {
