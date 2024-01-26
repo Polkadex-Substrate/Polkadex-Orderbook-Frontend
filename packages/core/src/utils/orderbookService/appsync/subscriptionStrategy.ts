@@ -4,6 +4,9 @@ import { READ_ONLY_TOKEN, USER_EVENTS } from "@orderbook/core/constants";
 import { appsyncReader } from "@orderbook/core/utils/orderbookService/appsync/readStrategy";
 import { KlineIntervals } from "@orderbook/core/utils/orderbookService/appsync/constants";
 
+import { Websocket_streamsSubscription } from "../../../API";
+import * as SUBS from "../../../graphql/subscriptions";
+
 import {
   AccountUpdateEvent,
   Asset,
@@ -26,8 +29,6 @@ import {
   OrderbookSubscriptionStrategy,
   SubscriptionCallBack,
 } from "./../interfaces";
-import { Websocket_streamsSubscription } from "./API";
-import * as SUBS from "./graphql/subscriptions";
 import {
   convertBookUpdatesToPriceLevels,
   filterUserSubscriptionType,
