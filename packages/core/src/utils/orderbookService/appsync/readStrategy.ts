@@ -12,6 +12,7 @@ import {
   Trade as APITrade,
   Transaction as APITransaction,
   PriceLevel,
+  UserTrade,
 } from "../../../API";
 import * as QUERIES from "../../../graphql/queries";
 
@@ -293,7 +294,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
   async getTradeHistory(
     args: UserHistoryProps
   ): Promise<MaybePaginated<Trade[]>> {
-    const queryResult = await fetchBatchFromAppSync<APITrade>(
+    const queryResult = await fetchBatchFromAppSync<UserTrade>(
       QUERIES.listTradesByMainAccount,
       {
         main_account: args.address,
@@ -307,7 +308,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     if (!queryResult) {
       return { data: [], nextToken: null };
     }
-    const trades = queryResult.response.map((item: APITrade): Trade => {
+    const trades = queryResult.response.map((item: UserTrade): Trade => {
       const market = this._marketList.find((x) => x.id === item?.m);
       if (!market) {
         throw new Error(
@@ -316,14 +317,13 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       }
       return {
         market,
-        price: Number(item?.p) || 0,
-        qty: Number(item?.q) || 0,
+        price: Number(item.p) || 0,
+        qty: Number(item.q) || 0,
         isReverted: item?.isReverted || false,
         timestamp: new Date(Number(item?.t) || 0),
         tradeId: item?.trade_id || "",
         fee: 0,
-        // TODO: Replace with item.s
-        side: "Ask" as OrderSide,
+        side: item.s as OrderSide,
         quantity: item.q,
       };
     });
