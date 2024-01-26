@@ -1,13 +1,14 @@
 import { GraphQLResult } from "@aws-amplify/api";
 
-import { sendQueryToAppSync } from "./helpers";
-import * as mutation from "./graphql/mutations";
-import { ExecuteArgs, OrderbookOperationStrategy } from "./../interfaces";
 import {
   Cancel_orderMutation,
   Place_orderMutation,
   WithdrawMutation,
-} from "./API";
+} from "../../../API";
+import * as mutation from "../../../graphql/mutations";
+
+import { sendQueryToAppSync } from "./helpers";
+import { ExecuteArgs, OrderbookOperationStrategy } from "./../interfaces";
 
 type UserActionLambdaResp = {
   is_success: boolean;
