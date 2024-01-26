@@ -50,4 +50,9 @@ export const QUERY_KEYS = {
     "extensionAccountFromBrowserAccount",
     address,
   ],
+  transactionFee: (mainAddress: string) => [
+    PREFIX,
+    "transactionFee",
+    mainAddress,
+  ],
 };

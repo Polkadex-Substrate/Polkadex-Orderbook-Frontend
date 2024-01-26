@@ -189,14 +189,25 @@ export const ConnectWalletProvider = ({
       ? wallet.getPair(selectedAddresses.tradeAddress)
       : undefined;
 
-  // UPDATE-CORE
-  // TODO: Not updating after creating a trading account
   const localTradingAccounts = useMemo(
     () =>
       isReady
         ? localAddresses?.map((value) => wallet.getPair(value) as KeyringPair)
         : [],
     [isReady, wallet, localAddresses]
+  );
+
+  // Sort proxy accounts in order of thier presence in browser
+  const sortedMainProxiesAccounts = useMemo(
+    () =>
+      mainProxiesAccounts.sort((a, b) => {
+        if (localAddresses.indexOf(a) < localAddresses.indexOf(b)) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }),
+    [localAddresses, mainProxiesAccounts]
   );
 
   const proxiesAccounts = useMemo(() => {
@@ -320,7 +331,7 @@ export const ConnectWalletProvider = ({
         importFromMnemonicStatus,
         onImportFromMnemonic,
 
-        mainProxiesAccounts,
+        mainProxiesAccounts: sortedMainProxiesAccounts,
         mainProxiesLoading,
         mainProxiesSuccess,
       }}

@@ -170,7 +170,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                   <Icons.Avatar />
                 </div>
                 {fundWalletPresent ? (
-                  <Typography.Text size="xs" bold>
+                  <Typography.Text size="xs" bold className="truncate max-w-28">
                     {selectedWallet?.name}
                   </Typography.Text>
                 ) : (
@@ -316,6 +316,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                   <TradingAccountList
                     key="TradingAccountList"
                     tradingAccounts={mainProxiesAccounts}
+                    browserAccounts={localTradingAccounts}
                     onRemove={(e) => onSetTempTrading?.(e)}
                     onClose={() => props?.onChangeInteraction(false)}
                     onRemoveCallback={() =>
@@ -425,6 +426,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                   <MaximumTradingAccount
                     key="MaximumTradingAccount"
                     tradingAccounts={mainProxiesAccounts}
+                    browserAccounts={localTradingAccounts}
                     onRemove={(e) => onSetTempTrading?.(e)}
                     onClose={() => props?.onChangeInteraction(false)}
                     onRemoveCallback={() =>
