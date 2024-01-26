@@ -54,7 +54,7 @@ export const fetchFullListFromAppSync = async <T = any>(
       query,
       variables: nextToken ? { ...variables, nextToken } : variables,
     });
-    fullResponse = [...fullResponse, ...res.data[key].items];
+    fullResponse = [...fullResponse, ...(res.data[key]?.items || [])];
     nextToken = res.data[key].nextToken;
   } while (nextToken);
   return fullResponse as T[];
@@ -70,9 +70,9 @@ export const fetchListFromAppSync = async <T = any[]>(
     variables,
   });
 
-  const fullResponse = res.data[key].items;
+  const fullResponse = res.data[key]?.items;
 
-  const nextToken = res.data[key].nextToken;
+  const nextToken = res.data[key]?.nextToken;
 
   return { response: fullResponse, nextToken };
 };
@@ -92,7 +92,7 @@ export const fetchBatchFromAppSync = async <T = any[]>(
         nextToken ? { ...variables, nextToken } : variables,
         key
       );
-    response = [...response, ...newResponse];
+    response = [...response, ...(newResponse || [])];
     nextToken = newNextToken;
   } while (response.length < LIST_LIMIT && nextToken);
   return { response, nextToken };
