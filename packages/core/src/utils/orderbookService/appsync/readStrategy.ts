@@ -343,7 +343,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         m: args.market,
         limit: args.limit,
       },
-      "getRecentTrades"
+      "listRecentTrades"
     );
     if (!queryResult) {
       return [];
