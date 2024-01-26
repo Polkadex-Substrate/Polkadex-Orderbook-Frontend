@@ -173,17 +173,13 @@ export const unLockAccountValidations = Yup.object().shape({
 export const createAccountValidations = Yup.object().shape({
   name: Yup.string()
     .min(2, "Too Short!")
-    .max(30, "Too long!")
+    .max(25, "Too long!")
     .required("Required"),
   passcode: Yup.string()
     .matches(/^[0-9]+$/, "Must be only digits")
     .min(5, "Must be exactly 5 digits")
     .max(5, "Must be exactly 5 digits")
     .nullable(),
-  controllerWallet: Yup.object({
-    name: Yup.string().required("Required"),
-    address: Yup.string().required("Required"),
-  }),
 });
 export const importAccountValidations = Yup.object().shape({
   name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
