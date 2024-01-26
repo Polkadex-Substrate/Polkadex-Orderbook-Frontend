@@ -295,6 +295,9 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
   async getTradeHistory(
     args: UserHistoryProps
   ): Promise<MaybePaginated<Trade[]>> {
+    if (!this.isReady()) {
+      await this.init();
+    }
     const queryResult = await fetchBatchFromAppSync<UserTrade>(
       QUERIES.listTradesByTradeAccount,
       {
