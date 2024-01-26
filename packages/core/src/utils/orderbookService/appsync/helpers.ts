@@ -4,7 +4,8 @@ import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
 import { Maybe } from "@orderbook/core/helpers";
 import { GraphQLResult, GraphQLSubscription } from "@aws-amplify/api";
 
-import { Websocket_streamsSubscription } from "./API";
+import { Websocket_streamsSubscription } from "../../../API";
+
 import { BookUpdateEvent } from "./types";
 import { PriceLevel, Order } from "./../types";
 
