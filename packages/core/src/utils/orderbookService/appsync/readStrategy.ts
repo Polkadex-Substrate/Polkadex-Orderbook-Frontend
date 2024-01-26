@@ -420,7 +420,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     >({
       query: QUERIES.findUserByTradeAccount,
       variables: {
-        proxy_account: tradeAddress,
+        trade_account: tradeAddress,
       },
     });
     return queryResult?.data?.findUserByTradeAccount?.items?.[0]?.main;
