@@ -6,10 +6,7 @@ import {
   getAddressFromMnemonic,
   registerMainAccount,
 } from "@orderbook/core/helpers";
-import {
-  getProxiesLinkedToMain,
-  useProfile,
-} from "@orderbook/core/providers/user/profile";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
@@ -60,7 +57,7 @@ export function useAddProxyAccount({
       const proxy = getAddressFromMnemonic(mnemonic);
 
       const registeredProxies =
-        (await getProxiesLinkedToMain(main))?.proxies || [];
+        await appsyncOrderbookService.query.getTradingAddresses(main);
 
       if (registeredProxies.length === 0) {
         await registerMainAccount(api, proxy, signer, main);

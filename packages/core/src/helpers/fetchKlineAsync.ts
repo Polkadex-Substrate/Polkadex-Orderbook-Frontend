@@ -1,4 +1,4 @@
-import { getKlinesbyMarketInterval } from "@orderbook/core/graphql/queries";
+import { getKlinesByMarketInterval } from "@orderbook/core/graphql/queries";
 import {
   KlineDbData,
   KlineEvent,
@@ -11,13 +11,13 @@ export const fetchKlineAsync = async (
   market: string,
   interval: string,
   from: Date,
-  to: Date,
+  to: Date
 ): Promise<KlineEvent[]> => {
   if (!market) {
     return [];
   }
   const res = await sendQueryToAppSync({
-    query: getKlinesbyMarketInterval,
+    query: getKlinesByMarketInterval,
     variables: {
       market,
       interval,
