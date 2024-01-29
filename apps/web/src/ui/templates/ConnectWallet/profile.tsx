@@ -175,7 +175,7 @@ export const Profile = ({
                       <div className="flex items-center gap-2 mr-2">
                         <Separator.Horizontal className="bg-level-5" />
                         <Typography.Text appearance="secondary" size="xs">
-                          other trading account(s)
+                          from other funding account(s)
                         </Typography.Text>
                       </div>
                     )}

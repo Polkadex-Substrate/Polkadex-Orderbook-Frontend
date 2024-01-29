@@ -5,11 +5,13 @@ import { RemoveWalletCard } from "../ReadyToUse";
 
 export const TradingAccountList = ({
   tradingAccounts,
+  browserAccounts,
   onRemove,
   onClose,
   onRemoveCallback,
 }: {
   tradingAccounts?: string[];
+  browserAccounts: TradeAccount[];
   onRemove: (e: TradeAccount) => void;
   onClose: () => void;
   onRemoveCallback: () => void;
@@ -27,6 +29,9 @@ export const TradingAccountList = ({
             <Accordion.Content>
               <div className="flex flex-col gap-4">
                 {tradingAccounts?.map((v) => {
+                  const account = browserAccounts?.find(
+                    (acc) => acc.address === v
+                  );
                   const tradingAccount = {
                     address: v,
                     meta: {
@@ -36,6 +41,7 @@ export const TradingAccountList = ({
                   return (
                     <RemoveWalletCard
                       key={v}
+                      name={account?.meta?.name}
                       address={v}
                       showTooltip={tradingAccounts.length === 1}
                       onClick={() => {

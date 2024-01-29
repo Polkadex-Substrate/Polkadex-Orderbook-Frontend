@@ -1,10 +1,19 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { Button, Input, Interaction, Loading, Typography } from "@polkadex/ux";
+import {
+  Button,
+  Input,
+  Interaction,
+  Loading,
+  Typography,
+  Skeleton,
+} from "@polkadex/ux";
 import { useFormik } from "formik";
 import { generateUsername } from "friendly-username-generator";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
+import { createAccountValidations } from "@orderbook/core/validations";
+import { useTradingAccountFee } from "@orderbook/core/hooks";
 
 import {
   ErrorMessage,
@@ -30,7 +39,6 @@ export const NewTradingAccount = ({
   fundWalletPresent,
   loading,
   balance = 0,
-  fee = 1,
   selectedExtension,
   errorMessage,
   errorTitle,
@@ -40,7 +48,6 @@ export const NewTradingAccount = ({
   onCreateCallback: () => void;
   loading?: boolean;
   balance?: number;
-  fee?: number;
   fundWalletPresent?: boolean;
   errorTitle?: string;
   errorMessage?: string;
@@ -48,30 +55,39 @@ export const NewTradingAccount = ({
 }) => {
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(1);
+  const { txFee, txFeeLoading } = useTradingAccountFee();
 
   const isLoading = false;
   const error = false;
   const [state, setState] = useState<(string | number)[]>(initialState);
 
-  const { isValid, resetForm, setFieldValue, getFieldProps, handleSubmit } =
-    useFormik({
-      initialValues,
-      onSubmit: async ({ name }) => {
-        try {
-          const password = state.join("");
-          const mnemonic = mnemonicGenerate();
-          await onCreateAccount({
-            name,
-            password: password.length === 5 ? password : "",
-            mnemonic,
-          });
-          onCreateCallback();
-        } catch (error) {
-          resetForm();
-          setState(initialState);
-        }
-      },
-    });
+  const {
+    isValid,
+    resetForm,
+    setFieldValue,
+    getFieldProps,
+    handleSubmit,
+    errors,
+  } = useFormik({
+    initialValues,
+    validationSchema: createAccountValidations,
+    validateOnChange: true,
+    onSubmit: async ({ name }) => {
+      try {
+        const password = state.join("");
+        const mnemonic = mnemonicGenerate();
+        await onCreateAccount({
+          name,
+          password: password.length === 5 ? password : "",
+          mnemonic,
+        });
+        onCreateCallback();
+      } catch (error) {
+        resetForm();
+        setState(initialState);
+      }
+    },
+  });
 
   return (
     <Loading.Processing
@@ -99,9 +115,8 @@ export const NewTradingAccount = ({
                     );
                   }}
                   actionTitle="Random"
-                >
-                  <Input.Label>Account name</Input.Label>
-                </Input.Vertical>
+                />
+                <ErrorMessage withIcon={false}>{errors.name}</ErrorMessage>
               </div>
               <OptionalField label="Protected by password">
                 <div className="flex items-center justify-between">
@@ -167,7 +182,14 @@ export const NewTradingAccount = ({
               <GenericInfoCard label="Your balance">
                 {balance} PDEX
               </GenericInfoCard>
-              <GenericInfoCard label="Fees">{fee} PDEX</GenericInfoCard>
+              <GenericInfoCard label="Transaction fee">
+                <Skeleton
+                  loading={txFeeLoading}
+                  className="bg-level-5 w-24 h-4"
+                >
+                  {txFee}
+                </Skeleton>
+              </GenericInfoCard>
             </div>
           </Interaction.Content>
           <Interaction.Footer>

@@ -9,11 +9,13 @@ import { TradeAccount } from "@orderbook/core/providers/types";
 import { RemoveWalletCard } from "../ReadyToUse";
 
 export const MaximumTradingAccount = ({
+  browserAccounts,
   tradingAccounts,
   onRemove,
   onClose,
   onRemoveCallback,
 }: {
+  browserAccounts: TradeAccount[];
   tradingAccounts?: string[];
   onRemove: (e: TradeAccount) => void;
   onClose: () => void;
@@ -47,6 +49,9 @@ export const MaximumTradingAccount = ({
             <Accordion.Content>
               <div className="flex flex-col gap-4">
                 {tradingAccounts?.map((v) => {
+                  const account = browserAccounts?.find(
+                    (acc) => acc.address === v
+                  );
                   const tradingAccount = {
                     address: v,
                     meta: {
@@ -56,6 +61,7 @@ export const MaximumTradingAccount = ({
                   return (
                     <RemoveWalletCard
                       key={v}
+                      name={account?.meta?.name}
                       address={v}
                       showTooltip={tradingAccounts.length === 1}
                       onClick={() => {
