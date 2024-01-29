@@ -25,7 +25,7 @@ export const fetchKlineAsync = async (
       to: to.toISOString(),
     },
   });
-  const data: KlineDbData[] = res.data?.getKlinesbyMarketInterval?.items;
+  const data: KlineDbData[] = res.data?.getKlinesByMarketInterval?.items;
   if (!data) {
     return [];
   }
