@@ -300,7 +300,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
         queryClient.setQueryData(
           QUERY_KEYS.tradingBalances(mainAddress),
           (oldData): Balance[] => {
-            const prevData = [...(oldData as Balance[])];
+            const prevData = [...((oldData || []) as Balance[])];
             const old = prevData.find(
               (i) => i.asset.id.toString() === updateBalance.assetId.toString()
             );
