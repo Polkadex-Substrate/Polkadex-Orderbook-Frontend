@@ -115,7 +115,9 @@ export const NewTradingAccount = ({
                     );
                   }}
                   actionTitle="Random"
-                />
+                >
+                  <Input.Label>Account name</Input.Label>
+                </Input.Vertical>
                 <ErrorMessage withIcon={false}>{errors.name}</ErrorMessage>
               </div>
               <OptionalField label="Protected by password">
