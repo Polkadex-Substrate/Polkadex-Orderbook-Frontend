@@ -1,3 +1,14 @@
+type Account {
+    main: String
+    proxy: String
+    stid: String
+}
+
+type AccountConnection {
+    items: [Account]
+    nextToken: String
+}
+
 type Asset {
     # asset symbol of the asset; BTC
     symbol: String!
@@ -14,7 +25,6 @@ type AssetsConnection {
     nextToken: String
 }
 
-#
 #Balance of an asset for a given account
 #"""
 type Balance {
@@ -31,7 +41,6 @@ type BalanceConnection {
     nextToken: String
 }
 
-#
 #Candlestick data for a given interval
 #"""
 type CandleStick {
@@ -60,7 +69,6 @@ type KlinesConnection {
     items: [CandleStick]
 }
 
-#
 #Market information for a given market
 #"""
 type Market {
@@ -88,7 +96,6 @@ type MarketsConnection {
     items: [Market]
 }
 
-#
 #Order data for a given order
 #"""
 type Order {
@@ -151,18 +158,6 @@ type OrdersConnection {
     nextToken: String
 }
 
-type Account {
-    main: String
-    proxy: String
-    stid: String
-}
-
-type AccountConnection {
-    items: [Account]
-    nextToken: String
-}
-
-#
 #Price level of the orderbook
 #"""
 type PriceLevel {
@@ -176,7 +171,6 @@ type PriceLevel {
     stid: String!
 }
 
-#
 #Stats for a given market 24 hour period
 #"""
 type TickerStats {
@@ -199,7 +193,6 @@ type TickersConnection {
     nextToken: String
 }
 
-#
 #Trade data for a given market
 #"""
 type Trade {
@@ -228,34 +221,6 @@ type TradesConnection {
     nextToken: String
 }
 
-#
-#Trade data for a given account
-#"""
-type UserTrade {
-    # market symbol of the trade; eg 123-456
-    m: String!
-    # price of the trade; eg 1000
-    p: String!
-    # qty of the trade; eg 1.0
-    q: String!
-    # side of the trade; eg Bid
-    s: String!
-    # timestamp of the trade;
-    t: String!
-    # state id, an incrementing nonce for exchange events
-    stid: String!
-    # trade id
-    trade_id: String
-    # flag to check if the trade is reverted, ie during a recovery
-    isReverted: Boolean
-}
-
-type UserTradesConnection {
-    items: [UserTrade]
-    nextToken: String
-}
-
-#
 #Transaction data for a given account; Deposit and Withdraw
 #"""
 type Transaction {
@@ -299,6 +264,32 @@ type TransactionsConnection {
 
 input UserActionInput {
     payload: String!
+}
+
+#Trade data for a given account
+#"""
+type UserTrade {
+    # market symbol of the trade; eg 123-456
+    m: String!
+    # price of the trade; eg 1000
+    p: String!
+    # qty of the trade; eg 1.0
+    q: String!
+    # side of the trade; eg Bid
+    s: String!
+    # timestamp of the trade;
+    t: String!
+    # state id, an incrementing nonce for exchange events
+    stid: String!
+    # trade id
+    trade_id: String
+    # flag to check if the trade is reverted, ie during a recovery
+    isReverted: Boolean
+}
+
+type UserTradesConnection {
+    items: [UserTrade]
+    nextToken: String
 }
 
 type Mutation {

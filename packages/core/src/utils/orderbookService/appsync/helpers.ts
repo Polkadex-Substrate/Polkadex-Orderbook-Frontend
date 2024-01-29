@@ -25,11 +25,6 @@ export async function sendQueryToAppSync<T = any>({
   API = amplifyApi,
 }: Props): Promise<T> {
   const authOptions = {
-    [GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS]: {
-      query,
-      variables,
-      authMode,
-    },
     [GRAPHQL_AUTH_MODE.AWS_LAMBDA]: {
       query,
       variables,

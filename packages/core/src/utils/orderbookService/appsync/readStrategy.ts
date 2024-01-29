@@ -98,7 +98,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
           const asset = this._assetsList.find((x) => x.id === item?.a);
           if (!asset) {
             throw new Error(
-              `[${this.constructor.name}:getBalance] cannot find asset`
+              `[${this.constructor.name}:getBalance] cannot find asset: ${item?.a}`
             );
           }
           return {

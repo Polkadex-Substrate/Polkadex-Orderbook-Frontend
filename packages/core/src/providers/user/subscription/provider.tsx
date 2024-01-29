@@ -124,7 +124,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
     (trade: PublicTrade) => {
       if (market) {
         queryClient.setQueryData(QUERY_KEYS.recentTrades(market), (oldData) => {
-          const oldRecentTrades = oldData as PublicTrade[];
+          const oldRecentTrades = oldData ? (oldData as PublicTrade[]) : [];
           return [trade, ...oldRecentTrades];
         });
       }
