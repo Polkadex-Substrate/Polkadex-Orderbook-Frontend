@@ -86,7 +86,7 @@ export const ConnectTradingInteraction = () => {
                     await onImportFromMnemonic?.(e);
                     props?.onChangeInteraction(false);
                   }}
-                  onCancel={() => props?.onPage("ConnectTradingAccount")}
+                  onCancel={() => props?.onChangeInteraction(false)}
                   loading={importFromMnemonicStatus === "loading"}
                   errorMessage={
                     (importFromMnemonicError as Error)?.message ??
