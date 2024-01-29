@@ -1,16 +1,105 @@
 import { useQuery } from "@tanstack/react-query";
+import { supported_resolutions } from "@orderbook/frontend/src/ui/molecules";
 
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
+import { appsyncOrderbookService } from "../utils/orderbookService";
+import { QUERY_KEYS } from "../constants";
+import { useSettingsProvider } from "../providers/public/settings";
+import { getCorrectTimestamp, getResolutionInMilliSeconds } from "../helpers";
+import { KlineEvent } from "../providers/public/klineProvider";
 
-export const useCandles = (market: string) => {
+const getAbsoluteResolution = (currentResolution: string) => {
+  const getCorrectResolutions = {
+    "1": "1m",
+    "5": "5m",
+    "15": "15m",
+    "30": "30m",
+    "60": "1h",
+    "120": "2h",
+    "360": "6h",
+  };
+  return getCorrectResolutions[currentResolution] || currentResolution;
+};
+
+const processKline = (data: any, interval: string): KlineEvent => {
+  const kline = {
+    open: Number(data.o),
+    close: Number(data.c),
+    high: Number(data.h),
+    low: Number(data.l),
+    timestamp: getCorrectTimestamp(data.t),
+    volume: Number(data.vb),
+  };
+  const close = kline.close;
+  const resolution = getResolutionInMilliSeconds(interval);
+
+  const currentBucket =
+    Math.floor(new Date().getTime() / resolution) * resolution;
+  if (kline.timestamp < currentBucket) {
+    kline.open = close;
+    kline.low = close;
+    kline.high = close;
+    kline.volume = 0;
+    kline.timestamp = currentBucket;
+  }
+  return kline;
+};
+
+export const useCandles = (
+  market: string,
+  from: Date,
+  to: Date,
+  resolution: string
+) => {
+  const { onHandleError } = useSettingsProvider();
   const { isReady } = useOrderbookService();
-
-  const enabled = isReady && market?.length > 0;
+  const enabled = Boolean(
+    isReady &&
+      market?.length > 0 &&
+      from &&
+      to &&
+      supported_resolutions.includes(resolution)
+  );
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ["abcd"],
-    queryFn: () => {},
+    queryKey: QUERY_KEYS.candles(market, from, to, resolution),
     enabled,
+    queryFn: async () => {
+      const klines = await appsyncOrderbookService.query.getCandles({
+        market,
+        interval: getAbsoluteResolution(resolution),
+        from,
+        to,
+      });
+
+      // process kline here
+
+      const klinesLength = klines.length;
+      const bars = klines.map((bar, index) => {
+        return {
+          time: bar.timestamp,
+          low: bar.low,
+          high: bar.high,
+          open: bar.open,
+          close: bar.close,
+          volume: bar.baseVolume,
+          isBarClosed: index !== klinesLength - 1,
+          isLastBar: index === klinesLength - 1,
+        };
+      });
+
+      if (bars.length < 1) {
+        return [];
+      } else {
+        return bars;
+      }
+    },
+    onError: (error) => {
+      const errorMessage =
+        error instanceof Error ? error.message : (error as string);
+      onHandleError(errorMessage);
+    },
+    refetchOnMount: false,
   });
 
   return {

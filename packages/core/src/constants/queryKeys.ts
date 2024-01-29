@@ -55,4 +55,12 @@ export const QUERY_KEYS = {
     "transactionFee",
     mainAddress,
   ],
+  candles: (market: string, from: Date, to: Date, resolution: string) => [
+    PREFIX,
+    "candles",
+    market,
+    from,
+    to,
+    resolution,
+  ],
 };

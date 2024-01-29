@@ -19,18 +19,20 @@ import {
 import * as S from "./styles";
 import { customFontFamily, options } from "./options";
 
+export const supported_resolutions = [
+  "1",
+  "5",
+  "15",
+  "30",
+  "60",
+  "120",
+  "360",
+  "1D",
+  "1W",
+];
+
 const configurationData: DatafeedConfiguration = {
-  supported_resolutions: [
-    "1",
-    "5",
-    "15",
-    "30",
-    "60",
-    "120",
-    "360",
-    "1D",
-    "1W",
-  ] as ResolutionString[],
+  supported_resolutions: supported_resolutions as ResolutionString[],
   exchanges: [
     {
       value: "Polkadex",
