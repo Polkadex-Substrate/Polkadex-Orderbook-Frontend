@@ -173,7 +173,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
     (payload: Trade) => {
       try {
         queryClient.setQueryData(
-          QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
+          QUERY_KEYS.tradeHistory(dateFrom, dateTo, mainAddress),
           (
             oldTradeHistory: InfiniteData<MaybePaginated<Trade[]>> | undefined
           ) => {
@@ -205,7 +205,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
         onHandleError(`User trades channel error: ${error?.message ?? error}`);
       }
     },
-    [dateFrom, dateTo, onHandleError, queryClient, tradeAddress]
+    [dateFrom, dateTo, onHandleError, queryClient, mainAddress]
   );
 
   const onTransactionsUpdate = useCallback(
