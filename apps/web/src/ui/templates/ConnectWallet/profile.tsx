@@ -138,14 +138,16 @@ export const Profile = ({
                 asChild
                 className="flex justify-between items-center gap-2 flex-1 py-3 [&[data-state=open]>div>svg]:rotate-180"
               >
-                <AccountCard.Inverted
-                  name={tradeAccount?.meta?.name}
-                  address={tradeAccount?.address as string}
-                  withIcon={false}
-                  hoverable={false}
-                >
-                  <ChevronDownIcon className="h-3 w-3 transition-transform duration-300 text-primary" />
-                </AccountCard.Inverted>
+                <div>
+                  <AccountCard.Inverted
+                    name={tradeAccount?.meta?.name}
+                    address={tradeAccount?.address as string}
+                    withIcon={false}
+                    hoverable={false}
+                  >
+                    <ChevronDownIcon className="h-3 w-3 transition-transform duration-300 text-primary" />
+                  </AccountCard.Inverted>
+                </div>
               </Dropdown.Trigger>
               <Dropdown.Content className="min-w-[20rem]">
                 <div className="flex flex-col gap-0 p-2 rounded-md">

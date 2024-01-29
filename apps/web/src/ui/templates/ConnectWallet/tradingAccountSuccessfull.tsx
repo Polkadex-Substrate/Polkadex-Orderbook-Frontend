@@ -8,7 +8,7 @@ import {
 } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
 
@@ -64,10 +64,12 @@ export const TradingAccountSuccessfull = ({
                   asChild
                   className="[&[data-state=open]>button>svg]:rotate-180"
                 >
-                  <Button.Solid appearance="secondary" size="sm">
-                    Download as
-                    <ChevronDownIcon className="h-3 w-3 ml-1 transition-transform duration-300 text-primary" />
-                  </Button.Solid>
+                  <div>
+                    <Button.Solid appearance="secondary" size="sm">
+                      Download as
+                      <ChevronDownIcon className="h-3 w-3 ml-1 transition-transform duration-300 text-primary" />
+                    </Button.Solid>
+                  </div>
                 </Dropdown.Trigger>
                 <Dropdown.Content>
                   <Dropdown.Item
