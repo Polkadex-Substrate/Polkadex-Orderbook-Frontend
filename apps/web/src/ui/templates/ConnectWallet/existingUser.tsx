@@ -139,7 +139,11 @@ export const ExistingUser = ({
             {hasTradingAccounts && (
               <div className="flex items-center gap-2">
                 <Separator.Horizontal className="bg-level-5" />
-                <Typography.Text appearance="secondary" size="xs">
+                <Typography.Text
+                  appearance="secondary"
+                  size="xs"
+                  className="whitespace-nowrap"
+                >
                   More options
                 </Typography.Text>
               </div>

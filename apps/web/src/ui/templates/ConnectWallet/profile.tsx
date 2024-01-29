@@ -174,7 +174,11 @@ export const Profile = ({
                     {otherBrowserAccounts?.length > 0 && (
                       <div className="flex items-center gap-2 mr-2">
                         <Separator.Horizontal className="bg-level-5" />
-                        <Typography.Text appearance="secondary" size="xs">
+                        <Typography.Text
+                          appearance="secondary"
+                          size="xs"
+                          className="whitespace-nowrap"
+                        >
                           from other funding account(s)
                         </Typography.Text>
                       </div>

@@ -12,7 +12,11 @@ export const ConnectTradingAccountCard = ({
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2 px-4">
           <Separator.Horizontal className=" bg-level-5" />
-          <Typography.Text appearance="secondary" size="xs">
+          <Typography.Text
+            appearance="secondary"
+            size="xs"
+            className="whitespace-nowrap"
+          >
             Or access with
           </Typography.Text>
         </div>

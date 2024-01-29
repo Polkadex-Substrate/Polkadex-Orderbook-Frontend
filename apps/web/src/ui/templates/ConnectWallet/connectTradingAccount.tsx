@@ -102,7 +102,11 @@ export const ConnectTradingAccount = ({
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <Separator.Horizontal className="bg-level-5" />
-              <Typography.Text appearance="secondary" size="xs">
+              <Typography.Text
+                appearance="secondary"
+                size="xs"
+                className="whitespace-nowrap"
+              >
                 Or restore your trading account using
               </Typography.Text>
             </div>
