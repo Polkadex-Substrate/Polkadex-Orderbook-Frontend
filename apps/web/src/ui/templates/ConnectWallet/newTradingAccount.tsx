@@ -90,7 +90,6 @@ export const NewTradingAccount = ({
               <div>
                 <Input.Vertical
                   {...getFieldProps("name")}
-                  label="Account name"
                   placeholder="Enter a name"
                   action={(e) => {
                     e.preventDefault();
@@ -100,7 +99,9 @@ export const NewTradingAccount = ({
                     );
                   }}
                   actionTitle="Random"
-                />
+                >
+                  <Input.Label>Account name</Input.Label>
+                </Input.Vertical>
               </div>
               <OptionalField label="Protected by password">
                 <div className="flex items-center justify-between">

@@ -67,10 +67,11 @@ export const ImportTradingAccountMnemonic = ({
             <div className="flex flex-col gap-5 flex-1">
               <Input.Vertical
                 {...getFieldProps("mnemonic")}
-                label="12-word mnemonic seed"
                 placeholder="Enter a mnemonic here..."
                 autoComplete="off"
-              />
+              >
+                <Input.Label>12-word mnemonic seed</Input.Label>
+              </Input.Vertical>
               {errors.mnemonic && (
                 <Typography.Text
                   size="xs"
@@ -82,7 +83,6 @@ export const ImportTradingAccountMnemonic = ({
               )}
               <Input.Vertical
                 {...getFieldProps("name")}
-                label="Account name"
                 placeholder="Enter a name"
                 action={(e) => {
                   e.preventDefault();
@@ -93,7 +93,9 @@ export const ImportTradingAccountMnemonic = ({
                 }}
                 actionTitle="Random"
                 autoComplete="off"
-              />
+              >
+                <Input.Label>Account name</Input.Label>
+              </Input.Vertical>
               {errors.name && (
                 <Typography.Text
                   size="xs"
