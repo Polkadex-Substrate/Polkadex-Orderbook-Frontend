@@ -38,7 +38,7 @@ export const NewUser = ({
                   exclusively for trading.
                 </Typography.Paragraph>
                 <Typography.Paragraph variant="primary">
-                  Orderbook simplifies token transfers between your wallet and
+                  Orderbook simplifies token transfers between your funding and
                   trading account so you can focus on trading.
                 </Typography.Paragraph>
               </div>
