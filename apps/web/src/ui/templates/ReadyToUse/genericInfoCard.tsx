@@ -9,7 +9,7 @@ export const GenericInfoCard = ({
 }>) => {
   return (
     <div className="flex items-center justify-between gap-2">
-      <Typography.Text variant="primary">{label}</Typography.Text>
+      <Typography.Text appearance="primary">{label}</Typography.Text>
       <Typography.Text>{children}</Typography.Text>
     </div>
   );

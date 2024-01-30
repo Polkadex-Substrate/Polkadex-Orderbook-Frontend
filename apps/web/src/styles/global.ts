@@ -167,7 +167,6 @@ Super Form Reset
 
     /* Browsers have different default form fonts */
     font-size: 13px;
-    font-family: ${theme.font.family};
   }
 
   /* Remove the stupid outer glow in Webkit */

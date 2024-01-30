@@ -28,7 +28,7 @@ export const GenericSelectCard = ({
         <div className="w-5 h-5">
           <Icon name={icon} />
         </div>
-        <Typography.Text variant="primary">{title}</Typography.Text>
+        <Typography.Text appearance="primary">{title}</Typography.Text>
       </div>
       <Checkbox.Solid
         disabled={disabled}

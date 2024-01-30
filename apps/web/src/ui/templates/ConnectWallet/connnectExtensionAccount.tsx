@@ -22,7 +22,7 @@ export const ConnectExtensionAccount = ({
       <Interaction.Title onClose={onClose}>Connect wallet</Interaction.Title>
       <Interaction.Content withPadding={false}>
         <div className="flex flex-col gap-1">
-          <Typography.Text variant="secondary" size="xs" className="px-7">
+          <Typography.Text appearance="secondary" size="xs" className="px-7">
             Wallets available on the Polkadot chain
           </Typography.Text>
           <div className="flex flex-col px-3 max-h-[16rem] overflow-auto">

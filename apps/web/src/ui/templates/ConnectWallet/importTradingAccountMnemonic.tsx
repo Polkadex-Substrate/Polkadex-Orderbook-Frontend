@@ -67,18 +67,22 @@ export const ImportTradingAccountMnemonic = ({
             <div className="flex flex-col gap-5 flex-1">
               <Input.Vertical
                 {...getFieldProps("mnemonic")}
-                label="12-word mnemonic seed"
                 placeholder="Enter a mnemonic here..."
                 autoComplete="off"
-              />
+              >
+                <Input.Label>12-word mnemonic seed</Input.Label>
+              </Input.Vertical>
               {errors.mnemonic && (
-                <Typography.Text size="xs" variant="danger" className="-my-2">
+                <Typography.Text
+                  size="xs"
+                  appearance="danger"
+                  className="-my-2"
+                >
                   {errors.mnemonic}
                 </Typography.Text>
               )}
               <Input.Vertical
                 {...getFieldProps("name")}
-                label="Account name"
                 placeholder="Enter a name"
                 action={(e) => {
                   e.preventDefault();
@@ -89,9 +93,15 @@ export const ImportTradingAccountMnemonic = ({
                 }}
                 actionTitle="Random"
                 autoComplete="off"
-              />
+              >
+                <Input.Label>Account name</Input.Label>
+              </Input.Vertical>
               {errors.name && (
-                <Typography.Text size="xs" variant="danger" className="-my-2">
+                <Typography.Text
+                  size="xs"
+                  appearance="danger"
+                  className="-my-2"
+                >
                   {errors.name}
                 </Typography.Text>
               )}
@@ -116,7 +126,7 @@ export const ImportTradingAccountMnemonic = ({
             </div>
           </Interaction.Content>
           <Interaction.Footer>
-            <Typography.Text size="sm" variant="danger">
+            <Typography.Text size="sm" appearance="danger">
               {errorMessage}
             </Typography.Text>
             <Interaction.Action

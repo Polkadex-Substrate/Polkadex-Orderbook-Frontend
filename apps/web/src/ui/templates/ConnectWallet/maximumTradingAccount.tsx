@@ -32,7 +32,7 @@ export const MaximumTradingAccount = ({
             <Typography.Text bold size="xl">
               Maximum 3 accounts allowed
             </Typography.Text>
-            <Typography.Text variant="primary">
+            <Typography.Text appearance="primary">
               Each Funding account within the Orderbook can be linked to a
               maximum of 3 distinct Trading accounts. Please delete one to
               continue.
@@ -42,7 +42,7 @@ export const MaximumTradingAccount = ({
         <Accordion type="multiple">
           <Accordion.Item value="accordion1">
             <Accordion.Trigger>
-              <Typography.Text variant="secondary">
+              <Typography.Text appearance="secondary">
                 Trading accounts
               </Typography.Text>
             </Accordion.Trigger>

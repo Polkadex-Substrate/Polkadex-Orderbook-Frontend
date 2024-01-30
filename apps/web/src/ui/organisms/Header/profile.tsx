@@ -174,7 +174,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     {selectedWallet?.name}
                   </Typography.Text>
                 ) : (
-                  <Typography.Text size="xs" bold variant="secondary">
+                  <Typography.Text size="xs" bold appearance="secondary">
                     Wallet not present
                   </Typography.Text>
                 )}
@@ -194,7 +194,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                 {selectedAccount?.meta.name} ({shortAddress})
               </Typography.Text>
             ) : (
-              <Typography.Text size="xs" bold variant="primary">
+              <Typography.Text size="xs" bold appearance="primary">
                 No trading account
               </Typography.Text>
             )}
@@ -446,5 +446,9 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
       </Popover>
     );
 
-  return <Button.Solid onClick={onClick}>Connect wallet</Button.Solid>;
+  return (
+    <Button.Solid onClick={onClick} size="sm">
+      Connect wallet
+    </Button.Solid>
+  );
 };

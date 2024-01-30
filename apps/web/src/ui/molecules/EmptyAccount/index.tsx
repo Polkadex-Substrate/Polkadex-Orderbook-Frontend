@@ -26,7 +26,9 @@ export const EmptyMyAccount = ({
         <p>{description}</p>
       </S.EmptyContent>
       {buttonTitle && (
-        <Button.Solid onClick={buttonAction}>{buttonTitle}</Button.Solid>
+        <Button.Solid onClick={buttonAction} size="sm">
+          {buttonTitle}
+        </Button.Solid>
       )}
     </S.EmptyContainer>
   </S.Empty>

@@ -72,7 +72,7 @@ export const UnlockBrowserAccount = ({
                 <Typography.Text bold size="xl">
                   Unlock trading account
                 </Typography.Text>
-                <Typography.Paragraph variant="primary">
+                <Typography.Paragraph appearance="primary">
                   Enter 5-digit password to unlock your account
                 </Typography.Paragraph>
               </div>

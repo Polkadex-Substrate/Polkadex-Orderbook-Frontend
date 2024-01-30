@@ -71,17 +71,19 @@ export const TradingAccountCard = ({
             </Skeleton>
           </div>
           <Skeleton loading={!address}>
-            <Typography.Text variant="primary">{name}</Typography.Text>
+            <Typography.Text appearance="primary">{name}</Typography.Text>
           </Skeleton>
         </div>
 
         {(hasRemove || onExport) && (
           <div className="flex gap-1">
             <Dropdown open={open} onOpenChange={setOpen}>
-              <Dropdown.Trigger>
-                <Button.Icon asChild size="sm" variant="ghost">
-                  <EllipsisVerticalIcon className="text-primary group-hover:text-current duration-300 transition-colors" />
-                </Button.Icon>
+              <Dropdown.Trigger asChild>
+                <div>
+                  <Button.Icon size="sm" variant="ghost">
+                    <EllipsisVerticalIcon className="text-primary group-hover:text-current duration-300 transition-colors" />
+                  </Button.Icon>
+                </div>
               </Dropdown.Trigger>
               <Dropdown.Content>
                 {hasRemove && (
@@ -117,7 +119,7 @@ export const TradingAccountCard = ({
           <Skeleton loading={isLoading} className="w-20 h-4">
             <HoverCard>
               <HoverCard.Trigger>
-                <Typography.Text variant="primary" size="xs">
+                <Typography.Text appearance="primary" size="xs">
                   {extensionAccounName ?? shortExtensionAccountAddress}
                 </Typography.Text>
               </HoverCard.Trigger>

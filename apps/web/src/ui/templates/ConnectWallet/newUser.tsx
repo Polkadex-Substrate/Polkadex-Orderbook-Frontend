@@ -32,12 +32,12 @@ export const NewUser = ({
                 To start trading, you need to create a trading account
               </Typography.Text>
               <div className="flex flex-col gap-4">
-                <Typography.Paragraph variant="primary">
+                <Typography.Paragraph appearance="primary">
                   Think of your wallet as your bank account, handling your
                   funds, and a trading account as a secure virtual debit card
                   exclusively for trading.
                 </Typography.Paragraph>
-                <Typography.Paragraph variant="primary">
+                <Typography.Paragraph appearance="primary">
                   Orderbook simplifies token transfers between your wallet and
                   trading account so you can focus on trading.
                 </Typography.Paragraph>

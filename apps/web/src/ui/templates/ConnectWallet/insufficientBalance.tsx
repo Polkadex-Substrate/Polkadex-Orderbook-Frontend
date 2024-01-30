@@ -24,7 +24,7 @@ export const InsufficientBalance = ({
             <div className="max-w-[8rem]">
               <Illustrations.Error className="max-w-[6rem] w-full" />
             </div>
-            <Typography.Text variant="primary">
+            <Typography.Text appearance="primary">
               It seems that you don&lsquo;t have enough funds to cover the
               transaction fees.
             </Typography.Text>

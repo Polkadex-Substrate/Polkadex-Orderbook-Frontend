@@ -38,7 +38,7 @@ export const TradingAccountMnemonic = ({
             <Typography.Text bold size="xl">
               Mnemonic
             </Typography.Text>
-            <Typography.Text variant="primary">
+            <Typography.Text appearance="primary">
               Please write down your walet’s mnemonic seed and keep it in a safe
               place. The mnemonic can be used to restore your wallet.
             </Typography.Text>
