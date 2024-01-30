@@ -40,7 +40,7 @@ export const InsufficientBalance = ({
           <Accordion.Item value="accordion1">
             <Accordion.Trigger>
               <Typography.Heading type="h4" size="xs">
-                Explore ways to get PDEX coins
+                Explore ways to get PDEX
               </Typography.Heading>
             </Accordion.Trigger>
             <Accordion.Content>
