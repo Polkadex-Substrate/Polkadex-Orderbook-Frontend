@@ -28,7 +28,7 @@ type GetCandleProps = {
 export const useCandles = () => {
   const { onHandleError } = useSettingsProvider();
 
-  const { isLoading, mutateAsync } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationFn: async ({
       market,
       from,
@@ -69,6 +69,5 @@ export const useCandles = () => {
 
   return {
     fetchCandles: mutateAsync,
-    isLoading: isLoading,
   };
 };

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { useKlineProvider } from "@orderbook/core/providers/public/klineProvider";
-import { useMarkets } from "@orderbook/core/hooks";
+import { useCandles, useMarkets } from "@orderbook/core/hooks";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
 import { TradingView as TradingViewConstants } from "@orderbook/core/constants";
@@ -55,7 +55,8 @@ type Props = {
 export const TradingView = ({ market }: Props) => {
   const [isReady, setIsReady] = useState(false);
 
-  const { onHandleKlineFetch, onFetchKlineChannel } = useKlineProvider();
+  const { fetchCandles } = useCandles();
+  const { onFetchKlineChannel } = useKlineProvider();
   const { list: allMarkets } = useMarkets();
   const currentMarket = getCurrentMarket(allMarkets, market);
   const { theme } = useSettingsProvider();
@@ -75,49 +76,6 @@ export const TradingView = ({ market }: Props) => {
   }, [allMarkets]);
 
   const tvWidget = useRef<IChartingLibraryWidget>();
-
-  const getData = useCallback(
-    async (resolution: ResolutionString, from: number, to: number) => {
-      try {
-        if (!currentMarket?.id) return [];
-
-        const klines =
-          (await onHandleKlineFetch({
-            market: currentMarket?.id,
-            resolution: resolution,
-            from: new Date(from * 1000),
-            to: new Date(to * 1000),
-          })) ?? [];
-
-        if (klines.length === 0) {
-          return [];
-        }
-
-        const klinesLength = klines.length;
-        const bars = klines.map((bar, index) => {
-          return {
-            time: bar.timestamp,
-            low: bar.low,
-            high: bar.high,
-            open: bar.open,
-            close: bar.close,
-            volume: bar.volume,
-            isBarClosed: index !== klinesLength - 1,
-            isLastBar: index === klinesLength - 1,
-          };
-        });
-
-        if (bars.length < 1) {
-          return [];
-        } else {
-          return bars;
-        }
-      } catch (error) {
-        return error;
-      }
-    },
-    [currentMarket, onHandleKlineFetch]
-  );
 
   const widgetOptions: ChartingLibraryWidgetOptions = useMemo(() => {
     const interval = (localStorage.getItem(
@@ -185,7 +143,15 @@ export const TradingView = ({ market }: Props) => {
         async getBars(symbolInfo, resolution, periodParams, onResult, onError) {
           const { from, to } = periodParams;
           try {
-            const bars = await getData(resolution, from, to);
+            if (!currentMarket?.id) return onResult([], { noData: true });
+
+            const bars = await fetchCandles({
+              market: currentMarket?.id,
+              resolution: resolution,
+              from: new Date(from * 1000),
+              to: new Date(to * 1000),
+            });
+
             if (bars.length < 1) {
               return onResult([], { noData: true });
             } else {
@@ -240,7 +206,7 @@ export const TradingView = ({ market }: Props) => {
   }, [
     currentMarket?.id,
     getAllSymbols,
-    getData,
+    fetchCandles,
     currentMarket?.name,
     onFetchKlineChannel,
     currentMarket?.price_tick_size,
