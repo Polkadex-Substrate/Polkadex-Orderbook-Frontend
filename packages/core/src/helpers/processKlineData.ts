@@ -15,7 +15,7 @@ export const getCorrectTimestamp = (ISOdate: string) => {
 
 export const processKlineData = (data: Kline[]) => {
   const klinesData = data.map((x) => ({
-    timestamp: getCorrectTimestamp(x.timestamp.toISOString()),
+    timestamp: getCorrectTimestamp(x.timestamp?.toISOString()),
     open: Number(x.open),
     high: Number(x.high),
     low: Number(x.low),

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
-import { useKlineProvider } from "@orderbook/core/providers/public/klineProvider";
+import { useSubscription } from "@orderbook/core/providers/user/subscription";
 import { useCandles, useMarkets } from "@orderbook/core/hooks";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
@@ -56,7 +56,7 @@ export const TradingView = ({ market }: Props) => {
   const [isReady, setIsReady] = useState(false);
 
   const { fetchCandles } = useCandles();
-  const { onFetchKlineChannel } = useKlineProvider();
+  const { onCandleSubscribe } = useSubscription();
   const { list: allMarkets } = useMarkets();
   const currentMarket = getCurrentMarket(allMarkets, market);
   const { theme } = useSettingsProvider();
@@ -163,7 +163,7 @@ export const TradingView = ({ market }: Props) => {
         },
         subscribeBars(symbolInfo, resolution, onTick) {
           if (currentMarket?.id) {
-            onFetchKlineChannel({
+            onCandleSubscribe({
               market: currentMarket?.id,
               interval: resolution,
               onUpdateTradingViewRealTime: onTick,
@@ -204,12 +204,12 @@ export const TradingView = ({ market }: Props) => {
       load_last_chart: true,
     };
   }, [
+    currentMarket?.name,
+    currentMarket?.price_tick_size,
     currentMarket?.id,
     getAllSymbols,
     fetchCandles,
-    currentMarket?.name,
-    onFetchKlineChannel,
-    currentMarket?.price_tick_size,
+    onCandleSubscribe,
   ]);
 
   useEffect(() => {

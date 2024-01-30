@@ -12,7 +12,9 @@ import {
   Transaction,
   Ticker,
   Balance,
+  Kline,
 } from "@orderbook/core/utils/orderbookService";
+import { Bar } from "@orderbook/core/utils/charting_library";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
 import { useOrderbookService } from "@orderbook/core/providers/public/orderbookServiceProvider/useOrderbookService";
@@ -20,7 +22,10 @@ import {
   decimalPlaces,
   deleteFromBook,
   fetchOnChainBalance,
+  getAbsoluteResolution,
+  getCorrectTimestamp,
   getCurrentMarket,
+  getResolutionInMilliSeconds,
   replaceOrAddToBook,
 } from "@orderbook/core/helpers";
 import {
@@ -345,6 +350,52 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
     [mainAddress, onHandleError, queryClient, updateBalanceFromEvent]
   );
 
+  const processKline = (data: Kline, interval: string): Bar => {
+    const kline = {
+      open: Number(data.open),
+      close: Number(data.close),
+      high: Number(data.high),
+      low: Number(data.low),
+      time: getCorrectTimestamp(data.timestamp.toISOString()),
+      volume: Number(data.baseVolume),
+    };
+    const close = kline.close;
+    const resolution = getResolutionInMilliSeconds(interval);
+
+    const currentBucket =
+      Math.floor(new Date().getTime() / resolution) * resolution;
+    if (kline.time < currentBucket) {
+      kline.open = close;
+      kline.low = close;
+      kline.high = close;
+      kline.volume = 0;
+      kline.time = currentBucket;
+    }
+    return kline;
+  };
+
+  const onCandleSubscribe = useCallback(
+    ({
+      market,
+      interval: i,
+      onUpdateTradingViewRealTime,
+    }: T.CandleSubscriptionProps) => {
+      if (!isReady) return;
+
+      const interval = getAbsoluteResolution(i);
+
+      appsyncOrderbookService.subscriber.subscribeKLines(
+        market,
+        interval,
+        (data) => {
+          const kline = processKline(data, interval);
+          onUpdateTradingViewRealTime(kline);
+        }
+      );
+    },
+    [isReady]
+  );
+
   // Recent Trades subscription
   useEffect(() => {
     if (!isReady || !market) return;
@@ -435,5 +486,5 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
     }
   }, [mainAddress, onBalanceUpdate, isReady]);
 
-  return <Provider value={{}}>{children}</Provider>;
+  return <Provider value={{ onCandleSubscribe }}>{children}</Provider>;
 };
