@@ -168,9 +168,9 @@ export const ImportTradingAccount = ({
                 )}
                 {extensionAccountAddress && (
                   <Input.Vertical
-                    label="Funding wallet"
+                    label="Funding account"
                     defaultValue={extensionAccountInput ?? ""}
-                    placeholder="Funding wallet"
+                    placeholder="Funding account"
                     disabled
                     className="text-sm flex-1"
                   />

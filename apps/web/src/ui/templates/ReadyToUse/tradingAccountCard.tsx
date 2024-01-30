@@ -121,7 +121,9 @@ export const TradingAccountCard = ({
                   {extensionAccounName ?? shortExtensionAccountAddress}
                 </Typography.Text>
               </HoverCard.Trigger>
-              <HoverCard.Content side="right">Funding Wallet</HoverCard.Content>
+              <HoverCard.Content side="right">
+                Funding account
+              </HoverCard.Content>
             </HoverCard>
           </Skeleton>
         ) : (

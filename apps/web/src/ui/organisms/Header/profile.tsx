@@ -185,7 +185,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
               withArrow={true}
               className="bg-level-5"
             >
-              Funding wallet
+              Funding account
             </HoverCard.Content>
           </HoverCard>
           <div className="flex items-center gap-2 bg-level-4 px-2 py-1 rounded-md">

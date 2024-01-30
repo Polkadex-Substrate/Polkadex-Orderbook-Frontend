@@ -69,7 +69,7 @@ export const Profile = ({
       <div className="flex flex-col gap-6 p-4 border-b border-primary bg-level-2">
         <div className="flex items-center justify-between">
           <Typography.Text variant="secondary" size="sm">
-            Funding wallet
+            Funding account
           </Typography.Text>
           <Button.Icon
             onClick={onLogout}
@@ -112,7 +112,7 @@ export const Profile = ({
                 <InformationCircleIcon className="w-7 h-7 text-attention-base" />
                 <Typography.Paragraph variant="primary" size="xs">
                   <span className="text-attention-base">(Optional)</span> Your
-                  funding wallet is only required for signing transactions and
+                  funding account is only required for signing transactions and
                   account management.
                 </Typography.Paragraph>
               </div>
