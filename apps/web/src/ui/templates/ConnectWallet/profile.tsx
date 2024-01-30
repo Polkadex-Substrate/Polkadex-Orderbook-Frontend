@@ -227,7 +227,10 @@ export const Profile = ({
                 Create new account
               </Button.Solid>
               <div className="flex items-center self-center gap-1">
-                <Typography.Text appearance="primary">
+                <Typography.Text
+                  appearance="primary"
+                  className="whitespace-nowrap"
+                >
                   Already have a trading account?
                 </Typography.Text>
                 <Button.Light
@@ -278,10 +281,12 @@ const TradingAccountCard = ({
     >
       <div className="flex gap-1">
         <Dropdown>
-          <Dropdown.Trigger>
-            <Button.Icon asChild size="sm" variant="ghost">
-              <EllipsisVerticalIcon className="text-primary group-hover:text-current duration-300 transition-colors" />
-            </Button.Icon>
+          <Dropdown.Trigger asChild>
+            <div>
+              <Button.Icon size="sm" variant="ghost">
+                <EllipsisVerticalIcon className="text-primary group-hover:text-current duration-300 transition-colors" />
+              </Button.Icon>
+            </div>
           </Dropdown.Trigger>
           <Dropdown.Content>
             <Dropdown.Item
