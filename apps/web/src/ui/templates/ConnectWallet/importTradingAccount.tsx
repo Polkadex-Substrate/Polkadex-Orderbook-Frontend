@@ -219,7 +219,6 @@ export const ImportTradingAccount = ({
                     </div>
                   </OptionalField>
                 )}
-
                 {isValidFile && isError && (
                   <ErrorMessage withIcon={false}>
                     No funding account linked to this trading account.
