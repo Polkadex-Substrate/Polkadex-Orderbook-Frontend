@@ -26,7 +26,7 @@ export const InsufficientBalance = ({
             </div>
             <Typography.Text variant="primary">
               It seems that you don&lsquo;t have enough funds to cover the
-              transaction fees.
+              transaction fees and existential deposit.
             </Typography.Text>
           </div>
           <div className="flex flex-col gap-2">
@@ -57,16 +57,6 @@ export const InsufficientBalance = ({
                     icon="DecentralizedBridge"
                   >
                     Decentralized bridge
-                  </GenericExternalCard>
-                </div>
-                <div className="opacity-50 pointer-events-none">
-                  <GenericExternalCard href="/" icon="Free">
-                    Get 1 PDEX for free
-                  </GenericExternalCard>
-                </div>
-                <div className="opacity-50 pointer-events-none">
-                  <GenericExternalCard href="/" icon="CreditCard">
-                    Credit card
                   </GenericExternalCard>
                 </div>
               </div>
