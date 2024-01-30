@@ -236,6 +236,7 @@ export const Profile = ({
                 <Button.Light
                   onClick={onImportTradingAccount}
                   appearance="primary"
+                  size="2sm"
                 >
                   Select / Import
                 </Button.Light>
