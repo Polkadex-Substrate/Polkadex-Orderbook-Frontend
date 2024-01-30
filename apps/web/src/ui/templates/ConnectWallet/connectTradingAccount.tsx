@@ -110,7 +110,7 @@ export const ConnectTradingAccount = ({
               <GenericHorizontalCard
                 title="Google Drive"
                 icon="GoogleDrive"
-                onClick={() => window.alert("Connect")}
+                disabled
               >
                 Connect
               </GenericHorizontalCard>
