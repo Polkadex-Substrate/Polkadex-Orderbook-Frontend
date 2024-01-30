@@ -37,7 +37,7 @@ export const ConnectTradingAccount = ({
   return (
     <Interaction>
       <Interaction.Title onClose={onClose}>
-        Select/Import Trading Account
+        Select / Import Trading Account
       </Interaction.Title>
       <Interaction.Content>
         <div className="flex flex-col gap-6">

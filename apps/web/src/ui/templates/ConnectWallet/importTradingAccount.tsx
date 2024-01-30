@@ -156,7 +156,7 @@ export const ImportTradingAccount = ({
   return (
     <Loading.Spinner active={loading}>
       <form onSubmit={handleSubmit}>
-        <Interaction className="gap-10">
+        <Interaction className="gap-10" withAnimation={false}>
           <Interaction.Title onClose={onClose}>
             Import Account
           </Interaction.Title>
@@ -224,7 +224,7 @@ export const ImportTradingAccount = ({
                     No funding account linked to this trading account.
                   </ErrorMessage>
                 )}
-                {isAlreadyExists && (
+                {!loading && isAlreadyExists && (
                   <ErrorMessage withIcon={false}>
                     This trading account already available in the device.
                   </ErrorMessage>
