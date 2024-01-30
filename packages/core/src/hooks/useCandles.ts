@@ -5,8 +5,7 @@ import { useOrderbookService } from "../providers/public/orderbookServiceProvide
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { QUERY_KEYS } from "../constants";
 import { useSettingsProvider } from "../providers/public/settings";
-import { getCorrectTimestamp, getResolutionInMilliSeconds } from "../helpers";
-import { KlineEvent } from "../providers/public/klineProvider";
+import { processKlineData } from "../helpers";
 
 const getAbsoluteResolution = (currentResolution: string) => {
   const getCorrectResolutions = {
@@ -19,30 +18,6 @@ const getAbsoluteResolution = (currentResolution: string) => {
     "360": "6h",
   };
   return getCorrectResolutions[currentResolution] || currentResolution;
-};
-
-const processKline = (data: any, interval: string): KlineEvent => {
-  const kline = {
-    open: Number(data.o),
-    close: Number(data.c),
-    high: Number(data.h),
-    low: Number(data.l),
-    timestamp: getCorrectTimestamp(data.t),
-    volume: Number(data.vb),
-  };
-  const close = kline.close;
-  const resolution = getResolutionInMilliSeconds(interval);
-
-  const currentBucket =
-    Math.floor(new Date().getTime() / resolution) * resolution;
-  if (kline.timestamp < currentBucket) {
-    kline.open = close;
-    kline.low = close;
-    kline.high = close;
-    kline.volume = 0;
-    kline.timestamp = currentBucket;
-  }
-  return kline;
 };
 
 export const useCandles = (
@@ -65,16 +40,16 @@ export const useCandles = (
     queryKey: QUERY_KEYS.candles(market, from, to, resolution),
     enabled,
     queryFn: async () => {
-      const klines = await appsyncOrderbookService.query.getCandles({
+      const data = await appsyncOrderbookService.query.getCandles({
         market,
         interval: getAbsoluteResolution(resolution),
         from,
         to,
       });
 
-      // process kline here
-
+      const klines = processKlineData(data);
       const klinesLength = klines.length;
+
       const bars = klines.map((bar, index) => {
         return {
           time: bar.timestamp,
@@ -82,7 +57,7 @@ export const useCandles = (
           high: bar.high,
           open: bar.open,
           close: bar.close,
-          volume: bar.baseVolume,
+          volume: bar.volume,
           isBarClosed: index !== klinesLength - 1,
           isLastBar: index === klinesLength - 1,
         };
