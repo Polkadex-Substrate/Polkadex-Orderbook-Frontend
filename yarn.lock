@@ -3222,10 +3222,10 @@
     "@polkadot/util" "^12.5.1"
     typescript latest
 
-"@polkadex/ux@^4.3.0":
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-4.4.0.tgz#1abbbd8293abb83cb2782bb614244bb907b8998e"
-  integrity sha512-+d/SkRy5uAcNg1+V8EvZKXFIr7lfbiZcJbECdoN+FOEs7dbK5FCtYmBhtIp+gGiE9l4vRffBN7rUCPd7ZDX1Ww==
+"@polkadex/ux@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-5.2.0.tgz#de8072e5894c0d0ae22f8de8c749e94597ce8ba7"
+  integrity sha512-YeG3eibBVg1BjKnmhu0VdXzyXbkQfWnNJM7jsShk+538VwblJulbYkZ4yZURF/SeQP1Opn+yd4aBZhDG2y+C1Q==
   dependencies:
     "@floating-ui/react" "^0.26.4"
     "@heroicons/react" "^2.0.18"
@@ -3240,6 +3240,7 @@
     "@radix-ui/react-separator" "^1.0.3"
     "@radix-ui/react-slot" "^1.0.2"
     "@radix-ui/react-switch" "^1.0.3"
+    "@radix-ui/react-tabs" "^1.0.4"
     "@radix-ui/react-tooltip" "^1.0.7"
     react-use "^17.4.0"
     sonner "^1.2.4"
@@ -3967,6 +3968,21 @@
     "@radix-ui/react-use-controllable-state" "1.0.1"
     "@radix-ui/react-use-previous" "1.0.1"
     "@radix-ui/react-use-size" "1.0.1"
+
+"@radix-ui/react-tabs@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-tabs/-/react-tabs-1.0.4.tgz#993608eec55a5d1deddd446fa9978d2bc1053da2"
+  integrity sha512-egZfYY/+wRNCflXNHx+dePvnz9FbmssDTJBtgRfDY7e8SE5oIo3Py2eCB1ckAbh1Q7cQ/6yJZThJ++sgbxibog==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "1.0.1"
+    "@radix-ui/react-context" "1.0.1"
+    "@radix-ui/react-direction" "1.0.1"
+    "@radix-ui/react-id" "1.0.1"
+    "@radix-ui/react-presence" "1.0.1"
+    "@radix-ui/react-primitive" "1.0.3"
+    "@radix-ui/react-roving-focus" "1.0.4"
+    "@radix-ui/react-use-controllable-state" "1.0.1"
 
 "@radix-ui/react-tooltip@^1.0.7":
   version "1.0.7"
