@@ -29,22 +29,9 @@ export const useCandles = () => {
         to,
       });
 
-      const klines = processKlineData(data);
-      const klinesLength = klines.length;
-
-      const bars: Bar[] = klines.map((bar, index) => {
-        return {
-          time: bar.timestamp,
-          low: bar.low,
-          high: bar.high,
-          open: bar.open,
-          close: bar.close,
-          volume: bar.volume,
-          isBarClosed: index !== klinesLength - 1,
-          isLastBar: index === klinesLength - 1,
-        };
-      });
+      const bars = processKlineData(data);
       bars.reverse();
+      bars.pop();
       return bars || [];
     },
     onError: (error) => {

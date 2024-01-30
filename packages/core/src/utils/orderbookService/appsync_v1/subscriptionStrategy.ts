@@ -185,7 +185,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
     >({
       query: SUBS.websocket_streams,
       variables: {
-        name: `${market}_${interval.toLowerCase()}`,
+        name: `${market}_${interval}`,
       },
       authToken: READ_ONLY_TOKEN,
     });

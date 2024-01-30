@@ -1,15 +1,16 @@
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { fetchKlineAsync } from "@orderbook/core/helpers";
-import { KlineEvent } from "@orderbook/core/providers/public/klineProvider";
+import { useQuery } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "../constants";
 
 import { useTickers } from "./useTickers";
+import { useCandles } from "./useCandles";
 
 export const useMiniGraph = (market: string, from: Date, to: Date) => {
-  const dailyKline: UseQueryResult<KlineEvent[], Error> = useQuery({
+  const { fetchCandles } = useCandles();
+
+  const dailyKline = useQuery({
     queryKey: QUERY_KEYS.miniGraph(market),
-    queryFn: () => fetchKlineAsync(market, "2h", from, to),
+    queryFn: () => fetchCandles({ market, resolution: "2h", from, to }),
     refetchOnWindowFocus: false,
   });
 
@@ -22,7 +23,7 @@ export const useMiniGraph = (market: string, from: Date, to: Date) => {
   const points = dailyKline?.data?.map((i) => i.close) || [];
 
   return {
-    graphPoints: points.reverse(),
+    graphPoints: points,
     isIncreasing,
   };
 };

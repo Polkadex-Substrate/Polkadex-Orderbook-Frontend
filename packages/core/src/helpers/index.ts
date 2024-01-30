@@ -7,7 +7,6 @@ export * from "./createWithdrawHelpers";
 export * from "./DateTime";
 export * from "./enclavePayloadSigner";
 export * from "./eventHandler";
-export * from "./fetchKlineAsync";
 export * from "./fetchOnChainBalance";
 export * from "./filterBlockedAssets";
 export * from "./filterPrice";
