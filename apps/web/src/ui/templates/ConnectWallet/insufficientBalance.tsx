@@ -51,14 +51,13 @@ export const InsufficientBalance = ({
                 >
                   Centralized exchanges
                 </GenericExternalCard>
-                <div className="opacity-50 pointer-events-none">
-                  <GenericExternalCard
-                    href="https://thea.polkadex.trade/"
-                    icon="DecentralizedBridge"
-                  >
-                    Decentralized bridge
-                  </GenericExternalCard>
-                </div>
+                <GenericExternalCard
+                  href="https://thea.polkadex.trade/"
+                  icon="DecentralizedBridge"
+                  disabled
+                >
+                  Decentralized bridge
+                </GenericExternalCard>
               </div>
             </Accordion.Content>
           </Accordion.Item>

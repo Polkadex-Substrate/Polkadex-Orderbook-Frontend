@@ -5,16 +5,20 @@ import type { IconsProps } from "@polkadex/ux";
 export const GenericExternalCard = ({
   icon,
   href,
+  disabled,
   children,
 }: PropsWithChildren<{
   icon: IconsProps;
   href: string;
+  disabled?: boolean;
 }>) => {
   return (
     <a
       href={href}
       target="_blank"
-      className="group flex items-center justify-between gap-2 rounded-md p-3 border border-level-5 hover:bg-level-4 duration-300 transition-colors"
+      className={`group flex items-center justify-between gap-2 rounded-md p-3 border border-level-5 hover:bg-level-4 duration-300 transition-colors ${
+        disabled && "opacity-50 pointer-events-none"
+      }`}
       rel="noreferrer"
     >
       <div className="flex items-center gap-3">
