@@ -75,7 +75,8 @@ export const Menu = ({ open = false }) => {
         </Help>
         <Terms open={open} />
       </S.WrapperLinks>
-      <S.BottomContainer>
+      {/* // TODO: Remove style when light theme avaliable for Connect-Wallet component */}
+      <S.BottomContainer style={{ display: "none" }}>
         <S.WrapperIcon onClick={changeTheme} as="button">
           <Icon
             name={isDarkTheme ? "Sun" : "Moon"}
