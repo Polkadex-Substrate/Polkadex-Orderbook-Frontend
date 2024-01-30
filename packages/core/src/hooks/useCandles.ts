@@ -31,7 +31,14 @@ export const useCandles = () => {
 
       const bars = processKlineData(data);
       bars.reverse();
-      bars.pop();
+
+      // Remove items from last which have zero volume
+      let i = bars.length - 1;
+      while (i >= 0 && bars[i].volume === 0) {
+        bars.pop();
+        i--;
+      }
+
       return bars || [];
     },
     onError: (error) => {

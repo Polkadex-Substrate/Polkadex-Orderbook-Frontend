@@ -386,7 +386,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
 
       appsyncOrderbookService.subscriber.subscribeKLines(
         market,
-        interval,
+        interval.toLowerCase(),
         (data) => {
           const kline = processKline(data, interval);
           onUpdateTradingViewRealTime(kline);

@@ -29,7 +29,7 @@ export const getResolutionInMilliSeconds = (resolution: string): number => {
   }
 };
 
-export const getAbsoluteResolution = (currentResolution: string) => {
+export const getAbsoluteResolution = (currentResolution: string): string => {
   const getCorrectResolutions = {
     "1": "1m",
     "5": "5m",
