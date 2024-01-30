@@ -148,7 +148,7 @@ export const ExistingUser = ({
                 onClick={onCreate}
               />
               <GenericHorizontalCard
-                title="Recover trading account"
+                title="Import trading account"
                 icon="Recover"
                 onClick={onRecover}
               />
