@@ -20,7 +20,7 @@ export const GenericExternalCard = ({
       <div className="flex items-center gap-3">
         <Icon name={icon} className="w-4 h-4 text-primary " />
         <Typography.Text
-          variant="primary"
+          appearance="primary"
           className="group-hover:text-current duration-300 transition-colors"
         >
           {children}

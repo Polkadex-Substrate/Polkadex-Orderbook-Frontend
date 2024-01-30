@@ -65,7 +65,7 @@ export const RemoveTradingAccount = ({
               <Typography.Text bold size="xl">
                 Remove trading account
               </Typography.Text>
-              <Typography.Paragraph variant="primary">
+              <Typography.Paragraph appearance="primary">
                 Are you sure you want
                 <span className="text-current">
                   {" "}

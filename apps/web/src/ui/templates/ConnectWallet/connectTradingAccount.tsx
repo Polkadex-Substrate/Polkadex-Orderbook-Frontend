@@ -43,7 +43,7 @@ export const ConnectTradingAccount = ({
         <div className="flex flex-col gap-6">
           {accounts.length ? (
             <div className="flex flex-col gap-3">
-              <Typography.Text variant="secondary" size="sm">
+              <Typography.Text appearance="secondary" size="sm">
                 Available trading account(s)
               </Typography.Text>
               <div
@@ -93,7 +93,7 @@ export const ConnectTradingAccount = ({
                 <Typography.Text bold size="md">
                   No trading accounts found
                 </Typography.Text>
-                <Typography.Text variant="primary">
+                <Typography.Text appearance="primary">
                   Oops, it looks like you don&apos;t have any trading account.
                 </Typography.Text>
               </div>
@@ -102,7 +102,11 @@ export const ConnectTradingAccount = ({
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <Separator.Horizontal className="bg-level-5" />
-              <Typography.Text variant="secondary" size="xs">
+              <Typography.Text
+                appearance="secondary"
+                size="xs"
+                className="whitespace-nowrap"
+              >
                 Or restore your trading account using
               </Typography.Text>
             </div>

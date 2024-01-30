@@ -39,14 +39,14 @@ export const GenericHorizontalCard = ({
               />
             </div>
             <Typography.Text
-              variant="primary"
+              appearance="primary"
               className="group-hover:text-current transition-colors duration-300"
             >
               {title}
             </Typography.Text>
           </div>
           {isStringType ? (
-            <Button.Solid appearance="secondary" size="sm" {...props}>
+            <Button.Solid appearance="secondary" size="xs" {...props}>
               {children}
             </Button.Solid>
           ) : (
