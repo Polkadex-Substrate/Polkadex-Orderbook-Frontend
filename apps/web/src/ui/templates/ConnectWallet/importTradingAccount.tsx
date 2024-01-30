@@ -177,7 +177,8 @@ export const ImportTradingAccount = ({
                 )}
                 {!isValidFile && (
                   <ErrorMessage withIcon={false}>
-                    Selected trade account not linked to funding.
+                    This trading account is not linked to the selected funding
+                    account.
                   </ErrorMessage>
                 )}
                 {isValidFile && !isError && (
