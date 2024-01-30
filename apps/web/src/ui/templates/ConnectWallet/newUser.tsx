@@ -38,8 +38,8 @@ export const NewUser = ({
                   exclusively for trading.
                 </Typography.Paragraph>
                 <Typography.Paragraph appearance="primary">
-                  In Orderbook, your wallet simplifies token transfers between
-                  your wallet and trading account.
+                  Orderbook simplifies token transfers between your wallet and
+                  trading account so you can focus on trading.
                 </Typography.Paragraph>
               </div>
             </div>
