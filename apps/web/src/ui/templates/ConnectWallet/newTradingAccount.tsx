@@ -106,7 +106,6 @@ export const NewTradingAccount = ({
               <div>
                 <Input.Vertical
                   {...getFieldProps("name")}
-                  label="Account name"
                   placeholder="Enter a name"
                   action={(e) => {
                     e.preventDefault();
@@ -116,7 +115,9 @@ export const NewTradingAccount = ({
                     );
                   }}
                   actionTitle="Random"
-                />
+                >
+                  <Input.Label>Account name</Input.Label>
+                </Input.Vertical>
                 <ErrorMessage withIcon={false}>{errors.name}</ErrorMessage>
               </div>
               <OptionalField label="Protected by password">
@@ -143,7 +144,7 @@ export const NewTradingAccount = ({
                     Store my trading account
                     <span className="opacity-30 text-xs"> (Recommended)</span>
                   </Typography.Text>
-                  <Typography.Text variant="primary">
+                  <Typography.Text appearance="primary">
                     Trade freely without the need for your extension.
                   </Typography.Text>
                 </div>

@@ -6,8 +6,8 @@ const defaultTheme = "dark";
 const isBrowser = (process as any).browser;
 const defaultLanguage = isBrowser && navigator.language.substring(0, 2);
 
-const theme = ((isBrowser && localStorage.getItem(C.DEFAULTTHEMENAME)) ??
-  defaultTheme) as T.SettingState["theme"];
+// TODO: Revert it back when we have light theme support for wallet connect
+const theme = defaultTheme as T.SettingState["theme"];
 
 const language = ((isBrowser && localStorage.getItem(C.DEFAULTLANGUAGENAME)) ??
   defaultLanguage) as T.SettingState["language"];

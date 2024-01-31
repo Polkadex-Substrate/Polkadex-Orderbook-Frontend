@@ -24,7 +24,7 @@ export const InsufficientBalance = ({
             <div className="max-w-[8rem]">
               <Illustrations.Error className="max-w-[6rem] w-full" />
             </div>
-            <Typography.Text variant="primary">
+            <Typography.Text appearance="primary">
               It seems that you don&lsquo;t have enough funds to cover the
               transaction fees.
             </Typography.Text>
@@ -40,7 +40,7 @@ export const InsufficientBalance = ({
           <Accordion.Item value="accordion1">
             <Accordion.Trigger>
               <Typography.Heading type="h4" size="xs">
-                Explore ways to get PDEX coins
+                Explore ways to get PDEX
               </Typography.Heading>
             </Accordion.Trigger>
             <Accordion.Content>

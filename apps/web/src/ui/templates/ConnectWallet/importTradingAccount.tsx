@@ -151,29 +151,32 @@ export const ImportTradingAccount = ({
             {hasFile ? (
               <div className="flex flex-col gap-5 flex-1">
                 <Input.Vertical
-                  label="Account name"
                   defaultValue={values?.file?.meta?.name}
                   placeholder="Account name"
                   disabled
                   className="text-sm flex-1"
-                />
+                >
+                  <Input.Label>Account name</Input.Label>
+                </Input.Vertical>
                 {browserAccountAddress && (
                   <Input.Vertical
-                    label="Account address"
                     defaultValue={browserAccountAddress}
                     placeholder="Account address"
                     disabled
                     className="text-sm flex-1"
-                  />
+                  >
+                    <Input.Label>Account address</Input.Label>
+                  </Input.Vertical>
                 )}
                 {extensionAccountAddress && (
                   <Input.Vertical
-                    label="Funding wallet"
                     defaultValue={extensionAccountInput ?? ""}
                     placeholder="Funding wallet"
                     disabled
                     className="text-sm flex-1"
-                  />
+                  >
+                    <Input.Label>Funding wallet</Input.Label>
+                  </Input.Vertical>
                 )}
                 {!isValidFile && (
                   <ErrorMessage withIcon={false}>
@@ -222,7 +225,7 @@ export const ImportTradingAccount = ({
                 <FolderPlusIcon className="w-7 h-7 text-primary" />
                 <div className="flex flex-col">
                   <Typography.Text>Choose a file</Typography.Text>
-                  <Typography.Text variant="primary">
+                  <Typography.Text appearance="primary">
                     or drag and drop it here
                   </Typography.Text>
                 </div>

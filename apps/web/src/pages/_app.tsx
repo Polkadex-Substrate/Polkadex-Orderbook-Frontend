@@ -14,9 +14,9 @@ import Head from "next/head";
 import { defaultConfig } from "@orderbook/core/config";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import dynamic from "next/dynamic";
-import "@polkadex/ux/dist/index.css";
-
 import "../styles/globals.scss";
+
+import "@polkadex/ux/dist/index.css";
 import awsconfig from "../../aws-exports";
 
 import * as gtag from "@/lib/gtag";
