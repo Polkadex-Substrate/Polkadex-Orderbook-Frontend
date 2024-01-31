@@ -113,7 +113,12 @@ export const TradingAccountSuccessfull = ({
         </div>
       </Interaction.Content>
       <Interaction.Footer>
-        <Interaction.Action onClick={() => router.push("/transfer")}>
+        <Interaction.Action
+          onClick={() => {
+            onClose();
+            router.push("/transfer");
+          }}
+        >
           Transfer funds
         </Interaction.Action>
         <Interaction.Close onClick={onClose}>Close</Interaction.Close>

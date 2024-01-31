@@ -10,7 +10,7 @@ import { GenericInfoCard, GenericExternalCard } from "../ReadyToUse";
 export const InsufficientBalance = ({
   onClose,
   balance,
-  fee = 1,
+  fee = 2,
 }: {
   balance?: number;
   fee?: number;
@@ -26,14 +26,16 @@ export const InsufficientBalance = ({
             </div>
             <Typography.Text appearance="primary">
               It seems that you don&lsquo;t have enough funds to cover the
-              transaction fees.
+              transaction fees and existential deposit.
             </Typography.Text>
           </div>
           <div className="flex flex-col gap-2">
             <GenericInfoCard label="Your balance">
               {balance} PDEX
             </GenericInfoCard>
-            <GenericInfoCard label="Fees">{fee} PDEX</GenericInfoCard>
+            <GenericInfoCard label="Balance required">
+              {fee} PDEX
+            </GenericInfoCard>
           </div>
         </div>
         <Accordion type="single" defaultValue="accordion1">
@@ -46,16 +48,17 @@ export const InsufficientBalance = ({
             <Accordion.Content>
               <div className="flex flex-col gap-3">
                 <GenericExternalCard
-                  href="https://thea.polkadex.trade/"
-                  icon="DecentralizedBridge"
-                >
-                  Decentralized bridge
-                </GenericExternalCard>
-                <GenericExternalCard
                   href="https://www.kucoin.com/trade/PDEX-USDT"
                   icon="Exchange"
                 >
                   Centralized exchanges
+                </GenericExternalCard>
+                <GenericExternalCard
+                  href="https://thea.polkadex.trade/"
+                  icon="DecentralizedBridge"
+                  disabled
+                >
+                  Decentralized bridge
                 </GenericExternalCard>
               </div>
             </Accordion.Content>

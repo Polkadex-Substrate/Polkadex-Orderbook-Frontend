@@ -69,9 +69,9 @@ export const RemoveTradingAccount = ({
                 Are you sure you want
                 <span className="text-current">
                   {" "}
-                  remove this trading account from your device?{" "}
+                  remove this trading account?{" "}
                 </span>
-                Don`t worry your funds are safe in your funding account.
+                Don&apos;t worry your funds are safe in your funding account.
               </Typography.Paragraph>
             </div>
             <TradingAccountCard

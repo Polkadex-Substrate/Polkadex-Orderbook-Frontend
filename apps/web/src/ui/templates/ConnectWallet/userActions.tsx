@@ -29,7 +29,7 @@ export const UserActions = ({
           />
         )}
         <GenericHorizontalCard
-          title="Recover trading account"
+          title="Import trading account"
           icon="Recover"
           onClick={onImportTradingAccount}
         />

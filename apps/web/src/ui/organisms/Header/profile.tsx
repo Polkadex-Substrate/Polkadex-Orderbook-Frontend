@@ -128,7 +128,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
       : "NewTradingAccount";
 
   const redirectEnoughBalance =
-    (walletBalance ?? 0) >= 1 ? redirectMaximumAccounts : "InsufficientBalance";
+    (walletBalance ?? 0) >= 2 ? redirectMaximumAccounts : "InsufficientBalance";
 
   const availableOnDevice = useMemo(
     () =>
@@ -185,7 +185,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
               withArrow={true}
               className="bg-level-5"
             >
-              Funding wallet
+              Funding account
             </HoverCard.Content>
           </HoverCard>
           <div className="flex items-center gap-2 bg-level-4 px-2 py-1 rounded-md">
