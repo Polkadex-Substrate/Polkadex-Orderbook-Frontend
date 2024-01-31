@@ -37,7 +37,7 @@ export const ConnectTradingAccount = ({
   return (
     <Interaction>
       <Interaction.Title onClose={onClose}>
-        Recover trading account
+        Select / Import Trading Account
       </Interaction.Title>
       <Interaction.Content>
         <div className="flex flex-col gap-6">
@@ -114,7 +114,7 @@ export const ConnectTradingAccount = ({
               <GenericHorizontalCard
                 title="Google Drive"
                 icon="GoogleDrive"
-                onClick={() => window.alert("Connect")}
+                disabled
               >
                 Connect
               </GenericHorizontalCard>
