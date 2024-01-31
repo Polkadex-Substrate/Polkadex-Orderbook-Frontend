@@ -2,7 +2,11 @@ import { useMutation } from "@tanstack/react-query";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { useSettingsProvider } from "../providers/public/settings";
-import { getAbsoluteResolution, processKlineData } from "../helpers";
+import {
+  getAbsoluteResolution,
+  getResolutionInMilliSeconds,
+  processKlineData,
+} from "../helpers";
 import { Bar } from "../utils/charting_library";
 
 type GetCandleProps = {
@@ -20,25 +24,30 @@ export const useCandles = () => {
       market,
       from,
       to,
-      resolution,
+      resolution: r,
     }: GetCandleProps): Promise<Bar[]> => {
+      const resolution = getAbsoluteResolution(r);
+      const resolutioninMs = getResolutionInMilliSeconds(resolution);
       const data = await appsyncOrderbookService.query.getCandles({
         market,
-        interval: getAbsoluteResolution(resolution),
+        interval: resolution,
         from,
         to,
       });
 
-      const bars = processKlineData(data);
-      bars.reverse();
+      let bars = processKlineData(data);
 
-      // Remove items from last which have zero volume
-      let i = bars.length - 1;
-      while (i >= 0 && bars[i].volume === 0) {
-        bars.pop();
-        i--;
+      const currentBucket =
+        Math.floor(new Date().getTime() / resolutioninMs) * resolutioninMs;
+
+      // Remove items which have greater time than current time
+      let i = 0;
+      while (i < bars.length && bars[i].time > currentBucket) {
+        i++;
       }
 
+      bars = bars.splice(i);
+      bars.reverse();
       return bars || [];
     },
     onError: (error) => {
