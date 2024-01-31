@@ -10,7 +10,7 @@ import { GenericInfoCard, GenericExternalCard } from "../ReadyToUse";
 export const InsufficientBalance = ({
   onClose,
   balance,
-  fee = 1,
+  fee = 2,
 }: {
   balance?: number;
   fee?: number;
@@ -33,7 +33,9 @@ export const InsufficientBalance = ({
             <GenericInfoCard label="Your balance">
               {balance} PDEX
             </GenericInfoCard>
-            <GenericInfoCard label="Fees">{fee} PDEX</GenericInfoCard>
+            <GenericInfoCard label="Balance required">
+              {fee} PDEX
+            </GenericInfoCard>
           </div>
         </div>
         <Accordion type="single" defaultValue="accordion1">

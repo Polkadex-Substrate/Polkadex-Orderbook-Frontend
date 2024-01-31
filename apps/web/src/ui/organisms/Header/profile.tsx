@@ -128,7 +128,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
       : "NewTradingAccount";
 
   const redirectEnoughBalance =
-    (walletBalance ?? 0) >= 1 ? redirectMaximumAccounts : "InsufficientBalance";
+    (walletBalance ?? 0) >= 2 ? redirectMaximumAccounts : "InsufficientBalance";
 
   const availableOnDevice = useMemo(
     () =>
