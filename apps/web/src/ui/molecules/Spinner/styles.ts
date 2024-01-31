@@ -1,6 +1,9 @@
 import styled, { css } from "styled-components";
 
 import { Props } from "./types";
+
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   display: flex;
   align-items: center;
@@ -12,6 +15,10 @@ export const SecondaryWrapper = styled.div<{ color: string; size: string }>`
     height: ${size};
     display: inline-block;
     vertical-align: middle;
+    svg {
+      width: 100%;
+      height: 100%;
+    }
     svg path,
     svg rect {
       fill: ${theme.colors[color]};
@@ -20,8 +27,8 @@ export const SecondaryWrapper = styled.div<{ color: string; size: string }>`
 `;
 
 export const Container = styled.div<Props>`
-  ${({ theme, size = "1rem", color = "primary" }) => css`
-    margin-left: -2rem;
+  ${({ theme, size = normalizeValue(1), color = "primary" }) => css`
+    margin-left: ${normalizeValue(-2)};
 
     &,
     &:before,
@@ -49,7 +56,7 @@ export const Container = styled.div<Props>`
     &:before {
       bottom: 0;
       left: 0;
-      margin-left: 1.2rem;
+      margin-left: ${normalizeValue(1.2)};
 
       -webkit-animation: spScaleAlphaBefore 1s infinite linear;
       animation: spScaleAlphaBefore 1s infinite linear;
@@ -57,7 +64,7 @@ export const Container = styled.div<Props>`
     &:after {
       left: 0;
       top: 0;
-      margin-left: 2.4rem;
+      margin-left: ${normalizeValue(2.4)};
       -webkit-animation: spScaleAlphaAfter 1s infinite linear;
       animation: spScaleAlphaAfter 1s infinite linear;
     }

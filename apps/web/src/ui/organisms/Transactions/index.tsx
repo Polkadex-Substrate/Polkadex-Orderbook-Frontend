@@ -29,6 +29,8 @@ import { Ifilters } from "@orderbook/core/providers/types";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const initialFilters: Ifilters = {
   hiddenPairs: false,
   onlyBuy: false,
@@ -37,7 +39,11 @@ const initialFilters: Ifilters = {
   status: "All Orders",
 };
 
-export const Transactions = () => {
+type Props = {
+  market: string;
+};
+
+export const Transactions = ({ market }: Props) => {
   const { t: translation, "2": isReady } = useTranslation("organisms");
   const t = (key: string) => translation(`transactions.${key}`);
 
@@ -191,10 +197,11 @@ export const Transactions = () => {
               onHideTransactionDropdown={(v: boolean) =>
                 setTransactionDropdownVisible(v)
               }
+              market={market}
             />
           </TabContent>
           <TabContent>
-            <OrderHistory filters={filters} />
+            <OrderHistory filters={filters} market={market} />
           </TabContent>
           <TabContent>
             <TradeHistory
@@ -202,6 +209,7 @@ export const Transactions = () => {
                 setTransactionDropdownVisible(v)
               }
               filters={filters}
+              market={market}
             />
           </TabContent>
           <TabContent>
@@ -216,11 +224,11 @@ export const Transactions = () => {
 export const TransactionsSkeleton = () => {
   return (
     <S.SkeletonWrapper>
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
-      <Skeleton width={"100%"} height={"5rem"} />
+      <Skeleton width={"100%"} height={normalizeValue(5.4)} />
+      <Skeleton width={"100%"} height={normalizeValue(5.4)} />
+      <Skeleton width={"100%"} height={normalizeValue(5.4)} />
+      <Skeleton width={"100%"} height={normalizeValue(5.4)} />
+      <Skeleton width={"100%"} height={normalizeValue(5.4)} />
     </S.SkeletonWrapper>
   );
 };

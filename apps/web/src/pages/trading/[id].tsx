@@ -1,10 +1,4 @@
 import dynamic from "next/dynamic";
-import {
-  RecentTradesProvider,
-  OrdersProvider,
-  OrderBookProvider,
-  BalancesProvider,
-} from "@orderbook/core/providers";
 import { GetServerSideProps } from "next";
 
 import LoadingScreen from "@/ui/molecules/LoadingScreen";
@@ -21,17 +15,18 @@ const TradingTemplate = dynamic(
   }
 );
 
+const OrdersProvider = dynamic(
+  () => import("@orderbook/core/providers").then((mod) => mod.OrdersProvider),
+  {
+    ssr: false,
+  }
+);
+
 const Trading = () => {
   return (
-    <BalancesProvider>
-      <OrderBookProvider>
-        <OrdersProvider>
-          <RecentTradesProvider>
-            <TradingTemplate />
-          </RecentTradesProvider>
-        </OrdersProvider>
-      </OrderBookProvider>
-    </BalancesProvider>
+    <OrdersProvider>
+      <TradingTemplate />
+    </OrdersProvider>
   );
 };
 

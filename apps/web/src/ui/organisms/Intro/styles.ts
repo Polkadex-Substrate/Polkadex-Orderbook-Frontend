@@ -1,13 +1,15 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Intro = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     background: ${theme.colors.primaryBackgroundSolid};
-    padding: 2rem;
-    border-radius: 1rem;
+    padding: ${normalizeValue(2)};
+    border-radius: ${normalizeValue(1)};
   `}
 `;
 
@@ -15,7 +17,7 @@ export const IntroActions = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   flex-wrap: wrap;
 `;
 
@@ -23,11 +25,11 @@ export const IntroButtons = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     button {
       transition: background-color 0.5s ease;
-      padding: 1rem;
-      border-radius: 0.4rem;
+      padding: ${normalizeValue(1)};
+      border-radius: ${normalizeValue(0.4)};
       &:last-child {
         background: ${theme.colors.secondaryBackgroundOpacity};
       }
@@ -41,5 +43,5 @@ export const IntroButtons = styled.div`
 export const IntroSwitch = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;

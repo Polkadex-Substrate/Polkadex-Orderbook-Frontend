@@ -1,24 +1,65 @@
-import { useEffect, useState } from "react";
-import { useOrderHistoryProvider } from "@orderbook/core/providers/user/orderHistoryProvider";
+import { useMemo } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { Ifilters } from "../providers/types";
-import { sortOrdersDescendingTime } from "../helpers";
+import { getCurrentMarket, sortOrdersDescendingTime } from "../helpers";
+import { QUERY_KEYS } from "../constants";
+import { useProfile } from "../providers/user/profile";
+import { useSessionProvider } from "../providers/user/sessionProvider";
+import { appsyncOrderbookService } from "../utils/orderbookService";
 
-export const useOrderHistory = (filters: Ifilters) => {
+import { useMarkets } from "./useMarkets";
+
+export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
   const {
-    fetchNextOrderHistoryPage,
-    isOrderHistoryLoading,
-    hasNextOrderHistoryPage,
-    orderHistory,
-    isMarketMatch,
-    orderHistoryError,
-  } = useOrderHistoryProvider();
+    selectedAddresses: { tradeAddress },
+  } = useProfile();
+  const { dateFrom, dateTo } = useSessionProvider();
+  const { list: markets } = useMarkets();
+  const currentMarket = getCurrentMarket(markets, defaultMarket);
 
-  const list = sortOrdersDescendingTime(orderHistory);
+  const userLoggedIn = tradeAddress !== "";
 
-  const [filteredOrderHistory, setFilteredOrderHistory] = useState(list);
+  const shouldFetchOrderHistory = Boolean(
+    userLoggedIn && currentMarket && tradeAddress
+  );
 
-  useEffect(() => {
+  const {
+    data: orderHistoryList,
+    fetchNextPage: fetchNextOrderHistoryPage,
+    isLoading: isOrderHistoryLoading,
+    hasNextPage: hasNextOrderHistoryPage,
+    error: orderHistoryError,
+  } = useInfiniteQuery({
+    queryKey: QUERY_KEYS.orderHistory(dateFrom, dateTo, tradeAddress),
+    enabled: shouldFetchOrderHistory,
+    queryFn: async ({ pageParam = null }) => {
+      return await appsyncOrderbookService.query.getOrderHistory({
+        address: tradeAddress,
+        from: dateFrom,
+        to: dateTo,
+        limit: 30,
+        pageParams: pageParam,
+      });
+    },
+    getNextPageParam: (lastPage) => {
+      // If the last page contains nextToken as null, don't fetch the next page
+      if (!lastPage.nextToken) {
+        return false;
+      }
+      return lastPage.nextToken;
+    },
+  });
+
+  const orderHistory = useMemo(
+    () =>
+      sortOrdersDescendingTime(
+        orderHistoryList?.pages.flatMap((page) => page.data) ?? []
+      ),
+    [orderHistoryList?.pages]
+  );
+
+  const filteredOrderHistory = useMemo(() => {
     let orderHistoryList = orderHistory.filter((item) => !item.isReverted);
 
     if (filters?.showReverted) {
@@ -27,7 +68,7 @@ export const useOrderHistory = (filters: Ifilters) => {
 
     if (filters?.hiddenPairs) {
       orderHistoryList = orderHistoryList.filter((order) => {
-        return isMarketMatch(order) && order;
+        return order.orderId === currentMarket?.id;
       });
     }
 
@@ -58,15 +99,15 @@ export const useOrderHistory = (filters: Ifilters) => {
       });
     }
 
-    setFilteredOrderHistory(orderHistoryList);
+    return orderHistoryList;
   }, [
     filters?.hiddenPairs,
     filters?.onlyBuy,
     filters?.onlySell,
     filters?.showReverted,
     filters?.status,
+    currentMarket?.id,
     orderHistory,
-    isMarketMatch,
   ]);
 
   return {
@@ -74,6 +115,6 @@ export const useOrderHistory = (filters: Ifilters) => {
     isLoading: isOrderHistoryLoading,
     hasNextPage: hasNextOrderHistoryPage,
     onFetchNextPage: fetchNextOrderHistoryPage,
-    error: orderHistoryError,
+    error: orderHistoryError as string,
   };
 };

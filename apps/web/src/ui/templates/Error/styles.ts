@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.section`
   min-height: 100vh;
   display: flex;
@@ -11,9 +13,9 @@ export const Container = styled.div`
   max-width: 1200px;
 
   @media screen and (max-width: 900px) {
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
     grid-template-columns: 1fr;
-    row-gap: 3rem;
+    row-gap: ${normalizeValue(3)};
     text-align: center;
   }
 
@@ -22,7 +24,7 @@ export const Container = styled.div`
   }
 
   @media screen and (max-width: 1200px) {
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
   }
 
   @media screen and (min-width: 1200px) {
@@ -31,17 +33,17 @@ export const Container = styled.div`
   margin: 0 auto;
   display: grid;
   align-items: center;
-  column-gap: 4rem;
+  column-gap: ${normalizeValue(4)};
 `;
 
 export const TitleContainer = styled.div`
   & h1 {
-    font-size: 12rem;
+    font-size: ${normalizeValue(12)};
   }
 
   & h2 {
-    font-size: 4rem;
-    margin-bottom: 2rem;
+    font-size: ${normalizeValue(4)};
+    margin-bottom: ${normalizeValue(2)};
   }
 
   & p {

@@ -1,11 +1,14 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import {
-  useMarketsProvider,
-  defaultTickers,
-  Market,
-} from "@orderbook/core/providers/public/marketsProvider";
+import { Market } from "@orderbook/core/utils/orderbookService";
+import { getCurrentMarket, setToStorage } from "@orderbook/core/helpers";
+import { defaultConfig } from "@orderbook/core/config";
+
+import { LOCAL_STORAGE_ID, defaultTicker } from "../constants";
+import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
+
+import { useTickers } from "./useTickers";
 
 export type InitialMarkets = {
   last: string | number;
@@ -15,21 +18,34 @@ export type InitialMarkets = {
   isFavourite?: boolean;
 } & Market;
 
-export function useMarkets(onClose: () => void) {
+export function useMarkets(market?: string) {
   const [fieldValue, setFieldValue] = useState({
     searchFieldValue: "",
     marketsTabsSelected: "All",
     showFavourite: false,
   });
 
-  const profileState = useProfile();
   const router = useRouter();
-  const {
-    list: markets,
-    currentMarket,
-    tickers: allMarketTickers,
-  } = useMarketsProvider();
-  const favorites = profileState.userMarket.favoriteMarkets;
+  const { markets: data, isReady } = useOrderbookService();
+  const { favoriteMarkets, onUserFavoriteMarketPush } = useProfile();
+  const { tickers: allMarketTickers } = useTickers(market);
+
+  const markets = useMemo(() => {
+    return data?.filter(
+      (market) =>
+        !defaultConfig.blockedAssets.some(
+          (item) => item === market.baseAsset.id
+        ) &&
+        !defaultConfig.blockedAssets.some(
+          (item) => item === market.quoteAsset.id
+        )
+    );
+  }, [data]);
+
+  const currentMarket = useMemo(
+    () => (market ? getCurrentMarket(markets, market) : undefined),
+    [market, markets]
+  );
 
   /**
    * @description Get the single market information for the current market
@@ -44,16 +60,12 @@ export function useMarkets(onClose: () => void) {
    * @param {string} e -  Search field value
    */
   const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log({
-      searchFieldValue: e.target.value,
-    });
-
     setFieldValue({ ...fieldValue, searchFieldValue: e.target.value });
   };
 
   const handleSelectedFavorite = (id: string) => {
     // this should dispatch an action to make store favorites to the dynamo db
-    profileState.onUserFavoriteMarketPush(id.trim());
+    onUserFavoriteMarketPush(id.trim());
   };
 
   /**
@@ -74,20 +86,31 @@ export function useMarkets(onClose: () => void) {
    * @returns {void} dispatch setCurrentMarket action
    */
   const handleChangeMarket = useCallback(
-    (e: string): void => {
+    (e: string, onClose: () => void): void => {
       const marketToSet = markets?.find((el) => el.name === e);
       if (marketToSet) {
+        setToStorage(
+          LOCAL_STORAGE_ID.DEFAULT_MARKET,
+          JSON.stringify({
+            id: marketToSet.id,
+            name: `${
+              marketToSet.baseAsset.ticker + marketToSet.quoteAsset.ticker
+            }`,
+          })
+        );
+
         router.push(
-          `${marketToSet.base_ticker + marketToSet.quote_ticker}`,
+          `${marketToSet.baseAsset.ticker + marketToSet.quoteAsset.ticker}`,
           undefined,
           {
             shallow: true,
           }
         );
+
         onClose();
       }
     },
-    [markets, onClose, router]
+    [markets, router]
   );
 
   /**
@@ -98,18 +121,18 @@ export function useMarkets(onClose: () => void) {
   const marketTokens = (): InitialMarkets[] => {
     const initialMarkets: InitialMarkets[] = [];
     const allTickets = markets.map((item) => {
-      const ticker = allMarketTickers.find((val) => val.m === item.m);
+      const ticker = allMarketTickers.find((val) => val.market === item.id);
       return {
         ...item,
-        last: (ticker || defaultTickers).close,
-        volume: (ticker || defaultTickers).volumeQuote24Hr,
+        last: (ticker || defaultTicker).close,
+        volume: (ticker || defaultTicker).quoteVolume,
         price_change_percent: (
-          ticker || defaultTickers
+          ticker || defaultTicker
         ).priceChangePercent24Hr?.toString(),
         price_change_percent_num: Number.parseFloat(
-          String((ticker || defaultTickers).priceChangePercent24Hr)
+          String((ticker || defaultTicker).priceChangePercent24Hr)
         ),
-        isFavourite: favorites.includes(item.id),
+        isFavourite: favoriteMarkets.includes(item.id),
       };
     });
     const allFavoriteFilters = allTickets.filter((value) =>
@@ -160,7 +183,10 @@ export function useMarkets(onClose: () => void) {
     marketTickers,
     fieldValue,
     currentTickerName: currentMarket?.name,
-    currentTickerImg: currentMarket?.tokenTickerName,
+    currentTickerImg: currentMarket?.baseAsset.ticker,
     id: currentMarket?.id,
+
+    list: markets,
+    loading: !isReady,
   };
 }

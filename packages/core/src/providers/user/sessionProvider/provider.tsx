@@ -12,7 +12,7 @@ import { initialState, sessionReducer } from "./reducer";
 export const SessionProvider: T.SessionComponent = ({ children }) => {
   const [state, dispatch] = useReducer(sessionReducer, initialState);
   const profileState = useProfile();
-  const address = profileState.selectedAccount.mainAddress;
+  const address = profileState.selectedAddresses.mainAddress;
   const { onHandleError } = useSettingsProvider();
 
   const onFetchSession = useCallback(() => {

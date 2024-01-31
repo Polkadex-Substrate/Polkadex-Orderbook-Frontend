@@ -2,21 +2,23 @@ import styled, { css } from "styled-components";
 import { Wrapper as EmptyData } from "@polkadex/orderbook-ui/molecules/EmptyData/styles";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    max-height: 50rem;
+    max-height: ${normalizeValue(50)};
     @media screen and (min-width: 900px) {
       /* border-left: 1px solid ${theme.colors.secondaryBackground}; */
-      max-width: 35rem;
+      max-width: ${normalizeValue(35)};
       width: 30%;
-      min-width: 30rem;
+      min-width: ${normalizeValue(30)};
     }
 
     @media screen and (min-width: 1688px) {
       /* border-left: 1px solid ${theme.colors.secondaryBackground}; */
-      max-width: 41.8rem;
+      max-width: 4 ${normalizeValue(1.8)};
     }
     @media screen and (min-height: 1200px) {
       min-height: 50vh;
@@ -29,24 +31,25 @@ export const WrapperTitle = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1rem 1rem 1rem;
+  padding: ${normalizeValue(1)} ${normalizeValue(1)} ${normalizeValue(1)}
+    ${normalizeValue(1)};
 `;
 
 export const DropdownContent = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primaryBackground};
-    padding: 1rem;
-    border-radius: 0.5rem;
+    padding: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(0.5)};
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
   `}
 `;
 export const ContainerActions = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: 0.5rem;
-  margin-right: 1rem;
+  grid-column-gap: ${normalizeValue(0.5)};
+  margin-right: ${normalizeValue(1)};
 `;
 export const ContainerTitle = styled.div`
   display: flex;
@@ -57,9 +60,14 @@ export const SizeHeader = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
+  font-size: ${normalizeValue(1.3)};
   div {
-    width: 0.8rem;
+    width: ${normalizeValue(0.8)};
+  }
+  svg {
+    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -67,7 +75,7 @@ export const Main = styled.section`
   ${({ theme }) => css`
     grid-area: Orderbook;
     background: ${theme.colors.inverse};
-    border-radius: 1rem;
+    border-radius: ${normalizeValue(1)};
     box-shadow: ${theme.shadows.secondary};
     max-height: -webkit-fill-available;
     height: 100%;
@@ -81,11 +89,11 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1rem 0 1rem;
-  margin-bottom: 1rem;
+  padding: ${normalizeValue(1)} ${normalizeValue(1)} 0 ${normalizeValue(1)};
+  margin-bottom: ${normalizeValue(1)};
   h2 {
-    font-size: 1.5rem;
-    font-weight: 550;
+    font-size: ${normalizeValue(1.5)};
+    font-weight: 600;
   }
 `;
 
@@ -98,7 +106,7 @@ export const Content = styled.div`
 
   @media screen and (max-width: 700px) {
     ${EmptyData} {
-      padding: 3rem 1rem;
+      padding: ${normalizeValue(3)} ${normalizeValue(1)};
     }
   }
 `;
@@ -146,8 +154,8 @@ export const Head = styled.div<{ lightMode?: boolean }>`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    padding: 0 1rem;
-    margin-bottom: 0.5rem;
+    padding: 0 ${normalizeValue(1)};
+    margin-bottom: ${normalizeValue(0.5)};
     span {
       opacity: 0.5;
     }
@@ -155,7 +163,7 @@ export const Head = styled.div<{ lightMode?: boolean }>`
 `;
 
 export const CellHead = styled.span`
-  font-size: 1.2rem;
+  font-size: ${normalizeValue(1.2)};
 
   &:not(:first-child) {
     justify-self: flex-end;
@@ -178,11 +186,11 @@ export const Card = styled.div<{ isSell?: boolean }>`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    padding: 0 1rem;
+    padding: 0 ${normalizeValue(1)};
     cursor: pointer;
     transition: background 0.3s ease-in-out;
     &:not(:last-child) {
-      margin-bottom: 0.1rem;
+      margin-bottom: ${normalizeValue(0.1)};
     }
     &:hover {
       background: ${isSell ? theme.colors.primary : theme.colors.green}19;
@@ -200,8 +208,8 @@ export const CardVolume = styled.div<{ isSell?: boolean }>`
 `;
 
 export const CardCell = styled.span`
-  padding: 0.4rem 0;
-  font-size: 1.2rem;
+  padding: ${normalizeValue(0.4)} 0;
+  font-size: ${normalizeValue(1.2)};
   font-weight: 500;
   &:not(:first-child) {
     justify-self: flex-end;
@@ -213,22 +221,22 @@ export const Pricing = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0.8rem 0;
+  margin: ${normalizeValue(0.8)} 0;
 `;
 
 export const PricingAsideLeft = styled.div<{ isPriceUp?: boolean }>`
   ${({ theme, isPriceUp }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 1rem;
+    padding: ${normalizeValue(1)};
     flex: 1;
     span {
-      font-size: 1.5rem;
-      font-weight: 550;
+      font-size: ${normalizeValue(1.5)};
+      font-weight: 600;
       color: ${isPriceUp ? theme.colors.green : theme.colors.primary};
 
       ${Icon} {
         transition: transform 0.2s ease-in-out;
-        margin-right: 0.5rem;
+        margin-right: ${normalizeValue(0.5)};
         transform: ${isPriceUp ? "rotate(180deg)" : "rotate(0)"};
         svg {
           fill: ${isPriceUp ? theme.colors.green : theme.colors.primary};
@@ -238,23 +246,23 @@ export const PricingAsideLeft = styled.div<{ isPriceUp?: boolean }>`
     p {
       display: inline-block;
       opacity: 0.4;
-      font-size: 1.3rem;
+      font-size: ${normalizeValue(1.3)};
       font-weight: 500;
-      margin-left: 0.5rem;
+      margin-left: ${normalizeValue(0.5)};
     }
   `}
 `;
 
 export const PricingAsideRight = styled.div`
   ${({ theme }) => css`
-    width: 3rem;
-    height: 3rem;
+    width: ${normalizeValue(3)};
+    height: ${normalizeValue(3)};
     border: 1px solid ${theme.colors.secondaryBackground};
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 20rem;
-    margin: 0 2rem;
+    border-radius: ${normalizeValue(20)};
+    margin: 0 ${normalizeValue(2)};
     cursor: pointer;
     transition: border 0.5s ease-in-out;
     &:hover {
@@ -265,6 +273,6 @@ export const PricingAsideRight = styled.div`
 export const Skeleton = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: ${normalizeValue(0.5)};
+  padding: ${normalizeValue(0.5)} ${normalizeValue(1)};
 `;

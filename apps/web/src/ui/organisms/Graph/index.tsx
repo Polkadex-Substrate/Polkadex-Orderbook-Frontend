@@ -13,7 +13,11 @@ const TradingView = dynamic(
   }
 );
 
-export const Graph = () => {
+type Props = {
+  market: string;
+};
+
+export const Graph = ({ market }: Props) => {
   const { theme } = useSettingsProvider();
   return (
     <>
@@ -21,10 +25,10 @@ export const Graph = () => {
       <S.Wrapper isLightMode={theme === "light"}>
         <S.WrapperGraph>
           <S.ChartWrapper>
-            <TradingView />
+            <TradingView market={market} />
           </S.ChartWrapper>
         </S.WrapperGraph>
-        <OrderBook />
+        <OrderBook market={market} />
       </S.Wrapper>
     </>
   );

@@ -1,46 +1,48 @@
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Section = styled.section`
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 28rem;
+  min-height: ${normalizeValue(28)};
 `;
 
 // Header
 export const Header = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  padding: 2rem 0;
+  gap: ${normalizeValue(1.5)};
+  padding: ${normalizeValue(2)} 0;
   justify-content: space-between;
   align-items: flex-start;
   ${media.lessThan("large")`
       grid-template-columns: 1fr;
-      grid-row-gap: 2rem;
+      grid-row-gap: ${normalizeValue(2)};
     `}
 `;
 export const Content = styled.div``;
 export const ContentWrapper = styled.div`
-  padding: 10rem 0;
+  padding: ${normalizeValue(10)} 0;
 `;
 
 export const HeaderContent = styled.ul`
   display: flex;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
 `;
 export const TabHeader = styled.li<{ isActive?: boolean }>`
   ${({ theme, isActive }) => css`
     list-style: none;
-    padding-bottom: 1rem;
+    padding-bottom: ${normalizeValue(1)};
     border-bottom: 2px solid;
     border-bottom-color: ${isActive ? theme.colors.text : "transparent"};
     cursor: pointer;
     white-space: nowrap;
     user-select: none;
     opacity: ${isActive ? 1 : 0.3};
-
+    font-size: ${normalizeValue(1.3)};
     font-weight: ${isActive ? 550 : 500};
     transition: opacity 0.5s ease-in-out;
     &:hover {
@@ -51,20 +53,20 @@ export const TabHeader = styled.li<{ isActive?: boolean }>`
 
 export const Tab = styled.ul`
   li {
-    font-size: 1.4rem;
+    font-size: ${normalizeValue(1.4)};
     font-weight: 800;
     display: inline-block;
   }
 
   li :not(:last-child) {
-    margin-right: 2rem;
+    margin-right: ${normalizeValue(2)};
   }
 `;
 export const WrapperActions = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   flex-wrap: wrap;
 `;
 
@@ -74,7 +76,7 @@ export const Calendar = styled.div``;
 export const ContainerActions = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-column-gap: 1rem;
+  grid-column-gap: ${normalizeValue(1)};
 `;
 
 export const ContainerTransactions = styled.div`
@@ -87,14 +89,19 @@ export const ContainerTransactions = styled.div`
 export const Icon = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
+  font-size: ${normalizeValue(1.3)};
   div {
-    max-width: 0.8rem;
+    max-width: ${normalizeValue(0.8)};
+    svg {
+      width: 100%;
+      height: 100%;
+    }
   }
 `;
 
 export const SkeletonWrapper = styled.div`
   div {
-    margin-block: 1rem;
+    margin-block: ${normalizeValue(1)};
   }
 `;

@@ -9,17 +9,20 @@ import * as S from "./styles";
 
 type Props = {
   handleClose?: (() => void) | undefined;
-  onSubmit: (value) => void;
+  onSubmit: (value: { password: string }) => void;
 };
 
 export const UnlockAccount = ({ handleClose = undefined, onSubmit }: Props) => {
-  const { setFieldValue, values, handleSubmit, isValid, dirty } = useFormik({
-    initialValues: {
-      password: "",
-    },
-    validationSchema: unLockAccountValidations,
-    onSubmit: onSubmit,
-  });
+  const { setFieldValue, values, handleSubmit, isValid, dirty, errors } =
+    useFormik({
+      initialValues: {
+        password: "",
+      },
+      validationSchema: unLockAccountValidations,
+      validateOnChange: true,
+      validateOnBlur: true,
+      onSubmit,
+    });
   const digitsLeft = useMemo(
     () => 5 - Array.from(String(values.password), (v) => Number(v)).length,
     [values]
@@ -42,12 +45,13 @@ export const UnlockAccount = ({ handleClose = undefined, onSubmit }: Props) => {
         <h2>{t("title")}</h2>
         <p>{t("description")}</p>
       </S.Title>
-      <form onChange={() => handleSubmit()}>
+      <form onSubmit={handleSubmit}>
         <PassCode
           numInputs={5}
           onChange={(e) => setFieldValue("password", e)}
           value={values.password}
           name="password"
+          error={errors?.password}
         />
         <S.Actions>
           {handleClose && (
@@ -61,9 +65,12 @@ export const UnlockAccount = ({ handleClose = undefined, onSubmit }: Props) => {
               {t("cancel")}
             </Button>
           )}
-          <S.Span color={isValid && dirty ? "green" : "secondaryBackground"}>
+          <S.Button
+            type="submit"
+            color={isValid && dirty ? "green" : "secondaryBackground"}
+          >
             {message}
-          </S.Span>
+          </S.Button>
         </S.Actions>
       </form>
     </S.Wrapper>

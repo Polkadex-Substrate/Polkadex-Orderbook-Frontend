@@ -4,19 +4,15 @@ import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
 import { useAppearance } from "@orderbook/core/hooks";
-import { useProfile } from "@orderbook/core/providers/user/profile";
+import { IIcons } from "@orderbook/core/utils";
+import { getMarketUrl } from "@orderbook/core/helpers";
 
 import * as S from "./styles";
 
 export const Menu = ({ open = false }) => {
   const router = useRouter();
-
-  const profileState = useProfile();
   const { isDarkTheme, changeTheme } = useAppearance();
-
-  const {
-    authInfo: { isAuthenticated },
-  } = profileState;
+  const marketUrl = getMarketUrl();
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`menu.${key}`);
@@ -27,7 +23,7 @@ export const Menu = ({ open = false }) => {
         <Card
           active={router.pathname === "/trading/[id]"}
           icon="Exchange"
-          href="/trading"
+          href={marketUrl}
           open={open}
         >
           {t("exchange")}
@@ -36,19 +32,17 @@ export const Menu = ({ open = false }) => {
           active={router.pathname === "/balances"}
           icon="Coins"
           href="/balances"
-          disable={!isAuthenticated}
           open={open}
         >
           {t("balances")}
-        </Card>
+        </Card>{" "}
         <Card
-          active={router.pathname === "/wallets"}
-          icon="Wallet"
-          href="/wallets"
-          disable={!isAuthenticated}
+          active={router.pathname === "/transfer"}
+          icon="DoubleExchange"
+          href="/transfer"
           open={open}
         >
-          {t("wallets")}
+          {t("transfer")}
         </Card>
         <Help open={open} title={t("help")}>
           <Link
@@ -81,7 +75,8 @@ export const Menu = ({ open = false }) => {
         </Help>
         <Terms open={open} />
       </S.WrapperLinks>
-      <S.BottomContainer>
+      {/* // TODO: Remove style when light theme avaliable for Connect-Wallet component */}
+      <S.BottomContainer style={{ display: "none" }}>
         <S.WrapperIcon onClick={changeTheme} as="button">
           <Icon
             name={isDarkTheme ? "Sun" : "Moon"}
@@ -205,7 +200,7 @@ interface Props
     "href" | "target" | "rel"
   > {
   active?: boolean;
-  icon: "Exchange" | "Coins" | "Wallet" | "Help" | "Question";
+  icon: IIcons;
   disable?: boolean;
   open?: boolean;
 }

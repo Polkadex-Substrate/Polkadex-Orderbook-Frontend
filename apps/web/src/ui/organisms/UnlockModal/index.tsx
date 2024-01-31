@@ -11,10 +11,12 @@ export const UnlockModal = ({
   onClose,
   tradingAccountInBrowser,
   dispatchAction,
+  onError,
 }: {
   open: boolean;
   onClose: () => void;
   dispatchAction: () => void;
+  onError: (value: string) => void;
   tradingAccountInBrowser?: KeyringPair;
 }) => {
   return (
@@ -32,7 +34,7 @@ export const UnlockModal = ({
                 tradingAccountInBrowser.unlock(password);
                 if (!tradingAccountInBrowser?.isLocked) dispatchAction();
               } catch (error) {
-                alert(error);
+                onError(error);
               } finally {
                 onClose();
               }

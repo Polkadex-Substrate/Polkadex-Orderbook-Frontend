@@ -3,9 +3,13 @@ export * from "./types";
 
 export const defaultConfig: DefaultConfig = {
   polkadexFeature: process.env.POLKADEX_FEATURE,
-  polkadexChain: process.env.POLKADEX_CHAIN || "wss://mainnet.polkadex.trade",
+  polkadexChain: [
+    process.env.POLKADEX_CHAIN as string,
+    // This is a backup chain
+    "wss://polkadex.api.onfinality.io/public-ws",
+  ],
   gaTrackerKey: process.env.GA_MEASUREMENT_ID ?? "G-PWZK8JEFLX",
-  landingPageMarket: process.env.LANDING_PAGE || "PDEXCUSDT",
+  landingPageMarket: process.env.LANDING_PAGE || "DOTUSDT",
   withCredentials: false,
   incrementalOrderBook: false,
   orderBookSideLimit: 25,
@@ -20,21 +24,7 @@ export const defaultConfig: DefaultConfig = {
   signUpDisabled: process.env.SIGNUP_DISABLED === "true",
   reconnectRangerTime: 30000,
   showShutdownPopup: process.env.SHOW_SHUTDOWN_POPUP === "true",
-  availableRoutes: [
-    "/trading",
-    "/balances",
-    "/codeVerification",
-    "/createAccount",
-    "/deposit",
-    "/recovery",
-    "/resetPassword",
-    "/resetPasswordForm",
-    "/wallets",
-    "/sign",
-    "/signIn",
-    "/withdraw",
-    "/transfer",
-  ],
+  availableRoutes: ["/trading", "/balances", "/wallets", "/transfer"],
   underMaintenance: process.env.UNDER_MAINTENACE?.split(",") ?? [],
   mainUrl: process.env.MAIN_URL || "/trading",
   blockedAssets: process.env.BLOCKED_ASSETS?.split(",") || [],

@@ -6,8 +6,8 @@ const defaultTheme = "dark";
 const isBrowser = (process as any).browser;
 const defaultLanguage = isBrowser && navigator.language.substring(0, 2);
 
-const theme = ((isBrowser && localStorage.getItem(C.DEFAULTTHEMENAME)) ??
-  defaultTheme) as T.SettingState["theme"];
+// TODO: Revert it back when we have light theme support for wallet connect
+const theme = defaultTheme as T.SettingState["theme"];
 
 const language = ((isBrowser && localStorage.getItem(C.DEFAULTLANGUAGENAME)) ??
   defaultLanguage) as T.SettingState["language"];
@@ -18,7 +18,7 @@ const currency = ((isBrowser && localStorage.getItem(C.DEFAULTCURRENCYNAME)) ??
 const notifications =
   JSON.parse(
     isBrowser &&
-      (window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME) as string),
+      (window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME) as string)
   ) || [];
 
 export const initialState: T.SettingState = {
@@ -30,6 +30,8 @@ export const initialState: T.SettingState = {
   marketSelectorActive: false,
   ordersHideOtherPairs: true,
   hasExtension: false,
+  connectExtension: false,
+  connectTrading: false,
 };
 
 export const settingReducer = (state: T.SettingState, action) => {
@@ -84,7 +86,7 @@ export const settingReducer = (state: T.SettingState, action) => {
         isBrowser && window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME);
       const prevObj: T.Notification[] =
         JSON.parse(localData as string)?.sort(
-          (a: T.Notification, b: T.Notification) => a.date - b.date,
+          (a: T.Notification, b: T.Notification) => a.date - b.date
         ) || [];
       const data: T.Notification = {
         id: new Date().getTime().toString(36) + new Date().getUTCMilliseconds(),
@@ -96,7 +98,7 @@ export const settingReducer = (state: T.SettingState, action) => {
 
       window.localStorage.setItem(
         C.DEFAULTNOTIFICATIONNAME,
-        JSON.stringify([...prevObj, data]),
+        JSON.stringify([...prevObj, data])
       );
       return {
         ...state,
@@ -111,9 +113,21 @@ export const settingReducer = (state: T.SettingState, action) => {
         notifications: [],
       };
 
+    case C.TOOGLE_CONNECT_EXTENSION:
+      return {
+        ...state,
+        connectExtension: action.payload || !state.connectExtension,
+      };
+
+    case C.TOOGLE_CONNECT_TRADING:
+      return {
+        ...state,
+        connectTrading: action.payload || !state.connectTrading,
+      };
+
     case C.NOTIFICATION_DELETE_BY_ID: {
       const localNotifications = window.localStorage.getItem(
-        C.DEFAULTNOTIFICATIONNAME,
+        C.DEFAULTNOTIFICATIONNAME
       );
       const prevObj: T.Notification[] =
         JSON.parse(localNotifications as string) || [];
@@ -123,7 +137,7 @@ export const settingReducer = (state: T.SettingState, action) => {
       isBrowser &&
         window.localStorage.setItem(
           C.DEFAULTNOTIFICATIONNAME,
-          JSON.stringify([...newObj]),
+          JSON.stringify([...newObj])
         );
 
       return {
@@ -153,7 +167,7 @@ export const settingReducer = (state: T.SettingState, action) => {
       isBrowser &&
         window.localStorage.setItem(
           C.DEFAULTNOTIFICATIONNAME,
-          JSON.stringify([...newObj]),
+          JSON.stringify([...newObj])
         );
 
       return {

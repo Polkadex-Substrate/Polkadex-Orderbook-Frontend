@@ -86,43 +86,41 @@ export const AssetsTable = ({
           ))}
         </thead>
         <tbody>
-          {table
-            .getRowModel()
-            .rows.slice(0, 10)
-            .map((row, ti) => {
-              const tdClassName = classNames({
-                active: row.original.assetId === selectedAssetId,
-              });
+          {table.getRowModel().rows.map((row, ti) => {
+            const tdClassName = classNames({
+              active: row.original.id === selectedAssetId,
+            });
 
-              return (
-                <tr
-                  className={tdClassName}
-                  key={row.id}
-                  onClick={() =>
-                    onChangeAsset({
-                      onChainBalance: row.original.onChainBalance,
-                      free_balance: row.original.free_balance,
-                      assetId: row.original.assetId,
-                      name: row.original.name,
-                      symbol: row.original.symbol,
-                    })
-                  }
-                >
-                  {row.getVisibleCells().map((cell) => {
-                    const lastCell = table.getRowModel().rows.length === ti + 1;
-                    const tdClassName = classNames({ last: lastCell });
-                    return (
-                      <td className={tdClassName} key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
+            return (
+              <tr
+                className={tdClassName}
+                key={row.id}
+                onClick={() =>
+                  onChangeAsset({
+                    onChainBalance: row.original.onChainBalance,
+                    free_balance: row.original.free_balance,
+                    id: row.original.id,
+                    name: row.original.name,
+                    ticker: row.original.ticker,
+                    decimal: row.original.decimal,
+                  })
+                }
+              >
+                {row.getVisibleCells().map((cell) => {
+                  const lastCell = table.getRowModel().rows.length === ti + 1;
+                  const tdClassName = classNames({ last: lastCell });
+                  return (
+                    <td className={tdClassName} key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </S.Wrapper>

@@ -1,5 +1,5 @@
 import { TransferForm } from "@polkadex/orderbook-ui/organisms";
-import { useTransferHistory } from "@orderbook/core/index";
+import { useTransferHistory } from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { defaultConfig } from "@orderbook/core/config";
 
@@ -22,9 +22,9 @@ export const CustomTransfer = ({
   onDisableSwitch: () => void;
   switchEnable: boolean;
 }) => {
-  const { selectedAccount } = useProfile();
-
-  const { mainAddress } = selectedAccount;
+  const {
+    selectedAddresses: { mainAddress },
+  } = useProfile();
 
   const { data, isLoading, refetch } = useTransferHistory(
     defaultConfig.subscanApi,

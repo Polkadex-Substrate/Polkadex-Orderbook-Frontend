@@ -8,7 +8,7 @@ export const QUERY_KEYS = {
     id,
   ],
   assets: () => [PREFIX, "assets"],
-  markets: (assets: string) => [PREFIX, "markets", assets],
+  markets: () => [PREFIX, "markets"],
   tickers: () => [PREFIX, "tickers"],
   recentTrades: (market: string) => [PREFIX, "recentTrades", market],
   orderBook: (market: string) => [PREFIX, "orderbook", market],
@@ -33,11 +33,26 @@ export const QUERY_KEYS = {
     "tradingBalances",
     mainAddress,
   ],
-  onChainBalances: (accountId: string, ids: string[]) => [
+  onChainBalances: (accountId: string) => [
     PREFIX,
     "onChainBalances",
-    accountId.toString(),
-    ...ids,
+    accountId,
   ],
   transactions: (mainAddress: string) => [PREFIX, "transactions", mainAddress],
+  proxyAccounts: (extensions) => [PREFIX, "proxyAccounts", extensions],
+  singleProxyAccounts: (mainAddress: string) => [
+    PREFIX,
+    "proxyAccount",
+    mainAddress,
+  ],
+  extensionAccountFromBrowserAccount: (address: string) => [
+    PREFIX,
+    "extensionAccountFromBrowserAccount",
+    address,
+  ],
+  transactionFee: (mainAddress: string) => [
+    PREFIX,
+    "transactionFee",
+    mainAddress,
+  ],
 };

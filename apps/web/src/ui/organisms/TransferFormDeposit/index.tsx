@@ -1,25 +1,29 @@
 import { MouseEvent, useMemo, useRef } from "react";
 import {
-  useExtensionWallet,
-  userMainAccountDetails,
-} from "@orderbook/core/providers/user/extensionWallet";
-import {
   transformAddress,
   useProfile,
 } from "@orderbook/core/providers/user/profile";
+import { useExtensionAccounts } from "@polkadex/react-providers";
 import { useFormik } from "formik";
 import { depositValidations } from "@orderbook/core/validations";
-import { isAssetPDEX, trimFloat } from "@orderbook/core/helpers";
+import {
+  getFundingAccountDetail,
+  isAssetPDEX,
+  trimFloat,
+} from "@orderbook/core/helpers";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useTranslation } from "next-i18next";
-import { useBalancesProvider } from "@orderbook/core/providers/user/balancesProvider";
+import { useFunds } from "@orderbook/core/index";
 import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import * as S from "./styles";
 import * as T from "./types";
 
 import { Loading, Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
+import { normalizeValue } from "@/utils/normalize";
+import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 const initialValues = { amount: 0.0 };
 
@@ -27,26 +31,30 @@ export const TransferFormDeposit = ({
   onTransferInteraction,
   onOpenAssets,
   selectedAsset,
+  fundWalletPresent,
 }: T.Props) => {
   const { t } = useTranslation("transfer");
 
-  const { allAccounts } = useExtensionWallet();
+  const { extensionAccounts: allAccounts } = useExtensionAccounts();
   const { loading, onFetchDeposit } = useDepositProvider();
-  const { selectedAccount } = useProfile();
-  const { loading: balancesLoading } = useBalancesProvider();
-
-  const { mainAddress } = selectedAccount;
+  const {
+    selectedAddresses: { mainAddress },
+  } = useProfile();
+  const { loading: balancesLoading } = useFunds();
+  const { onToogleConnectExtension } = useSettingsProvider();
+  const { mainProxiesAccounts, mainProxiesLoading } =
+    useConnectWalletProvider();
 
   const fundingWallet = useMemo(
-    () => userMainAccountDetails(mainAddress, allAccounts),
+    () => getFundingAccountDetail(mainAddress, allAccounts),
     [allAccounts, mainAddress]
   );
 
   const amountRef = useRef<HTMLInputElement | null>(null);
 
   const isPolkadexToken = useMemo(
-    () => isAssetPDEX(selectedAsset?.assetId),
-    [selectedAsset?.assetId]
+    () => isAssetPDEX(selectedAsset?.id),
+    [selectedAsset?.id]
   );
 
   const existentialBalance = useMemo(
@@ -65,10 +73,9 @@ export const TransferFormDeposit = ({
     // TODO: Handle Error...
   };
 
-  const fundingWalletName = fundingWallet?.account?.meta.name ?? "";
   const fundingWalletAddress = useMemo(
-    () => transformAddress(fundingWallet?.account?.address ?? ""),
-    [fundingWallet?.account?.address]
+    () => transformAddress((mainAddress || fundingWallet?.address) ?? ""),
+    [mainAddress, fundingWallet?.address]
   );
 
   const {
@@ -94,11 +101,11 @@ export const TransferFormDeposit = ({
       // TODO: Handle Error...
 
       try {
-        const address = fundingWallet.account.address;
+        const address = fundingWallet.address;
 
         const asset: T.GenericAsset = isPolkadexToken
           ? { polkadex: null }
-          : { asset: selectedAsset?.assetId || null };
+          : { asset: selectedAsset?.id || null };
 
         // TODO: Fix types or Handle Error
         if (!address || !fundingWallet) return;
@@ -114,21 +121,40 @@ export const TransferFormDeposit = ({
     },
   });
 
+  const buttonMessage = fundWalletPresent ? "transferButton" : "userButton";
+  const localAccountError =
+    fundWalletPresent && mainProxiesAccounts.length === 0 && !mainProxiesLoading
+      ? "localAccountError"
+      : "";
+
+  const disabled = fundWalletPresent
+    ? !(isValid && dirty) || loading || !!localAccountError?.length
+    : false;
+
   return (
     <Loading
-      style={{ maxWidth: "100rem" }}
+      style={{ maxWidth: normalizeValue(100) }}
       isVisible={loading}
       hasBg={false}
       message=""
       spinner="Keyboard"
     >
+      {localAccountError && (
+        <S.Errors style={{ marginBottom: normalizeValue(1) }}>
+          <div>
+            <Icons.Alert />
+          </div>
+          <p>{t(localAccountError)}</p>
+        </S.Errors>
+      )}
       <S.Content onSubmit={handleSubmit}>
         <S.Wallets>
           <WalletCard
             label={t("from")}
             walletType={t("funding.type")}
-            walletName={fundingWalletName}
+            walletName={fundingWallet?.name ?? "Wallet not present"}
             walletAddress={fundingWalletAddress}
+            hasUser={fundWalletPresent}
           />
           <S.WalletsButton type="button" onClick={onTransferInteraction}>
             <div>
@@ -140,12 +166,13 @@ export const TransferFormDeposit = ({
             label={t("to")}
             walletType={t("trading.type")}
             walletName={t("trading.message")}
+            hasUser
           />
         </S.Wallets>
         <S.Form>
           <TokenCard
-            tokenIcon={(selectedAsset?.symbol as keyof typeof Tokens) ?? ""}
-            tokenTicker={selectedAsset?.symbol ?? ""}
+            tokenIcon={(selectedAsset?.ticker as keyof typeof Tokens) ?? ""}
+            tokenTicker={selectedAsset?.ticker ?? ""}
             availableAmount={selectedAsset?.onChainBalance ?? "0.00"}
             onAction={() => onOpenAssets(resetForm)}
             loading={balancesLoading}
@@ -172,18 +199,39 @@ export const TransferFormDeposit = ({
                 ref={amountRef}
                 autoComplete="off"
                 placeholder={t("amountPlaceholder")}
+                disabled={!fundWalletPresent}
                 {...getFieldProps("amount")}
               />
             </div>
-            <button type="button" onClick={handleMax}>
+            <button
+              disabled={!fundWalletPresent}
+              type="button"
+              onClick={handleMax}
+            >
               {t("maxButton")}
             </button>
           </S.Amount>
         </S.Form>
-        <S.Footer>
-          <button disabled={!(isValid && dirty) || loading} type="submit">
-            {t("transferButton")}
-          </button>
+        <S.Footer hasUser={fundWalletPresent && localAccountError.length === 0}>
+          {localAccountError?.length === 0 ? (
+            <button
+              type={fundWalletPresent ? "submit" : "button"}
+              disabled={disabled}
+              onClick={
+                fundWalletPresent ? undefined : () => onToogleConnectExtension()
+              }
+            >
+              {t(buttonMessage)}
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="bg-primary-base"
+              onClick={() => onToogleConnectExtension()}
+            >
+              {t("createTradingAccount")}
+            </button>
+          )}
         </S.Footer>
       </S.Content>
     </Loading>

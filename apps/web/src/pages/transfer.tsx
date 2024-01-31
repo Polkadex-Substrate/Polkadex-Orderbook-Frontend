@@ -1,15 +1,5 @@
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import {
-  AssetsProvider,
-  BalancesProvider,
-  TransactionsProvider,
-  DepositProvider,
-  WithdrawsProvider,
-} from "@orderbook/core/providers";
 import LoadingScreen from "@polkadex/orderbook-ui/molecules/LoadingScreen";
-import { useProfile } from "@orderbook/core/providers/user/profile";
 import { GetServerSideProps } from "next";
 
 import { getServerSidePropsWithTranslations } from "@/utils";
@@ -23,32 +13,26 @@ const TransferTemplate = dynamic(
     loading: () => <LoadingScreen />,
   }
 );
-
+const DepositProvider = dynamic(
+  () => import("@orderbook/core/providers").then((mod) => mod.DepositProvider),
+  {
+    ssr: false,
+  }
+);
+const WithdrawsProvider = dynamic(
+  () =>
+    import("@orderbook/core/providers").then((mod) => mod.WithdrawsProvider),
+  {
+    ssr: false,
+  }
+);
 const Transfer = () => {
-  const router = useRouter();
-
-  const {
-    authInfo: { isAuthenticated },
-    auth: { isLoading },
-  } = useProfile();
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) router?.push("/trading/");
-  }, [isLoading, isAuthenticated, router]);
-
-  if (!isAuthenticated || isLoading) return <div />;
   return (
-    <AssetsProvider>
-      <BalancesProvider>
-        <TransactionsProvider>
-          <DepositProvider>
-            <WithdrawsProvider>
-              <TransferTemplate />
-            </WithdrawsProvider>
-          </DepositProvider>
-        </TransactionsProvider>
-      </BalancesProvider>
-    </AssetsProvider>
+    <DepositProvider>
+      <WithdrawsProvider>
+        <TransferTemplate />
+      </WithdrawsProvider>
+    </DepositProvider>
   );
 };
 

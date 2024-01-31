@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   flex: 1;
   display: flex;
@@ -7,12 +9,17 @@ export const Wrapper = styled.div`
   justify-content: center;
 `;
 export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  padding: 4rem 2rem;
+  padding: ${normalizeValue(4)} ${normalizeValue(2)};
   p {
-    margin-top: 1rem;
+    margin-top: ${normalizeValue(1)};
+    font-size: ${normalizeValue(1.3)};
   }
   svg {
-    width: 4rem;
+    width: ${normalizeValue(4)};
+    height: ${normalizeValue(4)};
   }
 `;

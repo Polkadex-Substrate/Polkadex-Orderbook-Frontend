@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
 export const Wrapper = styled.div`
   position: relative;
 `;
@@ -13,7 +14,7 @@ export const Container = styled.div<{
     position: absolute;
     top: 0;
     background-color: ${theme.colors[color]};
-    padding: 1rem;
+    padding: ${normalizeValue(1)};
     color: ${theme.colors.text};
     width: 100%;
     height: 100%;

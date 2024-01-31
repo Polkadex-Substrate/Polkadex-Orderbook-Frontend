@@ -4,9 +4,7 @@
   "withdraw": "Withdraw",
   "connectTradingAccount": {
     "title": "Connect your Trading Account",
-    "description": "Import your existing account, or create a new account",
-    "primaryLinkTitle": "Create Account",
-    "secondaryLinkTitle": "Select Account"
+    "description": "Import your existing account, or create a new account"
   },
   "blockFinalizationMessage": "Block finalization will take a few mins.",
   "createAccount": "Create Account",
@@ -24,8 +22,8 @@
   "transfer": "Transfer",
   "externalLink": "External link",
   "backButton": "Back",
-  "nextButton":"Next",
-  "doneButton":"Done",
+  "nextButton": "Next",
+  "doneButton": "Done",
   "dontShow": "  Don't show again",
-  "dontShowAria":"Close tour"
+  "dontShowAria": "Close tour"
 }

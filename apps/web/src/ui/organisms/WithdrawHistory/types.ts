@@ -1,7 +1,9 @@
 import { WithdrawGroup, WithdrawGroupItem } from "@orderbook/core/helpers";
-import { Transaction } from "@orderbook/core/providers/user/transactionsProvider";
+import { Transaction } from "@orderbook/core/utils/orderbookService";
 
-export interface WithdrawTableProps extends Omit<Transaction, "asset"> {
+export interface WithdrawTableProps
+  extends Omit<Transaction, "asset" | "timestamp"> {
+  timestamp: string;
   token: {
     name: string;
     ticker: string;

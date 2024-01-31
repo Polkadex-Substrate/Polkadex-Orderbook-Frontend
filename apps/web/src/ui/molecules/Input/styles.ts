@@ -1,9 +1,11 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div`
   ${({ theme }) => css`
-    padding: 1rem;
-    border-radius: 1rem;
+    padding: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(1)};
     background: ${theme.colors.secondaryBackgroundOpacity};
     label {
       font-size: ${theme.font.sizes.xsmall};
@@ -11,7 +13,7 @@ export const Wrapper = styled.div`
       width: 100%;
     }
     input {
-      margin-top: 1rem;
+      margin-top: ${normalizeValue(1)};
       display: block;
       font-size: ${theme.font.sizes.small};
       color: ${theme.colors.text};
@@ -26,11 +28,11 @@ export const LineContainer = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     input {
       width: 100%;
       display: block;
-      margin-top: 1rem;
+      margin-top: ${normalizeValue(1)};
       color: ${theme.colors.text};
     }
   `}
@@ -39,13 +41,13 @@ export const LineContainer = styled.div`
 export const InputLineWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: ${normalizeValue(0.5)};
 `;
 export const LineBox = styled.div<{ error?: boolean }>`
   ${({ theme, error }) => css`
     border-bottom: 1px solid
       ${error ? theme.colors.primary : theme.colors.secondaryBackgroundOpacity};
-    padding-bottom: 1rem;
+    padding-bottom: ${normalizeValue(1)};
     display: flex;
     flex-direction: column;
     span {
@@ -61,8 +63,8 @@ export const LabelBox = styled.div`
 
 export const Box = styled.div`
   ${({ theme }) => css`
-    padding: 1.2rem;
-    border-radius: 1rem;
+    padding: ${normalizeValue(1.2)};
+    border-radius: ${normalizeValue(1)};
     background: ${theme.colors.white};
     border: 1px solid ${theme.colors.secondaryBackground};
     label {
@@ -71,7 +73,7 @@ export const Box = styled.div`
       color: ${theme.colors.black};
     }
     input {
-      margin-top: 1rem;
+      margin-top: ${normalizeValue(1)};
       display: block;
       font-size: ${theme.font.sizes.small};
       color: ${theme.colors.black};
@@ -85,7 +87,7 @@ export const Box = styled.div`
 export const PassCodeWrapper = styled.div`
   ${({ theme }) => css`
     span {
-      margin-bottom: 1rem;
+      margin-bottom: ${normalizeValue(-1)};
       display: block;
       color: ${theme.colors.tertiaryText};
     }
@@ -94,7 +96,7 @@ export const PassCodeWrapper = styled.div`
 
 export const PassCode = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const LinePassCode = styled.div<{ error?: boolean }>`
@@ -104,10 +106,10 @@ export const LinePassCode = styled.div<{ error?: boolean }>`
       width: 100%;
       text-align: center;
       color: ${theme.colors.text};
-      border-radius: 0.4rem;
+      border-radius: ${normalizeValue(0.4)};
       background: ${theme.colors.secondaryBackgroundOpacity};
-      width: 4rem;
-      height: 5rem;
+      width: ${normalizeValue(4)};
+      height: ${normalizeValue(5)};
       border: 2px solid ${theme.colors.transparent};
       :-webkit-outer-spin-button,
       :-webkit-inner-spin-button {
@@ -133,8 +135,8 @@ export const LinePassCode = styled.div<{ error?: boolean }>`
 export const Error = styled.span<{ hasMargin?: boolean }>`
   ${({ theme, hasMargin = true }) => css`
     color: ${theme.colors.primary} !important;
-    font-size: 1.2rem;
-    margin-left: ${hasMargin ? "1.3rem" : "none"};
+    font-size: ${normalizeValue(1.2)};
+    margin-left: ${hasMargin ? normalizeValue(1.3) : "none"};
   `}
 `;
 
@@ -143,8 +145,8 @@ export const Error = styled.span<{ hasMargin?: boolean }>`
 export const SecondaryWrapper = styled.div<{ hasLabel?: boolean }>`
   ${({ theme, hasLabel }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 1.2rem 0.8rem;
-    border-radius: 0.8rem;
+    padding: ${normalizeValue(1.2)} ${normalizeValue(0.8)};
+    border-radius: ${normalizeValue(0.8)};
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -163,7 +165,7 @@ export const SecondaryWrapper = styled.div<{ hasLabel?: boolean }>`
     input {
       color: ${theme.colors.text};
       text-align: ${hasLabel ? "end" : "start"};
-      margin-right: 0.5rem;
+      margin-right: ${normalizeValue(0.5)};
       font-size: ${theme.font.sizes.small};
       line-height: 0;
       width: 100%;
@@ -183,7 +185,7 @@ export const TabHeader = styled.div<{
         : theme.colors.green
       : "transparent"};
     opacity: ${isActive ? 1 : 0.7};
-    padding: 1.2rem;
+    padding: ${normalizeValue(1.2)};
     font-weight: 600;
     cursor: pointer;
     font-size: ${theme.font.sizes.xsmall};

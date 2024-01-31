@@ -65,6 +65,7 @@
     "exchange": "Exchange",
     "balances": "Balances",
     "wallets": "Wallets",
+    "transfer": "Transfer",
     "light": "Light",
     "dark": "Dark",
     "help": "Help",

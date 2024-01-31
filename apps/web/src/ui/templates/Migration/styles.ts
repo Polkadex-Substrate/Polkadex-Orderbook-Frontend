@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.section`
   min-height: 100vh;
   display: flex;
@@ -11,7 +13,7 @@ export const Container = styled.div`
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
-  column-gap: 4rem;
+  column-gap: ${normalizeValue(4)};
   flex: 1;
   justify-content: center;
   flex-wrap: wrap;
@@ -24,22 +26,22 @@ export const Info = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: ${normalizeValue(1.5)};
     max-width: 1000px;
 
-    padding: 2rem;
-    max-height: 50rem;
-    min-height: 50rem;
+    padding: ${normalizeValue(2)};
+    max-height: ${normalizeValue(50)};
+    min-height: ${normalizeValue(50)};
     overflow: auto;
     background-color: ${theme.colors.black};
     color: ${theme.colors.tertiaryText};
 
-    font-size: 1.5rem;
-    border-radius: 1rem;
+    font-size: ${normalizeValue(1.5)};
+    border-radius: ${normalizeValue(1)};
     button {
       background-color: ${theme.colors.primary};
       width: max-content;
-      padding: 1rem 2rem;
+      padding: ${normalizeValue(1)} ${normalizeValue(2)};
       color: ${theme.colors.text};
       border-radius: ${theme.border.radius.small};
     }
@@ -52,18 +54,18 @@ export const Info = styled.div`
 export const Inner = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.primary};
-    width: 20rem;
-    height: 10rem;
-    border-radius: 0 0 10rem 10rem;
+    width: ${normalizeValue(20)};
+    height: ${normalizeValue(10)};
+    border-radius: 0 0 ${normalizeValue(10)} ${normalizeValue(10)};
   `}
 `;
 
 export const Outer = styled.div`
   ${({ theme }) => css`
     position: absolute;
-    width: 40rem;
-    height: 20rem;
-    border-radius: 0 0 20rem 20rem;
+    width: ${normalizeValue(40)};
+    height: ${normalizeValue(20)};
+    border-radius: 0 0 ${normalizeValue(20)} ${normalizeValue(20)};
     background: ${theme.colors.primary}22;
     display: flex;
     justify-content: center;
@@ -80,20 +82,20 @@ export const Content = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: column;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     flex: 1;
     background: ${theme.colors.tertiaryBackgroundOpacity};
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
     p,
     a,
     span {
-      font-size: 1.4rem;
+      font-size: ${normalizeValue(1.4)};
     }
     @media screen and (min-width: 855px) {
-      max-width: 50rem;
+      max-width: ${normalizeValue(50)};
     }
     @media screen and (min-width: 1006px) {
-      padding: 4rem;
+      padding: ${normalizeValue(4)};
     }
   `}
 `;
@@ -103,10 +105,10 @@ export const Box = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: column;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     h1 {
-      font-size: 5.5rem;
-      font-weight: 550;
+      font-size: ${normalizeValue(5.5)};
+      font-weight: 600;
       line-height: 1;
     }
     p {
@@ -127,18 +129,18 @@ export const Header = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: ${normalizeValue(1)};
     span {
       display: block;
       &:first-child {
-        height: 3rem;
-        width: 3rem;
+        height: ${normalizeValue(3)};
+        width: ${normalizeValue(3)};
       }
       &:last-child {
-        height: 4rem;
-        width: 15rem;
-        margin-left: 1rem;
-        padding-left: 1rem;
+        height: ${normalizeValue(4)};
+        width: ${normalizeValue(15)};
+        margin-left: ${normalizeValue(1)};
+        padding-left: ${normalizeValue(1)};
         border-left: 1px solid ${theme.colors.secondaryBackground};
       }
     }
@@ -151,14 +153,14 @@ export const Footer = styled.div`
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 4rem;
+    gap: ${normalizeValue(1)};
+    margin-top: ${normalizeValue(4)};
     p {
       color: ${theme.colors.tertiaryText};
     }
     a {
-      border-radius: 0.6rem;
-      padding: 1rem;
+      border-radius: ${normalizeValue(0.6)};
+      padding: ${normalizeValue(1)};
       background: ${theme.colors.primary};
       color: ${theme.colors.white};
       transition: background-color 0.4s ease;
@@ -175,17 +177,17 @@ export const Timer = styled.div`
   justify-content: center;
   align-items: center;
   max-width: fit-content;
-  margin-top: 3rem;
-  gap: 6rem;
+  margin-top: ${normalizeValue(3)};
+  gap: ${normalizeValue(6)};
   flex: 1;
-  padding: 0 2rem;
+  padding: 0 ${normalizeValue(2)};
   img {
     width: 100%;
-    max-width: 60rem;
+    max-width: ${normalizeValue(60)};
   }
   h3 {
     font-weight: normal;
-    font-size: 1.4rem;
+    font-size: ${normalizeValue(1.4)};
   }
 
   @media screen and (min-width: 855px) {
@@ -198,7 +200,7 @@ export const TimerWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3rem;
+    gap: ${normalizeValue(3)};
     h3 {
       color: ${theme.colors.white};
     }
@@ -211,37 +213,37 @@ export const TimerWrapper = styled.div`
 export const CountDown = styled.div`
   ${({ theme }) => css`
     display: flex;
-    gap: 5rem;
+    gap: ${normalizeValue(5)};
     div {
       position: relative;
       &:not(:last-child) {
         &:before {
-          font-size: 4rem;
+          font-size: ${normalizeValue(4)};
           position: absolute;
           content: ":";
-          right: -3.2rem;
+          right: ${normalizeValue(-3.2)};
           top: 20%;
         }
       }
     }
     span {
-      font-size: 8rem;
+      font-size: ${normalizeValue(8)};
     }
     p {
-      font-size: 3rem;
+      font-size: ${normalizeValue(3)};
       color: ${theme.colors.tertiaryText};
       opacity: 0.5;
-      font-weight: 550;
+      font-weight: 600;
     }
     span {
       color: ${theme.colors.white};
     }
     @media screen and (max-width: 612px) {
       span {
-        font-size: 4rem;
+        font-size: ${normalizeValue(4)};
       }
       p {
-        font-size: 1.5rem;
+        font-size: ${normalizeValue(1.5)};
       }
     }
   `}
@@ -250,10 +252,10 @@ export const CountDown = styled.div`
 export const InfoButton = styled.button`
   ${({ theme }) => css`
     cursor: pointer;
-    font-weight: 550;
-    border-radius: 0.6rem;
+    font-weight: 600;
+    border-radius: ${normalizeValue(0.6)};
 
-    padding: 2rem 1rem;
+    padding: ${normalizeValue(2)} ${normalizeValue(1)};
     width: 100%;
     background-color: ${theme.colors.primary};
     font-size: ${theme.font.sizes.large};

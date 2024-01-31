@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 import { generateMedia } from "styled-media-query";
+
+import { normalizeValue } from "@/utils/normalize";
 const customMedia = generateMedia({
   large: "923px",
 });
@@ -7,13 +9,13 @@ const customMedia = generateMedia({
 export const Container = styled.div<{ show: boolean }>`
   ${({ theme, show }) => css`
     border-left: 1px solid ${theme.colors.secondaryBackground};
-    max-width: 30rem;
+    max-width: ${normalizeValue(38)};
     width: 100%;
     min-height: 100vh;
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     flex-shrink: 0;
     ${customMedia.lessThan("large")`
         display:flex;
@@ -40,7 +42,7 @@ export const Button = styled.button`
   ${({ theme }) => css`
     background-color: ${theme.colors.primary};
     font-size: large;
-    padding: 1.8rem;
+    padding: ${normalizeValue(1.8)};
     font-weight: 500;
     border-radius: ${theme.border.radius.medium};
   `}
@@ -50,18 +52,18 @@ export const SocialWrapper = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.tertiaryBackgroundOpacity};
     font-size: ${theme.font.sizes.small};
-    padding: 1.8rem;
+    padding: ${normalizeValue(1.8)};
     font-weight: 400;
     border-radius: ${theme.border.radius.medium};
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: ${normalizeValue(1.5)};
   `}
 `;
 
 export const Social = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
   align-items: center;
   cursor: pointer;
   &:hover {
@@ -75,14 +77,14 @@ export const Social = styled.div`
 
 export const OnlyIcons = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: ${normalizeValue(1)};
 `;
 
 export const IconWrapper = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.tertiaryBackgroundOpacity};
-    width: 4.5rem;
-    height: 4.5rem;
+    width: ${normalizeValue(4.5)};
+    height: ${normalizeValue(4.5)};
     border-radius: ${theme.border.radius.medium};
     display: flex;
     align-items: center;
@@ -103,7 +105,7 @@ export const Icon = styled.div`
 export const Community = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.colors.tertiaryBackgroundOpacity};
-    padding: 1.8rem;
+    padding: ${normalizeValue(1.8)};
     border-radius: ${theme.border.radius.medium};
   `}
 `;
@@ -112,9 +114,9 @@ export const Description = styled.div`
   ${({ theme }) => css`
     font-size: small;
     color: ${theme.colors.tertiaryText};
-    margin-top: 1rem;
+    margin-top: ${normalizeValue(1)};
     font-weight: 400;
-    line-height: 2rem;
+    line-height: ${normalizeValue(2)};
   `}
 `;
 

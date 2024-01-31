@@ -12,24 +12,31 @@ import { Amplify, Analytics } from "aws-amplify";
 import { Work_Sans } from "next/font/google";
 import Head from "next/head";
 import { defaultConfig } from "@orderbook/core/config";
-import {
-  AuthProvider,
-  ProfileProvider,
-  TradeWalletProvider,
-  NativeApiProvider,
-  ExtensionWalletProvider,
-  SettingProvider,
-  AssetsProvider,
-  MarketsProvider,
-} from "@orderbook/core/providers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { useInit } from "@orderbook/core/hooks";
+import dynamic from "next/dynamic";
+import "../styles/globals.scss";
 
+import "@polkadex/ux/dist/index.css";
 import awsconfig from "../../aws-exports";
 
 import * as gtag from "@/lib/gtag";
 import { defaultThemes, GlobalStyles } from "@/styles";
 
+const SettingProvider = dynamic(
+  () => import("@orderbook/core/providers").then((mod) => mod.SettingProvider),
+  {
+    ssr: false,
+  }
+);
+const DynamicProviders = dynamic(
+  () =>
+    import("@/ui/templates/DynamicProviders").then(
+      (mod) => mod.DynamicProviders
+    ),
+  {
+    ssr: false,
+  }
+);
 const analyticsConfig = {
   AWSPinpoint: {
     // Amazon Pinpoint App Client ID
@@ -44,6 +51,7 @@ Amplify.configure(awsconfig);
 Analytics.configure(analyticsConfig);
 
 const workSans = Work_Sans({
+  display: "swap",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
   subsets: ["latin"],
 });
@@ -55,32 +63,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-const Providers = ({ children }) => {
-  return (
-    <AuthProvider>
-      <ProfileProvider>
-        <NativeApiProvider>
-          <TradeWalletProvider>
-            <ExtensionWalletProvider>{children}</ExtensionWalletProvider>
-          </TradeWalletProvider>
-        </NativeApiProvider>
-      </ProfileProvider>
-    </AuthProvider>
-  );
-};
-
-const TradingPageProvider = ({ children }) => {
-  const router = useRouter();
-  const isTradingPage = router.pathname.startsWith("/trading");
-  return isTradingPage ? (
-    <AssetsProvider>
-      <MarketsProvider>{children}</MarketsProvider>
-    </AssetsProvider>
-  ) : (
-    <>{children}</>
-  );
-};
 
 function App({ Component, pageProps }: AppProps) {
   // Removes all console from production environment
@@ -136,14 +118,12 @@ function App({ Component, pageProps }: AppProps) {
         >
           <OverlayProvider>
             {isActive ? (
-              <TradingPageProvider>
-                <Providers>
-                  <ModifiedThemeProvider
-                    Component={Component}
-                    pageProps={pageProps}
-                  />
-                </Providers>
-              </TradingPageProvider>
+              <DynamicProviders>
+                <ModifiedThemeProvider
+                  Component={Component}
+                  pageProps={pageProps}
+                />
+              </DynamicProviders>
             ) : (
               <ModifiedThemeProvider
                 Component={Component}
@@ -166,7 +146,6 @@ function App({ Component, pageProps }: AppProps) {
 
 const ModifiedThemeProvider = ({ Component, pageProps }) => {
   const { theme } = useSettingsProvider();
-
   return (
     <>
       <ThemeProvider
@@ -182,8 +161,6 @@ const ModifiedThemeProvider = ({ Component, pageProps }) => {
 };
 
 const ThemeWrapper = ({ children }: { children: ReactNode }) => {
-  useInit();
-
   return (
     <>
       <NextNProgress

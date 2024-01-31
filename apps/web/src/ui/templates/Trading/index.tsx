@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import {
   AccountBanner,
   EmptyMyAccount,
@@ -22,19 +22,21 @@ import {
 } from "@polkadex/orderbook-ui/organisms";
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useRecentTradesProvider } from "@orderbook/core/providers/public/recentTradesProvider";
-import { OrderHistoryProvider } from "@orderbook/core/providers/user/orderHistoryProvider";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { SessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { KlineProvider } from "@orderbook/core/providers/public/klineProvider";
-import { TradesProvider } from "@orderbook/core/providers/user/trades";
 import { defaultConfig } from "@orderbook/core/config";
+import { useMarkets, useTickers } from "@orderbook/core/hooks";
+import { getCurrentMarket } from "@orderbook/core/helpers";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { ShutdownInteraction } from "../ShutdownInteraction";
+import { ConnectTradingInteraction } from "../ConnectTradingInteraction";
 
 import * as S from "./styles";
 
 export function Trading() {
+  const router = useRouter();
+  const query = router.query;
   const shouldShowDisclaimer = useMemo(
     () =>
       process.browser &&
@@ -56,24 +58,24 @@ export function Trading() {
   const [banner, setBanner] = useState(false);
   const [disclaimer, setDisclaimer] = useState(!shouldShowDisclaimer);
 
-  const router = useRouter();
-  const { id } = router?.query;
+  const { list } = useMarkets();
+  const { onToogleConnectTrading } = useSettingsProvider();
 
-  const { currentMarket: market } = useMarketsProvider();
+  const market = getCurrentMarket(list, query?.id as string);
+  const id = market?.id;
 
   const {
-    authInfo: { isAuthenticated: isSignedIn, shouldShowInitialBanner },
-    selectedAccount: { mainAddress },
+    currentTicker: { currentPrice: currentTradePrice },
+  } = useTickers(market?.id ?? "");
+
+  const {
+    isBannerShown: shouldShowInitialBanner,
+    selectedAddresses: { mainAddress, tradeAddress },
     onUserChangeInitBanner,
+    allAccounts,
   } = useProfile();
 
-  const currentTrade = useRecentTradesProvider().getCurrentTradePrice();
-  const profileState = useProfile();
-  const hasTradeAccount = profileState.selectedAccount.tradeAddress !== "";
-  const hasUser = isSignedIn && hasTradeAccount;
-
-  const userAccounts = profileState.userData?.userAccounts;
-  const accounts = userAccounts?.filter(
+  const accounts = allAccounts?.filter(
     (account) => account.mainAddress === mainAddress
   );
   const hasAssociatedAccounts = accounts?.map((account) => account.tradeAddress)
@@ -82,24 +84,18 @@ export function Trading() {
   const { t } = useTranslation("trading");
   const { t: tc } = useTranslation("common");
 
-  const hasSelectedAccount = isSignedIn &&
-    !hasTradeAccount && {
-      image: "emptyWallet",
-      title: tc("connectTradingAccount.title"),
-      description: tc("connectTradingAccount.description"),
-      primaryLink: "/wallets",
-      primaryLinkTitle: tc("connectTradingAccount.primaryLinkTitle"),
-      secondaryLink: "/wallets",
-      secondaryLinkTitle: tc("connectTradingAccount.secondaryLinkTitle"),
-    };
+  const hasSelectedAccount = {
+    image: "emptyWallet",
+    title: tc("connectTradingAccount.title"),
+  };
 
   const marketName = market?.name?.replace("/", "");
 
   useEffect(() => {
-    if (isSignedIn && shouldShowInitialBanner && !hasAssociatedAccounts) {
+    if (shouldShowInitialBanner && !hasAssociatedAccounts) {
       setBanner(true);
     }
-  }, [isSignedIn, hasAssociatedAccounts, shouldShowInitialBanner]);
+  }, [hasAssociatedAccounts, shouldShowInitialBanner]);
 
   const closeBanner = () => {
     setBanner(false);
@@ -112,11 +108,11 @@ export function Trading() {
     <>
       <Head>
         <title>
-          {currentTrade && marketName && `${currentTrade} | ${marketName} | `}{" "}
-          {tc("polkadexOrderbook")}
+          {`${currentTradePrice} | ${marketName} | `} {tc("polkadexOrderbook")}
         </title>
         <meta name="description" content="The trading engine of Web3" />
       </Head>
+      <ConnectTradingInteraction />
       <Modal
         open={shutdownBanner}
         isBlur
@@ -133,7 +129,7 @@ export function Trading() {
         />
       </Modal>
       <Modal
-        open={isSignedIn && disclaimer}
+        open={disclaimer}
         onClose={handleAcceptDisclaimer}
         placement="start"
       >
@@ -160,7 +156,7 @@ export function Trading() {
         isFullHeight
         isBlur
       >
-        <Markets onClose={() => setState(false)} />
+        <Markets onClose={() => setState(false)} market={id} />
       </Modal>
       <S.Container>
         <S.Wrapper>
@@ -174,24 +170,28 @@ export function Trading() {
                     <S.CenterWrapper>
                       <S.GraphEpmty>
                         <KlineProvider>
-                          <Navbar onOpenMarkets={() => setState(!state)} />
-                          <Graph />
+                          <Navbar
+                            onOpenMarkets={() => setState(!state)}
+                            market={id}
+                          />
+                          <Graph market={id} />
                         </KlineProvider>
-                        {hasUser ? (
+                        {tradeAddress ? (
                           <SessionProvider>
-                            <TradesProvider>
-                              <OrderHistoryProvider>
-                                <Transactions />
-                              </OrderHistoryProvider>
-                            </TradesProvider>
+                            <Transactions market={id} />
                           </SessionProvider>
                         ) : (
-                          <EmptyMyAccount hasLimit {...hasSelectedAccount} />
+                          <EmptyMyAccount
+                            buttonAction={onToogleConnectTrading}
+                            buttonTitle="Connect Trading Account"
+                            hasLimit
+                            {...hasSelectedAccount}
+                          />
                         )}
                       </S.GraphEpmty>
                       <S.WrapperRight>
-                        <MarketOrder />
-                        <RecentTrades />
+                        <MarketOrder market={id} />
+                        <RecentTrades market={id} />
                       </S.WrapperRight>
                     </S.CenterWrapper>
                   </S.WrapperGraph>

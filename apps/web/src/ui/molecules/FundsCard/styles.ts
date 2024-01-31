@@ -2,12 +2,15 @@ import styled, { css } from "styled-components";
 import media from "styled-media-query";
 import { Wrapper as Icon } from "@polkadex/orderbook-ui/molecules/Icon/styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Tr = styled.tr`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    padding: 1.2rem;
-    margin-bottom: 1.2rem;
-    border-radius: 0 1rem 1rem 1rem;
+    padding: ${normalizeValue(1.2)};
+    margin-bottom: ${normalizeValue(1.2)};
+    border-radius: 0 ${normalizeValue(1)} ${normalizeValue(1)}
+      ${normalizeValue(1)};
     &:nth-child(even) {
       background: ${theme.colors.tertiaryBackgroundOpacity};
     }
@@ -22,8 +25,8 @@ export const ContainerFlex = styled.div`
 export const CardInfo = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-left: 0.5rem;
+  gap: ${normalizeValue(1)};
+  margin-left: ${normalizeValue(0.5)};
   p {
     font-weight: 500;
     white-space: nowrap;
@@ -38,9 +41,9 @@ export const CardIconWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 3rem;
-    height: 3rem;
-    margin-right: 0.4rem;
+    width: ${normalizeValue(3)};
+    height: ${normalizeValue(3)};
+    margin-right: ${normalizeValue(0.4)};
     border-radius: 50%;
     border: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     background: ${theme.colors.primaryBackgroundOpacity};
@@ -48,17 +51,17 @@ export const CardIconWrapper = styled.div`
 `;
 export const Image = styled.div<{ isSell?: boolean }>`
   ${({ theme }) => css`
-    width: 2.5rem;
-    height: 2.5rem;
+    width: ${normalizeValue(2.5)};
+    height: ${normalizeValue(2.5)};
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid ${theme.colors.secondaryBackground};
-    border-radius: 30rem;
-    margin-right: 0.5rem;
+    border-radius: ${normalizeValue(38)};
+    margin-right: ${normalizeValue(0.5)};
     svg {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: ${normalizeValue(1.5)};
+      height: ${normalizeValue(1.5)};
     }
   `}
 `;
@@ -70,8 +73,8 @@ export const ContainerActions = styled.div`
     justify-content: flex-end;
     ${Icon} {
       cursor: pointer;
-      padding: 0.5rem;
-      border-radius: 10rem;
+      padding: ${normalizeValue(0.5)};
+      border-radius: ${normalizeValue(10)};
       transition: background 0.5s ease;
       &:hover {
         background: ${theme.colors.secondaryBackground};
@@ -85,7 +88,7 @@ export const ContainerActions = styled.div`
 `;
 export const Tag = styled.span`
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: ${normalizeValue(1)};
   display: none;
   opacity: 0.5;
   ${media.lessThan("large")`

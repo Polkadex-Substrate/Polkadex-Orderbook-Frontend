@@ -7,27 +7,29 @@ import {
   LoadingSpinner,
   Button,
 } from "@polkadex/orderbook-ui/molecules";
-import { Ifilters, OrderCommon } from "@orderbook/core/providers/types";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
-import { decimalPlaces } from "@orderbook/core/helpers";
+import { Ifilters } from "@orderbook/core/providers/types";
+import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
 import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
-import { useOrderHistory } from "@orderbook/core/index";
+import { Order } from "@orderbook/core/utils/orderbookService";
+import { useMarkets, useOrderHistory } from "@orderbook/core/hooks";
 
 import { TransactionsSkeleton } from "../Transactions";
 
 import * as S from "./styles";
 
+import { normalizeValue } from "@/utils/normalize";
+
 type Props = {
   filters: Ifilters;
+  market: string;
 };
 
-export const OrderHistory = ({ filters }: Props) => {
+export const OrderHistory = ({ filters, market }: Props) => {
   const { hasNextPage, isLoading, onFetchNextPage, orderHistory, error } =
-    useOrderHistory(filters);
+    useOrderHistory(filters, market);
 
-  const { selectGetAsset } = useAssetsProvider();
-  const { currentMarket } = useMarketsProvider();
+  const { list } = useMarkets();
+  const currentMarket = getCurrentMarket(list, market);
 
   const priceFixed = currentMarket
     ? decimalPlaces(currentMarket.price_tick_size)
@@ -70,23 +72,22 @@ export const OrderHistory = ({ filters }: Props) => {
               height={300}
               loader={
                 <S.Loader>
-                  <LoadingSpinner size="2rem" />
+                  <LoadingSpinner size={normalizeValue(2)} />
                 </S.Loader>
               }
             >
               {orderHistory &&
-                orderHistory.map((order: OrderCommon, i) => {
-                  const [base, quote] = order.m.split("-");
-                  const date = new Date(order.time).toLocaleString();
+                orderHistory.map((order: Order, i) => {
+                  const date = new Date(order.timestamp).toLocaleString();
                   const isSell = order.side === "Ask";
-                  const isMarket = order.order_type === "MARKET";
-                  const baseUnit = selectGetAsset(base)?.symbol;
-                  const quoteUnit = selectGetAsset(quote)?.symbol;
-                  const avgPrice = order.avg_filled_price;
+                  const isMarket = order.type === "MARKET";
+                  const baseUnit = order.market?.baseAsset?.ticker;
+                  const quoteUnit = order.market?.quoteAsset?.ticker;
+                  const avgPrice = order.averagePrice;
                   const shortId =
-                    order.id.slice(0, 4) +
+                    order.orderId.slice(0, 4) +
                     "..." +
-                    order.id.slice(order.id.length - 4);
+                    order.orderId.slice(order.orderId.length - 4);
                   const status = order.status;
                   const show = status !== "OPEN";
                   return (
@@ -96,12 +97,12 @@ export const OrderHistory = ({ filters }: Props) => {
                         id={shortId}
                         isSell={isSell}
                         status={status}
-                        orderType={order.order_type}
+                        orderType={order.type}
                         baseUnit={baseUnit}
                         quoteUnit={quoteUnit}
                         data={[
                           { value: date },
-                          { value: order.order_type },
+                          { value: order.type },
                           { value: order.status },
                           {
                             value: isMarket
@@ -109,11 +110,15 @@ export const OrderHistory = ({ filters }: Props) => {
                               : Decimal.format(order.price, priceFixed, ","),
                           },
                           {
-                            value: Decimal.format(order.qty, amountFixed, ","),
+                            value: Decimal.format(
+                              order.quantity,
+                              amountFixed,
+                              ","
+                            ),
                           },
                           {
                             value: Decimal.format(
-                              order.filled_quantity,
+                              order.filledQuantity,
                               filledQtyPrecision,
                               ","
                             ),
@@ -133,7 +138,9 @@ export const OrderHistory = ({ filters }: Props) => {
               {!isLoading && error && (
                 <S.ErrorWrapper>
                   <p>{error}</p>
-                  <Button onClick={onFetchNextPage}>{t("tryAgain")}</Button>
+                  <Button onClick={() => onFetchNextPage()}>
+                    {t("tryAgain")}
+                  </Button>
                 </S.ErrorWrapper>
               )}
             </InfiniteScroll>

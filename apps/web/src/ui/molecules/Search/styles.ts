@@ -1,14 +1,16 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.div<{ isFull?: boolean; hasBorder?: boolean }>`
   ${({ theme, isFull, hasBorder }) => css`
     display: flex;
     align-items: center;
     justify-content: flex-start;
     overflow: hidden;
-    width: ${isFull ? "100%" : "3rem"};
-    height: 3rem;
-    border-radius: 20rem;
+    width: ${isFull ? "100%" : normalizeValue(3)};
+    height: ${normalizeValue(3)};
+    border-radius: ${normalizeValue(20)};
     border: ${hasBorder
       ? `1px solid ${theme.colors.secondaryBackground}`
       : "none"};
@@ -21,12 +23,12 @@ export const Wrapper = styled.div<{ isFull?: boolean; hasBorder?: boolean }>`
       border-color: ${theme.colors.text};
     }
     button {
-      padding: 0 0.7rem;
+      padding: 0 ${normalizeValue(0.7)};
       height: 100%;
     }
     input {
       color: ${theme.colors.text};
-      margin-left: 0.3rem;
+      margin-left: ${normalizeValue(0.3)};
       width: 100%;
     }
   `}

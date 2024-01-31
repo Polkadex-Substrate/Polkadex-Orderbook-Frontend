@@ -1,33 +1,70 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Ifilters } from "@orderbook/core/providers/types";
-import { useMarketsProvider } from "@orderbook/core/providers/public/marketsProvider";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useTrades } from "@orderbook/core/providers/user/trades";
-import { useAssetsProvider } from "@orderbook/core/providers/public/assetsProvider";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
-import { decimalPlaces } from "../helpers";
-import { MIN_DIGITS_AFTER_DECIMAL } from "../constants";
+import { decimalPlaces, getCurrentMarket } from "../helpers";
+import {
+  MIN_DIGITS_AFTER_DECIMAL,
+  QUERY_KEYS,
+  TRADE_HISTORY_PER_PAGE_LIMIT,
+} from "../constants";
+import { appsyncOrderbookService } from "../utils/orderbookService";
+import { useSessionProvider } from "../providers/user/sessionProvider";
 
-export function useTradeHistory(filters: Ifilters) {
-  const { selectGetAsset } = useAssetsProvider();
-  const profileState = useProfile();
-  const tradesState = useTrades();
-  const { onFetchNextPage } = tradesState;
+import { useMarkets } from "./useMarkets";
 
-  const list = tradesState.data;
-  const listSorted = useMemo(() => {
-    return list.sort((a, b) => {
-      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
+  const {
+    selectedAddresses: { tradeAddress },
+  } = useProfile();
+  const { dateFrom, dateTo } = useSessionProvider();
+  const { list: markets } = useMarkets();
+  const currentMarket = getCurrentMarket(markets, defaultMarket);
+
+  const userLoggedIn = tradeAddress !== "";
+
+  const shouldFetchTradeHistory = Boolean(
+    userLoggedIn && currentMarket && tradeAddress
+  );
+
+  const {
+    data,
+    fetchNextPage: onFetchNextPage,
+    isLoading: fetching,
+    hasNextPage,
+    error,
+  } = useInfiniteQuery({
+    queryKey: QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
+    enabled: shouldFetchTradeHistory,
+    queryFn: async ({ pageParam = null }) => {
+      return await appsyncOrderbookService.query.getTradeHistory({
+        address: tradeAddress,
+        from: dateFrom,
+        to: dateTo,
+        pageParams: pageParam,
+        limit: TRADE_HISTORY_PER_PAGE_LIMIT,
+      });
+    },
+    getNextPageParam: (lastPage) => {
+      // If the last page contains nextToken as null, don't fetch the next page
+      if (!lastPage.nextToken) {
+        return false;
+      }
+      return lastPage.nextToken;
+    },
+  });
+
+  const list = useMemo(() => {
+    const tradeHistory = data?.pages?.flatMap((page) => page.data) ?? [];
+    return tradeHistory.sort((a, b) => {
+      const timestampA = new Date(a.timestamp).getTime();
+      const timestampB = new Date(b.timestamp).getTime();
+      return timestampB - timestampA;
     });
-  }, [list]);
-  const fetching = tradesState.loading;
-  const { currentMarket } = useMarketsProvider();
-  const userLoggedIn = profileState.selectedAccount.tradeAddress !== "";
+  }, [data?.pages]);
 
-  const [updatedTradeList, setUpdatedTradeList] = useState(listSorted);
-
-  // TODO: Refactor filter process. Should do it on server rather than client
-  useEffect(() => {
+  const updatedTradeList = useMemo(() => {
     let tradeHistoryList = list.filter((item) => !item.isReverted);
 
     if (filters?.showReverted) {
@@ -46,16 +83,23 @@ export function useTradeHistory(filters: Ifilters) {
 
     if (filters?.hiddenPairs) {
       tradeHistoryList = tradeHistoryList.filter((trade) => {
-        const baseUnit = selectGetAsset(trade.baseAsset)?.symbol || "";
-        const quoteUnit = selectGetAsset(trade.quoteAsset)?.symbol || "";
+        const baseUnit = trade.market?.baseAsset?.ticker || "";
+        const quoteUnit = trade.market?.quoteAsset?.ticker || "";
         const market = currentMarket?.name;
         const marketForTrade = `${baseUnit}/${quoteUnit}`;
         return market === marketForTrade && trade;
       });
     }
 
-    setUpdatedTradeList(tradeHistoryList);
-  }, [filters, list, currentMarket?.name, selectGetAsset]);
+    return tradeHistoryList;
+  }, [
+    currentMarket?.name,
+    filters?.hiddenPairs,
+    filters?.onlyBuy,
+    filters?.onlySell,
+    filters?.showReverted,
+    list,
+  ]);
 
   const priceFixed = currentMarket
     ? decimalPlaces(currentMarket.price_tick_size)
@@ -69,10 +113,9 @@ export function useTradeHistory(filters: Ifilters) {
     trades: updatedTradeList,
     priceFixed,
     amountFixed,
-    userLoggedIn,
     isLoading: fetching,
-    hasNextPage: tradesState.hasNextPage,
-    error: tradesState.error,
+    hasNextPage,
+    error: error as string,
     onFetchNextPage,
   };
 }

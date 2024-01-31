@@ -1,12 +1,48 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-import { sortOrdersDescendingTime } from "../helpers";
+import { getCurrentMarket, sortOrdersDescendingTime } from "../helpers";
 import { Ifilters } from "../providers/types";
-import { useOrderHistoryProvider } from "../providers/user/orderHistoryProvider";
+import { useSettingsProvider } from "../providers/public/settings";
+import { useProfile } from "../providers/user/profile";
+import { appsyncOrderbookService } from "../utils/orderbookService";
+import { QUERY_KEYS } from "../constants";
 
-export const useOpenOrders = (filters: Ifilters) => {
-  const { openOrders, isOpenOrdersLoading, isMarketMatch } =
-    useOrderHistoryProvider();
+import { useMarkets } from "./useMarkets";
+
+export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
+  const { onHandleError } = useSettingsProvider();
+  const {
+    selectedAddresses: { tradeAddress },
+  } = useProfile();
+
+  const { list: markets } = useMarkets();
+  const currentMarket = getCurrentMarket(markets, defaultMarket);
+
+  const userLoggedIn = tradeAddress !== "";
+  const shouldFetchOpenOrders = Boolean(
+    userLoggedIn && currentMarket && tradeAddress
+  );
+
+  const {
+    data: openOrders,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: QUERY_KEYS.openOrders(tradeAddress),
+    enabled: shouldFetchOpenOrders,
+    queryFn: async () => {
+      return await appsyncOrderbookService.query.getOpenOrders({
+        address: tradeAddress,
+        limit: 25,
+      });
+    },
+    initialData: [],
+    onError: (error) => {
+      const errorMessage = error instanceof Error ? error.message : "";
+      onHandleError(errorMessage);
+    },
+  });
 
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
   const [filteredOpenOrders, setFilteredOpenOrders] =
@@ -17,7 +53,7 @@ export const useOpenOrders = (filters: Ifilters) => {
 
     if (filters?.hiddenPairs) {
       openOrdersList = openOrdersList.filter((order) => {
-        return isMarketMatch(order) && order;
+        return order.market.id === currentMarket?.id;
       });
     }
 
@@ -38,12 +74,12 @@ export const useOpenOrders = (filters: Ifilters) => {
     filters?.hiddenPairs,
     filters?.onlyBuy,
     filters?.onlySell,
-    isMarketMatch,
     openOrdersSorted,
+    currentMarket?.id,
   ]);
 
   return {
     openOrders: filteredOpenOrders,
-    isLoading: isOpenOrdersLoading,
+    isLoading: isLoading || isFetching,
   };
 };

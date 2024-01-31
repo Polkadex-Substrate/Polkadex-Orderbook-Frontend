@@ -2,45 +2,47 @@ import styled, { css } from "styled-components";
 
 import { Props } from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 const sizeModifier = {
   small: () => css`
-    width: 0.8rem;
-    height: 0.8rem;
+    width: ${normalizeValue(0.8)};
+    height: ${normalizeValue(0.8)};
   `,
   extraSmall: (isToken: boolean) => css`
-    width: 1.3rem;
-    height: 1.3rem;
-    padding: ${isToken ? "0.1rem" : "0.2rem"};
+    width: ${normalizeValue(1.3)};
+    height: ${normalizeValue(1.3)};
+    padding: ${isToken ? normalizeValue(0.1) : normalizeValue(0.2)};
   `,
   medium: (isToken: boolean) => css`
-    width: 1.8rem;
-    height: 1.8rem;
-    padding: ${isToken ? "0.2rem" : "0.3rem"};
+    width: ${normalizeValue(1.8)};
+    height: ${normalizeValue(1.8)};
+    padding: ${isToken ? normalizeValue(0.2) : normalizeValue(0.3)};
   `,
   extraMedium: (isToken: boolean) => css`
-    width: 2.3rem;
-    height: 2.3rem;
-    padding: ${isToken ? "0.3rem" : "0.5rem"};
+    width: ${normalizeValue(2.3)};
+    height: ${normalizeValue(2.3)};
+    padding: ${isToken ? normalizeValue(0.3) : normalizeValue(0.5)};
   `,
   large: (isToken: boolean) => css`
-    width: 2.8rem;
-    height: 2.8rem;
-    padding: ${isToken ? "0.3em" : "0.5rem"};
+    width: ${normalizeValue(2.8)};
+    height: ${normalizeValue(2.8)};
+    padding: ${isToken ? normalizeValue(3) : normalizeValue(0.5)};
   `,
   extraLarge: (isToken: boolean) => css`
-    width: 3.5rem;
-    height: 3.5rem;
-    padding: ${isToken ? "0.4rem" : "0.6rem"};
+    width: ${normalizeValue(3.5)};
+    height: ${normalizeValue(3.5)};
+    padding: ${isToken ? normalizeValue(0.4) : normalizeValue(0.6)};
   `,
   giant: (isToken: boolean) => css`
-    width: 4rem;
-    height: 4rem;
-    padding: ${isToken ? "0.8rem" : "0.6rem"};
+    width: ${normalizeValue(4)};
+    height: ${normalizeValue(4)};
+    padding: ${isToken ? normalizeValue(0.6) : normalizeValue(0.6)};
   `,
   extraGiant: (isToken: boolean) => css`
-    width: 5rem;
-    height: 5rem;
-    padding: ${isToken ? "1rem" : "0.6rem"};
+    width: ${normalizeValue(5)};
+    height: ${normalizeValue(5)};
+    padding: ${isToken ? normalizeValue(1) : normalizeValue(0.6)};
   `,
 };
 
@@ -66,6 +68,8 @@ export const Container = styled.div<Partial<Props>>`
     background: ${isActive ? theme.colors.primary : theme.colors[background]};
     border-radius: 20%;
     svg {
+      width: 100%;
+      height: 100%;
       fill: ${fill
         ? theme.colors[fill]
         : isActive

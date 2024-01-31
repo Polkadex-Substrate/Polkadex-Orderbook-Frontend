@@ -1,78 +1,40 @@
 import { FC, PropsWithChildren } from "react";
+import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 
-import { CommonActionState } from "../../types";
-
-import * as A from "./actions";
-
-export interface UserSelectAccount {
-  tradeAddress: string;
-}
-
-export interface UserAccount {
+export interface UserAddressTuple {
   mainAddress: string; // the main address linked to the trade address
   tradeAddress: string;
 }
 
-export interface UserAuth {
-  email: string;
-  isConfirmed: boolean;
-  isAuthenticated: boolean;
-  userExists: boolean;
-  jwt?: string;
-}
+export type ProfileContextState = {
+  selectedAddresses: UserAddressTuple;
+  allAccounts: UserAddressTuple[];
+  favoriteMarkets: string[];
+  avatar: string | null;
+  isBannerShown: boolean;
+  selectedExtension: any | null;
+};
 
-export interface AuthInfo {
-  isAuthenticated: boolean;
-  userExists: boolean;
-  session?: any;
-  jwt?: string;
-  shouldShowInitialBanner?: boolean;
-}
-
-export interface ProfileState {
-  authInfo: AuthInfo;
-  auth: CommonActionState;
-  userData: {
-    userAccounts?: UserAccount[];
-    mainAccounts?: string[];
-  };
-  data: CommonActionState;
-  userProfile?: {
-    avatar?: string;
-  };
-  userMarket: {
-    favoriteMarkets: string[];
-  };
-  selectedAccount: UserAccount;
-  defaultTradeAccount?: string;
-}
+export type ProfileContextInterface = ProfileContextState & {
+  onUserSelectTradingAddress: (value: {
+    tradeAddress: string;
+    isNew?: true;
+  }) => Promise<void>;
+  onUserSelectMainAddress: (value: { mainAddress: string }) => void;
+  onUserLogout: () => void;
+  onUserResetMainAddress: () => void;
+  onUserResetTradingAddress: () => void;
+  onResetSelectedExtension: () => void;
+  onUserChangeInitBanner: (value?: boolean) => void;
+  onUserSetAvatar: (value?: string) => void;
+  onUserFavoriteMarketPush: (value: string) => void;
+  getSigner: (address: string) => any;
+  setSelectedExtension: (value: (typeof ExtensionsArray)[0]) => void;
+};
 
 export type ProfileProviderProps = PropsWithChildren<{
-  value: ProfileContextProps;
+  value: ProfileContextInterface;
 }>;
-
-export type ProfileContextProps = ProfileState & {
-  onUserSelectAccount: (value: UserSelectAccount) => void;
-  onUserAuth: (value: UserAuth) => void;
-  onUserLogout: () => void;
-  onUserChangeInitBanner: (value?: boolean) => void;
-  onUserAuthFetch: () => void;
-  onUserProfileAccountPush: (value: UserAccount) => void;
-  onUserProfileTradeAccountDelete: (
-    value: A.UserProfileTradeAccountDelete["payload"],
-  ) => void;
-  onUserProfileMainAccountPush: (value: string) => void;
-  onUserAccountSelectFetch: (
-    value: A.UserAccountSelectFetch["payload"],
-  ) => void;
-  onUserSetDefaultTradeAccount: (
-    value: A.UserSetDefaultTradeAccount["payload"],
-  ) => void;
-  onUserSetAvatar: (value?: A.UserSetAvatar["payload"]) => void;
-  onUserFavoriteMarketPush: (
-    value: A.UserFavoriteMarketPush["payload"],
-  ) => void;
-};
 
 export interface ProfileProps {
   onError?: (value: string) => void;

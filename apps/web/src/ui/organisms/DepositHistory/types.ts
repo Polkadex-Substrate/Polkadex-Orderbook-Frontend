@@ -1,6 +1,7 @@
-import { Transaction } from "@orderbook/core/providers/user/transactionsProvider";
+import { Transaction } from "@orderbook/core/utils/orderbookService";
 
-export interface Props extends Omit<Transaction, "asset"> {
+export interface Props extends Omit<Transaction, "asset" | "timestamp"> {
+  timestamp: string;
   token: {
     name: string;
     ticker: string;

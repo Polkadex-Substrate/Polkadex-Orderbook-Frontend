@@ -1,6 +1,8 @@
 import { Combobox } from "@headlessui/react";
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Main = styled.div`
   display: flex;
   flex-direction: column;
@@ -12,7 +14,7 @@ export const Wrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     input {
       flex: 1;
     }
@@ -20,7 +22,7 @@ export const Wrapper = styled.div`
     p {
       color: ${theme.colors.text};
       white-space: nowrap;
-      font-size: 2rem;
+      font-size: ${normalizeValue(2)};
       font-weight: 500;
       span {
         opacity: 0.5;
@@ -39,11 +41,11 @@ export const Actions = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     button {
       background: ${theme.colors.secondaryBackground};
-      padding: 0.5rem;
-      border-radius: 0.5rem;
+      padding: ${normalizeValue(0.5)};
+      border-radius: ${normalizeValue(0.5)};
       width: 100%;
       transition: background-color 0.5s ease;
       &:disabled {
@@ -59,8 +61,8 @@ export const Actions = styled.div`
 
 export const Arrow = styled.div<{ open: boolean }>`
   ${({ open }) => css`
-    width: 1rem;
-    height: 1rem;
+    width: ${normalizeValue(1)};
+    height: ${normalizeValue(1)};
     transition: transform ease 0.3s;
     ${open &&
     css`
@@ -72,10 +74,10 @@ export const Arrow = styled.div<{ open: boolean }>`
 export const Icon = styled.div`
   ${({ theme }) => css`
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 0.5rem;
-    width: 2.3rem;
-    height: 2.3rem;
-    padding: 0.5rem;
+    border-radius: ${normalizeValue(0.5)};
+    width: ${normalizeValue(2.3)};
+    height: ${normalizeValue(2.3)};
+    padding: ${normalizeValue(0.5)};
     svg {
       stroke: ${theme.colors.tertiaryText};
     }
@@ -85,8 +87,8 @@ export const Icon = styled.div`
 export const OptionsWrapper = styled(Combobox.Options)`
   position: absolute;
   margin-top: 5px;
-  max-height: 24rem;
-  max-width: 40rem;
+  max-height: ${normalizeValue(24)};
+  max-width: ${normalizeValue(40)};
   width: 100%;
   overflow: auto;
   top: 100%;
@@ -100,13 +102,13 @@ export const OptionsContainer = styled.div`
     width: 100%;
     border-top: 1px solid ${theme.colors.secondaryBackground};
     background-color: ${theme.colors.secondaryBackgroundSolid};
-    border-radius: 0 0 0.5rem 0.5rem;
-    padding: 1.5rem;
+    border-radius: 0 0 ${normalizeValue(0.5)} ${normalizeValue(0.5)};
+    padding: ${normalizeValue(1.5)};
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: ${normalizeValue(1)};
     small {
-      font-size: 1.2rem;
+      font-size: ${normalizeValue(1.2)};
       opacity: 0.5;
     }
   `}
@@ -121,14 +123,16 @@ export const OptionsItem = styled(Combobox.Option)`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.8rem;
-    border-radius: 1rem;
+    gap: ${normalizeValue(1)};
+    padding: ${normalizeValue(0.8)};
+    border-radius: ${normalizeValue(1)};
     cursor: pointer;
     transition: background-color ease 0.4s;
     div {
-      width: 2.5em;
-      height: 2.5rem;
+      svg {
+        width: ${normalizeValue(2.5)};
+        height: ${normalizeValue(2.5)};
+      }
     }
     span {
       opacity: 0.5;
@@ -143,17 +147,17 @@ export const Errors = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     div {
-      width: 1.3rem;
-      height: 1.3rem;
+      width: ${normalizeValue(1.3)};
+      height: ${normalizeValue(1.3)};
       svg {
         fill: ${theme.colors.primary};
       }
     }
     background: ${theme.colors.white};
-    border-radius: 0.5rem;
-    padding: 0.8rem;
+    border-radius: ${normalizeValue(0.5)};
+    padding: ${normalizeValue(0.8)};
     p {
       color: ${theme.colors.inverse};
     }

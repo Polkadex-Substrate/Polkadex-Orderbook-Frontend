@@ -4,6 +4,8 @@ import { bgStyleVariants } from "@orderbook/core/helpers";
 
 import * as T from "./types";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Item: any = styled("li")<{
   isCloseOnSelect?: boolean;
   isFlex?: boolean;
@@ -12,9 +14,10 @@ export const Item: any = styled("li")<{
   withDivider?: boolean;
 }>(
   {
-    padding: "0.8rem 1rem",
+    padding: `${normalizeValue(0.8)} ${normalizeValue(1)}`,
     outline: "none",
     border: "1px solid transparent",
+    fontSize: normalizeValue(1.3),
   },
   variant({
     prop: "isCloseOnSelect",
@@ -68,15 +71,17 @@ export const Item: any = styled("li")<{
 export const Section = styled("li")({});
 
 export const SectionTitle = styled("div")({
-  padding: "0.8rem 1rem 0.4rem 1rem",
-  fontSize: "1.2rem",
+  padding: `${normalizeValue(0.8)} ${normalizeValue(1)} ${normalizeValue(
+    0.4
+  )} ${normalizeValue(1)}`,
+  fontSize: normalizeValue(1.2),
   opacity: 0.5,
 });
 
 export const ItemContainer = styled("div")({
   display: "flex",
   alignItems: "center",
-  gap: "0.8rem",
+  gap: normalizeValue(0.6),
 });
 
 export const Icon = styled("div")({
@@ -86,10 +91,10 @@ export const Icon = styled("div")({
 
 export const Command: any = styled("div")(({ theme }) =>
   css({
-    padding: "0.4rem",
+    padding: normalizeValue(0.4),
     border: "1px solid",
     borderColor: `${theme.colors.text}44`,
-    fontSize: "1rem",
+    fontSize: normalizeValue(1),
     textTransform: "uppercase",
     opacity: 0.5,
   })
@@ -100,7 +105,7 @@ export const SectionContainer = styled("ul")(() => css({}));
 export const Menu = styled("ul")<T.DropdownMenuProps>(
   ({ theme, fill, itemFill }) => css`
     background: ${fill && theme.colors[fill]};
-    min-width: 20rem;
+    min-width: ${normalizeValue(20)};
     border: 1px solid ${theme.colors.text}11;
     ${Item} {
       transition: background-color 0.2s ease-in-out;
@@ -113,23 +118,23 @@ export const Menu = styled("ul")<T.DropdownMenuProps>(
     prop: "border",
     variants: {
       semiRounded: {
-        borderRadius: "1rem",
-        padding: "0.8rem 0.7rem",
+        borderRadius: normalizeValue(1),
+        padding: `${normalizeValue(0.8)} ${normalizeValue(0.7)}`,
         [Item]: {
-          borderRadius: "0.7rem",
+          borderRadius: normalizeValue(0.7),
         },
         [Command]: {
-          borderRadius: "0.2rem",
+          borderRadius: normalizeValue(0.2),
         },
       },
       rounded: {
-        borderRadius: "1.3rem",
-        padding: "0.8rem 0.7rem",
+        borderRadius: normalizeValue(1.3),
+        padding: `${normalizeValue(0.8)} ${normalizeValue(0.7)}`,
         [Item]: {
-          borderRadius: "1rem",
+          borderRadius: normalizeValue(1),
         },
         [Command]: {
-          borderRadius: "0.5rem",
+          borderRadius: normalizeValue(0.5),
         },
       },
       squared: {
@@ -153,7 +158,7 @@ export const Divider = styled("div")(({ theme }) =>
   css({
     borderTop: "1px solid",
     borderTopColor: `${theme.colors.text}11`,
-    margin: "0.8rem 0",
+    margin: `${normalizeValue(0.8)} 0`,
   })
 );
 

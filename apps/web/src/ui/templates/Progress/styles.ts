@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.main`
   min-height: 100vh;
   display: flex;
@@ -18,8 +20,8 @@ export const Header = styled.header`
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-height: 6rem;
-    padding: 1rem;
+    max-height: ${normalizeValue(6)};
+    padding: ${normalizeValue(1)};
     border-bottom: 1px solid ${theme.colors.secondaryBackground};
   `}
 `;
@@ -27,21 +29,21 @@ export const Header = styled.header`
 export const Content = styled.section``;
 
 export const Hero = styled.div`
-  max-width: 100rem;
+  max-width: ${normalizeValue(100)};
   display: flex;
   flex-direction: column;
   flex: 1;
   margin: 0 auto;
   @media screen and (max-width: 1000px) {
-    padding: 0 1rem;
+    padding: 0 ${normalizeValue(1)};
   }
 `;
 
 export const HeroHeader = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 3rem 0 2rem;
+  gap: ${normalizeValue(1)};
+  padding: ${normalizeValue(3)} 0 ${normalizeValue(2)};
   @media screen and (max-width: 470px) {
     flex-direction: column;
     align-items: flex-start;
@@ -53,12 +55,12 @@ export const HeroTitle = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 5rem;
-    height: 5rem;
+    min-width: ${normalizeValue(5)};
+    height: ${normalizeValue(5)};
     background: ${theme.colors.secondaryBackgroundOpacity};
-    border-radius: 30rem;
+    border-radius: ${normalizeValue(38)};
     svg {
-      max-width: 1.5rem;
+      max-width: ${normalizeValue(1.5)};
       stroke: ${theme.colors.tertiaryText};
     }
   `}
@@ -68,17 +70,17 @@ export const HeroContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     h3,
     p {
       color: ${theme.colors.white};
     }
     h3 {
-      font-size: 2rem;
-      font-weight: 550;
+      font-size: ${normalizeValue(2)};
+      font-weight: 600;
     }
     p {
-      font-size: 1.4rem;
+      font-size: ${normalizeValue(1.4)};
       line-height: 1.4;
       a {
         color: ${theme.colors.primary};
@@ -104,39 +106,39 @@ export const HeroInteraction = styled.div`
 export const Footer = styled.div`
   ${({ theme }) => css`
     border-top: 1px solid ${theme.colors.secondaryBackground};
-    padding: 3rem 2rem;
+    padding: ${normalizeValue(3)} ${normalizeValue(2)};
     backdrop-filter: blur(10px);
     background: ${theme.colors.overlayOpacity};
-    margin-top: -4rem;
+    margin-top: ${normalizeValue(-4)};
     @media screen and (min-width: 750px) {
-      margin-top: -10rem;
+      margin-top: ${normalizeValue(-10)};
     }
   `}
 `;
 
 export const FooterWrapper = styled.div`
-  max-width: 120rem;
+  max-width: ${normalizeValue(120)};
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: ${normalizeValue(4)};
 `;
 
 export const FooterTitle = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: ${normalizeValue(0.5)};
     h1,
     p {
       color: ${theme.colors.white};
     }
     h1 {
-      font-size: 3rem;
-      font-weight: 550;
+      font-size: ${normalizeValue(3)};
+      font-weight: 600;
     }
     p {
-      font-size: 1.4rem;
+      font-size: ${normalizeValue(1.4)};
       line-height: 1.4;
     }
   `}
@@ -146,9 +148,9 @@ export const FooterContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: ${normalizeValue(2)};
     span {
-      font-size: 1.6rem;
+      font-size: ${normalizeValue(1.6)};
       font-weight: 600;
       color: ${theme.colors.white};
     }
@@ -158,7 +160,7 @@ export const FooterContent = styled.div`
 export const FooterFlex = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 2rem;
+  gap: ${normalizeValue(2)};
   flex-wrap: wrap;
 `;
 
@@ -167,8 +169,8 @@ export const FooterCard = styled.div<{ checked?: boolean; pending?: boolean }>`
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    min-width: 20rem;
+    gap: ${normalizeValue(1.5)};
+    min-width: ${normalizeValue(20)};
     p {
       line-height: 1.4;
       color: ${checked || pending
@@ -176,9 +178,9 @@ export const FooterCard = styled.div<{ checked?: boolean; pending?: boolean }>`
         : theme.colors.tertiaryText};
     }
     div {
-      width: 2rem;
-      height: 2rem;
-      border-radius: 10rem;
+      width: ${normalizeValue(2)};
+      height: ${normalizeValue(2)};
+      border-radius: ${normalizeValue(10)};
       ${checked || pending
         ? css`
             background: ${checked ? theme.colors.green : theme.colors.orange};
@@ -187,7 +189,7 @@ export const FooterCard = styled.div<{ checked?: boolean; pending?: boolean }>`
             background: ${theme.colors.secondaryBackground};
           `}
       svg {
-        max-width: 1.1rem;
+        max-width: ${normalizeValue(1.1)};
         fill: ${theme.colors.text};
       }
     }

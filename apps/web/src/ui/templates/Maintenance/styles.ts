@@ -1,19 +1,22 @@
 import styled, { css } from "styled-components";
 
+import { normalizeValue } from "@/utils/normalize";
+
 export const Wrapper = styled.section`
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: ${normalizeValue(1.3)};
 `;
 
 export const Container = styled.div`
   max-width: 1200px;
 
   @media screen and (max-width: 900px) {
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
     grid-template-columns: 1fr;
-    row-gap: 3rem;
+    row-gap: ${normalizeValue(3)};
     text-align: center;
   }
 
@@ -22,7 +25,7 @@ export const Container = styled.div`
   }
 
   @media screen and (max-width: 1200px) {
-    padding: 2rem;
+    padding: ${normalizeValue(2)};
   }
 
   @media screen and (min-width: 1200px) {
@@ -31,7 +34,7 @@ export const Container = styled.div`
   margin: 0 auto;
   display: grid;
   align-items: center;
-  column-gap: 4rem;
+  column-gap: ${normalizeValue(4)};
 `;
 
 export const TitleContainer = styled.div``;
@@ -46,12 +49,12 @@ export const ImageContainer = styled.div`
 
 export const TitleWrapper = styled.div`
   & h1 {
-    font-size: 5rem;
+    font-size: ${normalizeValue(5)};
     line-height: 1;
   }
 
   & p {
-    margin: 2rem 0;
+    margin: ${normalizeValue(2)} 0;
     line-height: 1.7;
   }
 `;
@@ -67,17 +70,17 @@ export const SocialIcons = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 10rem;
-      padding: 1rem;
+      border-radius: ${normalizeValue(10)};
+      padding: ${normalizeValue(1)};
       background: ${theme.colors.secondaryBackground};
-      width: 4rem;
-      height: 4rem;
+      width: ${normalizeValue(4)};
+      height: ${normalizeValue(4)};
       transition: background 0.3s ease-in-out;
       &:hover {
         background: ${theme.colors.secondaryBackgroundOpacity};
       }
       &:not(:last-child) {
-        margin-right: 1rem;
+        margin-right: ${normalizeValue(1)};
       }
     }
   `}
