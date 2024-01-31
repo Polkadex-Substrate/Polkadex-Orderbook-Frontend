@@ -6,7 +6,7 @@ import { fetchCandles } from "../helpers";
 import { useTickers } from "./useTickers";
 
 export const useMiniGraph = (market: string, from: Date, to: Date) => {
-  const dailyKline = useQuery({
+  const { data: dailyKline } = useQuery({
     queryKey: QUERY_KEYS.miniGraph(market),
     queryFn: () => fetchCandles({ market, resolution: "2h", from, to }),
     refetchOnWindowFocus: false,
@@ -18,7 +18,7 @@ export const useMiniGraph = (market: string, from: Date, to: Date) => {
   const isPriceChangeNegative = priceChange24Hr < 0;
   const isIncreasing = !isPriceChangeNegative;
 
-  const points = dailyKline?.data?.map((i) => i.close) || [];
+  const points = dailyKline?.map((i) => i.close) || [];
 
   return {
     graphPoints: points,
