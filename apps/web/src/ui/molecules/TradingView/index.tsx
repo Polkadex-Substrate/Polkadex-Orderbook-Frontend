@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
 import { useSubscription } from "@orderbook/core/providers/user/subscription";
-import { useCandles, useMarkets } from "@orderbook/core/hooks";
+import { useMarkets } from "@orderbook/core/hooks";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
+import {
+  decimalPlaces,
+  fetchCandles,
+  getCurrentMarket,
+} from "@orderbook/core/helpers";
 import { TradingView as TradingViewConstants } from "@orderbook/core/constants";
 
 import {
@@ -55,7 +59,6 @@ type Props = {
 export const TradingView = ({ market }: Props) => {
   const [isReady, setIsReady] = useState(false);
 
-  const { fetchCandles } = useCandles();
   const { onCandleSubscribe } = useSubscription();
   const { list: allMarkets } = useMarkets();
   const currentMarket = getCurrentMarket(allMarkets, market);
@@ -208,7 +211,6 @@ export const TradingView = ({ market }: Props) => {
     currentMarket?.price_tick_size,
     currentMarket?.id,
     getAllSymbols,
-    fetchCandles,
     onCandleSubscribe,
   ]);
 

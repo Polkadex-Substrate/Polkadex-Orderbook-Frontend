@@ -1,13 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "../constants";
+import { fetchCandles } from "../helpers";
 
 import { useTickers } from "./useTickers";
-import { useCandles } from "./useCandles";
 
 export const useMiniGraph = (market: string, from: Date, to: Date) => {
-  const { fetchCandles } = useCandles();
-
   const dailyKline = useQuery({
     queryKey: QUERY_KEYS.miniGraph(market),
     queryFn: () => fetchCandles({ market, resolution: "2h", from, to }),
