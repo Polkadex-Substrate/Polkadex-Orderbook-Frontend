@@ -16,6 +16,7 @@ const Maintenance = () => <MaintenanceTemplate />;
 
 export default Maintenance;
 
+//maintnenace page
 export async function getStaticProps({ locale }) {
   return {
     props: {

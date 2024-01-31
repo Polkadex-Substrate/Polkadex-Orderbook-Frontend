@@ -44,4 +44,5 @@ export * from "./TokenCard";
 export * from "./WalletCard";
 export * from "./CheckboxCustom";
 export * from "./AccountSelect";
+export * from "./TwitterMessage";
 export * as LoadingIcons from "./LoadingIcons";
