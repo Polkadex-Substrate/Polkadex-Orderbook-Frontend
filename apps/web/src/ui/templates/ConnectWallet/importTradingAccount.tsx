@@ -226,7 +226,7 @@ export const ImportTradingAccount = ({
                 )}
                 {!loading && isAlreadyExists && (
                   <ErrorMessage withIcon={false}>
-                    This trading account already available in the device.
+                    This trading account is already available in the device.
                   </ErrorMessage>
                 )}
               </div>
