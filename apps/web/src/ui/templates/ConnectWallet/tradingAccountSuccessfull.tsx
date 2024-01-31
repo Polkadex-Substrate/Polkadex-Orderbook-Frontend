@@ -8,7 +8,7 @@ import {
 } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
 
@@ -42,14 +42,14 @@ export const TradingAccountSuccessfull = ({
             <Typography.Text bold size="xl">
               New Trading account created!
             </Typography.Text>
-            <Typography.Text variant="primary">
+            <Typography.Text appearance="primary">
               You’re set to trade on Orderbook! Transfer funds to your trading
               account to start trading.
             </Typography.Text>
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          <Typography.Text variant="secondary" size="xs">
+          <Typography.Text appearance="secondary" size="xs">
             Trading account details
           </Typography.Text>
           <div className="flex flex-col gap-2">
@@ -64,10 +64,12 @@ export const TradingAccountSuccessfull = ({
                   asChild
                   className="[&[data-state=open]>button>svg]:rotate-180"
                 >
-                  <Button.Solid appearance="secondary" size="sm">
-                    Download as
-                    <ChevronDownIcon className="h-3 w-3 ml-1 transition-transform duration-300 text-primary" />
-                  </Button.Solid>
+                  <div>
+                    <Button.Solid appearance="secondary" size="sm">
+                      Download as
+                      <ChevronDownIcon className="h-3 w-3 ml-1 transition-transform duration-300 text-primary" />
+                    </Button.Solid>
+                  </div>
                 </Dropdown.Trigger>
                 <Dropdown.Content>
                   <Dropdown.Item
@@ -111,7 +113,12 @@ export const TradingAccountSuccessfull = ({
         </div>
       </Interaction.Content>
       <Interaction.Footer>
-        <Interaction.Action onClick={() => router.push("/transfer")}>
+        <Interaction.Action
+          onClick={() => {
+            onClose();
+            router.push("/transfer");
+          }}
+        >
           Transfer funds
         </Interaction.Action>
         <Interaction.Close onClick={onClose}>Close</Interaction.Close>

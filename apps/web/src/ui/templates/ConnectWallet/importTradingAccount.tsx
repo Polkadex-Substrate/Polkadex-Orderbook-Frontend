@@ -17,7 +17,10 @@ import { useFormik } from "formik";
 import { useDropzone } from "react-dropzone";
 import classNames from "classnames";
 import { useExtensionAccountFromBrowserAccount } from "@orderbook/core/hooks";
-import { useExtensionAccounts } from "@polkadex/react-providers";
+import {
+  useExtensionAccounts,
+  useUserAccounts,
+} from "@polkadex/react-providers";
 import {
   EncryptedJsonEncoding,
   EncryptedJsonVersion,
@@ -79,6 +82,7 @@ export const ImportTradingAccount = ({
 }) => {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
+  const { localAddresses } = useUserAccounts();
 
   const [state, setState] = useState<(string | number)[]>(initialState);
 
@@ -125,6 +129,11 @@ export const ImportTradingAccount = ({
     true
   );
 
+  const isAlreadyExists = useMemo(
+    () => localAddresses?.includes(values?.file?.address as string),
+    [localAddresses, values?.file?.address]
+  );
+
   const browserAccountAddress =
     values?.file?.address && truncateString(values?.file?.address);
 
@@ -138,12 +147,16 @@ export const ImportTradingAccount = ({
     : extensionAccountAddress;
 
   const buttonDisabled =
-    !(isValid && dirty) || !isValidFile || isError || !isSuccess;
+    !(isValid && dirty) ||
+    !isValidFile ||
+    isError ||
+    !isSuccess ||
+    isAlreadyExists;
 
   return (
     <Loading.Spinner active={loading}>
       <form onSubmit={handleSubmit}>
-        <Interaction className="gap-10">
+        <Interaction className="gap-10" withAnimation={false}>
           <Interaction.Title onClose={onClose}>
             Import Account
           </Interaction.Title>
@@ -151,33 +164,37 @@ export const ImportTradingAccount = ({
             {hasFile ? (
               <div className="flex flex-col gap-5 flex-1">
                 <Input.Vertical
-                  label="Account name"
                   defaultValue={values?.file?.meta?.name}
                   placeholder="Account name"
                   disabled
                   className="text-sm flex-1"
-                />
+                >
+                  <Input.Label>Account name</Input.Label>
+                </Input.Vertical>
                 {browserAccountAddress && (
                   <Input.Vertical
-                    label="Account address"
                     defaultValue={browserAccountAddress}
                     placeholder="Account address"
                     disabled
                     className="text-sm flex-1"
-                  />
+                  >
+                    <Input.Label>Account address</Input.Label>
+                  </Input.Vertical>
                 )}
                 {extensionAccountAddress && (
                   <Input.Vertical
-                    label="Funding wallet"
                     defaultValue={extensionAccountInput ?? ""}
-                    placeholder="Funding wallet"
+                    placeholder="Funding account"
                     disabled
                     className="text-sm flex-1"
-                  />
+                  >
+                    <Input.Label>Funding account</Input.Label>
+                  </Input.Vertical>
                 )}
                 {!isValidFile && (
                   <ErrorMessage withIcon={false}>
-                    Selected trade account not linked to funding.
+                    This trading account is not linked to the selected funding
+                    account.
                   </ErrorMessage>
                 )}
                 {isValidFile && !isError && (
@@ -202,10 +219,14 @@ export const ImportTradingAccount = ({
                     </div>
                   </OptionalField>
                 )}
-
                 {isValidFile && isError && (
                   <ErrorMessage withIcon={false}>
-                    No funding linked to trade account.
+                    No funding account linked to this trading account.
+                  </ErrorMessage>
+                )}
+                {!loading && isAlreadyExists && (
+                  <ErrorMessage withIcon={false}>
+                    This trading account is already available in the device.
                   </ErrorMessage>
                 )}
               </div>
@@ -222,7 +243,7 @@ export const ImportTradingAccount = ({
                 <FolderPlusIcon className="w-7 h-7 text-primary" />
                 <div className="flex flex-col">
                   <Typography.Text>Choose a file</Typography.Text>
-                  <Typography.Text variant="primary">
+                  <Typography.Text appearance="primary">
                     or drag and drop it here
                   </Typography.Text>
                 </div>

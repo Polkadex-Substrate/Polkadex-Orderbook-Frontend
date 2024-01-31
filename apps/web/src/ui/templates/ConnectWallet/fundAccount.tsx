@@ -34,7 +34,7 @@ export const FundAccount = ({
                 <Typography.Text bold size="xl">
                   Connected
                 </Typography.Text>
-                <Typography.Text variant="primary">
+                <Typography.Text appearance="primary">
                   Excellent! You can now perform actions that require signing,
                   such as transferring funds and managing your trading account.
                 </Typography.Text>
@@ -55,7 +55,7 @@ export const FundAccount = ({
                 <Typography.Text bold size="xl">
                   Funding wallet not found here
                 </Typography.Text>
-                <Typography.Text variant="primary">
+                <Typography.Text appearance="primary">
                   Are you sure your wallet was here? Check{" "}
                   {selectedExtension?.title} to ensure your wallet is visible
                   and try once more.
@@ -65,7 +65,7 @@ export const FundAccount = ({
             <Accordion type="single" defaultValue="accordion1">
               <Accordion.Item value="accordion1">
                 <Accordion.Trigger>
-                  <Typography.Text variant="secondary">
+                  <Typography.Text appearance="secondary">
                     Wallets in this extension
                   </Typography.Text>
                 </Accordion.Trigger>

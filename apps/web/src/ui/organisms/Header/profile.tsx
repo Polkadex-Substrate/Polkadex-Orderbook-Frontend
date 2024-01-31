@@ -128,7 +128,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
       : "NewTradingAccount";
 
   const redirectEnoughBalance =
-    (walletBalance ?? 0) >= 1 ? redirectMaximumAccounts : "InsufficientBalance";
+    (walletBalance ?? 0) >= 2 ? redirectMaximumAccounts : "InsufficientBalance";
 
   const availableOnDevice = useMemo(
     () =>
@@ -174,7 +174,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     {selectedWallet?.name}
                   </Typography.Text>
                 ) : (
-                  <Typography.Text size="xs" bold variant="secondary">
+                  <Typography.Text size="xs" bold appearance="secondary">
                     Wallet not present
                   </Typography.Text>
                 )}
@@ -185,7 +185,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
               withArrow={true}
               className="bg-level-5"
             >
-              Funding wallet
+              Funding account
             </HoverCard.Content>
           </HoverCard>
           <div className="flex items-center gap-2 bg-level-4 px-2 py-1 rounded-md">
@@ -194,7 +194,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                 {selectedAccount?.meta.name} ({shortAddress})
               </Typography.Text>
             ) : (
-              <Typography.Text size="xs" bold variant="primary">
+              <Typography.Text size="xs" bold appearance="primary">
                 No trading account
               </Typography.Text>
             )}
@@ -446,5 +446,9 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
       </Popover>
     );
 
-  return <Button.Solid onClick={onClick}>Connect wallet</Button.Solid>;
+  return (
+    <Button.Solid onClick={onClick} size="sm">
+      Connect wallet
+    </Button.Solid>
+  );
 };

@@ -30,11 +30,11 @@ export const MaximumTradingAccount = ({
           </div>
           <div className="flex flex-col gap-2">
             <Typography.Text bold size="xl">
-              Maximum 3 accounts allowed
+              Maximum 3 trading accounts allowed
             </Typography.Text>
-            <Typography.Text variant="primary">
-              Each Funding account within the Orderbook can be linked to a
-              maximum of 3 distinct Trading accounts. Please delete one to
+            <Typography.Text appearance="primary">
+              Each funding account within the Orderbook can be linked to a
+              maximum of 3 distinct trading accounts. Please delete one to
               continue.
             </Typography.Text>
           </div>
@@ -42,7 +42,7 @@ export const MaximumTradingAccount = ({
         <Accordion type="multiple">
           <Accordion.Item value="accordion1">
             <Accordion.Trigger>
-              <Typography.Text variant="secondary">
+              <Typography.Text appearance="secondary">
                 Trading accounts
               </Typography.Text>
             </Accordion.Trigger>
