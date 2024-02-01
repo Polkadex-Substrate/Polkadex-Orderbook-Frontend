@@ -84,7 +84,7 @@ export const ConnectTradingInteraction = () => {
                 <ImportTradingAccount
                   key="ImportTradingAccount"
                   onImport={async (e) => await onImportFromFile?.(e)}
-                  onRedirect={() => props?.onPage("ConnectTradingAccount")}
+                  onRedirect={onClose}
                   onClose={() => props?.onChangeInteraction(false)}
                   loading={importFromFileStatus === "loading"}
                   whitelistBrowserAccounts={mainProxiesAccounts}
