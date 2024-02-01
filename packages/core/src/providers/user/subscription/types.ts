@@ -15,4 +15,4 @@ export type SubscriptionProviderProps = PropsWithChildren<{
   value: SubscriptionContextProps;
 }>;
 
-export type SubscriptionComponent = FC<PropsWithChildren<unknown>>;
+export type SubscriptionComponent = FC<PropsWithChildren<object>>;
