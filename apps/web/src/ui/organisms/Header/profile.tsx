@@ -347,27 +347,6 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     selectedExtension={tempSelectedExtension}
                     onCancel={() => props?.onChangeInteraction(false)}
                   />
-                  <ImportTradingAccount
-                    key="ImportTradingAccount"
-                    onImport={async (e) => await onImportFromFile?.(e)}
-                    onRedirect={() => props?.onPage("ConnectTradingAccount")}
-                    onClose={() => props?.onPage("ConnectTradingAccount")}
-                    loading={importFromFileStatus === "loading"}
-                    whitelistBrowserAccounts={mainProxiesAccounts}
-                  />
-                  <ImportTradingAccountMnemonic
-                    key="ImportTradingAccountMnemonic"
-                    onImport={async (e) => {
-                      await onImportFromMnemonic?.(e);
-                      props?.onChangeInteraction(false);
-                    }}
-                    onCancel={() => props?.onPage("ConnectTradingAccount")}
-                    loading={importFromMnemonicStatus === "loading"}
-                    errorMessage={
-                      (importFromMnemonicError as Error)?.message ??
-                      importFromMnemonicError
-                    }
-                  />
                   <TradingAccountSuccessfull
                     key="TradingAccountSuccessfull"
                     tradingAccount={selectedAccount}
@@ -393,6 +372,27 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                       props?.onPage("TradingAccountSuccessfull", true)
                     }
                     mnemonic={tempMnemonic?.split(" ") ?? []}
+                  />
+                  <ImportTradingAccount
+                    key="ImportTradingAccount"
+                    onImport={async (e) => await onImportFromFile?.(e)}
+                    onRedirect={() => props?.onPage("ConnectTradingAccount")}
+                    onClose={() => props?.onPage("ConnectTradingAccount")}
+                    loading={importFromFileStatus === "loading"}
+                    whitelistBrowserAccounts={mainProxiesAccounts}
+                  />
+                  <ImportTradingAccountMnemonic
+                    key="ImportTradingAccountMnemonic"
+                    onImport={async (e) => {
+                      await onImportFromMnemonic?.(e);
+                      props?.onChangeInteraction(false);
+                    }}
+                    onCancel={() => props?.onPage("ConnectTradingAccount")}
+                    loading={importFromMnemonicStatus === "loading"}
+                    errorMessage={
+                      (importFromMnemonicError as Error)?.message ??
+                      importFromMnemonicError
+                    }
                   />
                   <ConnectExtensionAccount
                     key="ConnectWallet"
