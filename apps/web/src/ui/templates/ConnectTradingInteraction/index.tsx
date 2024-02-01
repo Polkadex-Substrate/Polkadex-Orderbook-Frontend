@@ -1,6 +1,7 @@
 import { Modal, Multistep } from "@polkadex/ux";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { useMemo } from "react";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
@@ -29,6 +30,14 @@ export const ConnectTradingInteraction = () => {
     importFromMnemonicStatus,
     onImportFromMnemonic,
   } = useConnectWalletProvider();
+
+  const availableOnDevice = useMemo(
+    () =>
+      localTradingAccounts?.some(
+        (value) => value.address === tempTrading?.address
+      ),
+    [localTradingAccounts, tempTrading?.address]
+  );
 
   return (
     <Modal open={!!connectTrading} onOpenChange={onToogleConnectTrading}>
@@ -96,6 +105,7 @@ export const ConnectTradingInteraction = () => {
                 <RemoveTradingAccount
                   key="RemoveTradingAccount"
                   tradingAccount={tempTrading as TradeAccount}
+                  availableOnDevice={availableOnDevice}
                   onRemoveFromDevice={() =>
                     onRemoveTradingAccountFromDevice?.(
                       tempTrading?.address as string

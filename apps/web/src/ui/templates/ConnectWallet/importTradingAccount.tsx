@@ -105,7 +105,7 @@ export const ImportTradingAccount = ({
     });
 
   const isValidFile = useMemo(() => {
-    if (!whitelistBrowserAccounts) return true;
+    if (!whitelistBrowserAccounts?.length) return true;
     return (
       values.file?.address &&
       whitelistBrowserAccounts.includes(values.file?.address)

@@ -28,7 +28,7 @@ export const RemoveTradingAccount = ({
   selectedExtension?: (typeof ExtensionsArray)[0];
   errorTitle?: string;
   errorMessage?: string;
-  availableOnDevice?: boolean;
+  availableOnDevice: boolean;
   enabledExtensionAccount?: boolean;
 }) => {
   const [state, setState] = useState({
