@@ -11,6 +11,8 @@ import {
 import { usePlaceOrder } from "@orderbook/core/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { Typography } from "@polkadex/ux";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 import * as S from "./styles";
 
@@ -205,6 +207,7 @@ export const MarketOrderAction = ({
                 disabled={isOrderLoading}
               />
             )}
+            {isSignedIn && <TradingFee />}
             {isMarketFetching || !baseTicker ? (
               <ButtonSkeleton />
             ) : hasUser ? (
@@ -255,3 +258,24 @@ export const ButtonSkeleton = () => (
     <Skeleton height={normalizeValue(4)} width="100%" />
   </S.ButtonSkeletonWrapper>
 );
+
+const TradingFee = () => {
+  return (
+    <div className="bg-[rgba(139,161,190,0.1)] p-3.5 h-28 rounded-t-lg -mb-5">
+      <Typography.Heading size="md" className="flex items-center gap-1">
+        <InformationCircleIcon className="h-4 w-4 stroke-[20px]" />
+        <span>Trading Fee</span>
+      </Typography.Heading>
+      <div className="flex flex-col gap-0.5 my-1 text-gray-400">
+        <div className="flex justify-between">
+          <Typography.Text>Taker Fee</Typography.Text>
+          <Typography.Text>0.1</Typography.Text>
+        </div>
+        <div className="flex justify-between items-center">
+          <Typography.Text>Maker Fee</Typography.Text>
+          <Typography.Text>0.1</Typography.Text>
+        </div>
+      </div>
+    </div>
+  );
+};
