@@ -262,7 +262,7 @@ export const ButtonSkeleton = () => (
 const TradingFee = () => {
   return (
     <div className="bg-[rgba(139,161,190,0.1)] p-3.5 h-28 rounded-t-lg -mb-5">
-      <Typography.Heading size="md" className="flex items-center gap-1">
+      <Typography.Heading size="sm" className="flex items-center gap-1">
         <InformationCircleIcon className="h-4 w-4 stroke-[20px]" />
         <span>Trading Fee</span>
       </Typography.Heading>
