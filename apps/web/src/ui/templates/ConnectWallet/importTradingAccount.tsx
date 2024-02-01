@@ -224,7 +224,7 @@ export const ImportTradingAccount = ({
                     No funding account linked to this trading account.
                   </ErrorMessage>
                 )}
-                {!loading && isAlreadyExists && (
+                {isValidFile && !loading && isAlreadyExists && (
                   <ErrorMessage withIcon={false}>
                     This trading account is already available in the device.
                   </ErrorMessage>
