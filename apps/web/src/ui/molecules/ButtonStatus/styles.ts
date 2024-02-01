@@ -15,7 +15,7 @@ export const Wrapper = styled.button<{
     background: ${isSell ? theme.colors.primary : theme.colors.green};
     color: ${theme.colors.white};
     padding: ${normalizeValue(1)};
-    border-radius: ${normalizeValue(1)};
+    border-radius: ${normalizeValue(0.8)};
     font-weight: 500;
     width: 100%;
     transition:
@@ -76,8 +76,8 @@ export const Wrapper = styled.button<{
           stroke: ${isLoading
             ? "white"
             : isSell
-            ? theme.colors.primary
-            : theme.colors.green};
+              ? theme.colors.primary
+              : theme.colors.green};
           stroke-width: 1px;
           stroke-dashoffset: 47.124 * 2;
           stroke-dasharray: 47.124;
