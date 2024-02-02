@@ -11,7 +11,7 @@ import {
 import { usePlaceOrder } from "@orderbook/core/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { Typography } from "@polkadex/ux";
+import { Typography, Tooltip } from "@polkadex/ux";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 import * as S from "./styles";
@@ -261,21 +261,27 @@ export const ButtonSkeleton = () => (
 
 const TradingFee = () => {
   return (
-    <div className="bg-[rgba(139,161,190,0.1)] p-3.5 h-28 rounded-t-lg -mb-5">
-      <Typography.Heading size="sm" className="flex items-center gap-1">
-        <InformationCircleIcon className="h-4 w-4 stroke-[20px]" />
-        <span>Trading Fee</span>
-      </Typography.Heading>
-      <div className="flex flex-col gap-0.5 my-1 text-gray-400">
+    <Tooltip>
+      <Tooltip.Trigger>
+        <Typography.Heading size="sm" className="flex items-center gap-1 mb-3">
+          <InformationCircleIcon className="h-4 w-4 stroke-[20px]" />
+          <span>Trading Fee</span>
+        </Typography.Heading>
+      </Tooltip.Trigger>
+      <Tooltip.Content
+        className="w-36 flex flex-col gap-0.5 my-1"
+        side="right"
+        align="end"
+      >
         <div className="flex justify-between">
           <Typography.Text>Taker Fee</Typography.Text>
-          <Typography.Text>0.1</Typography.Text>
+          <Typography.Text className="text-gray-400">0.1</Typography.Text>
         </div>
         <div className="flex justify-between items-center">
           <Typography.Text>Maker Fee</Typography.Text>
-          <Typography.Text>0.1</Typography.Text>
+          <Typography.Text className="text-gray-400">0.1</Typography.Text>
         </div>
-      </div>
-    </div>
+      </Tooltip.Content>
+    </Tooltip>
   );
 };
