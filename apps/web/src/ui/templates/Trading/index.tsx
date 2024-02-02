@@ -23,7 +23,6 @@ import {
 import { LOCAL_STORAGE_ID } from "@orderbook/core/constants";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { SessionProvider } from "@orderbook/core/providers/user/sessionProvider";
-import { KlineProvider } from "@orderbook/core/providers/public/klineProvider";
 import { defaultConfig } from "@orderbook/core/config";
 import { useMarkets, useTickers } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
@@ -169,13 +168,11 @@ export function Trading() {
                   <S.WrapperGraph>
                     <S.CenterWrapper>
                       <S.GraphEpmty>
-                        <KlineProvider>
-                          <Navbar
-                            onOpenMarkets={() => setState(!state)}
-                            market={id}
-                          />
-                          <Graph market={id} />
-                        </KlineProvider>
+                        <Navbar
+                          onOpenMarkets={() => setState(!state)}
+                          market={id}
+                        />
+                        <Graph market={id} />
                         {tradeAddress ? (
                           <SessionProvider>
                             <Transactions market={id} />

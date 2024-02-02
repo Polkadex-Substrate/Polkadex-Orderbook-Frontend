@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Keyboard } from "@polkadex/orderbook-ui/molecules/LoadingIcons";
-import { useKlineProvider } from "@orderbook/core/providers/public/klineProvider";
+import { useSubscription } from "@orderbook/core/providers/user/subscription";
 import { useMarkets } from "@orderbook/core/hooks";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
+import {
+  decimalPlaces,
+  fetchCandles,
+  getCurrentMarket,
+} from "@orderbook/core/helpers";
 import { TradingView as TradingViewConstants } from "@orderbook/core/constants";
 
 import {
@@ -19,18 +23,20 @@ import {
 import * as S from "./styles";
 import { customFontFamily, options } from "./options";
 
+export const supported_resolutions = [
+  "1",
+  "5",
+  "15",
+  "30",
+  "60",
+  "120",
+  "360",
+  "1D",
+  "1W",
+];
+
 const configurationData: DatafeedConfiguration = {
-  supported_resolutions: [
-    "1",
-    "5",
-    "15",
-    "30",
-    "60",
-    "120",
-    "360",
-    "1D",
-    "1W",
-  ] as ResolutionString[],
+  supported_resolutions: supported_resolutions as ResolutionString[],
   exchanges: [
     {
       value: "Polkadex",
@@ -53,7 +59,7 @@ type Props = {
 export const TradingView = ({ market }: Props) => {
   const [isReady, setIsReady] = useState(false);
 
-  const { onHandleKlineFetch, onFetchKlineChannel } = useKlineProvider();
+  const { onCandleSubscribe } = useSubscription();
   const { list: allMarkets } = useMarkets();
   const currentMarket = getCurrentMarket(allMarkets, market);
   const { theme } = useSettingsProvider();
@@ -73,49 +79,6 @@ export const TradingView = ({ market }: Props) => {
   }, [allMarkets]);
 
   const tvWidget = useRef<IChartingLibraryWidget>();
-
-  const getData = useCallback(
-    async (resolution: ResolutionString, from: number, to: number) => {
-      try {
-        if (!currentMarket?.id) return [];
-
-        const klines =
-          (await onHandleKlineFetch({
-            market: currentMarket?.id,
-            resolution: resolution,
-            from: new Date(from * 1000),
-            to: new Date(to * 1000),
-          })) ?? [];
-
-        if (klines.length === 0) {
-          return [];
-        }
-
-        const klinesLength = klines.length;
-        const bars = klines.map((bar, index) => {
-          return {
-            time: bar.timestamp,
-            low: bar.low,
-            high: bar.high,
-            open: bar.open,
-            close: bar.close,
-            volume: bar.volume,
-            isBarClosed: index !== klinesLength - 1,
-            isLastBar: index === klinesLength - 1,
-          };
-        });
-
-        if (bars.length < 1) {
-          return [];
-        } else {
-          return bars;
-        }
-      } catch (error) {
-        return error;
-      }
-    },
-    [currentMarket, onHandleKlineFetch]
-  );
 
   const widgetOptions: ChartingLibraryWidgetOptions = useMemo(() => {
     const interval = (localStorage.getItem(
@@ -183,7 +146,15 @@ export const TradingView = ({ market }: Props) => {
         async getBars(symbolInfo, resolution, periodParams, onResult, onError) {
           const { from, to } = periodParams;
           try {
-            const bars = await getData(resolution, from, to);
+            if (!currentMarket?.id) return onResult([], { noData: true });
+
+            const bars = await fetchCandles({
+              market: currentMarket?.id,
+              resolution: resolution,
+              from: new Date(from * 1000),
+              to: new Date(to * 1000),
+            });
+
             if (bars.length < 1) {
               return onResult([], { noData: true });
             } else {
@@ -195,7 +166,7 @@ export const TradingView = ({ market }: Props) => {
         },
         subscribeBars(symbolInfo, resolution, onTick) {
           if (currentMarket?.id) {
-            onFetchKlineChannel({
+            onCandleSubscribe({
               market: currentMarket?.id,
               interval: resolution,
               onUpdateTradingViewRealTime: onTick,
@@ -236,12 +207,11 @@ export const TradingView = ({ market }: Props) => {
       load_last_chart: true,
     };
   }, [
+    currentMarket?.name,
+    currentMarket?.price_tick_size,
     currentMarket?.id,
     getAllSymbols,
-    getData,
-    currentMarket?.name,
-    onFetchKlineChannel,
-    currentMarket?.price_tick_size,
+    onCandleSubscribe,
   ]);
 
   useEffect(() => {
