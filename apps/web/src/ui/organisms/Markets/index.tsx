@@ -120,7 +120,7 @@ export const HeaderMarket = ({
             <S.HeaderInfoContainer>
               <span>{pair}</span>
             </S.HeaderInfoContainer>
-            <p>{chainName}</p>
+            <p className="truncate max-w-24">{chainName}</p>
           </S.HeaderInfo>
         </S.HeaderAsideLeft>
         <S.HeaderAsideCenter>
