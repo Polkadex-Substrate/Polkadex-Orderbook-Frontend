@@ -16,7 +16,7 @@ import { useMarkets } from "./useMarkets";
 
 export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
   const {
-    selectedAddresses: { tradeAddress, mainAddress },
+    selectedAddresses: { tradeAddress },
   } = useProfile();
   const { dateFrom, dateTo } = useSessionProvider();
   const { list: markets } = useMarkets();
@@ -35,11 +35,11 @@ export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
     hasNextPage,
     error,
   } = useInfiniteQuery({
-    queryKey: QUERY_KEYS.tradeHistory(dateFrom, dateTo, mainAddress),
+    queryKey: QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
     enabled: shouldFetchTradeHistory,
     queryFn: async ({ pageParam = null }) => {
       return await appsyncOrderbookService.query.getTradeHistory({
-        address: mainAddress,
+        address: tradeAddress,
         from: dateFrom,
         to: dateTo,
         pageParams: pageParam,
