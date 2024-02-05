@@ -269,17 +269,17 @@ const TradingFee = () => {
         </Typography.Heading>
       </Tooltip.Trigger>
       <Tooltip.Content
-        className="w-36 flex flex-col gap-0.5 my-1"
+        className="flex flex-col gap-0.5 my-1 [&>div]:gap-5"
         side="right"
         align="end"
       >
         <div className="flex justify-between">
           <Typography.Text>Taker Fee</Typography.Text>
-          <Typography.Text className="text-gray-400">0.1</Typography.Text>
+          <Typography.Text className="text-gray-400">0.1%</Typography.Text>
         </div>
         <div className="flex justify-between items-center">
           <Typography.Text>Maker Fee</Typography.Text>
-          <Typography.Text className="text-gray-400">0.1</Typography.Text>
+          <Typography.Text className="text-gray-400">0.1%</Typography.Text>
         </div>
       </Tooltip.Content>
     </Tooltip>
