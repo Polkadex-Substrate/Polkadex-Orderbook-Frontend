@@ -90,7 +90,7 @@ export const HeaderAsideCenter = styled.div`
   max-width: ${normalizeValue(10)};
   height: ${normalizeValue(4)};
   min-width: ${normalizeValue(10)};
-  margin-left: ${normalizeValue(1)};
+  margin-left: ${normalizeValue(0.4)};
   svg {
     height: 100%;
     width: 100%;

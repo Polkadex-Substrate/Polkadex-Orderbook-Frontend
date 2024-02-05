@@ -118,7 +118,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       query: QUERIES.getKlinesByMarketInterval,
       variables: {
         from: args.from.toISOString(),
-        to: args.to.toUTCString(),
+        to: args.to.toISOString(),
         market: args.market,
         interval: args.interval,
       },
