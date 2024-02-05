@@ -26,8 +26,7 @@ export const Main = styled.div<{ hasData?: boolean }>`
     border-radius: 0 ${normalizeValue(2)} ${normalizeValue(2)} 0;
     min-width: ${normalizeValue(28)};
     width: 100%;
-    max-height: 540px;
-    height: 50vh;
+    max-height: 500px;
 
     @media screen and (min-height: 1200px) {
       max-height: 660px;
