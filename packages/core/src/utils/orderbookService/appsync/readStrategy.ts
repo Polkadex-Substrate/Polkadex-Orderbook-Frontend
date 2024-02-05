@@ -436,6 +436,8 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         `[${this.constructor.name}:getOpenOrders] cannot find market`
       );
     }
+    const marketBuyHistory =
+      item.st !== "OPEN" && item.ot === "MARKET" && item.s === "Bid";
     return {
       market,
       tradeAddress: item?.u || "",
@@ -449,7 +451,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       timestamp: new Date(Number(item?.t) || 0),
       side: item.s as OrderSide,
       filledQuantity: String(item.fq),
-      quantity: item.q,
+      quantity: marketBuyHistory ? item.qoq : item.q,
     };
   }
 }
