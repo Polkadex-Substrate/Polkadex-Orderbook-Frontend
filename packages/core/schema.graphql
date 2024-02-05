@@ -119,6 +119,8 @@ type Order {
     p: String!
     # qty of the order; eg 1.0
     q: String!
+    # quote qty of the order
+    qoq: String!
     # avg price of the order; eg 1000
     afp: String!
     # filled qty of the order; eg 1.0

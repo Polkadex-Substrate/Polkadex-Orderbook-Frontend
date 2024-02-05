@@ -247,6 +247,7 @@ export const findOrderById = /* GraphQL */ `query FindOrderById($order_id: Strin
     st
     p
     q
+    qoq
     afp
     fq
     fee
@@ -284,6 +285,7 @@ export const listOrderHistoryByMainAccount = /* GraphQL */ `query ListOrderHisto
       st
       p
       q
+      qoq
       afp
       fq
       fee
@@ -324,6 +326,7 @@ export const listOrderHistoryByTradeAccount = /* GraphQL */ `query ListOrderHist
       st
       p
       q
+      qoq
       afp
       fq
       fee
@@ -360,6 +363,7 @@ export const listOpenOrdersByMainAccount = /* GraphQL */ `query ListOpenOrdersBy
       st
       p
       q
+      qoq
       afp
       fq
       fee
@@ -396,6 +400,7 @@ export const listOpenOrdersByTradeAccount = /* GraphQL */ `query ListOpenOrdersB
       st
       p
       q
+      qoq
       afp
       fq
       fee
