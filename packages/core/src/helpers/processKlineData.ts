@@ -1,4 +1,5 @@
-import { KlineDbData } from "@orderbook/core/providers/public/klineProvider";
+import { Bar } from "../utils/charting_library";
+import { Kline } from "../utils/orderbookService";
 
 // This function aims to provide a timestamp that represents the same point in time as the input ISO date string
 // but without accounting for any time zone offset.
@@ -13,14 +14,14 @@ export const getCorrectTimestamp = (ISOdate: string) => {
   return timestampWithoutOffset;
 };
 
-export const processKlineData = (data: KlineDbData[]) => {
+export const processKlineData = (data: Kline[]): Bar[] => {
   const klinesData = data.map((x) => ({
-    timestamp: getCorrectTimestamp(x.t),
-    open: Number(x.o),
-    high: Number(x.h),
-    low: Number(x.l),
-    close: Number(x.c),
-    volume: Number(x.vb),
+    time: getCorrectTimestamp(x.timestamp.toISOString()),
+    open: Number(x.open),
+    high: Number(x.high),
+    low: Number(x.low),
+    close: Number(x.close),
+    volume: Number(x.baseVolume),
   }));
   // if volume is 0, take previous close as candle
   klinesData?.forEach((elem, idx) => {

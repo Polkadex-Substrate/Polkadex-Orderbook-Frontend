@@ -14,4 +14,5 @@ export const KlineIntervals = [
   "3d",
   "7d",
   "1M",
+  "1w",
 ];
