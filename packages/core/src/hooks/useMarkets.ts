@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback, useMemo, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { Market } from "@orderbook/core/utils/orderbookService";
 import { getCurrentMarket, setToStorage } from "@orderbook/core/helpers";
@@ -100,11 +100,7 @@ export function useMarkets(market?: string) {
         );
 
         router.push(
-          `${marketToSet.baseAsset.ticker + marketToSet.quoteAsset.ticker}`,
-          undefined,
-          {
-            shallow: true,
-          }
+          `${marketToSet.baseAsset.ticker + marketToSet.quoteAsset.ticker}`
         );
 
         onClose();
