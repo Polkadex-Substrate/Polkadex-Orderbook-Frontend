@@ -1,6 +1,7 @@
+"use client";
+
 import _ from "lodash";
 import { useCallback, useEffect } from "react";
-import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
 import {
   PublicTrade,
@@ -42,10 +43,12 @@ import { useNativeApi } from "../../public/nativeApi";
 import { Provider } from "./context";
 import * as T from "./types";
 
-export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
+export const SubscriptionProvider: T.SubscriptionComponent = ({
+  children,
+  marketId,
+}) => {
   const queryClient = useQueryClient();
   const path = usePathname();
-  const router = useRouter();
   const { onHandleError } = useSettingsProvider();
   const { isReady, markets } = useOrderbookService();
   const { dateFrom, dateTo } = useSessionProvider();
@@ -55,7 +58,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({ children }) => {
   const { api } = useNativeApi();
 
   const isTradingPage = path.startsWith("/trading");
-  const marketName = isTradingPage ? (router.query.id as string) : null;
+  const marketName = isTradingPage ? marketId : null;
   const market = getCurrentMarket(markets, marketName)?.id;
 
   const { asks, bids } = useOrderbook(market as string);

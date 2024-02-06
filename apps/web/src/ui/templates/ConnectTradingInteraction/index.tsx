@@ -1,14 +1,13 @@
 import { Modal, Multistep } from "@polkadex/ux";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { RemoveTradingAccount } from "../ConnectWallet/removeTradingAccount";
 import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAccountMnemonic";
-
-import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export const ConnectTradingInteraction = () => {
   const { connectTrading, onToogleConnectTrading } = useSettingsProvider();

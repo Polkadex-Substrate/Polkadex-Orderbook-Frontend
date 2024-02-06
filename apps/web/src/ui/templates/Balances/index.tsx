@@ -22,6 +22,7 @@ import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useMemo } from "react";
 import { useAssets } from "@orderbook/core/hooks";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { useRouter } from "next/router";
 
 import * as S from "./styles";
 import { TableSkeleton } from "./skeleton";
@@ -42,9 +43,9 @@ export const BalancesTemplate = () => {
     image: "emptyWallet",
     title: tc("connectTradingAccount.title"),
   };
-
+  const { locale } = useRouter();
   const { assets, filters, loading, onHideZeroBalance, onSearchToken } =
-    useAssets();
+    useAssets(locale);
 
   const showLoader = useMemo(
     () => connecting || loading,
