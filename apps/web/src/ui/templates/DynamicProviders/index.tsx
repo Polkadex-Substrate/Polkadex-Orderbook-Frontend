@@ -8,9 +8,9 @@ import {
   NativeApiProvider,
   OrderbookServiceProvider,
   SubscriptionProvider,
+  ConnectWalletProvider,
 } from "@orderbook/core/providers";
 
-import { ConnectWalletProvider } from "@/providers/connectWalletProvider";
 export const DynamicProviders = ({ children }) => {
   return (
     <ExtensionsProvider>

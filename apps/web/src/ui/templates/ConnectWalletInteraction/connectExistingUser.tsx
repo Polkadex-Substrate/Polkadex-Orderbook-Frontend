@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { Multistep } from "@polkadex/ux";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ExistingUser } from "../ConnectWallet/existingUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
@@ -12,8 +13,6 @@ import { MaximumTradingAccount } from "../ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
 import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAccountMnemonic";
-
-import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export const ConnectExistingUser = ({
   onClose,

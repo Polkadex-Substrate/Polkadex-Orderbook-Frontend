@@ -13,6 +13,7 @@ import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import {
   ExtensionAccount,
   useExtensionAccounts,
@@ -29,7 +30,6 @@ import { RemoveTradingAccount } from "@/ui/templates/ConnectWallet/removeTrading
 import { ImportTradingAccount } from "@/ui/templates/ConnectWallet/importTradingAccount";
 import { TradingAccountSuccessfull } from "@/ui/templates/ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "@/ui/templates/ConnectWallet/tradingAccountMnemonic";
-import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 import { ConnectExtensionAccount } from "@/ui/templates/ConnectWallet/connnectExtensionAccount";
 import { FundAccount } from "@/ui/templates/ConnectWallet/fundAccount";
 import { TradingAccountList } from "@/ui/templates/ConnectWallet/tradingAccountList";
