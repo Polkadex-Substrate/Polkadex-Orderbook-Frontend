@@ -10,8 +10,10 @@ import {
   SubscriptionProvider,
   ConnectWalletProvider,
 } from "@orderbook/core/providers";
+import { useRouter } from "next/router";
 
 export const DynamicProviders = ({ children }) => {
+  const { query } = useRouter();
   return (
     <ExtensionsProvider>
       <ExtensionAccountsProvider
@@ -23,7 +25,7 @@ export const DynamicProviders = ({ children }) => {
           <ProfileProvider>
             <NativeApiProvider>
               <OrderbookServiceProvider>
-                <SubscriptionProvider>
+                <SubscriptionProvider marketId={query.id as string}>
                   <ConnectWalletProvider>{children}</ConnectWalletProvider>
                 </SubscriptionProvider>
               </OrderbookServiceProvider>
