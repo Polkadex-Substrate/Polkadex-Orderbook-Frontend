@@ -70,7 +70,7 @@ export const Markets = ({ hasMargin = false, onClose, market }: Props) => {
       />
       <Content
         handleSelectedFavorite={handleSelectedFavorite}
-        tokens={marketTokens()}
+        tokens={marketTokens}
         changeMarket={(e) => handleChangeMarket(e, onClose)}
       />
       <Footer

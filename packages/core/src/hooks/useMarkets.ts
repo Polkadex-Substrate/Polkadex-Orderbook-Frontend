@@ -118,7 +118,7 @@ export function useMarkets(market?: string) {
    *
    * @returns {InitialMarkets[]} dispatch setCurrentMarket action
    */
-  const marketTokens = (): InitialMarkets[] => {
+  const marketTokens = useMemo((): InitialMarkets[] => {
     const initialMarkets: InitialMarkets[] = [];
     const allTickets = markets.map((item) => {
       const ticker = allMarketTickers.find((val) => val.market === item.id);
@@ -154,7 +154,14 @@ export function useMarkets(market?: string) {
       }
       return pv;
     }, initialMarkets);
-  };
+  }, [
+    allMarketTickers,
+    favoriteMarkets,
+    fieldValue.marketsTabsSelected,
+    fieldValue.searchFieldValue,
+    fieldValue.showFavourite,
+    markets,
+  ]);
 
   /**
    * @description Return the market tickers
