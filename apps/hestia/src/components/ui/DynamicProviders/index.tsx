@@ -1,9 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Amplify } from "aws-amplify";
 import {
   ProfileProvider,
   OrderbookServiceProvider,
@@ -16,8 +14,11 @@ import {
   UserAccountsProvider,
 } from "@polkadex/react-providers";
 import { ConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { Toaster } from "@polkadex/ux";
+import { Amplify } from "aws-amplify";
 
 import awsconfig from "../../../../aws-exports";
+Amplify.configure(awsconfig);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,7 +28,6 @@ const queryClient = new QueryClient({
   },
 });
 
-Amplify.configure(awsconfig);
 export const DynamicProviders = ({ children }: { children: ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>

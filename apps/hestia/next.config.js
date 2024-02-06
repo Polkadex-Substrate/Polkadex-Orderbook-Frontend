@@ -10,10 +10,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const { withSentryConfig } = require("@sentry/nextjs");
 
 const nextConfig = {
-  transpilePackages: [
-    "@orderbook/core",
-    "@chainsafe/metamask-polkadot-adapter",
-  ],
+  transpilePackages: ["@orderbook/core"],
   reactStrictMode: false,
   // Optional build-time configuration options
   sentry: {
