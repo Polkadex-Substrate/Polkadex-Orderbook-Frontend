@@ -7,17 +7,15 @@ import FileSaver from "file-saver";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import {
-  transformAddress,
-  useProfile,
-} from "@orderbook/core/providers/user/profile";
-// TODO: should be moved to polkadex-ts types
-import {
   PropsWithChildren,
   ReactNode,
   createContext,
   useMemo,
   useState,
 } from "react";
+
+import { POLKADEX_ASSET } from "../../../constants";
+import { transformAddress, useProfile } from "../../user/profile";
 import {
   AddProxyAccountArgs,
   ImportFromFile,
@@ -30,12 +28,12 @@ import {
   useProxyAccounts,
   useRemoveProxyAccount,
   useSingleProxyAccount,
-} from "@orderbook/core/hooks";
-import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { POLKADEX_ASSET } from "@orderbook/core/constants";
+} from "../../../hooks";
+import { useSettingsProvider } from "../../public/settings";
 
 type GenericStatus = "error" | "idle" | "success" | "loading";
 
+export { useConnectWalletProvider } from "./useConnectWallet";
 export type ExportTradeAccountProps = {
   account: KeyringPair;
   password?: string;
