@@ -5,7 +5,7 @@ import { Fragment } from "react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 
-import { OpenOrders } from "./openOrders";
+import { OpenOrdersTable } from "./openOrders";
 
 type Props = {
   maxHeight: string;
@@ -46,7 +46,7 @@ export const Orders = ({ id }: Props) => {
       {connected ? (
         <Fragment>
           <Tabs.Content value="openOrders">
-            <OpenOrders market={id} />
+            <OpenOrdersTable market={id} />
           </Tabs.Content>
         </Fragment>
       ) : (

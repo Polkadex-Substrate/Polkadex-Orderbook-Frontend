@@ -1,54 +1,85 @@
+import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import classNames from "classnames";
+import {
+  ArrowLeftCircleIcon,
+  ArrowRightCircleIcon,
+} from "@heroicons/react/24/solid";
+import { Button } from "@polkadex/ux";
 
-export interface OrderbookProps {
-  price: string;
-  amount: string;
-  date: Date;
-  type: "sell" | "buy";
-}
-const columnHelper = createColumnHelper<OrderbookProps>();
+const columnHelper = createColumnHelper<Order>();
 
-export const columns = () => [
+export const openOrderColumns = () => [
   columnHelper.accessor((row) => row, {
-    id: "price",
+    id: "pair",
     cell: (e) => {
+      const isSell = e.getValue().side === "Ask";
+      const Icon = isSell ? ArrowRightCircleIcon : ArrowLeftCircleIcon;
       return (
-        <span
-          className={classNames(
-            e.getValue().type === "sell"
-              ? "text-primary-base"
-              : "text-success-base"
-          )}
-        >
-          {e.getValue().price}
+        <span className="flex items-center gap-1">
+          <Icon
+            className={classNames(
+              "w-5 h-5",
+              isSell ? "text-primary-base" : "text-success-base"
+            )}
+          />
+          {e.getValue().market.name}
         </span>
       );
     },
-    header: () => <span>Price(PDEX)</span>,
+    header: () => <span>Pair</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.amount, {
-    id: "amount",
-    cell: (e) => {
-      return <span>{e.getValue()}</span>;
-    },
-    header: () => <span>Amount(DOT)</span>,
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row.date, {
+  columnHelper.accessor((row) => row, {
     id: "date",
-    cell: () => {
-      const date = new Intl.DateTimeFormat("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-        second: "2-digit",
-      })
-        .format(new Date())
-        .replace(/ [APap][Mm]/, "");
-      return <span>{date}</span>;
+    cell: (e) => {
+      return <span>{e.getValue().timestamp.toLocaleString()}</span>;
     },
-    header: () => <span>Total(DOT)</span>,
+    header: () => <span>Date</span>,
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "type",
+    cell: (e) => {
+      return <span>{e.getValue().type}</span>;
+    },
+    header: () => <span>Type</span>,
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "price",
+    cell: (e) => {
+      return <span>{e.getValue().price}</span>;
+    },
+    header: () => <span>Price</span>,
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "total",
+    cell: (e) => {
+      return <span>{e.getValue().quantity}</span>;
+    },
+    header: () => <span>Total</span>,
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "filled",
+    cell: (e) => {
+      return <span>{e.getValue().filledQuantity}</span>;
+    },
+    header: () => <span>Filled</span>,
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "cancel order",
+    cell: () => {
+      return (
+        <Button.Solid className="p-0.5" size="xs">
+          Cancel Order
+        </Button.Solid>
+      );
+    },
+    // header: () => <span>Filled</span>,
     footer: (e) => e.column.id,
   }),
 ];
