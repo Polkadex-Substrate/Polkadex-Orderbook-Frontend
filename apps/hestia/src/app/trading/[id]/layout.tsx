@@ -1,6 +1,9 @@
 "use client";
 
-import { SubscriptionProvider } from "@orderbook/core/providers";
+import {
+  SubscriptionProvider,
+  OrdersProvider,
+} from "@orderbook/core/providers";
 import { ReactNode } from "react";
 
 export default function Layout({
@@ -12,7 +15,7 @@ export default function Layout({
 }) {
   return (
     <SubscriptionProvider marketId={params.id ?? "DOTUSDT"}>
-      {children}
+      <OrdersProvider>{children}</OrdersProvider>
     </SubscriptionProvider>
   );
 }

@@ -6,10 +6,15 @@ import {
   ArrowRightCircleIcon,
 } from "@heroicons/react/24/solid";
 import { Button } from "@polkadex/ux";
+import { OrderCancellation } from "@orderbook/core/providers/user/orders";
 
 const columnHelper = createColumnHelper<Order>();
 
-export const openOrderColumns = () => [
+export const openOrderColumns = ({
+  onCancelOrder,
+}: {
+  onCancelOrder: (value: OrderCancellation) => void;
+}) => [
   columnHelper.accessor((row) => row, {
     id: "pair",
     cell: (e) => {
@@ -72,14 +77,24 @@ export const openOrderColumns = () => [
   }),
   columnHelper.accessor((row) => row, {
     id: "cancel order",
-    cell: () => {
+    cell: (e) => {
       return (
-        <Button.Solid className="p-0.5" size="xs">
+        <Button.Solid
+          className="py-0.5 h-auto"
+          size="xs"
+          onClick={() =>
+            onCancelOrder({
+              orderId: e.getValue().orderId,
+              base: e.getValue().market.baseAsset.id,
+              quote: e.getValue().market.quoteAsset.id,
+            })
+          }
+        >
           Cancel Order
         </Button.Solid>
       );
     },
-    // header: () => <span>Filled</span>,
+    header: () => <></>,
     footer: (e) => e.column.id,
   }),
 ];

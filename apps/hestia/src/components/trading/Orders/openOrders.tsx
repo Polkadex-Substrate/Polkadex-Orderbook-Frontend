@@ -7,6 +7,7 @@ import {
 import classNames from "classnames";
 import { GenericMessage, Skeleton, Table as PolkadexTable } from "@polkadex/ux";
 import { useOpenOrders } from "@orderbook/core/hooks";
+import { useOrders } from "@orderbook/core/providers/user/orders";
 
 import { openOrderColumns } from "./columns";
 
@@ -17,10 +18,11 @@ export const OpenOrdersTable = ({
   market: string;
   hasHeader?: boolean;
 }) => {
+  const { onCancelOrder } = useOrders();
   const { isLoading, openOrders } = useOpenOrders(market);
   const table = useReactTable({
     data: openOrders,
-    columns: openOrderColumns(),
+    columns: openOrderColumns({ onCancelOrder }),
     getCoreRowModel: getCoreRowModel(),
   });
 
