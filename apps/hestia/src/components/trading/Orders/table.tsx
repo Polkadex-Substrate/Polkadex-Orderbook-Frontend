@@ -9,7 +9,13 @@ import { GenericMessage } from "@polkadex/ux";
 
 import { columns } from "./columns";
 
-export const Table = ({ hasHeader = true }: { hasHeader?: boolean }) => {
+export const Table = ({
+  hasHeader = true,
+  emptyMessage = "No open orders",
+}: {
+  hasHeader?: boolean;
+  emptyMessage?: string;
+}) => {
   const data: any = [];
   const table = useReactTable({
     data,
@@ -18,7 +24,13 @@ export const Table = ({ hasHeader = true }: { hasHeader?: boolean }) => {
   });
 
   if (!data.length)
-    return <GenericMessage title="No open orders" illustration="NoData" />;
+    return (
+      <GenericMessage
+        title={emptyMessage}
+        illustration="NoData"
+        className="h-64"
+      />
+    );
 
   return (
     <div

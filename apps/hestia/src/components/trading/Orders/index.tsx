@@ -3,14 +3,22 @@
 import { Button, Dropdown, Tabs, GenericMessage } from "@polkadex/ux";
 import { Fragment } from "react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
-import { Table } from "./table";
+import { OpenOrders } from "./openOrders";
 
-export const Orders = ({ maxHeight }: { maxHeight: string }) => {
-  const connected = false;
+type Props = {
+  maxHeight: string;
+  id: string;
+};
+
+export const Orders = ({ id }: Props) => {
+  const { selectedAddresses } = useProfile();
+  const connected = selectedAddresses.tradeAddress.length > 0;
+
   return (
     <Tabs defaultValue="openOrders" className="min-w-[25rem]">
-      <div className="flex items-center justify-between ">
+      <div className="flex items-center justify-between">
         <Tabs.List className="px-2 py-3">
           <Tabs.Trigger value="openOrders">Open Orders(0)</Tabs.Trigger>
           <Tabs.Trigger value="orderHistory">Order History</Tabs.Trigger>
@@ -37,12 +45,8 @@ export const Orders = ({ maxHeight }: { maxHeight: string }) => {
 
       {connected ? (
         <Fragment>
-          <Tabs.Content
-            value="openOrders"
-            className="flex-1"
-            style={{ maxHeight }}
-          >
-            <Table />
+          <Tabs.Content value="openOrders">
+            <OpenOrders market={id} />
           </Tabs.Content>
         </Fragment>
       ) : (
