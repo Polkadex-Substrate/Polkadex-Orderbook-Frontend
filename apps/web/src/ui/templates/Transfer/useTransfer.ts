@@ -22,11 +22,11 @@ const onChangeState = (onCallback: Dispatch<SetStateAction<boolean>>) => {
 
 export function useTransfer() {
   const toHuman = BalanceFormatter.toHuman;
-  const { assets: list } = useAssets();
+  const { query, locale, push } = useRouter();
+  const { assets: list } = useAssets(locale);
   const { balances } = useFunds();
   const { loading: depositLoading } = useDepositProvider();
   const { loading: withdrawLoading } = useWithdrawsProvider();
-  const { query, locale, push } = useRouter();
 
   const [assetsInteraction, setAssetsInteraction] = useState(false);
   const [switchEnable, setSwitchEnable] = useState(false);

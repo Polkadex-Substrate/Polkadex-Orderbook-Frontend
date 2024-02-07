@@ -7,6 +7,7 @@ import {
   Multistep,
   ExtensionAccounts,
 } from "@polkadex/ux";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
@@ -16,8 +17,6 @@ import { ConnectTradingAccountCard } from "../ReadyToUse/connectTradingAccountCa
 import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 
 import { SwitchKeys } from ".";
-
-import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export type ConnectKeys =
   | "ConnectAuthorization"
