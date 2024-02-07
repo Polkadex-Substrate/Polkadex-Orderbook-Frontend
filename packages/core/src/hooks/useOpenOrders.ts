@@ -14,12 +14,12 @@ export const useOpenOrders = (defaultMarket: string) => {
     selectedAddresses: { tradeAddress },
   } = useProfile();
 
-  const { list: markets } = useMarkets();
+  const { list: markets, loading } = useMarkets();
   const currentMarket = getCurrentMarket(markets, defaultMarket);
 
   const userLoggedIn = tradeAddress !== "";
   const shouldFetchOpenOrders = Boolean(
-    userLoggedIn && currentMarket && tradeAddress
+    userLoggedIn && currentMarket && tradeAddress && !loading
   );
 
   const {

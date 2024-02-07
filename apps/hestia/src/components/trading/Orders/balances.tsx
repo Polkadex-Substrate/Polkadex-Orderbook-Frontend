@@ -1,30 +1,27 @@
-"use client";
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
+import { useAssets } from "@orderbook/core/hooks";
 import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
-import { useOpenOrders } from "@orderbook/core/hooks";
-import { useOrders } from "@orderbook/core/providers/user/orders";
 
-import { openOrderColumns } from "./columns";
 import { Loading } from "./loading";
+import { balanceColumns } from "./columns";
 
-export const OpenOrdersTable = ({ market }: { market: string }) => {
-  const { onCancelOrder } = useOrders();
-  const { isLoading, openOrders } = useOpenOrders(market);
+export const BalancesTable = () => {
+  const { assets, loading } = useAssets();
   const table = useReactTable({
-    data: openOrders,
-    columns: openOrderColumns({ onCancelOrder }),
+    data: assets,
+    columns: balanceColumns(),
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <Loading />;
+  if (loading) return <Loading />;
 
-  if (!openOrders.length)
-    return <GenericMessage title={"No open orders"} illustration="NoData" />;
+  if (!assets?.length)
+    return <GenericMessage title={"No items found"} illustration="NoData" />;
 
   return (
     <div
@@ -67,7 +64,7 @@ export const OpenOrdersTable = ({ market }: { market: string }) => {
                   return (
                     <PolkadexTable.Cell
                       key={cell.id}
-                      className={classNames("px-2 py-4 text-xs")}
+                      className={classNames("px-2 py-3 text-xs")}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

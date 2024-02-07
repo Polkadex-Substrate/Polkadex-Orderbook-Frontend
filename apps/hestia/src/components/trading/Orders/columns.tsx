@@ -5,11 +5,18 @@ import {
   ArrowLeftCircleIcon,
   ArrowRightCircleIcon,
 } from "@heroicons/react/24/solid";
-import { Button, truncateString } from "@polkadex/ux";
+import { Button, truncateString, Tokens, Typography } from "@polkadex/ux";
 import { OrderCancellation } from "@orderbook/core/providers/user/orders";
+import { AssetsProps } from "@orderbook/core/hooks";
+import { getChainFromTicker } from "@orderbook/core/helpers";
+
+import { ActionsCard } from "@/components/balances/Table/actionsCard";
+import { TokenCard } from "@/components/ui/ReadyToUse";
+import { AmountCard } from "@/components/ui/ReadyToUse/amountCard";
 
 const openOrderColumnHelper = createColumnHelper<Order>();
 const orderHistoryColumnHelper = createColumnHelper<Order>();
+const balanceColumnHelper = createColumnHelper<AssetsProps>();
 
 export const openOrderColumns = ({
   onCancelOrder,
@@ -183,6 +190,86 @@ export const orderHistoryColumns = () => [
       return <span>{e.getValue().fee}</span>;
     },
     header: () => <span>Fee</span>,
+    footer: (e) => e.column.id,
+  }),
+];
+
+export const balanceColumns = () => [
+  balanceColumnHelper.accessor((row) => row, {
+    id: "token",
+    cell: (e) => {
+      return (
+        <TokenCard
+          tokenName={e.getValue().name}
+          ticker={e.getValue().ticker}
+          icon={e.getValue().ticker as keyof typeof Tokens}
+        />
+      );
+    },
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Asset
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  balanceColumnHelper.accessor((row) => row.onChainBalance, {
+    id: "tradingAccount",
+    cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Trading account
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  balanceColumnHelper.accessor((row) => row.free_balance, {
+    id: "fundingAccount",
+    cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Funding account
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  balanceColumnHelper.accessor((row) => row.inOrdersBalance, {
+    id: "inOrders",
+    cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        In orders
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  balanceColumnHelper.accessor((row) => row, {
+    id: "actions",
+    cell: (e) => {
+      const chainName = getChainFromTicker(e.getValue().ticker);
+      return (
+        <ActionsCard
+          withdrawLink={{
+            pathname: "https://thea.polkadex.trade/withdraw",
+            query: chainName && {
+              chain: encodeURIComponent(chainName),
+            },
+          }}
+          depositLink={{
+            pathname: "https://thea.polkadex.trade/",
+            query: chainName && {
+              chain: encodeURIComponent(chainName),
+            },
+          }}
+          tradeLink={`/trading/${e.getValue().ticker}`}
+          transferLink={{
+            pathname: "/transfer",
+            query: { token: e.getValue().ticker },
+          }}
+        />
+      );
+    },
+    header: () => <></>,
     footer: (e) => e.column.id,
   }),
 ];

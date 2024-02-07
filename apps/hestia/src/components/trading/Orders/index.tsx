@@ -6,6 +6,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { OpenOrdersTable } from "./openOrders";
 import { OrderHistoryTable } from "./orderHistory";
+import { BalancesTable } from "./balances";
 
 type Props = {
   maxHeight: string;
@@ -23,9 +24,7 @@ export const Orders = ({ id }: Props) => {
           <Tabs.Trigger value="openOrders">Open Orders(0)</Tabs.Trigger>
           <Tabs.Trigger value="orderHistory">Order History</Tabs.Trigger>
           <Tabs.Trigger value="tradeHistory">Trade History</Tabs.Trigger>
-          <Tabs.Trigger value="balances" disabled>
-            Balances
-          </Tabs.Trigger>
+          <Tabs.Trigger value="balances">Balances</Tabs.Trigger>
         </Tabs.List>
         <Dropdown>
           <Dropdown.Trigger>
@@ -50,6 +49,9 @@ export const Orders = ({ id }: Props) => {
           </Tabs.Content>
           <Tabs.Content value="orderHistory">
             <OrderHistoryTable market={id} />
+          </Tabs.Content>
+          <Tabs.Content value="balances">
+            <BalancesTable />
           </Tabs.Content>
         </>
       ) : (

@@ -23,13 +23,7 @@ export const OrderHistoryTable = ({ market }: { market: string }) => {
   if (isLoading) return <Loading />;
 
   if (!orderHistory.length)
-    return (
-      <GenericMessage
-        title={"No items found"}
-        illustration="NoData"
-        className="h-64"
-      />
-    );
+    return <GenericMessage title={"No items found"} illustration="NoData" />;
 
   return (
     <div
