@@ -17,9 +17,8 @@ export const useOpenOrders = (defaultMarket: string) => {
   const { list: markets, loading } = useMarkets();
   const currentMarket = getCurrentMarket(markets, defaultMarket);
 
-  const userLoggedIn = tradeAddress !== "";
   const shouldFetchOpenOrders = Boolean(
-    userLoggedIn && currentMarket && tradeAddress && !loading
+    currentMarket && tradeAddress?.length > 0 && !loading
   );
 
   const {
@@ -46,6 +45,6 @@ export const useOpenOrders = (defaultMarket: string) => {
 
   return {
     openOrders: openOrdersSorted,
-    isLoading: isLoading || isFetching,
+    isLoading: !shouldFetchOpenOrders || isLoading || isFetching,
   };
 };
