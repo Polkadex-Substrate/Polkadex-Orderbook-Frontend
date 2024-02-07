@@ -1,3 +1,5 @@
+"use client";
+
 import { Multistep } from "@polkadex/ux";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";

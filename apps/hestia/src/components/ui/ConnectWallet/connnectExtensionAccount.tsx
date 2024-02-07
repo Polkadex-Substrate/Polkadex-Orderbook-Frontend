@@ -1,3 +1,5 @@
+"use client";
+
 import { Interaction, ProviderCard, Typography } from "@polkadex/ux";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { ExtensionStatus } from "@polkadex/react-providers";

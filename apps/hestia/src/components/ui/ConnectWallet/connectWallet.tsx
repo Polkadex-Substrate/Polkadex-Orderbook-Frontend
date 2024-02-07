@@ -1,3 +1,5 @@
+"use client";
+
 import { PropsWithChildren, useState } from "react";
 import { ExtensionStatus } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";

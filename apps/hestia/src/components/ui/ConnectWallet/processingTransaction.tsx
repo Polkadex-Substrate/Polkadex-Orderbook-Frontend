@@ -1,3 +1,5 @@
+"use client";
+
 import { ElementType, useEffect } from "react";
 import { getExtensionIcon } from "@polkadot-cloud/assets/extensions";
 import classNames from "classnames";

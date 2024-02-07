@@ -13,11 +13,24 @@ import {
   ExtensionsProvider,
   UserAccountsProvider,
 } from "@polkadex/react-providers";
-import { ConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
-import { Toaster } from "@polkadex/ux";
 import { Amplify } from "aws-amplify";
+import dynamic from "next/dynamic";
 
 import awsconfig from "../../../../aws-exports";
+
+const ConnectWalletProvider = dynamic(
+  () =>
+    import("@orderbook/core/providers").then(
+      (mod) => mod.ConnectWalletProvider
+    ),
+  { ssr: false }
+);
+
+const Toaster = dynamic(
+  () => import("@polkadex/ux").then((mod) => mod.Toaster),
+  { ssr: false }
+);
+
 Amplify.configure(awsconfig);
 
 const queryClient = new QueryClient({

@@ -1,3 +1,5 @@
+"use client";
+
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { ElementType, useCallback, useEffect, useState } from "react";
 import { getExtensionIcon } from "@polkadot-cloud/assets/extensions";
