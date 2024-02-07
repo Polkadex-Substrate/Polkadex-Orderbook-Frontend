@@ -7,6 +7,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import { OpenOrdersTable } from "./openOrders";
 import { OrderHistoryTable } from "./orderHistory";
 import { BalancesTable } from "./balances";
+import { TradeHistoryTable } from "./tradeHistory";
 
 type Props = {
   maxHeight: string;
@@ -49,6 +50,9 @@ export const Orders = ({ id }: Props) => {
           </Tabs.Content>
           <Tabs.Content value="orderHistory">
             <OrderHistoryTable market={id} />
+          </Tabs.Content>
+          <Tabs.Content value="tradeHistory">
+            <TradeHistoryTable market={id} />
           </Tabs.Content>
           <Tabs.Content value="balances">
             <BalancesTable />
