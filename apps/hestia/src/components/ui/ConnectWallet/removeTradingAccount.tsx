@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useMemo, useState } from "react";
 import { Interaction, Typography, Loading } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
