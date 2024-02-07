@@ -12,7 +12,7 @@ export const Table = styled.table`
 `;
 const Grid = styled.thead`
   tr {
-    grid-template-columns: 1fr 1fr 1.5fr 1fr repeat(4, 1fr);
+    grid-template-columns: 1fr 1fr 1.5fr 1fr repeat(5, 1fr);
   }
 `;
 

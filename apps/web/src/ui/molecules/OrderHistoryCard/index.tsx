@@ -61,5 +61,10 @@ export const OrderHistoryCard = ({
       <S.Tag>Filled</S.Tag>
       <span>{data[5].value}</span>
     </S.Td>
+
+    <S.Td>
+      <S.Tag>Fee</S.Tag>
+      <span>{data[7].value}</span>
+    </S.Td>
   </S.Tr>
 );
