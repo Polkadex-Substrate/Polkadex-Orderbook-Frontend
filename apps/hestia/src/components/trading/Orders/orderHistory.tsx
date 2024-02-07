@@ -11,7 +11,13 @@ import { useOrderHistory } from "@orderbook/core/hooks";
 import { orderHistoryColumns } from "./columns";
 import { Loading } from "./loading";
 
-export const OrderHistoryTable = ({ market }: { market: string }) => {
+export const OrderHistoryTable = ({
+  market,
+  maxHeight,
+}: {
+  market: string;
+  maxHeight: string;
+}) => {
   const { isLoading, orderHistory } = useOrderHistory(market);
 
   const table = useReactTable({
@@ -28,7 +34,7 @@ export const OrderHistoryTable = ({ market }: { market: string }) => {
   return (
     <div
       className="flex-1 overflow-y-hidden hover:overflow-y-auto"
-      style={{ scrollbarGutter: "stable" }}
+      style={{ maxHeight, scrollbarGutter: "stable" }}
     >
       <PolkadexTable className="w-full">
         <PolkadexTable.Header className="sticky top-0 bg-black">

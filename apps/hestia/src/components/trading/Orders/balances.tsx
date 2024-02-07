@@ -10,7 +10,7 @@ import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
 import { Loading } from "./loading";
 import { balanceColumns } from "./columns";
 
-export const BalancesTable = () => {
+export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
   const { assets, loading } = useAssets();
   const table = useReactTable({
     data: assets,
@@ -21,12 +21,12 @@ export const BalancesTable = () => {
   if (loading) return <Loading />;
 
   if (!assets?.length)
-    return <GenericMessage title={"No items found"} illustration="NoData" />;
+    return <GenericMessage title={"No assets found"} illustration="NoData" />;
 
   return (
     <div
       className="flex-1 overflow-y-hidden hover:overflow-y-auto"
-      style={{ scrollbarGutter: "stable" }}
+      style={{ maxHeight, scrollbarGutter: "stable" }}
     >
       <PolkadexTable className="w-full">
         <PolkadexTable.Header className="sticky top-0 bg-black">

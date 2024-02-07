@@ -12,7 +12,13 @@ import { useOrders } from "@orderbook/core/providers/user/orders";
 import { openOrderColumns } from "./columns";
 import { Loading } from "./loading";
 
-export const OpenOrdersTable = ({ market }: { market: string }) => {
+export const OpenOrdersTable = ({
+  market,
+  maxHeight,
+}: {
+  market: string;
+  maxHeight: string;
+}) => {
   const { onCancelOrder } = useOrders();
   const { isLoading, openOrders } = useOpenOrders(market);
   const table = useReactTable({
@@ -29,7 +35,7 @@ export const OpenOrdersTable = ({ market }: { market: string }) => {
   return (
     <div
       className="flex-1 overflow-y-hidden hover:overflow-y-auto"
-      style={{ scrollbarGutter: "stable" }}
+      style={{ maxHeight, scrollbarGutter: "stable" }}
     >
       <PolkadexTable className="w-full">
         <PolkadexTable.Header className="sticky top-0 bg-black">

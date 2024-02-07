@@ -15,6 +15,8 @@ type Props = {
   id: string;
 };
 
+const MAX_HEIGHT = "260px";
+
 export const Orders = ({ id }: Props) => {
   const { openOrders } = useOpenOrders(id);
   const { selectedAddresses } = useProfile();
@@ -50,16 +52,16 @@ export const Orders = ({ id }: Props) => {
       {connected ? (
         <>
           <Tabs.Content value="openOrders">
-            <OpenOrdersTable market={id} />
+            <OpenOrdersTable market={id} maxHeight={MAX_HEIGHT} />
           </Tabs.Content>
           <Tabs.Content value="orderHistory">
-            <OrderHistoryTable market={id} />
+            <OrderHistoryTable market={id} maxHeight={MAX_HEIGHT} />
           </Tabs.Content>
           <Tabs.Content value="tradeHistory">
-            <TradeHistoryTable market={id} />
+            <TradeHistoryTable market={id} maxHeight={MAX_HEIGHT} />
           </Tabs.Content>
           <Tabs.Content value="balances">
-            <BalancesTable />
+            <BalancesTable maxHeight={MAX_HEIGHT} />
           </Tabs.Content>
         </>
       ) : (
