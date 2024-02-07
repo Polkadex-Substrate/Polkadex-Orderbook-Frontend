@@ -25,7 +25,7 @@ export const OrderHistoryTable = ({ market }: { market: string }) => {
   if (!orderHistory.length)
     return (
       <GenericMessage
-        title={"No order history found"}
+        title={"No items found"}
         illustration="NoData"
         className="h-64"
       />
@@ -37,7 +37,7 @@ export const OrderHistoryTable = ({ market }: { market: string }) => {
       style={{ scrollbarGutter: "stable" }}
     >
       <PolkadexTable className="w-full">
-        <PolkadexTable.Header>
+        <PolkadexTable.Header className="sticky top-0 bg-black">
           {table.getHeaderGroups().map((headerGroup) => (
             <PolkadexTable.Row key={headerGroup.id}>
               {headerGroup.headers.map((header) => {

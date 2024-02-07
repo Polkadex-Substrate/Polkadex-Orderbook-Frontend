@@ -12,13 +12,7 @@ import { useOrders } from "@orderbook/core/providers/user/orders";
 import { openOrderColumns } from "./columns";
 import { Loading } from "./loading";
 
-export const OpenOrdersTable = ({
-  market,
-  hasHeader = true,
-}: {
-  market: string;
-  hasHeader?: boolean;
-}) => {
+export const OpenOrdersTable = ({ market }: { market: string }) => {
   const { onCancelOrder } = useOrders();
   const { isLoading, openOrders } = useOpenOrders(market);
   const table = useReactTable({
@@ -44,29 +38,27 @@ export const OpenOrdersTable = ({
       style={{ scrollbarGutter: "stable" }}
     >
       <PolkadexTable className="w-full">
-        {hasHeader && (
-          <PolkadexTable.Header>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <PolkadexTable.Row key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <PolkadexTable.Head
-                      className={classNames(
-                        "px-2 text-primary font-semibold text-xs"
-                      )}
-                      key={header.id}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </PolkadexTable.Head>
-                  );
-                })}
-              </PolkadexTable.Row>
-            ))}
-          </PolkadexTable.Header>
-        )}
+        <PolkadexTable.Header className="sticky top-0 bg-black">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <PolkadexTable.Row key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <PolkadexTable.Head
+                    className={classNames(
+                      "px-2 text-primary font-semibold text-xs"
+                    )}
+                    key={header.id}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </PolkadexTable.Head>
+                );
+              })}
+            </PolkadexTable.Row>
+          ))}
+        </PolkadexTable.Header>
         <PolkadexTable.Body>
           {table.getRowModel().rows.map((row, i) => {
             return (

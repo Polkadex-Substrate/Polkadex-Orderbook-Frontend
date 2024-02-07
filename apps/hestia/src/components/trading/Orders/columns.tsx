@@ -5,7 +5,7 @@ import {
   ArrowLeftCircleIcon,
   ArrowRightCircleIcon,
 } from "@heroicons/react/24/solid";
-import { Button } from "@polkadex/ux";
+import { Button, truncateString } from "@polkadex/ux";
 import { OrderCancellation } from "@orderbook/core/providers/user/orders";
 
 const openOrderColumnHelper = createColumnHelper<Order>();
@@ -102,6 +102,14 @@ export const openOrderColumns = ({
 
 export const orderHistoryColumns = () => [
   orderHistoryColumnHelper.accessor((row) => row, {
+    id: "id",
+    cell: (e) => {
+      return <span>{truncateString(e.getValue().orderId, 4)}</span>;
+    },
+    header: () => <span>Id</span>,
+    footer: (e) => e.column.id,
+  }),
+  orderHistoryColumnHelper.accessor((row) => row, {
     id: "pair",
     cell: (e) => {
       const isSell = e.getValue().side === "Ask";
@@ -119,6 +127,62 @@ export const orderHistoryColumns = () => [
       );
     },
     header: () => <span>Pair</span>,
+    footer: (e) => e.column.id,
+  }),
+  orderHistoryColumnHelper.accessor((row) => row, {
+    id: "date",
+    cell: (e) => {
+      return <span>{e.getValue().timestamp.toLocaleString()}</span>;
+    },
+    header: () => <span>Date</span>,
+    footer: (e) => e.column.id,
+  }),
+  orderHistoryColumnHelper.accessor((row) => row, {
+    id: "type",
+    cell: (e) => {
+      return <span>{e.getValue().type}</span>;
+    },
+    header: () => <span>Type</span>,
+    footer: (e) => e.column.id,
+  }),
+  orderHistoryColumnHelper.accessor((row) => row, {
+    id: "status",
+    cell: (e) => {
+      return <span>{e.getValue().status}</span>;
+    },
+    header: () => <span>Status</span>,
+    footer: (e) => e.column.id,
+  }),
+  orderHistoryColumnHelper.accessor((row) => row, {
+    id: "price",
+    cell: (e) => {
+      return <span>{e.getValue().price}</span>;
+    },
+    header: () => <span>Price</span>,
+    footer: (e) => e.column.id,
+  }),
+  orderHistoryColumnHelper.accessor((row) => row, {
+    id: "amount",
+    cell: (e) => {
+      return <span>{e.getValue().quantity}</span>;
+    },
+    header: () => <span>Amount</span>,
+    footer: (e) => e.column.id,
+  }),
+  orderHistoryColumnHelper.accessor((row) => row, {
+    id: "filled",
+    cell: (e) => {
+      return <span>{e.getValue().filledQuantity}</span>;
+    },
+    header: () => <span>Filled</span>,
+    footer: (e) => e.column.id,
+  }),
+  orderHistoryColumnHelper.accessor((row) => row, {
+    id: "fee",
+    cell: (e) => {
+      return <span>{e.getValue().fee}</span>;
+    },
+    header: () => <span>Fee</span>,
     footer: (e) => e.column.id,
   }),
 ];
