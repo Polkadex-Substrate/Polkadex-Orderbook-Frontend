@@ -81,7 +81,7 @@ export const OpenOrdersTable = ({
                   return (
                     <PolkadexTable.Cell
                       key={cell.id}
-                      className={classNames("px-2 py-3 text-xs")}
+                      className={classNames("px-2 py-4 text-xs")}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
