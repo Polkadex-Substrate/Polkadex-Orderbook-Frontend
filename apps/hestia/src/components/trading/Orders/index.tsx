@@ -3,6 +3,7 @@
 import { Button, Dropdown, Tabs, GenericMessage } from "@polkadex/ux";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { useOpenOrders } from "@orderbook/core/hooks";
 
 import { OpenOrdersTable } from "./openOrders";
 import { OrderHistoryTable } from "./orderHistory";
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export const Orders = ({ id }: Props) => {
+  const { openOrders } = useOpenOrders(id);
   const { selectedAddresses } = useProfile();
   const connected = selectedAddresses.tradeAddress.length > 0;
 
@@ -22,7 +24,9 @@ export const Orders = ({ id }: Props) => {
     <Tabs defaultValue="openOrders" className="min-w-[25rem]">
       <div className="flex items-center justify-between">
         <Tabs.List className="px-2 py-3">
-          <Tabs.Trigger value="openOrders">Open Orders(0)</Tabs.Trigger>
+          <Tabs.Trigger value="openOrders">
+            Open Orders({openOrders?.length || 0})
+          </Tabs.Trigger>
           <Tabs.Trigger value="orderHistory">Order History</Tabs.Trigger>
           <Tabs.Trigger value="tradeHistory">Trade History</Tabs.Trigger>
           <Tabs.Trigger value="balances">Balances</Tabs.Trigger>
