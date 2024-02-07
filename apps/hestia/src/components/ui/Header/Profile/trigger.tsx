@@ -18,7 +18,7 @@ export const Trigger = ({
     : "Wallet not present";
 
   const browserAccount = browserAccountPresent
-    ? `Trading account ${truncateString(browserAccountAddress, 3)}`
+    ? `Trading account (${truncateString(browserAccountAddress, 3)})`
     : "No trading account";
 
   return (

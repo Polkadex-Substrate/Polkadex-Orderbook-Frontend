@@ -6,8 +6,8 @@ import { useConnectWalletProvider } from "@orderbook/core/providers/user/connect
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { RemoveTradingAccount } from "../ConnectWallet/removeTradingAccount";
-import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAccountMnemonic";
+import { UnlockAccount } from "../ReadyToUse/unlockAccount";
 
 export const ConnectTradingInteraction = () => {
   const { connectTrading, onToogleConnectTrading } = useSettingsProvider();
@@ -62,7 +62,7 @@ export const ConnectTradingInteraction = () => {
                 />
               </Multistep.Trigger>
               <Multistep.Content>
-                <UnlockBrowserAccount
+                <UnlockAccount
                   key="UnlockBrowserAccount"
                   tempBrowserAccount={tempTrading}
                   onClose={() => props?.onChangeInteraction(false)}

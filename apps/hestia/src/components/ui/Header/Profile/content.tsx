@@ -21,7 +21,6 @@ import { RemoveTradingAccount } from "../../ConnectWallet/removeTradingAccount";
 import { ImportTradingAccount } from "../../ConnectWallet/importTradingAccount";
 import { TradingAccountSuccessfull } from "../../ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "../../ConnectWallet/tradingAccountMnemonic";
-import { UnlockBrowserAccount } from "../../ConnectWallet/unlockBrowserAccount";
 import { TradingAccountList } from "../../ConnectWallet/tradingAccountList";
 import { ImportTradingAccountMnemonic } from "../../ConnectWallet/importTradingAccountMnemonic";
 import { ConnectExtensionAccount } from "../../ConnectWallet/connnectExtensionAccount";
@@ -29,6 +28,7 @@ import { FundAccount } from "../../ConnectWallet/fundAccount";
 import { MaximumTradingAccount } from "../../ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "../../ConnectWallet/insufficientBalance";
 import { Authorization } from "../../ConnectWallet/authorization";
+import { UnlockAccount } from "../../ReadyToUse/unlockAccount";
 
 export const Content = () => {
   const {
@@ -203,7 +203,7 @@ export const Content = () => {
               }
               onClose={() => props?.onChangeInteraction(false)}
             />
-            <UnlockBrowserAccount
+            <UnlockAccount
               key="UnlockBrowserAccount"
               tempBrowserAccount={tempTrading}
               onClose={() => props?.onChangeInteraction(false)}
