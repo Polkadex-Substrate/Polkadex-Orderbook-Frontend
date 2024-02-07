@@ -1,11 +1,11 @@
 "use client";
 
 import { Button, Dropdown, Tabs, GenericMessage } from "@polkadex/ux";
-import { Fragment } from "react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { OpenOrdersTable } from "./openOrders";
+import { OrderHistoryTable } from "./orderHistory";
 
 type Props = {
   maxHeight: string;
@@ -44,11 +44,14 @@ export const Orders = ({ id }: Props) => {
       </div>
 
       {connected ? (
-        <Fragment>
+        <>
           <Tabs.Content value="openOrders">
             <OpenOrdersTable market={id} />
           </Tabs.Content>
-        </Fragment>
+          <Tabs.Content value="orderHistory">
+            <OrderHistoryTable market={id} />
+          </Tabs.Content>
+        </>
       ) : (
         <GenericMessage
           title="Connect your trading account to start trading."

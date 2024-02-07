@@ -6,33 +6,26 @@ import {
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
-import { useOpenOrders } from "@orderbook/core/hooks";
-import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useOrderHistory } from "@orderbook/core/hooks";
 
-import { openOrderColumns } from "./columns";
+import { orderHistoryColumns } from "./columns";
 import { Loading } from "./loading";
 
-export const OpenOrdersTable = ({
-  market,
-  hasHeader = true,
-}: {
-  market: string;
-  hasHeader?: boolean;
-}) => {
-  const { onCancelOrder } = useOrders();
-  const { isLoading, openOrders } = useOpenOrders(market);
+export const OrderHistoryTable = ({ market }: { market: string }) => {
+  const { isLoading, orderHistory } = useOrderHistory(market);
+
   const table = useReactTable({
-    data: openOrders,
-    columns: openOrderColumns({ onCancelOrder }),
+    data: orderHistory,
+    columns: orderHistoryColumns(),
     getCoreRowModel: getCoreRowModel(),
   });
 
   if (isLoading) return <Loading />;
 
-  if (!openOrders.length)
+  if (!orderHistory.length)
     return (
       <GenericMessage
-        title={"No open orders"}
+        title={"No order history found"}
         illustration="NoData"
         className="h-64"
       />
@@ -44,29 +37,27 @@ export const OpenOrdersTable = ({
       style={{ scrollbarGutter: "stable" }}
     >
       <PolkadexTable className="w-full">
-        {hasHeader && (
-          <PolkadexTable.Header>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <PolkadexTable.Row key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <PolkadexTable.Head
-                      className={classNames(
-                        "px-2 text-primary font-semibold text-xs"
-                      )}
-                      key={header.id}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </PolkadexTable.Head>
-                  );
-                })}
-              </PolkadexTable.Row>
-            ))}
-          </PolkadexTable.Header>
-        )}
+        <PolkadexTable.Header>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <PolkadexTable.Row key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <PolkadexTable.Head
+                    className={classNames(
+                      "px-2 text-primary font-semibold text-xs"
+                    )}
+                    key={header.id}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </PolkadexTable.Head>
+                );
+              })}
+            </PolkadexTable.Row>
+          ))}
+        </PolkadexTable.Header>
         <PolkadexTable.Body>
           {table.getRowModel().rows.map((row, i) => {
             return (

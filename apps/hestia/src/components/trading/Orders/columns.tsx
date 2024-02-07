@@ -8,14 +8,15 @@ import {
 import { Button } from "@polkadex/ux";
 import { OrderCancellation } from "@orderbook/core/providers/user/orders";
 
-const columnHelper = createColumnHelper<Order>();
+const openOrderColumnHelper = createColumnHelper<Order>();
+const orderHistoryColumnHelper = createColumnHelper<Order>();
 
 export const openOrderColumns = ({
   onCancelOrder,
 }: {
   onCancelOrder: (value: OrderCancellation) => void;
 }) => [
-  columnHelper.accessor((row) => row, {
+  openOrderColumnHelper.accessor((row) => row, {
     id: "pair",
     cell: (e) => {
       const isSell = e.getValue().side === "Ask";
@@ -35,7 +36,7 @@ export const openOrderColumns = ({
     header: () => <span>Pair</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row, {
+  openOrderColumnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => {
       return <span>{e.getValue().timestamp.toLocaleString()}</span>;
@@ -43,7 +44,7 @@ export const openOrderColumns = ({
     header: () => <span>Date</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row, {
+  openOrderColumnHelper.accessor((row) => row, {
     id: "type",
     cell: (e) => {
       return <span>{e.getValue().type}</span>;
@@ -51,7 +52,7 @@ export const openOrderColumns = ({
     header: () => <span>Type</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row, {
+  openOrderColumnHelper.accessor((row) => row, {
     id: "price",
     cell: (e) => {
       return <span>{e.getValue().price}</span>;
@@ -59,7 +60,7 @@ export const openOrderColumns = ({
     header: () => <span>Price</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row, {
+  openOrderColumnHelper.accessor((row) => row, {
     id: "total",
     cell: (e) => {
       return <span>{e.getValue().quantity}</span>;
@@ -67,7 +68,7 @@ export const openOrderColumns = ({
     header: () => <span>Total</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row, {
+  openOrderColumnHelper.accessor((row) => row, {
     id: "filled",
     cell: (e) => {
       return <span>{e.getValue().filledQuantity}</span>;
@@ -75,7 +76,7 @@ export const openOrderColumns = ({
     header: () => <span>Filled</span>,
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row, {
+  openOrderColumnHelper.accessor((row) => row, {
     id: "cancel order",
     cell: (e) => {
       return (
@@ -95,6 +96,29 @@ export const openOrderColumns = ({
       );
     },
     header: () => <></>,
+    footer: (e) => e.column.id,
+  }),
+];
+
+export const orderHistoryColumns = () => [
+  orderHistoryColumnHelper.accessor((row) => row, {
+    id: "pair",
+    cell: (e) => {
+      const isSell = e.getValue().side === "Ask";
+      const Icon = isSell ? ArrowRightCircleIcon : ArrowLeftCircleIcon;
+      return (
+        <span className="flex items-center gap-1">
+          <Icon
+            className={classNames(
+              "w-5 h-5",
+              isSell ? "text-primary-base" : "text-success-base"
+            )}
+          />
+          {e.getValue().market.name}
+        </span>
+      );
+    },
+    header: () => <span>Pair</span>,
     footer: (e) => e.column.id,
   }),
 ];
