@@ -19,17 +19,14 @@ export function Template({ id }: { id: string }) {
   const [headerRef, { height: headerHeight }] = useElementSize();
   const [footerRef, { height: footerHeight }] = useElementSize();
   const [marketRef, marketHeight] = useSizeObserver();
-  const [placeOrderRef, { height: placeOrderHeight }] = useElementSize();
+  const [placeOrderRef, placeOrderHeight] = useSizeObserver();
 
   const maxHeight = useMemo(
     () => `calc(100vh - ${marketHeight + headerHeight + footerHeight + 1}px)`,
     [headerHeight, footerHeight, marketHeight]
   );
 
-  const ordersSize = useMemo(
-    () => `${placeOrderHeight + 10}px`,
-    [placeOrderHeight]
-  );
+  const ordersSize = useMemo(() => `${placeOrderHeight}px`, [placeOrderHeight]);
 
   const { list } = useMarkets();
 
@@ -50,7 +47,7 @@ export function Template({ id }: { id: string }) {
         </div>
         <div
           ref={marketRef}
-          className="flex flex-wrap border-t border-t-primary relative"
+          className="flex flex-wrap border-t border-t-primary"
         >
           <Orders maxHeight={ordersSize} id={id} />
           <PlaceOrder ref={placeOrderRef} />

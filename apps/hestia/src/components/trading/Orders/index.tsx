@@ -35,9 +35,8 @@ type Props = {
 
 const BUY = "BUY";
 const SELL = "SELL";
-const MAX_HEIGHT = "260px";
 
-export const Orders = ({ id }: Props) => {
+export const Orders = ({ maxHeight, id }: Props) => {
   const { dispatchUserSessionData, dateFrom, dateTo } = useSessionProvider();
   const { openOrders } = useOpenOrders(id);
   const { selectedAddresses } = useProfile();
@@ -139,25 +138,25 @@ export const Orders = ({ id }: Props) => {
             <OpenOrdersTable
               filters={filters}
               market={id}
-              maxHeight={MAX_HEIGHT}
+              maxHeight={maxHeight}
             />
           </Tabs.Content>
           <Tabs.Content value="orderHistory">
             <OrderHistoryTable
               filters={filters}
               market={id}
-              maxHeight={MAX_HEIGHT}
+              maxHeight={maxHeight}
             />
           </Tabs.Content>
           <Tabs.Content value="tradeHistory">
             <TradeHistoryTable
               filters={filters}
               market={id}
-              maxHeight={MAX_HEIGHT}
+              maxHeight={maxHeight}
             />
           </Tabs.Content>
           <Tabs.Content value="balances">
-            <BalancesTable maxHeight={MAX_HEIGHT} />
+            <BalancesTable maxHeight={maxHeight} />
           </Tabs.Content>
         </>
       ) : (

@@ -8,10 +8,7 @@ import { Form } from "./form";
 export const PlaceOrder = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <Tabs defaultValue="limit">
-      <div
-        ref={ref}
-        className="flex items-center justify-between border-b border-primary"
-      >
+      <div className="flex items-center justify-between border-b border-primary">
         <Tabs.List className="px-2 py-3">
           <Tabs.Trigger value="limit">Limit</Tabs.Trigger>
           <Tabs.Trigger value="market">Market</Tabs.Trigger>
@@ -35,13 +32,15 @@ export const PlaceOrder = forwardRef<HTMLDivElement>((_, ref) => {
         </Dropdown>
       </div>
 
-      <Tabs.Content
-        value="limit"
-        id="placeOrderContent"
-        className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
-      >
-        <Form />
-      </Tabs.Content>
+      <div ref={ref}>
+        <Tabs.Content
+          value="limit"
+          id="placeOrderContent"
+          className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
+        >
+          <Form />
+        </Tabs.Content>
+      </div>
     </Tabs>
   );
 });
