@@ -3,6 +3,7 @@
 import { OrdersProvider } from "@orderbook/core/providers";
 import dynamic from "next/dynamic";
 import { ReactNode } from "react";
+import { SessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 
 const SubscriptionProvider = dynamic(
   () =>
@@ -18,8 +19,10 @@ export default function Layout({
   params: { id: string };
 }) {
   return (
-    <SubscriptionProvider marketId={params.id ?? "DOTUSDT"}>
-      <OrdersProvider>{children}</OrdersProvider>
-    </SubscriptionProvider>
+    <SessionProvider>
+      <SubscriptionProvider marketId={params.id ?? "DOTUSDT"}>
+        <OrdersProvider>{children}</OrdersProvider>
+      </SubscriptionProvider>
+    </SessionProvider>
   );
 }

@@ -1,10 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { Button, Tabs, GenericMessage, Checkbox } from "@polkadex/ux";
+import { useMemo, useState } from "react";
+import {
+  DateRangePicker,
+  RangeKeyDict,
+  defaultStaticRanges,
+} from "react-date-range";
+import { Button, Tabs, GenericMessage, Checkbox, Popover } from "@polkadex/ux";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useOpenOrders } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
+import { CalendarDaysIcon } from "@heroicons/react/24/solid";
+import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import "@/styles/calendar.scss";
 
 import { OpenOrdersTable } from "./openOrders";
 import { OrderHistoryTable } from "./orderHistory";
@@ -28,12 +38,24 @@ const SELL = "SELL";
 const MAX_HEIGHT = "260px";
 
 export const Orders = ({ id }: Props) => {
+  const { dispatchUserSessionData, dateFrom, dateTo } = useSessionProvider();
   const { openOrders } = useOpenOrders(id);
   const { selectedAddresses } = useProfile();
   const connected = selectedAddresses.tradeAddress.length > 0;
 
   const [show, setShow] = useState(true);
   const [filters, setFilters] = useState<Ifilters>(initialFilters);
+
+  const ranges = useMemo(() => {
+    return [
+      {
+        startDate: dateFrom,
+        endDate: dateTo,
+        key: "selection",
+        showDateDisplay: true,
+      },
+    ];
+  }, [dateFrom, dateTo]);
 
   const onChangeFilters = (key: typeof BUY | typeof SELL) => {
     switch (key) {
@@ -48,6 +70,14 @@ export const Orders = ({ id }: Props) => {
       default: {
         break;
       }
+    }
+  };
+
+  const onChangeDateRange = ({
+    selection: { startDate, endDate },
+  }: RangeKeyDict) => {
+    if (startDate && endDate) {
+      dispatchUserSessionData({ dateFrom: startDate, dateTo: endDate });
     }
   };
 
@@ -69,7 +99,7 @@ export const Orders = ({ id }: Props) => {
           </Tabs.Trigger>
         </Tabs.List>
 
-        {show && (
+        {connected && show && (
           <div className="flex justify-center items-center gap-3 mr-3">
             <Checkbox.Solid
               id={BUY}
@@ -85,6 +115,20 @@ export const Orders = ({ id }: Props) => {
             >
               <Checkbox.Label htmlFor={SELL}>Sell</Checkbox.Label>
             </Checkbox.Solid>
+            <Popover>
+              <Popover.Trigger>
+                <CalendarDaysIcon className="w-5 h-5" />
+              </Popover.Trigger>
+              <Popover.Content>
+                <DateRangePicker
+                  ranges={ranges}
+                  onChange={onChangeDateRange}
+                  rangeColors={["#E6007A"]}
+                  staticRanges={defaultStaticRanges}
+                  inputRanges={[]}
+                />
+              </Popover.Content>
+            </Popover>
           </div>
         )}
       </div>
