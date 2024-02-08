@@ -83,7 +83,7 @@ export const Orders = ({ id }: Props) => {
 
   return (
     <Tabs defaultValue="openOrders" className="min-w-[25rem] bg-black">
-      <div className="flex items-center justify-between">
+      <div className="lg:flex items-center justify-between">
         <Tabs.List className="px-2 py-3">
           <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
             Open Orders({openOrders?.length || 0})
@@ -100,7 +100,7 @@ export const Orders = ({ id }: Props) => {
         </Tabs.List>
 
         {connected && show && (
-          <div className="flex justify-center items-center gap-3 mx-2">
+          <div className="flex items-center gap-3 mx-2">
             <Checkbox.Solid
               id={BUY}
               checked={filters.onlyBuy}
