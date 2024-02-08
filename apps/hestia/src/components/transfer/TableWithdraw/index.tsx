@@ -7,7 +7,7 @@ import { TokenCard } from "@/components/ui/ReadyToUse";
 
 export type Data = (typeof fakeData)[0];
 
-export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
+export const TableWithdraw = forwardRef<HTMLDivElement, { maxHeight: string }>(
   ({ maxHeight }, ref) => {
     const [state, setState] = useState<Data | null>(null);
     const { width } = useWindowSize();
@@ -100,7 +100,7 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
     );
   }
 );
-Table.displayName = "Table";
+TableWithdraw.displayName = "TableWithdraw";
 
 const fakeData = [
   {

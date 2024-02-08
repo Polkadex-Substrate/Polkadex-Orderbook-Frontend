@@ -45,6 +45,7 @@ const initialValues = { amount: 0.0 };
 export const Form = ({
   selectedAsset,
   onAssetsInteraction,
+  assetsInteraction,
   type,
   onChangeType,
 }: {
@@ -52,6 +53,7 @@ export const Form = ({
   onAssetsInteraction: (callback?: () => void) => void;
   type: SwitchType;
   onChangeType: (e: SwitchType) => void;
+  assetsInteraction?: boolean;
 }) => {
   const [cardFocus, setCardFocus] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -163,6 +165,7 @@ export const Form = ({
     isValid,
     dirty,
     setFieldValue,
+    setErrors,
   } = useFormik({
     initialValues,
     validationSchema,
@@ -285,7 +288,7 @@ export const Form = ({
                 <ChevronDownIcon className="w-4 h-4" />
               </div>
             </div>
-            <Tooltip open={!!errors.amount}>
+            <Tooltip open={!!errors.amount && !assetsInteraction}>
               <Tooltip.Trigger asChild>
                 <div
                   className={classNames(
@@ -301,7 +304,10 @@ export const Form = ({
                     onFocus={() => setCardFocus(true)}
                     disabled={!selectedWallet}
                     {...getFieldProps("amount")}
-                    onBlur={() => setCardFocus(false)}
+                    onBlur={() => {
+                      setCardFocus(false);
+                      setErrors({ amount: "" });
+                    }}
                   />
                   <Button.Solid
                     appearance="secondary"

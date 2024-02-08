@@ -1,14 +1,14 @@
 "use client";
 
-import { Typography, Input } from "@polkadex/ux";
+import { Typography } from "@polkadex/ux";
 import { useElementSize } from "usehooks-ts";
 import { Fragment, useMemo } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
-import { Table } from "./Table";
 import { Help } from "./Help";
 import { SelectAsset } from "./SelectAsset";
 import { Form } from "./Form";
+import { TableDeposit } from "./TableDeposit";
 
 import { Footer, Header, Menu } from "@/components/ui";
 import { useTransfer } from "@/hooks";
@@ -53,8 +53,8 @@ export function Template() {
         vaul-drawer-wrapper=""
       >
         <Header ref={headerRef} />
-        <main className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-screen-2xl m-auto">
-          <Menu />
+        <main className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto">
+          {/* <Menu /> */}
           <div className="flex flex-col flex-1">
             <div ref={overviewRef} className="flex-1 flex flex-col">
               <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-secondary-base flex-wrap">
@@ -64,25 +64,26 @@ export function Template() {
                 <InformationCircleIcon className="w-6 h-6 text-primary" />
               </div>
               <Form
+                assetsInteraction={assetsInteraction}
                 selectedAsset={selectedAsset}
                 onAssetsInteraction={onAssetsInteraction}
                 type={type}
                 onChangeType={(e) => onChangeType(e)}
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex-1 flex flex-col">
               <div
                 ref={tableTitleRef}
-                className="flex items-center justify-between gap-2 border-b border-primary px-4 w-full  p-2"
+                className="border-b border-primary px-4 w-full py-2"
               >
                 <Typography.Text appearance="primary" bold>
                   History (5)
                 </Typography.Text>
-                <div>
-                  <Input.Search placeholder="Search transactions.." />
-                </div>
               </div>
-              <Table maxHeight={maxHeight} />
+              <TableDeposit
+                selectedAsset={selectedAsset}
+                maxHeight={maxHeight}
+              />
             </div>
             <Help ref={helpRef} />
           </div>
