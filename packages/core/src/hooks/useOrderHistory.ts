@@ -10,7 +10,7 @@ import { appsyncOrderbookService } from "../utils/orderbookService";
 
 import { useMarkets } from "./useMarkets";
 
-export const useOrderHistory = (defaultMarket: string) => {
+export const useOrderHistory = (defaultMarket: string, filters: Ifilters) => {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
@@ -59,59 +59,53 @@ export const useOrderHistory = (defaultMarket: string) => {
     [orderHistoryList?.pages]
   );
 
-  // const filteredOrderHistory = useMemo(() => {
-  //   let orderHistoryList = orderHistory.filter((item) => !item.isReverted);
+  const filteredOrderHistory = useMemo(() => {
+    let orderHistoryList = orderHistory.filter(
+      (item) => !item.isReverted && item.status !== "OPEN"
+    );
 
-  //   if (filters?.showReverted) {
-  //     orderHistoryList = orderHistory.filter((item) => item.isReverted);
-  //   }
+    if (filters?.showReverted) {
+      orderHistoryList = orderHistory.filter((item) => item.isReverted);
+    }
 
-  //   if (filters?.hiddenPairs) {
-  //     orderHistoryList = orderHistoryList.filter((order) => {
-  //       return order.orderId === currentMarket?.id;
-  //     });
-  //   }
+    if (filters?.onlyBuy && filters.onlySell) {
+      // Nothing to do
+    } else if (filters?.onlyBuy) {
+      orderHistoryList = orderHistoryList.filter(
+        (data) => data.side?.toUpperCase() === "BID"
+      );
+    } else if (filters?.onlySell) {
+      orderHistoryList = orderHistoryList.filter(
+        (data) => data.side.toUpperCase() === "ASK"
+      );
+    }
 
-  //   if (filters?.onlyBuy && filters.onlySell) {
-  //     // Nothing to do
-  //   } else if (filters?.onlyBuy) {
-  //     orderHistoryList = orderHistoryList.filter(
-  //       (data) => data.side?.toUpperCase() === "BID"
-  //     );
-  //   } else if (filters?.onlySell) {
-  //     orderHistoryList = orderHistoryList.filter(
-  //       (data) => data.side.toUpperCase() === "ASK"
-  //     );
-  //   }
+    const acceptedStatus = {
+      "all orders": "all",
+      pending: "open",
+      completed: "closed",
+    };
 
-  //   const acceptedStatus = {
-  //     "all orders": "all",
-  //     pending: "open",
-  //     completed: "closed",
-  //   };
+    const status = filters?.status?.toLowerCase();
+    const filterStatus = acceptedStatus[status] ?? status;
 
-  //   const status = filters?.status?.toLowerCase();
-  //   const filterStatus = acceptedStatus[status] ?? status;
+    if (filterStatus !== Object.values(acceptedStatus)[0]) {
+      orderHistoryList = orderHistoryList.filter((item) => {
+        return item.status.toLowerCase() === filterStatus;
+      });
+    }
 
-  //   if (filterStatus !== Object.values(acceptedStatus)[0]) {
-  //     orderHistoryList = orderHistoryList.filter((item) => {
-  //       return item.status.toLowerCase() === filterStatus;
-  //     });
-  //   }
-
-  //   return orderHistoryList;
-  // }, [
-  //   filters?.hiddenPairs,
-  //   filters?.onlyBuy,
-  //   filters?.onlySell,
-  //   filters?.showReverted,
-  //   filters?.status,
-  //   currentMarket?.id,
-  //   orderHistory,
-  // ]);
+    return orderHistoryList;
+  }, [
+    filters?.onlyBuy,
+    filters?.onlySell,
+    filters?.showReverted,
+    filters?.status,
+    orderHistory,
+  ]);
 
   return {
-    orderHistory,
+    orderHistory: filteredOrderHistory,
     isLoading: isOrderHistoryLoading,
     hasNextPage: hasNextOrderHistoryPage,
     onFetchNextPage: fetchNextOrderHistoryPage,

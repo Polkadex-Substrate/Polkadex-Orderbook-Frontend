@@ -9,6 +9,7 @@ import {
 import classNames from "classnames";
 import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
 import { useOrderHistory } from "@orderbook/core/hooks";
+import { Ifilters } from "@orderbook/core/providers/types";
 
 import { orderHistoryColumns } from "./columns";
 import { Loading } from "./loading";
@@ -16,12 +17,14 @@ import { OrderHistoryResponsiveCard } from "./responsiveCard";
 
 export const OrderHistoryTable = ({
   market,
+  filters,
   maxHeight,
 }: {
   market: string;
+  filters: Ifilters;
   maxHeight: string;
 }) => {
-  const { isLoading, orderHistory } = useOrderHistory(market);
+  const { isLoading, orderHistory } = useOrderHistory(market, filters);
   const { width } = useWindowSize();
   const table = useReactTable({
     data: orderHistory,

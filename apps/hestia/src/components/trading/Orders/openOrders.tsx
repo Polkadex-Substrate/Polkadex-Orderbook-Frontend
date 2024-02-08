@@ -18,12 +18,12 @@ import { OpenOrderResponsiveCard } from "./responsiveCard";
 
 export const OpenOrdersTable = ({
   market,
-  maxHeight,
   filters,
+  maxHeight,
 }: {
   market: string;
-  maxHeight: string;
   filters: Ifilters;
+  maxHeight: string;
 }) => {
   const { onCancelOrder } = useOrders();
   const { isLoading, openOrders } = useOpenOrders(market, filters);
