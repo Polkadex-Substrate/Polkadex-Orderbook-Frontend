@@ -1,5 +1,5 @@
 import { Button, Typography, truncateString } from "@polkadex/ux";
-import { Order } from "@orderbook/core/utils/orderbookService/types";
+import { Order, Trade } from "@orderbook/core/utils/orderbookService/types";
 import { OrderCancellation } from "@orderbook/core/providers/user/orders";
 import {
   ArrowLeftCircleIcon,
@@ -150,6 +150,57 @@ export const OrderHistoryResponsiveCard = ({ orders }: { orders: Order[] }) => {
         <div className="flex flex-col gap-1">
           <Typography.Text appearance="primary">Fee</Typography.Text>
           <Typography.Text>{order.fee}</Typography.Text>
+        </div>
+      </div>
+    );
+  });
+};
+
+export const TradeHistoryResponsiveCard = ({ trades }: { trades: Trade[] }) => {
+  return trades.map((trade, i) => {
+    const isSell = trade.side === "Ask";
+    const Icon = isSell ? ArrowRightCircleIcon : ArrowLeftCircleIcon;
+    return (
+      <div
+        key={trade.tradeId}
+        className={classNames(
+          "grid grid-cols-3 items-center gap-x-14 gap-y-3 p-2",
+          i % 2 && "bg-level-1"
+        )}
+      >
+        <div className="flex flex-col gap-1">
+          <Typography.Text appearance="primary">Id</Typography.Text>
+          <Typography.Text>{truncateString(trade.tradeId, 4)}</Typography.Text>
+        </div>
+
+        <div className="flex flex-col gap-1 w-24">
+          <Typography.Text appearance="primary">Pair</Typography.Text>
+          <Typography.Text className="flex items-center gap-1">
+            <Icon
+              className={classNames(
+                "w-5 h-5",
+                isSell ? "text-primary-base" : "text-success-base"
+              )}
+            />
+            {trade.market.name}
+          </Typography.Text>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Typography.Text appearance="primary">Date</Typography.Text>
+          <Typography.Text>
+            {trade.timestamp.toLocaleDateString()}
+          </Typography.Text>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Typography.Text appearance="primary">Price</Typography.Text>
+          <Typography.Text>{trade.price}</Typography.Text>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Typography.Text appearance="primary">Total</Typography.Text>
+          <Typography.Text>{trade.quantity}</Typography.Text>
         </div>
       </div>
     );

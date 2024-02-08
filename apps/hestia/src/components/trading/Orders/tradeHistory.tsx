@@ -1,4 +1,6 @@
 "use client";
+import { useMemo } from "react";
+import { useWindowSize } from "usehooks-ts";
 import {
   flexRender,
   getCoreRowModel,
@@ -10,6 +12,7 @@ import { useTradeHistory } from "@orderbook/core/hooks";
 
 import { tradeHistoryColumns } from "./columns";
 import { Loading } from "./loading";
+import { TradeHistoryResponsiveCard } from "./responsiveCard";
 
 export const TradeHistoryTable = ({
   market,
@@ -19,16 +22,32 @@ export const TradeHistoryTable = ({
   maxHeight: string;
 }) => {
   const { isLoading, trades } = useTradeHistory(market);
+  const { width } = useWindowSize();
   const table = useReactTable({
     data: trades,
     columns: tradeHistoryColumns(),
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const responsiveView = useMemo(
+    () => width < 500 || (width >= 715 && width <= 1000),
+    [width]
+  );
+
   if (isLoading) return <Loading />;
 
   if (!trades.length)
     return <GenericMessage title={"No items found"} illustration="NoData" />;
+
+  if (responsiveView)
+    return (
+      <div
+        className="flex-1 overflow-y-hidden hover:overflow-y-auto"
+        style={{ maxHeight, scrollbarGutter: "stable" }}
+      >
+        <TradeHistoryResponsiveCard trades={trades} />
+      </div>
+    );
 
   return (
     <div
