@@ -14,7 +14,7 @@ import { useSessionProvider } from "../providers/user/sessionProvider";
 
 import { useMarkets } from "./useMarkets";
 
-export function useTradeHistory(defaultMarket: string) {
+export function useTradeHistory(defaultMarket: string, filters: Ifilters) {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
@@ -64,42 +64,25 @@ export function useTradeHistory(defaultMarket: string) {
     });
   }, [data?.pages]);
 
-  // const updatedTradeList = useMemo(() => {
-  //   let tradeHistoryList = list.filter((item) => !item.isReverted);
+  const updatedTradeList = useMemo(() => {
+    let tradeHistoryList = list.filter((item) => !item.isReverted);
 
-  //   if (filters?.showReverted) {
-  //     tradeHistoryList = list.filter((item) => item.isReverted);
-  //   }
+    if (filters?.showReverted) {
+      tradeHistoryList = list.filter((item) => item.isReverted);
+    }
 
-  //   if (filters?.onlyBuy) {
-  //     tradeHistoryList = tradeHistoryList.filter(
-  //       (data) => data.side?.toUpperCase() === "BID"
-  //     );
-  //   } else if (filters?.onlySell) {
-  //     tradeHistoryList = tradeHistoryList.filter(
-  //       (data) => data.side.toUpperCase() === "ASK"
-  //     );
-  //   }
+    if (filters?.onlyBuy) {
+      tradeHistoryList = tradeHistoryList.filter(
+        (data) => data.side?.toUpperCase() === "BID"
+      );
+    } else if (filters?.onlySell) {
+      tradeHistoryList = tradeHistoryList.filter(
+        (data) => data.side.toUpperCase() === "ASK"
+      );
+    }
 
-  //   if (filters?.hiddenPairs) {
-  //     tradeHistoryList = tradeHistoryList.filter((trade) => {
-  //       const baseUnit = trade.market?.baseAsset?.ticker || "";
-  //       const quoteUnit = trade.market?.quoteAsset?.ticker || "";
-  //       const market = currentMarket?.name;
-  //       const marketForTrade = `${baseUnit}/${quoteUnit}`;
-  //       return market === marketForTrade && trade;
-  //     });
-  //   }
-
-  //   return tradeHistoryList;
-  // }, [
-  //   currentMarket?.name,
-  //   filters?.hiddenPairs,
-  //   filters?.onlyBuy,
-  //   filters?.onlySell,
-  //   filters?.showReverted,
-  //   list,
-  // ]);
+    return tradeHistoryList;
+  }, [filters?.onlyBuy, filters?.onlySell, filters?.showReverted, list]);
 
   const priceFixed = currentMarket
     ? decimalPlaces(currentMarket.price_tick_size)
@@ -110,7 +93,7 @@ export function useTradeHistory(defaultMarket: string) {
     : MIN_DIGITS_AFTER_DECIMAL;
 
   return {
-    trades: list,
+    trades: updatedTradeList,
     priceFixed,
     amountFixed,
     isLoading: fetching,
