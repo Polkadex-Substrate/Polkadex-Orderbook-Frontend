@@ -100,7 +100,7 @@ export const Orders = ({ id }: Props) => {
         </Tabs.List>
 
         {connected && show && (
-          <div className="flex justify-center items-center gap-3 mr-3">
+          <div className="flex justify-center items-center gap-3 mx-2">
             <Checkbox.Solid
               id={BUY}
               checked={filters.onlyBuy}
