@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { getCurrentMarket, sortOrdersDescendingTime } from "../helpers";
@@ -5,10 +6,11 @@ import { useSettingsProvider } from "../providers/public/settings";
 import { useProfile } from "../providers/user/profile";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { QUERY_KEYS } from "../constants";
+import { Ifilters } from "../providers/types";
 
 import { useMarkets } from "./useMarkets";
 
-export const useOpenOrders = (defaultMarket: string) => {
+export const useOpenOrders = (defaultMarket: string, filters?: Ifilters) => {
   const { onHandleError } = useSettingsProvider();
   const {
     selectedAddresses: { tradeAddress },
@@ -43,8 +45,26 @@ export const useOpenOrders = (defaultMarket: string) => {
 
   const openOrdersSorted = sortOrdersDescendingTime(openOrders);
 
+  const filteredOpenOrders = useMemo(() => {
+    let openOrdersList = openOrdersSorted;
+
+    if (filters?.onlyBuy && filters.onlySell) {
+      // Nothing to do
+    } else if (filters?.onlyBuy) {
+      openOrdersList = openOrdersList.filter(
+        (data) => data.side?.toUpperCase() === "BID"
+      );
+    } else if (filters?.onlySell) {
+      openOrdersList = openOrdersList.filter(
+        (data) => data.side?.toUpperCase() === "ASK"
+      );
+    }
+
+    return openOrdersList;
+  }, [filters?.onlyBuy, filters?.onlySell, openOrdersSorted]);
+
   return {
-    openOrders: openOrdersSorted,
+    openOrders: filteredOpenOrders,
     isLoading: !shouldFetchOpenOrders || isLoading || isFetching,
   };
 };

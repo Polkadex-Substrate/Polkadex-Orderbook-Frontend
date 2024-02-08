@@ -10,6 +10,7 @@ import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
 import { useOpenOrders } from "@orderbook/core/hooks";
 import { useOrders } from "@orderbook/core/providers/user/orders";
 import { useWindowSize } from "usehooks-ts";
+import { Ifilters } from "@orderbook/core/providers/types";
 
 import { openOrderColumns } from "./columns";
 import { Loading } from "./loading";
@@ -18,12 +19,14 @@ import { OpenOrderResponsiveCard } from "./responsiveCard";
 export const OpenOrdersTable = ({
   market,
   maxHeight,
+  filters,
 }: {
   market: string;
   maxHeight: string;
+  filters: Ifilters;
 }) => {
   const { onCancelOrder } = useOrders();
-  const { isLoading, openOrders } = useOpenOrders(market);
+  const { isLoading, openOrders } = useOpenOrders(market, filters);
   const { width } = useWindowSize();
 
   const responsiveView = useMemo(
