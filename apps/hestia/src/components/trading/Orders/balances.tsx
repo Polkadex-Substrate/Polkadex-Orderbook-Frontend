@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+import { useWindowSize } from "usehooks-ts";
 import {
   flexRender,
   getCoreRowModel,
@@ -9,19 +11,36 @@ import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
 
 import { Loading } from "./loading";
 import { balanceColumns } from "./columns";
+import { BalanceResponsiveCard } from "./responsiveCard";
 
 export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
   const { assets, loading } = useAssets();
+  const { width } = useWindowSize();
   const table = useReactTable({
     data: assets,
     columns: balanceColumns(),
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const responsiveView = useMemo(
+    () => width < 550 || (width >= 715 && width <= 1100),
+    [width]
+  );
+
   if (loading) return <Loading />;
 
   if (!assets?.length)
     return <GenericMessage title={"No assets found"} illustration="NoData" />;
+
+  if (responsiveView)
+    return (
+      <div
+        className="flex-1 overflow-y-hidden hover:overflow-y-auto"
+        style={{ maxHeight, scrollbarGutter: "stable" }}
+      >
+        <BalanceResponsiveCard assets={assets} />
+      </div>
+    );
 
   return (
     <div
