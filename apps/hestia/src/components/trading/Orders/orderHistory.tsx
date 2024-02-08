@@ -1,4 +1,6 @@
 "use client";
+import { useMemo } from "react";
+import { useWindowSize } from "usehooks-ts";
 import {
   flexRender,
   getCoreRowModel,
@@ -10,6 +12,7 @@ import { useOrderHistory } from "@orderbook/core/hooks";
 
 import { orderHistoryColumns } from "./columns";
 import { Loading } from "./loading";
+import { OrderHistoryResponsiveCard } from "./responsiveCard";
 
 export const OrderHistoryTable = ({
   market,
@@ -19,17 +22,33 @@ export const OrderHistoryTable = ({
   maxHeight: string;
 }) => {
   const { isLoading, orderHistory } = useOrderHistory(market);
-
+  const { width } = useWindowSize();
   const table = useReactTable({
     data: orderHistory,
     columns: orderHistoryColumns(),
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const responsiveView = useMemo(
+    () => width < 600 || (width >= 715 && width <= 1200),
+    [width]
+  );
+
   if (isLoading) return <Loading />;
 
   if (!orderHistory.length)
     return <GenericMessage title={"No items found"} illustration="NoData" />;
+
+  if (responsiveView) {
+    return (
+      <div
+        className="flex-1 overflow-y-hidden hover:overflow-y-auto"
+        style={{ maxHeight, scrollbarGutter: "stable" }}
+      >
+        <OrderHistoryResponsiveCard orders={orderHistory} />
+      </div>
+    );
+  }
 
   return (
     <div
