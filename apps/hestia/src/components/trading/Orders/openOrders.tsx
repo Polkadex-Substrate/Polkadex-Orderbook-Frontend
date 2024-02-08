@@ -1,4 +1,5 @@
 "use client";
+import { useMemo } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -8,9 +9,11 @@ import classNames from "classnames";
 import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
 import { useOpenOrders } from "@orderbook/core/hooks";
 import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useWindowSize } from "usehooks-ts";
 
 import { openOrderColumns } from "./columns";
 import { Loading } from "./loading";
+import { OpenOrderResponsiveCard } from "./responsiveCard";
 
 export const OpenOrdersTable = ({
   market,
@@ -21,6 +24,13 @@ export const OpenOrdersTable = ({
 }) => {
   const { onCancelOrder } = useOrders();
   const { isLoading, openOrders } = useOpenOrders(market);
+  const { width } = useWindowSize();
+
+  const responsiveView = useMemo(
+    () => width < 500 || (width >= 715 && width <= 1115),
+    [width]
+  );
+
   const table = useReactTable({
     data: openOrders,
     columns: openOrderColumns({ onCancelOrder }),
@@ -31,6 +41,20 @@ export const OpenOrdersTable = ({
 
   if (!openOrders.length)
     return <GenericMessage title={"No open orders"} illustration="NoData" />;
+
+  if (responsiveView) {
+    return (
+      <div
+        className="flex-1 overflow-y-hidden hover:overflow-y-auto"
+        style={{ maxHeight, scrollbarGutter: "stable" }}
+      >
+        <OpenOrderResponsiveCard
+          orders={openOrders}
+          onCancelOrder={onCancelOrder}
+        />
+      </div>
+    );
+  }
 
   return (
     <div
