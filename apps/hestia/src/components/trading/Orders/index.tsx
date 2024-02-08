@@ -82,7 +82,7 @@ export const Orders = ({ id }: Props) => {
   };
 
   return (
-    <Tabs defaultValue="openOrders" className="min-w-[25rem]">
+    <Tabs defaultValue="openOrders" className="min-w-[25rem] bg-black">
       <div className="flex items-center justify-between">
         <Tabs.List className="px-2 py-3">
           <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
