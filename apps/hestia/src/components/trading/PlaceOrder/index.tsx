@@ -2,7 +2,8 @@
 import { forwardRef } from "react";
 import { Tabs } from "@polkadex/ux";
 
-import { LimitOrderForm, MarketOrderForm } from "./form";
+import { LimitOrder } from "./limitOrder";
+import { MarketOrder } from "./marketOrder";
 
 export const PlaceOrder = forwardRef<HTMLDivElement>((_, ref) => {
   return (
@@ -23,14 +24,14 @@ export const PlaceOrder = forwardRef<HTMLDivElement>((_, ref) => {
           id="placeOrderContent"
           className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
         >
-          <LimitOrderForm />
+          <LimitOrder />
         </Tabs.Content>
         <Tabs.Content
           value="market"
           id="placeOrderContent"
           className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
         >
-          <MarketOrderForm />
+          <MarketOrder />
         </Tabs.Content>
       </div>
     </Tabs>
