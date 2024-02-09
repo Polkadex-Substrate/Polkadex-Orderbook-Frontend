@@ -13,6 +13,7 @@ export interface DepositData extends Omit<Transaction, "asset" | "timestamp"> {
     ticker: string;
   };
   wallets: {
+    fromWalletType: string;
     fromWalletName: string;
     fromWalletAddress: string;
     toWalletType: string;
@@ -21,13 +22,13 @@ export interface DepositData extends Omit<Transaction, "asset" | "timestamp"> {
 const columnHelper = createColumnHelper<DepositData>();
 
 export const columns = [
-  columnHelper.accessor((row) => row.token, {
+  columnHelper.accessor((row) => row, {
     id: "token",
     cell: (e) => {
-      const tokenTicker = e.getValue().ticker;
+      const tokenTicker = e.getValue().token.ticker;
       return (
         <TokenCard
-          tokenName={e.getValue().name}
+          tokenName={e.getValue().token.name}
           ticker={tokenTicker}
           icon={tokenTicker as keyof typeof Tokens}
         />
@@ -71,11 +72,7 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.amount, {
     id: "amount",
-    cell: (e) => (
-      <Typography.Text appearance="secondary" size="xs">
-        {e.getValue()}
-      </Typography.Text>
-    ),
+    cell: (e) => <Typography.Text size="sm">{e.getValue()}</Typography.Text>,
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Amount
@@ -85,11 +82,7 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.fee, {
     id: "fees",
-    cell: (e) => (
-      <Typography.Text appearance="secondary" size="xs">
-        {e.getValue()}
-      </Typography.Text>
-    ),
+    cell: (e) => <Typography.Text size="xs">{e.getValue()}</Typography.Text>,
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Fees
@@ -103,23 +96,52 @@ export const columns = [
       const address = truncateString(e.getValue().fromWalletAddress);
       return (
         <div className="flex items-center gap-2">
-          <Tooltip>
-            <Tooltip.Trigger>
-              <Typography.Text>Funding account</Typography.Text>
-            </Tooltip.Trigger>
-            <Tooltip.Content>
-              <div>
-                <Typography.Text>{e.getValue().fromWalletName}</Typography.Text>
-                <Typography.Text appearance="primary">
-                  {address}
-                </Typography.Text>
-              </div>
-            </Tooltip.Content>
-          </Tooltip>
+          {e.getValue().fromWalletType === "Trading Account" ? (
+            <Typography.Text>{e.getValue().fromWalletType}</Typography.Text>
+          ) : (
+            <Tooltip>
+              <Tooltip.Trigger className="flex items-center gap-1">
+                <Typography.Text>{e.getValue().fromWalletType}</Typography.Text>
+              </Tooltip.Trigger>
+              <Tooltip.Content>
+                <div className="flex items-center gap-2">
+                  <Typography.Text>
+                    {e.getValue().fromWalletName}
+                  </Typography.Text>
+                  <Typography.Text appearance="primary">
+                    {address}
+                  </Typography.Text>
+                </div>
+              </Tooltip.Content>
+            </Tooltip>
+          )}
+
           <div className="flex items-center justify-center bg-level-1 w-6 h-6 rounded-md">
             <ArrowRightIcon className="w-4 h-4 text-primary" />
           </div>
-          <Typography.Text>Trading account</Typography.Text>
+          <Tooltip>
+            <Tooltip.Trigger>
+              <Typography.Text appearance="primary">
+                {e.getValue().toWalletType}
+              </Typography.Text>
+            </Tooltip.Trigger>
+            <Tooltip.Content>
+              {e.getValue().fromWalletType === "Funding Account" ? (
+                <Typography.Text>
+                  Balance available across all trading accounts.
+                </Typography.Text>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Typography.Text>
+                    {e.getValue().fromWalletName}
+                  </Typography.Text>
+                  <Typography.Text appearance="primary">
+                    {address}
+                  </Typography.Text>
+                </div>
+              )}
+            </Tooltip.Content>
+          </Tooltip>
         </div>
       );
     },
@@ -132,11 +154,7 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.timestamp, {
     id: "date",
-    cell: (e) => (
-      <Typography.Text appearance="secondary" size="xs">
-        {e.getValue()}
-      </Typography.Text>
-    ),
+    cell: (e) => <Typography.Text size="sm">{e.getValue()}</Typography.Text>,
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Date

@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography } from "@polkadex/ux";
+import { Tabs, Typography } from "@polkadex/ux";
 import { useElementSize } from "usehooks-ts";
 import { Fragment, useMemo } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
@@ -8,7 +8,8 @@ import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { Help } from "./Help";
 import { SelectAsset } from "./SelectAsset";
 import { Form } from "./Form";
-import { TableDeposit } from "./TableDeposit";
+import { History } from "./History";
+import { ReadyToClaim } from "./ReadyToClaim";
 
 import { Footer, Header, Menu } from "@/components/ui";
 import { useTransfer } from "@/hooks";
@@ -71,20 +72,34 @@ export function Template() {
                 onChangeType={(e) => onChangeType(e)}
               />
             </div>
-            <div className="flex-1 flex flex-col">
-              <div
-                ref={tableTitleRef}
-                className="border-b border-primary px-4 w-full py-2"
-              >
-                <Typography.Text appearance="primary" bold>
-                  History (5)
-                </Typography.Text>
+            <Tabs defaultValue="history">
+              <div className="flex-1 flex flex-col">
+                <div
+                  ref={tableTitleRef}
+                  className="border-b border-primary px-4 w-full py-2"
+                >
+                  <Tabs.List>
+                    <Tabs.Trigger value="history">History (5)</Tabs.Trigger>
+                    <Tabs.Trigger value="readyToClaim">
+                      Ready to claim (5)
+                    </Tabs.Trigger>
+                  </Tabs.List>
+                </div>
+                <Tabs.Content value="history" className="flex flex-col">
+                  <History
+                    selectedAsset={selectedAsset}
+                    maxHeight={maxHeight}
+                  />
+                </Tabs.Content>
+                <Tabs.Content value="readyToClaim" className="flex flex-col">
+                  <ReadyToClaim
+                    maxHeight={`300px`}
+                    selectedAsset={selectedAsset}
+                  />
+                </Tabs.Content>
               </div>
-              <TableDeposit
-                selectedAsset={selectedAsset}
-                maxHeight={maxHeight}
-              />
-            </div>
+            </Tabs>
+
             <Help ref={helpRef} />
           </div>
         </main>

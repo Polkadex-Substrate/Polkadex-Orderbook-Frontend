@@ -41,7 +41,7 @@ export const Profile = ({
             Fund wallet
           </Button.Solid>
           <Tooltip>
-            <Tooltip.Trigger>
+            <Tooltip.Trigger asChild>
               <Button.Icon asChild>
                 <Link href="/balances">
                   <Icons.Wallet />
@@ -51,7 +51,7 @@ export const Profile = ({
             <Tooltip.Content>Balances</Tooltip.Content>
           </Tooltip>
           <Tooltip>
-            <Tooltip.Trigger>
+            <Tooltip.Trigger asChild>
               <Button.Icon asChild>
                 <Link href="/transactions">
                   <BookOpenIcon />
@@ -61,7 +61,7 @@ export const Profile = ({
             <Tooltip.Content>Transactions</Tooltip.Content>
           </Tooltip>
           <Tooltip>
-            <Tooltip.Trigger>
+            <Tooltip.Trigger asChild>
               <Button.Icon onClick={onOpenNotifications}>
                 <BellIcon />
               </Button.Icon>

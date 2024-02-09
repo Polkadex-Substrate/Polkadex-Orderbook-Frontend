@@ -1,6 +1,6 @@
-import { Table as PolkadexTable, Skeleton, GenericMessage } from "@polkadex/ux";
+import { Table, Skeleton, GenericMessage } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
-import { Fragment, forwardRef, useMemo, useState } from "react";
+import { forwardRef, useMemo, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -11,20 +11,27 @@ import {
 import classNames from "classnames";
 import { useTransactions } from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { getFundingAccountDetail } from "@orderbook/core/helpers";
+import {
+  getChainFromTicker,
+  getFundingAccountDetail,
+} from "@orderbook/core/helpers";
 import { useExtensionAccounts } from "@polkadex/react-providers";
 import { intlFormat } from "date-fns";
 
 import { DepositData, columns } from "./columns";
+import { Filters } from "./filters";
 
 import { FilteredAssetProps } from "@/hooks";
+import { BatchCard } from "@/components/ui/ReadyToUse";
 
-export const TableDeposit = forwardRef<
+const responsiveKeys = ["wallets", "fees", "date"];
+const actionKeys = ["token", "amount", "date"];
+
+export const History = forwardRef<
   HTMLDivElement,
   { maxHeight: string; selectedAsset: FilteredAssetProps }
 >(({ maxHeight, selectedAsset }) => {
   const { width } = useWindowSize();
-
   const responsiveView = useMemo(() => width <= 800, [width]);
 
   const [showSelectedCoins, setShowSelectedCoins] = useState<boolean>(false);
@@ -33,7 +40,8 @@ export const TableDeposit = forwardRef<
 
   const { selectedAddresses } = useProfile();
   const { extensionAccounts } = useExtensionAccounts();
-  const { deposits, loading } = useTransactions();
+  const { deposits, loading, allWithdrawals, readyWithdrawals } =
+    useTransactions();
 
   const { mainAddress } = selectedAddresses;
   const fundingWallet = useMemo(
@@ -41,7 +49,7 @@ export const TableDeposit = forwardRef<
     [extensionAccounts, mainAddress]
   );
 
-  const data = useMemo(
+  const depositsTransactions = useMemo(
     () =>
       deposits
         ?.filter((e) => {
@@ -74,9 +82,11 @@ export const TableDeposit = forwardRef<
             ),
             token: {
               ticker: e.asset?.ticker,
-              name: e.asset?.name,
+              name:
+                getChainFromTicker(e.asset?.ticker as string) ?? e?.asset.name,
             },
             wallets: {
+              fromWalletType: "Funding Account",
               fromWalletName: fundingWallet?.name ?? "",
               fromWalletAddress: fundingWallet?.address ?? "",
               toWalletType: "Trading Account",
@@ -93,8 +103,63 @@ export const TableDeposit = forwardRef<
       search,
     ]
   );
-  const responsiveKeys = ["inOrders", "fundingAccount"];
 
+  const withdrawalsTransactions = useMemo(
+    () =>
+      allWithdrawals
+        ?.filter(
+          (txn) =>
+            txn.asset.name.toLowerCase().includes(search) ||
+            txn.asset.ticker.toLowerCase().includes(search)
+        )
+        ?.map((e) => {
+          const token = e.asset;
+          return {
+            ...e,
+            timestamp: intlFormat(
+              new Date(e.timestamp),
+              {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              },
+              { locale: "EN" }
+            ),
+            token: {
+              ticker: token?.ticker,
+              name: getChainFromTicker(token?.name as string) ?? token?.name,
+            },
+            wallets: {
+              fromWalletType: "Trading Account",
+              fromWalletName: fundingWallet?.name ?? "",
+              fromWalletAddress: fundingWallet?.address ?? "",
+              toWalletType: "Funding Account",
+            },
+          };
+        })
+        ?.flatMap((withdrawal) => {
+          if (showSelectedCoins) {
+            const assetName = withdrawal.token?.name;
+            return assetName === selectedAsset?.name ? [withdrawal] : [];
+          }
+          return [withdrawal];
+        }),
+    [
+      allWithdrawals,
+      showSelectedCoins,
+      selectedAsset?.name,
+      fundingWallet?.address,
+      fundingWallet?.name,
+      search,
+    ]
+  );
+
+  const data = useMemo(
+    () => [...depositsTransactions, ...withdrawalsTransactions],
+    [depositsTransactions, withdrawalsTransactions]
+  );
   const table = useReactTable({
     data,
     state: {
@@ -114,27 +179,25 @@ export const TableDeposit = forwardRef<
         ))}
       </div>
     );
-
-  console.log(".......");
-
   return (
-    <Fragment>
+    <div className="flex-1 flex flex-col">
+      <Filters />
       {data.length ? (
         <div className="flex-1 flex flex-col justify-between border-b border-secondary-base min-h-40">
           <div
             className="overflow-y-hidden hover:overflow-y-auto px-3"
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
-            <PolkadexTable>
-              <PolkadexTable.Header className="[&_th]:border-none">
+            <Table>
+              <Table.Header className="[&_th]:border-none">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <PolkadexTable.Row
+                  <Table.Row
                     key={headerGroup.id}
-                    className="border-none"
+                    className="border-none sticky top-0 bg-backgroundBase"
                   >
                     {headerGroup.headers.map((header) => {
                       const getSorted = header.column.getIsSorted();
-                      const isActionTab = header.id === "actions";
+                      const isActionTab = actionKeys.includes(header.id);
                       const handleSort = (): void => {
                         const isDesc = getSorted === "desc";
                         header.column.toggleSorting(!isDesc);
@@ -143,12 +206,12 @@ export const TableDeposit = forwardRef<
                         return null;
 
                       return (
-                        <PolkadexTable.Head
+                        <Table.Head
                           key={header.id}
                           className={classNames(
                             !isActionTab && "cursor-pointer"
                           )}
-                          {...(!isActionTab && { onClick: handleSort })}
+                          {...(isActionTab && { onClick: handleSort })}
                         >
                           {header.isPlaceholder
                             ? null
@@ -156,16 +219,16 @@ export const TableDeposit = forwardRef<
                                 header.column.columnDef.header,
                                 header.getContext()
                               )}
-                          {!isActionTab && <PolkadexTable.Icon />}
-                        </PolkadexTable.Head>
+                          {isActionTab && <Table.Icon />}
+                        </Table.Head>
                       );
                     })}
-                  </PolkadexTable.Row>
+                  </Table.Row>
                 ))}
-              </PolkadexTable.Header>
-              <PolkadexTable.Body className="[&_tr]:border-none border-none">
+              </Table.Header>
+              <Table.Body className="[&_tr]:border-none border-none">
                 {table.getRowModel().rows.map((row) => (
-                  <PolkadexTable.Row key={row.id}>
+                  <Table.Row key={row.id}>
                     {row.getVisibleCells().map((cell) => {
                       if (
                         responsiveView &&
@@ -173,21 +236,19 @@ export const TableDeposit = forwardRef<
                       )
                         return null;
                       return (
-                        <PolkadexTable.Cell key={cell.id}>
+                        <Table.Cell key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
                           )}
-                        </PolkadexTable.Cell>
+                        </Table.Cell>
                       );
                     })}
-                  </PolkadexTable.Row>
+                  </Table.Row>
                 ))}
-              </PolkadexTable.Body>
-              <PolkadexTable.Caption>
-                Transfer history table
-              </PolkadexTable.Caption>
-            </PolkadexTable>
+              </Table.Body>
+              <Table.Caption>Transfer history table</Table.Caption>
+            </Table>
           </div>
         </div>
       ) : (
@@ -197,7 +258,7 @@ export const TableDeposit = forwardRef<
           className="bg-level-1"
         />
       )}
-    </Fragment>
+    </div>
   );
 });
-TableDeposit.displayName = "TableDeposit";
+History.displayName = "History";

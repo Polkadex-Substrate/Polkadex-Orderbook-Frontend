@@ -288,14 +288,15 @@ export const Form = ({
                 <ChevronDownIcon className="w-4 h-4" />
               </div>
             </div>
-            <Tooltip open={!!errors.amount && !assetsInteraction}>
-              <Tooltip.Trigger asChild>
-                <div
-                  className={classNames(
-                    "w-full flex items-center justify-between gap-2 pr-4 h-full",
-                    !!errors.amount && "border-danger-base border rounded-md"
-                  )}
-                >
+
+            <div
+              className={classNames(
+                "w-full flex items-center justify-between gap-2 pr-4 h-full",
+                !!errors.amount && "border-danger-base border rounded-md"
+              )}
+            >
+              <Tooltip open={!!errors.amount && !assetsInteraction}>
+                <Tooltip.Trigger asChild>
                   <input
                     type="text"
                     autoComplete="off"
@@ -309,21 +310,21 @@ export const Form = ({
                       setErrors({ amount: "" });
                     }}
                   />
-                  <Button.Solid
-                    appearance="secondary"
-                    size="xs"
-                    onMouseEnter={() => setCardFocus(true)}
-                    onMouseLeave={() => setCardFocus(false)}
-                    onClick={handleMax}
-                  >
-                    MAX
-                  </Button.Solid>
-                </div>
-              </Tooltip.Trigger>
-              <Tooltip.Content side="left" className="bg-level-5 z-[1]">
-                {errors.amount && errors.amount}
-              </Tooltip.Content>
-            </Tooltip>
+                </Tooltip.Trigger>
+                <Tooltip.Content side="left" className="bg-level-5 z-[1]">
+                  {errors.amount && errors.amount}
+                </Tooltip.Content>
+              </Tooltip>
+              <Button.Solid
+                appearance="secondary"
+                size="xs"
+                onMouseEnter={() => setCardFocus(true)}
+                onMouseLeave={() => setCardFocus(false)}
+                onClick={handleMax}
+              >
+                MAX
+              </Button.Solid>
+            </div>
           </div>
           <Button.Solid
             type="submit"

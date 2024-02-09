@@ -13,3 +13,4 @@ export * from "./SelectChain";
 export * from "./providerCard";
 export * from "./tokenCard";
 export * from "./accountInfo";
+export * from "./batchCard";
