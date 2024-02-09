@@ -8,6 +8,7 @@ import { useFunds, useLimitOrder } from "@orderbook/core/hooks";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { limitOrderValidations } from "@orderbook/core/validations";
 import { Market } from "@orderbook/core/utils/orderbookService/types";
+import { decimalPlaces, trimFloat } from "@orderbook/core/helpers";
 
 import { Balance } from "./balance";
 
@@ -25,12 +26,18 @@ const initialValues = {
 
 export const LimitOrder = ({ market }: { market?: Market }) => {
   const { getFreeProxyBalance } = useFunds();
-  const availableQuoteAmount = getFreeProxyBalance(
-    market?.quoteAsset?.id || "-1"
-  );
-  const availableBaseAmount = getFreeProxyBalance(
-    market?.baseAsset?.id || "-1"
-  );
+  const pricePrecision = (market && decimalPlaces(market.price_tick_size)) || 0;
+  const qtyPrecision = (market && decimalPlaces(market.qty_step_size)) || 0;
+
+  const availableQuoteAmount = trimFloat({
+    value: getFreeProxyBalance(market?.quoteAsset?.id || "-1"),
+    digitsAfterDecimal: pricePrecision,
+  });
+
+  const availableBaseAmount = trimFloat({
+    value: getFreeProxyBalance(market?.baseAsset?.id || "-1"),
+    digitsAfterDecimal: qtyPrecision,
+  });
 
   return (
     <div className="flex flex-auto gap-2 flex-wrap">
@@ -60,10 +67,8 @@ const BuyOrder = ({
     errors,
     isValid,
     dirty,
-    touched,
     values,
     setValues,
-    setTouched,
     resetForm,
     isSubmitting,
   } = useFormik({
@@ -93,6 +98,7 @@ const BuyOrder = ({
     onChangeTotal,
     onChangeAmount,
     onExecuteOrder,
+    onChangeRange,
     isOrderLoading,
   } = useLimitOrder({
     isSell: false,
@@ -104,7 +110,6 @@ const BuyOrder = ({
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    setTouched({ ...touched, [name.toLowerCase()]: true });
     if (name === PRICE) onChangePrice(value, values.amount);
     else if (name === AMOUNT) onChangeAmount(value, values.price);
     else onChangeTotal(value, values.price);
@@ -112,14 +117,11 @@ const BuyOrder = ({
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
-      <Tooltip open={!!errors.price && touched.price && !!values.price}>
+      <Tooltip open={!!errors.price && !!values.price}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.price &&
-                touched.price &&
-                !!values.price &&
-                "border-danger-base border"
+              !!errors.price && !!values.price && "border-danger-base border"
             )}
           >
             <Input.Primary
@@ -148,20 +150,11 @@ const BuyOrder = ({
         </Tooltip.Content>
       </Tooltip>
 
-      <Tooltip
-        open={
-          !!errors.amount &&
-          (touched.amount || touched.total) &&
-          !!values.amount
-        }
-      >
+      <Tooltip open={!!errors.amount && !!values.amount}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.amount &&
-                (touched.amount || touched.total) &&
-                !!values.amount &&
-                "border-danger-base border"
+              !!errors.amount && !!values.amount && "border-danger-base border"
             )}
           >
             <Input.Primary
@@ -194,10 +187,22 @@ const BuyOrder = ({
       </Balance>
       <Range
         ranges={[
-          { value: "25%", action: () => window.alert("25%") },
-          { value: "50%", action: () => window.alert("50%") },
-          { value: "75%", action: () => window.alert("75%") },
-          { value: "100%", action: () => window.alert("100%") },
+          {
+            value: "25%",
+            action: () => onChangeRange(25, availableQuoteAmount),
+          },
+          {
+            value: "50%",
+            action: () => onChangeRange(50, availableQuoteAmount),
+          },
+          {
+            value: "75%",
+            action: () => onChangeRange(75, availableQuoteAmount),
+          },
+          {
+            value: "100%",
+            action: () => onChangeRange(100, availableQuoteAmount),
+          },
         ]}
       />
       <Tooltip open={!!errors.total && !!values.total}>
@@ -271,10 +276,8 @@ const SellOrder = ({
     errors,
     isValid,
     dirty,
-    touched,
     values,
     setValues,
-    setTouched,
     resetForm,
     isSubmitting,
   } = useFormik({
@@ -304,6 +307,7 @@ const SellOrder = ({
     onChangeTotal,
     onChangeAmount,
     onExecuteOrder,
+    onChangeRange,
     isOrderLoading,
   } = useLimitOrder({
     isSell: true,
@@ -315,7 +319,6 @@ const SellOrder = ({
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    setTouched({ ...touched, [name.toLowerCase()]: true });
     if (name === PRICE) onChangePrice(value, values.amount);
     else if (name === AMOUNT) onChangeAmount(value, values.price);
     else onChangeTotal(value, values.price);
@@ -323,14 +326,11 @@ const SellOrder = ({
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
-      <Tooltip open={!!errors.price && touched.price && !!values.price}>
+      <Tooltip open={!!errors.price && !!values.price}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.price &&
-                touched.price &&
-                !!values.price &&
-                "border-danger-base border"
+              !!errors.price && !!values.price && "border-danger-base border"
             )}
           >
             <Input.Primary
@@ -359,20 +359,11 @@ const SellOrder = ({
         </Tooltip.Content>
       </Tooltip>
 
-      <Tooltip
-        open={
-          !!errors.amount &&
-          (touched.amount || touched.total) &&
-          !!values.amount
-        }
-      >
+      <Tooltip open={!!errors.amount && !!values.amount}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.amount &&
-                (touched.amount || touched.total) &&
-                !!values.amount &&
-                "border-danger-base border"
+              !!errors.amount && !!values.amount && "border-danger-base border"
             )}
           >
             <Input.Primary
@@ -405,10 +396,22 @@ const SellOrder = ({
       </Balance>
       <Range
         ranges={[
-          { value: "25%", action: () => window.alert("25%") },
-          { value: "50%", action: () => window.alert("50%") },
-          { value: "75%", action: () => window.alert("75%") },
-          { value: "100%", action: () => window.alert("100%") },
+          {
+            value: "25%",
+            action: () => onChangeRange(25, availableBaseAmount, true),
+          },
+          {
+            value: "50%",
+            action: () => onChangeRange(50, availableBaseAmount, true),
+          },
+          {
+            value: "75%",
+            action: () => onChangeRange(75, availableBaseAmount, true),
+          },
+          {
+            value: "100%",
+            action: () => onChangeRange(100, availableBaseAmount, true),
+          },
         ]}
       />
       <Tooltip open={!!errors.total && !!values.total}>

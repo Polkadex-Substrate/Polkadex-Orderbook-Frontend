@@ -18,7 +18,10 @@ export const Range = ({ ranges, popover = false }: RangeProps) => {
         <Button.Outline
           appearance="secondary"
           key={i}
-          onClick={action}
+          onClick={(e) => {
+            e.preventDefault();
+            action();
+          }}
           className={styles}
         >
           {value}

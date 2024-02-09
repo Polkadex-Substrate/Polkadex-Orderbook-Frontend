@@ -3,9 +3,11 @@ import BigNumber from "bignumber.js";
 import { FormikHelpers } from "formik";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useOrders } from "@orderbook/core/providers/user/orders";
+import { Decimal } from "@orderbook/core/utils";
 import {
   cleanPositiveFloatInput,
   decimalPlaces,
+  getAbsoluteNumber,
   precisionRegExp,
   trimFloat,
 } from "@orderbook/core/helpers";
@@ -42,6 +44,17 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
   const pricePrecision = market ? decimalPlaces(market.price_tick_size) : 0;
   const qtyPrecision = market ? decimalPlaces(market.qty_step_size) : 0;
   const totalPrecision = Math.max(pricePrecision, qtyPrecision);
+
+  // Get estimated total amount
+  const getEstimatedTotal = useCallback(
+    (total: number | string): string =>
+      Decimal.format(
+        total,
+        market?.basePrecision || market?.quotePrecision || 0,
+        ","
+      ),
+    [market?.basePrecision, market?.quotePrecision]
+  );
 
   const calculateTotal = useCallback((price: string, amount: string) => {
     const bigPrice = new BigNumber(price);
@@ -113,6 +126,38 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
     [isSell, lastPriceValue, qtyPrecision, setValues, totalPrecision, values]
   );
 
+  const onChangeRange = (
+    percent: number,
+    availableBalance: number,
+    isSell?: boolean
+  ) => {
+    const price = values.price || String(lastPriceValue);
+    if (isSell) {
+      const amount = `${availableBalance * percent * 0.01}`;
+      const total = getAbsoluteNumber(
+        getEstimatedTotal(calculateTotal(price, amount))
+      );
+      setValues({
+        ...values,
+        price,
+        amount: Decimal.format(amount, qtyPrecision),
+        total: Decimal.format(total, totalPrecision),
+      });
+      return;
+    }
+    const amount = `${(availableBalance * percent * 0.01) / Number(price)}`;
+    const total = getAbsoluteNumber(
+      getEstimatedTotal(calculateTotal(price, amount))
+    );
+
+    setValues({
+      ...values,
+      price,
+      amount: Decimal.format(amount, qtyPrecision),
+      total: Decimal.format(total, totalPrecision),
+    });
+  };
+
   // Calls the action for placing order
   const onExecuteOrder = async (price: string, amount: string) => {
     if (!market) {
@@ -136,6 +181,7 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
     onChangeAmount,
     onChangePrice,
     onChangeTotal,
+    onChangeRange,
     onExecuteOrder,
   };
 };
