@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 
 import { getServerSidePropsWithTranslations } from "@/utils";
 
+// access denied should be shown for excluded jurisdictions
 const AccessDeniedTemplate = dynamic(
   () =>
     import("@polkadex/orderbook-ui/templates/AccessDenied").then(
