@@ -90,20 +90,23 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
     (total: string, price: string) => {
       const convertedValue = cleanPositiveFloatInput(total);
       if (convertedValue.match(precisionRegExp(totalPrecision || 0))) {
-        const formPrice = price || String(lastPriceValue);
+        const formPrice = +price || lastPriceValue;
 
-        const estimatedAmount = isSell
-          ? `${Number(total)}`
-          : `${Number(total) / Number(formPrice)}`;
+        const buyOrderAmount =
+          formPrice === 0
+            ? ""
+            : trimFloat({
+                value: Number(total) / formPrice,
+                digitsAfterDecimal: qtyPrecision,
+              });
+
+        const estimatedAmount = isSell ? total : buyOrderAmount;
 
         setValues({
           ...values,
           total,
-          price: formPrice,
-          amount: trimFloat({
-            value: estimatedAmount,
-            digitsAfterDecimal: qtyPrecision,
-          }),
+          price: String(formPrice),
+          amount: estimatedAmount === "0" ? "" : estimatedAmount,
         });
       }
     },
