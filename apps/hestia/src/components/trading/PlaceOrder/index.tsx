@@ -1,9 +1,8 @@
 "use client";
 import { forwardRef } from "react";
-import { Dropdown, Tabs } from "@polkadex/ux";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { Tabs } from "@polkadex/ux";
 
-import { Form } from "./form";
+import { LimitOrderForm, MarketOrderForm } from "./form";
 
 export const PlaceOrder = forwardRef<HTMLDivElement>((_, ref) => {
   return (
@@ -16,29 +15,22 @@ export const PlaceOrder = forwardRef<HTMLDivElement>((_, ref) => {
             Stop Limit
           </Tabs.Trigger>
         </Tabs.List>
-        <Dropdown>
-          <Dropdown.Trigger>
-            <div className="flex justify-center items-center w-[1.8rem] h-[1.8rem] p-[0.25rem] hover:bg-level-1 transition-colors duration-300 rounded opacity-100">
-              <EllipsisVerticalIcon />
-            </div>
-          </Dropdown.Trigger>
-          <Dropdown.Content>
-            {["Example1", "Example2"].map((value, i) => (
-              <Dropdown.Item key={i} onClick={() => window.alert("Changing.")}>
-                {value}
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Content>
-        </Dropdown>
       </div>
 
-      <div ref={ref}>
+      <div ref={ref} className="min-h-[18rem]">
         <Tabs.Content
           value="limit"
           id="placeOrderContent"
           className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
         >
-          <Form />
+          <LimitOrderForm />
+        </Tabs.Content>
+        <Tabs.Content
+          value="market"
+          id="placeOrderContent"
+          className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
+        >
+          <MarketOrderForm />
         </Tabs.Content>
       </div>
     </Tabs>
