@@ -111,12 +111,12 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
   );
 
   // Calls the action for placing order
-  const onExecuteOrder = (price: string, amount: string): void => {
+  const onExecuteOrder = async (price: string, amount: string) => {
     if (!market) {
       console.error("No market selected");
       return;
     }
-    onPlaceOrders({
+    await onPlaceOrders({
       order_type: "LIMIT",
       symbol: [market?.baseAsset?.id, market?.quoteAsset?.id],
       side: isSell ? "Sell" : "Buy",

@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent } from "react";
-import { Button, Input, Tooltip } from "@polkadex/ux";
+import { Button, Input, Tooltip, Spinner } from "@polkadex/ux";
 import classNames from "classnames";
 import { useFormik } from "formik";
 import { useFunds, useLimitOrder } from "@orderbook/core/hooks";
@@ -65,6 +65,7 @@ const BuyOrder = ({
     setValues,
     setTouched,
     resetForm,
+    isSubmitting,
   } = useFormik({
     initialValues,
     validationSchema: limitOrderValidations({
@@ -75,11 +76,12 @@ const BuyOrder = ({
       availableBalance: availableQuoteAmount,
     }),
     validateOnChange: true,
-    onSubmit: (e) => {
+    onSubmit: async (e) => {
       try {
-        onExecuteOrder(e.price, e.amount);
+        await onExecuteOrder(e.price, e.amount);
         resetForm();
       } catch (error) {
+        // TODO: Handle error with toast
         console.log(error);
       }
     },
@@ -235,9 +237,13 @@ const BuyOrder = ({
         <Button.Solid
           appearance="success"
           type="submit"
-          disabled={!(isValid && dirty) || isOrderLoading}
+          disabled={!(isValid && dirty) || isOrderLoading || isSubmitting}
         >
-          Buy {market?.baseAsset?.ticker}
+          {isSubmitting ? (
+            <Spinner.Keyboard className="h-6 w-6" />
+          ) : (
+            <>Buy {market?.baseAsset?.ticker}</>
+          )}
         </Button.Solid>
       ) : (
         <Button.Solid
@@ -270,6 +276,7 @@ const SellOrder = ({
     setValues,
     setTouched,
     resetForm,
+    isSubmitting,
   } = useFormik({
     initialValues,
     validationSchema: limitOrderValidations({
@@ -281,9 +288,9 @@ const SellOrder = ({
       availableBalance: availableBaseAmount,
     }),
     validateOnChange: true,
-    onSubmit: (e) => {
+    onSubmit: async (e) => {
       try {
-        onExecuteOrder(e.price, e.amount);
+        await onExecuteOrder(e.price, e.amount);
         resetForm();
       } catch (error) {
         console.log(error);
@@ -439,9 +446,13 @@ const SellOrder = ({
       {isSignedIn ? (
         <Button.Solid
           type="submit"
-          disabled={!(isValid && dirty) || isOrderLoading}
+          disabled={!(isValid && dirty) || isOrderLoading || isSubmitting}
         >
-          Sell {market?.baseAsset?.ticker}
+          {isSubmitting ? (
+            <Spinner.Keyboard className="h-6 w-6" />
+          ) : (
+            <>Sell {market?.baseAsset?.ticker}</>
+          )}
         </Button.Solid>
       ) : (
         <Button.Solid
