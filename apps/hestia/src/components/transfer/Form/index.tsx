@@ -125,7 +125,6 @@ export const Form = ({
       selectedAsset?.onChainBalance,
     ]
   );
-
   const onSubmitWithdraw = async ({ amount }: { amount: number }) => {
     if (selectedAccount?.isLocked) setShowPassword(true);
     else {
@@ -141,7 +140,6 @@ export const Form = ({
 
   const onSubmitDeposit = async ({ amount }: { amount: number }) => {
     if (!selectedWallet) return;
-
     try {
       const asset: Record<string, string | null> = isPolkadexToken
         ? { polkadex: null }
@@ -171,13 +169,15 @@ export const Form = ({
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: isTransferFromFunding ? onSubmitWithdraw : onSubmitDeposit,
+    onSubmit: isTransferFromFunding ? onSubmitDeposit : onSubmitWithdraw,
   });
 
-  const disabled =
-    !selectedWallet && isTransferFromFunding
-      ? withdrawLoading
-      : depositLoading || !(isValid && dirty);
+  // const disabled =
+  //   !selectedWallet && isTransferFromFunding
+  //     ? withdrawLoading
+  //     : depositLoading || !(isValid && dirty);
+
+  const disabled = !(isValid && dirty);
 
   useEffect(() => {
     if (!isTransferFromFunding) tryUnlockTradeAccount(selectedAccount);
@@ -328,7 +328,7 @@ export const Form = ({
           </div>
           <Button.Solid
             type="submit"
-            disabled={disabled}
+            // disabled={disabled}
             appearance="primary"
             size="md"
             className="w-full py-5"

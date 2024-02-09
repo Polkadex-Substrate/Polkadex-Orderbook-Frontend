@@ -79,8 +79,14 @@ export const DynamicProviders = ({ children }: { children: ReactNode }) => {
       <QueryClientProvider client={queryClient}>
         <SettingProvider
           defaultToast={{
-            onError: (e) => toast(e),
-            onSuccess: (e) => toast(e),
+            onError: (e) => {
+              console.log("onError", e);
+              toast(e.toString());
+            },
+            onSuccess: (e) => {
+              console.log("onSuccess", e);
+              toast(e.toString());
+            },
           }}
         >
           <ExtensionsProvider>

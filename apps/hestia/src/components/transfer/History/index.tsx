@@ -22,7 +22,6 @@ import { DepositData, columns } from "./columns";
 import { Filters } from "./filters";
 
 import { FilteredAssetProps } from "@/hooks";
-import { BatchCard } from "@/components/ui/ReadyToUse";
 
 const responsiveKeys = ["wallets", "fees", "date"];
 const actionKeys = ["token", "amount", "date"];
