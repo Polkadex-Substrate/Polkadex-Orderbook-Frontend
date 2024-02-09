@@ -226,6 +226,7 @@ export const buySellValidation = Yup.object().shape({
 });
 
 type LimitOrderValidations = {
+  isSell?: boolean;
   minMarketPrice: number;
   maxMarketPrice: number;
   minQuantity: number;
@@ -233,6 +234,7 @@ type LimitOrderValidations = {
   availableBalance: number;
 };
 export const limitOrderValidations = ({
+  isSell = false,
   minMarketPrice,
   maxMarketPrice,
   minQuantity,
@@ -269,14 +271,15 @@ export const limitOrderValidations = ({
         "Max Quantity",
         `Maximum amount: ${maxQuantity}`,
         (value) => Number(value || 0) <= maxQuantity
+      )
+      .test("Balance check", `You don't have enough balance`, (value) =>
+        !isSell ? true : +(value || 0) <= availableBalance
       ),
     total: Yup.string()
       .test("Valid number", "Must be a number", (value) =>
         value ? /^\d+(\.\d+)?$/.test(value) : false
       )
-      .test(
-        "Balance check",
-        `You don't have enough balance`,
-        (value) => getAbsoluteNumber(value || 0) <= availableBalance
+      .test("Balance check", `You don't have enough balance`, (value) =>
+        isSell ? true : getAbsoluteNumber(value || 0) <= availableBalance
       ),
   });
