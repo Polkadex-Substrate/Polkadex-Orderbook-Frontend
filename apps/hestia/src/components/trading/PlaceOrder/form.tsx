@@ -121,6 +121,12 @@ export const MarketOrderForm = ({
   return (
     <div className="flex flex-auto gap-2 flex-wrap">
       <form className="flex flex-auto flex-col gap-2">
+        <Button.Solid
+          appearance="secondary"
+          className="pointer-events-none opacity-50 border border-dashed"
+        >
+          Best Market Price
+        </Button.Solid>
         <Input.Primary type="text" placeholder="0.0000000000">
           <Input.Label className="w-[50px]">Amount</Input.Label>
           <Input.Ticker>DOT</Input.Ticker>
@@ -149,6 +155,12 @@ export const MarketOrderForm = ({
         </Button.Solid>
       </form>
       <form className="flex flex-auto flex-col gap-2">
+        <Button.Solid
+          appearance="secondary"
+          className="pointer-events-none opacity-50 border border-dashed"
+        >
+          Best Market Price
+        </Button.Solid>
         <Input.Primary type="text" placeholder="0.0000000000">
           <Input.Label className="w-[50px]">Amount</Input.Label>
           <Input.Ticker>DOT</Input.Ticker>
