@@ -12,6 +12,7 @@ import { Trades } from "./Trades";
 import { Orders } from "./Orders";
 import { PlaceOrder } from "./PlaceOrder";
 
+import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { Footer, Header } from "@/components/ui";
 import { useSizeObserver } from "@/hooks";
 
@@ -33,6 +34,7 @@ export function Template({ id }: { id: string }) {
   const currentMarket = getCurrentMarket(list, id);
   return (
     <Fragment>
+      <ConnectTradingInteraction />
       <Header ref={headerRef} />
       <main className="flex flex-1 flex-col overflow-auto">
         <div className="flex flex-1 flex-wrap">
@@ -50,7 +52,7 @@ export function Template({ id }: { id: string }) {
           className="flex flex-wrap border-t border-t-primary"
         >
           <Orders maxHeight={ordersSize} id={id} />
-          <PlaceOrder ref={placeOrderRef} />
+          <PlaceOrder ref={placeOrderRef} market={currentMarket} />
         </div>
       </main>
       <Footer ref={footerRef} marketsActive />

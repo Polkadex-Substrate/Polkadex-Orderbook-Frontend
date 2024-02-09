@@ -12,6 +12,7 @@ import { useOpenOrders } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
 import { CalendarDaysIcon } from "@heroicons/react/24/solid";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "@/styles/calendar.scss";
@@ -37,6 +38,7 @@ const BUY = "BUY";
 const SELL = "SELL";
 
 export const Orders = ({ maxHeight, id }: Props) => {
+  const { onToogleConnectTrading } = useSettingsProvider();
   const { dispatchUserSessionData, dateFrom, dateTo } = useSessionProvider();
   const { openOrders } = useOpenOrders(id);
   const { selectedAddresses } = useProfile();
@@ -164,7 +166,9 @@ export const Orders = ({ maxHeight, id }: Props) => {
           title="Connect your trading account to start trading."
           illustration="ConnectAccount"
         >
-          <Button.Solid>Connect Wallet</Button.Solid>
+          <Button.Solid onClick={() => onToogleConnectTrading(true)}>
+            Connect Wallet
+          </Button.Solid>
         </GenericMessage>
       )}
     </Tabs>
