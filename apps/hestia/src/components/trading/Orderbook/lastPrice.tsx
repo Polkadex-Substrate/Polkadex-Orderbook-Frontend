@@ -19,11 +19,11 @@ export const LastPrice = ({
         <div className="flex items-center gap-1">
           <div className="flex items-center gap-1 text-sm font-semibold leading-none">
             {isPriceUp ? (
-              <ArrowUpIcon className="w-4 h-4 text-danger-base" />
+              <ArrowUpIcon className="w-4 h-4 text-success-base" />
             ) : (
-              <ArrowDownIcon className="w-4 h-4 text-success-base" />
+              <ArrowDownIcon className="w-4 h-4 text-danger-base" />
             )}
-            <Typography.Text appearance={isPriceUp ? "danger" : "success"}>
+            <Typography.Text appearance={!isPriceUp ? "danger" : "success"}>
               {lastPrice}
             </Typography.Text>
           </div>
