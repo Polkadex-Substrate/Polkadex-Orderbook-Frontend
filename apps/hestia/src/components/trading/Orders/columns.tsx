@@ -243,7 +243,7 @@ export const tradeHistoryColumns = () => [
   tradeHistoryColumnHelper.accessor((row) => row, {
     id: "quantity",
     cell: (e) => {
-      return <span>{e.getValue().quantity}</span>;
+      return <span>{e.getValue().qty}</span>;
     },
     header: () => <span>Quantity</span>,
     footer: (e) => e.column.id,
