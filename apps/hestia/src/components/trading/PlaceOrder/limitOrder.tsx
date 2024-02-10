@@ -99,7 +99,8 @@ const BuyOrder = ({
     onChangeAmount,
     onExecuteOrder,
     onChangeRange,
-    isOrderLoading,
+    onIncreaseAmount,
+    onDecreaseAmount,
   } = useLimitOrder({
     isSell: false,
     market,
@@ -173,14 +174,8 @@ const BuyOrder = ({
             >
               <Input.Label className="w-[50px]">Amount</Input.Label>
               <Input.Ticker>{market?.baseAsset?.ticker}</Input.Ticker>
-              <Input.Button
-                variant="increase"
-                onClick={() => window.alert("Increase")}
-              />
-              <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
+              <Input.Button variant="increase" onClick={onIncreaseAmount} />
+              <Input.Button variant="decrease" onClick={onDecreaseAmount} />
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
@@ -251,7 +246,7 @@ const BuyOrder = ({
         <Button.Solid
           appearance="success"
           type="submit"
-          disabled={!(isValid && dirty) || isOrderLoading || isSubmitting}
+          disabled={!(isValid && dirty) || isSubmitting}
         >
           {isSubmitting ? (
             <Spinner.Keyboard className="h-6 w-6" />
@@ -317,7 +312,8 @@ const SellOrder = ({
     onChangeAmount,
     onExecuteOrder,
     onChangeRange,
-    isOrderLoading,
+    onIncreaseAmount,
+    onDecreaseAmount,
   } = useLimitOrder({
     isSell: true,
     market,
@@ -391,14 +387,8 @@ const SellOrder = ({
             >
               <Input.Label className="w-[50px]">Amount</Input.Label>
               <Input.Ticker>{market?.baseAsset?.ticker}</Input.Ticker>
-              <Input.Button
-                variant="increase"
-                onClick={() => window.alert("Increase")}
-              />
-              <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
+              <Input.Button variant="increase" onClick={onIncreaseAmount} />
+              <Input.Button variant="decrease" onClick={onDecreaseAmount} />
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
@@ -467,7 +457,7 @@ const SellOrder = ({
       {isSignedIn ? (
         <Button.Solid
           type="submit"
-          disabled={!(isValid && dirty) || isOrderLoading || isSubmitting}
+          disabled={!(isValid && dirty) || isSubmitting}
         >
           {isSubmitting ? (
             <Spinner.Keyboard className="h-6 w-6" />

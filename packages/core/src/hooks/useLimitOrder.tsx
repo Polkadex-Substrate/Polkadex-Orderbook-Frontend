@@ -36,10 +36,7 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
     selectedAddresses: { tradeAddress },
   } = useProfile();
 
-  const {
-    onPlaceOrders,
-    execute: { isLoading: isOrderLoading },
-  } = useOrders();
+  const { onPlaceOrders } = useOrders();
 
   const pricePrecision = market ? decimalPlaces(market.price_tick_size) : 0;
   const qtyPrecision = market ? decimalPlaces(market.qty_step_size) : 0;
@@ -205,7 +202,6 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
 
   return {
     isSignedIn: tradeAddress?.length > 0,
-    isOrderLoading,
 
     onChangeAmount,
     onChangePrice,
