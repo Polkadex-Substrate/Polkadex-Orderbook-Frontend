@@ -2,16 +2,19 @@
 
 import { FilterGroup, Typography } from "@polkadex/ux";
 import { Column } from "@tanstack/react-table";
+import classNames from "classnames";
 
 interface FacetedFilterProps<TData, TValue> {
   column: Column<TData, TValue> | undefined;
   title?: string;
+  withoutBorder?: boolean;
   values: string[];
 }
 export const FacetedFilter = <TData, TValue>({
   column,
   title,
   values,
+  withoutBorder,
 }: FacetedFilterProps<TData, TValue>) => {
   // Missing feature FilterGroup
   // const facets = column?.getFacetedUniqueValues();
@@ -22,7 +25,9 @@ export const FacetedFilter = <TData, TValue>({
   return (
     <FilterGroup>
       <FilterGroup.Root>
-        <FilterGroup.Trigger>
+        <FilterGroup.Trigger
+          className={classNames(withoutBorder && "border-0")}
+        >
           <FilterGroup.Title>
             <FilterGroup.Icon />
             {title}
