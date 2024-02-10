@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { FormikHelpers } from "formik";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useOrders } from "@orderbook/core/providers/user/orders";
@@ -32,7 +32,13 @@ export const useMarketOrder = ({
   } = useProfile();
   const { onPlaceOrders } = useOrders();
 
-  const qtyPrecision = market ? decimalPlaces(market.qty_step_size) : 0;
+  const minAmount = useMemo(() => market?.minQty || 0, [market?.minQty]);
+
+  const [qtyPrecision, amountTickSize] = useMemo(() => {
+    const qtyStepSize = market?.qty_step_size || 0;
+    const qtyPrecision = decimalPlaces(qtyStepSize);
+    return [qtyPrecision, qtyStepSize];
+  }, [market?.qty_step_size]);
 
   const onChangeAmount = useCallback(
     (amount: string) => {
@@ -46,6 +52,23 @@ export const useMarketOrder = ({
     },
     [qtyPrecision, setValues, values]
   );
+
+  const onIncreaseAmount = useCallback(() => {
+    let amount = values.amount;
+    if (!amount.trim().length) {
+      amount = String(minAmount);
+    } else {
+      amount = String(+values.amount + amountTickSize);
+    }
+    onChangeAmount(parseFloat(amount).toFixed(qtyPrecision));
+  }, [amountTickSize, minAmount, onChangeAmount, qtyPrecision, values.amount]);
+
+  const onDecreaseAmount = useCallback(() => {
+    let amount = values.amount;
+    if (!amount.trim().length || +values.amount <= minAmount) return;
+    amount = String(+values.amount - amountTickSize);
+    onChangeAmount(parseFloat(amount).toFixed(qtyPrecision));
+  }, [amountTickSize, minAmount, onChangeAmount, qtyPrecision, values.amount]);
 
   const onChangeRange = (percent: number, availableBalance: number) => {
     const amount = `${availableBalance * percent * 0.01}`;
@@ -76,6 +99,8 @@ export const useMarketOrder = ({
 
     onChangeAmount,
     onChangeRange,
+    onIncreaseAmount,
+    onDecreaseAmount,
     onExecuteOrder,
   };
 };

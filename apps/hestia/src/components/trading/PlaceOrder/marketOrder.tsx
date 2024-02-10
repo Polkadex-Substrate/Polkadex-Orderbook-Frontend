@@ -83,13 +83,19 @@ const BuyOrder = ({
       }
     },
   });
-  const { onChangeAmount, onChangeRange, onExecuteOrder, isSignedIn } =
-    useMarketOrder({
-      isSell: false,
-      setValues,
-      values,
-      market,
-    });
+  const {
+    onChangeAmount,
+    onIncreaseAmount,
+    onDecreaseAmount,
+    onChangeRange,
+    onExecuteOrder,
+    isSignedIn,
+  } = useMarketOrder({
+    isSell: false,
+    setValues,
+    values,
+    market,
+  });
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
@@ -118,14 +124,8 @@ const BuyOrder = ({
             >
               <Input.Label className="w-[50px]">Amount</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>
-              <Input.Button
-                variant="increase"
-                onClick={() => window.alert("Increase")}
-              />
-              <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
+              <Input.Button variant="increase" onClick={onIncreaseAmount} />
+              <Input.Button variant="decrease" onClick={onDecreaseAmount} />
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
@@ -218,13 +218,19 @@ const SellOrder = ({
       }
     },
   });
-  const { onChangeAmount, onChangeRange, onExecuteOrder, isSignedIn } =
-    useMarketOrder({
-      isSell: true,
-      setValues,
-      values,
-      market,
-    });
+  const {
+    onChangeAmount,
+    onIncreaseAmount,
+    onDecreaseAmount,
+    onChangeRange,
+    onExecuteOrder,
+    isSignedIn,
+  } = useMarketOrder({
+    isSell: true,
+    setValues,
+    values,
+    market,
+  });
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
@@ -253,14 +259,8 @@ const SellOrder = ({
             >
               <Input.Label className="w-[50px]">Amount</Input.Label>
               <Input.Ticker>{market?.baseAsset?.ticker}</Input.Ticker>
-              <Input.Button
-                variant="increase"
-                onClick={() => window.alert("Increase")}
-              />
-              <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
+              <Input.Button variant="increase" onClick={onIncreaseAmount} />
+              <Input.Button variant="decrease" onClick={onDecreaseAmount} />
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
