@@ -83,12 +83,13 @@ const BuyOrder = ({
       }
     },
   });
-  const { onChangeAmount, onExecuteOrder, isSignedIn } = useMarketOrder({
-    isSell: false,
-    setValues,
-    values,
-    market,
-  });
+  const { onChangeAmount, onChangeRange, onExecuteOrder, isSignedIn } =
+    useMarketOrder({
+      isSell: false,
+      setValues,
+      values,
+      market,
+    });
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
@@ -139,10 +140,22 @@ const BuyOrder = ({
       <div className="my-2">
         <Range
           ranges={[
-            { value: "25%", action: () => window.alert("25%") },
-            { value: "50%", action: () => window.alert("50%") },
-            { value: "75%", action: () => window.alert("75%") },
-            { value: "100%", action: () => window.alert("100%") },
+            {
+              value: "25%",
+              action: () => onChangeRange(25, availableQuoteAmount),
+            },
+            {
+              value: "50%",
+              action: () => onChangeRange(50, availableQuoteAmount),
+            },
+            {
+              value: "75%",
+              action: () => onChangeRange(75, availableQuoteAmount),
+            },
+            {
+              value: "100%",
+              action: () => onChangeRange(100, availableQuoteAmount),
+            },
           ]}
         />
       </div>
@@ -205,12 +218,13 @@ const SellOrder = ({
       }
     },
   });
-  const { onChangeAmount, onExecuteOrder, isSignedIn } = useMarketOrder({
-    isSell: true,
-    setValues,
-    values,
-    market,
-  });
+  const { onChangeAmount, onChangeRange, onExecuteOrder, isSignedIn } =
+    useMarketOrder({
+      isSell: true,
+      setValues,
+      values,
+      market,
+    });
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
@@ -261,10 +275,22 @@ const SellOrder = ({
       <div className="my-2">
         <Range
           ranges={[
-            { value: "25%", action: () => window.alert("25%") },
-            { value: "50%", action: () => window.alert("50%") },
-            { value: "75%", action: () => window.alert("75%") },
-            { value: "100%", action: () => window.alert("100%") },
+            {
+              value: "25%",
+              action: () => onChangeRange(25, availableBaseAmount),
+            },
+            {
+              value: "50%",
+              action: () => onChangeRange(50, availableBaseAmount),
+            },
+            {
+              value: "75%",
+              action: () => onChangeRange(75, availableBaseAmount),
+            },
+            {
+              value: "100%",
+              action: () => onChangeRange(100, availableBaseAmount),
+            },
           ]}
         />
       </div>

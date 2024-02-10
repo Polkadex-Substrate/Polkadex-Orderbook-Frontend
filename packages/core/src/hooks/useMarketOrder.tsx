@@ -8,6 +8,7 @@ import {
   precisionRegExp,
 } from "@orderbook/core/helpers";
 import { Market } from "@orderbook/core/utils/orderbookService/types";
+import { Decimal } from "@orderbook/core/utils";
 
 type FormValues = {
   amount: string;
@@ -46,6 +47,14 @@ export const useMarketOrder = ({
     [qtyPrecision, setValues, values]
   );
 
+  const onChangeRange = (percent: number, availableBalance: number) => {
+    const amount = `${availableBalance * percent * 0.01}`;
+    setValues({
+      ...values,
+      amount: Decimal.format(amount, qtyPrecision),
+    });
+  };
+
   // Calls the action for placing order
   const onExecuteOrder = async (amount: string) => {
     if (!market) {
@@ -66,6 +75,7 @@ export const useMarketOrder = ({
     isSignedIn: tradeAddress?.length > 0,
 
     onChangeAmount,
+    onChangeRange,
     onExecuteOrder,
   };
 };
