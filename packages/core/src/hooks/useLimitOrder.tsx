@@ -31,11 +31,13 @@ type Props = {
 export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
   const pricePrecision = market ? decimalPlaces(market.price_tick_size) : 0;
   const qtyPrecision = market ? decimalPlaces(market.qty_step_size) : 0;
-  const totalPrecision = 8;
   const minAmount = market?.minQty || 0;
   const minPrice = market?.minPrice || 0;
   const amountTickSize = market?.qty_step_size || 0;
   const priceTickSize = market?.price_tick_size || 0;
+  const totalPrecision = 8;
+  const minTotal = 1;
+  const totalTickSize = 0.5;
 
   const {
     currentTicker: { currentPrice: lastPriceValue },
@@ -122,7 +124,7 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
 
         setValues({
           total,
-          price: String(formPrice),
+          price: formPrice === 0 ? "" : String(formPrice),
           amount: estimatedAmount === "0" ? "" : estimatedAmount,
         });
       }
@@ -170,39 +172,47 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
     });
   };
 
-  const onIncreasePrice = useCallback(() => {
+  const onIncreasePrice = () => {
     let price = values.price;
-    if (!price.trim().length) {
-      price = String(minPrice);
-    } else {
-      price = String(+values.price + priceTickSize);
-    }
+    if (!price.trim().length) price = String(minPrice);
+    else price = String(+values.price + priceTickSize);
     onChangePrice(parseFloat(price).toFixed(pricePrecision));
-  }, [minPrice, onChangePrice, pricePrecision, priceTickSize, values.price]);
+  };
 
-  const onDecreasePrice = useCallback(() => {
+  const onDecreasePrice = () => {
     let price = values.price;
     if (!price.trim().length || +price <= minPrice) return;
     price = String(+values.price - priceTickSize);
     onChangePrice(parseFloat(price).toFixed(pricePrecision));
-  }, [minPrice, onChangePrice, pricePrecision, priceTickSize, values.price]);
+  };
 
-  const onIncreaseAmount = useCallback(() => {
+  const onIncreaseAmount = () => {
     let amount = values.amount;
-    if (!amount.trim().length) {
-      amount = String(minAmount);
-    } else {
-      amount = String(+values.amount + amountTickSize);
-    }
+    if (!amount.trim().length) amount = String(minAmount);
+    else amount = String(+values.amount + amountTickSize);
     onChangeAmount(parseFloat(amount).toFixed(qtyPrecision));
-  }, [amountTickSize, minAmount, onChangeAmount, qtyPrecision, values.amount]);
+  };
 
-  const onDecreaseAmount = useCallback(() => {
+  const onDecreaseAmount = () => {
     let amount = values.amount;
     if (!amount.trim().length || +values.amount <= minAmount) return;
     amount = String(+values.amount - amountTickSize);
     onChangeAmount(parseFloat(amount).toFixed(qtyPrecision));
-  }, [amountTickSize, minAmount, onChangeAmount, qtyPrecision, values.amount]);
+  };
+
+  const onIncreaseTotal = () => {
+    let total = values.total;
+    if (!total.trim().length) total = String(minTotal);
+    else total = String(+values.total + totalTickSize);
+    onChangeTotal(formatNumber(parseFloat(total).toFixed(totalPrecision)));
+  };
+
+  const onDecreaseTotal = () => {
+    let total = values.total;
+    if (!total.trim().length || +values.total <= minTotal) return;
+    total = String(+values.total - totalTickSize);
+    onChangeTotal(formatNumber(parseFloat(total).toFixed(totalPrecision)));
+  };
 
   // Calls the action for placing order
   const onExecuteOrder = async (price: string, amount: string) => {
@@ -231,6 +241,8 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
     onDecreasePrice,
     onIncreaseAmount,
     onDecreaseAmount,
+    onIncreaseTotal,
+    onDecreaseTotal,
 
     onChangeRange,
     onExecuteOrder,
