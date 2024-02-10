@@ -135,12 +135,12 @@ const BuyOrder = ({
               <Input.Label className="w-[50px]">Price</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>
               <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
-              <Input.Button
                 variant="increase"
                 onClick={() => window.alert("Increase")}
+              />
+              <Input.Button
+                variant="decrease"
+                onClick={() => window.alert("Decrease")}
               />
             </Input.Primary>
           </div>
@@ -168,12 +168,12 @@ const BuyOrder = ({
               <Input.Label className="w-[50px]">Amount</Input.Label>
               <Input.Ticker>{market?.baseAsset?.ticker}</Input.Ticker>
               <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
-              <Input.Button
                 variant="increase"
                 onClick={() => window.alert("Increase")}
+              />
+              <Input.Button
+                variant="decrease"
+                onClick={() => window.alert("Decrease")}
               />
             </Input.Primary>
           </div>
@@ -223,12 +223,12 @@ const BuyOrder = ({
               <Input.Label className="w-[50px]">Total</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>
               <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
-              <Input.Button
                 variant="increase"
                 onClick={() => window.alert("Increase")}
+              />
+              <Input.Button
+                variant="decrease"
+                onClick={() => window.alert("Decrease")}
               />
             </Input.Primary>
           </div>
@@ -344,12 +344,12 @@ const SellOrder = ({
               <Input.Label className="w-[50px]">Price</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>
               <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
-              <Input.Button
                 variant="increase"
                 onClick={() => window.alert("Increase")}
+              />
+              <Input.Button
+                variant="decrease"
+                onClick={() => window.alert("Decrease")}
               />
             </Input.Primary>
           </div>
@@ -377,12 +377,12 @@ const SellOrder = ({
               <Input.Label className="w-[50px]">Amount</Input.Label>
               <Input.Ticker>{market?.baseAsset?.ticker}</Input.Ticker>
               <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
-              <Input.Button
                 variant="increase"
                 onClick={() => window.alert("Increase")}
+              />
+              <Input.Button
+                variant="decrease"
+                onClick={() => window.alert("Decrease")}
               />
             </Input.Primary>
           </div>
@@ -432,12 +432,12 @@ const SellOrder = ({
               <Input.Label className="w-[50px]">Total</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>
               <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
-              <Input.Button
                 variant="increase"
                 onClick={() => window.alert("Increase")}
+              />
+              <Input.Button
+                variant="decrease"
+                onClick={() => window.alert("Decrease")}
               />
             </Input.Primary>
           </div>
