@@ -1,9 +1,11 @@
 "use client";
 
-import { Tabs, Typography } from "@polkadex/ux";
+import { Button, GenericMessage, Tabs, Typography } from "@polkadex/ux";
 import { useElementSize } from "usehooks-ts";
-import { Fragment, useMemo } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { useTransactions } from "@orderbook/core/hooks";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { Help } from "./Help";
 import { SelectAsset } from "./SelectAsset";
@@ -41,6 +43,15 @@ export function Template() {
     onChangeType,
   } = useTransfer();
 
+  const { readyWithdrawals } = useTransactions();
+  const { selectedAccount, selectedWallet } = useConnectWalletProvider();
+  const [activeTab, setActiveTab] = useState("history");
+
+  useEffect(() => {
+    if (readyWithdrawals?.length > 1) setActiveTab("readyToClaim");
+  }, [readyWithdrawals?.length]);
+
+  console.log(readyWithdrawals);
   return (
     <Fragment>
       <SelectAsset
@@ -72,34 +83,41 @@ export function Template() {
                 onChangeType={(e) => onChangeType(e)}
               />
             </div>
-            <Tabs defaultValue="history">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
               <div className="flex-1 flex flex-col">
                 <div
                   ref={tableTitleRef}
                   className="border-b border-primary px-4 w-full py-2"
                 >
                   <Tabs.List>
-                    <Tabs.Trigger value="history">History (5)</Tabs.Trigger>
+                    <Tabs.Trigger value="history">History</Tabs.Trigger>
                     <Tabs.Trigger value="readyToClaim">
-                      Ready to claim (5)
+                      Ready to claim ({readyWithdrawals.length})
                     </Tabs.Trigger>
                   </Tabs.List>
                 </div>
-                <Tabs.Content value="history" className="flex flex-col">
-                  <History
-                    selectedAsset={selectedAsset}
-                    maxHeight={maxHeight}
-                  />
-                </Tabs.Content>
-                <Tabs.Content value="readyToClaim" className="flex flex-col">
-                  <ReadyToClaim
-                    maxHeight={`300px`}
-                    selectedAsset={selectedAsset}
-                  />
-                </Tabs.Content>
+                {selectedAccount || selectedWallet ? (
+                  <Fragment>
+                    <Tabs.Content value="history" className="flex flex-col">
+                      <History maxHeight={maxHeight} />
+                    </Tabs.Content>
+                    <Tabs.Content
+                      value="readyToClaim"
+                      className="flex flex-col"
+                    >
+                      <ReadyToClaim maxHeight={`300px`} />
+                    </Tabs.Content>
+                  </Fragment>
+                ) : (
+                  <GenericMessage
+                    title="Connect your trading account to start trading."
+                    illustration="ConnectAccount"
+                  >
+                    <Button.Solid>Connect Wallet</Button.Solid>
+                  </GenericMessage>
+                )}
               </div>
             </Tabs>
-
             <Help ref={helpRef} />
           </div>
         </main>

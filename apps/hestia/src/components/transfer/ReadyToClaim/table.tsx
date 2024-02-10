@@ -1,3 +1,5 @@
+"use client";
+
 import { Table as PolkadexTable } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { PropsWithChildren, useMemo, useState } from "react";

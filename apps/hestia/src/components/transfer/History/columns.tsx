@@ -1,8 +1,12 @@
+"use client";
+
 import { createColumnHelper } from "@tanstack/react-table";
 import { Transaction } from "@orderbook/core/utils/orderbookService";
 import { Tokens, Tooltip, Typography, truncateString } from "@polkadex/ux";
 import classNames from "classnames";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+
+import { filters } from ".";
 
 import { TokenCard } from "@/components/ui/ReadyToUse";
 
@@ -40,6 +44,21 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    filterFn: (row, id, value: string[] | string) => {
+      if (typeof value === "string") {
+        const rowData = row.getValue<DepositData>(id)?.token;
+        const match =
+          rowData?.ticker?.toLowerCase().includes(value.toLowerCase()) ||
+          rowData?.name?.toLowerCase().includes(value.toLowerCase());
+
+        return match;
+      }
+      return value?.some((val) =>
+        val
+          .toLowerCase()
+          .includes(row.getValue<DepositData>(id)?.token?.ticker.toLowerCase())
+      );
+    },
   }),
   columnHelper.accessor((row) => row.status, {
     id: "status",
@@ -69,6 +88,12 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    filterFn: (row, id, value: typeof filters.status) =>
+      value?.some((val) =>
+        val
+          .toLowerCase()
+          .includes(row.getValue<DepositData["status"]>(id).toLowerCase())
+      ),
   }),
   columnHelper.accessor((row) => row.amount, {
     id: "amount",
@@ -151,6 +176,12 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    filterFn: (row, id, value: typeof filters.from) => {
+      const rowData = row.getValue<DepositData["wallets"]>(id).fromWalletType;
+      const valueSplited = value[0].split("/")[0].toLowerCase();
+      const rowDataSplited = rowData.toLowerCase().split(" ")[0].toLowerCase();
+      return valueSplited.includes(rowDataSplited);
+    },
   }),
   columnHelper.accessor((row) => row.timestamp, {
     id: "date",
