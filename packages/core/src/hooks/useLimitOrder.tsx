@@ -7,6 +7,7 @@ import { Decimal } from "@orderbook/core/utils";
 import {
   cleanPositiveFloatInput,
   decimalPlaces,
+  formatNumber,
   getAbsoluteNumber,
   precisionRegExp,
   trimFloat,
@@ -28,6 +29,14 @@ type Props = {
 };
 
 export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
+  const pricePrecision = market ? decimalPlaces(market.price_tick_size) : 0;
+  const qtyPrecision = market ? decimalPlaces(market.qty_step_size) : 0;
+  const totalPrecision = 8;
+  const minAmount = market?.minQty || 0;
+  const minPrice = market?.minPrice || 0;
+  const amountTickSize = market?.qty_step_size || 0;
+  const priceTickSize = market?.price_tick_size || 0;
+
   const {
     currentTicker: { currentPrice: lastPriceValue },
   } = useTickers(market?.id);
@@ -37,12 +46,6 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
   } = useProfile();
 
   const { onPlaceOrders } = useOrders();
-
-  const pricePrecision = market ? decimalPlaces(market.price_tick_size) : 0;
-  const qtyPrecision = market ? decimalPlaces(market.qty_step_size) : 0;
-  const totalPrecision = Math.max(pricePrecision, qtyPrecision);
-  const minAmount = market?.minQty || 0;
-  const amountTickSize = market?.qty_step_size || 0;
 
   // Get estimated total amount
   const getEstimatedTotal = useCallback(
@@ -68,13 +71,13 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
       if (convertedValue?.match(precisionRegExp(pricePrecision || 0))) {
         const total =
           amount && convertedValue
-            ? calculateTotal(convertedValue, amount)?.toString()
+            ? calculateTotal(convertedValue, amount)
             : "";
 
         setValues({
           ...values,
           price: convertedValue,
-          total: total,
+          total,
         });
       }
     },
@@ -93,7 +96,7 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
         setValues({
           ...values,
           amount: convertedValue,
-          total: String(total),
+          total: formatNumber(total),
         });
       }
     },
@@ -150,7 +153,7 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
         ...values,
         price,
         amount: Decimal.format(amount, qtyPrecision),
-        total: Decimal.format(total, totalPrecision),
+        total: formatNumber(Decimal.format(total, totalPrecision)),
       });
       return;
     }
@@ -163,9 +166,26 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
       ...values,
       price,
       amount: Decimal.format(amount, qtyPrecision),
-      total: Decimal.format(total, totalPrecision),
+      total: formatNumber(Decimal.format(total, totalPrecision)),
     });
   };
+
+  const onIncreasePrice = useCallback(() => {
+    let price = values.price;
+    if (!price.trim().length) {
+      price = String(minPrice);
+    } else {
+      price = String(+values.price + priceTickSize);
+    }
+    onChangePrice(parseFloat(price).toFixed(pricePrecision));
+  }, [minPrice, onChangePrice, pricePrecision, priceTickSize, values.price]);
+
+  const onDecreasePrice = useCallback(() => {
+    let price = values.price;
+    if (!price.trim().length || +price <= minPrice) return;
+    price = String(+values.price - priceTickSize);
+    onChangePrice(parseFloat(price).toFixed(pricePrecision));
+  }, [minPrice, onChangePrice, pricePrecision, priceTickSize, values.price]);
 
   const onIncreaseAmount = useCallback(() => {
     let amount = values.amount;
@@ -207,6 +227,8 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
     onChangePrice,
     onChangeTotal,
 
+    onIncreasePrice,
+    onDecreasePrice,
     onIncreaseAmount,
     onDecreaseAmount,
 

@@ -99,6 +99,8 @@ const BuyOrder = ({
     onChangeAmount,
     onExecuteOrder,
     onChangeRange,
+    onIncreasePrice,
+    onDecreasePrice,
     onIncreaseAmount,
     onDecreaseAmount,
   } = useLimitOrder({
@@ -138,14 +140,8 @@ const BuyOrder = ({
             >
               <Input.Label className="w-[50px]">Price</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>
-              <Input.Button
-                variant="increase"
-                onClick={() => window.alert("Increase")}
-              />
-              <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
+              <Input.Button variant="increase" onClick={onIncreasePrice} />
+              <Input.Button variant="decrease" onClick={onDecreasePrice} />
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
@@ -312,6 +308,8 @@ const SellOrder = ({
     onChangeAmount,
     onExecuteOrder,
     onChangeRange,
+    onIncreasePrice,
+    onDecreasePrice,
     onIncreaseAmount,
     onDecreaseAmount,
   } = useLimitOrder({
@@ -351,14 +349,8 @@ const SellOrder = ({
             >
               <Input.Label className="w-[50px]">Price</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>
-              <Input.Button
-                variant="increase"
-                onClick={() => window.alert("Increase")}
-              />
-              <Input.Button
-                variant="decrease"
-                onClick={() => window.alert("Decrease")}
-              />
+              <Input.Button variant="increase" onClick={onIncreasePrice} />
+              <Input.Button variant="decrease" onClick={onDecreasePrice} />
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
