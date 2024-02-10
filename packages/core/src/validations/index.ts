@@ -283,3 +283,36 @@ export const limitOrderValidations = ({
         isSell ? true : getAbsoluteNumber(value || 0) <= availableBalance
       ),
   });
+
+type MarketOrderValidations = {
+  minQuantity: number;
+  maxQuantity: number;
+  availableBalance: number;
+};
+
+export const marketOrderValidations = ({
+  minQuantity,
+  maxQuantity,
+  availableBalance,
+}: MarketOrderValidations) =>
+  Yup.object().shape({
+    amount: Yup.string()
+      .test("Valid number", "Must be a number", (value) =>
+        value ? /^\d+(\.\d+)?$/.test(value) : false
+      )
+      .test(
+        "Min Quantity",
+        `Minimum amount: ${minQuantity}`,
+        (value) => Number(value || 0) >= minQuantity
+      )
+      .test(
+        "Max Quantity",
+        `Maximum amount: ${maxQuantity}`,
+        (value) => Number(value || 0) <= maxQuantity
+      )
+      .test(
+        "Balance check",
+        `You don't have enough balance`,
+        (value) => +(value || 0) <= availableBalance
+      ),
+  });

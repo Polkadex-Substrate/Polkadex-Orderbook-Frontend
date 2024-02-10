@@ -47,7 +47,7 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
             id="placeOrderContent"
             className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
           >
-            <MarketOrder />
+            <MarketOrder market={market} />
           </Tabs.Content>
         </div>
       </Tabs>
