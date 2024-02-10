@@ -94,7 +94,7 @@ const BuyOrder = ({
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
       <Button.Solid
         appearance="secondary"
-        className="pointer-events-none opacity-50 border border-dashed"
+        className="pointer-events-none opacity-50 border border-dashed py-5"
         size="md"
       >
         Best Market Price
@@ -177,28 +177,87 @@ const SellOrder = ({
   market?: Market;
   availableBaseAmount: number;
 }) => {
+  const { onToogleConnectTrading } = useSettingsProvider();
+  const {
+    handleSubmit,
+    errors,
+    isValid,
+    dirty,
+    values,
+    setValues,
+    resetForm,
+    isSubmitting,
+  } = useFormik({
+    initialValues,
+    validationSchema: marketOrderValidations({
+      minQuantity: market?.minQty || 0,
+      maxQuantity: market?.maxQty || 0,
+      availableBalance: availableBaseAmount,
+    }),
+    validateOnChange: true,
+    onSubmit: async (e) => {
+      try {
+        await onExecuteOrder(e.amount);
+        resetForm();
+      } catch (error) {
+        // TODO: Handle this
+        console.log(error);
+      }
+    },
+  });
+  const { onChangeAmount, onExecuteOrder, isSignedIn } = useMarketOrder({
+    isSell: true,
+    setValues,
+    values,
+    market,
+  });
+
   return (
-    <form className="flex flex-auto flex-col gap-2">
+    <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
       <Button.Solid
         appearance="secondary"
-        className="pointer-events-none opacity-50 border border-dashed"
+        className="pointer-events-none opacity-50 border border-dashed py-5"
         size="md"
       >
         Best Market Price
       </Button.Solid>
-      <Input.Primary type="text" placeholder="0.0000000000">
-        <Input.Label className="w-[50px]">Amount</Input.Label>
-        <Input.Ticker>DOT</Input.Ticker>
-        <Input.Button
-          variant="decrease"
-          onClick={() => window.alert("Decrease")}
-        />
-        <Input.Button
-          variant="increase"
-          onClick={() => window.alert("Increase")}
-        />
-      </Input.Primary>
-      <Balance baseTicker="DOT">0.00456000</Balance>
+
+      <Tooltip open={!!errors.amount && !!values.amount}>
+        <Tooltip.Trigger asChild>
+          <div
+            className={classNames(
+              !!errors.amount && !!values.amount && "border-danger-base border"
+            )}
+          >
+            <Input.Primary
+              type="text"
+              placeholder="0.0000000000"
+              autoComplete="off"
+              name={AMOUNT}
+              value={values.amount}
+              onChange={(e) => onChangeAmount(e.target.value)}
+            >
+              <Input.Label className="w-[50px]">Amount</Input.Label>
+              <Input.Ticker>{market?.baseAsset?.ticker}</Input.Ticker>
+              <Input.Button
+                variant="increase"
+                onClick={() => window.alert("Increase")}
+              />
+              <Input.Button
+                variant="decrease"
+                onClick={() => window.alert("Decrease")}
+              />
+            </Input.Primary>
+          </div>
+        </Tooltip.Trigger>
+        <Tooltip.Content side="left" className="bg-level-0 z-[1]">
+          {errors.amount}
+        </Tooltip.Content>
+      </Tooltip>
+
+      <Balance baseTicker={market?.baseAsset?.ticker || ""}>
+        {availableBaseAmount}
+      </Balance>
       <div className="my-2">
         <Range
           ranges={[
@@ -209,7 +268,25 @@ const SellOrder = ({
           ]}
         />
       </div>
-      <Button.Solid type="submit">Sell PDEX</Button.Solid>
+      {isSignedIn ? (
+        <Button.Solid
+          type="submit"
+          disabled={!(isValid && dirty) || isSubmitting}
+        >
+          {isSubmitting ? (
+            <Spinner.Keyboard className="h-6 w-6" />
+          ) : (
+            <>Sell {market?.baseAsset?.ticker}</>
+          )}
+        </Button.Solid>
+      ) : (
+        <Button.Solid
+          type="button"
+          onClick={() => onToogleConnectTrading(true)}
+        >
+          Connect Wallet
+        </Button.Solid>
+      )}
     </form>
   );
 };
