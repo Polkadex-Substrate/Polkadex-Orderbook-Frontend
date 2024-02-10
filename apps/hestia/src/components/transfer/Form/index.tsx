@@ -204,7 +204,7 @@ export const Form = ({
         className="flex w-full border-b border-primary max-md:py-6 md:py-12 bg-level-0"
       >
         <div className="flex-1 flex flex-col gap-4 w-full max-w-[1000px] mx-auto">
-          <div className="flex-1 flex max-sm:flex-col items-center w-full border-y border-primary">
+          <div className="flex-1 flex max-lg:flex-col items-center w-full border-y border-primary">
             <FromFunding
               focused={cardFocus}
               fromFunding={isTransferFromFunding}
@@ -237,11 +237,11 @@ export const Form = ({
               selectedAssetTicker={selectedAsset?.ticker}
             />
           </div>
-          <div className="flex items-center border border-primary">
+          <div className="flex items-center border border-primary max-sm:flex-col">
             <div
               role="button"
               onClick={() => onAssetsInteraction()}
-              className="flex items-center justify-between gap-4 px-5 py-4 border-r border-primary hover:bg-level-1 duration-300 transition-colors min-w-60"
+              className="flex items-center justify-between gap-4 px-5 py-4 max-sm:w-full max-sm:border-b sm:border-r border-primary hover:bg-level-1 duration-300 transition-colors min-w-60"
             >
               <div className="flex items-center gap-2">
                 <Skeleton
@@ -311,7 +311,7 @@ export const Form = ({
                     }}
                   />
                 </Tooltip.Trigger>
-                <Tooltip.Content side="left" className="bg-level-5 z-[1]">
+                <Tooltip.Content className="bg-level-5 z-[1]">
                   {errors.amount && errors.amount}
                 </Tooltip.Content>
               </Tooltip>

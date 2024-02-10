@@ -1,7 +1,7 @@
 "use client";
 
 import { EllipsisVerticalIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Button, Icon, Input, Popover, Typography } from "@polkadex/ux";
+import { Button, Icon, Popover, Typography } from "@polkadex/ux";
 import { Table } from "@tanstack/react-table";
 import { Fragment, useMemo } from "react";
 import { useWindowSize } from "usehooks-ts";
