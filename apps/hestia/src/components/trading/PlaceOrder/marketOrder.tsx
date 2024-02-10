@@ -107,11 +107,14 @@ const BuyOrder = ({
         Best Market Price
       </Button.Solid>
 
-      <Tooltip open={!!errors.amount && !!values.amount}>
+      <Tooltip open={!!errors.amount && !!values.amount && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.amount && !!values.amount && "border-danger-base border"
+              !!errors.amount &&
+                !!values.amount &&
+                isSignedIn &&
+                "border-danger-base border"
             )}
           >
             <Input.Primary
@@ -242,11 +245,14 @@ const SellOrder = ({
         Best Market Price
       </Button.Solid>
 
-      <Tooltip open={!!errors.amount && !!values.amount}>
+      <Tooltip open={!!errors.amount && !!values.amount && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.amount && !!values.amount && "border-danger-base border"
+              !!errors.amount &&
+                !!values.amount &&
+                isSignedIn &&
+                "border-danger-base border"
             )}
           >
             <Input.Primary

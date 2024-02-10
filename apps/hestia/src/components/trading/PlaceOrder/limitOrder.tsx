@@ -117,11 +117,14 @@ const BuyOrder = ({
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
-      <Tooltip open={!!errors.price && !!values.price}>
+      <Tooltip open={!!errors.price && !!values.price && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.price && !!values.price && "border-danger-base border"
+              !!errors.price &&
+                !!values.price &&
+                isSignedIn &&
+                "border-danger-base border"
             )}
           >
             <Input.Primary
@@ -150,11 +153,14 @@ const BuyOrder = ({
         </Tooltip.Content>
       </Tooltip>
 
-      <Tooltip open={!!errors.amount && !!values.amount}>
+      <Tooltip open={!!errors.amount && !!values.amount && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.amount && !!values.amount && "border-danger-base border"
+              !!errors.amount &&
+                !!values.amount &&
+                isSignedIn &&
+                "border-danger-base border"
             )}
           >
             <Input.Primary
@@ -205,11 +211,14 @@ const BuyOrder = ({
           },
         ]}
       />
-      <Tooltip open={!!errors.total && !!values.total}>
+      <Tooltip open={!!errors.total && !!values.total && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.total && !!values.total && "border-danger-base border"
+              !!errors.total &&
+                !!values.total &&
+                isSignedIn &&
+                "border-danger-base border"
             )}
           >
             <Input.Primary
@@ -326,11 +335,14 @@ const SellOrder = ({
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
-      <Tooltip open={!!errors.price && !!values.price}>
+      <Tooltip open={!!errors.price && !!values.price && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.price && !!values.price && "border-danger-base border"
+              !!errors.price &&
+                !!values.price &&
+                isSignedIn &&
+                "border-danger-base border"
             )}
           >
             <Input.Primary
@@ -359,11 +371,14 @@ const SellOrder = ({
         </Tooltip.Content>
       </Tooltip>
 
-      <Tooltip open={!!errors.amount && !!values.amount}>
+      <Tooltip open={!!errors.amount && !!values.amount && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.amount && !!values.amount && "border-danger-base border"
+              !!errors.amount &&
+                !!values.amount &&
+                isSignedIn &&
+                "border-danger-base border"
             )}
           >
             <Input.Primary
@@ -414,11 +429,14 @@ const SellOrder = ({
           },
         ]}
       />
-      <Tooltip open={!!errors.total && !!values.total}>
+      <Tooltip open={!!errors.total && !!values.total && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.total && !!values.total && "border-danger-base border"
+              !!errors.total &&
+                !!values.total &&
+                isSignedIn &&
+                "border-danger-base border"
             )}
           >
             <Input.Primary
