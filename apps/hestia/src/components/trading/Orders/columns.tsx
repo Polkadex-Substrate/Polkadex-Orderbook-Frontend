@@ -164,7 +164,8 @@ export const orderHistoryColumns = () => [
   orderHistoryColumnHelper.accessor((row) => row, {
     id: "price",
     cell: (e) => {
-      return <span>{e.getValue().price}</span>;
+      const isMarket = e.getValue().type === "MARKET";
+      return <span>{isMarket ? "----" : e.getValue().price}</span>;
     },
     header: () => <span>Price</span>,
     footer: (e) => e.column.id,
