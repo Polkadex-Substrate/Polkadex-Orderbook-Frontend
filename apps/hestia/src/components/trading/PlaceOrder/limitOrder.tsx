@@ -110,9 +110,9 @@ const BuyOrder = ({
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    if (name === PRICE) onChangePrice(value, values.amount);
-    else if (name === AMOUNT) onChangeAmount(value, values.price);
-    else onChangeTotal(value, values.price);
+    if (name === PRICE) onChangePrice(value);
+    else if (name === AMOUNT) onChangeAmount(value);
+    else onChangeTotal(value);
   };
 
   return (
@@ -328,9 +328,9 @@ const SellOrder = ({
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    if (name === PRICE) onChangePrice(value, values.amount);
-    else if (name === AMOUNT) onChangeAmount(value, values.price);
-    else onChangeTotal(value, values.price);
+    if (name === PRICE) onChangePrice(value);
+    else if (name === AMOUNT) onChangeAmount(value);
+    else onChangeTotal(value);
   };
 
   return (
