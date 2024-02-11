@@ -94,6 +94,7 @@ export const OpenOrderResponsiveCard = ({
 export const OrderHistoryResponsiveCard = ({ orders }: { orders: Order[] }) => {
   return orders.map((order, i) => {
     const isSell = order.side === "Ask";
+    const isMarket = order.type === "MARKET";
     const Icon = isSell ? ArrowRightCircleIcon : ArrowLeftCircleIcon;
     return (
       <div
@@ -140,7 +141,7 @@ export const OrderHistoryResponsiveCard = ({ orders }: { orders: Order[] }) => {
 
         <div className="flex flex-col gap-1">
           <Typography.Text appearance="primary">Price</Typography.Text>
-          <Typography.Text>{order.price}</Typography.Text>
+          <Typography.Text>{isMarket ? "----" : order.price}</Typography.Text>
         </div>
 
         <div className="flex flex-col gap-1">
