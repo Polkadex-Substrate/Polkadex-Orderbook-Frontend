@@ -35,7 +35,7 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
   const minPrice = market?.minPrice || 0;
   const amountTickSize = market?.qty_step_size || 0;
   const priceTickSize = market?.price_tick_size || 0;
-  const totalPrecision = 8;
+  const totalPrecision = Math.max(pricePrecision, qtyPrecision);
   const minTotal = 1;
   const totalTickSize = 0.5;
 
@@ -98,11 +98,11 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
         setValues({
           ...values,
           amount: convertedValue,
-          total: formatNumber(total),
+          total: formatNumber(Decimal.format(total, totalPrecision)),
         });
       }
     },
-    [qtyPrecision, calculateTotal, setValues, values]
+    [qtyPrecision, calculateTotal, setValues, values, totalPrecision]
   );
 
   const onChangeTotal = useCallback(
