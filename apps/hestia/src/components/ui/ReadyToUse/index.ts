@@ -18,3 +18,4 @@ export * from "./skeletonCollection";
 export * from "./responsiveCard";
 export * from "./statusCard";
 export * from "./transactionDirection";
+export * from "./inlineAccountCard";

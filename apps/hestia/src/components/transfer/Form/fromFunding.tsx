@@ -1,10 +1,12 @@
 "use client";
 
-import { AccountInfo } from "../../ui/ReadyToUse";
+import { AccountInfo, InlineAccountCard } from "../../ui/ReadyToUse";
 
 import { Card } from "./card";
 
 export const FromFunding = ({
+  isExtensionAccountPresent,
+  isLocalAccountPresent,
   focused,
   fromFunding,
   extensionAccountName,
@@ -15,6 +17,8 @@ export const FromFunding = ({
   localAccountBalance = "0",
   selectedAssetTicker = "",
 }: {
+  isExtensionAccountPresent?: boolean;
+  isLocalAccountPresent?: boolean;
   focused?: boolean;
   fromFunding?: boolean;
   extensionAccountName?: string;
@@ -36,7 +40,12 @@ export const FromFunding = ({
         address={fromFunding ? extensionAccountAddress : localAccountAddress}
         ticker={selectedAssetTicker}
         balance={fromFunding ? extensionAccountBalance : localAccountBalance}
-      />
+      >
+        {((fromFunding && !isExtensionAccountPresent) ||
+          (!fromFunding && !isLocalAccountPresent)) && (
+          <InlineAccountCard>Account not present</InlineAccountCard>
+        )}
+      </AccountInfo>
     </Card>
   );
 };

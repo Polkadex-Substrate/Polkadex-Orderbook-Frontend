@@ -8,6 +8,7 @@ import {
   tokenAppearance,
   Tooltip,
   Modal,
+  Spinner,
 } from "@polkadex/ux";
 import {
   Fragment,
@@ -98,7 +99,7 @@ export const Form = ({
   const handleMax = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    isTransferFromFunding ? onChangeTradingMax() : onChangeFundingMax();
+    isTransferFromFunding ? onChangeFundingMax() : onChangeTradingMax();
   };
 
   const handleChanteType = (e: MouseEvent<HTMLElement>) => {
@@ -111,12 +112,12 @@ export const Form = ({
   const validationSchema = useMemo(
     () =>
       isTransferFromFunding
-        ? withdrawValidations(selectedAsset?.free_balance ?? "0")
-        : depositValidations(
+        ? depositValidations(
             Number(selectedAsset?.onChainBalance) ?? 0,
             isPolkadexToken,
             existentialBalance
-          ),
+          )
+        : withdrawValidations(selectedAsset?.free_balance ?? "0"),
     [
       existentialBalance,
       isPolkadexToken,
@@ -125,6 +126,7 @@ export const Form = ({
       selectedAsset?.onChainBalance,
     ]
   );
+
   const onSubmitWithdraw = async ({ amount }: { amount: number }) => {
     if (selectedAccount?.isLocked) setShowPassword(true);
     else {
@@ -171,13 +173,15 @@ export const Form = ({
     validateOnBlur: true,
     onSubmit: isTransferFromFunding ? onSubmitDeposit : onSubmitWithdraw,
   });
+  const isLocalAccountPresent = !!Object.keys(selectedAccount ?? {}).length;
+  const isExtensionAccountPresent = !!Object.keys(selectedWallet ?? {}).length;
 
-  // const disabled =
-  //   !selectedWallet && isTransferFromFunding
-  //     ? withdrawLoading
-  //     : depositLoading || !(isValid && dirty);
+  const hasAccount = isTransferFromFunding
+    ? isExtensionAccountPresent
+    : isLocalAccountPresent;
 
-  const disabled = !(isValid && dirty);
+  const loading = isTransferFromFunding ? depositLoading : withdrawLoading;
+  const disabled = !hasAccount || loading || !(isValid && dirty);
 
   useEffect(() => {
     if (!isTransferFromFunding) tryUnlockTradeAccount(selectedAccount);
@@ -206,14 +210,16 @@ export const Form = ({
         <div className="flex-1 flex flex-col gap-4 w-full max-w-[1000px] mx-auto">
           <div className="flex-1 flex max-lg:flex-col items-center w-full border-y border-primary">
             <FromFunding
+              isLocalAccountPresent={isLocalAccountPresent}
+              isExtensionAccountPresent={isExtensionAccountPresent}
               focused={cardFocus}
               fromFunding={isTransferFromFunding}
               extensionAccountName={selectedWallet?.name}
               extensionAccountAddress={selectedWallet?.address}
-              extensionAccountBalance={selectedAsset?.free_balance}
+              extensionAccountBalance={selectedAsset?.onChainBalance}
               localAccountName={selectedAccount?.meta?.name}
               localAccountAddress={selectedAccount?.address}
-              localAccountBalance={selectedAsset?.onChainBalance}
+              localAccountBalance={selectedAsset?.free_balance}
               selectedAssetTicker={selectedAsset?.ticker}
             />
 
@@ -229,11 +235,13 @@ export const Form = ({
               />
             </button>
             <FromTrading
+              isLocalAccountPresent={isLocalAccountPresent}
+              isExtensionAccountPresent={isExtensionAccountPresent}
               fromFunding={isTransferFromFunding}
               extensionAccountName={selectedWallet?.name}
               extensionAccountAddress={selectedWallet?.address}
-              extensionAccountBalance={selectedAsset?.free_balance}
-              localAccountBalance={selectedAsset?.onChainBalance}
+              extensionAccountBalance={selectedAsset?.onChainBalance}
+              localAccountBalance={selectedAsset?.free_balance}
               selectedAssetTicker={selectedAsset?.ticker}
             />
           </div>
@@ -303,11 +311,11 @@ export const Form = ({
                     placeholder="0.000000000"
                     className="text-current flex-1 p-4 bg-transparent"
                     onFocus={() => setCardFocus(true)}
-                    disabled={!selectedWallet}
+                    disabled={loading}
                     {...getFieldProps("amount")}
                     onBlur={() => {
                       setCardFocus(false);
-                      setErrors({ amount: "" });
+                      setErrors({});
                     }}
                   />
                 </Tooltip.Trigger>
@@ -321,20 +329,32 @@ export const Form = ({
                 onMouseEnter={() => setCardFocus(true)}
                 onMouseLeave={() => setCardFocus(false)}
                 onClick={handleMax}
+                disabled={loading}
               >
                 MAX
               </Button.Solid>
             </div>
           </div>
-          <Button.Solid
-            type="submit"
-            // disabled={disabled}
-            appearance="primary"
-            size="md"
-            className="w-full py-5"
-          >
-            Transfer
-          </Button.Solid>
+          {!hasAccount ? (
+            <Button.Solid
+              type="button"
+              appearance="primary"
+              size="md"
+              className="w-full py-5"
+            >
+              Connect yor account
+            </Button.Solid>
+          ) : (
+            <Button.Solid
+              type="submit"
+              disabled={disabled}
+              appearance={loading ? "secondary" : "primary"}
+              size="md"
+              className="w-full py-5"
+            >
+              {loading ? <Spinner.Keyboard className="w-5 h-5" /> : "Transfer"}
+            </Button.Solid>
+          )}
         </div>
       </form>
     </Fragment>
