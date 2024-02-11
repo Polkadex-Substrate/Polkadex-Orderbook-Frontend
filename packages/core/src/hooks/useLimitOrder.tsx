@@ -112,15 +112,13 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
       if (convertedValue.match(precisionRegExp(totalPrecision || 0))) {
         const formPrice = +price || lastPriceValue;
 
-        const buyOrderAmount =
+        const estimatedAmount =
           formPrice === 0
             ? ""
             : trimFloat({
                 value: Number(total) / formPrice,
                 digitsAfterDecimal: qtyPrecision,
               });
-
-        const estimatedAmount = isSell ? total : buyOrderAmount;
 
         setValues({
           total,
@@ -129,14 +127,7 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
         });
       }
     },
-    [
-      isSell,
-      lastPriceValue,
-      qtyPrecision,
-      setValues,
-      totalPrecision,
-      values.price,
-    ]
+    [lastPriceValue, qtyPrecision, setValues, totalPrecision, values.price]
   );
 
   const onChangeRange = (
