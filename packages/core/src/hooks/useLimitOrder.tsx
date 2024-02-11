@@ -98,7 +98,7 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
         setValues({
           ...values,
           amount: convertedValue,
-          total: formatNumber(Decimal.format(total, totalPrecision)),
+          total: total && formatNumber(Decimal.format(total, totalPrecision)),
         });
       }
     },
