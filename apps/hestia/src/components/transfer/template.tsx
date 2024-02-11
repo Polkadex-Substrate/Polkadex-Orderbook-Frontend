@@ -48,7 +48,7 @@ export function Template() {
   const [activeTab, setActiveTab] = useState("history");
 
   useEffect(() => {
-    if (readyWithdrawals?.length > 1) setActiveTab("readyToClaim");
+    if (readyWithdrawals?.length) setActiveTab("readyToClaim");
   }, [readyWithdrawals?.length]);
 
   return (
