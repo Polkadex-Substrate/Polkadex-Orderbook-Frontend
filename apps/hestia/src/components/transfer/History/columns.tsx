@@ -3,6 +3,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { Transaction } from "@orderbook/core/utils/orderbookService";
 import { Tokens, Typography, truncateString } from "@polkadex/ux";
+import { intlFormat } from "date-fns";
 
 import { filters } from ".";
 
@@ -13,7 +14,7 @@ import {
 } from "@/components/ui/ReadyToUse";
 
 export interface DepositData extends Omit<Transaction, "asset" | "timestamp"> {
-  timestamp: string;
+  timestamp: Date;
   token: {
     name: string;
     ticker: string;
@@ -127,7 +128,21 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.timestamp, {
     id: "date",
-    cell: (e) => <Typography.Text size="sm">{e.getValue()}</Typography.Text>,
+    cell: (e) => (
+      <Typography.Text size="sm">
+        {intlFormat(
+          new Date(e.getValue()),
+          {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          },
+          { locale: "EN" }
+        )}
+      </Typography.Text>
+    ),
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Date

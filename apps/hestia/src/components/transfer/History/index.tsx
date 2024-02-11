@@ -22,7 +22,6 @@ import {
   getFundingAccountDetail,
 } from "@orderbook/core/helpers";
 import { useExtensionAccounts } from "@polkadex/react-providers";
-import { intlFormat } from "date-fns";
 
 import { DepositData, columns } from "./columns";
 import { Filters } from "./Filters";
@@ -68,17 +67,7 @@ export const History = forwardRef<HTMLDivElement, { maxHeight: string }>(
           return {
             ...e,
             main_account: mainAddress,
-            timestamp: intlFormat(
-              new Date(e.timestamp),
-              {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              },
-              { locale: "EN" }
-            ),
+            timestamp: e.timestamp,
             token: {
               ticker: e.asset?.ticker,
               name:
@@ -102,17 +91,7 @@ export const History = forwardRef<HTMLDivElement, { maxHeight: string }>(
             const token = e.asset;
             return {
               ...e,
-              timestamp: intlFormat(
-                new Date(e.timestamp),
-                {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                },
-                { locale: "EN" }
-              ),
+              timestamp: e.timestamp,
               token: {
                 ticker: token?.ticker,
                 name: getChainFromTicker(token?.name as string) ?? token?.name,
@@ -130,7 +109,10 @@ export const History = forwardRef<HTMLDivElement, { maxHeight: string }>(
     );
 
     const data = useMemo(
-      () => [...depositsTransactions, ...withdrawalsTransactions],
+      () =>
+        [...depositsTransactions, ...withdrawalsTransactions]?.sort((a, b) =>
+          a.timestamp > b.timestamp ? -1 : 1
+        ),
       [depositsTransactions, withdrawalsTransactions]
     );
 
