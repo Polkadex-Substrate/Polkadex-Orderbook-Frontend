@@ -168,7 +168,7 @@ export const History = () => {
               style={{
                 maxHeight: tableMaxHeight,
                 scrollbarGutter: "stable",
-                minHeight: "250px",
+                minHeight: "200px",
               }}
             >
               <Table>

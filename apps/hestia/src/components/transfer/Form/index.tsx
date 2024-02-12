@@ -205,7 +205,7 @@ export const Form = ({
       <form
         ref={formRef}
         onSubmit={handleSubmit}
-        className="flex w-full border-b border-primary max-md:py-6 md:py-12 bg-level-0"
+        className="flex w-full border-b border-primary max-md:py-6 md:py-8 bg-level-0"
       >
         <div className="flex-1 flex flex-col gap-4 w-full max-w-[1000px] mx-auto">
           <div className="flex-1 flex max-lg:flex-col items-center w-full border-y border-primary">
