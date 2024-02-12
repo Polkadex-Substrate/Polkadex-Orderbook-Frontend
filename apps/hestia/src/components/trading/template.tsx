@@ -5,6 +5,8 @@ import { useElementSize } from "usehooks-ts";
 import { useMarkets } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
 
+import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
+
 import { AssetInfo } from "./AssetInfo";
 import { Graph } from "./Graph";
 import { Orderbook } from "./Orderbook";
@@ -33,6 +35,7 @@ export function Template({ id }: { id: string }) {
   const currentMarket = getCurrentMarket(list, id);
   return (
     <Fragment>
+      <ConnectTradingInteraction />
       <Header ref={headerRef} />
       <main className="flex flex-1 flex-col overflow-auto">
         <div className="flex flex-1 flex-wrap">
