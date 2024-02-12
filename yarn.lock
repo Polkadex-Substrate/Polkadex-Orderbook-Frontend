@@ -3758,7 +3758,7 @@
     "@babel/runtime" "^7.20.13"
     "@polkadot/util" "^10.4.2"
 
-"@polkadot/types@10.11.2", "@polkadot/types@^10.11.1":
+"@polkadot/types@10.11.2", "@polkadot/types@^10.11.1", "@polkadot/types@^10.11.2":
   version "10.11.2"
   resolved "https://registry.yarnpkg.com/@polkadot/types/-/types-10.11.2.tgz#3317b6fcee53bbfba7bf654413f93ccd742c478e"
   integrity sha512-d52j3xXni+C8GdYZVTSfu8ROAnzXFMlyRvXtor0PudUc8UQHOaC4+mYAkTBGA2gKdmL8MHSfRSbhcxHhsikY6Q==
