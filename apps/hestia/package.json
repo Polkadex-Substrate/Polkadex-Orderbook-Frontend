@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "dev:build": "export __NEXT_TEST_MODE=1 && next build",
     "start": "next start",
     "lint": "next lint --fix",
     "clear": "rm -rf .next"
