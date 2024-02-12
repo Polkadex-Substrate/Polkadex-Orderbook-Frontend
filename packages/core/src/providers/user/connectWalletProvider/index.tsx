@@ -117,8 +117,7 @@ export const ConnectWalletProvider = ({
     onUserLogout,
     onUserSelectTradingAddress,
   } = useProfile();
-  const { onHandleAlert: onSuccess, onHandleError: onError } =
-    useSettingsProvider();
+  const { onHandleAlert, onHandleError } = useSettingsProvider();
   const { extensionAccounts } = useExtensionAccounts();
   // TODO: rename to useBrowserAccounts
   const { wallet, isReady, localAddresses } = useUserAccounts();
@@ -129,8 +128,10 @@ export const ConnectWalletProvider = ({
     mutateAsync: onRegisterTradeAccount,
     status: registerStatus,
   } = useAddProxyAccount({
-    onError,
-    onSuccess,
+    onError: (e: Error) => {
+      onHandleError(e.message);
+    },
+    onSuccess: (msg) => msg && onHandleError(msg),
     onSetTempMnemonic,
   });
 
@@ -139,8 +140,10 @@ export const ConnectWalletProvider = ({
     mutateAsync: onRemoveTradingAccountFromChain,
     status: removingStatus,
   } = useRemoveProxyAccount({
-    onError,
-    onSuccess,
+    onError: (e: Error) => {
+      onHandleError(e.message);
+    },
+    onSuccess: (msg) => msg && onHandleError(msg),
   });
 
   const {
@@ -167,7 +170,7 @@ export const ConnectWalletProvider = ({
     mutateAsync: onImportFromFile,
     status: importFromFileStatus,
   } = useImportProxyAccount({
-    onSuccess,
+    onSuccess: (msg) => msg && onHandleError(msg),
   });
 
   const {
@@ -175,7 +178,7 @@ export const ConnectWalletProvider = ({
     mutateAsync: onImportFromMnemonic,
     status: importFromMnemonicStatus,
   } = useImportProxyAccountMnemonic({
-    onSuccess,
+    onSuccess: (msg) => msg && onHandleError(msg),
   });
 
   const selectedWallet = selectedAddresses?.mainAddress
@@ -257,7 +260,7 @@ export const ConnectWalletProvider = ({
       onUserResetTradingAddress();
     }
     wallet.remove(value);
-    onSuccess("Trading account removed from device");
+    onHandleAlert("Trading account removed from device");
   };
 
   const onExportTradeAccount = ({

@@ -72,7 +72,7 @@ export function useAddProxyAccount({
       });
       onSetTempMnemonic(mnemonic);
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       onError?.(error);
       console.log(error);
     },
