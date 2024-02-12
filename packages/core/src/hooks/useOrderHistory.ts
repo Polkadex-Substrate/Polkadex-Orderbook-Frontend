@@ -87,7 +87,8 @@ export const useOrderHistory = (defaultMarket: string, filters: Ifilters) => {
     };
 
     const status = filters?.status?.toLowerCase();
-    const filterStatus = acceptedStatus[status] ?? status;
+    const filterStatus =
+      acceptedStatus[status as keyof typeof acceptedStatus] ?? status;
 
     if (filterStatus !== Object.values(acceptedStatus)[0]) {
       orderHistoryList = orderHistoryList.filter((item) => {

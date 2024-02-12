@@ -13,7 +13,7 @@ export interface ExtrinsicResult {
 export const signAndSendExtrinsic = async (
   api: ApiPromise,
   extrinsic: SubmittableExtrinsic<"promise">,
-  injector: { signer: Signer },
+  injector: { signer?: Signer },
   address: string,
   waitForFinalization = false
 ) => {
@@ -21,7 +21,7 @@ export const signAndSendExtrinsic = async (
     extrinsic
       .signAndSend(
         address,
-        { signer: injector.signer },
+        { signer: injector?.signer },
         ({ status, events, dispatchError }: ISubmittableResult) => {
           // status would still be set, but in the case of error we can shortcut
           // to just check it (so an error would indicate InBlock or Finalized)

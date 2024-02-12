@@ -10,7 +10,6 @@ export * from "./useLimitOrder";
 export * from "./useMarketOrder";
 export * from "./useAppearance";
 export * from "./types";
-export * from "./useClickOutside";
 export * from "./useMiniGraph";
 export * from "./useTradeHistory";
 export * from "./useAssets";

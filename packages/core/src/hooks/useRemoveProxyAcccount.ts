@@ -34,7 +34,7 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
       appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
         queryClient.setQueryData(
           QUERY_KEYS.singleProxyAccounts(main),
-          (proxies: string[]) => {
+          (proxies?: string[]) => {
             return proxies?.filter((value) => value !== proxy);
           }
         );
@@ -81,8 +81,10 @@ const isTradingAccountRemovedFromDb = async (
         break;
       }
       throw new Error("Proxy not removed yet from database");
-    } catch (error) {
-      console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
+    } catch (error: unknown) {
+      console.error(
+        `Attempt ${attempt + 1} failed: ${(error as Error).message}`
+      );
     }
     if (attempt < maxAttempts)
       await new Promise((resolve) => setTimeout(resolve, 10000));

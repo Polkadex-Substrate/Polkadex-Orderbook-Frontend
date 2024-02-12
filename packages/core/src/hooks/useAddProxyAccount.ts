@@ -48,8 +48,8 @@ export function useAddProxyAccount({
       appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
         queryClient.setQueryData(
           QUERY_KEYS.singleProxyAccounts(main),
-          (proxies: string[]) => {
-            return [...proxies, pair.address];
+          (proxies?: string[]): string[] => {
+            return proxies ? [...proxies, pair.address] : [pair.address];
           }
         );
       });
