@@ -11,8 +11,8 @@ import { TradingAccountList } from "../ConnectWallet/tradingAccountList";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { MaximumTradingAccount } from "../ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
-import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAccountMnemonic";
+import { UnlockAccount } from "../ReadyToUse/unlockAccount";
 
 export const ConnectExistingUser = ({
   onClose,
@@ -149,7 +149,7 @@ export const ConnectExistingUser = ({
                 props?.onPage("ImportTradingAccountMnemonic", true);
               }}
             />
-            <UnlockBrowserAccount
+            <UnlockAccount
               key="UnlockBrowserAccount"
               tempBrowserAccount={tempTrading}
               onClose={() => props?.onPage("ConnectTradingAccount")}

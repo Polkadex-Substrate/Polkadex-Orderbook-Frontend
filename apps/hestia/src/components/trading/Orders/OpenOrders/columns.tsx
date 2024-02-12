@@ -153,7 +153,7 @@ export const columns = ({
         </PopConfirm>
       );
     },
-    header: () => <></>,
+    header: () => null,
     footer: (e) => e.column.id,
   }),
 ];

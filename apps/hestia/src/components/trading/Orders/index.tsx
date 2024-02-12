@@ -38,8 +38,8 @@ const BUY = "BUY";
 const SELL = "SELL";
 
 export const Orders = ({ maxHeight, id }: Props) => {
-  const { onToogleConnectTrading } = useSettingsProvider();
   const { dispatchUserSessionData, dateFrom, dateTo } = useSessionProvider();
+  const { onToogleConnectTrading } = useSettingsProvider();
   const { openOrders } = useOpenOrders(id);
   const { selectedAddresses } = useProfile();
   const connected = selectedAddresses.tradeAddress.length > 0;

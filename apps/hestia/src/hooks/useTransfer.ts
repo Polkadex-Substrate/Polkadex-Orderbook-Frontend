@@ -11,7 +11,7 @@ import { filterBlockedAssets } from "@orderbook/core/helpers";
 import { useAssets, useFunds } from "@orderbook/core/hooks";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { BalanceFormatter } from "@orderbook/format";
 import { Asset } from "@orderbook/core/utils/orderbookService";
 export interface FilteredAssetProps extends Asset {
@@ -32,7 +32,7 @@ export function useTransfer() {
   const { loading: depositLoading } = useDepositProvider();
   const { loading: withdrawLoading } = useWithdrawsProvider();
   const { push } = useRouter();
-  const searchParams = useSearchParams();
+  const params = useParams();
 
   const [assetsInteraction, setAssetsInteraction] = useState(false);
   const [switchEnable, setSwitchEnable] = useState(false);
@@ -44,7 +44,7 @@ export function useTransfer() {
     onChangeState(setAssetsInteraction);
   };
   const onChangeAsset = (asset: FilteredAssetProps) => {
-    push(`/transfer?token=${asset.ticker}`);
+    push(`/transfer/${asset.ticker}`);
     onAssetsInteraction();
   };
 
@@ -74,11 +74,11 @@ export function useTransfer() {
   /* Select default asset */
   const selectedAsset = useMemo(() => {
     const foundAsset = filteredNonBlockedAssets?.find(
-      ({ ticker }) => ticker === searchParams.get("token")
+      ({ ticker }) => ticker === params?.id
     );
 
     return foundAsset ?? filteredNonBlockedAssets?.[0];
-  }, [filteredNonBlockedAssets, searchParams]);
+  }, [filteredNonBlockedAssets, params?.id]);
 
   return {
     loading: depositLoading || withdrawLoading,

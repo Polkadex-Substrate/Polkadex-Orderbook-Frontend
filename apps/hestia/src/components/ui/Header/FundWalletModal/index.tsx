@@ -125,11 +125,7 @@ export const FundWalletModal = ({
               href="https://buy.simplex.com"
               target="_blank"
             />
-            <Card
-              icon="CentralizedExchange"
-              title="Centralized exchanges"
-              href="/"
-            >
+            <Card icon="CentralizedExchange" title="Centralized exchanges">
               <div className="flex items-center gap-2">
                 <Button.Solid
                   appearance="secondary"

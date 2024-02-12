@@ -1,13 +1,8 @@
-"use client";
+import { RedirectType, permanentRedirect } from "next/navigation";
 
-import dynamic from "next/dynamic";
+import { defaultConfig } from "@/config";
 
-const Template = dynamic(
-  () => import("@/components/transfer/template").then((mod) => mod.Template),
-  {
-    ssr: false,
-  }
-);
 export default function Page() {
-  return <Template />;
+  const defaultPage = defaultConfig.defaultTransferToken;
+  permanentRedirect(`/transfer/${defaultPage}`, "push" as RedirectType);
 }

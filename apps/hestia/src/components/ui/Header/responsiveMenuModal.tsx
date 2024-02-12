@@ -7,6 +7,7 @@ import {
   SwatchIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import { useWindowSize } from "usehooks-ts";
 
 import QrCode from "../../../../public/img/qrCode.png";
 
@@ -18,6 +19,7 @@ export const ResponsiveMenuModal = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const { width } = useWindowSize();
   return (
     <Modal
       open={open}
@@ -43,40 +45,43 @@ export const ResponsiveMenuModal = ({
       <Modal.Content className="flex flex-col flex-1">
         <div className="flex flex-col justify-between flex-1">
           <div className="flex flex-col gap-10 p-4">
-            <div className="flex flex-col gap-8">
-              <Typography.Text appearance="secondary">
-                Quick links
-              </Typography.Text>
-              <div className="flex flex-col gap-5">
-                <HeaderLink.Single size="lg" href="/" className="text-lg">
-                  Trade
-                </HeaderLink.Single>
-                <HeaderLink.Single size="lg" href="/" className="text-lg">
-                  Markets
-                </HeaderLink.Single>
-                <HeaderLink.Accordion
-                  items={[
-                    { href: "/", label: "Community support" },
-                    { href: "/", label: "Orderbook guide" },
-                    { href: "/", label: "FAQ" },
-                  ]}
-                >
-                  Help
-                </HeaderLink.Accordion>
-                <HeaderLink.Accordion
-                  items={[
-                    { href: "/", label: "Listings" },
-                    { href: "/", label: "Terms of use" },
-                    { href: "/", label: "Privacy policy" },
-                    { href: "/", label: "Disclaimer" },
-                    { href: "/", label: "Excluded Jurisdictions" },
-                    { href: "/", label: "Data Retention Policy" },
-                  ]}
-                >
-                  More
-                </HeaderLink.Accordion>
+            {width <= 1024 && (
+              <div className="flex flex-col gap-8">
+                <Typography.Text appearance="secondary">
+                  Quick links
+                </Typography.Text>
+                <div className="flex flex-col gap-5">
+                  <HeaderLink.Single size="lg" href="/" className="text-lg">
+                    Trade
+                  </HeaderLink.Single>
+                  <HeaderLink.Single size="lg" href="/" className="text-lg">
+                    Markets
+                  </HeaderLink.Single>
+                  <HeaderLink.Accordion
+                    items={[
+                      { href: "/", label: "Community support" },
+                      { href: "/", label: "Orderbook guide" },
+                      { href: "/", label: "FAQ" },
+                    ]}
+                  >
+                    Help
+                  </HeaderLink.Accordion>
+                  <HeaderLink.Accordion
+                    items={[
+                      { href: "/", label: "Listings" },
+                      { href: "/", label: "Terms of use" },
+                      { href: "/", label: "Privacy policy" },
+                      { href: "/", label: "Disclaimer" },
+                      { href: "/", label: "Excluded Jurisdictions" },
+                      { href: "/", label: "Data Retention Policy" },
+                    ]}
+                  >
+                    More
+                  </HeaderLink.Accordion>
+                </div>
               </div>
-            </div>
+            )}
+
             <div className="flex flex-col gap-8">
               <Typography.Text appearance="secondary">
                 General settings
