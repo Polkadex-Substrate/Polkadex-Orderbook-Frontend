@@ -1,5 +1,5 @@
 "use client";
-import { forwardRef, useEffect, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { Tabs } from "@polkadex/ux";
 import { Market } from "@orderbook/core/utils/orderbookService/types";
 import {
@@ -13,12 +13,13 @@ import { useFunds } from "@orderbook/core/hooks";
 import { LimitOrder } from "./Limit";
 import { MarketOrder } from "./Market";
 
-type Props = { market?: Market };
+import { UnlockAccount } from "@/components/ui/Temp/unlockAccount";
 
-// TODO: Account unlocking functionality
+type Props = { market?: Market };
 
 export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
   ({ market }, ref) => {
+    const formRef = useRef<HTMLFormElement | null>(null);
     const [isPasswordProtected, setIsPasswordProtected] = useState(false);
     const { selectedAccount } = useConnectWalletProvider();
     const { getFreeProxyBalance } = useFunds();
@@ -63,28 +64,44 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
         </div>
 
         <div ref={ref} className="min-h-[18rem]">
-          <Tabs.Content
-            value="limit"
-            id="placeOrderContent"
-            className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
-          >
-            <LimitOrder
-              market={market}
-              availableBaseAmount={availableBaseAmount}
-              availableQuoteAmount={availableQuoteAmount}
-            />
-          </Tabs.Content>
-          <Tabs.Content
-            value="market"
-            id="placeOrderContent"
-            className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
-          >
-            <MarketOrder
-              market={market}
-              availableBaseAmount={availableBaseAmount}
-              availableQuoteAmount={availableQuoteAmount}
-            />
-          </Tabs.Content>
+          {isPasswordProtected ? (
+            <div className="[&>form>div>div>div>div]:w-[20rem]">
+              <UnlockAccount
+                onAction={(e) => {
+                  console.log(e);
+                  formRef?.current?.dispatchEvent(
+                    new Event("submit", { cancelable: true, bubbles: true })
+                  );
+                }}
+                tempBrowserAccount={selectedAccount}
+              />
+            </div>
+          ) : (
+            <>
+              <Tabs.Content
+                value="limit"
+                id="placeOrderContent"
+                className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
+              >
+                <LimitOrder
+                  market={market}
+                  availableBaseAmount={availableBaseAmount}
+                  availableQuoteAmount={availableQuoteAmount}
+                />
+              </Tabs.Content>
+              <Tabs.Content
+                value="market"
+                id="placeOrderContent"
+                className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
+              >
+                <MarketOrder
+                  market={market}
+                  availableBaseAmount={availableBaseAmount}
+                  availableQuoteAmount={availableQuoteAmount}
+                />
+              </Tabs.Content>
+            </>
+          )}
         </div>
       </Tabs>
     );
