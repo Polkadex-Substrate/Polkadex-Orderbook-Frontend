@@ -56,9 +56,11 @@ export const HowItWorks = () => {
           Click this small button to begin trading
           <ArrowRightIcon className="w-4 h-4 ml-3 inline-block max-md:rotate-90" />
         </Typography.Text>
-        <Link href={lastUsedMarketUrl}>
-          <Button.Solid className="w-full">Start trading</Button.Solid>
-        </Link>
+        <Button.Solid className="w-full">
+          <Link href={lastUsedMarketUrl} className="w-full">
+            Start trading
+          </Link>
+        </Button.Solid>
       </div>
     </section>
   );

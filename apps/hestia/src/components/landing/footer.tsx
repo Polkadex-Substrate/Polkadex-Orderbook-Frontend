@@ -32,7 +32,7 @@ export const Footer = () => {
       </div>
       <div className="max-md:flex-col gap-3 flex md:items-center justify-between py-5 border-t border-primary">
         <div className="max-md:flex-1 flex items-center max-md:justify-between gap-4">
-          <Typography.Text>Copyright ©2023 Polkadex Inc.</Typography.Text>
+          <Typography.Text>Copyright ©2024 Polkadex Inc.</Typography.Text>
           <Typography.Text
             appearance="primary"
             className="hover:text-current duration-300 transition-colors"
