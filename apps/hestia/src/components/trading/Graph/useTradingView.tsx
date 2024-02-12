@@ -17,14 +17,14 @@ import {
 } from "../../../../public/static/charting_library/charting_library";
 
 import { configurationData, defaultWidgetOptions } from "./config";
+import { getLastUsedReslution } from "./helper";
 
 export function useTradingView({ id }: { id: string }) {
   const tvWidget = useRef<IChartingLibraryWidget>();
 
   const [isReady, setIsReady] = useState(false);
-  const [resolution, setResolution] = useState<ResolutionString>(
-    (localStorage.getItem(TradingViewConstants.lastResolution) ??
-      "60") as ResolutionString
+  const [activeResolution, setActiveResolution] = useState<ResolutionString>(
+    getLastUsedReslution()
   );
 
   const { onCandleSubscribe } = useSubscription();
@@ -44,6 +44,7 @@ export function useTradingView({ id }: { id: string }) {
   }, [list]);
 
   const widgetOptions = useMemo(() => {
+    const resolution = getLastUsedReslution();
     return {
       datafeed: {
         onReady(callback) {
@@ -149,12 +150,11 @@ export function useTradingView({ id }: { id: string }) {
     currentMarket?.name,
     onCandleSubscribe,
     currentMarket?.price_tick_size,
-    resolution,
   ]);
 
   const onChangeResolution = (e: ResolutionString) =>
     tvWidget.current?.activeChart().setResolution(e, () =>
-      setResolution(() => {
+      setActiveResolution(() => {
         localStorage.setItem(TradingViewConstants.lastResolution, e);
         return e;
       })
@@ -175,7 +175,7 @@ export function useTradingView({ id }: { id: string }) {
   };
   const onChartReady = useCallback((v: boolean) => setIsReady(v), []);
   return {
-    activeResolution: resolution,
+    activeResolution,
     onChangeResolution,
     onChangeFullScreen,
     onScreenshot,

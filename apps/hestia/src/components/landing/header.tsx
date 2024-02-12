@@ -1,4 +1,5 @@
 import { Bars2Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { getMarketUrl } from "@orderbook/core/helpers";
 import { Button, Logo, Typography } from "@polkadex/ux";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -7,6 +8,7 @@ import { useWindowSize } from "usehooks-ts";
 export const Header = () => {
   const [state, setState] = useState(false);
   const { width } = useWindowSize();
+  const lastUsedMarketUrl = getMarketUrl();
 
   const responsiveView = useMemo(() => width >= 768, [width]);
 
@@ -24,7 +26,7 @@ export const Header = () => {
           <Typography.Text>Community</Typography.Text>
         </div>
         <Button.Solid asChild>
-          <Link href="/trading">Start trading</Link>
+          <Link href={lastUsedMarketUrl}>Start trading</Link>
         </Button.Solid>
       </div>
       <Button.Icon
@@ -49,7 +51,7 @@ export const Header = () => {
               <Typography.Text size="lg">Community</Typography.Text>
             </div>
             <Button.Solid asChild>
-              <Link href="/trading">Start trading</Link>
+              <Link href={lastUsedMarketUrl}>Start trading</Link>
             </Button.Solid>
           </div>
         </div>

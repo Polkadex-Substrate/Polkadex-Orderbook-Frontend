@@ -4,8 +4,9 @@ import { Hero } from "./hero";
 import { HowItWorks } from "./HowItWorks";
 import { Features } from "./features";
 import { QuickLinks } from "./quickLinks";
+import { Footer } from "./footer";
 
-import { Footer, Header } from "@/components/ui";
+import { Header } from "@/components/ui";
 
 export function Template() {
   return (

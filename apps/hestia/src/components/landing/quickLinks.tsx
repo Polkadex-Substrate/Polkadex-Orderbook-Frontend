@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button, Typography } from "@polkadex/ux";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
@@ -14,10 +15,15 @@ export const QuickLinks = () => {
             on specific features.
           </Typography.Paragraph>
         </div>
-        <Button.Underline className="p-0 h-fit w-fit">
-          Explore FAQ
-          <ArrowRightIcon className="w-4 h-4 mr-4" />
-        </Button.Underline>
+        <Link
+          href="https://docs.polkadex.trade/orderbookPolkadexFAQWallets/"
+          target="_blank"
+        >
+          <Button.Underline className="p-0 h-fit w-fit">
+            Explore FAQ
+            <ArrowRightIcon className="w-4 h-4 mr-4" />
+          </Button.Underline>
+        </Link>
       </div>
       <div className="flex flex-col max-md:py-4 gap-5 md:p-10">
         <div className="flex flex-col gap-2">
@@ -29,14 +35,18 @@ export const QuickLinks = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button.Light appearance="tertiary">
-            <Icons.Discord className="w-4 h-4 mr-4 fill-slate-600" />
-            Discord
-          </Button.Light>
-          <Button.Light appearance="secondary">
-            <Icons.Telegram className="w-4 h-4 mr-4 fill-slate-600" />
-            Telegram
-          </Button.Light>
+          <Link href="https://discord.com/invite/Uvua83QAzk" target="_blank">
+            <Button.Light appearance="tertiary">
+              <Icons.Discord className="w-4 h-4 mr-4 fill-slate-600" />
+              Discord
+            </Button.Light>
+          </Link>
+          <Link href="https://t.me/Polkadex" target="_blank">
+            <Button.Light appearance="secondary">
+              <Icons.Telegram className="w-4 h-4 mr-4 fill-slate-600" />
+              Telegram
+            </Button.Light>
+          </Link>
         </div>
       </div>
     </section>
