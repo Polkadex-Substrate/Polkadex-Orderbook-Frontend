@@ -78,7 +78,11 @@ const DropdownMenu = ({
     <Dropdown.Content>
       {items.map(({ href, label }, i) => (
         <Dropdown.Item key={i}>
-          <Link href={href} className="text-left block text-sm w-full">
+          <Link
+            href={href}
+            target="_blank"
+            className="text-left block text-sm w-full"
+          >
             {label}
           </Link>
         </Dropdown.Item>

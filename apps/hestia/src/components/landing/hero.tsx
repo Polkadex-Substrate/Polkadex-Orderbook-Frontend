@@ -2,11 +2,13 @@ import { Button, Typography } from "@polkadex/ux";
 import Image from "next/image";
 import { useWindowSize } from "usehooks-ts";
 import Link from "next/link";
+import { getMarketUrl } from "@orderbook/core/helpers";
 
 import OrderbookImage from "../../../public/img/orderbook.webp";
 
 import { Icons } from "@/components/ui";
 export const Hero = () => {
+  const lastUsedMarketUrl = getMarketUrl();
   const { width } = useWindowSize();
   return (
     <section className="flex flex-col items-center gap-3 max-md:pt-5 md:pt-20 border-b border-primary max-w-screen-2xl mx-auto w-fulll max-2xl:px-2">
@@ -38,7 +40,7 @@ export const Hero = () => {
         </div>
 
         <Button.Solid asChild className="w-fit" size="md">
-          <Link href="/trading">Start trading</Link>
+          <Link href={lastUsedMarketUrl}>Start trading</Link>
         </Button.Solid>
       </div>
       <Image

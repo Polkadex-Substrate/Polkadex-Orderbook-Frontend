@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button, Typography } from "@polkadex/ux";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
@@ -29,14 +30,18 @@ export const QuickLinks = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button.Light appearance="tertiary">
-            <Icons.Discord className="w-4 h-4 mr-4 fill-slate-600" />
-            Discord
-          </Button.Light>
-          <Button.Light appearance="secondary">
-            <Icons.Telegram className="w-4 h-4 mr-4 fill-slate-600" />
-            Telegram
-          </Button.Light>
+          <Link href="https://discord.com/invite/Uvua83QAzk" target="_blank">
+            <Button.Light appearance="tertiary">
+              <Icons.Discord className="w-4 h-4 mr-4 fill-slate-600" />
+              Discord
+            </Button.Light>
+          </Link>
+          <Link href="https://t.me/Polkadex" target="_blank">
+            <Button.Light appearance="secondary">
+              <Icons.Telegram className="w-4 h-4 mr-4 fill-slate-600" />
+              Telegram
+            </Button.Light>
+          </Link>
         </div>
       </div>
     </section>

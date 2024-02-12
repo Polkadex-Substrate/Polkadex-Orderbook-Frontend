@@ -1,9 +1,12 @@
+import Link from "next/link";
 import { Button, Typography } from "@polkadex/ux";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { getMarketUrl } from "@orderbook/core/helpers";
 
 import { Card } from "./card";
 
 export const HowItWorks = () => {
+  const lastUsedMarketUrl = getMarketUrl();
   return (
     <section className="flex flex-col border-b border-primary max-w-screen-xl mx-auto w-fulll max-xl:px-3">
       <div className="flex flex-wrap items-center justify-around max-xl:p-4 py-12 border-b border-primary">
@@ -53,7 +56,9 @@ export const HowItWorks = () => {
           Click this small button to begin trading
           <ArrowRightIcon className="w-4 h-4 ml-3 inline-block max-md:rotate-90" />
         </Typography.Text>
-        <Button.Solid className="w-full">Start trading</Button.Solid>
+        <Link href={lastUsedMarketUrl}>
+          <Button.Solid className="w-full">Start trading</Button.Solid>
+        </Link>
       </div>
     </section>
   );
