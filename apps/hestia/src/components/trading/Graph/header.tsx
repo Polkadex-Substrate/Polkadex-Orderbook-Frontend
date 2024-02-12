@@ -48,7 +48,9 @@ export const Header = ({
       <div className="flex gap-2">
         <Tabs.List>
           <Tabs.Trigger value="tradingView">TradingView</Tabs.Trigger>
-          <Tabs.Trigger value="originalChart">Original Chart</Tabs.Trigger>
+          <Tabs.Trigger value="originalChart" disabled>
+            Original Chart
+          </Tabs.Trigger>
         </Tabs.List>
         <div className="flex gap-2">
           <button
