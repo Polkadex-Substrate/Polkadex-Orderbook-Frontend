@@ -1,25 +1,29 @@
 import { createColumnHelper } from "@tanstack/react-table";
+import { Typography, Token } from "@polkadex/ux";
 import { AssetsProps } from "@orderbook/core/hooks";
 import { getChainFromTicker } from "@orderbook/core/helpers";
-import { Tokens, Typography } from "@polkadex/ux";
-import { Fragment } from "react";
 
-import { ActionsCard } from "./actionsCard";
-
-import { TokenCard } from "@/components/ui/ReadyToUse";
+import { ActionsCard } from "@/components/balances/Table/actionsCard";
 import { AmountCard } from "@/components/ui/ReadyToUse/amountCard";
 
-const columnHelper = createColumnHelper<AssetsProps>();
+const balanceColumnHelper = createColumnHelper<AssetsProps>();
+
 export const columns = [
-  columnHelper.accessor((row) => row, {
+  balanceColumnHelper.accessor((row) => row, {
     id: "token",
     cell: (e) => {
+      const ticker = e.getValue().ticker;
       return (
-        <TokenCard
-          tokenName={e.getValue().name}
-          ticker={e.getValue().ticker}
-          icon={e.getValue().ticker as keyof typeof Tokens}
-        />
+        <div className="flex items-center gap-1">
+          <Token
+            name={ticker}
+            size="sm"
+            className="rounded-full border border-secondary"
+          />
+          <Typography.Text size="xs" className="uppercase">
+            {e.getValue().ticker}
+          </Typography.Text>
+        </div>
       );
     },
     header: () => (
@@ -29,7 +33,7 @@ export const columns = [
     ),
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.onChainBalance, {
+  balanceColumnHelper.accessor((row) => row.onChainBalance, {
     id: "fundingAccount",
     cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
     header: () => (
@@ -39,7 +43,7 @@ export const columns = [
     ),
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.free_balance, {
+  balanceColumnHelper.accessor((row) => row.free_balance, {
     id: "tradingAccount",
     cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
     header: () => (
@@ -49,7 +53,7 @@ export const columns = [
     ),
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.inOrdersBalance, {
+  balanceColumnHelper.accessor((row) => row.inOrdersBalance, {
     id: "inOrders",
     cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
     header: () => (
@@ -59,7 +63,7 @@ export const columns = [
     ),
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row, {
+  balanceColumnHelper.accessor((row) => row, {
     id: "actions",
     cell: (e) => {
       const chainName = getChainFromTicker(e.getValue().ticker);
@@ -85,7 +89,7 @@ export const columns = [
         />
       );
     },
-    header: () => <Fragment />,
+    header: () => null,
     footer: (e) => e.column.id,
   }),
 ];

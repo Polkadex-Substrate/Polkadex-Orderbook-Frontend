@@ -39,7 +39,7 @@ export const Orderbook = ({
 
   return (
     <div
-      className="flex flex-1 flex-col border-r border-r-primary min-w-[23rem] min-h-[22rem] overflow-hidden"
+      className="flex flex-1 flex-col border-r border-r-primary min-w-[23rem] min-h-[25rem] overflow-hidden"
       style={{ maxHeight }}
     >
       <Header
