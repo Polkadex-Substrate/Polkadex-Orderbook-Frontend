@@ -98,12 +98,10 @@ export function Template() {
                   </Fragment>
                 ) : (
                   <GenericMessage
-                    title="Connect your trading account to start trading."
+                    title="Connect your account"
                     illustration="ConnectAccount"
                     onClick={() => onToogleConnectExtension()}
-                  >
-                    <Button.Solid>Connect your account</Button.Solid>
-                  </GenericMessage>
+                  />
                 )}
               </div>
             </Tabs>
