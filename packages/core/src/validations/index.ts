@@ -1,5 +1,8 @@
 import * as Yup from "yup";
-import { getDigitsAfterDecimal } from "@orderbook/core/helpers";
+import {
+  getAbsoluteNumber,
+  getDigitsAfterDecimal,
+} from "@orderbook/core/helpers";
 import {
   ErrorMessages,
   MAX_DIGITS_AFTER_DECIMAL,
@@ -221,3 +224,95 @@ export const importValiations = () => {
 export const buySellValidation = Yup.object().shape({
   password: Yup.string().matches(/^[0-9]+$/, "Must be only digits"),
 });
+
+type LimitOrderValidations = {
+  isSell?: boolean;
+  minMarketPrice: number;
+  maxMarketPrice: number;
+  minQuantity: number;
+  maxQuantity: number;
+  availableBalance: number;
+};
+export const limitOrderValidations = ({
+  isSell = false,
+  minMarketPrice,
+  maxMarketPrice,
+  minQuantity,
+  maxQuantity,
+  availableBalance,
+}: LimitOrderValidations) =>
+  Yup.object().shape({
+    price: Yup.string()
+      .required("Required")
+      .test("Valid number", "Must be a number", (value) =>
+        value ? /^\d+(\.\d+)?$/.test(value) : false
+      )
+      .test(
+        "Min Price",
+        `Minimum price: ${minMarketPrice}`,
+        (value) => Number(value || 0) >= minMarketPrice
+      )
+      .test(
+        "Max Price",
+        `Maximum price: ${maxMarketPrice}`,
+        (value) => Number(value || 0) <= maxMarketPrice
+      ),
+    amount: Yup.string()
+      .required("Required")
+      .test("Valid number", "Must be a number", (value) =>
+        value ? /^\d+(\.\d+)?$/.test(value) : false
+      )
+      .test(
+        "Min Quantity",
+        `Minimum amount: ${minQuantity}`,
+        (value) => Number(value || 0) >= minQuantity
+      )
+      .test(
+        "Max Quantity",
+        `Maximum amount: ${maxQuantity}`,
+        (value) => Number(value || 0) <= maxQuantity
+      )
+      .test("Balance check", `You don't have enough balance`, (value) =>
+        !isSell ? true : +(value || 0) <= availableBalance
+      ),
+    total: Yup.string()
+      .test("Valid number", "Must be a number", (value) =>
+        value ? /^\d+(\.\d+)?$/.test(value) : false
+      )
+      .test("Balance check", `You don't have enough balance`, (value) =>
+        isSell ? true : getAbsoluteNumber(value || 0) <= availableBalance
+      ),
+  });
+
+type MarketOrderValidations = {
+  minQuantity: number;
+  maxQuantity: number;
+  availableBalance: number;
+};
+
+export const marketOrderValidations = ({
+  minQuantity,
+  maxQuantity,
+  availableBalance,
+}: MarketOrderValidations) =>
+  Yup.object().shape({
+    amount: Yup.string()
+      .test("Valid number", "Must be a number", (value) =>
+        value ? /^\d+(\.\d+)?$/.test(value) : false
+      )
+      .test(
+        "Min Quantity",
+        `Minimum amount: ${minQuantity}`,
+        (value) => Number(value || 0) >= minQuantity
+      )
+      .test(
+        "Max Quantity",
+        `Maximum amount: ${maxQuantity}`,
+        (value) => Number(value || 0) <= maxQuantity
+      )
+      .test(
+        "Balance check",
+        `You don't have enough balance`,
+        (value) => +(value || 0) <= availableBalance
+      ),
+  });

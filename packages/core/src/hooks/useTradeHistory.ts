@@ -14,7 +14,7 @@ import { useSessionProvider } from "../providers/user/sessionProvider";
 
 import { useMarkets } from "./useMarkets";
 
-export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
+export function useTradeHistory(defaultMarket: string, filters: Ifilters) {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
@@ -81,25 +81,8 @@ export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
       );
     }
 
-    if (filters?.hiddenPairs) {
-      tradeHistoryList = tradeHistoryList.filter((trade) => {
-        const baseUnit = trade.market?.baseAsset?.ticker || "";
-        const quoteUnit = trade.market?.quoteAsset?.ticker || "";
-        const market = currentMarket?.name;
-        const marketForTrade = `${baseUnit}/${quoteUnit}`;
-        return market === marketForTrade && trade;
-      });
-    }
-
     return tradeHistoryList;
-  }, [
-    currentMarket?.name,
-    filters?.hiddenPairs,
-    filters?.onlyBuy,
-    filters?.onlySell,
-    filters?.showReverted,
-    list,
-  ]);
+  }, [filters?.onlyBuy, filters?.onlySell, filters?.showReverted, list]);
 
   const priceFixed = currentMarket
     ? decimalPlaces(currentMarket.price_tick_size)

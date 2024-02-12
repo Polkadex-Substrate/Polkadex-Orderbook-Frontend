@@ -10,7 +10,7 @@ import { appsyncOrderbookService } from "../utils/orderbookService";
 
 import { useMarkets } from "./useMarkets";
 
-export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
+export const useOrderHistory = (defaultMarket: string, filters: Ifilters) => {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
@@ -60,16 +60,12 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
   );
 
   const filteredOrderHistory = useMemo(() => {
-    let orderHistoryList = orderHistory.filter((item) => !item.isReverted);
+    let orderHistoryList = orderHistory.filter(
+      (item) => !item.isReverted && item.status !== "OPEN"
+    );
 
     if (filters?.showReverted) {
       orderHistoryList = orderHistory.filter((item) => item.isReverted);
-    }
-
-    if (filters?.hiddenPairs) {
-      orderHistoryList = orderHistoryList.filter((order) => {
-        return order.orderId === currentMarket?.id;
-      });
     }
 
     if (filters?.onlyBuy && filters.onlySell) {
@@ -101,12 +97,10 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
 
     return orderHistoryList;
   }, [
-    filters?.hiddenPairs,
     filters?.onlyBuy,
     filters?.onlySell,
     filters?.showReverted,
     filters?.status,
-    currentMarket?.id,
     orderHistory,
   ]);
 
