@@ -1,6 +1,6 @@
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
-import { ClipboardDocumentIcon } from "@heroicons/react/24/solid";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
 
 const orderHistoryColumnHelper = createColumnHelper<Order>();
@@ -143,7 +143,7 @@ export const columns = [
     cell: (e) => (
       <Copy value={e.getValue().orderId}>
         <div className="flex items-center gap-1">
-          <ClipboardDocumentIcon className="w-4 h-4 text-actionInput" />
+          <DocumentDuplicateIcon className="w-4 h-4 text-actionInput" />
           <Typography.Text size="xs">
             {truncateString(e.getValue().orderId, 4)}
           </Typography.Text>
