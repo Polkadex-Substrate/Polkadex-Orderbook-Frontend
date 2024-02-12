@@ -3,14 +3,14 @@ import { Codec } from "@polkadot/types/types";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { u8aToHex } from "@polkadot/util";
 
-export type SignedOrderPayload = {
+export type SignatureEnumSr25519 = {
   Sr25519: string;
 };
 export const signPayload = (
   api: ApiPromise,
   userKeyring: KeyringPair,
-  payload: Codec,
-): SignedOrderPayload => {
+  payload: Codec
+): SignatureEnumSr25519 => {
   const signatureU8 = userKeyring.sign(payload.toU8a(), { withType: true });
   const signature = u8aToHex(signatureU8);
   const multiSignature: any = api.createType("MultiSignature", signature);

@@ -51,8 +51,8 @@ export const DepositProvider: T.DepositsComponent = ({ children }) => {
       }
     } catch (error) {
       console.log(error, "error");
-      onHandleError(error?.message ?? error);
-      dispatch(A.depositsError(error));
+      onHandleError((error as Error).message);
+      dispatch(A.depositsError(error as Error));
     }
   };
 

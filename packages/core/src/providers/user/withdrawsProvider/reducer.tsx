@@ -21,7 +21,7 @@ export const initialState: WithdrawsState = {
 
 export const withdrawsReducer = (
   state = initialState,
-  action: WithdrawsAction,
+  action: WithdrawsAction
 ): WithdrawsState => {
   switch (action.type) {
     case WITHDRAWS_FETCH:
@@ -55,7 +55,7 @@ export const withdrawsReducer = (
         ...state,
         claimLoading: false,
         claimsInLoading: state.claimsInLoading.filter(
-          (sid) => sid !== action.payload.sid,
+          (sid) => sid !== action.payload.sid
         ),
         claimSuccess: true,
       };
@@ -71,7 +71,7 @@ export const withdrawsReducer = (
 
     case CLAIM_WITHDRAW_CANCEL: {
       const claimsInLoading = state.claimsInLoading.filter(
-        (value) => value !== action.payload,
+        (value) => value !== action.payload
       );
       return {
         ...state,

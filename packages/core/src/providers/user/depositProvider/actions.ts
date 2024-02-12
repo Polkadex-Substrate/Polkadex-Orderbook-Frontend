@@ -1,5 +1,3 @@
-import { CommonError } from "../../types";
-
 import {
   DEPOSITS_FETCH,
   DEPOSITS_DATA,
@@ -16,7 +14,7 @@ export interface DepositsFetch {
 
 export interface DepositsError {
   type: typeof DEPOSITS_ERROR;
-  error: CommonError;
+  error: Error;
 }
 
 export interface DepositsReset {
@@ -37,7 +35,7 @@ export const depositsData = (): DepositsData => ({
   type: DEPOSITS_DATA,
 });
 
-export const depositsError = (error: CommonError): DepositsError => ({
+export const depositsError = (error: Error): DepositsError => ({
   type: DEPOSITS_ERROR,
   error,
 });

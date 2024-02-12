@@ -14,7 +14,7 @@ export const initialState: DepositsState = {
 
 export const depositsReducer = (
   state = initialState,
-  action: DepositsAction,
+  action: DepositsAction
 ) => {
   switch (action.type) {
     case DEPOSITS_FETCH:

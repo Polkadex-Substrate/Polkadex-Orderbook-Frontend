@@ -1,4 +1,4 @@
-import { CommonError, OrderSide, OrderType } from "../../types";
+import { OrderSide, OrderType } from "../../types";
 
 import {
   ORDER_EXECUTE_DATA,
@@ -44,7 +44,7 @@ export interface OrderExecuteDataDelete {
 
 export interface OrderExecuteError {
   type: typeof ORDER_EXECUTE_ERROR;
-  error: CommonError;
+  error: Error;
 }
 
 export interface OrderCancelFetch {
@@ -62,7 +62,7 @@ export interface OrderCancelDataDelete {
 
 export interface OrderCancelError {
   type: typeof ORDER_CANCEL_ERROR;
-  error: CommonError;
+  error: Error;
 }
 
 export interface SetCurrentPrice {
@@ -94,7 +94,7 @@ export type OrdersAction =
   | OrderCancelError;
 
 export const orderExecuteFetch = (
-  payload: OrderExecuteFetch["payload"],
+  payload: OrderExecuteFetch["payload"]
 ): OrderExecuteFetch => ({
   type: ORDER_EXECUTE_FETCH,
   payload,
@@ -108,13 +108,13 @@ export const orderExecuteDataDelete = (): OrderExecuteDataDelete => ({
   type: ORDER_EXECUTE_DATA_DELETE,
 });
 
-export const orderExecuteError = (error: CommonError): OrderExecuteError => ({
+export const orderExecuteError = (error: Error): OrderExecuteError => ({
   type: ORDER_EXECUTE_ERROR,
   error,
 });
 
 export const orderCancelFetch = (
-  payload: OrderCancelFetch["payload"],
+  payload: OrderCancelFetch["payload"]
 ): OrderCancelFetch => ({
   type: ORDER_CANCEL_FETCH,
   payload,
@@ -128,13 +128,13 @@ export const orderCancelDataDelete = (): OrderCancelDataDelete => ({
   type: ORDER_CANCEL_DATA_DELETE,
 });
 
-export const orderCancelError = (error: CommonError): OrderCancelError => ({
+export const orderCancelError = (error: Error): OrderCancelError => ({
   type: ORDER_CANCEL_ERROR,
   error,
 });
 
 export const setCurrentPrice = (
-  payload: SetCurrentPrice["payload"],
+  payload: SetCurrentPrice["payload"]
 ): SetCurrentPrice => ({
   type: ORDERS_SET_CURRENT_PRICE,
   payload,
@@ -146,7 +146,7 @@ export const setAmount = (payload: SetAmount["payload"]): SetAmount => ({
 });
 
 export const setOrderType = (
-  payload: SetOrderType["payload"],
+  payload: SetOrderType["payload"]
 ): SetOrderType => ({
   type: ORDERS_SET_ORDER_TYPE,
   payload,
