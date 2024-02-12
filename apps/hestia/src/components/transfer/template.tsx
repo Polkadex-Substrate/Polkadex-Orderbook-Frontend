@@ -15,7 +15,7 @@ import { History } from "./History";
 import { ReadyToClaim } from "./ReadyToClaim";
 import { useSizeProvider } from "./provider";
 
-import { Footer, Header, Menu } from "@/components/ui";
+import { Footer, Header } from "@/components/ui";
 import { useTransfer } from "@/hooks";
 
 export function Template() {
@@ -53,7 +53,6 @@ export function Template() {
       >
         <Header ref={headerRef} />
         <main className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto">
-          <Menu />
           <div className="flex flex-col flex-1">
             <div ref={formwRef} className="flex-1 flex flex-col">
               <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-secondary-base flex-wrap">
