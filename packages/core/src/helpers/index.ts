@@ -19,7 +19,6 @@ export * from "./mapValues";
 export * from "./precisionRegExp";
 export * from "./processKlineData";
 export * from "./signAndSendExtrinsic";
-export * from "./sliceArray";
 export * from "./sortOrderDescendingTime";
 export * from "./storage";
 export * from "./toCapitalize";
