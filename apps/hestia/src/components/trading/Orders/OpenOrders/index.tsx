@@ -1,53 +1,71 @@
+"use client";
 import { useMemo } from "react";
-import { useWindowSize } from "usehooks-ts";
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
-import { useAssets } from "@orderbook/core/hooks";
 import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
+import { useOpenOrders } from "@orderbook/core/hooks";
+import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useWindowSize } from "usehooks-ts";
+import { Ifilters } from "@orderbook/core/providers/types";
 
-import { Loading } from "./loading";
-import { balanceColumns } from "./columns";
-import { BalanceResponsiveCard } from "./responsiveCard";
+import { Loading } from "../loading";
+import { OpenOrderResponsiveCard } from "../responsiveCard";
 
-export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
-  const { assets, loading } = useAssets();
+import { columns } from "./columns";
+
+export const OpenOrdersTable = ({
+  market,
+  filters,
+  maxHeight,
+}: {
+  market: string;
+  filters: Ifilters;
+  maxHeight: string;
+}) => {
+  const { onCancelOrder } = useOrders();
+  const { isLoading, openOrders } = useOpenOrders(market, filters);
   const { width } = useWindowSize();
-  const table = useReactTable({
-    data: assets,
-    columns: balanceColumns(),
-    getCoreRowModel: getCoreRowModel(),
-  });
 
   const responsiveView = useMemo(
-    () => width < 550 || (width >= 715 && width <= 1100),
+    () => width < 500 || (width >= 715 && width <= 1115),
     [width]
   );
 
-  if (loading) return <Loading />;
+  const table = useReactTable({
+    data: openOrders,
+    columns: columns({ onCancelOrder }),
+    getCoreRowModel: getCoreRowModel(),
+  });
 
-  if (!assets?.length)
-    return <GenericMessage title={"No assets found"} illustration="NoData" />;
+  if (isLoading) return <Loading />;
 
-  if (responsiveView)
+  if (!openOrders.length)
+    return <GenericMessage title={"No open orders"} illustration="NoData" />;
+
+  if (responsiveView) {
     return (
       <div
         className="flex-1 overflow-y-hidden hover:overflow-y-auto"
         style={{ maxHeight, scrollbarGutter: "stable" }}
       >
-        <BalanceResponsiveCard assets={assets} />
+        <OpenOrderResponsiveCard
+          orders={openOrders}
+          onCancelOrder={onCancelOrder}
+        />
       </div>
     );
+  }
 
   return (
     <div
       className="flex-1 overflow-y-hidden hover:overflow-y-auto"
       style={{ maxHeight, scrollbarGutter: "stable" }}
     >
-      <PolkadexTable className="w-full" even>
+      <PolkadexTable className="w-full">
         <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
           {table.getHeaderGroups().map((headerGroup) => (
             <PolkadexTable.Row key={headerGroup.id}>
@@ -74,13 +92,16 @@ export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
             return (
               <PolkadexTable.Row
                 key={row.id}
-                className={classNames("hover:bg-level-1 cursor-pointer")}
+                className={classNames(
+                  "hover:bg-level-1 cursor-pointer",
+                  i % 2 && "bg-level-1"
+                )}
               >
                 {row.getVisibleCells().map((cell) => {
                   return (
                     <PolkadexTable.Cell
                       key={cell.id}
-                      className={classNames("px-2 py-3 text-xs")}
+                      className={classNames("px-2 py-4 text-xs")}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

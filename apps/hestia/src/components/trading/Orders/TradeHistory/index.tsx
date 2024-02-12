@@ -14,14 +14,15 @@ import {
   Table as PolkadexTable,
   Spinner,
 } from "@polkadex/ux";
-import { useOrderHistory } from "@orderbook/core/hooks";
+import { useTradeHistory } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
 
-import { orderHistoryColumns } from "./columns";
-import { Loading } from "./loading";
-import { OrderHistoryResponsiveCard } from "./responsiveCard";
+import { Loading } from "../loading";
+import { TradeHistoryResponsiveCard } from "../responsiveCard";
 
-export const OrderHistoryTable = ({
+import { columns } from "./columns";
+
+export const TradeHistoryTable = ({
   market,
   filters,
   maxHeight,
@@ -30,30 +31,30 @@ export const OrderHistoryTable = ({
   filters: Ifilters;
   maxHeight: string;
 }) => {
-  const { isLoading, orderHistory, error, hasNextPage, onFetchNextPage } =
-    useOrderHistory(market, filters);
+  const { isLoading, trades, hasNextPage, onFetchNextPage, error } =
+    useTradeHistory(market, filters);
   const { width } = useWindowSize();
   const table = useReactTable({
-    data: orderHistory,
-    columns: orderHistoryColumns(),
+    data: trades,
+    columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
   const responsiveView = useMemo(
-    () => width < 600 || (width >= 715 && width <= 1200),
+    () => width < 500 || (width >= 715 && width <= 1000),
     [width]
   );
 
   if (isLoading) return <Loading />;
 
-  if (!orderHistory.length)
+  if (!trades.length)
     return <GenericMessage title={"No items found"} illustration="NoData" />;
 
   return (
     <InfiniteScroll
       className="flex-1 overflow-y-hidden hover:overflow-y-auto"
       style={{ scrollbarGutter: "stable" }}
-      dataLength={orderHistory.length}
+      dataLength={trades.length}
       next={() => {
         onFetchNextPage();
       }}
@@ -62,7 +63,7 @@ export const OrderHistoryTable = ({
       loader={<Spinner.Keyboard className="h-6 mx-auto my-2" />}
     >
       {responsiveView ? (
-        <OrderHistoryResponsiveCard orders={orderHistory} />
+        <TradeHistoryResponsiveCard trades={trades} />
       ) : (
         <PolkadexTable className="w-full">
           <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">

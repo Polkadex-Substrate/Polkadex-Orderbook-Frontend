@@ -14,10 +14,10 @@ import { CalendarDaysIcon } from "@heroicons/react/24/solid";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
-import { OpenOrdersTable } from "./openOrders";
-import { OrderHistoryTable } from "./orderHistory";
-import { BalancesTable } from "./balances";
-import { TradeHistoryTable } from "./tradeHistory";
+import { OpenOrdersTable } from "./OpenOrders";
+import { OrderHistoryTable } from "./OrderHistory";
+import { BalancesTable } from "./Balances";
+import { TradeHistoryTable } from "./TradeHistory";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "@/styles/calendar.scss";

@@ -1,3 +1,4 @@
+// TODO: Use SkeletonCollection component
 import { Skeleton } from "@polkadex/ux";
 
 export const Loading = () => {
