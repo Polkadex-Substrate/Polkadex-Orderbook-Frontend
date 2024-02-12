@@ -32,7 +32,7 @@ const AccordionMenu = ({
             asChild
             className="transition-colors ease-out duration-300 hover:text-primary-base"
           >
-            <Link href={href} className="w-full">
+            <Link href={href} target="_blank" className="w-full">
               {label}
             </Link>
           </Typography.Text>

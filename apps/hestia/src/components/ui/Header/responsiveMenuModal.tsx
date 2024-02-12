@@ -7,6 +7,7 @@ import {
   SwatchIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import { getMarketUrl } from "@orderbook/core/helpers";
 
 import QrCode from "../../../../public/img/qrCode.png";
 
@@ -18,6 +19,7 @@ export const ResponsiveMenuModal = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const lastUsedMarketUrl = getMarketUrl();
   return (
     <Modal
       open={open}
@@ -48,17 +50,34 @@ export const ResponsiveMenuModal = ({
                 Quick links
               </Typography.Text>
               <div className="flex flex-col gap-5">
-                <HeaderLink.Single size="lg" href="/" className="text-lg">
+                <HeaderLink.Single
+                  size="lg"
+                  href={lastUsedMarketUrl}
+                  className="text-lg"
+                >
                   Trade
                 </HeaderLink.Single>
-                <HeaderLink.Single size="lg" href="/" className="text-lg">
+                <HeaderLink.Single
+                  size="lg"
+                  href="/markets"
+                  className="text-lg"
+                >
                   Markets
                 </HeaderLink.Single>
                 <HeaderLink.Accordion
                   items={[
-                    { href: "/", label: "Community support" },
-                    { href: "/", label: "Orderbook guide" },
-                    { href: "/", label: "FAQ" },
+                    {
+                      href: "https://discord.gg/G4KMw2sGGe",
+                      label: "Community support",
+                    },
+                    {
+                      href: "https://docs.polkadex.trade/orderbookPolkadexFAQHowToTradeStep1",
+                      label: "Orderbook guide",
+                    },
+                    {
+                      href: "https://docs.polkadex.trade/orderbookPolkadexFAQWallets",
+                      label: "FAQ",
+                    },
                   ]}
                 >
                   Help
@@ -66,11 +85,26 @@ export const ResponsiveMenuModal = ({
                 <HeaderLink.Accordion
                   items={[
                     { href: "/", label: "Listings" },
-                    { href: "/", label: "Terms of use" },
-                    { href: "/", label: "Privacy policy" },
-                    { href: "/", label: "Disclaimer" },
-                    { href: "/", label: "Excluded Jurisdictions" },
-                    { href: "/", label: "Data Retention Policy" },
+                    {
+                      href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf",
+                      label: "Terms of use",
+                    },
+                    {
+                      href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf",
+                      label: "Privacy policy",
+                    },
+                    {
+                      href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf",
+                      label: "Disclaimer",
+                    },
+                    {
+                      href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf",
+                      label: "Excluded Jurisdictions",
+                    },
+                    {
+                      href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf",
+                      label: "Data Retention Policy",
+                    },
                   ]}
                 >
                   More
