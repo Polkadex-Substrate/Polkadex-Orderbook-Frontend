@@ -47,7 +47,7 @@ export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
       className="flex-1 overflow-y-hidden hover:overflow-y-auto"
       style={{ maxHeight, scrollbarGutter: "stable" }}
     >
-      <PolkadexTable className="w-full">
+      <PolkadexTable className="w-full" even>
         <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
           {table.getHeaderGroups().map((headerGroup) => (
             <PolkadexTable.Row key={headerGroup.id}>
@@ -74,10 +74,7 @@ export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
             return (
               <PolkadexTable.Row
                 key={row.id}
-                className={classNames(
-                  "hover:bg-level-1 cursor-pointer",
-                  i % 2 && "bg-level-1"
-                )}
+                className={classNames("hover:bg-level-1 cursor-pointer")}
               >
                 {row.getVisibleCells().map((cell) => {
                   return (

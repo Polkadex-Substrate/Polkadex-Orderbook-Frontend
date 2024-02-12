@@ -5,13 +5,12 @@ import {
   ArrowLeftCircleIcon,
   ArrowRightCircleIcon,
 } from "@heroicons/react/24/solid";
-import { Button, truncateString, Tokens, Typography } from "@polkadex/ux";
+import { Button, truncateString, Typography, Token } from "@polkadex/ux";
 import { OrderCancellation } from "@orderbook/core/providers/user/orders";
 import { AssetsProps } from "@orderbook/core/hooks";
 import { getChainFromTicker } from "@orderbook/core/helpers";
 
 import { ActionsCard } from "@/components/balances/Table/actionsCard";
-import { TokenCard } from "@/components/ui/ReadyToUse";
 import { AmountCard } from "@/components/ui/ReadyToUse/amountCard";
 
 const openOrderColumnHelper = createColumnHelper<Order>();
@@ -255,12 +254,18 @@ export const balanceColumns = () => [
   balanceColumnHelper.accessor((row) => row, {
     id: "token",
     cell: (e) => {
+      const ticker = e.getValue().ticker;
       return (
-        <TokenCard
-          tokenName={e.getValue().name}
-          ticker={e.getValue().ticker}
-          icon={e.getValue().ticker as keyof typeof Tokens}
-        />
+        <div className="flex items-center gap-1">
+          <Token
+            name={ticker}
+            size="sm"
+            className="rounded-full border border-secondary"
+          />
+          <Typography.Text size="xs" className="uppercase">
+            {e.getValue().ticker}
+          </Typography.Text>
+        </div>
       );
     },
     header: () => (
