@@ -5,8 +5,6 @@ import { useElementSize } from "usehooks-ts";
 import { useMarkets } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
 
-import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
-
 import { AssetInfo } from "./AssetInfo";
 import { Graph } from "./Graph";
 import { Orderbook } from "./Orderbook";
@@ -14,6 +12,7 @@ import { Trades } from "./Trades";
 import { Orders } from "./Orders";
 import { PlaceOrder } from "./PlaceOrder";
 
+import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { Footer, Header } from "@/components/ui";
 import { useSizeObserver } from "@/hooks";
 
@@ -53,7 +52,7 @@ export function Template({ id }: { id: string }) {
           className="flex flex-wrap border-t border-t-primary"
         >
           <Orders maxHeight={ordersSize} id={id} />
-          <PlaceOrder ref={placeOrderRef} />
+          <PlaceOrder ref={placeOrderRef} market={currentMarket} />
         </div>
       </main>
       <Footer ref={footerRef} marketsActive />

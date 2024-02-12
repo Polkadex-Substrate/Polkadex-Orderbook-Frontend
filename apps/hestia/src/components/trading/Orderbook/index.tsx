@@ -68,7 +68,11 @@ export const Orderbook = ({
             orders={asks}
           />
         </Skeleton>
-        <LastPrice lastPrice={lastPriceValue} isPriceUp={isPriceUp} />
+        <LastPrice
+          loading={!!loading}
+          lastPrice={lastPriceValue}
+          isPriceUp={isPriceUp}
+        />
         <Skeleton loading={!!loading}>
           <Table
             precision={sizeState.length}

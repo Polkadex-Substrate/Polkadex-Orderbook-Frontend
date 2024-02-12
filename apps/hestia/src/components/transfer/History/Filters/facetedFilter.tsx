@@ -1,3 +1,4 @@
+// TODO: Fix FilterGroup - @polkadex/ux
 "use client";
 
 import { FilterGroup, Typography } from "@polkadex/ux";
@@ -24,6 +25,8 @@ export const FacetedFilter = <TData, TValue>({
 
   return (
     <FilterGroup>
+      {/* eslint-disable-next-line */}
+        {/* @ts-ignore */}
       <FilterGroup.Root>
         <FilterGroup.Trigger
           className={classNames(withoutBorder && "border-0")}
@@ -49,6 +52,8 @@ export const FacetedFilter = <TData, TValue>({
           </FilterGroup.Filters>
         </FilterGroup.Trigger>
       </FilterGroup.Root>
+      {/* eslint-disable-next-line */}
+        {/* @ts-ignore */}
       <FilterGroup.Content>
         {values.map((v) => {
           const isSelected = selectedValues.has(v);

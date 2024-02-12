@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { Button, Typography } from "@polkadex/ux";
 import Image from "next/image";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { getMarketUrl } from "@orderbook/core/helpers";
 
 import SpeedImage from "../../../public/img/speed.webp";
 import PadLock from "../../../public/img/padlock.webp";
@@ -8,6 +10,7 @@ import MarketImage from "../../../public/img/market.webp";
 import NonCustodial from "../../../public/img/nonCustodial.webp";
 
 export const Features = () => {
+  const lastUsedMarketUrl = getMarketUrl();
   return (
     <section className="flex flex-col border-b border-primary max-w-screen-xl mx-auto w-fulll max-xl:px-2">
       <div className="flex flex-wrap items-center justify-around">
@@ -117,7 +120,9 @@ export const Features = () => {
           Read more about Polkadex Orderbook
           <ArrowRightIcon className="w-4 h-4 ml-3 inline-block max-md:rotate-90" />
         </Typography.Text>
-        <Button.Solid>Start trading</Button.Solid>
+        <Link href={lastUsedMarketUrl}>
+          <Button.Solid>Start trading</Button.Solid>
+        </Link>
       </div>
     </section>
   );

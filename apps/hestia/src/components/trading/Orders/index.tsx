@@ -167,7 +167,9 @@ export const Orders = ({ maxHeight, id }: Props) => {
           illustration="ConnectAccount"
           onClick={() => onToogleConnectTrading()}
         >
-          <Button.Solid>Connect Wallet</Button.Solid>
+          <Button.Solid onClick={() => onToogleConnectTrading(true)}>
+            Connect Wallet
+          </Button.Solid>
         </GenericMessage>
       )}
     </Tabs>

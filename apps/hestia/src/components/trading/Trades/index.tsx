@@ -48,7 +48,10 @@ export const Trades = ({
         >
           <Markets />
         </Tabs.Content>
-        <Tabs.Content value="recentTrades">
+        <Tabs.Content
+          value="recentTrades"
+          className="xs:min-h-[25rem] min-h-[22rem]"
+        >
           <RecentTrades id={id} />
         </Tabs.Content>
       </div>
