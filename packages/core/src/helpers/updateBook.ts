@@ -6,9 +6,9 @@ type OrderBookDerived = {
 export const deleteFromBook = (
   book: OrderBookDerived,
   price: string,
-  side: string,
+  side: string
 ): OrderBookDerived => {
-  const bookSide: string[][] = book[side];
+  const bookSide: string[][] = book[side as keyof OrderBookDerived];
   const index = bookSide.findIndex((item) => item[0] === price);
   if (index === -1) return book;
   bookSide.splice(index, 1);
@@ -20,9 +20,9 @@ export const replaceOrAddToBook = (
   book: OrderBookDerived,
   price: string,
   qty: string,
-  side: string,
+  side: string
 ): OrderBookDerived => {
-  const bookSide: string[][] = book[side];
+  const bookSide: string[][] = book[side as keyof OrderBookDerived];
   const index = bookSide.findIndex((item) => item[0] === price);
   if (index === -1) {
     bookSide.push([price, qty]);
