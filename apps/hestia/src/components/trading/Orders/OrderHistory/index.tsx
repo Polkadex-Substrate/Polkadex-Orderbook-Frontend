@@ -1,4 +1,6 @@
+// TODO: Fix responsive interaction (reflect columns updates)
 "use client";
+
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useMemo } from "react";
 import { useWindowSize } from "usehooks-ts";
