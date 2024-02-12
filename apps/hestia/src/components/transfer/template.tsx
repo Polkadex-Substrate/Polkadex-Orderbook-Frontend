@@ -5,6 +5,7 @@ import { Fragment, useEffect, useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useTransactions } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 
@@ -32,6 +33,7 @@ export function Template() {
 
   const { readyWithdrawals } = useTransactions();
   const { selectedAccount, selectedWallet } = useConnectWalletProvider();
+  const { onToogleConnectExtension } = useSettingsProvider();
   const [activeTab, setActiveTab] = useState("history");
 
   useEffect(() => {
@@ -98,8 +100,9 @@ export function Template() {
                   <GenericMessage
                     title="Connect your trading account to start trading."
                     illustration="ConnectAccount"
+                    onClick={() => onToogleConnectExtension()}
                   >
-                    <Button.Solid>Connect Wallet</Button.Solid>
+                    <Button.Solid>Connect your account</Button.Solid>
                   </GenericMessage>
                 )}
               </div>

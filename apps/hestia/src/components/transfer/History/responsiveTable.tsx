@@ -1,5 +1,6 @@
 import { Drawer, Token, Typography, truncateString } from "@polkadex/ux";
 import { Dispatch, SetStateAction } from "react";
+import { intlFormat } from "date-fns";
 
 import { DepositData } from "./columns";
 
@@ -45,7 +46,19 @@ export const ResponsiveTable = ({
             toType={wallets.toWalletType}
           />
         </ResponsiveCard>
-        <ResponsiveCard label="Date">{timestamp}</ResponsiveCard>
+        <ResponsiveCard label="Date">
+          {intlFormat(
+            new Date(timestamp),
+            {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            },
+            { locale: "EN" }
+          )}
+        </ResponsiveCard>
       </Drawer.Content>
     </Drawer>
   );
