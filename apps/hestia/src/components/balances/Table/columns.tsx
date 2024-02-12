@@ -30,21 +30,21 @@ export const columns = [
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row.onChainBalance, {
-    id: "tradingAccount",
-    cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Trading account
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row.free_balance, {
     id: "fundingAccount",
     cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Funding account
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row.free_balance, {
+    id: "tradingAccount",
+    cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Trading account
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
@@ -62,7 +62,8 @@ export const columns = [
   columnHelper.accessor((row) => row, {
     id: "actions",
     cell: (e) => {
-      const chainName = getChainFromTicker(e.getValue().ticker);
+      const chainName =
+        getChainFromTicker(e.getValue().ticker) ?? e.getValue().name;
       return (
         <ActionsCard
           withdrawLink={{

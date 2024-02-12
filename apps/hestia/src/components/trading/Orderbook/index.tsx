@@ -39,7 +39,7 @@ export const Orderbook = ({
 
   return (
     <div
-      className="flex flex-1 flex-col border-r border-r-primary min-w-[23rem] min-h-[22rem] overflow-hidden"
+      className="flex flex-1 flex-col border-r border-r-primary min-w-[23rem] min-h-[25rem] overflow-hidden"
       style={{ maxHeight }}
     >
       <Header
@@ -68,7 +68,11 @@ export const Orderbook = ({
             orders={asks}
           />
         </Skeleton>
-        <LastPrice lastPrice={lastPriceValue} isPriceUp={isPriceUp} />
+        <LastPrice
+          loading={!!loading}
+          lastPrice={lastPriceValue}
+          isPriceUp={isPriceUp}
+        />
         <Skeleton loading={!!loading}>
           <Table
             precision={sizeState.length}

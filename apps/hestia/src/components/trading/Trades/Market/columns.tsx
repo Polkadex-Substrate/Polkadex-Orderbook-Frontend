@@ -52,10 +52,7 @@ export const columns = ({
   columnHelper.accessor((row) => row, {
     id: "price",
     cell: (e) => {
-      const { quotePrecision, last } = e.getValue();
-      const priceFormatted = Decimal.format(Number(last), quotePrecision);
-
-      return <Typography.Text size="xs">{priceFormatted}</Typography.Text>;
+      return <Typography.Text size="xs">{e.getValue().last}</Typography.Text>;
     },
     header: () => <Typography.Text size="xs">Price</Typography.Text>,
     footer: (e) => e.column.id,

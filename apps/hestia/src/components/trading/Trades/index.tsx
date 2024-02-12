@@ -16,7 +16,7 @@ export const Trades = ({
   return (
     <Tabs defaultValue="markets">
       <div
-        className="flex flex-1 flex-col min-w-[22rem] min-h-[22rem]"
+        className="flex flex-1 flex-col min-w-[22rem] min-h-[25rem]"
         style={{ maxHeight }}
       >
         <div className="flex items-center justify-between border-b border-primary">
@@ -48,7 +48,10 @@ export const Trades = ({
         >
           <Markets />
         </Tabs.Content>
-        <Tabs.Content value="recentTrades">
+        <Tabs.Content
+          value="recentTrades"
+          className="xs:min-h-[25rem] min-h-[22rem]"
+        >
           <RecentTrades id={id} />
         </Tabs.Content>
       </div>

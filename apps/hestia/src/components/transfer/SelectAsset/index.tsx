@@ -2,7 +2,7 @@ import { Button, Checkbox, Modal, Typography, Input } from "@polkadex/ux";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useAssets } from "@orderbook/core/hooks";
 
-import { Table } from "./Table";
+import { Table } from "./table";
 
 import { FilteredAssetProps } from "@/hooks";
 

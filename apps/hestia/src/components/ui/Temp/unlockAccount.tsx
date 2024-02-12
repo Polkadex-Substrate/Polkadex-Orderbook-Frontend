@@ -7,21 +7,22 @@ import { KeyringPair } from "@polkadot/keyring/types";
 import { ErrorMessage } from "../ReadyToUse";
 import { Icons } from "..";
 
-export const UnlockBrowserAccount = ({
+export const UnlockAccount = ({
   onClose,
   tempBrowserAccount,
   onAction,
   onResetTempBrowserAccount,
 }: {
-  onClose: () => void;
+  onClose?: () => void;
   onAction: (account: KeyringPair, password?: string) => void;
   tempBrowserAccount?: KeyringPair;
-  onResetTempBrowserAccount: () => void;
+  onResetTempBrowserAccount?: () => void;
 }) => {
   const [error, setError] = useState("");
   const handleClose = () => {
-    onResetTempBrowserAccount();
-    onClose();
+    if (typeof onResetTempBrowserAccount === "function")
+      onResetTempBrowserAccount?.();
+    onClose?.();
   };
   const { setFieldValue, values, handleSubmit, isValid, dirty, resetForm } =
     useFormik({
@@ -57,7 +58,7 @@ export const UnlockBrowserAccount = ({
   useEffect(() => {
     if (error && !!values.password) setError("");
   }, [error, values.password]);
-  // console.log("PASSWORD", values.password);
+
   return (
     <form onSubmit={handleSubmit}>
       <Interaction className="bg-backgroundBase rounded-sm">

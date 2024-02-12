@@ -1,7 +1,7 @@
 "use client";
 
-import { Bars2Icon, BellIcon } from "@heroicons/react/24/outline";
-import { Button, Icons, Popover } from "@polkadex/ux";
+import { Bars2Icon, BellIcon, BookOpenIcon } from "@heroicons/react/24/outline";
+import { Button, Icons, Popover, Tooltip } from "@polkadex/ux";
 import { useMemo } from "react";
 import Link from "next/link";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
@@ -40,19 +40,34 @@ export const Profile = ({
           <Button.Solid size="2sm" onClick={onOpenFundWallet}>
             Fund wallet
           </Button.Solid>
-          <Button.Icon asChild>
-            <Link href="/balances">
-              <Icons.Wallet />
-            </Link>
-          </Button.Icon>
-          <Button.Icon asChild>
-            <Link href="/transactions">
-              <Icons.History />
-            </Link>
-          </Button.Icon>
-          <Button.Icon onClick={onOpenNotifications}>
-            <BellIcon />
-          </Button.Icon>
+          <Tooltip>
+            <Tooltip.Trigger asChild>
+              <Button.Icon asChild>
+                <Link href="/balances">
+                  <Icons.Wallet />
+                </Link>
+              </Button.Icon>
+            </Tooltip.Trigger>
+            <Tooltip.Content>Balances</Tooltip.Content>
+          </Tooltip>
+          <Tooltip>
+            <Tooltip.Trigger asChild>
+              <Button.Icon asChild>
+                <Link href="/transactions">
+                  <BookOpenIcon />
+                </Link>
+              </Button.Icon>
+            </Tooltip.Trigger>
+            <Tooltip.Content>Transactions</Tooltip.Content>
+          </Tooltip>
+          <Tooltip>
+            <Tooltip.Trigger asChild>
+              <Button.Icon onClick={onOpenNotifications}>
+                <BellIcon />
+              </Button.Icon>
+            </Tooltip.Trigger>
+            <Tooltip.Content>Notifications</Tooltip.Content>
+          </Tooltip>
         </div>
         <Popover>
           <Popover.Trigger>

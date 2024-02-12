@@ -60,7 +60,7 @@ const handleRemoveExponent = (value: DecimalProps["children"]) => {
 const formatWithSeparators = (
   value: string,
   thousSep?: string,
-  floatSep?: string,
+  floatSep?: string
 ) => {
   let fmtNum = value;
 
@@ -73,7 +73,7 @@ const formatWithSeparators = (
       const fmtNumParts = fmtNum.toString().split(floatSep || ".");
       fmtNumParts[0] = fmtNumParts[0].replace(
         /\B(?=(\d{3})+(?!\d))/g,
-        thousSep,
+        thousSep
       );
       fmtNum = fmtNumParts.join(floatSep || ".");
     }
@@ -87,7 +87,7 @@ class Decimal extends React.Component<DecimalProps> {
     value: DecimalProps["children"],
     precision: number,
     thousSep?: string,
-    floatSep?: string,
+    floatSep?: string
   ) {
     if (typeof value === "undefined") {
       return "0";
@@ -111,9 +111,9 @@ class Decimal extends React.Component<DecimalProps> {
       result = handleRemoveExponent(
         Number(
           `${Math.floor(
-            Number(`${handleRemoveExponent(fmtVal)}e${precision}`),
-          )}e-${precision}`,
-        ),
+            Number(`${handleRemoveExponent(fmtVal)}e${precision}`)
+          )}e-${precision}`
+        )
       );
     }
 
@@ -134,7 +134,7 @@ class Decimal extends React.Component<DecimalProps> {
     value: DecimalProps["children"],
     fixed: number,
     thousSep?: string,
-    floatSep?: string,
+    floatSep?: string
   ) {
     return Decimal.format(value, 0, thousSep, floatSep);
   }
@@ -143,7 +143,7 @@ class Decimal extends React.Component<DecimalProps> {
     value: DecimalProps["children"],
     fixed: number,
     thousSep?: string,
-    floatSep?: string,
+    floatSep?: string
   ) {
     if (fixed === 0) {
       return;
@@ -175,12 +175,12 @@ class Decimal extends React.Component<DecimalProps> {
         prevValue,
         fixed,
         thousSep,
-        floatSep,
+        floatSep
       );
     } else {
       return (
         <React.Fragment>
-          <span style={{ opacity: hasStyle ? 0.6 : 1 }}>
+          <span>
             {Decimal.getNumberBeforeDot(children, fixed, thousSep, floatSep)}
           </span>
           <span>{Decimal.getNumberAfterDot(children, fixed)}</span>
@@ -194,7 +194,7 @@ class Decimal extends React.Component<DecimalProps> {
     prevValue: DecimalProps["children"],
     fixed: number,
     thousSep?: string,
-    floatSep?: string,
+    floatSep?: string
   ) => {
     let val = Decimal.format(value, fixed, thousSep, floatSep);
     let prev = Decimal.format(prevValue, fixed, thousSep, floatSep);

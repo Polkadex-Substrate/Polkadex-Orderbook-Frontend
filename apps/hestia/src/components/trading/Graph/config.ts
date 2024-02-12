@@ -88,6 +88,7 @@ export const supported_resolutions = [
   { id: "15", description: "15m" },
   { id: "30", description: "30m" },
   { id: "60", description: "1H" },
+  { id: "120", description: "2H" },
   { id: "360", description: "6H" },
   { id: "1D", description: "1D" },
   { id: "1W", description: "1W" },

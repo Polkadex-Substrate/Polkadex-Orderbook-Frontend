@@ -3,7 +3,7 @@ import { useConnectWalletProvider } from "@orderbook/core/providers/user/connect
 
 import { TradingAccountSuccessfull } from "../ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "../ConnectWallet/tradingAccountMnemonic";
-import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
+import { UnlockAccount } from "../ReadyToUse/unlockAccount";
 
 export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
   const {
@@ -44,7 +44,7 @@ export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
               onClose={() => props?.onChangeInteraction(false)}
               mnemonic={tempMnemonic?.split(" ") ?? []}
             />
-            <UnlockBrowserAccount
+            <UnlockAccount
               key="UnlockBrowserAccount"
               tempBrowserAccount={tempTrading}
               onClose={() => props?.onChangeInteraction(false)}
