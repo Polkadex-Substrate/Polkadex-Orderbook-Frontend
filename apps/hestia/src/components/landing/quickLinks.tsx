@@ -15,10 +15,15 @@ export const QuickLinks = () => {
             on specific features.
           </Typography.Paragraph>
         </div>
-        <Button.Underline className="p-0 h-fit w-fit">
-          Explore FAQ
-          <ArrowRightIcon className="w-4 h-4 mr-4" />
-        </Button.Underline>
+        <Link
+          href="https://docs.polkadex.trade/orderbookPolkadexFAQWallets/"
+          target="_blank"
+        >
+          <Button.Underline className="p-0 h-fit w-fit">
+            Explore FAQ
+            <ArrowRightIcon className="w-4 h-4 mr-4" />
+          </Button.Underline>
+        </Link>
       </div>
       <div className="flex flex-col max-md:py-4 gap-5 md:p-10">
         <div className="flex flex-col gap-2">

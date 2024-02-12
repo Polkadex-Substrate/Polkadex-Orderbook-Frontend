@@ -7,6 +7,7 @@ import { forwardRef, useState } from "react";
 import { Dropdown, Typography } from "@polkadex/ux";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import classNames from "classnames";
+import Link from "next/link";
 
 import { Markets } from "./markets";
 
@@ -64,8 +65,10 @@ export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
             Quick Start
           </Typography.Text>
           <Typography.Text appearance="primary">
-            <LifebuoyIcon className="h-3 w-3 inline-block mr-1" />
-            Help & Support
+            <Link href="https://discord.com/invite/Uvua83QAzk" target="_blank">
+              <LifebuoyIcon className="h-3 w-3 inline-block mr-1" />
+              Help & Support
+            </Link>
           </Typography.Text>
         </div>
       </footer>
