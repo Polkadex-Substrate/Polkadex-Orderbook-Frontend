@@ -14,8 +14,6 @@ const awsmobile = {
       "userPoolId": process.env.USER_POOL_ID,
       "userPoolWebClientId": process.env.USER_WEB_CLIENT_ID
     },
-    // Amazon Pinpoint App Client ID
-    "aws_mobile_analytics_app_id": process.env.PIN_POINT_CLIENT_ID,
     // Amazon service region
     "aws_mobile_analytics_app_region": process.env.API_REGION
   };
