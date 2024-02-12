@@ -1,12 +1,17 @@
 "use client";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import { Tabs } from "@polkadex/ux";
 import { Market } from "@orderbook/core/utils/orderbookService/types";
-import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
+import {
+  tryUnlockTradeAccount,
+  decimalPlaces,
+  trimFloat,
+} from "@orderbook/core/helpers";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useFunds } from "@orderbook/core/hooks";
 
-import { LimitOrder } from "./limitOrder";
-import { MarketOrder } from "./marketOrder";
+import { LimitOrder } from "./Limit";
+import { MarketOrder } from "./Market";
 
 type Props = { market?: Market };
 
@@ -16,6 +21,29 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
   ({ market }, ref) => {
     const [isPasswordProtected, setIsPasswordProtected] = useState(false);
     const { selectedAccount } = useConnectWalletProvider();
+    const { getFreeProxyBalance } = useFunds();
+
+    const pricePrecision =
+      (market && decimalPlaces(market.price_tick_size)) || 0;
+    const qtyPrecision = (market && decimalPlaces(market.qty_step_size)) || 0;
+
+    const [availableQuoteAmount, availableBaseAmount] = useMemo(() => {
+      const quoteAmount = trimFloat({
+        value: getFreeProxyBalance(market?.quoteAsset?.id || "-1"),
+        digitsAfterDecimal: pricePrecision,
+      });
+      const baseAmount = trimFloat({
+        value: getFreeProxyBalance(market?.baseAsset?.id || "-1"),
+        digitsAfterDecimal: qtyPrecision,
+      });
+      return [+quoteAmount, +baseAmount];
+    }, [
+      getFreeProxyBalance,
+      market?.baseAsset?.id,
+      market?.quoteAsset?.id,
+      pricePrecision,
+      qtyPrecision,
+    ]);
 
     useEffect(() => {
       tryUnlockTradeAccount(selectedAccount);
@@ -40,14 +68,22 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
             id="placeOrderContent"
             className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
           >
-            <LimitOrder market={market} />
+            <LimitOrder
+              market={market}
+              availableBaseAmount={availableBaseAmount}
+              availableQuoteAmount={availableQuoteAmount}
+            />
           </Tabs.Content>
           <Tabs.Content
             value="market"
             id="placeOrderContent"
             className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
           >
-            <MarketOrder market={market} />
+            <MarketOrder
+              market={market}
+              availableBaseAmount={availableBaseAmount}
+              availableQuoteAmount={availableQuoteAmount}
+            />
           </Tabs.Content>
         </div>
       </Tabs>
