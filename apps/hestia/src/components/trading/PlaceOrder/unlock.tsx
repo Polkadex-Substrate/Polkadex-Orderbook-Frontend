@@ -66,11 +66,11 @@ export const Unlock = ({
                 </Typography.Paragraph>
               </div>
             </div>
-            <div className="flex flex-col gap-2 w-full px-6">
+            <div className="flex flex-col gap-2 w-full px-6 items-center">
               <Input.Passcode
                 value={values.password}
                 onValuesChange={(e) => setFieldValue("password", e)}
-                className="flex-1 py-7"
+                className="flex-1 py-5"
                 name="password"
               />
 
