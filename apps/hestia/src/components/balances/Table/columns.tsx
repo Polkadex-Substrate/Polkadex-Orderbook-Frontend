@@ -62,7 +62,8 @@ export const columns = [
   columnHelper.accessor((row) => row, {
     id: "actions",
     cell: (e) => {
-      const chainName = getChainFromTicker(e.getValue().ticker);
+      const chainName =
+        getChainFromTicker(e.getValue().ticker) ?? e.getValue().name;
       return (
         <ActionsCard
           withdrawLink={{

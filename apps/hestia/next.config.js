@@ -45,6 +45,7 @@ const nextConfig = {
     UNDER_MAINTENACE: process.env.UNDER_MAINTENACE,
     MAIN_URL: process.env.MAIN_URL,
     BLOCKED_ASSETS: process.env.BLOCKED_ASSETS,
+    DEFAULT_TRANSFER_TOKEN: process.env.DEFAULT_TRANSFER_TOKEN,
     SUBSCAN_API: process.env.SUBSCAN_API,
     SENTRY_DSN: process.env.SENTRY_DSN,
     SENTRY_AUTH: process.env.SENTRY_AUTH,

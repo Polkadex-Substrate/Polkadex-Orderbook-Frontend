@@ -17,7 +17,7 @@ export const TokenCard = ({
         className="p-0.5 rounded-full border border-primary"
         appearance={icon as keyof typeof tokenAppearance}
       />
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-0.5">
         <Typography.Text>{ticker}</Typography.Text>
         <Typography.Text
           appearance="primary"
