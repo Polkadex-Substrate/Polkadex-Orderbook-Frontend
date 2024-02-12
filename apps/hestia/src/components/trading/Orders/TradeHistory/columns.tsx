@@ -81,17 +81,27 @@ export const columns = [
   tradeHistoryColumnHelper.accessor((row) => row, {
     id: "price",
     cell: (e) => {
-      return <span>{e.getValue().price}</span>;
+      return <Typography.Text size="xs">{e.getValue().price}</Typography.Text>;
     },
-    header: () => <span>Price</span>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Price
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
   tradeHistoryColumnHelper.accessor((row) => row, {
     id: "quantity",
     cell: (e) => {
-      return <span>{e.getValue().quantity}</span>;
+      return (
+        <Typography.Text size="xs">{e.getValue().quantity}</Typography.Text>
+      );
     },
-    header: () => <span>Quantity</span>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Quantity
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
   tradeHistoryColumnHelper.accessor((row) => row, {

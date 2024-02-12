@@ -89,7 +89,7 @@ export const columns = [
         />
       );
     },
-    header: () => <></>,
+    header: () => null,
     footer: (e) => e.column.id,
   }),
 ];
