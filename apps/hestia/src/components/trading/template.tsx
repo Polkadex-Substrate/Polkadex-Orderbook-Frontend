@@ -5,6 +5,8 @@ import { useElementSize } from "usehooks-ts";
 import { useMarkets } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
 
+import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
+
 import { AssetInfo } from "./AssetInfo";
 import { Graph } from "./Graph";
 import { Orderbook } from "./Orderbook";

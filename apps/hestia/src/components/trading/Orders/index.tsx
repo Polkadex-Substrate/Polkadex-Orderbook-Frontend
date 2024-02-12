@@ -13,14 +13,14 @@ import { Ifilters } from "@orderbook/core/providers/types";
 import { CalendarDaysIcon } from "@heroicons/react/24/solid";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+
+import { OpenOrdersTable } from "./OpenOrders";
+import { OrderHistoryTable } from "./OrderHistory";
+import { BalancesTable } from "./Balances";
+import { TradeHistoryTable } from "./TradeHistory";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "@/styles/calendar.scss";
-
-import { OpenOrdersTable } from "./openOrders";
-import { OrderHistoryTable } from "./orderHistory";
-import { BalancesTable } from "./balances";
-import { TradeHistoryTable } from "./tradeHistory";
 
 const initialFilters: Ifilters = {
   onlyBuy: false,
@@ -83,8 +83,8 @@ export const Orders = ({ maxHeight, id }: Props) => {
   };
 
   return (
-    <Tabs defaultValue="openOrders" className="min-w-[25rem] bg-black">
-      <div className="lg:flex items-center justify-between">
+    <Tabs defaultValue="openOrders" className="min-w-[25rem]">
+      <div className="lg:flex items-center justify-between border-r border-b border-primary">
         <Tabs.List className="px-2 py-3">
           <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
             Open Orders({openOrders?.length || 0})
@@ -165,6 +165,7 @@ export const Orders = ({ maxHeight, id }: Props) => {
         <GenericMessage
           title="Connect your trading account to start trading."
           illustration="ConnectAccount"
+          onClick={() => onToogleConnectTrading()}
         >
           <Button.Solid onClick={() => onToogleConnectTrading(true)}>
             Connect Wallet

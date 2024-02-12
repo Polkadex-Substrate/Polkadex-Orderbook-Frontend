@@ -9,16 +9,17 @@ import classNames from "classnames";
 import { useAssets } from "@orderbook/core/hooks";
 import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
 
-import { Loading } from "./loading";
-import { balanceColumns } from "./columns";
-import { BalanceResponsiveCard } from "./responsiveCard";
+import { Loading } from "../loading";
+import { BalanceResponsiveCard } from "../responsiveCard";
+
+import { columns } from "./columns";
 
 export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
   const { assets, loading } = useAssets();
   const { width } = useWindowSize();
   const table = useReactTable({
     data: assets,
-    columns: balanceColumns(),
+    columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -47,8 +48,8 @@ export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
       className="flex-1 overflow-y-hidden hover:overflow-y-auto"
       style={{ maxHeight, scrollbarGutter: "stable" }}
     >
-      <PolkadexTable className="w-full">
-        <PolkadexTable.Header className="sticky top-0 bg-black">
+      <PolkadexTable className="w-full" even>
+        <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
           {table.getHeaderGroups().map((headerGroup) => (
             <PolkadexTable.Row key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -74,10 +75,7 @@ export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
             return (
               <PolkadexTable.Row
                 key={row.id}
-                className={classNames(
-                  "hover:bg-level-1 cursor-pointer",
-                  i % 2 && "bg-level-1"
-                )}
+                className={classNames("hover:bg-level-1 cursor-pointer")}
               >
                 {row.getVisibleCells().map((cell) => {
                   return (

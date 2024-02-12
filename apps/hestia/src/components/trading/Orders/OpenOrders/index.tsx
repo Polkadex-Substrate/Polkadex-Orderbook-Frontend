@@ -12,9 +12,10 @@ import { useOrders } from "@orderbook/core/providers/user/orders";
 import { useWindowSize } from "usehooks-ts";
 import { Ifilters } from "@orderbook/core/providers/types";
 
-import { openOrderColumns } from "./columns";
-import { Loading } from "./loading";
-import { OpenOrderResponsiveCard } from "./responsiveCard";
+import { Loading } from "../loading";
+import { OpenOrderResponsiveCard } from "../responsiveCard";
+
+import { columns } from "./columns";
 
 export const OpenOrdersTable = ({
   market,
@@ -36,7 +37,7 @@ export const OpenOrdersTable = ({
 
   const table = useReactTable({
     data: openOrders,
-    columns: openOrderColumns({ onCancelOrder }),
+    columns: columns({ onCancelOrder }),
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -65,7 +66,7 @@ export const OpenOrdersTable = ({
       style={{ maxHeight, scrollbarGutter: "stable" }}
     >
       <PolkadexTable className="w-full">
-        <PolkadexTable.Header className="sticky top-0 bg-black">
+        <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
           {table.getHeaderGroups().map((headerGroup) => (
             <PolkadexTable.Row key={headerGroup.id}>
               {headerGroup.headers.map((header) => {

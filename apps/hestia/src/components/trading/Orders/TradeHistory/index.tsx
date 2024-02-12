@@ -17,9 +17,10 @@ import {
 import { useTradeHistory } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
 
-import { tradeHistoryColumns } from "./columns";
-import { Loading } from "./loading";
-import { TradeHistoryResponsiveCard } from "./responsiveCard";
+import { Loading } from "../loading";
+import { TradeHistoryResponsiveCard } from "../responsiveCard";
+
+import { columns } from "./columns";
 
 export const TradeHistoryTable = ({
   market,
@@ -35,7 +36,7 @@ export const TradeHistoryTable = ({
   const { width } = useWindowSize();
   const table = useReactTable({
     data: trades,
-    columns: tradeHistoryColumns(),
+    columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -65,7 +66,7 @@ export const TradeHistoryTable = ({
         <TradeHistoryResponsiveCard trades={trades} />
       ) : (
         <PolkadexTable className="w-full">
-          <PolkadexTable.Header className="sticky top-0 bg-black">
+          <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
             {table.getHeaderGroups().map((headerGroup) => (
               <PolkadexTable.Row key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
