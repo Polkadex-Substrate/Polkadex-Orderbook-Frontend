@@ -1,63 +1,52 @@
 import { Interaction, Typography, Input } from "@polkadex/ux";
 import { useFormik } from "formik";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { unLockAccountValidations } from "@orderbook/core/validations";
 import { KeyringPair } from "@polkadot/keyring/types";
 
-import { ErrorMessage } from "../ReadyToUse";
-import { Icons } from "..";
+import { Icons } from "@/components/ui";
+import { ErrorMessage } from "@/components/ui/ReadyToUse";
 
-export const UnlockAccount = ({
-  onClose,
+export const Unlock = ({
   tempBrowserAccount,
   onAction,
-  onResetTempBrowserAccount,
 }: {
-  onClose?: () => void;
   onAction: (account: KeyringPair, password?: string) => void;
   tempBrowserAccount?: KeyringPair;
-  onResetTempBrowserAccount?: () => void;
 }) => {
   const [error, setError] = useState("");
-  const handleClose = () => {
-    if (typeof onResetTempBrowserAccount === "function")
-      onResetTempBrowserAccount?.();
-    onClose?.();
-  };
-  const { setFieldValue, values, handleSubmit, isValid, dirty, resetForm } =
-    useFormik({
-      initialValues: {
-        password: "",
-      },
-      validationSchema: unLockAccountValidations,
-      onSubmit: async ({ password }) => {
-        try {
-          const pass = password.toString();
-          tempBrowserAccount?.unlock(pass);
-          if (tempBrowserAccount) {
-            onAction(tempBrowserAccount, pass);
-            handleClose();
-          }
-        } catch (error) {
-          setError("Invalid Password");
-          resetForm();
+  const {
+    setFieldValue,
+    values,
+    handleSubmit,
+    errors,
+    touched,
+    dirty,
+    isValid,
+    isValidating,
+    resetForm,
+  } = useFormik({
+    initialValues: {
+      password: "",
+    },
+    validationSchema: unLockAccountValidations,
+    onSubmit: async ({ password }) => {
+      try {
+        const pass = password.toString();
+        tempBrowserAccount?.unlock(pass);
+        if (tempBrowserAccount) {
+          onAction(tempBrowserAccount, pass);
         }
-      },
-    });
-
-  const digitsLeft = useMemo(
-    () => 5 - Array.from(String(values.password), (v) => Number(v)).length,
-    [values]
-  );
-
-  const message =
-    isValid && dirty
-      ? "Unlock"
-      : `${digitsLeft} digit${digitsLeft > 1 ? "s" : ""} left`;
+      } catch (error) {
+        setError("Invalid Password");
+        resetForm();
+      }
+    },
+  });
 
   useEffect(() => {
-    if (error && !!values.password) setError("");
-  }, [error, values.password]);
+    if (!isValidating && dirty && isValid) handleSubmit();
+  }, [dirty, handleSubmit, isValid, isValidating]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -85,16 +74,10 @@ export const UnlockAccount = ({
                 name="password"
               />
 
-              {!!error && <ErrorMessage>{error}</ErrorMessage>}
+              {!!error && <ErrorMessage>Invalid password</ErrorMessage>}
             </div>
           </div>
         </Interaction.Content>
-        <Interaction.Footer>
-          <Interaction.Action type="submit" disabled={!(isValid && dirty)}>
-            {message}
-          </Interaction.Action>
-          <Interaction.Close onClick={handleClose}>Cancel</Interaction.Close>
-        </Interaction.Footer>
       </Interaction>
     </form>
   );

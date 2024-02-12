@@ -12,8 +12,7 @@ import { useFunds } from "@orderbook/core/hooks";
 
 import { LimitOrder } from "./Limit";
 import { MarketOrder } from "./Market";
-
-import { UnlockAccount } from "@/components/ui/Temp/unlockAccount";
+import { Unlock } from "./unlock";
 
 type Props = { market?: Market };
 
@@ -66,9 +65,8 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
         <div ref={ref} className="min-h-[18rem]">
           {isPasswordProtected ? (
             <div className="[&>form>div>div>div>div]:w-[20rem]">
-              <UnlockAccount
+              <Unlock
                 onAction={(e) => {
-                  console.log(e);
                   formRef?.current?.dispatchEvent(
                     new Event("submit", { cancelable: true, bubbles: true })
                   );
