@@ -1,8 +1,7 @@
 "use client";
 
 import { Button, GenericMessage, Tabs, Typography } from "@polkadex/ux";
-import { useElementSize } from "usehooks-ts";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useTransactions } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
@@ -12,28 +11,14 @@ import { SelectAsset } from "./SelectAsset";
 import { Form } from "./Form";
 import { History } from "./History";
 import { ReadyToClaim } from "./ReadyToClaim";
+import { useSizeProvider } from "./provider";
 
 import { Footer, Header, Menu } from "@/components/ui";
 import { useTransfer } from "@/hooks";
 
 export function Template() {
-  const [headerRef, { height: headerHeight }] = useElementSize();
-  const [footerRef, { height: footerHeight }] = useElementSize();
-  const [helpRef, { height: helpHeight }] = useElementSize();
-  const [tableTitleRef, { height: tableTitleHeight }] = useElementSize();
-  const [overviewRef, { height: overviewHeight }] = useElementSize();
-  const maxHeight = useMemo(
-    () =>
-      `calc(100vh - ${
-        overviewHeight +
-        headerHeight +
-        footerHeight +
-        helpHeight +
-        tableTitleHeight +
-        1
-      }px)`,
-    [headerHeight, footerHeight, overviewHeight, helpHeight, tableTitleHeight]
-  );
+  const { headerRef, footerRef, formwRef, helpRef, tableTitleRef } =
+    useSizeProvider();
   const {
     onChangeAsset,
     selectedAsset,
@@ -67,7 +52,7 @@ export function Template() {
         <main className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto">
           <Menu />
           <div className="flex flex-col flex-1">
-            <div ref={overviewRef} className="flex-1 flex flex-col">
+            <div ref={formwRef} className="flex-1 flex flex-col">
               <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-secondary-base flex-wrap">
                 <Typography.Text bold size="lg">
                   Transfer
@@ -98,7 +83,7 @@ export function Template() {
                 {selectedAccount || selectedWallet ? (
                   <Fragment>
                     <Tabs.Content value="history" className="flex flex-col">
-                      <History maxHeight={maxHeight} />
+                      <History />
                     </Tabs.Content>
                     <Tabs.Content
                       value="readyToClaim"
