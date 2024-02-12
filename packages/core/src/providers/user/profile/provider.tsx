@@ -4,9 +4,9 @@ import {
   useUserAccounts,
   useExtensionAccounts,
 } from "@polkadex/react-providers";
-import { getMainAccountLinkedToProxy } from "@orderbook/core/providers/user/profile/helpers";
 import { useProxyAccounts } from "@orderbook/core/hooks";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
+import { appsyncOrderbookService } from "@orderbook/core/utils/orderbookService";
 
 import * as LOCAL_STORE from "./localstore";
 import { Provider } from "./context";
@@ -50,7 +50,8 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     // TODO: Temp solution, backend issue
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
-        const mainAddress = await getMainAccountLinkedToProxy(tradeAddress);
+        const mainAddress =
+          await appsyncOrderbookService.query.getFundingAddress(tradeAddress);
         if (!mainAddress)
           // TODO: move error to translation
           throw new Error("No main account linked to this trade address");

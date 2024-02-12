@@ -38,7 +38,7 @@ export const useOrderHistory = (defaultMarket: string, filters: Ifilters) => {
         address: tradeAddress,
         from: dateFrom,
         to: dateTo,
-        limit: 30,
+        limit: 25,
         pageParams: pageParam,
       });
     },

@@ -142,6 +142,16 @@ export interface UserHistoryProps<T = null> {
   pageParams: T;
   market?: string;
 }
+
+export interface TransactionHistoryProps<T = null> {
+  address: string;
+  from: Date;
+  to: Date;
+  limit: number;
+  pageParams: T;
+  transaction_type: "DEPOSIT" | "WITHDRAW";
+}
+
 export interface OrderHistoryProps {
   address: string;
   limit: number;

@@ -60,6 +60,7 @@ export const OrderHistory = ({ filters, market }: Props) => {
               <S.Th>Price</S.Th>
               <S.Th>Amount</S.Th>
               <S.Th>Filled</S.Th>
+              <S.Th>Fee</S.Th>
             </S.Tr>
           </S.Thead>
           <S.Tbody>
@@ -129,6 +130,9 @@ export const OrderHistory = ({ filters, market }: Props) => {
                               Number(priceFixed),
                               ","
                             ),
+                          },
+                          {
+                            value: String(order.fee),
                           },
                         ]}
                       />

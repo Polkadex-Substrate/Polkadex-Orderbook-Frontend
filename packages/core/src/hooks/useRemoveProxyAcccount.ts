@@ -1,10 +1,7 @@
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useUserAccounts } from "@polkadex/react-providers";
-import {
-  getProxiesLinkedToMain,
-  useProfile,
-} from "@orderbook/core/providers/user/profile";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   removeFromStorage,
@@ -78,8 +75,8 @@ const isTradingAccountRemovedFromDb = async (
   // TODO: Temp solution, backend issue
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
-      const { proxies }: { proxies: string[] } =
-        await getProxiesLinkedToMain(mainAddress);
+      const proxies =
+        await appsyncOrderbookService.query.getTradingAddresses(mainAddress);
       if (!proxies.includes(tradeAddress)) {
         break;
       }

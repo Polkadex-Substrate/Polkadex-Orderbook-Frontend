@@ -32,7 +32,7 @@ import {
 import {
   removeOrderFromList,
   replaceOrPushOrder,
-} from "@orderbook/core/utils/orderbookService/appsync_v1/helpers";
+} from "@orderbook/core/utils/orderbookService/appsync/helpers";
 import { useOrderbook } from "@orderbook/core/hooks";
 
 import { useProfile } from "../profile";
@@ -132,7 +132,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
     (trade: PublicTrade) => {
       if (market) {
         queryClient.setQueryData(QUERY_KEYS.recentTrades(market), (oldData) => {
-          const oldRecentTrades = oldData as PublicTrade[];
+          const oldRecentTrades = oldData ? (oldData as PublicTrade[]) : [];
           return [trade, ...oldRecentTrades];
         });
       }
@@ -181,7 +181,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
     (payload: Trade) => {
       try {
         queryClient.setQueryData(
-          QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
+          QUERY_KEYS.tradeHistory(dateFrom, dateTo, mainAddress),
           (
             oldTradeHistory: InfiniteData<MaybePaginated<Trade[]>> | undefined
           ) => {
@@ -213,7 +213,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         onHandleError(`User trades channel error: ${error?.message ?? error}`);
       }
     },
-    [dateFrom, dateTo, onHandleError, queryClient, tradeAddress]
+    [dateFrom, dateTo, onHandleError, queryClient, mainAddress]
   );
 
   const onTransactionsUpdate = useCallback(
@@ -221,7 +221,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
       try {
         if (payload) {
           queryClient.setQueryData(
-            QUERY_KEYS.transactions(mainAddress),
+            QUERY_KEYS.transactions(mainAddress, payload.txType),
             (oldData: MaybePaginated<Transaction[]> | undefined) => {
               const transactions = _.cloneDeep(oldData?.data as Transaction[]);
               const index = transactions.findIndex(
@@ -308,7 +308,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         queryClient.setQueryData(
           QUERY_KEYS.tradingBalances(mainAddress),
           (oldData): Balance[] => {
-            const prevData = [...(oldData as Balance[])];
+            const prevData = [...((oldData || []) as Balance[])];
             const old = prevData.find(
               (i) => i.asset.id.toString() === updateBalance.assetId.toString()
             );
