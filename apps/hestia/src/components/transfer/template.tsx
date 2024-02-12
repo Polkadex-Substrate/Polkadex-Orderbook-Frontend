@@ -6,6 +6,8 @@ import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useTransactions } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
+import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
+
 import { Help } from "./Help";
 import { SelectAsset } from "./SelectAsset";
 import { Form } from "./Form";
@@ -38,6 +40,7 @@ export function Template() {
 
   return (
     <Fragment>
+      <ConnectTradingInteraction />
       <SelectAsset
         open={assetsInteraction}
         onOpenChange={() => onAssetsInteraction()}

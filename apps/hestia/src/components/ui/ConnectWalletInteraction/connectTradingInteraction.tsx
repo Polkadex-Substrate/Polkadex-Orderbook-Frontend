@@ -30,7 +30,11 @@ export const ConnectTradingInteraction = () => {
   } = useConnectWalletProvider();
 
   return (
-    <Modal open={!!connectTrading} onOpenChange={onToogleConnectTrading}>
+    <Modal
+      open={!!connectTrading}
+      onOpenChange={onToogleConnectTrading}
+      closeOnClickOutside
+    >
       <Modal.Content>
         <Multistep.Interactive resetOnUnmount>
           {(props) => (

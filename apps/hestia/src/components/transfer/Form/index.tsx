@@ -35,6 +35,7 @@ import {
 } from "@orderbook/core/validations";
 import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { FromFunding } from "./fromFunding";
 import { FromTrading } from "./fromTrading";
@@ -65,6 +66,8 @@ export const Form = ({
   const { selectedAccount, selectedWallet } = useConnectWalletProvider();
   const { loading: depositLoading, onFetchDeposit } = useDepositProvider();
   const { onFetchWithdraws, loading: withdrawLoading } = useWithdrawsProvider();
+  const { onToogleConnectTrading, onToogleConnectExtension } =
+    useSettingsProvider();
 
   const chainName = useMemo(
     () => getChainFromTicker(selectedAsset?.ticker) || selectedAsset?.name,
@@ -341,6 +344,11 @@ export const Form = ({
               appearance="primary"
               size="md"
               className="w-full py-5"
+              onClick={() =>
+                isTransferFromFunding
+                  ? onToogleConnectExtension()
+                  : onToogleConnectTrading()
+              }
             >
               Connect yor account
             </Button.Solid>
