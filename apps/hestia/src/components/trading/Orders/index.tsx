@@ -83,8 +83,8 @@ export const Orders = ({ maxHeight, id }: Props) => {
   };
 
   return (
-    <Tabs defaultValue="openOrders" className="min-w-[25rem] bg-black">
-      <div className="lg:flex items-center justify-between">
+    <Tabs defaultValue="openOrders" className="min-w-[25rem]">
+      <div className="lg:flex items-center justify-between border-r border-b border-primary">
         <Tabs.List className="px-2 py-3">
           <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
             Open Orders({openOrders?.length || 0})

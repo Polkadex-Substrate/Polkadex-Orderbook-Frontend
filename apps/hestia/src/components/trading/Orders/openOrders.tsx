@@ -65,7 +65,7 @@ export const OpenOrdersTable = ({
       style={{ maxHeight, scrollbarGutter: "stable" }}
     >
       <PolkadexTable className="w-full">
-        <PolkadexTable.Header className="sticky top-0 bg-black">
+        <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
           {table.getHeaderGroups().map((headerGroup) => (
             <PolkadexTable.Row key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
