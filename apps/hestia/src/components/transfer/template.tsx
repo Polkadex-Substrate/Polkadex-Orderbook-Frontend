@@ -98,7 +98,7 @@ export function Template() {
                   </Fragment>
                 ) : (
                   <GenericMessage
-                    title="Connect your account"
+                    title="Connect Trading Account"
                     illustration="ConnectAccount"
                     onClick={() => onToogleConnectExtension()}
                   />

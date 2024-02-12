@@ -147,9 +147,10 @@ export const BuyOrder = ({
       ) : (
         <Button.Solid
           type="button"
+          appearance="secondary"
           onClick={() => onToogleConnectTrading(true)}
         >
-          Connect Wallet
+          Connect Trading Account
         </Button.Solid>
       )}
     </form>
