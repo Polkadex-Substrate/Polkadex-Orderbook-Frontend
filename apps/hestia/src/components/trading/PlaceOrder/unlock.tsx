@@ -29,18 +29,16 @@ export const Unlock = ({
     },
     validationSchema: unLockAccountValidations,
     onSubmit: async ({ password }) => {
-      setError(`Invalid password`);
-
-      // try {
-      //   const pass = password.toString();
-      //   tempBrowserAccount?.unlock(pass);
-      //   if (tempBrowserAccount) {
-      //     onAction(tempBrowserAccount, pass);
-      //   }
-      // } catch (error) {
-      //   setError("Invalid Password");
-      //   resetForm();
-      // }
+      try {
+        const pass = password.toString();
+        tempBrowserAccount?.unlock(pass);
+        if (tempBrowserAccount) {
+          onAction(tempBrowserAccount, pass);
+        }
+      } catch (error) {
+        setError("Invalid Password");
+        resetForm();
+      }
     },
   });
 
