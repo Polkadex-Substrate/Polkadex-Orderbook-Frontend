@@ -1,11 +1,6 @@
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
-import classNames from "classnames";
-import {
-  ArrowLeftCircleIcon,
-  ArrowRightCircleIcon,
-} from "@heroicons/react/24/solid";
-import { Button } from "@polkadex/ux";
+import { Button, PopConfirm, Tooltip, Typography } from "@polkadex/ux";
 import { OrderCancellation } from "@orderbook/core/providers/user/orders";
 
 const openOrderColumnHelper = createColumnHelper<Order>();
@@ -16,82 +11,146 @@ export const columns = ({
   onCancelOrder: (value: OrderCancellation) => void;
 }) => [
   openOrderColumnHelper.accessor((row) => row, {
-    id: "pair",
+    id: "date",
     cell: (e) => {
-      const isSell = e.getValue().side === "Ask";
-      const Icon = isSell ? ArrowRightCircleIcon : ArrowLeftCircleIcon;
+      const formattedDate = new Intl.DateTimeFormat("en-US", {
+        month: "numeric",
+        day: "2-digit",
+        hour: "numeric",
+        minute: "numeric",
+      })
+        .format(e.getValue().timestamp)
+        .replace(",", "");
+
       return (
-        <span className="flex items-center gap-1">
-          <Icon
-            className={classNames(
-              "w-5 h-5",
-              isSell ? "text-primary-base" : "text-success-base"
-            )}
-          />
-          {e.getValue().market.name}
-        </span>
+        <Tooltip>
+          <Tooltip.Trigger>
+            <Typography.Text size="xs">{formattedDate}</Typography.Text>
+          </Tooltip.Trigger>
+          <Tooltip.Content>
+            <Typography.Text>
+              <Typography.Text size="xs">
+                {e.getValue().timestamp.toLocaleString()}
+              </Typography.Text>
+            </Typography.Text>
+          </Tooltip.Content>
+        </Tooltip>
       );
     },
-    header: () => <span>Pair</span>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Date
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
   openOrderColumnHelper.accessor((row) => row, {
-    id: "date",
-    cell: (e) => {
-      return <span>{e.getValue().timestamp.toLocaleString()}</span>;
-    },
-    header: () => <span>Date</span>,
+    id: "pair",
+    cell: (e) => (
+      <Typography.Text bold size="xs">
+        {e.getValue().market.name}
+      </Typography.Text>
+    ),
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Pair
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
   openOrderColumnHelper.accessor((row) => row, {
     id: "type",
     cell: (e) => {
-      return <span>{e.getValue().type}</span>;
+      const isSell = e.getValue().side === "Ask";
+
+      const title = `${e.getValue().type.toLowerCase()}/${
+        isSell ? "Sell" : "Buy"
+      }`;
+      return (
+        <Typography.Text
+          size="xs"
+          bold
+          appearance={isSell ? "danger" : "success"}
+          className="capitalize"
+        >
+          {title}
+        </Typography.Text>
+      );
     },
-    header: () => <span>Type</span>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Type
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
   openOrderColumnHelper.accessor((row) => row, {
     id: "price",
     cell: (e) => {
-      return <span>{e.getValue().price}</span>;
+      return <Typography.Text size="xs">{e.getValue().price}</Typography.Text>;
     },
-    header: () => <span>Price</span>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Price
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
   openOrderColumnHelper.accessor((row) => row, {
     id: "total",
     cell: (e) => {
-      return <span>{e.getValue().quantity}</span>;
+      return (
+        <Typography.Text size="xs">{e.getValue().quantity}</Typography.Text>
+      );
     },
-    header: () => <span>Total</span>,
+    header: () => <Typography.Text size="xs">Total</Typography.Text>,
     footer: (e) => e.column.id,
   }),
   openOrderColumnHelper.accessor((row) => row, {
     id: "filled",
     cell: (e) => {
-      return <span>{e.getValue().filledQuantity}</span>;
+      return (
+        <Typography.Text size="xs">
+          {e.getValue().filledQuantity}
+        </Typography.Text>
+      );
     },
-    header: () => <span>Filled</span>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Filled
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
   openOrderColumnHelper.accessor((row) => row, {
     id: "cancel order",
     cell: (e) => {
       return (
-        <Button.Solid
-          className="py-0.5 h-auto"
-          size="xs"
-          onClick={() =>
-            onCancelOrder({
-              orderId: e.getValue().orderId,
-              base: e.getValue().market.baseAsset.id,
-              quote: e.getValue().market.quoteAsset.id,
-            })
-          }
-        >
-          Cancel Order
-        </Button.Solid>
+        <PopConfirm>
+          <PopConfirm.Trigger asChild>
+            <Button.Solid className="py-0.5 h-auto" size="xs">
+              Cancel Order
+            </Button.Solid>
+          </PopConfirm.Trigger>
+          <PopConfirm.Content>
+            <PopConfirm.Title>Cancel order</PopConfirm.Title>
+            <PopConfirm.Description>
+              Are you sure you want to cancel this order?
+            </PopConfirm.Description>
+            <PopConfirm.Close>No</PopConfirm.Close>
+            <PopConfirm.Button
+              onClick={() =>
+                onCancelOrder({
+                  orderId: e.getValue().orderId,
+                  base: e.getValue().market.baseAsset.id,
+                  quote: e.getValue().market.quoteAsset.id,
+                })
+              }
+            >
+              Yes cancel
+            </PopConfirm.Button>
+          </PopConfirm.Content>
+        </PopConfirm>
       );
     },
     header: () => <></>,

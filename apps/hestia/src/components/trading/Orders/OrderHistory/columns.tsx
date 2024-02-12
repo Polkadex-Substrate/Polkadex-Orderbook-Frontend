@@ -1,7 +1,7 @@
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ClipboardDocumentIcon } from "@heroicons/react/24/solid";
-import { Copy, Icon, Tooltip, Typography, truncateString } from "@polkadex/ux";
+import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
 
 const orderHistoryColumnHelper = createColumnHelper<Order>();
 

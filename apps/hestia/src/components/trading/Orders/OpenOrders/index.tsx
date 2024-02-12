@@ -1,4 +1,7 @@
+// TODO: Fix responsive interaction (reflect columns updates)
+
 "use client";
+
 import { useMemo } from "react";
 import {
   flexRender,
