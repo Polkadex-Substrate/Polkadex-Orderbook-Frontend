@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { getMarketUrl } from "@orderbook/core/helpers";
+import { useWindowSize } from "usehooks-ts";
 
 import QrCode from "../../../../public/img/qrCode.png";
 
@@ -20,6 +21,7 @@ export const ResponsiveMenuModal = ({
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
   const lastUsedMarketUrl = getMarketUrl();
+  const { width } = useWindowSize();
   return (
     <Modal
       open={open}
@@ -45,72 +47,75 @@ export const ResponsiveMenuModal = ({
       <Modal.Content className="flex flex-col flex-1">
         <div className="flex flex-col justify-between flex-1">
           <div className="flex flex-col gap-10 p-4">
-            <div className="flex flex-col gap-8">
-              <Typography.Text appearance="secondary">
-                Quick links
-              </Typography.Text>
-              <div className="flex flex-col gap-5">
-                <HeaderLink.Single
-                  size="lg"
-                  href={lastUsedMarketUrl}
-                  className="text-lg"
-                >
-                  Trade
-                </HeaderLink.Single>
-                <HeaderLink.Single
-                  size="lg"
-                  href="/markets"
-                  className="text-lg"
-                >
-                  Markets
-                </HeaderLink.Single>
-                <HeaderLink.Accordion
-                  items={[
-                    {
-                      href: "https://discord.gg/G4KMw2sGGe",
-                      label: "Community support",
-                    },
-                    {
-                      href: "https://docs.polkadex.trade/orderbookPolkadexFAQHowToTradeStep1",
-                      label: "Orderbook guide",
-                    },
-                    {
-                      href: "https://docs.polkadex.trade/orderbookPolkadexFAQWallets",
-                      label: "FAQ",
-                    },
-                  ]}
-                >
-                  Help
-                </HeaderLink.Accordion>
-                <HeaderLink.Accordion
-                  items={[
-                    { href: "/", label: "Listings" },
-                    {
-                      href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf",
-                      label: "Terms of use",
-                    },
-                    {
-                      href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf",
-                      label: "Privacy policy",
-                    },
-                    {
-                      href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf",
-                      label: "Disclaimer",
-                    },
-                    {
-                      href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf",
-                      label: "Excluded Jurisdictions",
-                    },
-                    {
-                      href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf",
-                      label: "Data Retention Policy",
-                    },
-                  ]}
-                >
-                  More
-                </HeaderLink.Accordion>
+            {width <= 1024 && (
+              <div className="flex flex-col gap-8">
+                <Typography.Text appearance="secondary">
+                  Quick links
+                </Typography.Text>
+                <div className="flex flex-col gap-5">
+                  <HeaderLink.Single
+                    size="lg"
+                    href={lastUsedMarketUrl}
+                    className="text-lg"
+                  >
+                    Trade
+                  </HeaderLink.Single>
+                  <HeaderLink.Single
+                    size="lg"
+                    href="/markets"
+                    className="text-lg"
+                  >
+                    Markets
+                  </HeaderLink.Single>
+                  <HeaderLink.Accordion
+                    items={[
+                      {
+                        href: "https://discord.gg/G4KMw2sGGe",
+                        label: "Community support",
+                      },
+                      {
+                        href: "https://docs.polkadex.trade/orderbookPolkadexFAQHowToTradeStep1",
+                        label: "Orderbook guide",
+                      },
+                      {
+                        href: "https://docs.polkadex.trade/orderbookPolkadexFAQWallets",
+                        label: "FAQ",
+                      },
+                    ]}
+                  >
+                    Help
+                  </HeaderLink.Accordion>
+                  <HeaderLink.Accordion
+                    items={[
+                      { href: "/", label: "Listings" },
+                      {
+                        href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf",
+                        label: "Terms of use",
+                      },
+                      {
+                        href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Privacy_Policy.pdf",
+                        label: "Privacy policy",
+                      },
+                      {
+                        href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Disclaimer_and_Legal_Notice.pdf",
+                        label: "Disclaimer",
+                      },
+                      {
+                        href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf",
+                        label: "Excluded Jurisdictions",
+                      },
+                      {
+                        href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf",
+                        label: "Data Retention Policy",
+                      },
+                    ]}
+                  >
+                    More
+                  </HeaderLink.Accordion>
+                </div>
               </div>
-            </div>
+            )}
+
             <div className="flex flex-col gap-8">
               <Typography.Text appearance="secondary">
                 General settings

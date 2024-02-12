@@ -1,9 +1,10 @@
 "use client";
 
-import { ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Amplify } from "aws-amplify";
 import dynamic from "next/dynamic";
+import { toast } from "sonner";
 
 import awsconfig from "../../../../aws-exports";
 const UserAccountsProvider = dynamic(
@@ -73,34 +74,40 @@ const queryClient = new QueryClient({
 
 export const DynamicProviders = ({ children }: { children: ReactNode }) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SettingProvider
-        defaultToast={{
-          onError: (e) => console.log(e),
-          onSuccess: (e) => console.log(e),
-        }}
-      >
-        <ExtensionsProvider>
-          <ExtensionAccountsProvider
-            network={"polkadex"}
-            ss58={88}
-            dappName={"polkadex"}
-          >
-            <UserAccountsProvider>
-              <ProfileProvider>
-                <NativeApiProvider>
-                  <OrderbookServiceProvider>
-                    <ConnectWalletProvider>
-                      <Toaster />
-                      {children}
-                    </ConnectWalletProvider>
-                  </OrderbookServiceProvider>
-                </NativeApiProvider>
-              </ProfileProvider>
-            </UserAccountsProvider>
-          </ExtensionAccountsProvider>
-        </ExtensionsProvider>
-      </SettingProvider>
-    </QueryClientProvider>
+    <Fragment>
+      <Toaster />
+      <QueryClientProvider client={queryClient}>
+        <SettingProvider
+          defaultToast={{
+            onError: (e) => {
+              console.log("onError", e);
+              toast(e.toString());
+            },
+            onSuccess: (e) => {
+              console.log("onSuccess", e);
+              toast(e.toString());
+            },
+          }}
+        >
+          <ExtensionsProvider>
+            <ExtensionAccountsProvider
+              network={"polkadex"}
+              ss58={88}
+              dappName={"polkadex"}
+            >
+              <UserAccountsProvider>
+                <ProfileProvider>
+                  <NativeApiProvider>
+                    <OrderbookServiceProvider>
+                      <ConnectWalletProvider>{children}</ConnectWalletProvider>
+                    </OrderbookServiceProvider>
+                  </NativeApiProvider>
+                </ProfileProvider>
+              </UserAccountsProvider>
+            </ExtensionAccountsProvider>
+          </ExtensionsProvider>
+        </SettingProvider>
+      </QueryClientProvider>
+    </Fragment>
   );
 };

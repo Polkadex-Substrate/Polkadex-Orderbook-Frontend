@@ -1,21 +1,50 @@
 "use client";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { Tabs } from "@polkadex/ux";
 import { Market } from "@orderbook/core/utils/orderbookService/types";
-import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
+import {
+  tryUnlockTradeAccount,
+  decimalPlaces,
+  trimFloat,
+} from "@orderbook/core/helpers";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useFunds } from "@orderbook/core/hooks";
 
-import { LimitOrder } from "./limitOrder";
-import { MarketOrder } from "./marketOrder";
+import { LimitOrder } from "./Limit";
+import { MarketOrder } from "./Market";
+
+import { UnlockAccount } from "@/components/ui/Temp/unlockAccount";
 
 type Props = { market?: Market };
 
-// TODO: Account unlocking functionality
-
 export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
   ({ market }, ref) => {
+    const formRef = useRef<HTMLFormElement | null>(null);
     const [isPasswordProtected, setIsPasswordProtected] = useState(false);
     const { selectedAccount } = useConnectWalletProvider();
+    const { getFreeProxyBalance } = useFunds();
+
+    const pricePrecision =
+      (market && decimalPlaces(market.price_tick_size)) || 0;
+    const qtyPrecision = (market && decimalPlaces(market.qty_step_size)) || 0;
+
+    const [availableQuoteAmount, availableBaseAmount] = useMemo(() => {
+      const quoteAmount = trimFloat({
+        value: getFreeProxyBalance(market?.quoteAsset?.id || "-1"),
+        digitsAfterDecimal: pricePrecision,
+      });
+      const baseAmount = trimFloat({
+        value: getFreeProxyBalance(market?.baseAsset?.id || "-1"),
+        digitsAfterDecimal: qtyPrecision,
+      });
+      return [+quoteAmount, +baseAmount];
+    }, [
+      getFreeProxyBalance,
+      market?.baseAsset?.id,
+      market?.quoteAsset?.id,
+      pricePrecision,
+      qtyPrecision,
+    ]);
 
     useEffect(() => {
       tryUnlockTradeAccount(selectedAccount);
@@ -35,20 +64,44 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
         </div>
 
         <div ref={ref} className="min-h-[18rem]">
-          <Tabs.Content
-            value="limit"
-            id="placeOrderContent"
-            className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
-          >
-            <LimitOrder market={market} />
-          </Tabs.Content>
-          <Tabs.Content
-            value="market"
-            id="placeOrderContent"
-            className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
-          >
-            <MarketOrder market={market} />
-          </Tabs.Content>
+          {isPasswordProtected ? (
+            <div className="[&>form>div>div>div>div]:w-[20rem]">
+              <UnlockAccount
+                onAction={(e) => {
+                  console.log(e);
+                  formRef?.current?.dispatchEvent(
+                    new Event("submit", { cancelable: true, bubbles: true })
+                  );
+                }}
+                tempBrowserAccount={selectedAccount}
+              />
+            </div>
+          ) : (
+            <>
+              <Tabs.Content
+                value="limit"
+                id="placeOrderContent"
+                className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
+              >
+                <LimitOrder
+                  market={market}
+                  availableBaseAmount={availableBaseAmount}
+                  availableQuoteAmount={availableQuoteAmount}
+                />
+              </Tabs.Content>
+              <Tabs.Content
+                value="market"
+                id="placeOrderContent"
+                className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
+              >
+                <MarketOrder
+                  market={market}
+                  availableBaseAmount={availableBaseAmount}
+                  availableQuoteAmount={availableQuoteAmount}
+                />
+              </Tabs.Content>
+            </>
+          )}
         </div>
       </Tabs>
     );

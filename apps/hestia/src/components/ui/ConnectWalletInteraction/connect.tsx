@@ -9,10 +9,10 @@ import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAccountMnemonic";
 import { RemoveTradingAccount } from "../ConnectWallet/removeTradingAccount";
 import { ConnectTradingAccountCard } from "../ReadyToUse/connectTradingAccountCard";
-import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
 import { ExtensionAccounts } from "../ConnectWallet/extensionAccounts";
 import { Authorization } from "../ConnectWallet/authorization";
 import { ConnectWallet } from "../ConnectWallet/connectWallet";
+import { UnlockAccount } from "../ReadyToUse/unlockAccount";
 
 import { SwitchKeys } from ".";
 
@@ -131,7 +131,7 @@ export const Connect = ({
               onClose={props?.onReset}
               onRedirect={onRedirect}
             />
-            <UnlockBrowserAccount
+            <UnlockAccount
               key="UnlockBrowserAccount"
               tempBrowserAccount={tempTrading}
               onClose={() => props?.onPage("ConnectTradingAccount")}

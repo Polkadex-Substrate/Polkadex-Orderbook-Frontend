@@ -3,6 +3,7 @@ export const defaultConfig = {
   polkadexChain: process.env.POLKADEX_CHAIN || "wss://mainnet.polkadex.trade",
   gaTrackerKey: process.env.GA_MEASUREMENT_ID ?? "G-PWZK8JEFLX",
   landingPageMarket: process.env.LANDING_PAGE || "PDEXCUSDT",
+  defaultTransferToken: process.env.DEFAULT_TRANSFER_TOKEN || "USDT",
   withCredentials: false,
   incrementalOrderBook: false,
   orderBookSideLimit: 25,

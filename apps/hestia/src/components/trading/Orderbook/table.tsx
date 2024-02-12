@@ -7,7 +7,7 @@ import {
 import classNames from "classnames";
 import { useOrderbookTable } from "@orderbook/core/hooks";
 import { MutableRefObject, useRef } from "react";
-import { GenericMessage } from "@polkadex/ux";
+import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
 
 import { columns } from "./columns";
 
@@ -70,17 +70,15 @@ export const Table = ({
       )}
       style={{ scrollbarGutter: "stable" }}
     >
-      <table className="w-full">
-        <thead className="sticky top-0 bg-level-0 z-[1]">
+      <PolkadexTable className="w-full">
+        <PolkadexTable.Header className="sticky top-0 bg-level-0">
           {getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
+            <PolkadexTable.Row key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <th
-                    className={classNames(
-                      header.id === "price" ? "text-left" : "text-right",
-                      "px-2 text-primary font-medium text-xs"
-                    )}
+                  <PolkadexTable.Head
+                    align={header.id === "price" ? "left" : "right"}
+                    className={"px-2 text-primary font-medium text-xs"}
                     key={header.id}
                   >
                     {header.isPlaceholder
@@ -89,29 +87,27 @@ export const Table = ({
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                  </th>
+                  </PolkadexTable.Head>
                 );
               })}
-            </tr>
+            </PolkadexTable.Row>
           ))}
-        </thead>
-        <tbody>
+        </PolkadexTable.Header>
+        <PolkadexTable.Body>
           {getRowModel().rows.map((row) => {
             return (
-              <tr
+              <PolkadexTable.Row
                 key={row.id}
-                className={classNames(
-                  "hover:bg-level-1 cursor-pointer relative"
-                )}
+                className={classNames("hover:bg-level-1 cursor-pointer ")}
               >
                 {row.getVisibleCells().map((cell, i) => {
                   const firstCol = i === 0;
                   const value = cell.getValue();
                   const active = firstCol && (value as string[])[0] === "8.654";
                   return (
-                    <td
+                    <PolkadexTable.Cell
                       className={classNames(
-                        "px-2 py-1 hover:bg-level-1 text-xs w-[33%] relative",
+                        "px-2 py-1 hover:bg-level-1 text-xs",
                         firstCol ? "text-left" : "text-right",
                         firstCol && "font-semibold",
                         active &&
@@ -123,14 +119,14 @@ export const Table = ({
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
-                    </td>
+                    </PolkadexTable.Cell>
                   );
                 })}
-              </tr>
+              </PolkadexTable.Row>
             );
           })}
-        </tbody>
-      </table>
+        </PolkadexTable.Body>
+      </PolkadexTable>
     </div>
   );
 };
