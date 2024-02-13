@@ -1,8 +1,11 @@
 import { API } from "aws-amplify";
 import { GraphQLSubscription } from "@aws-amplify/api";
 import { READ_ONLY_TOKEN, USER_EVENTS } from "@orderbook/core/constants";
-import { appsyncReader } from "@orderbook/core/utils/orderbookService/appsync_v1/readStrategy";
-import { KlineIntervals } from "@orderbook/core/utils/orderbookService/appsync_v1/constants";
+import { appsyncReader } from "@orderbook/core/utils/orderbookService/appsync/readStrategy";
+import { KlineIntervals } from "@orderbook/core/utils/orderbookService/appsync/constants";
+
+import { Websocket_streamsSubscription } from "../../../API";
+import * as SUBS from "../../../graphql/subscriptions";
 
 import {
   AccountUpdateEvent,
@@ -26,8 +29,6 @@ import {
   OrderbookSubscriptionStrategy,
   SubscriptionCallBack,
 } from "./../interfaces";
-import { Websocket_streamsSubscription } from "./API";
-import * as SUBS from "./graphql/subscriptions";
 import {
   convertBookUpdatesToPriceLevels,
   filterUserSubscriptionType,
@@ -145,7 +146,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       .filter((data) => {
         return filterUserSubscriptionType(data.value, USER_EVENTS.TradeFormat);
       })
-      .map((data) => {
+      .map((data): Trade => {
         const eventData = JSON.parse(
           data?.value?.data?.websocket_streams?.data as unknown as string
         ) as UserTradeEvent;
@@ -159,10 +160,12 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
           market,
           tradeId: eventData.trade_id.toString(),
           price: Number(eventData.p),
+          quote_qty: eventData.vq,
           qty: Number(eventData.q),
           isReverted: false,
           fee: 0,
           timestamp: new Date(eventData.t),
+          side: eventData.s,
         };
       });
     return observable.subscribe(cb);

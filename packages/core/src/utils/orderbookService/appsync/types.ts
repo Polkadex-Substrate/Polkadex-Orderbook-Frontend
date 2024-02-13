@@ -1,3 +1,5 @@
+import { OrderSide } from "@orderbook/core/API";
+
 export type BalanceUpdateEvent = {
   stid: number;
   asset: { asset: string } & string;
@@ -57,8 +59,10 @@ export type UserTradeEvent = {
   m: string;
   p: string;
   q: string;
+  vq: string;
   t: number;
   trade_id: number;
+  s: OrderSide;
 };
 export type TradeEvent = {
   m: string;

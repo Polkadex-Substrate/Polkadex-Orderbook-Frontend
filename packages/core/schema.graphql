@@ -1,0 +1,414 @@
+type Account {
+    main: String
+    proxy: String
+    stid: String
+}
+
+type AccountConnection {
+    items: [Account]
+    nextToken: String
+}
+
+type Asset {
+    # asset symbol of the asset; BTC
+    symbol: String!
+    # asset name of the asset; Bitcoin
+    name: String!
+    # withdrawal fee of the asset; eg 0.0005
+    withdrawal_fee: String!
+    # asset_id of the asset; eg 123456789
+    asset_id: String!
+}
+
+type AssetsConnection {
+    items: [Asset]
+    nextToken: String
+}
+
+#Balance of an asset for a given account
+#"""
+type Balance {
+    # asset_id of the asset; eg 123
+    a: String!
+    # free balance of the asset; eg 100.0
+    f: String!
+    # locked/reserved balance of the asset; eg 1.0
+    r: String!
+}
+
+type BalanceConnection {
+    items: [Balance]
+    nextToken: String
+}
+
+#Candlestick data for a given interval
+#"""
+type CandleStick {
+    # open price of the candlestick
+    o: String!
+    # close price of the candlestick
+    c: String!
+    # high price of the candlestick
+    h: String!
+    # low price of the candlestick
+    l: String!
+    # base volume of the candlestick
+    vb: String!
+    # quote volume of the candlestick
+    vq: String!
+    # timestamp of the candlestick
+    t: String!
+}
+
+type Channel {
+    name: String!
+    data: String!
+}
+
+type KlinesConnection {
+    items: [CandleStick]
+}
+
+#Market information for a given market
+#"""
+type Market {
+    # market symbol of the market; eg 123-456
+    market: String!
+    # max price config; eg 1000
+    max_order_price: String!
+    # min price config; eg 0.1
+    min_order_price: String!
+    # min qty config; eg 0.001
+    min_order_qty: String!
+    # max qty config; eg 1000
+    max_order_qty: String!
+    # price tick size config; eg 0.1
+    price_tick_size: String!
+    # qty tick size config; eg 0.001
+    qty_step_size: String!
+    # base asset of the market (only for internal use)
+    base_asset_precision: String!
+    # quote asset of the market (only for internal use)
+    quote_asset_precision: String!
+}
+
+type MarketsConnection {
+    items: [Market]
+}
+
+#Order data for a given order
+#"""
+type Order {
+    # unfilled qty of the order; eg 1.0
+    u: String!
+    # client order id of the order, set by the client;
+    cid: String!
+    # order id of the order, set by the exchange;
+    id: String!
+    # timestamp of the order;
+    t: String!
+    # market symbol of the order; eg 123-456
+    m: String!
+    # side of the order; eg Bid
+    s: String!
+    # type of the order; eg Limit
+    ot: String!
+    # status of the order; eg OPEN, FILLED, CANCELLED
+    st: String!
+    # price of the order; eg 1000
+    p: String!
+    # qty of the order; eg 1.0
+    q: String!
+    # quote qty of the order
+    qoq: String!
+    # avg price of the order; eg 1000
+    afp: String!
+    # filled qty of the order; eg 1.0
+    fq: String!
+    # fee of the order; eg 0.001
+    fee: String!
+    # state id, used unique incrementing nonce
+    stid: String!
+    # flag to check if the order is reverted, ie during a recovery
+    isReverted: Boolean
+}
+
+enum OrderSide {
+    Bid
+    Ask
+}
+
+enum OrderStatus {
+    OPEN
+    PARTIAL
+    CLOSED
+    CANCELLED
+}
+
+enum OrderType {
+    LIMIT
+    MARKET
+}
+
+type Orderbook {
+    items: [PriceLevel]
+    nextToken: String
+}
+
+type OrdersConnection {
+    items: [Order]
+    nextToken: String
+}
+
+#Price level of the orderbook
+#"""
+type PriceLevel {
+    # price of the price level
+    p: String!
+    # qty of the price level
+    q: String!
+    # side of the price level; eg Ask or Bid
+    s: OrderSide
+    # state id, a unique incrementing nonce
+    stid: String!
+}
+
+#Stats for a given market 24 hour period
+#"""
+type TickerStats {
+    # open price
+    o: String!
+    # close price
+    c: String!
+    # high price
+    h: String!
+    # low price
+    l: String!
+    # base volume
+    vb: String!
+    # quote volume
+    vq: String!
+}
+
+type TickersConnection {
+    items: TickerStats
+    nextToken: String
+}
+
+#Trade data for a given market
+#"""
+type Trade {
+    # market symbol of the trade; eg 123-456
+    m: String!
+    # price of the trade; eg 1000
+    p: String!
+    # qty of the trade; eg 1.0
+    q: String!
+    # timestamp of the trade;
+    t: String!
+    # state id, an incrementing nonce for exchange events
+    stid: String!
+    # taker order id for the trade
+    taker_id: String
+    # maker order id for the trade
+    maker_id: String
+    # trade id
+    trade_id: String
+    # flag to check if the trade is reverted, ie during a recovery
+    isReverted: Boolean
+}
+
+type TradesConnection {
+    items: [Trade]
+    nextToken: String
+}
+
+#Transaction data for a given account; Deposit and Withdraw
+#"""
+type Transaction {
+    # transaction type; eg Deposit or Withdraw
+    tt: String!
+    # asset of the transaction; eg 123
+    a: String!
+    # qty of the transaction; eg 1.0
+    q: String!
+    # fee of the transaction;
+    fee: String!
+    # status of the transaction; eg PENDING, CONFIRMED, FAILED
+    st: String!
+    # timestamp of the transaction;
+    t: String!
+    # state id, an incrementing nonce for exchange events
+    stid: String!
+    # snapshot id, incrementing nonce for blockchain
+    snapshot_id: String
+    # flag to check if the transaction is reverted, ie during a recovery
+    isReverted: Boolean
+}
+
+enum TransactionStatus {
+    PENDING
+    CONFIRMED
+    FAILED
+    CLAIMED
+    READY
+}
+
+enum TransactionType {
+    DEPOSIT
+    WITHDRAW
+}
+
+type TransactionsConnection {
+    items: [Transaction]
+    nextToken: String
+}
+
+input UserActionInput {
+    payload: String!
+}
+
+#Trade data for a given account
+#"""
+type UserTrade {
+    # market symbol of the trade; eg 123-456
+    m: String!
+    # price of the trade; eg 1000
+    p: String!
+    # qty of the trade; eg 1.0
+    q: String!
+    # side of the trade; eg Bid
+    s: String!
+    # timestamp of the trade;
+    t: String!
+    # state id, an incrementing nonce for exchange events
+    stid: String!
+    # trade id
+    trade_id: String
+    # flag to check if the trade is reverted, ie during a recovery
+    isReverted: Boolean
+}
+
+type UserTradesConnection {
+    items: [UserTrade]
+    nextToken: String
+}
+
+type Mutation {
+    place_order(input: UserActionInput!): String
+    @aws_lambda
+    cancel_order(input: UserActionInput!): String
+    @aws_lambda
+    cancel_all(input: UserActionInput!): String
+    @aws_lambda
+    withdraw(input: UserActionInput!): String
+    @aws_lambda
+    publish(name: String!, data: String!): Channel
+    @aws_lambda
+}
+
+type Query {
+    # Get Enclave time
+    getTime: String!
+    # Get orderbook
+    getOrderbook(market: String!, limit: Int, nextToken: String): Orderbook
+    # Get Klines
+    getKlinesByMarketInterval(
+        market: String!,
+        interval: String!,
+        # time in ISO 8601 format
+        from: AWSDateTime!,
+        # time in ISO 8601 format
+        to: AWSDateTime!
+    ): KlinesConnection
+    # Gets all assets available in Orderbook
+    getAllAssets(limit: Int, nextToken: String): AssetsConnection
+    # Gets all trades for a market
+    listTradesByMarket(
+        m: String!,
+        from: AWSDateTime!,
+        to: AWSDateTime,
+        limit: Int,
+        nextToken: String
+    ): TradesConnection
+    # Gets trades for a market
+    listRecentTrades(m: String!, limit: Int, nextToken: String): TradesConnection
+    # Get all market tickers
+    getMarketTickers(market: String!, from: AWSDateTime!, to: AWSDateTime!): TickersConnection
+    # Get all active market configs
+    getAllMarkets: MarketsConnection
+    # Finds User by trade account
+    findUserByTradeAccount(trade_account: String!): AccountConnection
+    # Finds User by main account
+    findUserByMainAccount(main_account: String!): AccountConnection
+    # Find Asset Balance by Main Account
+    findBalanceByMainAccount(main_account: String!, asset: String!): Balance
+    # Get all Asset Balances by Main Account
+    getAllBalancesByMainAccount(main_account: String!): BalanceConnection
+    # Find Order by id
+    findOrderById(order_id: String!): Order
+    # Get Order history based on time by account
+    listOrderHistoryByMainAccount(
+        # trading account address
+        main_account: String!,
+        # time in ISO 8601 format
+        from: AWSDateTime!,
+        # time in ISO 8601 format
+        to: AWSDateTime,
+        limit: Int,
+        nextToken: String
+    ): OrdersConnection
+    listOrderHistoryByTradeAccount(
+        # trading account address
+        trade_account: String!,
+        # time in ISO 8601 format
+        from: AWSDateTime!,
+        # time in ISO 8601 format
+        to: AWSDateTime,
+        limit: Int,
+        nextToken: String
+    ): OrdersConnection
+    # List open orders for account
+    listOpenOrdersByMainAccount(main_account: String!, limit: Int, nextToken: String): OrdersConnection
+    listOpenOrdersByTradeAccount(trade_account: String!, limit: Int, nextToken: String): OrdersConnection
+    # List transactions
+    listTransactionsByMainAccount(
+        # funding account address
+        main_account: String!,
+        # time in ISO 8601 format
+        from: AWSDateTime!,
+        # time in ISO 8601 format
+        to: AWSDateTime,
+        # type
+        transaction_type: TransactionType!,
+        limit: Int,
+        nextToken: String
+    ): TransactionsConnection
+    # List trades
+    listTradesByMainAccount(
+        # trading account address
+        main_account: String!,
+        # time in ISO 8601 format
+        from: AWSDateTime!,
+        # time in ISO 8601 format
+        to: AWSDateTime,
+        limit: Int,
+        nextToken: String
+    ): UserTradesConnection
+    listTradesByTradeAccount(
+        # trading account address
+        trade_account: String!,
+        # time in ISO 8601 format
+        from: AWSDateTime!,
+        # time in ISO 8601 format
+        to: AWSDateTime,
+        limit: Int,
+        nextToken: String
+    ): UserTradesConnection
+}
+
+type Subscription {
+    # General Trade streams
+    websocket_streams(name: String!): Channel
+    @aws_subscribe(mutations: ["publish"])
+}

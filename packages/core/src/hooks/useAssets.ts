@@ -40,7 +40,7 @@ export function useAssets(locale = "en") {
   const assets = useMemo(
     () =>
       assetsList
-        ?.map((e: AssetsProps) => {
+        ?.map((e: Asset) => {
           const tokenBalance = balances?.find(
             (value) => value.asset.id === e.id
           );

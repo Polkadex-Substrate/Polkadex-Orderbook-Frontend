@@ -1,4 +1,21 @@
 import { GraphQLResult } from "@aws-amplify/api";
+import { unknownAsset } from "@orderbook/core/utils/orderbookService/appsync/constants";
+
+import {
+  FindUserByMainAccountQuery,
+  FindUserByTradeAccountQuery,
+  GetAllAssetsQuery,
+  GetAllBalancesByMainAccountQuery,
+  GetAllMarketsQuery,
+  GetKlinesByMarketIntervalQuery,
+  GetMarketTickersQuery,
+  Order as APIOrder,
+  Trade as APITrade,
+  Transaction as APITransaction,
+  PriceLevel,
+  UserTrade,
+} from "../../../API";
+import * as QUERIES from "../../../graphql/queries";
 
 import { OrderbookReadStrategy } from "./../interfaces";
 import {
@@ -21,26 +38,13 @@ import {
   MaybePaginated,
   LatestTradesPropsForMarket,
   OrderSide,
+  TransactionHistoryProps,
 } from "./../types";
 import {
   fetchBatchFromAppSync,
   fetchFullListFromAppSync,
   sendQueryToAppSync,
 } from "./helpers";
-import * as QUERIES from "./graphql";
-import {
-  FindUserByMainAccountQuery,
-  FindUserByProxyAccountQuery,
-  GetAllAssetsQuery,
-  GetAllBalancesByMainAccountQuery,
-  GetAllMarketsQuery,
-  GetKlinesbyMarketIntervalQuery,
-  GetMarketTickersQuery,
-  Order as APIOrder,
-  Trade as APITrade,
-  Transaction as APITransaction,
-  SetPriceLevel,
-} from "./API";
 
 class AppsyncV1Reader implements OrderbookReadStrategy {
   ready = false;
@@ -92,10 +96,11 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     const balances =
       balancesQueryResult?.data?.getAllBalancesByMainAccount?.items?.map(
         (item): Balance => {
-          const asset = this._assetsList.find((x) => x.id === item?.a);
+          const asset =
+            this._assetsList.find((x) => x.id === item?.a) || unknownAsset;
           if (!asset) {
             throw new Error(
-              `[${this.constructor.name}:getBalance] cannot find asset`
+              `[${this.constructor.name}:getBalance] cannot find asset: ${item?.a}`
             );
           }
           return {
@@ -110,9 +115,9 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
 
   async getCandles(args: KlineHistoryProps): Promise<Kline[]> {
     const candlesQueryResult = await sendQueryToAppSync<
-      GraphQLResult<GetKlinesbyMarketIntervalQuery>
+      GraphQLResult<GetKlinesByMarketIntervalQuery>
     >({
-      query: QUERIES.getKlinesbyMarketInterval,
+      query: QUERIES.getKlinesByMarketInterval,
       variables: {
         from: args.from.toISOString(),
         to: args.to.toISOString(),
@@ -121,7 +126,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       },
     });
     const candles =
-      candlesQueryResult?.data?.getKlinesbyMarketInterval?.items?.map(
+      candlesQueryResult?.data?.getKlinesByMarketInterval?.items?.map(
         (item): Kline => {
           return {
             high: Number(item?.h) || 0,
@@ -190,12 +195,12 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       await this.init();
     }
     const openOrderQueryResult = await fetchFullListFromAppSync<APIOrder>(
-      QUERIES.listOpenOrdersByMainAccount,
+      QUERIES.listOpenOrdersByTradeAccount,
       {
-        main_account: args.address,
+        trade_account: args.address,
         limit: args.limit,
       },
-      "listOpenOrdersByMainAccount"
+      "listOpenOrdersByTradeAccount"
     );
     const openOrders = openOrderQueryResult?.map((item): Order => {
       return this.mapApiOrderToOrder(item, this._marketList);
@@ -210,15 +215,15 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       await this.init();
     }
     const orderHistoryQueryResult = await fetchBatchFromAppSync<APIOrder>(
-      QUERIES.listOrderHistorybyMainAccount,
+      QUERIES.listOrderHistoryByTradeAccount,
       {
-        main_account: args.address,
+        trade_account: args.address,
         limit: args.limit,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
         nextToken: args.pageParams,
       },
-      "listOrderHistorybyMainAccount"
+      "listOrderHistoryByTradeAccount"
     );
     if (!orderHistoryQueryResult) {
       return { data: [], nextToken: null };
@@ -235,7 +240,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
   }
 
   async getOrderbook(market: string): Promise<Orderbook> {
-    const queryResult = await fetchFullListFromAppSync<SetPriceLevel | null>(
+    const queryResult = await fetchFullListFromAppSync<PriceLevel | null>(
       QUERIES.getOrderbook,
       {
         market,
@@ -292,21 +297,24 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
   async getTradeHistory(
     args: UserHistoryProps
   ): Promise<MaybePaginated<Trade[]>> {
-    const queryResult = await fetchBatchFromAppSync<APITrade>(
-      QUERIES.listTradesByMainAccount,
+    if (!this.isReady()) {
+      await this.init();
+    }
+    const queryResult = await fetchBatchFromAppSync<UserTrade>(
+      QUERIES.listTradesByTradeAccount,
       {
-        main_account: args.address,
+        trade_account: args.address,
         limit: args.limit,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
         nextToken: args.pageParams,
       },
-      "listTradesByMainAccount"
+      "listTradesByTradeAccount"
     );
     if (!queryResult) {
       return { data: [], nextToken: null };
     }
-    const trades = queryResult.response.map((item: APITrade): Trade => {
+    const trades = queryResult.response.map((item: UserTrade): Trade => {
       const market = this._marketList.find((x) => x.id === item?.m);
       if (!market) {
         throw new Error(
@@ -315,14 +323,14 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       }
       return {
         market,
-        price: Number(item?.p) || 0,
-        qty: Number(item?.q) || 0,
+        price: Number(item.p) || 0,
+        qty: Number(item.q) || 0,
         isReverted: item?.isReverted || false,
         timestamp: new Date(Number(item?.t) || 0),
-        tradeId: item?.t_id || "",
+        tradeId: item?.trade_id || "",
         fee: 0,
         side: item.s as OrderSide,
-        quantity: item.q,
+        quote_qty: String(Number(item.p) * Number(item.q)),
       };
     });
     return { data: trades, nextToken: queryResult.nextToken };
@@ -332,12 +340,12 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     args: LatestTradesPropsForMarket
   ): Promise<PublicTrade[]> {
     const queryResult = await fetchBatchFromAppSync<APITrade>(
-      QUERIES.getRecentTrades,
+      QUERIES.listRecentTrades,
       {
         m: args.market,
         limit: args.limit,
       },
-      "getRecentTrades"
+      "listRecentTrades"
     );
     if (!queryResult) {
       return [];
@@ -361,13 +369,12 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         main_account: fundingAddress,
       },
     });
-    return (
-      (queryResult?.data?.findUserByMainAccount?.proxies as string[]) || []
-    );
+    const res = queryResult?.data?.findUserByMainAccount?.items || [];
+    return res.map((item) => item?.proxy || "");
   }
 
   async getTransactions(
-    args: UserHistoryProps
+    args: TransactionHistoryProps
   ): Promise<MaybePaginated<Transaction[]>> {
     if (!this.isReady()) {
       await this.init();
@@ -379,6 +386,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         limit: args.limit,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
+        transaction_type: args.transaction_type,
       },
       "listTransactionsByMainAccount"
     );
@@ -413,14 +421,14 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     tradeAddress: string
   ): Promise<string | null | undefined> {
     const queryResult = await sendQueryToAppSync<
-      GraphQLResult<FindUserByProxyAccountQuery>
+      GraphQLResult<FindUserByTradeAccountQuery>
     >({
-      query: QUERIES.findUserByProxyAccount,
+      query: QUERIES.findUserByTradeAccount,
       variables: {
-        proxy_account: tradeAddress,
+        trade_account: tradeAddress,
       },
     });
-    return queryResult?.data?.findUserByProxyAccount?.items?.[0]?.range_key;
+    return queryResult?.data?.findUserByTradeAccount?.items?.[0]?.main;
   }
 
   private mapApiOrderToOrder(item: APIOrder, marketList: Market[]): Order {
@@ -430,6 +438,8 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         `[${this.constructor.name}:getOpenOrders] cannot find market`
       );
     }
+    const marketBuyHistory =
+      item.st !== "OPEN" && item.ot === "MARKET" && item.s === "Bid";
     return {
       market,
       tradeAddress: item?.u || "",
@@ -443,7 +453,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       timestamp: new Date(Number(item?.t) || 0),
       side: item.s as OrderSide,
       filledQuantity: String(item.fq),
-      quantity: item.q,
+      quantity: marketBuyHistory ? item.qoq : item.q,
     };
   }
 }

@@ -133,6 +133,7 @@ export const TradingView = ({ market }: Props) => {
             has_intraday: true,
             visible_plots_set: "ohlcv",
             has_daily: true,
+            has_empty_bars: true,
             has_weekly_and_monthly: true,
             supported_resolutions: configurationData.supported_resolutions,
             volume_precision: 2,

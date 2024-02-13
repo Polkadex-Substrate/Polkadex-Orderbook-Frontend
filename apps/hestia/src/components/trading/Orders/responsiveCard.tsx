@@ -207,7 +207,7 @@ export const TradeHistoryResponsiveCard = ({ trades }: { trades: Trade[] }) => {
 
         <div className="flex flex-col gap-1">
           <Typography.Text appearance="primary">Total</Typography.Text>
-          <Typography.Text>{trade.quantity}</Typography.Text>
+          <Typography.Text>{trade.qty}</Typography.Text>
         </div>
       </div>
     );

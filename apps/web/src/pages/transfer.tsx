@@ -13,12 +13,7 @@ const TransferTemplate = dynamic(
     loading: () => <LoadingScreen />,
   }
 );
-const DepositProvider = dynamic(
-  () => import("@orderbook/core/providers").then((mod) => mod.DepositProvider),
-  {
-    ssr: false,
-  }
-);
+
 const WithdrawsProvider = dynamic(
   () =>
     import("@orderbook/core/providers").then((mod) => mod.WithdrawsProvider),
@@ -28,11 +23,9 @@ const WithdrawsProvider = dynamic(
 );
 const Transfer = () => {
   return (
-    <DepositProvider>
-      <WithdrawsProvider>
-        <TransferTemplate />
-      </WithdrawsProvider>
-    </DepositProvider>
+    <WithdrawsProvider>
+      <TransferTemplate />
+    </WithdrawsProvider>
   );
 };
 
