@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 import { color, variant } from "styled-system";
-import { bgStyleVariants } from "@orderbook/core/helpers";
 
 import * as T from "./types";
 
