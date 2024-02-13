@@ -1,5 +1,5 @@
 "use client";
-import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import { Tabs } from "@polkadex/ux";
 import { Market } from "@orderbook/core/utils/orderbookService/types";
 import {
@@ -18,7 +18,6 @@ type Props = { market?: Market };
 
 export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
   ({ market }, ref) => {
-    const formRef = useRef<HTMLFormElement | null>(null);
     const [isPasswordProtected, setIsPasswordProtected] = useState(false);
     const { selectedAccount } = useConnectWalletProvider();
     const { getFreeProxyBalance } = useFunds();
@@ -66,11 +65,7 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
           {isPasswordProtected ? (
             <div className="[&>form>div>div>div>div]:w-[20rem]">
               <Unlock
-                onAction={(e) => {
-                  formRef?.current?.dispatchEvent(
-                    new Event("submit", { cancelable: true, bubbles: true })
-                  );
-                }}
+                onAction={() => setIsPasswordProtected(false)}
                 tempBrowserAccount={selectedAccount}
               />
             </div>
