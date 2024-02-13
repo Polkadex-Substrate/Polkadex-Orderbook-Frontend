@@ -1,5 +1,6 @@
 import { ApiPromise } from "@polkadot/api";
 import { ExtensionAccount } from "@polkadex/react-providers";
+import { SignatureEnumSr25519 } from "@orderbook/core/helpers";
 
 import {
   AccountUpdateEvent,
@@ -105,6 +106,11 @@ export type ExecuteArgs = {
   token?: string;
 };
 
+export type WithdrawArgs = {
+  payload: [string, string, object, SignatureEnumSr25519];
+  address: string;
+};
+
 export type DepositArgs = {
   api: ApiPromise;
   amount: string | number;
@@ -115,7 +121,7 @@ export type DepositArgs = {
 export interface OrderbookOperationStrategy extends BaseStrategy {
   placeOrder: (args: ExecuteArgs) => Promise<void>;
   cancelOrder: (args: ExecuteArgs) => Promise<void>;
-  withdraw: (args: ExecuteArgs) => Promise<void>;
+  withdraw: (args: WithdrawArgs) => Promise<void>;
   deposit: (args: DepositArgs) => Promise<void>;
 }
 

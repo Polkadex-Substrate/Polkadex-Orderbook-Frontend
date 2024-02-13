@@ -6,11 +6,11 @@ import { useNativeApi } from "../providers/public/nativeApi";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
-export interface DepositArgs {
+type DepositArgs = {
   amount: string | number;
   asset: Record<string, string | null>;
   account: ExtensionAccount;
-}
+};
 
 export const useDeposit = () => {
   const { onHandleError, onHandleNotification } = useSettingsProvider();

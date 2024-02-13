@@ -15,6 +15,7 @@ import {
   DepositArgs,
   ExecuteArgs,
   OrderbookOperationStrategy,
+  WithdrawArgs,
 } from "./../interfaces";
 
 type UserActionLambdaResp = {
@@ -82,11 +83,11 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
     }
   }
 
-  async withdraw(data: ExecuteArgs): Promise<void> {
+  async withdraw(data: WithdrawArgs): Promise<void> {
     const result = await sendQueryToAppSync<GraphQLResult<WithdrawMutation>>({
       query: mutation.withdraw,
       variables: { input: { payload: data.payload } },
-      token: data.token,
+      token: data.address,
     });
     if (result.errors && result.errors.length > 0) {
       let concatError = "";
