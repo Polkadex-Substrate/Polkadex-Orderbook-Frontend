@@ -12,6 +12,7 @@ import { Market } from "@orderbook/core/utils/orderbookService/types";
 import { Balance } from "../balance";
 
 import { Range } from "@/components/ui/Temp/range";
+import { TradingFee } from "@/components/ui/ReadyToUse";
 
 const PRICE = "Price";
 const AMOUNT = "Amount";
@@ -164,9 +165,13 @@ export const SellOrder = ({
           {errors.amount}
         </Tooltip.Content>
       </Tooltip>
-      <Balance baseTicker={market?.baseAsset?.ticker || ""}>
-        {availableBaseAmount}
-      </Balance>
+      <div className="flex items-center gap-2 justify-between">
+        <TradingFee ticker="PDEX" />
+        <Balance baseTicker={market?.baseAsset?.ticker || ""}>
+          {availableBaseAmount}
+        </Balance>
+      </div>
+
       <Range
         ranges={[
           {
