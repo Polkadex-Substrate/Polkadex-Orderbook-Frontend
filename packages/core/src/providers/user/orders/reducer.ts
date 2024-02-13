@@ -57,7 +57,7 @@ export const ordersReducer = (state: OrdersState, action: OrdersAction) => {
           ...state.execute,
           isLoading: false,
           isError: true,
-          message: action.error.message,
+          message: [action.error.message],
         },
       };
     case ORDER_CANCEL_FETCH:
@@ -89,7 +89,7 @@ export const ordersReducer = (state: OrdersState, action: OrdersAction) => {
           ...state.cancel,
           isLoading: false,
           isError: true,
-          message: action.error.message,
+          message: [action.error.message],
         },
       };
     }
