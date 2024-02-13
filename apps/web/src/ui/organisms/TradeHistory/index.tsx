@@ -36,7 +36,7 @@ export const TradeHistory = ({
     error,
     isLoading,
     onFetchNextPage,
-  } = useTradeHistory(filters, market);
+  } = useTradeHistory(market, filters);
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`tradeHistory.${key}`);

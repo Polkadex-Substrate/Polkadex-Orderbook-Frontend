@@ -62,6 +62,7 @@ export type CommonState = {
 };
 
 export type Ifilters = {
+  hiddenPairs?: boolean;
   onlyBuy: boolean;
   onlySell: boolean;
   showReverted: boolean;

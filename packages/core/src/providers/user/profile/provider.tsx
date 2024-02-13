@@ -60,15 +60,21 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         setActiveAccount({ mainAddress, tradeAddress });
         break;
       } catch (error) {
-        console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
+        console.error(`Attempt ${attempt + 1} failed: ${error}`);
       }
       if (attempt < maxAttempts)
         await new Promise((resolve) => setTimeout(resolve, 10000));
     }
   };
 
-  const onUserSelectMainAddress = async ({ mainAddress: string }) => {
-    const mainAccount = extensionAccounts.find((acc) => acc.address === string);
+  const onUserSelectMainAddress = async ({
+    mainAddress,
+  }: {
+    mainAddress: string;
+  }) => {
+    const mainAccount = extensionAccounts.find(
+      (acc) => acc.address === mainAddress
+    );
     if (!mainAccount) {
       onHandleError("Invalid main Address");
       return;

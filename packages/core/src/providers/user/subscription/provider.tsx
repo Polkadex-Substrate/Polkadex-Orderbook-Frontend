@@ -69,7 +69,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         // Update OpenOrders Realtime
         queryClient.setQueryData(
           QUERY_KEYS.openOrders(tradeAddress),
-          (oldOpenOrders: Order[]) => {
+          (oldOpenOrders?: Order[]) => {
             const prevOpenOrders = [...(oldOpenOrders || [])];
 
             let updatedOpenOrders: Order[] = [];
@@ -122,7 +122,9 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
           }
         );
       } catch (error) {
-        onHandleError(`Order updates channel ${error?.message ?? error}`);
+        onHandleError(
+          `Order updates channel ${(error as Error)?.message ?? error}`
+        );
       }
     },
     [dateFrom, dateTo, onHandleError, queryClient, tradeAddress]
@@ -210,7 +212,9 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
           }
         );
       } catch (error) {
-        onHandleError(`User trades channel error: ${error?.message ?? error}`);
+        onHandleError(
+          `User trades channel error: ${(error as Error)?.message ?? error}`
+        );
       }
     },
     [dateFrom, dateTo, onHandleError, queryClient, mainAddress]
@@ -245,8 +249,8 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 
   const onTickerUpdates = useCallback(
     (ticker: Ticker) => {
-      queryClient.setQueryData(QUERY_KEYS.tickers(), (prevData: Ticker[]) => {
-        const newTickers = [...prevData];
+      queryClient.setQueryData(QUERY_KEYS.tickers(), (prevData?: Ticker[]) => {
+        const newTickers = [...(prevData || [])];
         const idx = newTickers?.findIndex((x) => x.market === ticker.market);
 
         const priceChange = Number(ticker.close) - Number(ticker.open);
@@ -307,7 +311,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         // Update trading account balance
         queryClient.setQueryData(
           QUERY_KEYS.tradingBalances(mainAddress),
-          (oldData): Balance[] => {
+          (oldData?: Balance[]): Balance[] => {
             const prevData = [...((oldData || []) as Balance[])];
             const old = prevData.find(
               (i) => i.asset.id.toString() === updateBalance.assetId.toString()
@@ -340,7 +344,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         // Update chain balance
         queryClient.setQueryData(
           QUERY_KEYS.onChainBalances(mainAddress),
-          (prevData) => {
+          (prevData?: Map<string, number>) => {
             const oldData = new Map(prevData as Map<string, number>);
             oldData.set(updateBalance.assetId, Number(onChainBalance));
             return oldData;

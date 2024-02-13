@@ -19,9 +19,7 @@ import {
   useUserAccounts,
   useExtensionAccounts,
 } from "@polkadex/react-providers";
-import {
-  parseMutationError,
-} from "@orderbook/core/providers/user/orders/helper";
+import { parseMutationError } from "@orderbook/core/providers/user/orders/helper";
 
 import { useProfile } from "../profile";
 
@@ -44,7 +42,10 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     is_success: boolean;
     body: string;
   };
-  const onFetchWithdraws = async ({ asset, amount }) => {
+  const onFetchWithdraws = async ({
+    asset,
+    amount,
+  }: A.WithdrawsFetch["payload"]) => {
     dispatch(A.withdrawsFetch({ asset, amount }));
     try {
       const keyringPair = wallet.getPair(tradeAddress);
@@ -152,8 +153,8 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
       }
     } catch (error) {
       dispatch(A.withdrawClaimCancel(sid));
-      settingsState.onHandleError(error?.message ?? error);
-      dispatch(A.withdrawsError(error));
+      settingsState.onHandleError((error as Error)?.message ?? error);
+      dispatch(A.withdrawsError((error as Error)?.message ?? error));
     } finally {
       for (const assetId of assetIds) {
         await onChangeChainBalance(assetId);

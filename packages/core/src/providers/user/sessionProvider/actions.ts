@@ -1,5 +1,3 @@
-import { Error } from "../../types";
-
 import { SESSION_FETCH, SESSION_DATA, SESSION_ERROR } from "./constants";
 
 export interface UserSessionPayload {
@@ -30,7 +28,7 @@ export const userSessionFetch = (): UserSessionFetch => ({
 });
 
 export const userSessionData = (
-  payload: UserSessionPayload,
+  payload: UserSessionPayload
 ): UserSessionData => ({
   type: SESSION_DATA,
   payload,

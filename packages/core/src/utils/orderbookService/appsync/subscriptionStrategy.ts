@@ -164,7 +164,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
           isReverted: false,
           fee: 0,
           timestamp: new Date(eventData.t),
-        };
+        } as Trade;
       });
     return observable.subscribe(cb);
   }

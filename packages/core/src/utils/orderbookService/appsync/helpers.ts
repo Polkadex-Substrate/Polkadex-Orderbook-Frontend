@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import { API as amplifyApi } from "aws-amplify";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/auth";
 import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
