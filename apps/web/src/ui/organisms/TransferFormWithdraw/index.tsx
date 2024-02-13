@@ -11,8 +11,7 @@ import {
   trimFloat,
   tryUnlockTradeAccount,
 } from "@orderbook/core/helpers";
-import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
-import { useFunds } from "@orderbook/core/hooks";
+import { useFunds, useWithdraw } from "@orderbook/core/hooks";
 import { useTranslation } from "next-i18next";
 import {
   useExtensionAccounts,
@@ -51,7 +50,7 @@ export const TransferFormWithdraw = ({
 
   const { extensionAccounts: allAccounts } = useExtensionAccounts();
   const { wallet, isReady } = useUserAccounts();
-  const { onFetchWithdraws, loading } = useWithdrawsProvider();
+  const { mutateAsync: onFetchWithdraws, loading } = useWithdraw();
   const { selectedAddresses } = useProfile();
   const { loading: balancesLoading } = useFunds();
   const { onToogleConnectExtension, onHandleError } = useSettingsProvider();

@@ -33,9 +33,8 @@ import {
   depositValidations,
   withdrawValidations,
 } from "@orderbook/core/validations";
-import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { useDeposit } from "@orderbook/core/hooks";
+import { useDeposit, useWithdraw } from "@orderbook/core/hooks";
 
 import { FromFunding } from "./fromFunding";
 import { FromTrading } from "./fromTrading";
@@ -65,7 +64,8 @@ export const Form = ({
 
   const { selectedAccount, selectedWallet } = useConnectWalletProvider();
   const { loading: depositLoading, mutateAsync: onFetchDeposit } = useDeposit();
-  const { onFetchWithdraws, loading: withdrawLoading } = useWithdrawsProvider();
+  const { mutateAsync: onFetchWithdraws, loading: withdrawLoading } =
+    useWithdraw();
   const { onToogleConnectTrading, onToogleConnectExtension } =
     useSettingsProvider();
 

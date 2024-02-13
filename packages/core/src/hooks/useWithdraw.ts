@@ -35,7 +35,7 @@ export const useWithdraw = () => {
 
       const keyringPair = wallet.getPair(tradeAddress);
       if (tradeAddress?.trim().length === 0 || !keyringPair)
-        throw new Error("Invalid trading account");
+        throw new Error("Invalid Trading Account");
 
       const nonce = getNonce();
       const payload = { asset_id: { asset }, amount, timestamp: nonce };
