@@ -93,9 +93,7 @@ export const columns = [
   tradeHistoryColumnHelper.accessor((row) => row, {
     id: "quantity",
     cell: (e) => {
-      return (
-        <Typography.Text size="xs">{e.getValue().quantity}</Typography.Text>
-      );
+      return <Typography.Text size="xs">{e.getValue().qty}</Typography.Text>;
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">

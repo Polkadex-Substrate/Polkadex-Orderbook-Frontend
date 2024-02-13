@@ -146,7 +146,7 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
       .filter((data) => {
         return filterUserSubscriptionType(data.value, USER_EVENTS.TradeFormat);
       })
-      .map((data) => {
+      .map((data): Trade => {
         const eventData = JSON.parse(
           data?.value?.data?.websocket_streams?.data as unknown as string
         ) as UserTradeEvent;
@@ -160,11 +160,13 @@ class AppsyncV1Subscriptions implements OrderbookSubscriptionStrategy {
           market,
           tradeId: eventData.trade_id.toString(),
           price: Number(eventData.p),
+          quote_qty: eventData.vq,
           qty: Number(eventData.q),
           isReverted: false,
           fee: 0,
           timestamp: new Date(eventData.t),
-        } as Trade;
+          side: eventData.s,
+        };
       });
     return observable.subscribe(cb);
   }

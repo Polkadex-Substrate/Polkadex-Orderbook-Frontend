@@ -67,7 +67,7 @@ export interface Trade {
   fee: number;
   timestamp: Date;
   side: OrderSide;
-  quantity: string;
+  quote_qty: string;
 }
 
 export interface PublicTrade {
