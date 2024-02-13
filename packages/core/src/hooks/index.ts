@@ -27,3 +27,4 @@ export * from "./useImportProxyMnemonic";
 export * from "./useSingleProxyAccount";
 export * from "./useExtensionAccountFromBrowserAccount";
 export * from "./useFee";
+export * from "./useDeposit";

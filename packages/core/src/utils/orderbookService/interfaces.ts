@@ -1,3 +1,6 @@
+import { ApiPromise } from "@polkadot/api";
+import { ExtensionAccount } from "@polkadex/react-providers";
+
 import {
   AccountUpdateEvent,
   Asset,
@@ -101,10 +104,19 @@ export type ExecuteArgs = {
   payload: string;
   token?: string;
 };
+
+export type DepositArgs = {
+  api: ApiPromise;
+  amount: string | number;
+  asset: Record<string, string | null>;
+  account: ExtensionAccount;
+};
+
 export interface OrderbookOperationStrategy extends BaseStrategy {
   placeOrder: (args: ExecuteArgs) => Promise<void>;
   cancelOrder: (args: ExecuteArgs) => Promise<void>;
   withdraw: (args: ExecuteArgs) => Promise<void>;
+  deposit: (args: DepositArgs) => Promise<void>;
 }
 
 export interface OrderbookService {

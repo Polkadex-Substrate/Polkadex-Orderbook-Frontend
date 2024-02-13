@@ -8,8 +8,7 @@
 
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { filterBlockedAssets } from "@orderbook/core/helpers";
-import { useAssets, useFunds } from "@orderbook/core/hooks";
-import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
+import { useAssets, useDeposit, useFunds } from "@orderbook/core/hooks";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
 import { useRouter, useParams } from "next/navigation";
 import { BalanceFormatter } from "@orderbook/format";
@@ -29,7 +28,7 @@ export function useTransfer() {
   const toHuman = BalanceFormatter.toHuman;
   const { assets: list } = useAssets();
   const { balances } = useFunds();
-  const { loading: depositLoading } = useDepositProvider();
+  const { loading: depositLoading } = useDeposit();
   const { loading: withdrawLoading } = useWithdrawsProvider();
   const { push } = useRouter();
   const params = useParams();

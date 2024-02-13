@@ -1,4 +1,7 @@
 import { GraphQLResult } from "@aws-amplify/api";
+import BigNumber from "bignumber.js";
+import { signAndSendExtrinsic } from "@orderbook/core/helpers";
+import { UNIT_BN } from "@orderbook/core/constants";
 
 import {
   Cancel_orderMutation,
@@ -8,7 +11,11 @@ import {
 import * as mutation from "../../../graphql/mutations";
 
 import { sendQueryToAppSync } from "./helpers";
-import { ExecuteArgs, OrderbookOperationStrategy } from "./../interfaces";
+import {
+  DepositArgs,
+  ExecuteArgs,
+  OrderbookOperationStrategy,
+} from "./../interfaces";
 
 type UserActionLambdaResp = {
   is_success: boolean;
@@ -96,6 +103,21 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
       }
     } else {
       throw new Error("withdraw failed: No valid response from server");
+    }
+  }
+
+  async deposit({ account, amount, api, asset }: DepositArgs): Promise<void> {
+    const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
+    const ext = api.tx.ocex.deposit(asset, amountStr);
+    const res = await signAndSendExtrinsic(
+      api,
+      ext,
+      { signer: account.signer },
+      account?.address,
+      true
+    );
+    if (!res.isSuccess) {
+      throw new Error("Deposit failed");
     }
   }
 }
