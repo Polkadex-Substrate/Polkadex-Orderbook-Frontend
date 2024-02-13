@@ -12,7 +12,6 @@ import { depositsReducer, initialState } from "./reducer";
 
 export const DepositProvider: T.DepositsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(depositsReducer, initialState);
-
   const { connected: isApiReady, api } = useNativeApi();
   const { onHandleError, onHandleNotification } = useSettingsProvider();
 
