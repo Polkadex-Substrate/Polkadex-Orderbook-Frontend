@@ -30,6 +30,7 @@
     "friendly-username-generator": "^2.0.4",
     "geist": "^1.2.1",
     "next": "^14.0.1",
+    "next-i18next": "^15.2.0",
     "postcss": "8.4.30",
     "react": "^18.2.0",
     "react-date-range": "^1.4.0",
@@ -49,6 +50,7 @@
   "devDependencies": {
     "@types/node": "^20.8.3",
     "@types/react": "^18.2.48",
+    "@types/react-date-range": "^1.4.9",
     "@types/react-dom": "^18.2.18",
     "typescript": "^5.0.4"
   }
