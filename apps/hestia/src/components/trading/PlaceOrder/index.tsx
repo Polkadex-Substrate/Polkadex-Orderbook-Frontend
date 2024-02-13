@@ -63,12 +63,10 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
 
         <div ref={ref} className="min-h-[18rem]">
           {isPasswordProtected ? (
-            <div className="[&>form>div>div>div>div]:w-[20rem]">
-              <Unlock
-                onAction={() => setIsPasswordProtected(false)}
-                tempBrowserAccount={selectedAccount}
-              />
-            </div>
+            <Unlock
+              onAction={() => setIsPasswordProtected(false)}
+              tempBrowserAccount={selectedAccount}
+            />
           ) : (
             <>
               <Tabs.Content

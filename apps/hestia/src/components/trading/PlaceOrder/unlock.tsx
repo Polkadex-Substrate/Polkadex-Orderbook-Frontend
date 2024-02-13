@@ -47,7 +47,10 @@ export const Unlock = ({
   }, [dirty, handleSubmit, isValid, isValidating]);
 
   return (
-    <Interaction className="bg-backgroundBase rounded-sm">
+    <Interaction
+      className="bg-backgroundBase rounded-sm h-full"
+      withAnimation={false}
+    >
       <Interaction.Content className="flex flex-col gap-1 flex-1">
         <div className="flex flex-col gap-8 items-center">
           <div className="flex flex-col text-center items-center gap-5">
