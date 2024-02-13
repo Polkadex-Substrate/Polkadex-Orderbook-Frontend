@@ -217,7 +217,7 @@ export const SellOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="right" className="bg-level-0 z-[1]">
+        <Tooltip.Content side="right" className="bg-level-5 z-[1]">
           {errors.total}
         </Tooltip.Content>
       </Tooltip>
