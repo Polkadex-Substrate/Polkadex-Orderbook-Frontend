@@ -24,7 +24,7 @@ export const useDeposit = () => {
       if (!api || !api?.isConnected)
         throw new Error("You are not connected to blockchain");
 
-      if (account.address.trim().length === 0)
+      if (account?.address?.trim().length === 0)
         throw new Error("Invalid account");
 
       onHandleNotification({

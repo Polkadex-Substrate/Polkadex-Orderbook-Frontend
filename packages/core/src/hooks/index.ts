@@ -28,3 +28,5 @@ export * from "./useSingleProxyAccount";
 export * from "./useExtensionAccountFromBrowserAccount";
 export * from "./useFee";
 export * from "./useDeposit";
+export * from "./useWithdraw";
+export * from "./useWithdrawClaim";
