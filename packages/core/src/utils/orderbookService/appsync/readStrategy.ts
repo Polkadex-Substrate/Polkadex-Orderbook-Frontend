@@ -331,7 +331,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         tradeId: item?.trade_id || "",
         fee: 0,
         side: item.s as OrderSide,
-        quantity: item.q,
+        quote_qty: String(Number(item.p) * Number(item.q)),
       };
     });
     return { data: trades, nextToken: queryResult.nextToken };
