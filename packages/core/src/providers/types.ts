@@ -9,11 +9,6 @@ export interface CommonActionState {
   isSuccess: boolean;
 }
 
-export type CommonError = {
-  code: number;
-  message: string[];
-};
-
 export type OrderSide = "Sell" | "Buy";
 export type OrderType = "LIMIT" | "MARKET";
 export type OrderStatus =
@@ -62,11 +57,12 @@ export interface OrderCommon {
 }
 
 export type CommonState = {
-  error?: CommonError;
+  error?: Error;
   loading?: boolean;
 };
 
 export type Ifilters = {
+  hiddenPairs?: boolean;
   onlyBuy: boolean;
   onlySell: boolean;
   showReverted: boolean;

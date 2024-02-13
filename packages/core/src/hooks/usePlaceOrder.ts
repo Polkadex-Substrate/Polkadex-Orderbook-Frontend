@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, FormEvent } from "react";
 import { FormikErrors, FormikHelpers } from "formik";
 import { useTranslation } from "next-i18next";
 import { Decimal } from "@orderbook/core/utils";
@@ -316,7 +316,7 @@ export function usePlaceOrder(
   );
 
   // Calls the action for placing order
-  const handleExecuteOrders = (e): void => {
+  const handleExecuteOrders = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const amount = isSell ? formValues.amountSell : formValues.amountBuy;
     const formPrice = isSell ? formValues.priceSell : formValues.priceBuy;

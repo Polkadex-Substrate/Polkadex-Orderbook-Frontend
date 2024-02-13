@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { appsyncOrderbookService } from "@orderbook/core/utils/orderbookService";
 
 import * as T from "./types";
 import { initialState, Provider } from "./context";
-export const OrderbookServiceProvider = ({ children }) => {
+export const OrderbookServiceProvider: FC<
+  PropsWithChildren<{
+    onError?: (value: string) => void;
+    onNotification?: (value: string) => void;
+  }>
+> = ({ children }) => {
   const [state, setState] = useState<T.OrderbookServiceState>(initialState);
   const enable = async () => {
     if (!appsyncOrderbookService.isReady()) {

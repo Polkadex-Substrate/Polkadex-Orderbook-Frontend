@@ -3067,22 +3067,6 @@
   resolved "https://registry.yarnpkg.com/@kwsites/promise-deferred/-/promise-deferred-1.1.1.tgz#8ace5259254426ccef57f3175bc64ed7095ed919"
   integrity sha512-GaHYm+c0O9MjZRu0ongGBRbinu8gVAMd2UZjji6jVmqKtZluZnptXGWhz1E8j8D2HJ3f/yMxKAUC0b+57wncIw==
 
-"@maxim_mazurok/gapi.client.discovery-v1@latest":
-  version "0.1.20200806"
-  resolved "https://registry.yarnpkg.com/@maxim_mazurok/gapi.client.discovery-v1/-/gapi.client.discovery-v1-0.1.20200806.tgz#1bdb82fadd659a159765178993dff6dbcb5968bc"
-  integrity sha512-Wl6UfmZVDdWbY3PUu8E2ULk9RPLjnMqp/iOA4tcK8Ne+U/GmlnWP/e34IaZNGArfl7iXJNOG+/3Rj9L9jQyF9Q==
-  dependencies:
-    "@types/gapi.client" "*"
-    "@types/gapi.client.discovery-v1" "*"
-
-"@maxim_mazurok/gapi.client.drive-v3@latest":
-  version "0.0.20231220"
-  resolved "https://registry.yarnpkg.com/@maxim_mazurok/gapi.client.drive-v3/-/gapi.client.drive-v3-0.0.20231220.tgz#c9dcdd9e97f02404121b86fd83c44031204ae19d"
-  integrity sha512-sf76YMd4AqnfdhzOYvNNA5rdrCgT3XVff+cZfSsqGjQRpjL+rALIXkQ0JN457mGuBzLqtoALSWBqPtqtI0Aqkg==
-  dependencies:
-    "@types/gapi.client" "*"
-    "@types/gapi.client.discovery-v1" "*"
-
 "@next/bundle-analyzer@^14.0.1":
   version "14.1.0"
   resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-14.1.0.tgz#da146eb713283c2a28d32c98dbd0d63ae7d42d30"
@@ -3342,10 +3326,10 @@
     usehooks-ts "^2.9.1"
     vaul "^0.8.0"
 
-"@polkadex/ux@^6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.2.0.tgz#cfc7b01dd0f3fa35318ee6221c74e3079c97e9f5"
-  integrity sha512-jUQIguKtw64jC34AZtv9GWDXSCoCAAC7Flco6SHXcmBJCSLQQ6wFTimMqHqcAQEWYN0YQd7neRu5k0oQTHXspQ==
+"@polkadex/ux@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.4.0.tgz#4e47ae155e4865d1daa965ee4313b057c00f6645"
+  integrity sha512-ZCwhs2hFgNLH0yurhk/q/BAGthPEbqMJooCKmXS53tiRcWuyYSi57uLt8nbAv4LhTHdmwiTE6BT8XMNhSQpQ5w==
   dependencies:
     "@floating-ui/react" "^0.26.4"
     "@headlessui/react" "^1.7.18"
@@ -3362,6 +3346,7 @@
     "@radix-ui/react-slot" "^1.0.2"
     "@radix-ui/react-switch" "^1.0.3"
     "@radix-ui/react-tabs" "^1.0.4"
+    "@radix-ui/react-toggle-group" "^1.0.4"
     "@radix-ui/react-tooltip" "^1.0.7"
     cmdk "^0.2.1"
     react-use "^17.4.0"
@@ -3474,7 +3459,7 @@
     "@polkadot/util-crypto" "^10.4.2"
     rxjs "^7.8.0"
 
-"@polkadot/api@10.11.2", "@polkadot/api@^10.11.1", "@polkadot/api@^10.4.1":
+"@polkadot/api@10.11.2", "@polkadot/api@^10.11.1", "@polkadot/api@^10.11.2", "@polkadot/api@^10.4.1":
   version "10.11.2"
   resolved "https://registry.yarnpkg.com/@polkadot/api/-/api-10.11.2.tgz#16cd07062d51cc9cf77a3a6afa3cb4e526e44a82"
   integrity sha512-AorCZxCWCoTtdbl4DPUZh+ACe/pbLIS1BkdQY0AFJuZllm0x/yWzjgampcPd5jQAA/O3iKShRBkZqj6Mk9yG/A==
@@ -3520,7 +3505,7 @@
     eventemitter3 "^5.0.0"
     rxjs "^7.8.0"
 
-"@polkadot/extension-dapp@^0.46.1":
+"@polkadot/extension-dapp@^0.46.1", "@polkadot/extension-dapp@^0.46.6":
   version "0.46.6"
   resolved "https://registry.yarnpkg.com/@polkadot/extension-dapp/-/extension-dapp-0.46.6.tgz#5ae08a9541842939363cdef4e41e72650322c4c2"
   integrity sha512-J8uhlAhCJkrVimS/ItCdXwgce9mbGZBwAAZLk9vxz7MGb9KkBV9wjy7xas7EPkA1fkSZ4hq+G9l8ybd+uwgp6Q==
@@ -3773,7 +3758,7 @@
     "@babel/runtime" "^7.20.13"
     "@polkadot/util" "^10.4.2"
 
-"@polkadot/types@10.11.2", "@polkadot/types@^10.11.1":
+"@polkadot/types@10.11.2", "@polkadot/types@^10.11.1", "@polkadot/types@^10.11.2":
   version "10.11.2"
   resolved "https://registry.yarnpkg.com/@polkadot/types/-/types-10.11.2.tgz#3317b6fcee53bbfba7bf654413f93ccd742c478e"
   integrity sha512-d52j3xXni+C8GdYZVTSfu8ROAnzXFMlyRvXtor0PudUc8UQHOaC4+mYAkTBGA2gKdmL8MHSfRSbhcxHhsikY6Q==
@@ -3801,7 +3786,7 @@
     "@polkadot/util-crypto" "^10.4.2"
     rxjs "^7.8.0"
 
-"@polkadot/ui-keyring@^3.2.1", "@polkadot/ui-keyring@^3.6.3", "@polkadot/ui-keyring@^3.6.4":
+"@polkadot/ui-keyring@^3.2.1", "@polkadot/ui-keyring@^3.6.4":
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/@polkadot/ui-keyring/-/ui-keyring-3.6.4.tgz#3270d00d0302a51520181756f256148c86dd546f"
   integrity sha512-yfzf+TCtfSQUp+NIqY6aMunnjCZcKobzFzMNOSGbbkHQf0TnAERmmhc/i0XUw9BkEMKWskEHapP9HRztRHKZ5Q==
@@ -4559,6 +4544,30 @@
     "@radix-ui/react-presence" "1.0.1"
     "@radix-ui/react-primitive" "1.0.3"
     "@radix-ui/react-roving-focus" "1.0.4"
+    "@radix-ui/react-use-controllable-state" "1.0.1"
+
+"@radix-ui/react-toggle-group@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-toggle-group/-/react-toggle-group-1.0.4.tgz#f5b5c8c477831b013bec3580c55e20a68179d6ec"
+  integrity sha512-Uaj/M/cMyiyT9Bx6fOZO0SAG4Cls0GptBWiBmBxofmDbNVnYYoyRWj/2M/6VCi/7qcXFWnHhRUfdfZFvvkuu8A==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "1.0.1"
+    "@radix-ui/react-context" "1.0.1"
+    "@radix-ui/react-direction" "1.0.1"
+    "@radix-ui/react-primitive" "1.0.3"
+    "@radix-ui/react-roving-focus" "1.0.4"
+    "@radix-ui/react-toggle" "1.0.3"
+    "@radix-ui/react-use-controllable-state" "1.0.1"
+
+"@radix-ui/react-toggle@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-toggle/-/react-toggle-1.0.3.tgz#aecb2945630d1dc5c512997556c57aba894e539e"
+  integrity sha512-Pkqg3+Bc98ftZGsl60CLANXQBBQ4W3mTFS9EJvNxKMZ7magklKV69/id1mlAlOFDDfHvlCms0fx8fA4CMKDJHg==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "1.0.1"
+    "@radix-ui/react-primitive" "1.0.3"
     "@radix-ui/react-use-controllable-state" "1.0.1"
 
 "@radix-ui/react-tooltip@^1.0.7":
@@ -6777,35 +6786,6 @@
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/@types/file-saver/-/file-saver-2.0.7.tgz#8dbb2f24bdc7486c54aa854eb414940bbd056f7d"
   integrity sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A==
-
-"@types/gapi.client.discovery-v1@*":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@types/gapi.client.discovery-v1/-/gapi.client.discovery-v1-0.0.4.tgz#92818a15931430751ed50d2381d0081fd0cefc20"
-  integrity sha512-uevhRumNE65F5mf2gABLaReOmbFSXONuzFZjNR3dYv6BmkHg+wciubHrfBAsp3554zNo3Dcg6dUAlwMqQfpwjQ==
-  dependencies:
-    "@maxim_mazurok/gapi.client.discovery-v1" latest
-
-"@types/gapi.client.drive-v3@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@types/gapi.client.drive-v3/-/gapi.client.drive-v3-0.0.1.tgz#e67ea94c79c68e690bdfc8afb83a1b0d4b9b2643"
-  integrity sha512-tIvUpcfeTZI5yRYWAPo/kx6w8kAfW8HeOAJPmXlhVpSBUO8R4hUVZiZhuc6PxNtQkI6LKXeyOuJv70Nd3Nb/8g==
-  dependencies:
-    "@maxim_mazurok/gapi.client.drive-v3" latest
-
-"@types/gapi.client@*":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@types/gapi.client/-/gapi.client-1.0.8.tgz#8e02c57493b014521f2fa3359166c01dc2861cd7"
-  integrity sha512-qJQUmmumbYym3Amax0S8CVzuSngcXsC1fJdwRS2zeW5lM63zXkw4wJFP+bG0jzgi0R6EsJKoHnGNVTDbOyG1ng==
-
-"@types/gapi@^0.0.45":
-  version "0.0.45"
-  resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.45.tgz#005ab29c31502e1b82d2a9c54a4dcc12dd1f0f58"
-  integrity sha512-xc8X9FrdZcWoOd4tMhLenYbnmaxCgy2FBt+SOI7xv9Efy/7Jk2V9gBZiufFBLIfDUUvpWY7DN3x4lrdL1I9y0Q==
-
-"@types/google.accounts@^0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@types/google.accounts/-/google.accounts-0.0.11.tgz#0685500115e28e2f0c93c718f12b60600615d9b4"
-  integrity sha512-/NaSZRkfnEMSRmNlu5G9mCxw81cymH0ugp1nVnk2athboz7kZu3FqLD+ehbfD3CBO5licFhFdR+JAjAT/DaqNQ==
 
 "@types/graceful-fs@^4.1.3":
   version "4.1.9"
@@ -9791,11 +9771,6 @@ functions-have-names@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
-
-gapi-script@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/gapi-script/-/gapi-script-1.2.0.tgz#8106ad0abb36661ce4fab62ef6efada288d7169e"
-  integrity sha512-NKTVKiIwFdkO1j1EzcrWu/Pz7gsl1GmBmgh+qhuV2Ytls04W/Eg5aiBL91SCiBM9lU0PMu7p1hTVxhh1rPT5Lw==
 
 geist@^1.2.1:
   version "1.2.2"
@@ -14233,7 +14208,7 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@^5.0.4, typescript@latest:
+typescript@^5.0.4, typescript@^5.3.3, typescript@latest:
   version "5.3.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.3.3.tgz#b3ce6ba258e72e6305ba66f5c9b452aaee3ffe37"
   integrity sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==

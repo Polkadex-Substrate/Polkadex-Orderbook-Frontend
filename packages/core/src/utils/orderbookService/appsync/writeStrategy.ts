@@ -1,13 +1,22 @@
 import { GraphQLResult } from "@aws-amplify/api";
+import BigNumber from "bignumber.js";
+import { signAndSendExtrinsic } from "@orderbook/core/helpers";
+import { UNIT_BN } from "@orderbook/core/constants";
 
-import { sendQueryToAppSync } from "./helpers";
-import * as mutation from "./graphql/mutations";
-import { ExecuteArgs, OrderbookOperationStrategy } from "./../interfaces";
 import {
   Cancel_orderMutation,
   Place_orderMutation,
   WithdrawMutation,
-} from "./API";
+} from "../../../API";
+import * as mutation from "../../../graphql/mutations";
+
+import { sendQueryToAppSync } from "./helpers";
+import {
+  DepositArgs,
+  ExecuteArgs,
+  OrderbookOperationStrategy,
+  WithdrawArgs,
+} from "./../interfaces";
 
 type UserActionLambdaResp = {
   is_success: boolean;
@@ -74,11 +83,11 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
     }
   }
 
-  async withdraw(data: ExecuteArgs): Promise<void> {
+  async withdraw(data: WithdrawArgs): Promise<void> {
     const result = await sendQueryToAppSync<GraphQLResult<WithdrawMutation>>({
       query: mutation.withdraw,
       variables: { input: { payload: data.payload } },
-      token: data.token,
+      token: data.address,
     });
     if (result.errors && result.errors.length > 0) {
       let concatError = "";
@@ -95,6 +104,21 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
       }
     } else {
       throw new Error("withdraw failed: No valid response from server");
+    }
+  }
+
+  async deposit({ account, amount, api, asset }: DepositArgs): Promise<void> {
+    const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
+    const ext = api.tx.ocex.deposit(asset, amountStr);
+    const res = await signAndSendExtrinsic(
+      api,
+      ext,
+      { signer: account.signer },
+      account?.address,
+      true
+    );
+    if (!res.isSuccess) {
+      throw new Error("Deposit failed");
     }
   }
 }

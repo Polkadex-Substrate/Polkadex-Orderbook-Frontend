@@ -1,10 +1,14 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import { API as amplifyApi } from "aws-amplify";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/auth";
 import { READ_ONLY_TOKEN } from "@orderbook/core/constants";
 import { Maybe } from "@orderbook/core/helpers";
 import { GraphQLResult, GraphQLSubscription } from "@aws-amplify/api";
 
-import { Websocket_streamsSubscription } from "./API";
+import { Websocket_streamsSubscription } from "../../../API";
+
 import { BookUpdateEvent } from "./types";
 import { PriceLevel, Order } from "./../types";
 
@@ -24,11 +28,6 @@ export async function sendQueryToAppSync<T = any>({
   API = amplifyApi,
 }: Props): Promise<T> {
   const authOptions = {
-    [GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS]: {
-      query,
-      variables,
-      authMode,
-    },
     [GRAPHQL_AUTH_MODE.AWS_LAMBDA]: {
       query,
       variables,
@@ -53,7 +52,7 @@ export const fetchFullListFromAppSync = async <T = any>(
       query,
       variables: nextToken ? { ...variables, nextToken } : variables,
     });
-    fullResponse = [...fullResponse, ...res.data[key].items];
+    fullResponse = [...fullResponse, ...(res.data[key]?.items || [])];
     nextToken = res.data[key].nextToken;
   } while (nextToken);
   return fullResponse as T[];
@@ -69,9 +68,9 @@ export const fetchListFromAppSync = async <T = any[]>(
     variables,
   });
 
-  const fullResponse = res.data[key].items;
+  const fullResponse = res.data[key]?.items;
 
-  const nextToken = res.data[key].nextToken;
+  const nextToken = res.data[key]?.nextToken;
 
   return { response: fullResponse, nextToken };
 };
@@ -91,7 +90,7 @@ export const fetchBatchFromAppSync = async <T = any[]>(
         nextToken ? { ...variables, nextToken } : variables,
         key
       );
-    response = [...response, ...newResponse];
+    response = [...response, ...(newResponse || [])];
     nextToken = newNextToken;
   } while (response.length < LIST_LIMIT && nextToken);
   return { response, nextToken };
