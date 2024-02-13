@@ -1,3 +1,5 @@
+import { Asset } from "@orderbook/core/utils/orderbookService";
+
 export const KlineIntervals = [
   "1m",
   "3m",
@@ -16,3 +18,10 @@ export const KlineIntervals = [
   "1M",
   "1w",
 ];
+
+export const unknownAsset: Asset = {
+  id: "unknown",
+  ticker: "unknown",
+  name: "unknown",
+  decimal: 12,
+};

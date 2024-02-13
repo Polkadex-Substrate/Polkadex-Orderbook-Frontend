@@ -1,4 +1,5 @@
 import { GraphQLResult } from "@aws-amplify/api";
+import { unknownAsset } from "@orderbook/core/utils/orderbookService/appsync/constants";
 
 import {
   FindUserByMainAccountQuery,
@@ -95,16 +96,14 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     const balances =
       balancesQueryResult?.data?.getAllBalancesByMainAccount?.items?.map(
         (item): Balance => {
-          // TODO: Must remove it `|| {}`
-          const asset = this._assetsList.find((x) => x.id === item?.a) || {};
+          const asset =
+            this._assetsList.find((x) => x.id === item?.a) || unknownAsset;
           if (!asset) {
             throw new Error(
               `[${this.constructor.name}:getBalance] cannot find asset: ${item?.a}`
             );
           }
           return {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             asset,
             free: Number(item?.f) || 0,
             reserved: Number(item?.r) || 0,
