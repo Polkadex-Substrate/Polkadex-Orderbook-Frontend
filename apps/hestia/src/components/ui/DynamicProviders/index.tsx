@@ -94,11 +94,11 @@ export const DynamicProviders = ({ children }: { children: ReactNode }) => {
           defaultToast={{
             onError: (e) => {
               console.log("onError", e);
-              toast.error(e.toString());
+              toast(e.toString());
             },
             onSuccess: (e) => {
               console.log("onSuccess", e);
-              toast.success(e.toString());
+              toast(e.toString());
             },
           }}
         >
