@@ -26,7 +26,7 @@ export const Asset = ({
             appearance={baseTicker as keyof typeof tokenAppearance}
             name={baseTicker}
             size="sm"
-            className="rounded-full"
+            className="rounded-full border border-primary"
           />
         </Skeleton>
       </div>

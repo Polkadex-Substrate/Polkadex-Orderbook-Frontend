@@ -1,8 +1,14 @@
 import { Decimal } from "@orderbook/core/utils";
 import { Typography } from "@polkadex/ux";
 import { createColumnHelper } from "@tanstack/react-table";
+import { MouseEvent } from "react";
 
 const columnHelper = createColumnHelper<string[]>();
+
+export type GenericAction = (
+  e: MouseEvent<HTMLElement>,
+  selectedIndex: number
+) => void;
 
 export const columns = ({
   total,
@@ -10,12 +16,18 @@ export const columns = ({
   isPriceUp,
   baseTicker,
   quoteTicker,
+  onChangePrice,
+  onChangeAmount,
+  onChangeTotal,
 }: {
   total: number[];
   precision: number;
   isPriceUp: boolean;
   quoteTicker: string;
   baseTicker: string;
+  onChangePrice: GenericAction;
+  onChangeAmount: GenericAction;
+  onChangeTotal: GenericAction;
 }) => [
   columnHelper.accessor((row) => row, {
     id: "price",
@@ -25,6 +37,7 @@ export const columns = ({
         <Typography.Text
           appearance={isPriceUp ? "danger" : "success"}
           size="xs"
+          onClick={(event) => onChangePrice(event, e.row.index)}
         >
           <Decimal
             fixed={precision}
@@ -46,7 +59,10 @@ export const columns = ({
     cell: (e) => {
       const amount = e.getValue()[1];
       return (
-        <Typography.Text size="xs">
+        <Typography.Text
+          size="xs"
+          onClick={(event) => onChangeAmount(event, e.row.index)}
+        >
           <Decimal fixed={precision} thousSep=",">
             {amount}
           </Decimal>
@@ -63,7 +79,10 @@ export const columns = ({
     cell: (e) => {
       const i = e.row.index;
       return (
-        <Typography.Text size="xs">
+        <Typography.Text
+          size="xs"
+          onClick={(event) => onChangeTotal(event, e.row.index)}
+        >
           <Decimal fixed={precision} thousSep=",">
             {total[i]}
           </Decimal>

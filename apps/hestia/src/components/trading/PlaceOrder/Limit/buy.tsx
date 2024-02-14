@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { Button, Input, Tooltip, Spinner } from "@polkadex/ux";
 import classNames from "classnames";
 import { useFormik } from "formik";
@@ -12,6 +12,7 @@ import { Market } from "@orderbook/core/utils/orderbookService/types";
 import { Balance } from "../balance";
 
 import { Range } from "@/components/ui/Temp/range";
+import { TradingFee } from "@/components/ui/ReadyToUse";
 
 const PRICE = "Price";
 const AMOUNT = "Amount";
@@ -26,13 +27,18 @@ const initialValues = {
 export const BuyOrder = ({
   market,
   availableQuoteAmount,
+  currentPrice,
+  amount,
 }: {
   market?: Market;
   availableQuoteAmount: number;
+  currentPrice?: number;
+  amount: string;
 }) => {
   const { onToogleConnectTrading } = useSettingsProvider();
 
   const {
+    setFieldValue,
     handleSubmit,
     errors,
     isValid,
@@ -42,7 +48,10 @@ export const BuyOrder = ({
     resetForm,
     isSubmitting,
   } = useFormik({
-    initialValues,
+    initialValues: {
+      ...initialValues,
+      price: currentPrice ? currentPrice.toString() : "",
+    },
     validationSchema: limitOrderValidations({
       maxMarketPrice: market?.maxPrice || 0,
       minMarketPrice: market?.minPrice || 0,
@@ -89,6 +98,14 @@ export const BuyOrder = ({
     else if (name === AMOUNT) onChangeAmount(value);
     else onChangeTotal(value);
   };
+
+  useEffect(() => {
+    if (currentPrice) setFieldValue("price", currentPrice);
+  }, [setFieldValue, currentPrice]);
+
+  useEffect(() => {
+    if (amount) setFieldValue("amount", amount);
+  }, [setFieldValue, amount]);
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
@@ -151,9 +168,13 @@ export const BuyOrder = ({
           {errors.amount}
         </Tooltip.Content>
       </Tooltip>
-      <Balance baseTicker={market?.quoteAsset?.ticker || ""}>
-        {availableQuoteAmount}
-      </Balance>
+      <div className="flex items-center gap-2 justify-between">
+        <TradingFee ticker="PDEX" />
+        <Balance baseTicker={market?.quoteAsset?.ticker || ""}>
+          {availableQuoteAmount}
+        </Balance>
+      </div>
+
       <Range
         ranges={[
           {
@@ -219,9 +240,10 @@ export const BuyOrder = ({
       ) : (
         <Button.Solid
           type="button"
+          appearance="secondary"
           onClick={() => onToogleConnectTrading(true)}
         >
-          Connect Wallet
+          Connect Trading Account
         </Button.Solid>
       )}
     </form>

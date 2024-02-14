@@ -19,3 +19,4 @@ export * from "./responsiveCard";
 export * from "./statusCard";
 export * from "./transactionDirection";
 export * from "./inlineAccountCard";
+export * from "./tradingFee";

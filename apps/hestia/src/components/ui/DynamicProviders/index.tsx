@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Amplify } from "aws-amplify";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
+import { useParams } from "next/navigation";
 
 import awsconfig from "../../../../aws-exports";
 const UserAccountsProvider = dynamic(
@@ -25,8 +26,19 @@ const ExtensionAccountsProvider = dynamic(
   { ssr: false }
 );
 
+const SessionProvider = dynamic(
+  () => import("@orderbook/core/providers").then((mod) => mod.SessionProvider),
+  { ssr: false }
+);
+
 const ProfileProvider = dynamic(
   () => import("@orderbook/core/providers").then((mod) => mod.ProfileProvider),
+  { ssr: false }
+);
+
+const SubscriptionProvider = dynamic(
+  () =>
+    import("@orderbook/core/providers").then((mod) => mod.SubscriptionProvider),
   { ssr: false }
 );
 
@@ -73,6 +85,7 @@ const queryClient = new QueryClient({
 });
 
 export const DynamicProviders = ({ children }: { children: ReactNode }) => {
+  const params = useParams();
   return (
     <Fragment>
       <Toaster />
@@ -99,7 +112,15 @@ export const DynamicProviders = ({ children }: { children: ReactNode }) => {
                 <ProfileProvider>
                   <NativeApiProvider>
                     <OrderbookServiceProvider>
-                      <ConnectWalletProvider>{children}</ConnectWalletProvider>
+                      <SessionProvider>
+                        <SubscriptionProvider
+                          marketId={(params.id as string) ?? "DOTUSDT"}
+                        >
+                          <ConnectWalletProvider>
+                            {children}
+                          </ConnectWalletProvider>
+                        </SubscriptionProvider>
+                      </SessionProvider>
                     </OrderbookServiceProvider>
                   </NativeApiProvider>
                 </ProfileProvider>

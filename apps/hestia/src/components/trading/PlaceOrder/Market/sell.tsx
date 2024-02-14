@@ -102,7 +102,7 @@ export const SellOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="left" className="bg-level-0 z-[1]">
+        <Tooltip.Content side="left" className="bg-level-5 z-[1]">
           {errors.amount}
         </Tooltip.Content>
       </Tooltip>
@@ -146,9 +146,10 @@ export const SellOrder = ({
       ) : (
         <Button.Solid
           type="button"
+          appearance="secondary"
           onClick={() => onToogleConnectTrading(true)}
         >
-          Connect Wallet
+          Connect Trading Account
         </Button.Solid>
       )}
     </form>

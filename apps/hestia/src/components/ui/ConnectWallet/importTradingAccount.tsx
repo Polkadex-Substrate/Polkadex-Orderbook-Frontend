@@ -88,8 +88,9 @@ export const ImportTradingAccount = ({
     }>({
       initialValues,
       onSubmit: async ({ file }) => {
+        const password = state?.replace(/\s+/g, "");
         try {
-          await onImport({ file: file as DecodedFile, password: state });
+          await onImport({ file: file as DecodedFile, password });
           onRedirect();
         } catch (error) {
           setError((error as Error)?.message ?? error);

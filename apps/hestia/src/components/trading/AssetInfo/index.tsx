@@ -53,7 +53,9 @@ export const AssetInfo = ({ currentMarket }: { currentMarket?: Market }) => {
     [changeFormatted]
   );
   const chainName = useMemo(
-    () => getChainFromTicker(currentMarket?.baseAsset?.ticker as string),
+    () =>
+      getChainFromTicker(currentMarket?.baseAsset?.ticker as string) ??
+      "Polkadex",
     [currentMarket?.baseAsset?.ticker]
   );
 
