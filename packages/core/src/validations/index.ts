@@ -172,8 +172,11 @@ export const unLockAccountValidations = Yup.object().shape({
     .test("", "Must be only digits", (value) =>
       value ? /^[0-9]+$/.test(value.replace(/\s+/g, "")) : false
     )
-    .min(9, "Must be exactly 5 digits")
-    .max(9, "Must be exactly 5 digits"),
+    .test(
+      "",
+      "Must be exactly 5 digits",
+      (value) => value?.replace(/\s+/g, "")?.length === 5
+    ),
 });
 export const createAccountValidations = Yup.object().shape({
   name: Yup.string()
@@ -181,17 +184,27 @@ export const createAccountValidations = Yup.object().shape({
     .max(25, "Too long!")
     .required("Required"),
   passcode: Yup.string()
-    .matches(/^[0-9]+$/, "Must be only digits")
-    .min(5, "Must be exactly 5 digits")
-    .max(5, "Must be exactly 5 digits")
+    .test("", "Must be only digits", (value) =>
+      value ? /^[0-9]+$/.test(value.replace(/\s+/g, "")) : false
+    )
+    .test(
+      "",
+      "Must be exactly 5 digits",
+      (value) => value?.replace(/\s+/g, "")?.length === 5
+    )
     .nullable(),
 });
 export const importAccountValidations = Yup.object().shape({
   name: Yup.string().min(2, "Too Short!").max(30, "Too long!"),
   passcode: Yup.string()
-    .matches(/^[0-9]+$/, "Must be only digits")
-    .min(5, "Must be exactly 5 digits")
-    .max(5, "Must be exactly 5 digits")
+    .test("", "Must be only digits", (value) =>
+      value ? /^[0-9]+$/.test(value.replace(/\s+/g, "")) : false
+    )
+    .test(
+      "",
+      "Must be exactly 5 digits",
+      (value) => value?.replace(/\s+/g, "")?.length === 5
+    )
     .nullable(),
   mnemonic: Yup.string()
     .required("Required")
