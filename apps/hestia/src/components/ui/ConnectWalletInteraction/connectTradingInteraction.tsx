@@ -2,6 +2,7 @@ import { Modal, Multistep } from "@polkadex/ux";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useMemo } from "react";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
@@ -13,6 +14,7 @@ export const ConnectTradingInteraction = () => {
   const { connectTrading, onToogleConnectTrading } = useSettingsProvider();
   const onClose = () => onToogleConnectTrading(false);
   const {
+    selectedWallet,
     selectedExtension,
     localTradingAccounts,
     onSelectTradingAccount,
@@ -28,6 +30,14 @@ export const ConnectTradingInteraction = () => {
     importFromMnemonicStatus,
     onImportFromMnemonic,
   } = useConnectWalletProvider();
+
+  const availableOnDevice = useMemo(
+    () =>
+      localTradingAccounts?.some(
+        (value) => value.address === tempTrading?.address
+      ),
+    [tempTrading?.address, localTradingAccounts]
+  );
 
   return (
     <Modal
@@ -81,7 +91,11 @@ export const ConnectTradingInteraction = () => {
                   onRedirect={() => props?.onPage("ConnectTradingAccount")}
                   onClose={() => props?.onChangeInteraction(false)}
                   loading={importFromFileStatus === "loading"}
-                  whitelistBrowserAccounts={mainProxiesAccounts}
+                  whitelistBrowserAccounts={
+                    Object.keys(selectedWallet ?? {}).length
+                      ? mainProxiesAccounts
+                      : undefined
+                  }
                 />
                 <ImportTradingAccountMnemonic
                   key="ImportTradingAccountMnemonic"
@@ -105,7 +119,9 @@ export const ConnectTradingInteraction = () => {
                     )
                   }
                   selectedExtension={selectedExtension}
+                  availableOnDevice={availableOnDevice}
                   onCancel={() => props?.onChangeInteraction(false)}
+                  enabledExtensionAccount={!selectedWallet}
                 />
               </Multistep.Content>
             </>
