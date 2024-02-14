@@ -46,17 +46,17 @@ export const Table = ({
     bids,
   });
 
-  const onChangePrice: GenericAction = (selectedIndex) => {
+  const onChangePrice: GenericAction = (e, selectedIndex) => {
     changeMarketPrice(selectedIndex, isSell ? "asks" : "bids");
   };
 
-  const onChangeAmount: GenericAction = (selectedIndex) =>
+  const onChangeAmount: GenericAction = (e, selectedIndex) =>
     changeMarketAmount(selectedIndex, isSell ? "asks" : "bids");
 
-  const onChangeTotal: GenericAction = (selectedIndex) =>
+  const onChangeTotal: GenericAction = (e, selectedIndex) =>
     changeMarketAmountSumClick(selectedIndex);
 
-  const onChangeAllValues: GenericAction = (selectedIndex) => {
+  const onChangeAllValues: GenericAction = (e, selectedIndex) => {
     changeMarketAmount(selectedIndex, isSell ? "asks" : "bids");
     changeMarketPrice(selectedIndex, isSell ? "asks" : "bids");
   };
@@ -116,11 +116,7 @@ export const Table = ({
             return (
               <PolkadexTable.Row
                 key={row.id}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onChangeAllValues(ind);
-                }}
+                onClick={(e) => onChangeAllValues(e, ind)}
                 className={classNames("hover:bg-level-1 cursor-pointer ")}
               >
                 {row.getVisibleCells().map((cell, i) => {
