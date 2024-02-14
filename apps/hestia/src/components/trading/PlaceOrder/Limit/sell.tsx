@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { Button, Input, Tooltip, Spinner } from "@polkadex/ux";
 import classNames from "classnames";
 import { useFormik } from "formik";
@@ -12,6 +12,7 @@ import { Market } from "@orderbook/core/utils/orderbookService/types";
 import { Balance } from "../balance";
 
 import { Range } from "@/components/ui/Temp/range";
+import { TradingFee } from "@/components/ui/ReadyToUse";
 
 const PRICE = "Price";
 const AMOUNT = "Amount";
@@ -26,13 +27,18 @@ const initialValues = {
 export const SellOrder = ({
   market,
   availableBaseAmount,
+  currentPrice,
+  amount,
 }: {
   market?: Market;
   availableBaseAmount: number;
+  currentPrice?: number;
+  amount: string;
 }) => {
   const { onToogleConnectTrading } = useSettingsProvider();
 
   const {
+    setFieldValue,
     handleSubmit,
     errors,
     isValid,
@@ -89,6 +95,14 @@ export const SellOrder = ({
     else if (name === AMOUNT) onChangeAmount(value);
     else onChangeTotal(value);
   };
+
+  useEffect(() => {
+    if (currentPrice) setFieldValue("price", currentPrice);
+  }, [setFieldValue, currentPrice]);
+
+  useEffect(() => {
+    if (amount) setFieldValue("amount", amount);
+  }, [setFieldValue, amount]);
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
@@ -151,9 +165,13 @@ export const SellOrder = ({
           {errors.amount}
         </Tooltip.Content>
       </Tooltip>
-      <Balance baseTicker={market?.baseAsset?.ticker || ""}>
-        {availableBaseAmount}
-      </Balance>
+      <div className="flex items-center gap-2 justify-between">
+        <TradingFee ticker="PDEX" />
+        <Balance baseTicker={market?.baseAsset?.ticker || ""}>
+          {availableBaseAmount}
+        </Balance>
+      </div>
+
       <Range
         ranges={[
           {
@@ -199,7 +217,7 @@ export const SellOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="right" className="bg-level-0 z-[1]">
+        <Tooltip.Content side="right" className="bg-level-5 z-[1]">
           {errors.total}
         </Tooltip.Content>
       </Tooltip>
@@ -217,9 +235,10 @@ export const SellOrder = ({
       ) : (
         <Button.Solid
           type="button"
+          appearance="secondary"
           onClick={() => onToogleConnectTrading(true)}
         >
-          Connect Wallet
+          Connect Trading Account
         </Button.Solid>
       )}
     </form>

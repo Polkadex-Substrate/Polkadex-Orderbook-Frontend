@@ -2,7 +2,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { createColumnHelper } from "@tanstack/react-table";
 import classNames from "classnames";
 import { Decimal, InitialMarkets, isNegative } from "@orderbook/core/index";
-import { Typography, Token } from "@polkadex/ux";
+import { Typography, Token, tokenAppearance } from "@polkadex/ux";
 
 const columnHelper = createColumnHelper<InitialMarkets>();
 
@@ -33,9 +33,11 @@ export const columns = ({
             />
           </button>
           <div className="flex items-center gap-1">
-            <div className="h-6 w-6 p-[4px] rounded-full bg-level-2">
-              <Token name={baseAsset.ticker as string} />
-            </div>
+            <Token
+              size="xs"
+              name={baseAsset.ticker as string}
+              className="rounded-full bg-level-2"
+            />
             <Typography.Text size="xs" className="uppercase">
               {baseAsset.ticker}/
               <Typography.Text size="xs" appearance="primary">

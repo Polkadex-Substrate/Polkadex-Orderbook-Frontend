@@ -32,7 +32,7 @@ export const UnlockAccount = ({
       validationSchema: unLockAccountValidations,
       onSubmit: async ({ password }) => {
         try {
-          const pass = password.toString();
+          const pass = password?.replace(/\s+/g, "");
           tempBrowserAccount?.unlock(pass);
           if (tempBrowserAccount) {
             onAction(tempBrowserAccount, pass);

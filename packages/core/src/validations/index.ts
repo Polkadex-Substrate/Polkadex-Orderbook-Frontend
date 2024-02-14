@@ -169,9 +169,11 @@ export const typeValidations = Yup.object().shape({
 export const unLockAccountValidations = Yup.object().shape({
   password: Yup.string()
     .required("Required")
-    .matches(/^[0-9]+$/, "Must be only digits")
-    .min(5, "Must be exactly 5 digits")
-    .max(5, "Must be exactly 5 digits"),
+    .test("", "Must be only digits", (value) =>
+      value ? /^[0-9]+$/.test(value.replace(/\s+/g, "")) : false
+    )
+    .min(9, "Must be exactly 5 digits")
+    .max(9, "Must be exactly 5 digits"),
 });
 export const createAccountValidations = Yup.object().shape({
   name: Yup.string()

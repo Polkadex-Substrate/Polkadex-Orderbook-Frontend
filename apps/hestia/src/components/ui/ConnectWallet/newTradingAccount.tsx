@@ -64,6 +64,7 @@ export const NewTradingAccount = ({
   const [state, setState] = useState(initialState);
 
   const {
+    values,
     isValid,
     resetForm,
     setFieldValue,
@@ -77,9 +78,10 @@ export const NewTradingAccount = ({
     onSubmit: async ({ name }) => {
       try {
         const mnemonic = mnemonicGenerate();
+        const password = state?.replace(/\s+/g, "");
         await onCreateAccount({
           name,
-          password: state.length === 5 ? state : "",
+          password: password.length === 5 ? password : "",
           mnemonic,
         });
         onCreateCallback();
