@@ -165,10 +165,9 @@ export const Orders = ({ maxHeight, id }: Props) => {
         <GenericMessage
           title="Connect your trading account to start trading."
           illustration="ConnectAccount"
-          onClick={() => onToogleConnectTrading()}
         >
-          <Button.Solid onClick={() => onToogleConnectTrading(true)}>
-            Connect Wallet
+          <Button.Solid onClick={() => onToogleConnectTrading()}>
+            Connect Trading Account
           </Button.Solid>
         </GenericMessage>
       )}

@@ -9,7 +9,7 @@ import { useOrderbookTable } from "@orderbook/core/hooks";
 import { MutableRefObject, useRef } from "react";
 import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
 
-import { columns } from "./columns";
+import { GenericAction, columns } from "./columns";
 
 export const Table = ({
   isSell = false,
@@ -46,6 +46,21 @@ export const Table = ({
     bids,
   });
 
+  const onChangePrice: GenericAction = (e, selectedIndex) => {
+    changeMarketPrice(selectedIndex, isSell ? "asks" : "bids");
+  };
+
+  const onChangeAmount: GenericAction = (e, selectedIndex) =>
+    changeMarketAmount(selectedIndex, isSell ? "asks" : "bids");
+
+  const onChangeTotal: GenericAction = (e, selectedIndex) =>
+    changeMarketAmountSumClick(selectedIndex);
+
+  const onChangeAllValues: GenericAction = (e, selectedIndex) => {
+    changeMarketAmount(selectedIndex, isSell ? "asks" : "bids");
+    changeMarketPrice(selectedIndex, isSell ? "asks" : "bids");
+  };
+
   const { getHeaderGroups, getRowModel } = useReactTable({
     data: orders,
     columns: columns({
@@ -54,6 +69,9 @@ export const Table = ({
       isPriceUp: isSell,
       baseTicker,
       quoteTicker,
+      onChangePrice,
+      onChangeTotal,
+      onChangeAmount,
     }),
     getCoreRowModel: getCoreRowModel(),
   });
@@ -94,10 +112,11 @@ export const Table = ({
           ))}
         </PolkadexTable.Header>
         <PolkadexTable.Body>
-          {getRowModel().rows.map((row) => {
+          {getRowModel().rows.map((row, ind) => {
             return (
               <PolkadexTable.Row
                 key={row.id}
+                onClick={(e) => onChangeAllValues(e, ind)}
                 className={classNames("hover:bg-level-1 cursor-pointer ")}
               >
                 {row.getVisibleCells().map((cell, i) => {
@@ -106,6 +125,7 @@ export const Table = ({
                   const active = firstCol && (value as string[])[0] === "8.654";
                   return (
                     <PolkadexTable.Cell
+                      key={cell.id}
                       className={classNames(
                         "px-2 py-1 hover:bg-level-1 text-xs",
                         firstCol ? "text-left" : "text-right",
@@ -113,7 +133,6 @@ export const Table = ({
                         active &&
                           "before:absolute before:left-[-1%] before:content-[''] before:top-1/2 before:transform before:-translate-y-1/2 before:block before:h-0 before:w-0 before:border-x-4 before:border-x-transparent before:border-b-[6px] before:border-b-attention-base before:rotate-90"
                       )}
-                      key={cell.id}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

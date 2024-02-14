@@ -70,7 +70,7 @@ export const Profile = ({
           </Tooltip>
         </div>
         <Popover>
-          <Popover.Trigger>
+          <Popover.Trigger superpositionTrigger>
             <Trigger
               browserAccountPresent={tradingWalletPresent}
               extensionAccountPresent={fundWalletPresent}
@@ -81,6 +81,7 @@ export const Profile = ({
           <Popover.Content>
             <Content />
           </Popover.Content>
+          <Popover.Overlay />
         </Popover>
         <Button.Icon variant="ghost" onClick={onOpenMenu}>
           <Bars2Icon />
