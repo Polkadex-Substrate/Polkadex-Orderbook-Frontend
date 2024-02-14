@@ -190,17 +190,18 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     return markets || [];
   }
 
+  // TODO: Revert it
   async getOpenOrders(args: OrderHistoryProps): Promise<Order[]> {
     if (!this.isReady()) {
       await this.init();
     }
     const openOrderQueryResult = await fetchFullListFromAppSync<APIOrder>(
-      QUERIES.listOpenOrdersByTradeAccount,
+      QUERIES.listOpenOrdersByMainAccount,
       {
-        trade_account: args.address,
+        main_account: args.address,
         limit: args.limit,
       },
-      "listOpenOrdersByTradeAccount"
+      "listOpenOrdersByMainAccount"
     );
     const openOrders = openOrderQueryResult?.map((item): Order => {
       return this.mapApiOrderToOrder(item, this._marketList);

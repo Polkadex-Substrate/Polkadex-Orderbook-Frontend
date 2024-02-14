@@ -60,6 +60,9 @@ export function Template() {
             <Tabs.Content value="transfer" className="flex-1 flex">
               <TradesTable ref={tableRowsRef} maxHeight={maxHeight} />
             </Tabs.Content>
+            <Tabs.Content value="openOrders" className="flex-1 flex">
+              Open orders
+            </Tabs.Content>
             <Help ref={helpRef} />
           </div>
         </main>
