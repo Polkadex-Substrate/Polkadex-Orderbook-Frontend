@@ -48,9 +48,9 @@ export function Template() {
               <div className="flex items-center justify-between gap-2 border-b border-primary px-4 w-full">
                 <Tabs.List className="py-2">
                   <Tabs.Trigger value="transfer">Transfer</Tabs.Trigger>
-                  <Tabs.Trigger value="openOrders">Open orders</Tabs.Trigger>
-                  <Tabs.Trigger value="orderOrders">Order history</Tabs.Trigger>
-                  <Tabs.Trigger value="tradeOrders">Trade history</Tabs.Trigger>
+                  <Tabs.Trigger value="openOrders">Open Orders</Tabs.Trigger>
+                  <Tabs.Trigger value="orderOrders">Order History</Tabs.Trigger>
+                  <Tabs.Trigger value="tradeOrders">Trade History</Tabs.Trigger>
                 </Tabs.List>
                 <div>
                   <Input.Search placeholder="Search transactions.." />
