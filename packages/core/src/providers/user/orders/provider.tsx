@@ -19,7 +19,7 @@ import {
   executeCancelOrder,
   executePlaceOrder,
   getNewClientId,
-  parseError,
+  parseMutationError,
 } from "./helper";
 import { Provider } from "./context";
 
@@ -83,11 +83,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
       }
     } catch (error) {
       dispatch(A.orderExecuteDataDelete());
-      const msg =
-        typeof error.message === "string"
-          ? error.message
-          : error?.errors[0]?.message;
-      const errorText = parseError(msg);
+      const errorText = parseMutationError(error);
       // ignore market liquidity error as there will always be a small qty which cannot be filled
       // due to the step size of the configuration. Its expected even-though order-book throws error
       if (errorText.includes("MarketLiquidityError")) {
@@ -140,8 +136,9 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
         }, 1000);
       }
     } catch (error) {
-      settingsState.onHandleError(error?.message ?? error);
-      dispatch(A.orderCancelError(error));
+      const errorText = parseMutationError(error);
+      settingsState.onHandleError(errorText);
+      dispatch(A.orderCancelError(new Error(errorText)));
     }
   };
 

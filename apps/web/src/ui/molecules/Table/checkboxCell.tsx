@@ -27,6 +27,8 @@ const CheckboxCell = forwardRef(
         outline={isFocusVisible}
         ref={componentRef}
       >
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
         <Checkbox {...checkboxProps} />
       </S.Cell>
     );

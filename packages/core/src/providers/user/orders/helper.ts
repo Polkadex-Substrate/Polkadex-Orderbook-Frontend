@@ -1,5 +1,9 @@
 import * as mutation from "@orderbook/core/graphql/mutations";
-import { sendQueryToAppSync } from "@orderbook/core/helpers";
+import {
+  sendQueryToAppSync,
+  SignatureEnumSr25519,
+} from "@orderbook/core/helpers";
+import { Codec } from "@polkadot/types/types";
 
 export const getNewClientId = () => {
   // 32 byte Uint8Array of random string with "webapp-" prefix
@@ -12,8 +16,8 @@ export const getNewClientId = () => {
 };
 
 export const executePlaceOrder = async (
-  orderPayload: any[],
-  proxyAddress: string,
+  orderPayload: [Codec, SignatureEnumSr25519],
+  proxyAddress: string
 ) => {
   const payloadStr = JSON.stringify({ PlaceOrder: orderPayload });
   const res = await sendQueryToAppSync({
@@ -25,17 +29,20 @@ export const executePlaceOrder = async (
   return res;
 };
 
-export const parseError = (msg: unknown) => {
-  if (typeof msg === "string") {
-    return msg;
+export const parseMutationError = (err: unknown) => {
+  if (err instanceof Error) {
+    return err.message;
+  }
+  if (typeof err === "string") {
+    return err;
   } else {
-    return JSON.stringify(msg);
+    return JSON.stringify(err);
   }
 };
 
 export const executeCancelOrder = async (
-  cancelOrderPayload,
-  proxyAddress: string,
+  cancelOrderPayload: [string, string, string, string, SignatureEnumSr25519],
+  proxyAddress: string
 ) => {
   const payload = JSON.stringify({ CancelOrder: cancelOrderPayload });
   const res = await sendQueryToAppSync({

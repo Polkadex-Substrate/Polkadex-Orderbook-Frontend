@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 import { color, variant } from "styled-system";
-import { bgStyleVariants } from "@orderbook/core/helpers";
 
 import * as T from "./types";
 
@@ -142,10 +141,7 @@ export const Menu = styled("ul")<T.DropdownMenuProps>(
       },
     },
   }),
-  color,
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  bgStyleVariants
+  color
 );
 
 export const Selected = styled("path")(({ theme }) =>
