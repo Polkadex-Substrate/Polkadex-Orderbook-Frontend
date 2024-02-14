@@ -6,13 +6,23 @@ export const MessageBanner = ({ link = "/transfer" }) => {
   return (
     <S.Banner>
       <p>
-        <strong>Users residing in the US </strong>
-        are requested not to use the Orderbook.{" "}
+        <a
+          href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf
+Polkadex_Excluded_Jurisdictions.pdf"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          Regulatory compliance
+        </a>
+        : Traders residing in the USA are requested not to use Polkadex
+        Orderbook.{" "}
         <strong>
-          It will be unavailable in the US within the next 7 days.{" "}
+          This website will be geoblocked in the US by February 28th
         </strong>
       </p>
-      <Link href={link}>Transfer funds</Link>
+      <div>
+        <Link href={link}>Transfer funds</Link>
+      </div>
     </S.Banner>
   );
 };

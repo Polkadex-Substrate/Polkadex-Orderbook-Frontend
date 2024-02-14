@@ -8,9 +8,12 @@ export const Banner = styled.div`
     justify-content: center;
     gap: 1rem;
     background-color: ${theme.colors.primary};
-    padding: ${normalizeValue(0.5)};
+    padding: ${normalizeValue(0.8)};
     @media screen and (max-width: 500px) {
       flex-direction: column;
+    }
+    a:hover {
+      opacity: 0.9;
     }
     a,
     p {
@@ -18,18 +21,18 @@ export const Banner = styled.div`
     }
     p {
       font-weight: 550;
+      a {
+        text-decoration: underline;
+      }
     }
-    strong {
-      text-decoration: underline;
-    }
-    a {
-      background: ${theme.colors.primaryBackgroundSolid};
-      padding: ${normalizeValue(0.6)} ${normalizeValue(1)};
-      border-radius: ${normalizeValue(0.9)};
-      transition: ease opacity 0.5s;
-      white-space: nowrap;
-      &:hover {
-        opacity: 0.9;
+
+    div {
+      a {
+        background: ${theme.colors.primaryBackgroundSolid};
+        padding: ${normalizeValue(0.6)} ${normalizeValue(1)};
+        border-radius: ${normalizeValue(0.9)};
+        transition: ease opacity 0.5s;
+        white-space: nowrap;
       }
     }
   `}
