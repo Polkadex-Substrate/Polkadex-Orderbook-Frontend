@@ -10,12 +10,13 @@ import { TradesTable } from "./TradesTable";
 
 import { Footer, Header } from "@/components/ui";
 
+// useElementSize Deprecated -> useResizeObserver
 export function Template() {
-  const [headerRef, { height: headerHeight }] = useElementSize();
-  const [footerRef, { height: footerHeight }] = useElementSize();
-  const [helpRef, { height: helpeight }] = useElementSize();
-  const [tableRowsRef, { height: tableRowsHeight }] = useElementSize();
-  const [overviewRef, { height: overviewHeight }] = useElementSize();
+  const [headerRef, { height: headerHeight = 0 }] = useElementSize();
+  const [footerRef, { height: footerHeight = 0 }] = useElementSize();
+  const [helpRef, { height: helpeight = 0 }] = useElementSize();
+  const [tableRowsRef, { height: tableRowsHeight = 0 }] = useElementSize();
+  const [overviewRef, { height: overviewHeight = 0 }] = useElementSize();
 
   const maxHeight = useMemo(
     () =>

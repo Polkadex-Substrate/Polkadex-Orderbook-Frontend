@@ -1,14 +1,10 @@
 import { Decimal } from "@orderbook/core/utils";
 import { Typography } from "@polkadex/ux";
 import { createColumnHelper } from "@tanstack/react-table";
-import { MouseEvent } from "react";
 
 const columnHelper = createColumnHelper<string[]>();
 
-export type GenericAction = (
-  e: MouseEvent<HTMLElement>,
-  selectedIndex: number
-) => void;
+export type GenericAction = (selectedIndex: number) => void;
 
 export const columns = ({
   total,
@@ -37,7 +33,11 @@ export const columns = ({
         <Typography.Text
           appearance={isPriceUp ? "danger" : "success"}
           size="xs"
-          onClick={(event) => onChangePrice(event, e.row.index)}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onChangePrice(e.row.index);
+          }}
         >
           <Decimal
             fixed={precision}
@@ -61,7 +61,11 @@ export const columns = ({
       return (
         <Typography.Text
           size="xs"
-          onClick={(event) => onChangeAmount(event, e.row.index)}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onChangeAmount(e.row.index);
+          }}
         >
           <Decimal fixed={precision} thousSep=",">
             {amount}
@@ -81,7 +85,11 @@ export const columns = ({
       return (
         <Typography.Text
           size="xs"
-          onClick={(event) => onChangeTotal(event, e.row.index)}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onChangeTotal(e.row.index);
+          }}
         >
           <Decimal fixed={precision} thousSep=",">
             {total[i]}

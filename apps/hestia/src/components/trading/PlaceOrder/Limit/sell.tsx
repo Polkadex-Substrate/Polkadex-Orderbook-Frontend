@@ -38,6 +38,7 @@ export const SellOrder = ({
   const { onToogleConnectTrading } = useSettingsProvider();
 
   const {
+    touched,
     setFieldValue,
     handleSubmit,
     errors,
@@ -57,7 +58,6 @@ export const SellOrder = ({
       maxQuantity: market?.maxQty || 0,
       availableBalance: availableBaseAmount,
     }),
-    validateOnChange: true,
     onSubmit: async (e) => {
       try {
         await onExecuteOrder(e.price, e.amount);
@@ -106,7 +106,9 @@ export const SellOrder = ({
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
-      <Tooltip open={!!errors.price && !!values.price && isSignedIn}>
+      <Tooltip
+        open={touched.price && !!errors.price && !!values.price && isSignedIn}
+      >
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
@@ -131,12 +133,16 @@ export const SellOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="left" className="bg-level-0 z-[1]">
+        <Tooltip.Content side="left" className="bg-level-5 z-[1]">
           {errors.price}
         </Tooltip.Content>
       </Tooltip>
 
-      <Tooltip open={!!errors.amount && !!values.amount && isSignedIn}>
+      <Tooltip
+        open={
+          touched.amount && !!errors.amount && !!values.amount && isSignedIn
+        }
+      >
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
@@ -161,7 +167,7 @@ export const SellOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="left" className="bg-level-0 z-[1]">
+        <Tooltip.Content side="left" className="bg-level-5 z-[1]">
           {errors.amount}
         </Tooltip.Content>
       </Tooltip>

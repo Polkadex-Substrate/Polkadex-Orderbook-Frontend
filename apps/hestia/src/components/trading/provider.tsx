@@ -9,6 +9,8 @@ import {
 } from "react";
 import { useElementSize } from "usehooks-ts";
 
+import { useSizeObserver } from "@/hooks";
+
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
@@ -16,53 +18,37 @@ type GenericRef<T = HTMLDivElement> = (node: T | null) => void;
 type State = {
   headerRef: GenericRef;
   footerRef: GenericRef;
-  helpRef: GenericRef;
-  tableTitleRef: GenericRef;
-  formwRef: GenericRef;
-  filtersRef: GenericRef;
+  marketRef: GenericRef;
+  placeOrderRef: GenericRef;
   tableMaxHeight: string;
+  ordersMaxHeight: string;
 };
-
 // useElementSize Deprecated -> useResizeObserver
 export const SizeProvider = ({ children }: { children: ReactNode }) => {
   const [headerRef, { height: headerHeight = 0 }] = useElementSize();
   const [footerRef, { height: footerHeight = 0 }] = useElementSize();
-  const [helpRef, { height: helpHeight = 0 }] = useElementSize();
-  const [tableTitleRef, { height: tableTitleHeight = 0 }] = useElementSize();
-  const [formwRef, { height: formHeight = 0 }] = useElementSize();
-  const [filtersRef, { height: filtersHeight = 0 }] = useElementSize();
+  const [marketRef, marketHeight] = useSizeObserver();
+  const [placeOrderRef, placeOrderHeight] = useSizeObserver();
 
   const tableMaxHeight = useMemo(
-    () =>
-      `calc(100vh - ${
-        formHeight +
-        headerHeight +
-        footerHeight +
-        helpHeight +
-        tableTitleHeight +
-        filtersHeight +
-        1
-      }px)`,
-    [
-      filtersHeight,
-      headerHeight,
-      footerHeight,
-      formHeight,
-      helpHeight,
-      tableTitleHeight,
-    ]
+    () => `calc(100vh - ${marketHeight + headerHeight + footerHeight + 1}px)`,
+    [headerHeight, footerHeight, marketHeight]
+  );
+
+  const ordersMaxHeight = useMemo(
+    () => `${placeOrderHeight}px`,
+    [placeOrderHeight]
   );
 
   return (
     <Provider
       value={{
-        headerRef,
-        footerRef,
-        helpRef,
-        tableTitleRef,
-        formwRef,
         tableMaxHeight,
-        filtersRef,
+        ordersMaxHeight,
+        headerRef,
+        marketRef,
+        placeOrderRef,
+        footerRef,
       }}
     >
       {children}

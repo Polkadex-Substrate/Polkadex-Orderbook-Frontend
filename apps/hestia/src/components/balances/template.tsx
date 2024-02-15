@@ -14,13 +14,14 @@ import { Help } from "./Help";
 
 import { Footer, Header } from "@/components/ui";
 
+// useElementSize Deprecated -> useResizeObserver
 export function Template() {
   const { width } = useWindowSize();
 
-  const [headerRef, { height: headerHeight }] = useElementSize();
-  const [footerRef, { height: footerHeight }] = useElementSize();
-  const [helpRef, { height: helpeight }] = useElementSize();
-  const [overviewRef, { height: overviewHeight }] = useElementSize();
+  const [headerRef, { height: headerHeight = 0 }] = useElementSize();
+  const [footerRef, { height: footerHeight = 0 }] = useElementSize();
+  const [helpRef, { height: helpeight = 0 }] = useElementSize();
+  const [overviewRef, { height: overviewHeight = 0 }] = useElementSize();
 
   const { assets, filters, loading, onHideZeroBalance, onSearchToken } =
     useAssets();

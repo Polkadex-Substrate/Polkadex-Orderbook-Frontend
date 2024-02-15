@@ -24,7 +24,7 @@ export const TradingAccountList = ({
       <Interaction.Content className="flex flex-col gap-6 flex-1">
         <Accordion type="single" defaultValue="accordion1" collapsible>
           <Accordion.Item value="accordion1">
-            <Accordion.Trigger>
+            <Accordion.Trigger className="pb-4">
               <Typography.Text appearance="secondary">
                 Trading accounts
               </Typography.Text>
