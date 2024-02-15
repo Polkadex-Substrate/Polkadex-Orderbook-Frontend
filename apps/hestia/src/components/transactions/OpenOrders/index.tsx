@@ -35,6 +35,21 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
       setIsfetchingNext(false);
     };
 
+    const onPrevPage = async () => {
+      console.log("coming here");
+      setIsfetchingNext(true);
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      if (page > 1) setPage(page - 1);
+      setIsfetchingNext(false);
+    };
+
+    const onNextPage = async () => {
+      setIsfetchingNext(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (openOrders.length > rowsPerPage * page) setPage(page + 1);
+      setIsfetchingNext(false);
+    };
+
     const table = useReactTable({
       data: openOrders.splice(rowsPerPage * (page - 1), rowsPerPage * page),
       columns: columns({ onCancelOrder }),
@@ -121,7 +136,10 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
           </Loading.Spinner>
           <TablePagination
             rowsPerPage={rowsPerPage}
+            page={page}
             onSetRowsPerPage={onSetRowsPerPage}
+            onNextPage={onNextPage}
+            onPrevPage={onPrevPage}
             ref={ref}
           />
         </div>

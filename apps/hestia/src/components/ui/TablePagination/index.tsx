@@ -2,12 +2,15 @@ import { Typography, Dropdown, Pagination } from "@polkadex/ux";
 import { forwardRef } from "react";
 
 type Props = {
+  page?: number;
   rowsPerPage?: number;
   onSetRowsPerPage?: (row: number) => void;
+  onPrevPage?: () => void;
+  onNextPage?: () => void;
 };
 
 export const TablePagination = forwardRef<HTMLDivElement, Props>(
-  ({ rowsPerPage, onSetRowsPerPage }, ref) => {
+  ({ page, rowsPerPage, onPrevPage, onNextPage }, ref) => {
     const rows = [10, 20, 30];
     return (
       <div
@@ -19,7 +22,7 @@ export const TablePagination = forwardRef<HTMLDivElement, Props>(
             <Typography.Text>Rows per page</Typography.Text>
             <Dropdown>
               <Dropdown.Trigger className="border rounded-md border-secondary-base p-1">
-                10
+                {rowsPerPage}
                 <Dropdown.Icon />
               </Dropdown.Trigger>
               <Dropdown.Content>
@@ -33,10 +36,10 @@ export const TablePagination = forwardRef<HTMLDivElement, Props>(
           </div>
           <div>
             <Pagination>
-              <Typography.Text className="text-sm">Page 1</Typography.Text>
+              <Typography.Text className="text-sm">Page {page}</Typography.Text>
               <Pagination.Content>
-                <Pagination.Button arrowSide="left" />
-                <Pagination.Button arrowSide="right" />
+                <Pagination.Button arrowSide="left" onClick={onPrevPage} />
+                <Pagination.Button arrowSide="right" onClick={onNextPage} />
               </Pagination.Content>
             </Pagination>
           </div>
