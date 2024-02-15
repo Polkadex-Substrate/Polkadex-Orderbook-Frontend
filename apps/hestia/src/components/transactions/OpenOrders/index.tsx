@@ -1,4 +1,5 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
+import { useWindowSize } from "usehooks-ts";
 import classNames from "classnames";
 import { useOpenOrders } from "@orderbook/core/hooks";
 import { GenericMessage, Loading, Modal, Table } from "@polkadex/ux";
@@ -24,8 +25,11 @@ type Props = {
   maxHeight: string;
 };
 
+const responsiveKeys = ["id", "filled", "date", "actions"];
+
 export const OpenOrders = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight }, ref) => {
+    const { width } = useWindowSize();
     const { selectedAccount } = useConnectWalletProvider();
     const { onCancelOrder: cancelOrder } = useOrders();
     const { isLoading, openOrders } = useOpenOrders();
@@ -48,6 +52,8 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
         setOrderPayload(null);
       }
     };
+
+    const responsiveView = useMemo(() => width <= 850, [width]);
 
     const table = useReactTable({
       data: openOrders.slice(rowsPerPage * (page - 1), rowsPerPage * page),
@@ -119,6 +125,12 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
                     {table.getHeaderGroups().map((headerGroup) => (
                       <Table.Row key={headerGroup.id}>
                         {headerGroup.headers.map((header) => {
+                          if (
+                            responsiveView &&
+                            responsiveKeys.includes(header.id)
+                          )
+                            return null;
+
                           return (
                             <Table.Head
                               className={classNames(
@@ -148,6 +160,12 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
                           )}
                         >
                           {row.getVisibleCells().map((cell) => {
+                            if (
+                              responsiveView &&
+                              responsiveKeys.includes(cell.column.id)
+                            )
+                              return null;
+
                             return (
                               <Table.Cell
                                 key={cell.id}

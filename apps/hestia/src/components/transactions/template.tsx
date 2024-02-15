@@ -78,7 +78,7 @@ export function Template() {
               <Tabs.Content value="openOrders" className="flex-1 flex">
                 {tradeAddress?.length ? (
                   <OrdersProvider>
-                    <OpenOrders maxHeight={maxHeight} ref={tableRowsRef} />
+                    <OpenOrders ref={tableRowsRef} maxHeight={maxHeight} />
                   </OrdersProvider>
                 ) : (
                   <ConnectTradingAccountWrapper />

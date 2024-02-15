@@ -147,7 +147,7 @@ export const columns = ({
     footer: (e) => e.column.id,
   }),
   openOrderColumnHelper.accessor((row) => row, {
-    id: "cancel order",
+    id: "actions",
     cell: (e) => {
       return (
         <PopConfirm>
