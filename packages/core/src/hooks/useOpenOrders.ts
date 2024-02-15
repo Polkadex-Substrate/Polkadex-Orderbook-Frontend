@@ -1,27 +1,19 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import { getCurrentMarket, sortOrdersDescendingTime } from "../helpers";
+import { sortOrdersDescendingTime } from "../helpers";
 import { useSettingsProvider } from "../providers/public/settings";
 import { useProfile } from "../providers/user/profile";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { QUERY_KEYS } from "../constants";
 import { Ifilters } from "../providers/types";
 
-import { useMarkets } from "./useMarkets";
-
-export const useOpenOrders = (defaultMarket: string, filters?: Ifilters) => {
+export const useOpenOrders = (filters?: Ifilters) => {
   const { onHandleError } = useSettingsProvider();
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
-
-  const { list: markets, loading } = useMarkets();
-  const currentMarket = getCurrentMarket(markets, defaultMarket);
-
-  const shouldFetchOpenOrders = Boolean(
-    currentMarket && tradeAddress?.length > 0 && !loading
-  );
+  const shouldFetchOpenOrders = Boolean(tradeAddress?.length > 0);
 
   const {
     data: openOrders,
@@ -64,7 +56,7 @@ export const useOpenOrders = (defaultMarket: string, filters?: Ifilters) => {
   }, [filters?.onlyBuy, filters?.onlySell, openOrdersSorted]);
 
   return {
-    openOrders: filteredOpenOrders,
+    openOrders: filteredOpenOrders.concat(filteredOpenOrders),
     isLoading: !shouldFetchOpenOrders || isLoading || isFetching,
   };
 };
