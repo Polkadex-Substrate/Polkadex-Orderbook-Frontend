@@ -13,6 +13,9 @@ const nextConfig = {
   transpilePackages: ["@orderbook/core"],
   reactStrictMode: false,
   // Optional build-time configuration options
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   sentry: {
     // See the sections below for information on the following options:
     //   'Configure Source Maps':

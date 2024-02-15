@@ -57,7 +57,6 @@ export const SellOrder = ({
       maxQuantity: market?.maxQty || 0,
       availableBalance: availableBaseAmount,
     }),
-    validateOnChange: true,
     onSubmit: async (e) => {
       try {
         await onExecuteOrder(e.price, e.amount);
@@ -131,7 +130,7 @@ export const SellOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="left" className="bg-level-0 z-[1]">
+        <Tooltip.Content side="left" className="bg-level-5 z-[1]">
           {errors.price}
         </Tooltip.Content>
       </Tooltip>
@@ -161,7 +160,7 @@ export const SellOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="left" className="bg-level-0 z-[1]">
+        <Tooltip.Content side="left" className="bg-level-5 z-[1]">
           {errors.amount}
         </Tooltip.Content>
       </Tooltip>
