@@ -13,9 +13,6 @@ const nextConfig = {
   transpilePackages: ["@orderbook/core"],
   reactStrictMode: false,
   // Optional build-time configuration options
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   sentry: {
     // See the sections below for information on the following options:
     //   'Configure Source Maps':
@@ -30,6 +27,9 @@ const nextConfig = {
     //     - excludeServerRoutes
     //   'Configure Tunneling to avoid Ad-Blockers':
     //     - tunnelRoute
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
   env: {
     POLKADEX_CHAIN: process.env.POLKADEX_CHAIN,
