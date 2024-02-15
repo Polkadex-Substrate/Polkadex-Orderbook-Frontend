@@ -96,6 +96,10 @@ export const OrderHistoryResponsiveCard = ({ orders }: { orders: Order[] }) => {
     const isSell = order.side === "Ask";
     const isMarket = order.type === "MARKET";
     const Icon = isSell ? ArrowRightCircleIcon : ArrowLeftCircleIcon;
+    const feeTicker = !isSell
+      ? order.market.baseAsset.ticker
+      : order.market.quoteAsset.ticker;
+
     return (
       <div
         key={order.orderId}
@@ -156,7 +160,9 @@ export const OrderHistoryResponsiveCard = ({ orders }: { orders: Order[] }) => {
 
         <div className="flex flex-col gap-1">
           <Typography.Text appearance="primary">Fee</Typography.Text>
-          <Typography.Text>{order.fee}</Typography.Text>
+          <Typography.Text>
+            {order.fee} {feeTicker}
+          </Typography.Text>
         </div>
       </div>
     );
