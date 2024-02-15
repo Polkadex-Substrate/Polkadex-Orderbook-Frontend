@@ -8,7 +8,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { Help } from "./Help";
 import { TradesTable } from "./TradesTable";
-import OpenOrders from "./OpenOrders";
+import { OpenOrders } from "./OpenOrders";
 
 import { Footer, Header } from "@/components/ui";
 import { useSizeObserver } from "@/hooks";
@@ -78,7 +78,7 @@ export function Template() {
               <Tabs.Content value="openOrders" className="flex-1 flex">
                 {tradeAddress?.length ? (
                   <OrdersProvider>
-                    <OpenOrders maxHeight={maxHeight} />
+                    <OpenOrders maxHeight={maxHeight} ref={tableRowsRef} />
                   </OrdersProvider>
                 ) : (
                   <ConnectTradingAccountWrapper />
