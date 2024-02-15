@@ -56,7 +56,7 @@ export const useOpenOrders = (filters?: Ifilters) => {
   }, [filters?.onlyBuy, filters?.onlySell, openOrdersSorted]);
 
   return {
-    openOrders: filteredOpenOrders.concat(filteredOpenOrders),
+    openOrders: filteredOpenOrders,
     isLoading: !shouldFetchOpenOrders || isLoading || isFetching,
   };
 };

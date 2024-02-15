@@ -22,7 +22,7 @@ export const columns = ({
     id: "id",
     cell: (e) => (
       <Copy value={e.getValue().orderId}>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <DocumentDuplicateIcon className="w-4 h-4 text-actionInput" />
           <Typography.Text size="xs">
             {truncateString(e.getValue().orderId, 4)}
@@ -177,11 +177,7 @@ export const columns = ({
         </PopConfirm>
       );
     },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Actions
-      </Typography.Text>
-    ),
+    header: () => null,
     footer: (e) => e.column.id,
   }),
 ];
