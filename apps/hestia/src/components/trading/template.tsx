@@ -1,6 +1,7 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
+import { useElementSize } from "usehooks-ts";
 import { useMarkets } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
 
@@ -10,20 +11,23 @@ import { Orderbook } from "./Orderbook";
 import { Trades } from "./Trades";
 import { Orders } from "./Orders";
 import { PlaceOrder } from "./PlaceOrder";
-import { useSizeProvider } from "./provider";
 
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { Footer, Header } from "@/components/ui";
+import { useSizeObserver } from "@/hooks";
 
 export function Template({ id }: { id: string }) {
-  const {
-    footerRef,
-    headerRef,
-    ordersMaxHeight,
-    placeOrderRef,
-    tableMaxHeight,
-    marketRef,
-  } = useSizeProvider();
+  const [headerRef, { height: headerHeight }] = useElementSize();
+  const [footerRef, { height: footerHeight }] = useElementSize();
+  const [marketRef, marketHeight] = useSizeObserver();
+  const [placeOrderRef, placeOrderHeight] = useSizeObserver();
+
+  const maxHeight = useMemo(
+    () => `calc(100vh - ${marketHeight + headerHeight + footerHeight + 1}px)`,
+    [headerHeight, footerHeight, marketHeight]
+  );
+
+  const ordersSize = useMemo(() => `${placeOrderHeight}px`, [placeOrderHeight]);
 
   const { list } = useMarkets();
 
@@ -39,15 +43,15 @@ export function Template({ id }: { id: string }) {
             <Graph id={id} />
           </div>
           <div className="flex min-h-[22rem] flex-1 max-md:flex-wrap">
-            <Orderbook maxHeight={tableMaxHeight as string} id={id} />
-            <Trades maxHeight={tableMaxHeight as string} id={id} />
+            <Orderbook maxHeight={maxHeight} id={id} />
+            <Trades maxHeight={maxHeight} id={id} />
           </div>
         </div>
         <div
           ref={marketRef}
           className="flex flex-wrap border-t border-t-primary"
         >
-          <Orders maxHeight={ordersMaxHeight as string} id={id} />
+          <Orders maxHeight={ordersSize} id={id} />
           <PlaceOrder ref={placeOrderRef} market={currentMarket} />
         </div>
       </main>
