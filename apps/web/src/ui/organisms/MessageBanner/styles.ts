@@ -1,14 +1,27 @@
 import styled, { css } from "styled-components";
 
 import { normalizeValue } from "@/utils/normalize";
+export const Wrapper = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: ${theme.colors.red};
+    padding: ${normalizeValue(0.8)};
+    gap: 1rem;
+    button {
+      padding: 5px;
+      transition: ease background-color 0.4s;
+    }
+  `}
+`;
 export const Banner = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    background-color: ${theme.colors.primary};
-    padding: ${normalizeValue(0.8)};
+
     @media screen and (max-width: 500px) {
       flex-direction: column;
     }
@@ -33,6 +46,7 @@ export const Banner = styled.div`
         border-radius: ${normalizeValue(0.9)};
         transition: ease opacity 0.5s;
         white-space: nowrap;
+        font-size: ${normalizeValue(1.2)};
       }
     }
   `}
