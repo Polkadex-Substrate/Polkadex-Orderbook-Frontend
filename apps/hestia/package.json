@@ -17,6 +17,7 @@
     "@orderbook/eslint-config": "*",
     "@orderbook/tsconfig": "*",
     "@polkadex/react-providers": "^1.1.0",
+    "@polkadex/types": "^1.2.2",
     "@polkadex/ux": "^6.6.0",
     "@polkadot-cloud/assets": "^0.3.4",
     "@sentry/nextjs": "^7.99.0",
