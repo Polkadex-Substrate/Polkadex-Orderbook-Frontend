@@ -86,7 +86,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     };
 
     useEffect(() => {
-      tryUnlockTradeAccount(selectedAccount);
+      if (selectedAccount) tryUnlockTradeAccount(selectedAccount);
     }, [selectedAccount]);
 
     if (isLoading) return <SkeletonCollection rows={7} />;
