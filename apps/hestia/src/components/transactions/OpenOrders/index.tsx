@@ -27,16 +27,13 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     const [page, setPage] = useState(1);
 
     const onSetRowsPerPage = async (row: number) => {
-      setIsfetchingNext(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log(row);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setRowsPerPage(row);
       setPage(1);
-      setIsfetchingNext(false);
     };
 
     const onPrevPage = async () => {
-      console.log("coming here");
       setIsfetchingNext(true);
       await new Promise((resolve) => setTimeout(resolve, 5000));
       if (page > 1) setPage(page - 1);
@@ -51,7 +48,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     };
 
     const table = useReactTable({
-      data: openOrders.splice(rowsPerPage * (page - 1), rowsPerPage * page),
+      data: openOrders.slice(rowsPerPage * (page - 1), rowsPerPage * page),
       columns: columns({ onCancelOrder }),
       getCoreRowModel: getCoreRowModel(),
     });

@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const TablePagination = forwardRef<HTMLDivElement, Props>(
-  ({ page, rowsPerPage, onPrevPage, onNextPage }, ref) => {
+  ({ page, rowsPerPage, onSetRowsPerPage, onPrevPage, onNextPage }, ref) => {
     const rows = [10, 20, 30];
     return (
       <div
@@ -27,7 +27,11 @@ export const TablePagination = forwardRef<HTMLDivElement, Props>(
               </Dropdown.Trigger>
               <Dropdown.Content>
                 {rows.map((row, i) => (
-                  <Dropdown.ItemCheckbox key={i} checked={row === rowsPerPage}>
+                  <Dropdown.ItemCheckbox
+                    key={i}
+                    checked={row === rowsPerPage}
+                    onSelect={() => onSetRowsPerPage?.(row)}
+                  >
                     {row}
                   </Dropdown.ItemCheckbox>
                 ))}
