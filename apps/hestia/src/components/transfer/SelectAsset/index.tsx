@@ -1,6 +1,7 @@
 import { Button, Checkbox, Modal, Typography, Input } from "@polkadex/ux";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useAssets } from "@orderbook/core/hooks";
+import classNames from "classnames";
 
 import { Table } from "./table";
 
@@ -26,7 +27,10 @@ export const SelectAsset = ({
       onOpenChange={onOpenChange}
       placement="top right"
       closeOnClickOutside
-      className="flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto"
+      className={classNames(
+        "flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto",
+        "top-1/2 right-0 transform -translate-y-1/2" // fix that in polkadex/ux
+      )}
     >
       <Modal.Title className="flex justify-between items-center py-4 pl-4">
         <Typography.Text size="lg" bold>

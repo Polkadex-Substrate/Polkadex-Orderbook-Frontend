@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import { getMarketUrl } from "@orderbook/core/helpers";
 import { useWindowSize } from "usehooks-ts";
+import classNames from "classnames";
 
 import QrCode from "../../../../public/img/qrCode.png";
 
@@ -28,7 +29,10 @@ export const ResponsiveMenuModal = ({
       onOpenChange={onOpenChange}
       placement="top right"
       closeOnClickOutside
-      className="flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto"
+      className={classNames(
+        "flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto",
+        "top-1/2 right-0 transform -translate-y-1/2" // fix that in polkadex/ux
+      )}
     >
       <Modal.Title className="flex justify-between items-center py-4 pl-4">
         <Typography.Text size="lg" bold>
