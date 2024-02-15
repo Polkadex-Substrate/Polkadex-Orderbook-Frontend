@@ -17,7 +17,7 @@ export const FundWalletModal = ({
     <Modal
       open={open}
       onOpenChange={onOpenChange}
-      placement="center right"
+      placement="top right"
       closeOnClickOutside
       className="flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto"
     >
