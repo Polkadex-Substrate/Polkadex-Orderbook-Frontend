@@ -251,7 +251,7 @@ export const History = () => {
           <GenericMessage
             title="No result found"
             illustration="NoResultFound"
-            className="bg-level-1 border-b border-b-primary"
+            className="bg-level-1 border-y border-y-primary"
           />
         )}
       </div>

@@ -35,7 +35,7 @@ export const Filters = <TData,>({
   return (
     <div
       ref={filtersRef}
-      className="flex items-center gap-5 justify-between  px-4 pt-2"
+      className="flex items-center gap-5 justify-between px-4 py-1.5"
     >
       <div
         className={classNames(

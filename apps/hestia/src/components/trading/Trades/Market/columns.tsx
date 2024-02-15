@@ -63,8 +63,11 @@ export const columns = ({
     id: "change",
     cell: (e) => {
       const { price_change_percent } = e.getValue();
-      const changeFormatted =
-        Decimal.format(Number(price_change_percent), 2, ",") + "%";
+      const changeFormatted = Decimal.format(
+        Number(price_change_percent),
+        2,
+        ","
+      );
       const negative = isNegative(changeFormatted.toString());
       return (
         <Typography.Text size="xs" appearance={negative ? "danger" : "success"}>
