@@ -32,3 +32,4 @@ export * from "./CustomTransfer";
 export * from "./CustomWithdraw";
 export * from "./Intro";
 export * from "./MessageBanner";
+export * from "./CrowdloansBanner";
