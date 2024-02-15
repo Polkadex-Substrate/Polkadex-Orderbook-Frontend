@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { OrdersProvider } from "@orderbook/core/providers";
 import { useElementSize } from "usehooks-ts";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { Help } from "./Help";
 import { TradesTable } from "./TradesTable";
@@ -34,6 +35,9 @@ export function Template() {
       }px)`,
     [headerHeight, footerHeight, overviewHeight, helpeight, tableRowsHeight]
   );
+  const {
+    selectedAddresses: { tradeAddress },
+  } = useProfile();
 
   return (
     <>
