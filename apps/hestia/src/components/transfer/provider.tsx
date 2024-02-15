@@ -23,13 +23,14 @@ type State = {
   tableMaxHeight: string;
 };
 
+// useElementSize Deprecated -> useResizeObserver
 export const SizeProvider = ({ children }: { children: ReactNode }) => {
-  const [headerRef, { height: headerHeight }] = useElementSize();
-  const [footerRef, { height: footerHeight }] = useElementSize();
-  const [helpRef, { height: helpHeight }] = useElementSize();
-  const [tableTitleRef, { height: tableTitleHeight }] = useElementSize();
-  const [formwRef, { height: formHeight }] = useElementSize();
-  const [filtersRef, { height: filtersHeight }] = useElementSize();
+  const [headerRef, { height: headerHeight = 0 }] = useElementSize();
+  const [footerRef, { height: footerHeight = 0 }] = useElementSize();
+  const [helpRef, { height: helpHeight = 0 }] = useElementSize();
+  const [tableTitleRef, { height: tableTitleHeight = 0 }] = useElementSize();
+  const [formwRef, { height: formHeight = 0 }] = useElementSize();
+  const [filtersRef, { height: filtersHeight = 0 }] = useElementSize();
 
   const tableMaxHeight = useMemo(
     () =>

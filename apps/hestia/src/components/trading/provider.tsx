@@ -23,10 +23,10 @@ type State = {
   tableMaxHeight: string;
   ordersMaxHeight: string;
 };
-
+// useElementSize Deprecated -> useResizeObserver
 export const SizeProvider = ({ children }: { children: ReactNode }) => {
-  const [headerRef, { height: headerHeight }] = useElementSize();
-  const [footerRef, { height: footerHeight }] = useElementSize();
+  const [headerRef, { height: headerHeight = 0 }] = useElementSize();
+  const [footerRef, { height: footerHeight = 0 }] = useElementSize();
   const [marketRef, marketHeight] = useSizeObserver();
   const [placeOrderRef, placeOrderHeight] = useSizeObserver();
 

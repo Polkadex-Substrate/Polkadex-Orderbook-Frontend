@@ -1,5 +1,5 @@
-import "@polkadex/ux/dist/index.css";
 import "@/styles/globals.scss";
+import "@polkadex/ux/dist/index.css";
 import { GeistSans } from "geist/font/sans";
 import { ReactNode } from "react";
 import classNames from "classnames";
