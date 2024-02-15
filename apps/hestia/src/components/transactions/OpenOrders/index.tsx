@@ -1,7 +1,7 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import classNames from "classnames";
 import { useOpenOrders } from "@orderbook/core/hooks";
-import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
+import { GenericMessage, Loading, Table } from "@polkadex/ux";
 import {
   flexRender,
   getCoreRowModel,
@@ -22,9 +22,21 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight }, ref) => {
     const { onCancelOrder } = useOrders();
     const { isLoading, openOrders } = useOpenOrders();
+    const [isFetchingNextPage, setIsfetchingNext] = useState(false);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [page, setPage] = useState(1);
+
+    const onSetRowsPerPage = async (row: number) => {
+      setIsfetchingNext(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log(row);
+      setRowsPerPage(row);
+      setPage(1);
+      setIsfetchingNext(false);
+    };
 
     const table = useReactTable({
-      data: openOrders,
+      data: openOrders.splice(rowsPerPage * (page - 1), rowsPerPage * page),
       columns: columns({ onCancelOrder }),
       getCoreRowModel: getCoreRowModel(),
     });
@@ -42,62 +54,76 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
 
     return (
       <div className="flex-1 flex flex-col">
-        <div className="flex-1 flex flex-col justify-between border-b border-secondary-base">
-          <div
-            className="overflow-y-hidden hover:overflow-y-auto px-3"
-            style={{ maxHeight, scrollbarGutter: "stable" }}
-          >
-            <PolkadexTable className="w-full" even>
-              <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <PolkadexTable.Row key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <PolkadexTable.Head
-                          className={classNames(
-                            "px-2 text-primary font-semibold text-xs"
-                          )}
-                          key={header.id}
-                        >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </PolkadexTable.Head>
-                      );
-                    })}
-                  </PolkadexTable.Row>
-                ))}
-              </PolkadexTable.Header>
-              <PolkadexTable.Body>
-                {table.getRowModel().rows.map((row) => {
-                  return (
-                    <PolkadexTable.Row
-                      key={row.id}
-                      className={classNames("hover:bg-level-1 cursor-pointer")}
-                    >
-                      {row.getVisibleCells().map((cell) => {
+        <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
+          <Loading.Spinner active={isFetchingNextPage}>
+            <div
+              className="overflow-y-hidden hover:overflow-y-auto px-3"
+              style={{ maxHeight, scrollbarGutter: "stable" }}
+            >
+              <Table
+                className={classNames(
+                  "w-full",
+                  isFetchingNextPage && "opacity-50"
+                )}
+                even
+              >
+                <Table.Header className="sticky top-0 bg-backgroundBase">
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <Table.Row key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => {
                         return (
-                          <PolkadexTable.Cell
-                            key={cell.id}
-                            className={classNames("px-2 py-4 text-xs")}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
+                          <Table.Head
+                            className={classNames(
+                              "px-2 text-primary font-semibold text-xs"
                             )}
-                          </PolkadexTable.Cell>
+                            key={header.id}
+                          >
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                          </Table.Head>
                         );
                       })}
-                    </PolkadexTable.Row>
-                  );
-                })}
-              </PolkadexTable.Body>
-            </PolkadexTable>
-          </div>
-          <TablePagination ref={ref} />
+                    </Table.Row>
+                  ))}
+                </Table.Header>
+                <Table.Body>
+                  {table.getRowModel().rows.map((row) => {
+                    return (
+                      <Table.Row
+                        key={row.id}
+                        className={classNames(
+                          "hover:bg-level-1 cursor-pointer"
+                        )}
+                      >
+                        {row.getVisibleCells().map((cell) => {
+                          return (
+                            <Table.Cell
+                              key={cell.id}
+                              className={classNames("px-2 py-4 text-xs")}
+                            >
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              )}
+                            </Table.Cell>
+                          );
+                        })}
+                      </Table.Row>
+                    );
+                  })}
+                </Table.Body>
+              </Table>
+            </div>
+          </Loading.Spinner>
+          <TablePagination
+            rowsPerPage={rowsPerPage}
+            onSetRowsPerPage={onSetRowsPerPage}
+            ref={ref}
+          />
         </div>
       </div>
     );
