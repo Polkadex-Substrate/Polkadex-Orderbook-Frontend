@@ -89,7 +89,7 @@ export const columns = [
       const isMarket = e.getValue().type === "MARKET";
       return (
         <Typography.Text size="xs">
-          {isMarket ? "-" : e.getValue().price}
+          {isMarket ? "---" : e.getValue().price}
         </Typography.Text>
       );
     },
@@ -134,6 +134,26 @@ export const columns = [
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Status
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  orderHistoryColumnHelper.accessor((row) => row, {
+    id: "fee",
+    cell: (e) => {
+      const ticker =
+        e.getValue().side === "Bid"
+          ? e.getValue().market.baseAsset.ticker
+          : e.getValue().market.quoteAsset.ticker;
+      return (
+        <Typography.Text size="xs">
+          {e.getValue().fee} {ticker}
+        </Typography.Text>
+      );
+    },
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Fee
       </Typography.Text>
     ),
     footer: (e) => e.column.id,

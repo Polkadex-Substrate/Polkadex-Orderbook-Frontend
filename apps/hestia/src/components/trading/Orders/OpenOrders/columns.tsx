@@ -103,7 +103,11 @@ export const columns = ({
         <Typography.Text size="xs">{e.getValue().quantity}</Typography.Text>
       );
     },
-    header: () => <Typography.Text size="xs">Total</Typography.Text>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Total
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
   openOrderColumnHelper.accessor((row) => row, {

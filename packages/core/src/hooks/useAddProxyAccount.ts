@@ -65,7 +65,7 @@ export function useAddProxyAccount({
         await addProxyToAccount(api, proxy, signer, main);
       }
 
-      const { pair } = wallet.add(mnemonic, name, password);
+      const { pair } = wallet.addFromMnemonic(mnemonic, name, password);
       await onUserSelectTradingAddress({
         tradeAddress: pair.address,
         isNew: true,

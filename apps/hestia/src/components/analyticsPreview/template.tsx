@@ -13,12 +13,13 @@ import { TableRewards } from "./TableRewards";
 
 import { Footer, Header } from "@/components/ui";
 
+// useElementSize Deprecated -> useResizeObserver
 export function Template() {
-  const [headerRef, { height: headerHeight }] = useElementSize();
-  const [footerRef, { height: footerHeight }] = useElementSize();
-  const [tableTitlesRef, { height: tableTitleHeight }] = useElementSize();
-  const [tableRowsRef, { height: tableRowsHeight }] = useElementSize();
-  const [overviewRef, { height: overviewHeight }] = useElementSize();
+  const [headerRef, { height: headerHeight = 0 }] = useElementSize();
+  const [footerRef, { height: footerHeight = 0 }] = useElementSize();
+  const [tableTitlesRef, { height: tableTitleHeight = 0 }] = useElementSize();
+  const [tableRowsRef, { height: tableRowsHeight = 0 }] = useElementSize();
+  const [overviewRef, { height: overviewHeight = 0 }] = useElementSize();
 
   const maxHeight = useMemo(
     () =>

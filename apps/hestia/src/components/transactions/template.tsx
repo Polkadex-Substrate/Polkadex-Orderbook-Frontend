@@ -4,26 +4,23 @@ import { Typography, Input, Tabs } from "@polkadex/ux";
 import { useMemo } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { OrdersProvider } from "@orderbook/core/providers";
-import { useProfile } from "@orderbook/core/providers/user/profile";
+import { useElementSize } from "usehooks-ts";
 
 import { Help } from "./Help";
 import { TradesTable } from "./TradesTable";
 import { OpenOrders } from "./OpenOrders";
 
 import { Footer, Header } from "@/components/ui";
-import { useSizeObserver } from "@/hooks";
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ConnectTradingAccountWrapper } from "@/components/ui/ReadyToUse";
 
+// useElementSize Deprecated -> useResizeObserver
 export function Template() {
-  const [headerRef, headerHeight] = useSizeObserver();
-  const [footerRef, footerHeight] = useSizeObserver();
-  const [helpRef, helpeight] = useSizeObserver();
-  const [tableRowsRef, tableRowsHeight] = useSizeObserver();
-  const [overviewRef, overviewHeight] = useSizeObserver();
-  const {
-    selectedAddresses: { tradeAddress },
-  } = useProfile();
+  const [headerRef, { height: headerHeight = 0 }] = useElementSize();
+  const [footerRef, { height: footerHeight = 0 }] = useElementSize();
+  const [helpRef, { height: helpeight = 0 }] = useElementSize();
+  const [tableRowsRef, { height: tableRowsHeight = 0 }] = useElementSize();
+  const [overviewRef, { height: overviewHeight = 0 }] = useElementSize();
 
   const maxHeight = useMemo(
     () =>
