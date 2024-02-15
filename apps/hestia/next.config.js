@@ -28,6 +28,9 @@ const nextConfig = {
     //   'Configure Tunneling to avoid Ad-Blockers':
     //     - tunnelRoute
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   env: {
     POLKADEX_CHAIN: process.env.POLKADEX_CHAIN,
     GOOGLE_ANALYTICS: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
