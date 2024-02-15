@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import { useWindowSize } from "usehooks-ts";
 import classNames from "classnames";
+import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { useOpenOrders } from "@orderbook/core/hooks";
 import { GenericMessage, Loading, Modal, Table } from "@polkadex/ux";
 import {
@@ -16,6 +17,7 @@ import { useConnectWalletProvider } from "@orderbook/core/providers/user/connect
 import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
 
 import { columns } from "./columns";
+import { ResponsiveTable } from "./responsiveTable";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
@@ -37,6 +39,8 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     const [orderPayload, setOrderPayload] = useState<OrderCancellation | null>(
       null
     );
+    const [responsiveState, setResponsiveState] = useState(false);
+    const [responsiveData, setResponsiveData] = useState<Order | null>(null);
 
     const [isFetchingNextPage, setIsfetchingNext] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -107,6 +111,12 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
             />
           </Modal.Content>
         </Modal>
+        <ResponsiveTable
+          data={responsiveData}
+          onOpenChange={setResponsiveState}
+          open={responsiveState}
+          onCancelOrder={onCancelOrder}
+        />
         <div className="flex-1 flex flex-col">
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
@@ -166,10 +176,21 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
                             )
                               return null;
 
+                            const responsiveProps = responsiveView
+                              ? {
+                                  className: "cursor-pointer",
+                                  onClick: () => {
+                                    setResponsiveState(true);
+                                    setResponsiveData(row.original);
+                                  },
+                                }
+                              : {};
+
                             return (
                               <Table.Cell
                                 key={cell.id}
                                 className={classNames("px-2 py-4 text-xs")}
+                                {...responsiveProps}
                               >
                                 {flexRender(
                                   cell.column.columnDef.cell,
