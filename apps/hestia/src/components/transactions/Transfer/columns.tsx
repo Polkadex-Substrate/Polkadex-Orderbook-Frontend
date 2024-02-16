@@ -9,7 +9,10 @@ import {
 import { createColumnHelper } from "@tanstack/react-table";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
-import { TokenCard, TransactionDirection } from "@/components/ui/ReadyToUse";
+import {
+  TokenCard,
+  CustomTransactionDirection,
+} from "@/components/ui/ReadyToUse";
 
 export type TransferHistoryData = {
   hash: string;
@@ -21,10 +24,12 @@ export type TransferHistoryData = {
     ticker: string;
   };
   wallets: {
-    fromWalletType: string;
-    fromWalletName: string;
-    fromWalletAddress: string;
-    toWalletType: string;
+    fromType: string;
+    fromName: string;
+    fromAddress: string;
+    toType: string;
+    toName: string;
+    toAddress: string;
   };
 };
 
@@ -99,14 +104,18 @@ export const columns = () => [
   columnHelper.accessor((row) => row.wallets, {
     id: "wallets",
     cell: (e) => {
-      const address = truncateString(e.getValue().fromWalletAddress);
+      const showFromToolTip = e.getValue().fromType !== "Trading Account";
+      const fromAddress = truncateString(e.getValue().fromAddress);
+      const toAddress = truncateString(e.getValue().toAddress);
       return (
-        <TransactionDirection
-          tooltipable={e.getValue().fromWalletType === "Trading Account"}
-          fromType={e.getValue().fromWalletType}
-          fromName={e.getValue().fromWalletName}
-          fromAddress={address}
-          toType={e.getValue().toWalletType}
+        <CustomTransactionDirection
+          showFromToolTip={showFromToolTip}
+          fromType={e.getValue().fromType}
+          fromName={e.getValue().fromName}
+          fromAddress={fromAddress}
+          toType={e.getValue().toType}
+          toName={e.getValue().toName}
+          toAddress={toAddress}
         />
       );
     },

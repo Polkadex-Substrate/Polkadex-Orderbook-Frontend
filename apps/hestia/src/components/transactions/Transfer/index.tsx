@@ -66,13 +66,6 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
 
           let fromWalletType;
           let toWalletType;
-          //   if (e.from === PALLET_ADDRESS) {
-          //     fromWalletType = "Funding Account";
-          //   }
-          //   if (e.to === PALLET_ADDRESS) {
-          //     toWalletType = "Trading Account";
-          //   }
-
           if (e.from !== PALLET_ADDRESS && e.to !== PALLET_ADDRESS) {
             fromWalletType = fromData?.name ?? "Custom Wallet";
             toWalletType = toData?.name ?? "Custom Wallet";
@@ -93,15 +86,12 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
               name: token?.name,
             },
             wallets: {
-              fromWalletType,
-              fromWalletName: fromData?.name ?? "Custom wallet",
-              fromWalletAddress: e.from,
-              //   fromWalletName: fundingWallet?.name ?? "",
-              //   fromWalletAddress: fundingWallet?.address ?? "",
-
-              toWalletType,
-              toWalletName: toData?.name ?? "Custom wallet",
-              toWalletAddress: e.to,
+              fromType: fromWalletType,
+              fromAddress: e.from,
+              fromName: fromData?.name || "Custom Wallet",
+              toType: toWalletType,
+              toAddress: e.to,
+              toName: toData?.name || "Custom Wallet",
             },
           } as TransferHistoryData;
         }),
