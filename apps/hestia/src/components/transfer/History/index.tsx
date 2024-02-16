@@ -15,9 +15,14 @@ import {
   getFacetedUniqueValues,
 } from "@tanstack/react-table";
 import classNames from "classnames";
-import { useTransactions } from "@orderbook/core/hooks";
+import {
+  useAssets,
+  useTransactions,
+  useTransferHistory,
+} from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
+  TransferHistory,
   getChainFromTicker,
   getFundingAccountDetail,
 } from "@orderbook/core/helpers";
@@ -30,6 +35,7 @@ import { Filters } from "./Filters";
 import { ResponsiveTable } from "./responsiveTable";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
+import { defaultConfig } from "@/config";
 
 const responsiveKeys = ["wallets", "fees", "date"];
 const actionKeys = ["token", "amount", "date"];
@@ -57,12 +63,55 @@ export const History = () => {
   const { selectedAddresses } = useProfile();
   const { extensionAccounts } = useExtensionAccounts();
   const { deposits, loading, allWithdrawals } = useTransactions();
+  // const { selectGetAsset } = useAssets();
 
   const { mainAddress } = selectedAddresses;
+
+  // const {
+  //   data: transferSubscanData,
+  //   isLoading,
+  //   refetch,
+  // } = useTransferHistory(
+  //   defaultConfig.subscanApi,
+  //   mainAddress,
+  //   mainAddress?.length > 0
+  // );
+
   const fundingWallet = useMemo(
     () => getFundingAccountDetail(mainAddress, extensionAccounts),
     [extensionAccounts, mainAddress]
   );
+
+  // const transferSubscanTransactions = useMemo(
+  //   () =>
+  //     transferSubscanData?.pages?.[0]?.transfers?.map((e) => {
+  //       const tokenId = e.asset_unique_id.split("standard_assets/").join("");
+  //       const token = selectGetAsset(tokenId);
+  //       const fromData = extensionAccounts?.find(
+  //         (from) => from.address === e.from
+  //       );
+  //       const toData = extensionAccounts?.find(
+  //         (wallet) => wallet.address === e.to
+  //       );
+
+  //       return {
+  //         hash: e.hash,
+  //         amount: e.amount,
+  //         time: e.block_timestamp * 1000,
+  //         token: {
+  //           ticker: token?.ticker,
+  //           name: token?.name,
+  //         },
+  //         wallets: {
+  //           fromWalletName: fromData?.name ?? "Custom wallet",
+  //           fromWalletAddress: e.from,
+  //           toWalletName: toData?.name ?? "Custom wallet",
+  //           toWalletAddress: e.to,
+  //         },
+  //       };
+  //     }),
+  //   [transferSubscanData?.pages, selectGetAsset, extensionAccounts]
+  // );
 
   const depositsTransactions = useMemo(
     () =>

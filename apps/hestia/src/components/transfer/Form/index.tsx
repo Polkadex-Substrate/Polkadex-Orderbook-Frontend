@@ -56,6 +56,7 @@ export const Form = ({
   onChangeType: (e: SwitchType) => void;
   assetsInteraction?: boolean;
 }) => {
+  const [fundingToFunding, setFundingToFunding] = useState(false);
   const [cardFocus, setCardFocus] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -246,6 +247,8 @@ export const Form = ({
               extensionAccountBalance={selectedAsset?.onChainBalance}
               localAccountBalance={selectedAsset?.free_balance}
               selectedAssetTicker={selectedAsset?.ticker}
+              onChangeDirection={setFundingToFunding}
+              isFundingToFunding={fundingToFunding}
             />
           </div>
           <div className="flex items-center border border-primary max-sm:flex-col">

@@ -1,11 +1,13 @@
 "use client";
 
-import { Icon, Typography } from "@polkadex/ux";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { Skeleton, Typography, truncateString } from "@polkadex/ux";
+import { Dispatch, Fragment, PropsWithChildren, SetStateAction } from "react";
 
-import { AccountInfo, InlineAccountCard } from "../../ui/ReadyToUse";
+import { InlineAccountCard } from "../../ui/ReadyToUse";
 
 import { Card } from "./card";
+import { SelectFundingDropdown } from "./selectFundingDropdown";
+import { AvailableMessage } from "./availableMessage";
 
 export const FromTrading = ({
   isLocalAccountPresent,
@@ -16,6 +18,8 @@ export const FromTrading = ({
   extensionAccountBalance = "0",
   localAccountBalance = "0",
   selectedAssetTicker = "",
+  isFundingToFunding,
+  onChangeDirection,
 }: {
   fromFunding?: boolean;
   extensionAccountName?: string;
@@ -25,37 +29,68 @@ export const FromTrading = ({
   selectedAssetTicker?: string;
   isExtensionAccountPresent?: boolean;
   isLocalAccountPresent?: boolean;
+  isFundingToFunding?: boolean;
+  onChangeDirection: Dispatch<SetStateAction<boolean>>;
 }) => {
   const accountNotPresent =
     (fromFunding && !isLocalAccountPresent) ||
     (!fromFunding && !isExtensionAccountPresent);
 
+  const title = isFundingToFunding
+    ? "Another Funding Account"
+    : "Trading Account";
+
+  const balance = fromFunding ? localAccountBalance : extensionAccountBalance;
+  const shortAddress = truncateString(extensionAccountAddress ?? "");
+
   return (
     <Card
       label="To"
-      title={fromFunding ? "Trading Account" : "Funding Account"}
+      title={fromFunding ? title : "Funding Account"}
+      dropdown={fromFunding}
+      onChangeDirection={onChangeDirection}
     >
-      <AccountInfo
-        name={extensionAccountName}
-        address={extensionAccountAddress}
-        ticker={selectedAssetTicker}
-        balance={fromFunding ? localAccountBalance : extensionAccountBalance}
+      <RenderConditional
+        isFundingToFunding={!!isFundingToFunding}
+        accountNotPresent={accountNotPresent}
       >
-        {fromFunding ? (
-          <div className="flex gap-2 flex-1">
-            <Icon size="xs" className="bg-info-base rounded-md">
-              <InformationCircleIcon />
-            </Icon>
-            <Typography.Text className="self-center whitespace-nowrap">
-              All trading accounts
+        <div className="flex justify-between gap-2 flex-wrap px-5 py-3 border-t border-primary">
+          {fromFunding ? (
+            <AvailableMessage />
+          ) : (
+            <InlineAccountCard
+              loading={!extensionAccountAddress && !extensionAccountName}
+            >
+              <strong>{extensionAccountName}</strong> {shortAddress}
+            </InlineAccountCard>
+          )}
+
+          <Skeleton loading={!selectedAssetTicker} className="h-auto max-w-20">
+            <Typography.Text
+              appearance="primary"
+              size="xs"
+              className="self-center whitespace-nowrap"
+            >
+              {balance} {selectedAssetTicker}
             </Typography.Text>
-          </div>
-        ) : (
-          accountNotPresent && (
-            <InlineAccountCard>Account not present</InlineAccountCard>
-          )
-        )}
-      </AccountInfo>
+          </Skeleton>
+        </div>
+      </RenderConditional>
     </Card>
   );
+};
+
+const RenderConditional = ({
+  isFundingToFunding,
+  accountNotPresent,
+  children,
+}: PropsWithChildren<{
+  isFundingToFunding: boolean;
+  accountNotPresent: boolean;
+}>) => {
+  if (isFundingToFunding) return <SelectFundingDropdown />;
+  else if (accountNotPresent)
+    return <InlineAccountCard>Account not present</InlineAccountCard>;
+
+  return <Fragment>{children}</Fragment>;
 };
