@@ -41,7 +41,9 @@ export const ResponsiveTable = ({
   return (
     <Drawer closeOnClickOutside open={open} onOpenChange={onOpenChange}>
       <Drawer.Title className="px-4">
-        Order ID # {truncateString(orderId, 6)}
+        <Typography.Heading size="base">
+          Order ID # {truncateString(orderId, 6)}
+        </Typography.Heading>
       </Drawer.Title>
       <Drawer.Content className="flex flex-col gap-4 p-4">
         <ResponsiveCard label="Order ID">

@@ -34,7 +34,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     const { width } = useWindowSize();
     const { selectedAccount } = useConnectWalletProvider();
     const { onCancelOrder: cancelOrder } = useOrders();
-    const { isLoading, openOrders } = useOpenOrders();
+    const { isLoading, openOrders: allOpenOrders } = useOpenOrders();
     const [showPassword, setShowPassword] = useState(false);
     const [orderPayload, setOrderPayload] = useState<OrderCancellation | null>(
       null
@@ -59,16 +59,23 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
 
     const responsiveView = useMemo(() => width <= 850, [width]);
 
+    const openOrdersPerPage = useMemo(
+      () => allOpenOrders.slice(rowsPerPage * (page - 1), rowsPerPage * page),
+      [allOpenOrders, page, rowsPerPage]
+    );
+
     const table = useReactTable({
-      data: openOrders.slice(rowsPerPage * (page - 1), rowsPerPage * page),
+      data: openOrdersPerPage,
       columns: columns({ onCancelOrder }),
       getCoreRowModel: getCoreRowModel(),
     });
 
     const onSetRowsPerPage = async (row: number) => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setIsfetchingNext(true);
       setRowsPerPage(row);
       setPage(1);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setIsfetchingNext(false);
     };
 
     const onPrevPage = async () => {
@@ -81,7 +88,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     const onNextPage = async () => {
       setIsfetchingNext(true);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      if (openOrders.length > rowsPerPage * page) setPage(page + 1);
+      if (allOpenOrders.length > rowsPerPage * page) setPage(page + 1);
       setIsfetchingNext(false);
     };
 
@@ -91,7 +98,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
 
     if (isLoading) return <SkeletonCollection rows={7} />;
 
-    if (!openOrders.length)
+    if (openOrdersPerPage?.length === 0)
       return (
         <GenericMessage
           title="No result found"
