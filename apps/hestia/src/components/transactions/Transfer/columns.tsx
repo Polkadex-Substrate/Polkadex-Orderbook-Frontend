@@ -70,7 +70,7 @@ export const columns = () => [
     cell: (e) => {
       const tokenTicker = e.getValue().ticker;
       return (
-        <div className="[&_svg]:scale-105">
+        <div className="[&_svg]:scale-[1.05]">
           <TokenCard
             tokenName={e.getValue().name ?? "UNKNOWN"}
             ticker={tokenTicker ?? "UNKNOWN"}

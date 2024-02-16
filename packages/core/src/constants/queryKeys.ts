@@ -2,10 +2,11 @@ import { Maybe } from "@orderbook/core/helpers";
 
 const PREFIX = "@orderbook";
 export const QUERY_KEYS = {
-  blockchainTransfers: (id: Maybe<string>) => [
+  blockchainTransfers: (id: Maybe<string>, PER_PAGE_LIMIT: number) => [
     PREFIX,
     "blockchainTransfers",
     id,
+    PER_PAGE_LIMIT,
   ],
   assets: () => [PREFIX, "assets"],
   markets: () => [PREFIX, "markets"],

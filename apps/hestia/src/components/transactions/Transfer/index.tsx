@@ -21,12 +21,12 @@ type Props = { maxHeight: string };
 
 const PALLET_ADDRESS = "esoEt6uZ3GuFV8EzKB2EAREe3KE9WuRVfmhK1RRtwffY78ArH";
 
-const responsiveKeys: string[] = [];
+const responsiveKeys = ["fees", "date", "hash"];
 
 export const TransferHistory = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight }, ref) => {
     const { width } = useWindowSize();
-    const responsiveView = useMemo(() => width <= 850, [width]);
+    const responsiveView = useMemo(() => width <= 1050, [width]);
 
     const {
       selectedAddresses: { mainAddress },
@@ -40,7 +40,8 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
       useTransferHistory(
         defaultConfig.subscanApi,
         mainAddress,
-        mainAddress?.length > 0 && assets?.length > 0
+        mainAddress?.length > 0 && assets?.length > 0,
+        rowsPerPage
       );
     const transactions = useMemo(
       () => data?.pages?.at(page - 1)?.transfers || [],
