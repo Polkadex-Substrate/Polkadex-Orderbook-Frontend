@@ -343,7 +343,6 @@ export const listOrderHistoryByTradeAccount = /* GraphQL */ `query ListOrderHist
   APITypes.ListOrderHistoryByTradeAccountQuery
 >;
 
-// TODO: Revert it
 export const listOpenOrdersByMainAccount = /* GraphQL */ `query ListOpenOrdersByMainAccount(
   $main_account: String!
   $limit: Int
@@ -365,6 +364,7 @@ export const listOpenOrdersByMainAccount = /* GraphQL */ `query ListOpenOrdersBy
       st
       p
       q
+      qoq
       afp
       fq
       fee

@@ -8,8 +8,8 @@ type Props = {
   onSetRowsPerPage?: (row: number) => void;
   onPrevPage?: () => void;
   onNextPage?: () => void;
-  prevButtonDisabled: boolean;
-  nextButtonDisabled: boolean;
+  prevButtonDisabled?: boolean;
+  nextButtonDisabled?: boolean;
 };
 
 export const TablePagination = forwardRef<HTMLDivElement, Props>(

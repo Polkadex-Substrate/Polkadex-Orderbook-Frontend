@@ -48,6 +48,8 @@ export const GenericHorizontalCard = ({
             </Typography.Text>
           </div>
           {isStringType ? (
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             <Button.Solid appearance="secondary" size="xs" {...props}>
               {children}
             </Button.Solid>
