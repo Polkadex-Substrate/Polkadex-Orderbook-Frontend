@@ -64,6 +64,17 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
       [allOpenOrders, page, rowsPerPage]
     );
 
+    const prevButtonDisabled = useMemo(() => page === 1, [page]);
+
+    const nextButtonDisabled = useMemo(() => {
+      const totalResultsForPreviousPages = rowsPerPage * (page - 1);
+      const totalResultsForCurrentPage = openOrdersPerPage.length;
+      return (
+        allOpenOrders.length <=
+        totalResultsForPreviousPages + totalResultsForCurrentPage
+      );
+    }, [allOpenOrders?.length, openOrdersPerPage?.length, page, rowsPerPage]);
+
     const table = useReactTable({
       data: openOrdersPerPage,
       columns: columns({ onCancelOrder }),
@@ -72,23 +83,25 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
 
     const onSetRowsPerPage = async (row: number) => {
       setIsfetchingNext(true);
-      setRowsPerPage(row);
-      setPage(1);
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      setPage(1);
+      setRowsPerPage(row);
       setIsfetchingNext(false);
     };
 
     const onPrevPage = async () => {
+      if (prevButtonDisabled) return;
       setIsfetchingNext(true);
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      if (page > 1) setPage(page - 1);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setPage(page - 1);
       setIsfetchingNext(false);
     };
 
     const onNextPage = async () => {
+      if (nextButtonDisabled) return;
       setIsfetchingNext(true);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      if (allOpenOrders.length > rowsPerPage * page) setPage(page + 1);
+      setPage(page + 1);
       setIsfetchingNext(false);
     };
 
@@ -185,7 +198,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
 
                             const responsiveProps = responsiveView
                               ? {
-                                  className: "cursor-pointer",
+                                  className: "cursor-pointer py-4",
                                   onClick: () => {
                                     setResponsiveState(true);
                                     setResponsiveData(row.original);
@@ -219,6 +232,8 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
               onSetRowsPerPage={onSetRowsPerPage}
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
+              prevButtonDisabled={prevButtonDisabled}
+              nextButtonDisabled={nextButtonDisabled}
               ref={ref}
             />
           </div>

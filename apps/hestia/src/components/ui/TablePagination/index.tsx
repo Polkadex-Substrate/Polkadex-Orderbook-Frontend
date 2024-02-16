@@ -1,4 +1,5 @@
 import { Typography, Dropdown, Pagination } from "@polkadex/ux";
+import classNames from "classnames";
 import { forwardRef } from "react";
 
 type Props = {
@@ -7,10 +8,23 @@ type Props = {
   onSetRowsPerPage?: (row: number) => void;
   onPrevPage?: () => void;
   onNextPage?: () => void;
+  prevButtonDisabled: boolean;
+  nextButtonDisabled: boolean;
 };
 
 export const TablePagination = forwardRef<HTMLDivElement, Props>(
-  ({ page, rowsPerPage, onSetRowsPerPage, onPrevPage, onNextPage }, ref) => {
+  (
+    {
+      page,
+      rowsPerPage,
+      onSetRowsPerPage,
+      onPrevPage,
+      onNextPage,
+      prevButtonDisabled,
+      nextButtonDisabled,
+    },
+    ref
+  ) => {
     const rows = [10, 20, 30];
     return (
       <div
@@ -42,8 +56,22 @@ export const TablePagination = forwardRef<HTMLDivElement, Props>(
             <Pagination>
               <Typography.Text className="text-sm">Page {page}</Typography.Text>
               <Pagination.Content>
-                <Pagination.Button arrowSide="left" onClick={onPrevPage} />
-                <Pagination.Button arrowSide="right" onClick={onNextPage} />
+                <div
+                  onClick={onPrevPage}
+                  className={classNames(
+                    prevButtonDisabled && "pointer-events-none opacity-50"
+                  )}
+                >
+                  <Pagination.Button arrowSide="left" />
+                </div>
+                <div
+                  onClick={onNextPage}
+                  className={classNames(
+                    nextButtonDisabled && "pointer-events-none opacity-50"
+                  )}
+                >
+                  <Pagination.Button arrowSide="right" />
+                </div>
               </Pagination.Content>
             </Pagination>
           </div>

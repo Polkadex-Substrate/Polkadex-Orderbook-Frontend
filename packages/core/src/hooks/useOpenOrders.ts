@@ -35,10 +35,8 @@ export const useOpenOrders = (filters?: Ifilters) => {
     },
   });
 
-  const openOrdersSorted = sortOrdersDescendingTime(openOrders);
-
   const filteredOpenOrders = useMemo(() => {
-    let openOrdersList = openOrdersSorted;
+    let openOrdersList = sortOrdersDescendingTime(openOrders);
 
     if (filters?.onlyBuy && filters.onlySell) {
       // Nothing to do
@@ -53,7 +51,7 @@ export const useOpenOrders = (filters?: Ifilters) => {
     }
 
     return openOrdersList;
-  }, [filters?.onlyBuy, filters?.onlySell, openOrdersSorted]);
+  }, [filters?.onlyBuy, filters?.onlySell, openOrders]);
 
   return {
     openOrders: filteredOpenOrders,

@@ -1,6 +1,4 @@
 // Returns chain name for an asset ticker
-import { de } from "date-fns/locale";
-
 export const getChainFromTicker = (ticker: string): string => {
   // Should update it whenever any new asset is added to orderbook
   switch (ticker) {
@@ -16,6 +14,8 @@ export const getChainFromTicker = (ticker: string): string => {
       return "Phala Network";
     case "GLMR":
       return "Moonbeam Network";
+    case "PDEX":
+      return "Polkadex";
     default:
       return "Unknown";
   }
