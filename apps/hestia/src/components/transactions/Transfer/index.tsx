@@ -1,124 +1,147 @@
-import { forwardRef, useEffect, useMemo, useState } from "react";
-import { useWindowSize } from "usehooks-ts";
-import classNames from "classnames";
-import { Order } from "@orderbook/core/utils/orderbookService/types";
-import { useOpenOrders } from "@orderbook/core/hooks";
-import { GenericMessage, Loading, Modal, Table } from "@polkadex/ux";
+import { useAssets, useTransferHistory } from "@orderbook/core/hooks";
+import { useProfile } from "@orderbook/core/providers/user/profile";
+import { forwardRef, useMemo, useState } from "react";
+import { useExtensionAccounts } from "@polkadex/react-providers";
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  OrderCancellation,
-  useOrders,
-} from "@orderbook/core/providers/user/orders";
-import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
-import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
+import { GenericMessage, Loading, Table } from "@polkadex/ux";
+import classNames from "classnames";
+import { useWindowSize } from "usehooks-ts";
 
-import { columns } from "./columns";
-import { ResponsiveTable } from "./responsiveTable";
+import { TransferHistoryData, columns } from "./columns";
 
+import { defaultConfig } from "@/config";
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
-import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
 
-type Props = {
-  maxHeight: string;
-};
+type Props = { maxHeight: string };
 
-const responsiveKeys = ["id", "filled", "date", "actions"];
+const PALLET_ADDRESS = "esoEt6uZ3GuFV8EzKB2EAREe3KE9WuRVfmhK1RRtwffY78ArH";
 
-export const OpenOrders = forwardRef<HTMLDivElement, Props>(
+const responsiveKeys: string[] = [];
+
+export const TransferHistory = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight }, ref) => {
     const { width } = useWindowSize();
-    const { selectedAccount } = useConnectWalletProvider();
-    const { onCancelOrder: cancelOrder } = useOrders();
-    const { isLoading, openOrders: allOpenOrders } = useOpenOrders();
-    const [showPassword, setShowPassword] = useState(false);
-    const [orderPayload, setOrderPayload] = useState<OrderCancellation | null>(
-      null
-    );
-    const [responsiveState, setResponsiveState] = useState(false);
-    const [responsiveData, setResponsiveData] = useState<Order | null>(null);
+    const responsiveView = useMemo(() => width <= 850, [width]);
 
-    const [isFetchingNextPage, setIsfetchingNext] = useState(false);
+    const {
+      selectedAddresses: { mainAddress },
+    } = useProfile();
+    const { selectGetAsset, assets } = useAssets();
+    const { extensionAccounts } = useExtensionAccounts();
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
 
-    const onCancelOrder = async (payload: OrderCancellation | null) => {
-      if (!payload) return;
-      if (selectedAccount?.isLocked) {
-        setShowPassword(true);
-        setOrderPayload(payload);
-      } else {
-        await cancelOrder(payload);
-        setOrderPayload(null);
-      }
-    };
+    const { data, isLoading, isFetchingNextPage, fetchNextPage } =
+      useTransferHistory(
+        defaultConfig.subscanApi,
+        mainAddress,
+        mainAddress?.length > 0 && assets?.length > 0
+      );
+    const transactions = useMemo(
+      () => data?.pages?.at(page - 1)?.transfers || [],
+      [data?.pages, page]
+    );
+    const totalResultsCount = useMemo(
+      () => data?.pages?.at(0)?.count || 0,
+      [data?.pages]
+    );
 
-    const responsiveView = useMemo(() => width <= 850, [width]);
+    const transactionsPerPage = useMemo(
+      () =>
+        transactions.map((e) => {
+          const tokenId = e.asset_unique_id.split("standard_assets/").join("");
+          const token = selectGetAsset(tokenId);
+          const fromData = extensionAccounts?.find(
+            (from) => from.address === e.from
+          );
+          const toData = extensionAccounts?.find(
+            (wallet) => wallet.address === e.to
+          );
 
-    const openOrdersPerPage = useMemo(
-      () => allOpenOrders.slice(rowsPerPage * (page - 1), rowsPerPage * page),
-      [allOpenOrders, page, rowsPerPage]
+          let fromWalletType;
+          let toWalletType;
+          //   if (e.from === PALLET_ADDRESS) {
+          //     fromWalletType = "Funding Account";
+          //   }
+          //   if (e.to === PALLET_ADDRESS) {
+          //     toWalletType = "Trading Account";
+          //   }
+
+          if (e.from !== PALLET_ADDRESS && e.to !== PALLET_ADDRESS) {
+            fromWalletType = fromData?.name ?? "Custom Wallet";
+            toWalletType = toData?.name ?? "Custom Wallet";
+          } else {
+            fromWalletType =
+              e.from === PALLET_ADDRESS ? "Trading Account" : "Funding Account";
+            toWalletType =
+              e.to === PALLET_ADDRESS ? "Trading Account" : "Funding Account";
+          }
+
+          return {
+            hash: e.hash,
+            amount: e.amount,
+            fee: (+e.fee / Math.pow(10, 12)).toFixed(3),
+            time: new Date(e.block_timestamp),
+            token: {
+              ticker: token?.ticker,
+              name: token?.name,
+            },
+            wallets: {
+              fromWalletType,
+              fromWalletName: fromData?.name ?? "Custom wallet",
+              fromWalletAddress: e.from,
+              //   fromWalletName: fundingWallet?.name ?? "",
+              //   fromWalletAddress: fundingWallet?.address ?? "",
+
+              toWalletType,
+              toWalletName: toData?.name ?? "Custom wallet",
+              toWalletAddress: e.to,
+            },
+          } as TransferHistoryData;
+        }),
+      [extensionAccounts, selectGetAsset, transactions]
     );
 
     const prevButtonDisabled = useMemo(() => page === 1, [page]);
-
     const nextButtonDisabled = useMemo(() => {
       const totalResultsForPreviousPages = rowsPerPage * (page - 1);
-      const totalResultsForCurrentPage = openOrdersPerPage.length;
+      const totalResultsForCurrentPage = transactionsPerPage?.length;
       return (
-        allOpenOrders.length <=
+        totalResultsCount <=
         totalResultsForPreviousPages + totalResultsForCurrentPage
       );
-    }, [allOpenOrders?.length, openOrdersPerPage?.length, page, rowsPerPage]);
+    }, [page, rowsPerPage, totalResultsCount, transactionsPerPage?.length]);
 
-    const table = useReactTable({
-      data: openOrdersPerPage,
-      columns: columns({ onCancelOrder }),
-      getCoreRowModel: getCoreRowModel(),
-    });
-
-    const onSetRowsPerPage = async (row: number) => {
-      setIsfetchingNext(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+    const onSetRowsPerPage = (row: number) => {
       setPage(1);
       setRowsPerPage(row);
-      setIsfetchingNext(false);
     };
 
     const onPrevPage = async () => {
       if (prevButtonDisabled) return;
-      setIsfetchingNext(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       setPage(page - 1);
-      setIsfetchingNext(false);
     };
 
     const onNextPage = async () => {
       if (nextButtonDisabled) return;
-      setIsfetchingNext(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await fetchNextPage();
       setPage(page + 1);
-      setIsfetchingNext(false);
     };
 
-    useEffect(() => {
-      if (selectedAccount) tryUnlockTradeAccount(selectedAccount);
-    }, [selectedAccount]);
-
-    useEffect(() => {
-      if (!responsiveView && !!responsiveState) {
-        setResponsiveState(false);
-        setResponsiveData(null);
-      }
-    }, [responsiveState, responsiveView]);
+    const table = useReactTable({
+      data: transactionsPerPage,
+      columns: columns(),
+      getCoreRowModel: getCoreRowModel(),
+    });
 
     if (isLoading) return <SkeletonCollection rows={7} />;
 
-    if (openOrdersPerPage?.length === 0)
+    if (transactionsPerPage?.length === 0)
       return (
         <GenericMessage
           title="No results found"
@@ -129,21 +152,6 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
 
     return (
       <>
-        <Modal open={showPassword} onOpenChange={setShowPassword}>
-          <Modal.Content>
-            <UnlockAccount
-              onClose={() => setShowPassword(false)}
-              onAction={async () => await onCancelOrder(orderPayload)}
-              tempBrowserAccount={selectedAccount}
-            />
-          </Modal.Content>
-        </Modal>
-        <ResponsiveTable
-          data={responsiveData}
-          onOpenChange={setResponsiveState}
-          open={responsiveState}
-          onCancelOrder={onCancelOrder}
-        />
         <div className="flex-1 flex flex-col">
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
@@ -207,8 +215,8 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
                               ? {
                                   className: "cursor-pointer py-4",
                                   onClick: () => {
-                                    setResponsiveState(true);
-                                    setResponsiveData(row.original);
+                                    // setResponsiveState(true);
+                                    // setResponsiveData(row.original);
                                   },
                                 }
                               : {};
@@ -234,7 +242,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
               </div>
             </Loading.Spinner>
             <TablePagination
-              totalResultCount={allOpenOrders.length}
+              totalResultCount={totalResultsCount}
               rowsPerPage={rowsPerPage}
               page={page}
               onSetRowsPerPage={onSetRowsPerPage}
@@ -250,4 +258,5 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     );
   }
 );
-OpenOrders.displayName = "OpenOrders";
+
+TransferHistory.displayName = "TransferHistory";

@@ -8,7 +8,7 @@ import { useElementSize } from "usehooks-ts";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { Help } from "./Help";
-import { TradesTable } from "./TradesTable";
+import { TransferHistory } from "./Transfer";
 import { OpenOrders } from "./OpenOrders";
 
 import { Footer, Header } from "@/components/ui";
@@ -74,7 +74,7 @@ export function Template() {
                 </div>
               </div>
               <Tabs.Content value="transfer" className="flex-1 flex">
-                <TradesTable ref={tableRowsRef} maxHeight={maxHeight} />
+                <TransferHistory ref={tableRowsRef} maxHeight={maxHeight} />
               </Tabs.Content>
               <Tabs.Content value="openOrders" className="flex-1 flex">
                 {tradeAddress?.length ? (

@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { forwardRef } from "react";
 
 type Props = {
+  totalResultCount?: number;
   page?: number;
   rowsPerPage?: number;
   onSetRowsPerPage?: (row: number) => void;
@@ -15,8 +16,9 @@ type Props = {
 export const TablePagination = forwardRef<HTMLDivElement, Props>(
   (
     {
+      totalResultCount = 0,
       page,
-      rowsPerPage,
+      rowsPerPage = 10,
       onSetRowsPerPage,
       onPrevPage,
       onNextPage,
@@ -54,7 +56,11 @@ export const TablePagination = forwardRef<HTMLDivElement, Props>(
           </div>
           <div>
             <Pagination>
-              <Typography.Text className="text-sm">Page {page}</Typography.Text>
+              <Typography.Text className="text-sm">
+                Page {page}
+                {totalResultCount > 0 &&
+                  ` of ${Math.ceil(totalResultCount / rowsPerPage)}`}
+              </Typography.Text>
               <Pagination.Content>
                 <div
                   onClick={onPrevPage}
