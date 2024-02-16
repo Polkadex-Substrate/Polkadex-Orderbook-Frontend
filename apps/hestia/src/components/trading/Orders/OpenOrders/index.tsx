@@ -21,7 +21,6 @@ import { OpenOrderResponsiveCard } from "../responsiveCard";
 import { columns } from "./columns";
 
 export const OpenOrdersTable = ({
-  _market,
   filters,
   maxHeight,
 }: {
