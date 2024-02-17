@@ -1,23 +1,11 @@
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
-import {
-  Button,
-  Copy,
-  PopConfirm,
-  Tooltip,
-  Typography,
-  truncateString,
-} from "@polkadex/ux";
-import { OrderCancellation } from "@orderbook/core/providers/user/orders";
+import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 
 const columnHelper = createColumnHelper<Order>();
 
-export const columns = ({
-  onCancelOrder,
-}: {
-  onCancelOrder: (value: OrderCancellation) => void;
-}) => [
+export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "id",
     cell: (e) => (
@@ -120,7 +108,7 @@ export const columns = ({
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row, {
-    id: "total",
+    id: "amount",
     cell: (e) => {
       return (
         <Typography.Text size="xs">{e.getValue().quantity}</Typography.Text>
@@ -128,7 +116,7 @@ export const columns = ({
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Total
+        Amount
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
@@ -150,37 +138,37 @@ export const columns = ({
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row, {
-    id: "actions",
+    id: "status",
+    cell: (e) => (
+      <Typography.Text size="xs" className="capitalize">
+        {e.getValue().status.toLowerCase()}
+      </Typography.Text>
+    ),
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Status
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "fee",
     cell: (e) => {
+      const ticker =
+        e.getValue().side === "Bid"
+          ? e.getValue().market.baseAsset.ticker
+          : e.getValue().market.quoteAsset.ticker;
       return (
-        <PopConfirm>
-          <PopConfirm.Trigger asChild>
-            <Button.Solid className="py-0.5 h-auto" size="xs">
-              Cancel Order
-            </Button.Solid>
-          </PopConfirm.Trigger>
-          <PopConfirm.Content>
-            <PopConfirm.Title>Cancel order</PopConfirm.Title>
-            <PopConfirm.Description>
-              Are you sure you want to cancel this order?
-            </PopConfirm.Description>
-            <PopConfirm.Close>No</PopConfirm.Close>
-            <PopConfirm.Button
-              onClick={() =>
-                onCancelOrder({
-                  orderId: e.getValue().orderId,
-                  base: e.getValue().market.baseAsset.id,
-                  quote: e.getValue().market.quoteAsset.id,
-                })
-              }
-            >
-              Yes cancel
-            </PopConfirm.Button>
-          </PopConfirm.Content>
-        </PopConfirm>
+        <Typography.Text size="xs">
+          {e.getValue().fee} {ticker}
+        </Typography.Text>
       );
     },
-    header: () => null,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Fee
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
 ];

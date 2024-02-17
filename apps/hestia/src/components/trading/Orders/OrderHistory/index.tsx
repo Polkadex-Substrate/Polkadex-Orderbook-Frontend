@@ -25,16 +25,14 @@ import { OrderHistoryResponsiveCard } from "../responsiveCard";
 import { columns } from "./columns";
 
 export const OrderHistoryTable = ({
-  market,
   filters,
   maxHeight,
 }: {
-  market: string;
   filters: Ifilters;
   maxHeight: string;
 }) => {
   const { isLoading, orderHistory, error, hasNextPage, onFetchNextPage } =
-    useOrderHistory(market, filters);
+    useOrderHistory(filters);
   const { width } = useWindowSize();
   const table = useReactTable({
     data: orderHistory,

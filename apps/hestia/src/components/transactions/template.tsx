@@ -10,6 +10,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import { Help } from "./Help";
 import { TransferHistory } from "./Transfer";
 import { OpenOrders } from "./OpenOrders";
+import { OrderHistory } from "./OrderHistory";
 
 import { Footer, Header } from "@/components/ui";
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
@@ -61,7 +62,7 @@ export function Template() {
                   <Tabs.List className="py-2">
                     <Tabs.Trigger value="transfer">Transfer</Tabs.Trigger>
                     <Tabs.Trigger value="openOrders">Open Orders</Tabs.Trigger>
-                    <Tabs.Trigger value="orderOrders">
+                    <Tabs.Trigger value="orderHistory">
                       Order History
                     </Tabs.Trigger>
                     <Tabs.Trigger value="tradeOrders">
@@ -85,6 +86,13 @@ export function Template() {
                   <OrdersProvider>
                     <OpenOrders ref={tableRowsRef} maxHeight={maxHeight} />
                   </OrdersProvider>
+                ) : (
+                  <ConnectAccountWrapper />
+                )}
+              </Tabs.Content>
+              <Tabs.Content value="orderHistory" className="flex-1 flex">
+                {tradeAddress?.length ? (
+                  <OrderHistory ref={tableRowsRef} maxHeight={maxHeight} />
                 ) : (
                   <ConnectAccountWrapper />
                 )}

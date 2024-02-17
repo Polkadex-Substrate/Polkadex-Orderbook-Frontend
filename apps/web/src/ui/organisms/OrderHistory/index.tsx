@@ -26,7 +26,7 @@ type Props = {
 
 export const OrderHistory = ({ filters, market }: Props) => {
   const { hasNextPage, isLoading, onFetchNextPage, orderHistory, error } =
-    useOrderHistory(market, filters);
+    useOrderHistory(filters);
 
   const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, market);

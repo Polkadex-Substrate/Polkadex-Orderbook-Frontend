@@ -2,27 +2,18 @@ import { useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { Ifilters } from "../providers/types";
-import { getCurrentMarket, sortOrdersDescendingTime } from "../helpers";
+import { sortOrdersDescendingTime } from "../helpers";
 import { QUERY_KEYS } from "../constants";
 import { useProfile } from "../providers/user/profile";
 import { useSessionProvider } from "../providers/user/sessionProvider";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 
-import { useMarkets } from "./useMarkets";
-
-export const useOrderHistory = (defaultMarket: string, filters: Ifilters) => {
+export const useOrderHistory = (filters?: Ifilters) => {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
   const { dateFrom, dateTo } = useSessionProvider();
-  const { list: markets } = useMarkets();
-  const currentMarket = getCurrentMarket(markets, defaultMarket);
-
-  const userLoggedIn = tradeAddress !== "";
-
-  const shouldFetchOrderHistory = Boolean(
-    userLoggedIn && currentMarket && tradeAddress
-  );
+  const shouldFetchOrderHistory = tradeAddress?.length > 0;
 
   const {
     data: orderHistoryList,
@@ -30,6 +21,7 @@ export const useOrderHistory = (defaultMarket: string, filters: Ifilters) => {
     isLoading: isOrderHistoryLoading,
     hasNextPage: hasNextOrderHistoryPage,
     error: orderHistoryError,
+    isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: QUERY_KEYS.orderHistory(dateFrom, dateTo, tradeAddress),
     enabled: shouldFetchOrderHistory,
@@ -90,7 +82,7 @@ export const useOrderHistory = (defaultMarket: string, filters: Ifilters) => {
     const filterStatus =
       acceptedStatus[status as keyof typeof acceptedStatus] ?? status;
 
-    if (filterStatus !== Object.values(acceptedStatus)[0]) {
+    if (filterStatus && filterStatus !== Object.values(acceptedStatus)[0]) {
       orderHistoryList = orderHistoryList.filter((item) => {
         return item.status.toLowerCase() === filterStatus;
       });
@@ -111,5 +103,6 @@ export const useOrderHistory = (defaultMarket: string, filters: Ifilters) => {
     hasNextPage: hasNextOrderHistoryPage,
     onFetchNextPage: fetchNextOrderHistoryPage,
     error: orderHistoryError as string,
+    isFetchingNextPage,
   };
 };

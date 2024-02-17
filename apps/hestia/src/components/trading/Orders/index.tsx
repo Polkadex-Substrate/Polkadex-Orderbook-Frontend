@@ -144,11 +144,7 @@ export const Orders = ({ maxHeight, id }: Props) => {
             />
           </Tabs.Content>
           <Tabs.Content value="orderHistory">
-            <OrderHistoryTable
-              filters={filters}
-              market={id}
-              maxHeight={maxHeight}
-            />
+            <OrderHistoryTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
           <Tabs.Content value="tradeHistory">
             <TradeHistoryTable
