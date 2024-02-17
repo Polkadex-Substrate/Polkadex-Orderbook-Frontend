@@ -41,10 +41,9 @@ export const columns = ({
     id: "date",
     cell: (e) => {
       const formattedDate = new Intl.DateTimeFormat("en-US", {
-        month: "numeric",
-        day: "2-digit",
-        hour: "numeric",
-        minute: "numeric",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
       })
         .format(e.getValue().timestamp)
         .replace(",", "");

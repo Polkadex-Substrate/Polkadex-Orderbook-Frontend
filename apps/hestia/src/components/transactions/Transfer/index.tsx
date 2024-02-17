@@ -1,6 +1,6 @@
 import { useAssets, useTransferHistory } from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import { PALLET_ADDRESS } from "@orderbook/core/constants";
 import { useExtensionAccounts } from "@polkadex/react-providers";
 import {
@@ -13,6 +13,7 @@ import classNames from "classnames";
 import { useWindowSize } from "usehooks-ts";
 
 import { TransferHistoryData, columns } from "./columns";
+import ResponsiveTable from "./responsiveTable";
 
 import { defaultConfig } from "@/config";
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
@@ -20,11 +21,15 @@ import { TablePagination } from "@/components/ui";
 
 type Props = { maxHeight: string };
 
-const responsiveKeys = ["fees", "date", "hash"];
+const responsiveKeys = ["fees", "date", "wallets"];
 
 export const TransferHistory = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight }, ref) => {
     const { width } = useWindowSize();
+
+    const [responsiveState, setResponsiveState] = useState(false);
+    const [responsiveData, setResponsiveData] =
+      useState<TransferHistoryData | null>(null);
     const responsiveView = useMemo(() => width <= 1050, [width]);
 
     const {
@@ -79,7 +84,7 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
             hash: e.hash,
             amount: e.amount,
             fee: (+e.fee / Math.pow(10, 12)).toFixed(3),
-            time: new Date(e.block_timestamp),
+            time: new Date(e.block_timestamp * 1000),
             token: {
               ticker: token?.ticker,
               name: token?.name,
@@ -129,6 +134,13 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
       getCoreRowModel: getCoreRowModel(),
     });
 
+    useEffect(() => {
+      if (!responsiveView && !!responsiveState) {
+        setResponsiveState(false);
+        setResponsiveData(null);
+      }
+    }, [responsiveState, responsiveView]);
+
     if (isLoading) return <SkeletonCollection rows={8} />;
 
     if (transactionsPerPage?.length === 0)
@@ -142,6 +154,11 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
 
     return (
       <>
+        <ResponsiveTable
+          data={responsiveData}
+          onOpenChange={setResponsiveState}
+          open={responsiveState}
+        />
         <div className="flex-1 flex flex-col">
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
@@ -205,8 +222,8 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
                               ? {
                                   className: "cursor-pointer py-4",
                                   onClick: () => {
-                                    // setResponsiveState(true);
-                                    // setResponsiveData(row.original);
+                                    setResponsiveState(true);
+                                    setResponsiveData(row.original);
                                   },
                                 }
                               : {};
