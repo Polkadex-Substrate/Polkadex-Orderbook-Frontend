@@ -43,7 +43,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     const [responsiveData, setResponsiveData] = useState<Order | null>(null);
 
     const [isFetchingNextPage, setIsfetchingNext] = useState(false);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(15);
     const [page, setPage] = useState(1);
 
     const onCancelOrder = async (payload: OrderCancellation | null) => {

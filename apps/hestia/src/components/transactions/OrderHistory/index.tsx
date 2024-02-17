@@ -23,7 +23,7 @@ const responsiveKeys = ["id", "filled", "date", "status", "fee"];
 export const OrderHistory = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight }, ref) => {
     const { width } = useWindowSize();
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(15);
     const [page, setPage] = useState(1);
 
     const responsiveView = useMemo(() => width <= 850, [width]);
