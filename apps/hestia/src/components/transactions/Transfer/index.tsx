@@ -1,6 +1,7 @@
 import { useAssets, useTransferHistory } from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { forwardRef, useMemo, useState } from "react";
+import { PALLET_ADDRESS } from "@orderbook/core/constants";
 import { useExtensionAccounts } from "@polkadex/react-providers";
 import {
   flexRender,
@@ -18,8 +19,6 @@ import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
 
 type Props = { maxHeight: string };
-
-const PALLET_ADDRESS = "esoEt6uZ3GuFV8EzKB2EAREe3KE9WuRVfmhK1RRtwffY78ArH";
 
 const responsiveKeys = ["fees", "date", "hash"];
 
@@ -130,7 +129,7 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
       getCoreRowModel: getCoreRowModel(),
     });
 
-    if (isLoading) return <SkeletonCollection rows={7} />;
+    if (isLoading) return <SkeletonCollection rows={8} />;
 
     if (transactionsPerPage?.length === 0)
       return (

@@ -116,7 +116,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
       }
     }, [responsiveState, responsiveView]);
 
-    if (isLoading) return <SkeletonCollection rows={7} />;
+    if (isLoading) return <SkeletonCollection rows={8} />;
 
     if (openOrdersPerPage?.length === 0)
       return (

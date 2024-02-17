@@ -20,5 +20,5 @@ export * from "./statusCard";
 export * from "./transactionDirection";
 export * from "./inlineAccountCard";
 export * from "./tradingFee";
-export * from "./connectTradingAccountWrapper";
+export * from "./connectAccountWrapper";
 export * from "./customTransactionDirection";

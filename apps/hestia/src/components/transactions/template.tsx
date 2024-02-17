@@ -13,7 +13,7 @@ import { OpenOrders } from "./OpenOrders";
 
 import { Footer, Header } from "@/components/ui";
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
-import { ConnectTradingAccountWrapper } from "@/components/ui/ReadyToUse";
+import { ConnectAccountWrapper } from "@/components/ui/ReadyToUse";
 
 // useElementSize Deprecated -> useResizeObserver
 export function Template() {
@@ -36,7 +36,7 @@ export function Template() {
     [headerHeight, footerHeight, overviewHeight, helpeight, tableRowsHeight]
   );
   const {
-    selectedAddresses: { tradeAddress },
+    selectedAddresses: { mainAddress, tradeAddress },
   } = useProfile();
 
   return (
@@ -74,7 +74,11 @@ export function Template() {
                 </div>
               </div>
               <Tabs.Content value="transfer" className="flex-1 flex">
-                <TransferHistory ref={tableRowsRef} maxHeight={maxHeight} />
+                {mainAddress?.length ? (
+                  <TransferHistory ref={tableRowsRef} maxHeight={maxHeight} />
+                ) : (
+                  <ConnectAccountWrapper funding />
+                )}
               </Tabs.Content>
               <Tabs.Content value="openOrders" className="flex-1 flex">
                 {tradeAddress?.length ? (
@@ -82,7 +86,7 @@ export function Template() {
                     <OpenOrders ref={tableRowsRef} maxHeight={maxHeight} />
                   </OrdersProvider>
                 ) : (
-                  <ConnectTradingAccountWrapper />
+                  <ConnectAccountWrapper />
                 )}
               </Tabs.Content>
               <Help ref={helpRef} />
