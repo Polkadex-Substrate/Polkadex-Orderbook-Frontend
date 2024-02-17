@@ -16,6 +16,7 @@ import {
 } from "@polkadex/ux";
 import { useTradeHistory } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
+import { DEFAULT_BATCH_LIMIT } from "@orderbook/core/constants";
 
 import { Loading } from "../loading";
 import { TradeHistoryResponsiveCard } from "../responsiveCard";
@@ -32,7 +33,7 @@ export const TradeHistoryTable = ({
   maxHeight: string;
 }) => {
   const { isLoading, trades, hasNextPage, onFetchNextPage, error } =
-    useTradeHistory(market, filters);
+    useTradeHistory(market, DEFAULT_BATCH_LIMIT, filters);
   const { width } = useWindowSize();
   const table = useReactTable({
     data: trades,

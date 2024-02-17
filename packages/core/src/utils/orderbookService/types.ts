@@ -141,6 +141,7 @@ export interface UserHistoryProps<T = null> {
   limit: number;
   pageParams: T;
   market?: string;
+  batchLimit: number;
 }
 
 export interface TransactionHistoryProps<T = null> {

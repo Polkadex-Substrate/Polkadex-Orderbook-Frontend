@@ -12,6 +12,7 @@ import { useWindowSize } from "usehooks-ts";
 import { columns } from "./columns";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
+import { TablePagination } from "@/components/ui";
 
 type Props = {
   maxHeight: string;
@@ -31,12 +32,49 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
       orderHistory: allOrderHistory,
       isLoading,
       isFetchingNextPage,
-    } = useOrderHistory();
+      hasNextPage,
+      onFetchNextPage,
+    } = useOrderHistory(rowsPerPage);
 
     const orderHistoryPerPage = useMemo(
       () => allOrderHistory.slice(rowsPerPage * (page - 1), rowsPerPage * page),
       [allOrderHistory, page, rowsPerPage]
     );
+
+    const prevButtonDisabled = useMemo(() => page === 1, [page]);
+    const nextButtonDisabled = useMemo(() => {
+      const totalResultsForPreviousPages = rowsPerPage * (page - 1);
+      const totalResultsForCurrentPage = orderHistoryPerPage?.length;
+
+      if (hasNextPage) return false;
+      return (
+        allOrderHistory.length <=
+        totalResultsForPreviousPages + totalResultsForCurrentPage
+      );
+    }, [
+      allOrderHistory.length,
+      hasNextPage,
+      orderHistoryPerPage?.length,
+      page,
+      rowsPerPage,
+    ]);
+
+    const onSetRowsPerPage = async (row: number) => {
+      setPage(1);
+      setRowsPerPage(row);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    };
+
+    const onPrevPage = () => {
+      if (prevButtonDisabled) return;
+      setPage(page - 1);
+    };
+
+    const onNextPage = async () => {
+      if (nextButtonDisabled) return;
+      await onFetchNextPage();
+      setPage(page + 1);
+    };
 
     const table = useReactTable({
       data: orderHistoryPerPage,
@@ -146,8 +184,7 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
                 </Table>
               </div>
             </Loading.Spinner>
-            {/* <TablePagination
-              totalResultCount={allOpenOrders.length}
+            <TablePagination
               rowsPerPage={rowsPerPage}
               page={page}
               onSetRowsPerPage={onSetRowsPerPage}
@@ -156,7 +193,7 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
               prevButtonDisabled={prevButtonDisabled}
               nextButtonDisabled={nextButtonDisabled}
               ref={ref}
-            /> */}
+            />
           </div>
         </div>
       </>

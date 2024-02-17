@@ -140,8 +140,8 @@ export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "status",
     cell: (e) => (
-      <Typography.Text size="xs" className="capitalize">
-        {e.getValue().status.toLowerCase()}
+      <Typography.Text size="xs">
+        {e.getValue().status.toUpperCase()}
       </Typography.Text>
     ),
     header: () => (

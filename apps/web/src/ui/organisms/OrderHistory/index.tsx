@@ -9,7 +9,10 @@ import {
 } from "@polkadex/orderbook-ui/molecules";
 import { Ifilters } from "@orderbook/core/providers/types";
 import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
-import { MIN_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
+import {
+  DEFAULT_BATCH_LIMIT,
+  MIN_DIGITS_AFTER_DECIMAL,
+} from "@orderbook/core/constants";
 import { Order } from "@orderbook/core/utils/orderbookService";
 import { useMarkets, useOrderHistory } from "@orderbook/core/hooks";
 
@@ -26,7 +29,7 @@ type Props = {
 
 export const OrderHistory = ({ filters, market }: Props) => {
   const { hasNextPage, isLoading, onFetchNextPage, orderHistory, error } =
-    useOrderHistory(filters);
+    useOrderHistory(DEFAULT_BATCH_LIMIT, filters);
 
   const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, market);

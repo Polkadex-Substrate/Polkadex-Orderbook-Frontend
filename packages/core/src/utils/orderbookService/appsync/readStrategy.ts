@@ -1,5 +1,9 @@
 import { GraphQLResult } from "@aws-amplify/api";
 import { unknownAsset } from "@orderbook/core/utils/orderbookService/appsync/constants";
+import {
+  DEFAULT_BATCH_LIMIT,
+  RECENT_TRADES_LIMIT,
+} from "@orderbook/core/constants";
 
 import {
   FindUserByMainAccountQuery,
@@ -223,7 +227,8 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         to: args.to.toISOString(),
         nextToken: args.pageParams,
       },
-      "listOrderHistoryByTradeAccount"
+      "listOrderHistoryByTradeAccount",
+      args.batchLimit
     );
     if (!orderHistoryQueryResult) {
       return { data: [], nextToken: null };
@@ -309,7 +314,8 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         to: args.to.toISOString(),
         nextToken: args.pageParams,
       },
-      "listTradesByTradeAccount"
+      "listTradesByTradeAccount",
+      args.batchLimit
     );
     if (!queryResult) {
       return { data: [], nextToken: null };
@@ -345,7 +351,8 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         m: args.market,
         limit: args.limit,
       },
-      "listRecentTrades"
+      "listRecentTrades",
+      RECENT_TRADES_LIMIT
     );
     if (!queryResult) {
       return [];
@@ -388,7 +395,8 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         to: args.to.toISOString(),
         transaction_type: args.transaction_type,
       },
-      "listTransactionsByMainAccount"
+      "listTransactionsByMainAccount",
+      DEFAULT_BATCH_LIMIT
     );
     if (!queryResult) {
       return { data: [], nextToken: null };

@@ -86,6 +86,7 @@ export const TradingView = {
 export const SUBSCAN_PER_PAGE_LIMIT = 10;
 export const TRADE_HISTORY_PER_PAGE_LIMIT = 25;
 export const RECENT_TRADES_LIMIT = 30;
+export const DEFAULT_BATCH_LIMIT = 15;
 
 export const OTHER_ASSET_EXISTENTIAL = 0.00000001;
 

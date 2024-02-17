@@ -14,20 +14,18 @@ export const QUERY_KEYS = {
   recentTrades: (market: string) => [PREFIX, "recentTrades", market],
   orderBook: (market: string) => [PREFIX, "orderbook", market],
   miniGraph: (market: string) => [PREFIX, `mini-graph-${market}`],
-  tradeHistory: (dateFrom: Date, dateTo: Date, tradeAddress: string) => [
-    PREFIX,
-    "tradeHistory",
-    dateFrom,
-    dateTo,
-    tradeAddress,
-  ],
-  orderHistory: (dateFrom: Date, dateTo: Date, tradeAddress: string) => [
-    PREFIX,
-    "orderHistory",
-    dateFrom,
-    dateTo,
-    tradeAddress,
-  ],
+  tradeHistory: (
+    dateFrom: Date,
+    dateTo: Date,
+    tradeAddress: string,
+    rowsPerPage: number
+  ) => [PREFIX, "tradeHistory", dateFrom, dateTo, tradeAddress, rowsPerPage],
+  orderHistory: (
+    dateFrom: Date,
+    dateTo: Date,
+    tradeAddress: string,
+    rowsPerPage: number
+  ) => [PREFIX, "orderHistory", dateFrom, dateTo, tradeAddress, rowsPerPage],
   openOrders: (tradeAddress: string) => [PREFIX, "openOrders", tradeAddress],
   tradingBalances: (mainAddress: string) => [
     PREFIX,

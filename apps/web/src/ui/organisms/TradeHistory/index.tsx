@@ -10,6 +10,7 @@ import {
   TradeHistoryCard,
 } from "@polkadex/orderbook-ui/molecules";
 import { Ifilters } from "@orderbook/core/providers/types";
+import { DEFAULT_BATCH_LIMIT } from "@orderbook/core/constants";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -36,7 +37,7 @@ export const TradeHistory = ({
     error,
     isLoading,
     onFetchNextPage,
-  } = useTradeHistory(market, filters);
+  } = useTradeHistory(market, DEFAULT_BATCH_LIMIT, filters);
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`tradeHistory.${key}`);

@@ -17,7 +17,7 @@ import {
 } from "@orderbook/core/utils/orderbookService";
 import { Bar } from "@orderbook/core/utils/charting_library";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@orderbook/core/constants";
+import { DEFAULT_BATCH_LIMIT, QUERY_KEYS } from "@orderbook/core/constants";
 import { useOrderbookService } from "@orderbook/core/providers/public/orderbookServiceProvider/useOrderbookService";
 import {
   decimalPlaces,
@@ -85,7 +85,12 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 
         // Update OrderHistory Realtime
         queryClient.setQueryData(
-          QUERY_KEYS.orderHistory(dateFrom, dateTo, tradeAddress),
+          QUERY_KEYS.orderHistory(
+            dateFrom,
+            dateTo,
+            tradeAddress,
+            DEFAULT_BATCH_LIMIT
+          ),
           (
             oldOrderHistory: InfiniteData<MaybePaginated<Order[]>> | undefined
           ) => {
@@ -183,7 +188,12 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
     (payload: Trade) => {
       try {
         queryClient.setQueryData(
-          QUERY_KEYS.tradeHistory(dateFrom, dateTo, mainAddress),
+          QUERY_KEYS.tradeHistory(
+            dateFrom,
+            dateTo,
+            mainAddress,
+            DEFAULT_BATCH_LIMIT
+          ),
           (
             oldTradeHistory: InfiniteData<MaybePaginated<Trade[]>> | undefined
           ) => {

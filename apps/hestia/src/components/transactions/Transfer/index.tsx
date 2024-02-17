@@ -117,7 +117,7 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
       setRowsPerPage(row);
     };
 
-    const onPrevPage = async () => {
+    const onPrevPage = () => {
       if (prevButtonDisabled) return;
       setPage(page - 1);
     };

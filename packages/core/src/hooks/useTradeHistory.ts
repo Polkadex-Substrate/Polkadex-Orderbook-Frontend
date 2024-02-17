@@ -14,7 +14,11 @@ import { useSessionProvider } from "../providers/user/sessionProvider";
 
 import { useMarkets } from "./useMarkets";
 
-export function useTradeHistory(defaultMarket: string, filters: Ifilters) {
+export function useTradeHistory(
+  defaultMarket: string,
+  rowsPerPage: number,
+  filters: Ifilters
+) {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
@@ -35,7 +39,12 @@ export function useTradeHistory(defaultMarket: string, filters: Ifilters) {
     hasNextPage,
     error,
   } = useInfiniteQuery({
-    queryKey: QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
+    queryKey: QUERY_KEYS.tradeHistory(
+      dateFrom,
+      dateTo,
+      tradeAddress,
+      rowsPerPage
+    ),
     enabled: shouldFetchTradeHistory,
     queryFn: async ({ pageParam = null }) => {
       return await appsyncOrderbookService.query.getTradeHistory({
@@ -44,6 +53,7 @@ export function useTradeHistory(defaultMarket: string, filters: Ifilters) {
         to: dateTo,
         pageParams: pageParam,
         limit: TRADE_HISTORY_PER_PAGE_LIMIT,
+        batchLimit: rowsPerPage,
       });
     },
     getNextPageParam: (lastPage) => {

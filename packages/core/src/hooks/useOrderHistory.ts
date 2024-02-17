@@ -8,7 +8,7 @@ import { useProfile } from "../providers/user/profile";
 import { useSessionProvider } from "../providers/user/sessionProvider";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 
-export const useOrderHistory = (filters?: Ifilters) => {
+export const useOrderHistory = (rowsPerPage: number, filters?: Ifilters) => {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
@@ -23,7 +23,12 @@ export const useOrderHistory = (filters?: Ifilters) => {
     error: orderHistoryError,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: QUERY_KEYS.orderHistory(dateFrom, dateTo, tradeAddress),
+    queryKey: QUERY_KEYS.orderHistory(
+      dateFrom,
+      dateTo,
+      tradeAddress,
+      rowsPerPage
+    ),
     enabled: shouldFetchOrderHistory,
     queryFn: async ({ pageParam = null }) => {
       return await appsyncOrderbookService.query.getOrderHistory({
@@ -32,6 +37,7 @@ export const useOrderHistory = (filters?: Ifilters) => {
         to: dateTo,
         limit: 25,
         pageParams: pageParam,
+        batchLimit: rowsPerPage,
       });
     },
     getNextPageParam: (lastPage) => {
