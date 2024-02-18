@@ -4,6 +4,9 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { Transaction } from "@orderbook/core/utils/orderbookService";
 import { Tokens, Typography, truncateString } from "@polkadex/ux";
 import { intlFormat } from "date-fns";
+import Link from "next/link";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { getChainFromTicker } from "@orderbook/core/helpers";
 
 import { filters } from ".";
 
@@ -13,7 +16,8 @@ import {
   TransactionDirection,
 } from "@/components/ui/ReadyToUse";
 
-export interface DepositData extends Omit<Transaction, "asset" | "timestamp"> {
+export interface DepositData
+  extends Omit<Transaction, "asset" | "timestamp" | "txType" | "stid"> {
   timestamp: Date;
   token: {
     name: string;
@@ -21,10 +25,14 @@ export interface DepositData extends Omit<Transaction, "asset" | "timestamp"> {
   };
   wallets: {
     fromWalletType: string;
-    fromWalletName: string;
-    fromWalletAddress: string;
+    fromWalletName?: string;
+    fromWalletAddress?: string;
     toWalletType: string;
+    toWalletAddress?: string;
+    toWalletName?: string;
   };
+  stid: string | number;
+  txType: "DEPOSIT" | "WITHDRAW" | "TRANSFER";
 }
 const columnHelper = createColumnHelper<DepositData>();
 
@@ -33,9 +41,10 @@ export const columns = [
     id: "token",
     cell: (e) => {
       const tokenTicker = e.getValue().token.ticker;
+      const name = getChainFromTicker(tokenTicker);
       return (
         <TokenCard
-          tokenName={e.getValue().token.name}
+          tokenName={name}
           ticker={tokenTicker}
           icon={tokenTicker as keyof typeof Tokens}
         />
@@ -91,10 +100,10 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.fee, {
     id: "fees",
-    cell: (e) => <Typography.Text size="xs">{e.getValue()}</Typography.Text>,
+    cell: (e) => <Typography.Text size="sm">{e.getValue()}</Typography.Text>,
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Fees
+        Fees (PDEX)
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
@@ -102,14 +111,23 @@ export const columns = [
   columnHelper.accessor((row) => row.wallets, {
     id: "wallets",
     cell: (e) => {
-      const address = truncateString(e.getValue().fromWalletAddress);
+      const fromAddress =
+        e.getValue().fromWalletAddress &&
+        truncateString(e.getValue().fromWalletAddress ?? "");
+
+      const toAddress =
+        e.getValue().toWalletAddress &&
+        truncateString(e.getValue().toWalletAddress ?? "");
+
       return (
         <TransactionDirection
           tooltipable={e.getValue().fromWalletType === "Trading Account"}
           fromType={e.getValue().fromWalletType}
-          fromName={e.getValue().fromWalletName}
-          fromAddress={address}
+          fromName={e.getValue()?.fromWalletName}
+          fromAddress={fromAddress}
+          toAddress={toAddress}
           toType={e.getValue().toWalletType}
+          toName={e.getValue()?.toWalletName}
         />
       );
     },
@@ -125,6 +143,32 @@ export const columns = [
       const rowDataSplited = rowData.toLowerCase().split(" ")[0].toLowerCase();
       return valueSplited.includes(rowDataSplited);
     },
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "txid",
+    cell: (e) => {
+      const isTransfer = e.cell.getValue().txType === "TRANSFER";
+      const value = e.getValue().stid.toString();
+      return isTransfer ? (
+        <div className="flex items-center gap-1.5 hover:underline">
+          <ArrowTopRightOnSquareIcon className="w-3 h-3 text-primary" />
+          <Typography.Text asChild size="sm">
+            <Link
+              href={`https://polkadex.subscan.io/extrinsic/${value}`}
+              target="_blank"
+            >
+              {truncateString(value)}
+            </Link>
+          </Typography.Text>
+        </div>
+      ) : null;
+    },
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Hash
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row.timestamp, {
     id: "date",

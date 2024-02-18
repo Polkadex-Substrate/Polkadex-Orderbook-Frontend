@@ -34,16 +34,22 @@ import {
   withdrawValidations,
 } from "@orderbook/core/validations";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { useDeposit, useWithdraw } from "@orderbook/core/hooks";
+import {
+  useAssetTransfer,
+  useDeposit,
+  useFunds,
+  useWithdraw,
+} from "@orderbook/core/hooks";
+import { ExtensionAccount } from "@polkadex/react-providers";
 
 import { FromFunding } from "./fromFunding";
-import { FromTrading } from "./fromTrading";
+import { FromTrading } from "./FromTrading";
 
 import { FilteredAssetProps, SwitchType } from "@/hooks";
 import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
 const initialValues = { amount: 0.0 };
-
 export const Form = ({
+  refetch,
   selectedAsset,
   onAssetsInteraction,
   assetsInteraction,
@@ -55,10 +61,14 @@ export const Form = ({
   type: SwitchType;
   onChangeType: (e: SwitchType) => void;
   assetsInteraction?: boolean;
+  refetch: () => Promise<void>;
 }) => {
   const [fundingToFunding, setFundingToFunding] = useState(false);
   const [cardFocus, setCardFocus] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [selectedExtensionAccount, setSelectedExtensionAccount] =
+    useState<ExtensionAccount | null>(null);
+
   const formRef = useRef<HTMLFormElement | null>(null);
 
   const isTransferFromFunding = type === "deposit";
@@ -67,6 +77,10 @@ export const Form = ({
   const { loading: depositLoading, mutateAsync: onFetchDeposit } = useDeposit();
   const { mutateAsync: onFetchWithdraws, loading: withdrawLoading } =
     useWithdraw();
+
+  const { mutateAsync, isLoading: transferLoading } = useAssetTransfer(refetch);
+  const { loading: fundgLoading, onChangeChainBalance } = useFunds();
+
   const { onToogleConnectTrading, onToogleConnectExtension } =
     useSettingsProvider();
 
@@ -115,7 +129,7 @@ export const Form = ({
 
   const validationSchema = useMemo(
     () =>
-      isTransferFromFunding
+      isTransferFromFunding || fundingToFunding
         ? depositValidations(
             Number(selectedAsset?.onChainBalance) ?? 0,
             isPolkadexToken,
@@ -128,6 +142,7 @@ export const Form = ({
       isTransferFromFunding,
       selectedAsset?.free_balance,
       selectedAsset?.onChainBalance,
+      fundingToFunding,
     ]
   );
 
@@ -161,6 +176,31 @@ export const Form = ({
     }
   };
 
+  const onSubmitTransfer = async ({ amount }: { amount: number }) => {
+    if (!selectedWallet) return;
+    try {
+      const address = selectedWallet?.address;
+
+      const asset: Record<string, string | null> = isPolkadexToken
+        ? { polkadex: null }
+        : { asset: selectedAsset?.id || null };
+
+      await mutateAsync({
+        asset,
+        dest: address,
+        amount: amount.toString(),
+        account: selectedWallet,
+      });
+    } finally {
+      resetForm({ values: initialValues });
+      const asset = isPolkadexToken ? "PDEX" : selectedAsset?.id || "PDEX";
+      onChangeChainBalance(asset);
+    }
+  };
+
+  const onHandleSubmit = isTransferFromFunding
+    ? onSubmitDeposit
+    : onSubmitWithdraw;
   const {
     handleSubmit,
     resetForm,
@@ -175,7 +215,7 @@ export const Form = ({
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: isTransferFromFunding ? onSubmitDeposit : onSubmitWithdraw,
+    onSubmit: fundingToFunding ? onSubmitTransfer : onHandleSubmit,
   });
   const isLocalAccountPresent = !!Object.keys(selectedAccount ?? {}).length;
   const isExtensionAccountPresent = !!Object.keys(selectedWallet ?? {}).length;
@@ -184,13 +224,16 @@ export const Form = ({
     ? isExtensionAccountPresent
     : isLocalAccountPresent;
 
-  const loading = isTransferFromFunding ? depositLoading : withdrawLoading;
+  const formLoading = isTransferFromFunding ? depositLoading : withdrawLoading;
+  const loading = fundingToFunding
+    ? transferLoading || fundgLoading
+    : formLoading;
+
   const disabled = !hasAccount || loading || !(isValid && dirty);
 
   useEffect(() => {
     if (!isTransferFromFunding) tryUnlockTradeAccount(selectedAccount);
   }, [selectedAccount, isTransferFromFunding]);
-
   return (
     <Fragment>
       <Modal open={showPassword} onOpenChange={setShowPassword}>
@@ -249,6 +292,8 @@ export const Form = ({
               selectedAssetTicker={selectedAsset?.ticker}
               onChangeDirection={setFundingToFunding}
               isFundingToFunding={fundingToFunding}
+              selectedExtensionAccount={selectedExtensionAccount}
+              setSelectedExtensionAccount={setSelectedExtensionAccount}
             />
           </div>
           <div className="flex items-center border border-primary max-sm:flex-col">

@@ -2,12 +2,13 @@
 
 import { Skeleton, Typography, truncateString } from "@polkadex/ux";
 import { Dispatch, Fragment, PropsWithChildren, SetStateAction } from "react";
+import { ExtensionAccount } from "@polkadex/react-providers";
 
-import { InlineAccountCard } from "../../ui/ReadyToUse";
+import { InlineAccountCard } from "../../../ui/ReadyToUse";
+import { Card } from "../card";
+import { AvailableMessage } from "../availableMessage";
 
-import { Card } from "./card";
 import { SelectFundingDropdown } from "./selectFundingDropdown";
-import { AvailableMessage } from "./availableMessage";
 
 export const FromTrading = ({
   isLocalAccountPresent,
@@ -20,6 +21,8 @@ export const FromTrading = ({
   selectedAssetTicker = "",
   isFundingToFunding,
   onChangeDirection,
+  selectedExtensionAccount,
+  setSelectedExtensionAccount,
 }: {
   fromFunding?: boolean;
   extensionAccountName?: string;
@@ -31,6 +34,10 @@ export const FromTrading = ({
   isLocalAccountPresent?: boolean;
   isFundingToFunding?: boolean;
   onChangeDirection: Dispatch<SetStateAction<boolean>>;
+  selectedExtensionAccount: ExtensionAccount | null;
+  setSelectedExtensionAccount: Dispatch<
+    SetStateAction<ExtensionAccount | null>
+  >;
 }) => {
   const accountNotPresent =
     (fromFunding && !isLocalAccountPresent) ||
@@ -53,6 +60,8 @@ export const FromTrading = ({
       <RenderConditional
         isFundingToFunding={!!isFundingToFunding}
         accountNotPresent={accountNotPresent}
+        selectedExtensionAccount={selectedExtensionAccount}
+        setSelectedExtensionAccount={setSelectedExtensionAccount}
       >
         <div className="flex justify-between gap-2 flex-wrap px-5 py-3 border-t border-primary">
           {fromFunding ? (
@@ -83,14 +92,30 @@ export const FromTrading = ({
 const RenderConditional = ({
   isFundingToFunding,
   accountNotPresent,
+  selectedExtensionAccount,
+  setSelectedExtensionAccount,
   children,
 }: PropsWithChildren<{
   isFundingToFunding: boolean;
   accountNotPresent: boolean;
+  selectedExtensionAccount: ExtensionAccount | null;
+  setSelectedExtensionAccount: Dispatch<
+    SetStateAction<ExtensionAccount | null>
+  >;
 }>) => {
-  if (isFundingToFunding) return <SelectFundingDropdown />;
+  if (isFundingToFunding)
+    return (
+      <SelectFundingDropdown
+        selectedExtensionAccount={selectedExtensionAccount}
+        setSelectedExtensionAccount={setSelectedExtensionAccount}
+      />
+    );
   else if (accountNotPresent)
-    return <InlineAccountCard>Account not present</InlineAccountCard>;
+    return (
+      <div className="px-5 py-3 border-t border-primary">
+        <InlineAccountCard>Account not present</InlineAccountCard>
+      </div>
+    );
 
   return <Fragment>{children}</Fragment>;
 };

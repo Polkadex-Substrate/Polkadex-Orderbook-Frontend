@@ -16,6 +16,8 @@ export const getChainFromTicker = (ticker: string): string => {
       return "Phala Network";
     case "GLMR":
       return "Moonbeam Network";
+    case "PDEX":
+      return "Polkadex";
     default:
       return "Unknown";
   }

@@ -1,6 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { Tokens, Tooltip, Typography, truncateString } from "@polkadex/ux";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { getChainFromTicker } from "@orderbook/core/helpers";
 
 import { ReadyToClaimProps } from ".";
 
@@ -13,9 +14,10 @@ export const columns = [
     id: "token",
     cell: (e) => {
       const tokenTicker = e.getValue().token.ticker;
+      const name = getChainFromTicker(tokenTicker);
       return (
         <TokenCard
-          tokenName={e.getValue().token.name}
+          tokenName={name}
           ticker={tokenTicker}
           icon={tokenTicker as keyof typeof Tokens}
         />
@@ -32,7 +34,7 @@ export const columns = [
     id: "amount",
     cell: (e) => <Typography.Text size="sm">{e.getValue()}</Typography.Text>,
     header: () => (
-      <Typography.Text size="xs" appearance="primary">
+      <Typography.Text size="sm" appearance="primary">
         Amount
       </Typography.Text>
     ),

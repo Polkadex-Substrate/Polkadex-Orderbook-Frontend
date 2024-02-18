@@ -1,9 +1,9 @@
 "use client";
 
-import { Button, GenericMessage, Tabs, Typography } from "@polkadex/ux";
+import { GenericMessage, Tabs, Typography } from "@polkadex/ux";
 import { Fragment, useEffect, useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { useTransactions } from "@orderbook/core/hooks";
+import { useTransactions, useTransferHistory } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
@@ -18,6 +18,10 @@ import { useSizeProvider } from "./provider";
 
 import { Footer, Header } from "@/components/ui";
 import { useTransfer } from "@/hooks";
+import { defaultConfig } from "@/config";
+
+const sleep = async (ms: number) =>
+  await new Promise((resolve) => setTimeout(resolve, ms));
 
 export function Template() {
   const { headerRef, footerRef, formwRef, helpRef, tableTitleRef } =
@@ -35,6 +39,12 @@ export function Template() {
   const { selectedAccount, selectedWallet } = useConnectWalletProvider();
   const { onToogleConnectExtension } = useSettingsProvider();
   const [activeTab, setActiveTab] = useState("history");
+
+  const { data, isLoading, refetch } = useTransferHistory(
+    defaultConfig.subscanApi,
+    selectedWallet?.address as string,
+    !!selectedWallet
+  );
 
   useEffect(() => {
     if (readyWithdrawals?.length) setActiveTab("readyToClaim");
@@ -69,6 +79,10 @@ export function Template() {
                 onAssetsInteraction={onAssetsInteraction}
                 type={type}
                 onChangeType={(e) => onChangeType(e)}
+                refetch={async () => {
+                  await sleep(55000);
+                  await refetch();
+                }}
               />
             </div>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -87,7 +101,10 @@ export function Template() {
                 {selectedAccount || selectedWallet ? (
                   <Fragment>
                     <Tabs.Content value="history" className="flex flex-col">
-                      <History />
+                      <History
+                        subscanData={data?.pages?.[0]?.transfers}
+                        subscanLoading={isLoading}
+                      />
                     </Tabs.Content>
                     <Tabs.Content
                       value="readyToClaim"

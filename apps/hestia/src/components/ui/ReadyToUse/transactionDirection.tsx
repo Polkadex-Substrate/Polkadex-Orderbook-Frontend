@@ -8,12 +8,16 @@ export const TransactionDirection = ({
   fromName,
   fromAddress,
   toType,
+  toAddress,
+  toName,
 }: {
   tooltipable?: boolean;
   fromType: string;
-  fromName: string;
-  fromAddress: string;
+  fromName?: string;
+  fromAddress?: string;
   toType: string;
+  toAddress?: string;
+  toName?: string;
 }) => {
   return (
     <div className="flex items-center gap-2">
@@ -26,7 +30,7 @@ export const TransactionDirection = ({
           </Tooltip.Trigger>
           <Tooltip.Content>
             <div className="flex items-center gap-2">
-              <Typography.Text>{fromName}</Typography.Text>
+              {fromName && <Typography.Text>{fromName}</Typography.Text>}
               <Typography.Text appearance="primary">
                 {fromAddress}
               </Typography.Text>
@@ -34,23 +38,23 @@ export const TransactionDirection = ({
           </Tooltip.Content>
         </Tooltip>
       )}
-      <div className="flex items-center justify-center bg-level-1 w-6 h-6 rounded-md">
-        <ArrowRightIcon className="w-4 h-4 text-primary" />
+      <div className="flex items-center justify-center bg-level-1 w-5 h-5 rounded-md">
+        <ArrowRightIcon className="w-3 h-3 text-primary" />
       </div>
       <Tooltip>
         <Tooltip.Trigger>
           <Typography.Text appearance="primary">{toType}</Typography.Text>
         </Tooltip.Trigger>
         <Tooltip.Content>
-          {tooltipable ? (
+          {fromType === "Funding Account" ? (
             <Typography.Text>
               Balance available across all trading accounts.
             </Typography.Text>
           ) : (
             <div className="flex items-center gap-2">
-              <Typography.Text>{fromName}</Typography.Text>
+              {toName && <Typography.Text>{toName}</Typography.Text>}
               <Typography.Text appearance="primary">
-                {fromAddress}
+                {toAddress}
               </Typography.Text>
             </div>
           )}

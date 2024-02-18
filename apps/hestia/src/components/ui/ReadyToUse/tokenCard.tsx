@@ -22,7 +22,7 @@ export const TokenCard = ({
         <Typography.Text
           appearance="primary"
           size="xs"
-          className="whitespace-nowrap"
+          className="whitespace-nowrap lowercase first-letter:uppercase"
         >
           {tokenName}
         </Typography.Text>
