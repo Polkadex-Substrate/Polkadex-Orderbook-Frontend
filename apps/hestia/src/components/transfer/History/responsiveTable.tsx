@@ -1,6 +1,8 @@
 import { Drawer, Token, Typography, truncateString } from "@polkadex/ux";
 import { Dispatch, SetStateAction } from "react";
 import { intlFormat } from "date-fns";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 import { DepositData } from "./columns";
 
@@ -20,6 +22,14 @@ export const ResponsiveTable = ({
 }) => {
   if (!data) return null;
   const { token, status, amount, fee, wallets, timestamp } = data;
+
+  const fromAddress =
+    wallets.fromWalletAddress &&
+    truncateString(wallets.fromWalletAddress ?? "");
+
+  const toAddress =
+    wallets.toWalletAddress && truncateString(wallets.toWalletAddress ?? "");
+
   return (
     <Drawer closeOnClickOutside open={open} onOpenChange={onOpenChange}>
       <Drawer.Title className="px-4">
@@ -42,10 +52,28 @@ export const ResponsiveTable = ({
             tooltipable={wallets.fromWalletType === "Trading Account"}
             fromType={wallets.fromWalletType}
             fromName={wallets.fromWalletName}
-            fromAddress={truncateString(wallets.fromWalletAddress)}
+            fromAddress={fromAddress}
+            toAddress={toAddress}
             toType={wallets.toWalletType}
+            toName={wallets.toWalletName}
           />
         </ResponsiveCard>
+        {data.txType === "TRANSFER" && (
+          <ResponsiveCard label="Hash">
+            <div className="flex items-center gap-1.5 hover:underline">
+              <ArrowTopRightOnSquareIcon className="w-3 h-3 text-primary" />
+              <Typography.Text asChild size="sm">
+                <Link
+                  href={`https://polkadex.subscan.io/extrinsic/${data.stid}`}
+                  target="_blank"
+                >
+                  {data.stid}
+                </Link>
+              </Typography.Text>
+            </div>
+          </ResponsiveCard>
+        )}
+
         <ResponsiveCard label="Date">
           {intlFormat(
             new Date(timestamp),
