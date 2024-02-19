@@ -3,6 +3,8 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
 
+import { filters } from "./filters";
+
 const columnHelper = createColumnHelper<Trade>();
 
 export const columns = () => [
@@ -74,6 +76,12 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    filterFn: (row, id, value: string[]) =>
+      value?.some((val) =>
+        val
+          .toLowerCase()
+          .includes(row.getValue<Trade>(id).market.name.toLowerCase())
+      ),
   }),
   columnHelper.accessor((row) => row, {
     id: "type",
@@ -97,6 +105,13 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    filterFn: (row, id, value: typeof filters.type) => {
+      const isSell = row.getValue<Trade>(id).side === "Ask";
+      const title = isSell ? "Sell" : "Buy";
+      return value?.some((val) =>
+        val.toLowerCase().includes(title.toLowerCase())
+      );
+    },
   }),
   columnHelper.accessor((row) => row, {
     id: "price",

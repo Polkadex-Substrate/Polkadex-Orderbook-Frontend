@@ -88,7 +88,6 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     }, [allOpenOrders]);
 
     const prevButtonDisabled = useMemo(() => page === 1, [page]);
-
     const nextButtonDisabled = useMemo(() => {
       const totalResultsForPreviousPages = rowsPerPage * (page - 1);
       const totalResultsForCurrentPage = openOrdersPerPage.length;

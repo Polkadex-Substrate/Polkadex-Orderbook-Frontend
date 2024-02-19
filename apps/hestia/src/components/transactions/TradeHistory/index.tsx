@@ -4,14 +4,20 @@ import { forwardRef, useEffect, useMemo, useState } from "react";
 import { useWindowSize } from "usehooks-ts";
 import classNames from "classnames";
 import {
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { Trade } from "@orderbook/core/utils/orderbookService/types";
 
 import { columns } from "./columns";
 import { ResponsiveTable } from "./responsiveTable";
+import { Filters } from "./filters";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
@@ -32,6 +38,8 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
     const responsiveView = useMemo(() => width <= 600, [width]);
     const [responsiveState, setResponsiveState] = useState(false);
     const [responsiveData, setResponsiveData] = useState<Trade | null>(null);
+
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
     const {
       isLoading,
@@ -54,6 +62,11 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
           ),
       [allTradeHistory, page, rowsPerPage, searchTerm]
     );
+
+    const availablePairs = useMemo(() => {
+      const marketsSet = new Set(allTradeHistory.map((v) => v.market.name));
+      return Array.from(marketsSet);
+    }, [allTradeHistory]);
 
     const prevButtonDisabled = useMemo(() => page === 1, [page]);
     const nextButtonDisabled = useMemo(() => {
@@ -92,6 +105,12 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
 
     const table = useReactTable({
       data: tradeHistoryPerPage,
+      state: { columnFilters },
+      onColumnFiltersChange: setColumnFilters,
+      getSortedRowModel: getSortedRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
+      getFacetedRowModel: getFacetedRowModel(),
+      getFacetedUniqueValues: getFacetedUniqueValues(),
       columns: columns(),
       getCoreRowModel: getCoreRowModel(),
     });
@@ -122,6 +141,7 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
           open={responsiveState}
         />
         <div className="flex-1 flex flex-col">
+          <Filters table={table} availablePairs={availablePairs} />
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
               <div
