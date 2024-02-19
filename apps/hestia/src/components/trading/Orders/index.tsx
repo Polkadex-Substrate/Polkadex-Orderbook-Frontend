@@ -31,13 +31,12 @@ const initialFilters: Ifilters = {
 
 type Props = {
   maxHeight: string;
-  id: string;
 };
 
 const BUY = "BUY";
 const SELL = "SELL";
 
-export const Orders = ({ maxHeight, id }: Props) => {
+export const Orders = ({ maxHeight }: Props) => {
   const { dispatchUserSessionData, dateFrom, dateTo } = useSessionProvider();
   const { onToogleConnectTrading } = useSettingsProvider();
   const { openOrders } = useOpenOrders();
@@ -137,21 +136,13 @@ export const Orders = ({ maxHeight, id }: Props) => {
       {connected ? (
         <>
           <Tabs.Content value="openOrders">
-            <OpenOrdersTable
-              filters={filters}
-              market={id}
-              maxHeight={maxHeight}
-            />
+            <OpenOrdersTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
           <Tabs.Content value="orderHistory">
             <OrderHistoryTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
           <Tabs.Content value="tradeHistory">
-            <TradeHistoryTable
-              filters={filters}
-              market={id}
-              maxHeight={maxHeight}
-            />
+            <TradeHistoryTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
           <Tabs.Content value="balances">
             <BalancesTable maxHeight={maxHeight} />

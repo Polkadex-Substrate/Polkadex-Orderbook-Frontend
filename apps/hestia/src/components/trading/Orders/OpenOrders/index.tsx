@@ -24,7 +24,6 @@ export const OpenOrdersTable = ({
   filters,
   maxHeight,
 }: {
-  market: string;
   filters: Ifilters;
   maxHeight: string;
 }) => {
