@@ -18,6 +18,7 @@ import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
 
 import { columns } from "./columns";
 import { ResponsiveTable } from "./responsiveTable";
+import { Filters } from "./Filters";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
@@ -74,6 +75,11 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
           ),
       [allOpenOrders, page, rowsPerPage, searchTerm]
     );
+
+    const availablePairs = useMemo(() => {
+      const marketsSet = new Set(allOpenOrders.map((v) => v.market.name));
+      return Array.from(marketsSet);
+    }, [allOpenOrders]);
 
     const prevButtonDisabled = useMemo(() => page === 1, [page]);
 
@@ -156,6 +162,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
           onCancelOrder={onCancelOrder}
         />
         <div className="flex-1 flex flex-col">
+          <Filters table={table} availablePairs={availablePairs} />
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
               <div
