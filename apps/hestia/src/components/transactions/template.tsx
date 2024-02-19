@@ -1,7 +1,7 @@
 "use client";
 
 import { Typography, Input, Tabs, Tooltip } from "@polkadex/ux";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { OrdersProvider } from "@orderbook/core/providers";
 import { useElementSize, useWindowSize } from "usehooks-ts";
@@ -29,6 +29,7 @@ export function Template() {
   const [helpRef, { height: helpeight = 0 }] = useElementSize();
   const [tableRowsRef, { height: tableRowsHeight = 0 }] = useElementSize();
   const [overviewRef, { height: overviewHeight = 0 }] = useElementSize();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const responsiveView = useMemo(() => width <= 675, [width]);
 
@@ -99,13 +100,18 @@ export function Template() {
                     <Input.Search
                       className="py-2 text-sm"
                       placeholder="Search transactions.."
+                      onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
                 </div>
               </div>
               <Tabs.Content value="transfer" className="flex-1 flex">
                 {mainAddress?.length ? (
-                  <TransferHistory ref={tableRowsRef} maxHeight={maxHeight} />
+                  <TransferHistory
+                    ref={tableRowsRef}
+                    maxHeight={maxHeight}
+                    searchTerm={searchTerm}
+                  />
                 ) : (
                   <ConnectAccountWrapper funding />
                 )}

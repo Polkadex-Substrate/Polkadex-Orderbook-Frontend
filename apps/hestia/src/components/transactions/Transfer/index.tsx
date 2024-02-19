@@ -19,12 +19,12 @@ import { defaultConfig } from "@/config";
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
 
-type Props = { maxHeight: string };
+type Props = { maxHeight: string; searchTerm: string };
 
 const responsiveKeys = ["fees", "wallets"];
 
 export const TransferHistory = forwardRef<HTMLDivElement, Props>(
-  ({ maxHeight }, ref) => {
+  ({ maxHeight, searchTerm }, ref) => {
     const { width } = useWindowSize();
 
     const [responsiveState, setResponsiveState] = useState(false);
@@ -58,48 +58,59 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
 
     const transactionsPerPage = useMemo(
       () =>
-        transactions.map((e) => {
-          const tokenId = e.asset_unique_id.split("standard_assets/").join("");
-          const token = selectGetAsset(tokenId);
-          const fromData = extensionAccounts?.find(
-            (from) => from.address === e.from
-          );
-          const toData = extensionAccounts?.find(
-            (wallet) => wallet.address === e.to
-          );
+        transactions
+          .map((e) => {
+            const tokenId = e.asset_unique_id
+              .split("standard_assets/")
+              .join("");
+            const token = selectGetAsset(tokenId);
+            const fromData = extensionAccounts?.find(
+              (from) => from.address === e.from
+            );
+            const toData = extensionAccounts?.find(
+              (wallet) => wallet.address === e.to
+            );
 
-          let fromWalletType;
-          let toWalletType;
-          if (e.from !== PALLET_ADDRESS && e.to !== PALLET_ADDRESS) {
-            fromWalletType = fromData?.name ?? "Custom Wallet";
-            toWalletType = toData?.name ?? "Custom Wallet";
-          } else {
-            fromWalletType =
-              e.from === PALLET_ADDRESS ? "Trading Account" : "Funding Account";
-            toWalletType =
-              e.to === PALLET_ADDRESS ? "Trading Account" : "Funding Account";
-          }
+            let fromWalletType;
+            let toWalletType;
+            if (e.from !== PALLET_ADDRESS && e.to !== PALLET_ADDRESS) {
+              fromWalletType = fromData?.name ?? "Custom Wallet";
+              toWalletType = toData?.name ?? "Custom Wallet";
+            } else {
+              fromWalletType =
+                e.from === PALLET_ADDRESS
+                  ? "Trading Account"
+                  : "Funding Account";
+              toWalletType =
+                e.to === PALLET_ADDRESS ? "Trading Account" : "Funding Account";
+            }
 
-          return {
-            hash: e.hash,
-            amount: e.amount,
-            fee: (+e.fee / Math.pow(10, 12)).toFixed(3),
-            time: new Date(e.block_timestamp * 1000),
-            token: {
-              ticker: token?.ticker,
-              name: token?.name,
-            },
-            wallets: {
-              fromType: fromWalletType,
-              fromAddress: e.from,
-              fromName: fromData?.name || "Custom Wallet",
-              toType: toWalletType,
-              toAddress: e.to,
-              toName: toData?.name || "Custom Wallet",
-            },
-          } as TransferHistoryData;
-        }),
-      [extensionAccounts, selectGetAsset, transactions]
+            return {
+              hash: e.hash,
+              amount: e.amount,
+              fee: (+e.fee / Math.pow(10, 12)).toFixed(3),
+              time: new Date(e.block_timestamp * 1000),
+              token: {
+                ticker: token?.ticker || "Unknown",
+                name: token?.name || "Unknown",
+              },
+              wallets: {
+                fromType: fromWalletType,
+                fromAddress: e.from,
+                fromName: fromData?.name || "Custom Wallet",
+                toType: toWalletType,
+                toAddress: e.to,
+                toName: toData?.name || "Custom Wallet",
+              },
+            } as TransferHistoryData;
+          })
+          .filter(
+            (e) =>
+              e.token.name.toLowerCase().includes(searchTerm) ||
+              e.token.ticker.toLowerCase().includes(searchTerm) ||
+              e.hash.includes(searchTerm)
+          ),
+      [extensionAccounts, searchTerm, selectGetAsset, transactions]
     );
 
     const prevButtonDisabled = useMemo(() => page === 1, [page]);
