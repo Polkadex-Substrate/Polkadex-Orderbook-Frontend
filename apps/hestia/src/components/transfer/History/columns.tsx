@@ -15,6 +15,8 @@ import {
   TokenCard,
   TransactionDirection,
 } from "@/components/ui/ReadyToUse";
+const formatAccount = (value: string, replaceValue = "Account") =>
+  value.replace(replaceValue, "").trim();
 
 export interface DepositData
   extends Omit<Transaction, "asset" | "timestamp" | "txType" | "stid"> {
@@ -118,7 +120,6 @@ export const columns = [
       const toAddress =
         e.getValue().toWalletAddress &&
         truncateString(e.getValue().toWalletAddress ?? "");
-
       return (
         <TransactionDirection
           tooltipable={e.getValue().fromWalletType === "Trading Account"}
@@ -137,11 +138,12 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
-    filterFn: (row, id, value: typeof filters.from) => {
-      const rowData = row.getValue<DepositData["wallets"]>(id).fromWalletType;
-      const valueSplited = value[0].split("/")[0].toLowerCase();
-      const rowDataSplited = rowData.toLowerCase().split(" ")[0].toLowerCase();
-      return valueSplited.includes(rowDataSplited);
+    filterFn: (row, id, value: string) => {
+      const fromRowData =
+        row.getValue<DepositData["wallets"]>(id).fromWalletType;
+      const toRowData = row.getValue<DepositData["wallets"]>(id).toWalletType;
+      const compareValue = `${formatAccount(fromRowData)}/${formatAccount(toRowData)}}`;
+      return compareValue.includes(value); // TODO: check trading/funding
     },
   }),
   columnHelper.accessor((row) => row, {

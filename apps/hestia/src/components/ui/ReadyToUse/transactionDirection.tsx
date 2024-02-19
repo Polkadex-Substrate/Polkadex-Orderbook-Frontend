@@ -46,7 +46,7 @@ export const TransactionDirection = ({
           <Typography.Text appearance="primary">{toType}</Typography.Text>
         </Tooltip.Trigger>
         <Tooltip.Content>
-          {fromType === "Funding Account" ? (
+          {fromType === "Funding Account" && toType === "Trading Account" ? (
             <Typography.Text>
               Balance available across all trading accounts.
             </Typography.Text>

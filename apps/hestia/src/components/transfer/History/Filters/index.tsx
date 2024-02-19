@@ -8,13 +8,9 @@ import { useWindowSize } from "usehooks-ts";
 import classNames from "classnames";
 
 import { useSizeProvider } from "../../provider";
+import { filters } from "..";
 
 import { FacetedFilter } from "./facetedFilter";
-
-const filters = {
-  status: ["Confirmed", "Pending", "Failed", "Ready"],
-  from: ["Trading/Funding", "Funding/Trading"],
-};
 
 interface FiltersProps<TData> {
   table: Table<TData>;

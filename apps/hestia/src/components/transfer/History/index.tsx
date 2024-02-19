@@ -33,7 +33,7 @@ const actionKeys = ["token", "amount", "date"];
 
 export const filters = {
   status: ["Confirmed", "Pending", "Failed", "Ready"],
-  from: ["Trading/Funding ", "Funding/Trading", "Funding/Funding"],
+  from: ["Trading/Funding ", "Funding/Trading", "Funding/Custom"],
 };
 
 export const History = ({
@@ -85,11 +85,11 @@ export const History = ({
           },
           txType: "TRANSFER",
           wallets: {
-            fromWalletType: "Funding Wallet",
+            fromWalletType: "Funding Account",
             fromWalletName: fromData?.name,
             fromWalletAddress: e.from,
             toWalletAddress: e.to,
-            toWalletType: "Custom Wallet",
+            toWalletType: "Custom Account",
           },
         } as DepositData;
       }),
