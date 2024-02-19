@@ -124,7 +124,7 @@ export function Template() {
                   </Fragment>
                 ) : (
                   <GenericMessage
-                    title="Connect Trading Account"
+                    title="Connect your trading account"
                     illustration="ConnectAccount"
                     className="bg-level-0 border-b border-primary"
                   />

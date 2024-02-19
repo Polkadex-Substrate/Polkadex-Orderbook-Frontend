@@ -399,7 +399,7 @@ export const Form = ({
                   : onToogleConnectTrading()
               }
             >
-              Connect yor account
+              Connect your account
             </Button.Solid>
           ) : (
             <Button.Solid
