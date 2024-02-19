@@ -36,7 +36,7 @@ export const CustomTransactionDirection = ({
         </Tooltip.Content>
       </Tooltip>
       <div className="flex items-center justify-center bg-level-1 w-6 h-6 rounded-md">
-        <ArrowRightIcon className="w-4 h-4 text-primary" />
+        <ArrowRightIcon className="w-5 h-5 text-primary" />
       </div>
       <Tooltip>
         <Tooltip.Trigger className="flex items-center gap-1">

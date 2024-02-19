@@ -107,15 +107,17 @@ export const columns = () => [
       const fromAddress = truncateString(e.getValue().fromAddress);
       const toAddress = truncateString(e.getValue().toAddress);
       return (
-        <CustomTransactionDirection
-          showFromToolTip={showFromToolTip}
-          fromType={e.getValue().fromType}
-          fromName={e.getValue().fromName}
-          fromAddress={fromAddress}
-          toType={e.getValue().toType}
-          toName={e.getValue().toName}
-          toAddress={toAddress}
-        />
+        <div className="[&_svg]:scale-90">
+          <CustomTransactionDirection
+            showFromToolTip={showFromToolTip}
+            fromType={e.getValue().fromType}
+            fromName={e.getValue().fromName}
+            fromAddress={fromAddress}
+            toType={e.getValue().toType}
+            toName={e.getValue().toName}
+            toAddress={toAddress}
+          />
+        </div>
       );
     },
     header: () => (
