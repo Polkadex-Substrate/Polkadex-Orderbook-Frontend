@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography, Input, Tabs } from "@polkadex/ux";
+import { Typography, Input, Tabs, Tooltip } from "@polkadex/ux";
 import { useMemo } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { OrdersProvider } from "@orderbook/core/providers";
@@ -61,7 +61,17 @@ export function Template() {
                   <Typography.Text bold size="lg">
                     Transactions
                   </Typography.Text>
-                  <InformationCircleIcon className="w-6 h-6 text-primary" />
+                  <Tooltip>
+                    <Tooltip.Trigger>
+                      <InformationCircleIcon className="w-6 h-6 text-primary" />
+                    </Tooltip.Trigger>
+                    <Tooltip.Content className="w-52" side="left">
+                      <Typography.Text>
+                        Explore detailed records of your Transfers & Orders
+                        here.
+                      </Typography.Text>
+                    </Tooltip.Content>
+                  </Tooltip>
                 </div>
                 <div
                   className={classNames(

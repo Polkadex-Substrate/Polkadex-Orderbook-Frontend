@@ -133,7 +133,7 @@ export const ConnectWalletProvider = ({
     onError: (e: Error) => {
       onHandleError(e.message);
     },
-    onSuccess: (msg) => msg && onHandleError(msg),
+    onSuccess: (msg) => msg && onHandleAlert(msg),
     onSetTempMnemonic,
   });
 
@@ -145,7 +145,7 @@ export const ConnectWalletProvider = ({
     onError: (e: Error) => {
       onHandleError(e.message);
     },
-    onSuccess: (msg) => msg && onHandleError(msg),
+    onSuccess: (msg) => msg && onHandleAlert(msg),
   });
 
   const {
@@ -172,7 +172,7 @@ export const ConnectWalletProvider = ({
     mutateAsync: onImportFromFile,
     status: importFromFileStatus,
   } = useImportProxyAccount({
-    onSuccess: (msg) => msg && onHandleError(msg),
+    onSuccess: (msg) => msg && onHandleAlert(msg),
   });
 
   const {
@@ -180,7 +180,7 @@ export const ConnectWalletProvider = ({
     mutateAsync: onImportFromMnemonic,
     status: importFromMnemonicStatus,
   } = useImportProxyAccountMnemonic({
-    onSuccess: (msg) => msg && onHandleError(msg),
+    onSuccess: (msg) => msg && onHandleAlert(msg),
   });
 
   const selectedWallet = selectedAddresses?.mainAddress
