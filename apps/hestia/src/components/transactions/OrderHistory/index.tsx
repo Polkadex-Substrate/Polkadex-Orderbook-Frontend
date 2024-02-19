@@ -4,12 +4,14 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useOrderHistory } from "@orderbook/core/hooks";
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import { GenericMessage, Loading, Table } from "@polkadex/ux";
 import classNames from "classnames";
 import { useWindowSize } from "usehooks-ts";
+import { Order } from "@orderbook/core/utils/orderbookService/types";
 
 import { columns } from "./columns";
+import { ResponsiveTable } from "./responsiveTable";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
@@ -27,6 +29,8 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
     const [page, setPage] = useState(1);
 
     const responsiveView = useMemo(() => width <= 850, [width]);
+    const [responsiveState, setResponsiveState] = useState(false);
+    const [responsiveData, setResponsiveData] = useState<Order | null>(null);
 
     const {
       orderHistory: allOrderHistory,
@@ -82,6 +86,13 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
       getCoreRowModel: getCoreRowModel(),
     });
 
+    useEffect(() => {
+      if (!responsiveView && !!responsiveState) {
+        setResponsiveState(false);
+        setResponsiveData(null);
+      }
+    }, [responsiveState, responsiveView]);
+
     if (isLoading) return <SkeletonCollection rows={8} />;
 
     if (orderHistoryPerPage?.length === 0)
@@ -95,6 +106,11 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
 
     return (
       <>
+        <ResponsiveTable
+          data={responsiveData}
+          onOpenChange={setResponsiveState}
+          open={responsiveState}
+        />
         <div className="flex-1 flex flex-col">
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
@@ -158,8 +174,8 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
                               ? {
                                   className: "cursor-pointer py-4",
                                   onClick: () => {
-                                    // setResponsiveState(true);
-                                    // setResponsiveData(row.original);
+                                    setResponsiveState(true);
+                                    setResponsiveData(row.original);
                                   },
                                 }
                               : {};
