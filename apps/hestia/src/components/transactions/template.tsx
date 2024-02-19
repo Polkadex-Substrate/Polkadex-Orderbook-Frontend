@@ -7,6 +7,7 @@ import { OrdersProvider } from "@orderbook/core/providers";
 import { useElementSize, useWindowSize } from "usehooks-ts";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import classNames from "classnames";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Help } from "./Help";
 import { TransferHistory } from "./Transfer";
@@ -20,6 +21,8 @@ import { ConnectAccountWrapper } from "@/components/ui/ReadyToUse";
 
 // useElementSize Deprecated -> useResizeObserver
 export function Template() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { width } = useWindowSize();
   const [headerRef, { height: headerHeight = 0 }] = useElementSize();
   const [footerRef, { height: footerHeight = 0 }] = useElementSize();
@@ -52,7 +55,10 @@ export function Template() {
         className="flex flex-1 flex-col bg-backgroundBase max-sm:pb-16"
         vaul-drawer-wrapper=""
       >
-        <Tabs defaultValue="transfer">
+        <Tabs
+          defaultValue={searchParams.get("tab") || "transfer"}
+          onValueChange={(e) => router.replace(`/transactions/?tab=${e}`)}
+        >
           <Header ref={headerRef} />
           <main className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-screen-2xl m-auto">
             <div className="flex-1 flex flex-col">
