@@ -98,7 +98,12 @@ export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "price",
     cell: (e) => {
-      return <Typography.Text size="xs">{e.getValue().price}</Typography.Text>;
+      const isMarket = e.getValue().type === "MARKET";
+      return (
+        <Typography.Text size="xs">
+          {isMarket ? "---" : e.getValue().price}
+        </Typography.Text>
+      );
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">

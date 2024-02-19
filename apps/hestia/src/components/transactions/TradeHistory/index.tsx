@@ -1,6 +1,6 @@
 import { useTradeHistory } from "@orderbook/core/hooks";
 import { GenericMessage, Loading, Table } from "@polkadex/ux";
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import { useWindowSize } from "usehooks-ts";
 import classNames from "classnames";
 import {
@@ -8,8 +8,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { Trade } from "@orderbook/core/utils/orderbookService/types";
 
 import { columns } from "./columns";
+import { ResponsiveTable } from "./responsiveTable";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
@@ -27,6 +29,8 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
     const [page, setPage] = useState(1);
 
     const responsiveView = useMemo(() => width <= 600, [width]);
+    const [responsiveState, setResponsiveState] = useState(false);
+    const [responsiveData, setResponsiveData] = useState<Trade | null>(null);
 
     const {
       isLoading,
@@ -82,6 +86,13 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
       getCoreRowModel: getCoreRowModel(),
     });
 
+    useEffect(() => {
+      if (!responsiveView && !!responsiveState) {
+        setResponsiveState(false);
+        setResponsiveData(null);
+      }
+    }, [responsiveState, responsiveView]);
+
     if (isLoading) return <SkeletonCollection rows={8} />;
 
     if (tradeHistoryPerPage?.length === 0)
@@ -95,6 +106,11 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
 
     return (
       <>
+        <ResponsiveTable
+          data={responsiveData}
+          onOpenChange={setResponsiveState}
+          open={responsiveState}
+        />
         <div className="flex-1 flex flex-col">
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
@@ -158,8 +174,8 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
                               ? {
                                   className: "cursor-pointer py-4",
                                   onClick: () => {
-                                    // setResponsiveState(true);
-                                    // setResponsiveData(row.original);
+                                    setResponsiveState(true);
+                                    setResponsiveData(row.original);
                                   },
                                 }
                               : {};

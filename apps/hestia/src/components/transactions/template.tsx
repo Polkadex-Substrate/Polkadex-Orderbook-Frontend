@@ -97,7 +97,7 @@ export function Template() {
                   </Tabs.List>
                   <div>
                     <Input.Search
-                      className="py-2"
+                      className="py-2 text-sm"
                       placeholder="Search transactions.."
                     />
                   </div>
