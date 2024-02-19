@@ -77,5 +77,5 @@ const sentryWebpackPluginOptions = {
 };
 
 module.exports = withBundleAnalyzer(
-  withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+  withSentryConfig(withPWA(nextConfig), sentryWebpackPluginOptions)
 );
