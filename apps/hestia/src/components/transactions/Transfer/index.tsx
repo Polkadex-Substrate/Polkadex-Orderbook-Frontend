@@ -4,8 +4,13 @@ import { forwardRef, useEffect, useMemo, useState } from "react";
 import { PALLET_ADDRESS } from "@orderbook/core/constants";
 import { useExtensionAccounts } from "@polkadex/react-providers";
 import {
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { GenericMessage, Loading, Table } from "@polkadex/ux";
@@ -14,6 +19,7 @@ import { useWindowSize } from "usehooks-ts";
 
 import { TransferHistoryData, columns } from "./columns";
 import ResponsiveTable from "./responsiveTable";
+import { Filters } from "./filters";
 
 import { defaultConfig } from "@/config";
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
@@ -31,6 +37,8 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
     const [responsiveData, setResponsiveData] =
       useState<TransferHistoryData | null>(null);
     const responsiveView = useMemo(() => width <= 850, [width]);
+
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
     const {
       selectedAddresses: { mainAddress },
@@ -113,6 +121,16 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
       [extensionAccounts, searchTerm, selectGetAsset, transactions]
     );
 
+    const availableTokens = useMemo(() => {
+      const tickersSet = new Set(
+        transactionsPerPage
+          .map((v) => v.token.ticker)
+          .filter((v) => v !== "Unknown")
+          .concat(["Other"])
+      );
+      return Array.from(tickersSet);
+    }, [transactionsPerPage]);
+
     const prevButtonDisabled = useMemo(() => page === 1, [page]);
     const nextButtonDisabled = useMemo(() => {
       const totalResultsForPreviousPages = rowsPerPage * (page - 1);
@@ -141,6 +159,12 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
 
     const table = useReactTable({
       data: transactionsPerPage,
+      state: { columnFilters },
+      onColumnFiltersChange: setColumnFilters,
+      getSortedRowModel: getSortedRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
+      getFacetedRowModel: getFacetedRowModel(),
+      getFacetedUniqueValues: getFacetedUniqueValues(),
       columns: columns(),
       getCoreRowModel: getCoreRowModel(),
     });
@@ -171,6 +195,7 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
           open={responsiveState}
         />
         <div className="flex-1 flex flex-col">
+          <Filters table={table} availableTokens={availableTokens} />
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
               <div

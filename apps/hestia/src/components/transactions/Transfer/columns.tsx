@@ -9,6 +9,8 @@ import {
 import { createColumnHelper } from "@tanstack/react-table";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
+import { filters } from "./filters";
+
 import {
   TokenCard,
   CustomTransactionDirection,
@@ -69,14 +71,14 @@ export const columns = () => [
     ),
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.token, {
+  columnHelper.accessor((row) => row, {
     id: "token",
     cell: (e) => {
-      const tokenTicker = e.getValue().ticker;
+      const tokenTicker = e.getValue().token.ticker;
       return (
         <div className="[&_svg]:scale-[1.05]">
           <TokenCard
-            tokenName={e.getValue().name ?? "UNKNOWN"}
+            tokenName={e.getValue().token.name ?? "UNKNOWN"}
             ticker={tokenTicker ?? "UNKNOWN"}
             icon={tokenTicker as keyof typeof Tokens}
           />
@@ -89,6 +91,15 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    filterFn: (row, id, value: string[]) => {
+      const ticker = row
+        .getValue<TransferHistoryData>(id)
+        .token.ticker?.toLowerCase();
+      const actualTicker = ticker === "unknown" ? "other" : ticker;
+      return value?.some((val) =>
+        val.toLowerCase().includes(actualTicker.toLowerCase())
+      );
+    },
   }),
   columnHelper.accessor((row) => row.amount, {
     id: "amount",
@@ -126,6 +137,23 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    filterFn: (row, id, value: typeof filters.from) => {
+      let title: string;
+      const { toType, fromType } =
+        row.getValue<TransferHistoryData["wallets"]>(id);
+
+      if (toType === "Trading Account") {
+        title = "Funding -> Trading";
+      } else if (fromType === "Trading Account") {
+        title = "Trading -> Funding";
+      } else {
+        title = "Funding -> Funding";
+      }
+
+      return value?.some((val) =>
+        val.toLowerCase().includes(title.toLowerCase())
+      );
+    },
   }),
   columnHelper.accessor((row) => row.fee, {
     id: "fees",
