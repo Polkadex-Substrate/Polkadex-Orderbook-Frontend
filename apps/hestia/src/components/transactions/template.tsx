@@ -11,6 +11,7 @@ import { Help } from "./Help";
 import { TransferHistory } from "./Transfer";
 import { OpenOrders } from "./OpenOrders";
 import { OrderHistory } from "./OrderHistory";
+import { TradeHistory } from "./TradeHistory";
 
 import { Footer, Header } from "@/components/ui";
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
@@ -65,7 +66,7 @@ export function Template() {
                     <Tabs.Trigger value="orderHistory">
                       Order History
                     </Tabs.Trigger>
-                    <Tabs.Trigger value="tradeOrders">
+                    <Tabs.Trigger value="tradeHistory">
                       Trade History
                     </Tabs.Trigger>
                   </Tabs.List>
@@ -93,6 +94,13 @@ export function Template() {
               <Tabs.Content value="orderHistory" className="flex-1 flex">
                 {tradeAddress?.length ? (
                   <OrderHistory ref={tableRowsRef} maxHeight={maxHeight} />
+                ) : (
+                  <ConnectAccountWrapper />
+                )}
+              </Tabs.Content>
+              <Tabs.Content value="tradeHistory" className="flex-1 flex">
+                {tradeAddress?.length ? (
+                  <TradeHistory ref={tableRowsRef} maxHeight={maxHeight} />
                 ) : (
                   <ConnectAccountWrapper />
                 )}
