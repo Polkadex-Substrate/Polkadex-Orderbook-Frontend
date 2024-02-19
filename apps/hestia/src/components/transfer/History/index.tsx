@@ -33,7 +33,7 @@ const actionKeys = ["token", "amount", "date"];
 
 export const filters = {
   status: ["Confirmed", "Pending", "Failed", "Ready"],
-  from: ["Trading/Funding ", "Funding/Trading", "Funding/Custom"],
+  from: ["Trading/Funding", "Funding/Trading", "Funding/Custom"],
 };
 
 export const History = ({
