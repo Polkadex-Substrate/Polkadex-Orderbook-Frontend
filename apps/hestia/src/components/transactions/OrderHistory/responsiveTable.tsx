@@ -45,31 +45,35 @@ export const ResponsiveTable = ({
           <Copy value={orderId}>
             <div className="flex items-center gap-1">
               <DocumentDuplicateIcon className="w-4 h-4 text-actionInput" />
-              <Typography.Text size="sm">
+              <Typography.Text size="xs">
                 {truncateString(orderId, 6)}
               </Typography.Text>
             </div>
           </Copy>
         </ResponsiveCard>
         <ResponsiveCard label="Date">
-          {intlFormat(
-            new Date(timestamp),
-            {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            },
-            { locale: "EN" }
-          ).replace(",", "")}
+          <Typography.Text size="xs">
+            {intlFormat(
+              new Date(timestamp),
+              {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              },
+              { locale: "EN" }
+            ).replace(",", "")}
+          </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Pair">
-          <Typography.Text size="sm">{market.name}</Typography.Text>
+          <Typography.Text bold size="xs">
+            {market.name}
+          </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Type">
           <Typography.Text
-            size="sm"
+            size="xs"
             bold
             appearance={isSell ? "danger" : "success"}
             className="uppercase"
@@ -78,21 +82,21 @@ export const ResponsiveTable = ({
           </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Price">
-          <Typography.Text size="sm">
+          <Typography.Text size="xs">
             {isMarket ? "---" : price}
           </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Amount">
-          <Typography.Text size="sm">{quantity}</Typography.Text>
+          <Typography.Text size="xs">{quantity}</Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Filled">
-          <Typography.Text size="sm">{filledQuantity}</Typography.Text>
+          <Typography.Text size="xs">{filledQuantity}</Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Status">
-          <Typography.Text size="sm">{status}</Typography.Text>
+          <Typography.Text size="xs">{status}</Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Fee">
-          <Typography.Text size="sm">
+          <Typography.Text size="xs">
             {fee} {ticker}
           </Typography.Text>
         </ResponsiveCard>
