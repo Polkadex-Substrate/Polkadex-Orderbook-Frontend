@@ -119,7 +119,11 @@ export function Template() {
               <Tabs.Content value="openOrders" className="flex-1 flex">
                 {tradeAddress?.length ? (
                   <OrdersProvider>
-                    <OpenOrders ref={tableRowsRef} maxHeight={maxHeight} />
+                    <OpenOrders
+                      ref={tableRowsRef}
+                      maxHeight={maxHeight}
+                      searchTerm={searchTerm}
+                    />
                   </OrdersProvider>
                 ) : (
                   <ConnectAccountWrapper />
@@ -127,14 +131,22 @@ export function Template() {
               </Tabs.Content>
               <Tabs.Content value="orderHistory" className="flex-1 flex">
                 {tradeAddress?.length ? (
-                  <OrderHistory ref={tableRowsRef} maxHeight={maxHeight} />
+                  <OrderHistory
+                    ref={tableRowsRef}
+                    maxHeight={maxHeight}
+                    searchTerm={searchTerm}
+                  />
                 ) : (
                   <ConnectAccountWrapper />
                 )}
               </Tabs.Content>
               <Tabs.Content value="tradeHistory" className="flex-1 flex">
                 {tradeAddress?.length ? (
-                  <TradeHistory ref={tableRowsRef} maxHeight={maxHeight} />
+                  <TradeHistory
+                    ref={tableRowsRef}
+                    maxHeight={maxHeight}
+                    searchTerm={searchTerm}
+                  />
                 ) : (
                   <ConnectAccountWrapper />
                 )}

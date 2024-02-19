@@ -25,12 +25,13 @@ import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
 
 type Props = {
   maxHeight: string;
+  searchTerm: string;
 };
 
 const responsiveKeys = ["id", "filled", "date", "actions"];
 
 export const OpenOrders = forwardRef<HTMLDivElement, Props>(
-  ({ maxHeight }, ref) => {
+  ({ maxHeight, searchTerm }, ref) => {
     const { width } = useWindowSize();
     const { selectedAccount } = useConnectWalletProvider();
     const { onCancelOrder: cancelOrder } = useOrders();
@@ -60,8 +61,18 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     const responsiveView = useMemo(() => width <= 850, [width]);
 
     const openOrdersPerPage = useMemo(
-      () => allOpenOrders.slice(rowsPerPage * (page - 1), rowsPerPage * page),
-      [allOpenOrders, page, rowsPerPage]
+      () =>
+        allOpenOrders
+          .slice(rowsPerPage * (page - 1), rowsPerPage * page)
+          .filter(
+            (e) =>
+              e.market.name
+                .replace("/", "")
+                .includes(searchTerm.toUpperCase()) ||
+              e.orderId.includes(searchTerm) ||
+              e.type.includes(searchTerm.toUpperCase())
+          ),
+      [allOpenOrders, page, rowsPerPage, searchTerm]
     );
 
     const prevButtonDisabled = useMemo(() => page === 1, [page]);

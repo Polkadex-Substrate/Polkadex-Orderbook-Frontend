@@ -18,12 +18,13 @@ import { TablePagination } from "@/components/ui";
 
 type Props = {
   maxHeight: string;
+  searchTerm: string;
 };
 
 const responsiveKeys = ["id", "filled", "date", "status", "fee"];
 
 export const OrderHistory = forwardRef<HTMLDivElement, Props>(
-  ({ maxHeight }, ref) => {
+  ({ maxHeight, searchTerm }, ref) => {
     const { width } = useWindowSize();
     const [rowsPerPage, setRowsPerPage] = useState(15);
     const [page, setPage] = useState(1);
@@ -41,8 +42,18 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
     } = useOrderHistory(rowsPerPage);
 
     const orderHistoryPerPage = useMemo(
-      () => allOrderHistory.slice(rowsPerPage * (page - 1), rowsPerPage * page),
-      [allOrderHistory, page, rowsPerPage]
+      () =>
+        allOrderHistory
+          .slice(rowsPerPage * (page - 1), rowsPerPage * page)
+          .filter(
+            (e) =>
+              e.market.name
+                .replace("/", "")
+                .includes(searchTerm.toUpperCase()) ||
+              e.orderId.includes(searchTerm) ||
+              e.type.includes(searchTerm.toUpperCase())
+          ),
+      [allOrderHistory, page, rowsPerPage, searchTerm]
     );
 
     const prevButtonDisabled = useMemo(() => page === 1, [page]);
