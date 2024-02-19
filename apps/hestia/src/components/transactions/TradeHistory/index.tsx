@@ -12,12 +12,13 @@ import {
 import { columns } from "./columns";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
+import { TablePagination } from "@/components/ui";
 
 type Props = {
   maxHeight: string;
 };
 
-const responsiveKeys = ["id"];
+const responsiveKeys = ["id", "date"];
 
 export const TradeHistory = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight }, ref) => {
@@ -25,18 +26,55 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
     const [rowsPerPage, setRowsPerPage] = useState(15);
     const [page, setPage] = useState(1);
 
-    const responsiveView = useMemo(() => width <= 850, [width]);
+    const responsiveView = useMemo(() => width <= 600, [width]);
 
     const {
       isLoading,
       trades: allTradeHistory,
       isFetchingNextPage,
+      hasNextPage,
+      onFetchNextPage,
     } = useTradeHistory(rowsPerPage);
 
     const tradeHistoryPerPage = useMemo(
       () => allTradeHistory.slice(rowsPerPage * (page - 1), rowsPerPage * page),
       [allTradeHistory, page, rowsPerPage]
     );
+
+    const prevButtonDisabled = useMemo(() => page === 1, [page]);
+    const nextButtonDisabled = useMemo(() => {
+      const totalResultsForPreviousPages = rowsPerPage * (page - 1);
+      const totalResultsForCurrentPage = tradeHistoryPerPage?.length;
+
+      if (hasNextPage) return false;
+      return (
+        allTradeHistory.length <=
+        totalResultsForPreviousPages + totalResultsForCurrentPage
+      );
+    }, [
+      allTradeHistory.length,
+      hasNextPage,
+      page,
+      rowsPerPage,
+      tradeHistoryPerPage?.length,
+    ]);
+
+    const onSetRowsPerPage = async (row: number) => {
+      setPage(1);
+      setRowsPerPage(row);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    };
+
+    const onPrevPage = () => {
+      if (prevButtonDisabled) return;
+      setPage(page - 1);
+    };
+
+    const onNextPage = async () => {
+      if (nextButtonDisabled) return;
+      await onFetchNextPage();
+      setPage(page + 1);
+    };
 
     const table = useReactTable({
       data: tradeHistoryPerPage,
@@ -146,6 +184,16 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
                 </Table>
               </div>
             </Loading.Spinner>
+            <TablePagination
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onSetRowsPerPage={onSetRowsPerPage}
+              onNextPage={onNextPage}
+              onPrevPage={onPrevPage}
+              prevButtonDisabled={prevButtonDisabled}
+              nextButtonDisabled={nextButtonDisabled}
+              ref={ref}
+            />
           </div>
         </div>
       </>

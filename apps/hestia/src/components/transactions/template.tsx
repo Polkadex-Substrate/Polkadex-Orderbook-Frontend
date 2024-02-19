@@ -4,8 +4,9 @@ import { Typography, Input, Tabs } from "@polkadex/ux";
 import { useMemo } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { OrdersProvider } from "@orderbook/core/providers";
-import { useElementSize } from "usehooks-ts";
+import { useElementSize, useWindowSize } from "usehooks-ts";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import classNames from "classnames";
 
 import { Help } from "./Help";
 import { TransferHistory } from "./Transfer";
@@ -19,11 +20,14 @@ import { ConnectAccountWrapper } from "@/components/ui/ReadyToUse";
 
 // useElementSize Deprecated -> useResizeObserver
 export function Template() {
+  const { width } = useWindowSize();
   const [headerRef, { height: headerHeight = 0 }] = useElementSize();
   const [footerRef, { height: footerHeight = 0 }] = useElementSize();
   const [helpRef, { height: helpeight = 0 }] = useElementSize();
   const [tableRowsRef, { height: tableRowsHeight = 0 }] = useElementSize();
   const [overviewRef, { height: overviewHeight = 0 }] = useElementSize();
+
+  const responsiveView = useMemo(() => width <= 675, [width]);
 
   const maxHeight = useMemo(
     () =>
@@ -59,7 +63,12 @@ export function Template() {
                   </Typography.Text>
                   <InformationCircleIcon className="w-6 h-6 text-primary" />
                 </div>
-                <div className="flex items-center justify-between gap-2 border-b border-primary px-4 w-full">
+                <div
+                  className={classNames(
+                    "flex items-center justify-between gap-2 border-b border-primary px-4 w-full",
+                    responsiveView && "flex-col"
+                  )}
+                >
                   <Tabs.List className="py-2">
                     <Tabs.Trigger value="transfer">Transfer</Tabs.Trigger>
                     <Tabs.Trigger value="openOrders">Open Orders</Tabs.Trigger>
@@ -71,7 +80,10 @@ export function Template() {
                     </Tabs.Trigger>
                   </Tabs.List>
                   <div>
-                    <Input.Search placeholder="Search transactions.." />
+                    <Input.Search
+                      className="py-2"
+                      placeholder="Search transactions.."
+                    />
                   </div>
                 </div>
               </div>
