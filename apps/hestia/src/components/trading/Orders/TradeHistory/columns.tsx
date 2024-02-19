@@ -65,7 +65,7 @@ export const columns = [
           size="xs"
           bold
           appearance={isSell ? "danger" : "success"}
-          className="capitalize"
+          className="uppercase"
         >
           {isSell ? "Sell" : "Buy"}
         </Typography.Text>

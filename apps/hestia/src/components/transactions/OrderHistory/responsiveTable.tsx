@@ -61,7 +61,7 @@ export const ResponsiveTable = ({
               minute: "2-digit",
             },
             { locale: "EN" }
-          )}
+          ).replace(",", "")}
         </ResponsiveCard>
         <ResponsiveCard label="Pair">{market.name}</ResponsiveCard>
         <ResponsiveCard label="Type">

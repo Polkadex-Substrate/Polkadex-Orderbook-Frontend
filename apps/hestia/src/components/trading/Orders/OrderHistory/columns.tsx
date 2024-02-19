@@ -69,7 +69,7 @@ export const columns = [
           size="xs"
           bold
           appearance={isSell ? "danger" : "success"}
-          className="capitalize"
+          className="uppercase"
         >
           {title}
         </Typography.Text>
@@ -127,9 +127,7 @@ export const columns = [
   orderHistoryColumnHelper.accessor((row) => row, {
     id: "status",
     cell: (e) => (
-      <Typography.Text size="xs" className="capitalize">
-        {e.getValue().status.toLowerCase()}
-      </Typography.Text>
+      <Typography.Text size="xs">{e.getValue().status}</Typography.Text>
     ),
     header: () => (
       <Typography.Text size="xs" appearance="primary">
