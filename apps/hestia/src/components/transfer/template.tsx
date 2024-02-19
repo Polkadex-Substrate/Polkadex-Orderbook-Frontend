@@ -6,6 +6,7 @@ import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useTransactions, useTransferHistory } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { usePathname, useRouter } from "next/navigation";
 
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 
@@ -24,8 +25,12 @@ const sleep = async (ms: number) =>
   await new Promise((resolve) => setTimeout(resolve, ms));
 
 export function Template() {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const { headerRef, footerRef, formwRef, helpRef, tableTitleRef } =
     useSizeProvider();
+
   const {
     onChangeAsset,
     selectedAsset,
@@ -33,6 +38,7 @@ export function Template() {
     onAssetsInteraction,
     type,
     onChangeType,
+    createQueryString,
   } = useTransfer();
 
   const { readyWithdrawals } = useTransactions();
@@ -78,7 +84,10 @@ export function Template() {
                 selectedAsset={selectedAsset}
                 onAssetsInteraction={onAssetsInteraction}
                 type={type}
-                onChangeType={(e) => onChangeType(e)}
+                onChangeType={(e) => {
+                  onChangeType(e);
+                  router.push(pathname + "?" + createQueryString("type", e));
+                }}
                 refetch={async () => {
                   await sleep(55000);
                   await refetch();

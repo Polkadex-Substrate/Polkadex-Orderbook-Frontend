@@ -2,8 +2,10 @@
 
 import { Dropdown, Typography } from "@polkadex/ux";
 import classNames from "classnames";
-import { Dispatch, PropsWithChildren, SetStateAction, useRef } from "react";
+import { PropsWithChildren, useRef } from "react";
 import { useResizeObserver } from "usehooks-ts";
+
+import { SwitchType } from "@/hooks";
 export const Card = ({
   label,
   title,
@@ -16,7 +18,7 @@ export const Card = ({
   title: string;
   active?: boolean;
   dropdown?: boolean;
-  onChangeDirection?: Dispatch<SetStateAction<boolean>>;
+  onChangeDirection?: (e: SwitchType) => void;
 }>) => {
   const ref = useRef<HTMLDivElement>(null);
   const { width = 0 } = useResizeObserver({
@@ -42,10 +44,10 @@ export const Card = ({
           <Dropdown.Icon />
         </Dropdown.Trigger>
         <Dropdown.Content sideOffset={-1} style={{ width }}>
-          <Dropdown.Item onClick={() => onChangeDirection?.(false)}>
+          <Dropdown.Item onClick={() => onChangeDirection?.("deposit")}>
             Trading Account
           </Dropdown.Item>
-          <Dropdown.Item onClick={() => onChangeDirection?.(true)}>
+          <Dropdown.Item onClick={() => onChangeDirection?.("transfer")}>
             Another Funding Account
           </Dropdown.Item>
         </Dropdown.Content>

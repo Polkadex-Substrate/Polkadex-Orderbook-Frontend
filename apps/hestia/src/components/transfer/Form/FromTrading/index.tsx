@@ -10,6 +10,8 @@ import { AvailableMessage } from "../availableMessage";
 
 import { SelectFundingDropdown } from "./selectFundingDropdown";
 
+import { SwitchType } from "@/hooks";
+
 export const FromTrading = ({
   isLocalAccountPresent,
   isExtensionAccountPresent,
@@ -23,6 +25,7 @@ export const FromTrading = ({
   onChangeDirection,
   selectedExtensionAccount,
   setSelectedExtensionAccount,
+  type,
 }: {
   fromFunding?: boolean;
   extensionAccountName?: string;
@@ -33,28 +36,32 @@ export const FromTrading = ({
   isExtensionAccountPresent?: boolean;
   isLocalAccountPresent?: boolean;
   isFundingToFunding?: boolean;
-  onChangeDirection: Dispatch<SetStateAction<boolean>>;
+  onChangeDirection: (e: SwitchType) => void;
   selectedExtensionAccount: ExtensionAccount | null;
   setSelectedExtensionAccount: Dispatch<
     SetStateAction<ExtensionAccount | null>
   >;
+  type: SwitchType;
 }) => {
   const accountNotPresent =
     (fromFunding && !isLocalAccountPresent) ||
     (!fromFunding && !isExtensionAccountPresent);
 
-  const title = isFundingToFunding
-    ? "Another Funding Account"
-    : "Trading Account";
-
   const balance = fromFunding ? localAccountBalance : extensionAccountBalance;
   const shortAddress = truncateString(extensionAccountAddress ?? "");
 
+  const typeTitle: Record<SwitchType, string> = {
+    deposit: "Trading Account",
+    withdraw: "Funding Account",
+    transfer: "Another Funding Account",
+  };
+
+  const withDropown = type === "deposit" || type === "transfer";
   return (
     <Card
       label="To"
-      title={fromFunding ? title : "Funding Account"}
-      dropdown={fromFunding}
+      title={typeTitle[type]}
+      dropdown={withDropown}
       onChangeDirection={onChangeDirection}
     >
       <RenderConditional

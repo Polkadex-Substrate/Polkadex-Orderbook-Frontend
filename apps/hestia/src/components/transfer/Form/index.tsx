@@ -63,7 +63,6 @@ export const Form = ({
   assetsInteraction?: boolean;
   refetch: () => Promise<void>;
 }) => {
-  const [fundingToFunding, setFundingToFunding] = useState(false);
   const [cardFocus, setCardFocus] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedExtensionAccount, setSelectedExtensionAccount] =
@@ -129,7 +128,7 @@ export const Form = ({
 
   const validationSchema = useMemo(
     () =>
-      isTransferFromFunding || fundingToFunding
+      isTransferFromFunding || type === "transfer"
         ? depositValidations(
             Number(selectedAsset?.onChainBalance) ?? 0,
             isPolkadexToken,
@@ -142,7 +141,7 @@ export const Form = ({
       isTransferFromFunding,
       selectedAsset?.free_balance,
       selectedAsset?.onChainBalance,
-      fundingToFunding,
+      type,
     ]
   );
 
@@ -215,7 +214,7 @@ export const Form = ({
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: fundingToFunding ? onSubmitTransfer : onHandleSubmit,
+    onSubmit: type === "transfer" ? onSubmitTransfer : onHandleSubmit,
   });
   const isLocalAccountPresent = !!Object.keys(selectedAccount ?? {}).length;
   const isExtensionAccountPresent = !!Object.keys(selectedWallet ?? {}).length;
@@ -225,9 +224,8 @@ export const Form = ({
     : isLocalAccountPresent;
 
   const formLoading = isTransferFromFunding ? depositLoading : withdrawLoading;
-  const loading = fundingToFunding
-    ? transferLoading || fundgLoading
-    : formLoading;
+  const loading =
+    type === "transfer" ? transferLoading || fundgLoading : formLoading;
 
   const disabled = !hasAccount || loading || !(isValid && dirty);
 
@@ -290,8 +288,12 @@ export const Form = ({
               extensionAccountBalance={selectedAsset?.onChainBalance}
               localAccountBalance={selectedAsset?.free_balance}
               selectedAssetTicker={selectedAsset?.ticker}
-              onChangeDirection={setFundingToFunding}
-              isFundingToFunding={fundingToFunding}
+              onChangeDirection={(e) => {
+                resetForm();
+                onChangeType(e);
+              }}
+              isFundingToFunding={type === "transfer"}
+              type={type}
               selectedExtensionAccount={selectedExtensionAccount}
               setSelectedExtensionAccount={setSelectedExtensionAccount}
             />
@@ -302,7 +304,7 @@ export const Form = ({
               onClick={() => onAssetsInteraction()}
               className="flex items-center justify-between gap-4 px-5 py-4 max-sm:w-full max-sm:border-b sm:border-r border-primary hover:bg-level-1 duration-300 transition-colors min-w-60"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-1">
                 <Skeleton
                   loading={!selectedAsset?.ticker}
                   className="w-10 h-10"
@@ -317,13 +319,13 @@ export const Form = ({
                 </Skeleton>
                 <div
                   className={classNames(
-                    "flex flex-col",
+                    "flex flex-col flex-1",
                     !selectedAsset && "gap-2"
                   )}
                 >
                   <Skeleton
                     loading={!selectedAsset?.ticker}
-                    className="w-20 h-4"
+                    className="flex-1 min-h-4"
                   >
                     <Typography.Text size="md" bold>
                       {selectedAsset?.ticker}
@@ -331,7 +333,7 @@ export const Form = ({
                   </Skeleton>
                   <Skeleton
                     loading={!selectedAsset?.ticker}
-                    className="w-10 h-4"
+                    className="flex-1 min-h-4"
                   >
                     <Typography.Text
                       appearance="primary"
@@ -347,7 +349,6 @@ export const Form = ({
                 <ChevronDownIcon className="w-4 h-4" />
               </div>
             </div>
-
             <div
               className={classNames(
                 "w-full flex items-center justify-between gap-2 pr-4 h-full",
