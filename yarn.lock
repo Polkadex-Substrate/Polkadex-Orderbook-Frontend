@@ -9495,7 +9495,7 @@ file-entry-cache@^6.0.1:
   dependencies:
     flat-cache "^3.0.4"
 
-file-saver@^2.0.5:
+file-saver@^2.0.2, file-saver@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/file-saver/-/file-saver-2.0.5.tgz#d61cfe2ce059f414d899e9dd6d4107ee25670c38"
   integrity sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==
@@ -12513,10 +12513,12 @@ react-aria@^3.18.0:
     "@react-aria/visually-hidden" "^3.8.9"
     "@react-types/shared" "^3.22.0"
 
-react-csv@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/react-csv/-/react-csv-2.2.2.tgz#5bbf0d72a846412221a14880f294da9d6def9bfb"
-  integrity sha512-RG5hOcZKZFigIGE8LxIEV/OgS1vigFQT4EkaHeKgyuCbUAu9Nbd/1RYq++bJcJJ9VOqO/n9TZRADsXNDR4VEpw==
+react-csv-downloader@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-csv-downloader/-/react-csv-downloader-3.1.0.tgz#59bd04ff832019156054b6a200b0e680e841ac87"
+  integrity sha512-ART4CNMU89Y5OZQp9gR3IUlVt541djWwRfokQY+CYsGQjHNZFJAk6FvgOwLUNG0o/CxeUdexYjnMMFinMv4Xjg==
+  dependencies:
+    file-saver "^2.0.2"
 
 react-date-range@^1.4.0:
   version "1.4.0"
