@@ -3,17 +3,37 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
 
-const tradeHistoryColumnHelper = createColumnHelper<Trade>();
+const columnHelper = createColumnHelper<Trade>();
 
-export const columns = [
-  tradeHistoryColumnHelper.accessor((row) => row, {
+export const columns = () => [
+  columnHelper.accessor((row) => row, {
+    id: "id",
+    cell: (e) => {
+      return (
+        <Copy value={e.getValue().tradeId}>
+          <div className="flex items-center gap-1">
+            <DocumentDuplicateIcon className="w-4 h-4 text-actionInput" />
+            <Typography.Text size="xs">
+              {truncateString(e.getValue().tradeId, 4)}
+            </Typography.Text>
+          </div>
+        </Copy>
+      );
+    },
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        ID
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => {
       const formattedDate = new Intl.DateTimeFormat("en-US", {
-        month: "numeric",
-        day: "2-digit",
-        hour: "numeric",
-        minute: "numeric",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
       })
         .format(e.getValue().timestamp)
         .replace(",", "");
@@ -41,7 +61,7 @@ export const columns = [
     footer: (e) => e.column.id,
   }),
 
-  tradeHistoryColumnHelper.accessor((row) => row, {
+  columnHelper.accessor((row) => row, {
     id: "pair",
     cell: (e) => (
       <Typography.Text bold size="xs">
@@ -55,7 +75,7 @@ export const columns = [
     ),
     footer: (e) => e.column.id,
   }),
-  tradeHistoryColumnHelper.accessor((row) => row, {
+  columnHelper.accessor((row) => row, {
     id: "type",
     cell: (e) => {
       const isSell = e.getValue().side === "Ask";
@@ -78,7 +98,7 @@ export const columns = [
     ),
     footer: (e) => e.column.id,
   }),
-  tradeHistoryColumnHelper.accessor((row) => row, {
+  columnHelper.accessor((row) => row, {
     id: "price",
     cell: (e) => {
       return <Typography.Text size="xs">{e.getValue().price}</Typography.Text>;
@@ -90,7 +110,7 @@ export const columns = [
     ),
     footer: (e) => e.column.id,
   }),
-  tradeHistoryColumnHelper.accessor((row) => row, {
+  columnHelper.accessor((row) => row, {
     id: "amount",
     cell: (e) => {
       return <Typography.Text size="xs">{e.getValue().qty}</Typography.Text>;
@@ -98,27 +118,6 @@ export const columns = [
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Amount
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  tradeHistoryColumnHelper.accessor((row) => row, {
-    id: "id",
-    cell: (e) => {
-      return (
-        <Copy value={e.getValue().tradeId}>
-          <div className="flex items-center gap-1">
-            <DocumentDuplicateIcon className="w-4 h-4 text-actionInput" />
-            <Typography.Text size="xs">
-              {truncateString(e.getValue().tradeId, 4)}
-            </Typography.Text>
-          </div>
-        </Copy>
-      );
-    },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        ID
       </Typography.Text>
     ),
     footer: (e) => e.column.id,

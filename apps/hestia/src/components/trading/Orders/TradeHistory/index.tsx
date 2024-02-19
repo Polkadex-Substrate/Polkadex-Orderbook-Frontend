@@ -24,16 +24,14 @@ import { TradeHistoryResponsiveCard } from "../responsiveCard";
 import { columns } from "./columns";
 
 export const TradeHistoryTable = ({
-  market,
   filters,
   maxHeight,
 }: {
-  market: string;
   filters: Ifilters;
   maxHeight: string;
 }) => {
   const { isLoading, trades, hasNextPage, onFetchNextPage, error } =
-    useTradeHistory(market, DEFAULT_BATCH_LIMIT, filters);
+    useTradeHistory(DEFAULT_BATCH_LIMIT, filters);
   const { width } = useWindowSize();
   const table = useReactTable({
     data: trades,

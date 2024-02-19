@@ -97,7 +97,7 @@ export const columns = ({
     footer: (e) => e.column.id,
   }),
   openOrderColumnHelper.accessor((row) => row, {
-    id: "total",
+    id: "amount",
     cell: (e) => {
       return (
         <Typography.Text size="xs">{e.getValue().quantity}</Typography.Text>
@@ -105,7 +105,7 @@ export const columns = ({
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Total
+        Amount
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
