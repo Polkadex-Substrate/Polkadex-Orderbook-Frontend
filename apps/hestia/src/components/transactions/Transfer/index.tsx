@@ -21,7 +21,7 @@ import { TablePagination } from "@/components/ui";
 
 type Props = { maxHeight: string };
 
-const responsiveKeys = ["fees", "date", "wallets"];
+const responsiveKeys = ["fees", "wallets"];
 
 export const TransferHistory = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight }, ref) => {
@@ -30,7 +30,7 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
     const [responsiveState, setResponsiveState] = useState(false);
     const [responsiveData, setResponsiveData] =
       useState<TransferHistoryData | null>(null);
-    const responsiveView = useMemo(() => width <= 1050, [width]);
+    const responsiveView = useMemo(() => width <= 850, [width]);
 
     const {
       selectedAddresses: { mainAddress },

@@ -50,7 +50,7 @@ export const columns = () => [
       return (
         <Tooltip>
           <Tooltip.Trigger>
-            <Typography.Text size="sm">{formattedDate}</Typography.Text>
+            <Typography.Text size="xs">{formattedDate}</Typography.Text>
           </Tooltip.Trigger>
           <Tooltip.Content>
             <Typography.Text>
@@ -92,7 +92,7 @@ export const columns = () => [
   }),
   columnHelper.accessor((row) => row.amount, {
     id: "amount",
-    cell: (e) => <Typography.Text size="sm">{e.getValue()}</Typography.Text>,
+    cell: (e) => <Typography.Text size="xs">{e.getValue()}</Typography.Text>,
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Amount
@@ -128,7 +128,7 @@ export const columns = () => [
   columnHelper.accessor((row) => row.fee, {
     id: "fees",
     cell: (e) => (
-      <Typography.Text size="sm">{e.getValue()} PDEX</Typography.Text>
+      <Typography.Text size="xs">{e.getValue()} PDEX</Typography.Text>
     ),
     header: () => (
       <Typography.Text size="xs" appearance="primary">
@@ -140,14 +140,14 @@ export const columns = () => [
   columnHelper.accessor((row) => row.hash, {
     id: "hash",
     cell: (e) => {
-      const shortLink = truncateString(e.getValue(), 10);
+      const shortLink = truncateString(e.getValue(), 5);
       return (
         <Link
           href={`https://polkadex.subscan.io/extrinsic/${e.getValue()}`}
           target="_blank"
         >
           <Typography.Text
-            size="sm"
+            size="xs"
             appearance="primary"
             className="flex items-center gap-1"
           >

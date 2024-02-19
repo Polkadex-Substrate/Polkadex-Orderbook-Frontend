@@ -39,7 +39,7 @@ const ResponsiveTable = ({
       </Drawer.Title>
       <Drawer.Content className="flex flex-col gap-4 p-4">
         <ResponsiveCard label="Date">
-          <Typography.Text size="sm">
+          <Typography.Text size="xs">
             {intlFormat(
               time,
               {
@@ -56,13 +56,13 @@ const ResponsiveTable = ({
         <ResponsiveCard label="Token">
           <div className="flex items-center gap-1">
             <Token name={token.ticker} size="xs" />
-            <Typography.Text size="sm">
+            <Typography.Text size="xs">
               {token.ticker ?? "Unknown"}
             </Typography.Text>
           </div>
         </ResponsiveCard>
         <ResponsiveCard label="Amount">
-          <Typography.Text size="sm">{amount}</Typography.Text>
+          <Typography.Text size="xs">{amount}</Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="From/To">
           <CustomTransactionDirection
@@ -76,7 +76,7 @@ const ResponsiveTable = ({
           />
         </ResponsiveCard>
         <ResponsiveCard label="Fees">
-          <Typography.Text size="sm">{fee} PDEX</Typography.Text>
+          <Typography.Text size="xs">{fee} PDEX</Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Hash">
           <Link
