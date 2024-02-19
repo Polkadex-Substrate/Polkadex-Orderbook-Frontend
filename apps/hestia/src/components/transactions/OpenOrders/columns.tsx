@@ -11,6 +11,8 @@ import {
 import { OrderCancellation } from "@orderbook/core/providers/user/orders";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 
+import { filters } from "./filters";
+
 const columnHelper = createColumnHelper<Order>();
 
 export const columns = ({
@@ -83,6 +85,12 @@ export const columns = ({
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    filterFn: (row, id, value: string[]) =>
+      value?.some((val) =>
+        val
+          .toLowerCase()
+          .includes(row.getValue<Order>(id).market.name.toLowerCase())
+      ),
   }),
   columnHelper.accessor((row) => row, {
     id: "type",
@@ -106,6 +114,13 @@ export const columns = ({
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    filterFn: (row, id, value: typeof filters.type) => {
+      const isSell = row.getValue<Order>(id).side === "Ask";
+      const title = `${row.getValue<Order>(id).type}/${isSell ? "Sell" : "Buy"}`;
+      return value?.some((val) =>
+        val.toLowerCase().includes(title.toLowerCase())
+      );
+    },
   }),
   columnHelper.accessor((row) => row, {
     id: "price",

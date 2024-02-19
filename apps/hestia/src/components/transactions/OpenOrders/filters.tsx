@@ -9,9 +9,9 @@ import classNames from "classnames";
 import { useMemo } from "react";
 import { useWindowSize } from "usehooks-ts";
 
-import { FacetedFilter } from "./facetedFilters";
+import { FacetedFilter } from "../facetedFilters";
 
-const filters = {
+export const filters = {
   type: ["LIMIT/BUY", "LIMIT/SELL", "MARKET/BUY", "MARKET/SELL"],
 };
 

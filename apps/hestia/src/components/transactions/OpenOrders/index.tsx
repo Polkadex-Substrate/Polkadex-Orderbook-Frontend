@@ -5,8 +5,13 @@ import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { useOpenOrders } from "@orderbook/core/hooks";
 import { GenericMessage, Loading, Modal, Table } from "@polkadex/ux";
 import {
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -18,7 +23,7 @@ import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
 
 import { columns } from "./columns";
 import { ResponsiveTable } from "./responsiveTable";
-import { Filters } from "./Filters";
+import { Filters } from "./filters";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
@@ -43,6 +48,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     );
     const [responsiveState, setResponsiveState] = useState(false);
     const [responsiveData, setResponsiveData] = useState<Order | null>(null);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
     const [isFetchingNextPage, setIsfetchingNext] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -94,6 +100,12 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
 
     const table = useReactTable({
       data: openOrdersPerPage,
+      state: { columnFilters },
+      onColumnFiltersChange: setColumnFilters,
+      getSortedRowModel: getSortedRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
+      getFacetedRowModel: getFacetedRowModel(),
+      getFacetedUniqueValues: getFacetedUniqueValues(),
       columns: columns({ onCancelOrder }),
       getCoreRowModel: getCoreRowModel(),
     });
