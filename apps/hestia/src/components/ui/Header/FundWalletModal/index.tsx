@@ -27,7 +27,7 @@ export const FundWalletModal = ({
     >
       <Modal.Title className="flex justify-between items-center py-4 pl-4">
         <Typography.Text size="lg" bold>
-          Fund Wallet
+          Fund Account
         </Typography.Text>
         <Button.Icon
           variant="ghost"

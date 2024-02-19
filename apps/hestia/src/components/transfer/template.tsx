@@ -126,7 +126,7 @@ export function Template() {
                   <GenericMessage
                     title="Connect Trading Account"
                     illustration="ConnectAccount"
-                    onClick={() => onToogleConnectExtension()}
+                    className="bg-level-0 border-b border-primary"
                   />
                 )}
               </div>
