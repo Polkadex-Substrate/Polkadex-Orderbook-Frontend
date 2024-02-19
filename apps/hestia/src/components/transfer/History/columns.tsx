@@ -161,7 +161,9 @@ export const columns = [
             </Link>
           </Typography.Text>
         </div>
-      ) : null;
+      ) : (
+        <Typography.Text size="sm">-</Typography.Text>
+      );
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">

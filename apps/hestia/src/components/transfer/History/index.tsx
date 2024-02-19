@@ -185,7 +185,7 @@ export const History = ({
     }
   }, [responsiveState, responsiveView]);
 
-  if (loading || subscanLoading) return <SkeletonCollection />;
+  if (loading || (mainAddress && subscanLoading)) return <SkeletonCollection />;
   return (
     <Fragment>
       <ResponsiveTable
