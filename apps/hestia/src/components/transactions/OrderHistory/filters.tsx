@@ -13,6 +13,7 @@ import { FacetedFilter } from "../facetedFilters";
 
 export const filters = {
   type: ["LIMIT/BUY", "LIMIT/SELL", "MARKET/BUY", "MARKET/SELL"],
+  status: ["CLOSED", "CANCELLED"],
 };
 
 interface FiltersProps<TData> {
@@ -25,7 +26,7 @@ export const Filters = <TData,>({
   table,
 }: FiltersProps<TData>) => {
   const { width } = useWindowSize();
-  const responsiveFilter = useMemo(() => width <= 600, [width]);
+  const responsiveFilter = useMemo(() => width <= 780, [width]);
   const hasFilters = table.getState().columnFilters.length > 0;
 
   return (
@@ -60,6 +61,14 @@ export const Filters = <TData,>({
                     withoutBorder
                   />
                 )}
+                {table.getColumn("status") && (
+                  <FacetedFilter
+                    column={table.getColumn("status")}
+                    title="Status"
+                    values={filters.status}
+                    withoutBorder
+                  />
+                )}
               </Popover.Content>
             </Popover>
           </>
@@ -77,6 +86,13 @@ export const Filters = <TData,>({
                 column={table.getColumn("type")}
                 title="Type"
                 values={filters.type}
+              />
+            )}
+            {table.getColumn("status") && (
+              <FacetedFilter
+                column={table.getColumn("status")}
+                title="Status"
+                values={filters.status}
               />
             )}
           </div>
