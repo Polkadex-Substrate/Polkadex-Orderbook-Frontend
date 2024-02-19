@@ -1,3 +1,5 @@
+"use client";
+
 import { Modal, Multistep } from "@polkadex/ux";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { TradeAccount } from "@orderbook/core/providers/types";
