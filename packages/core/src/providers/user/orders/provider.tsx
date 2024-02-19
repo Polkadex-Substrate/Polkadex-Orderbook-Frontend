@@ -102,6 +102,10 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
 
   const onCancelOrder = async (payload: A.OrderCancelFetch["payload"]) => {
     try {
+      settingsState.onHandleNotification({
+        type: "Information",
+        message: "Cancelling order...",
+      });
       dispatch(A.orderCancelFetch(payload));
       const { orderId, base, quote } = payload;
       const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
