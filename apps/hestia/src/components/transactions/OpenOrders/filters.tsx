@@ -1,17 +1,14 @@
-import {
-  ArrowDownTrayIcon,
-  EllipsisVerticalIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { Button, Icon, Popover, Typography } from "@polkadex/ux";
 import { Table } from "@tanstack/react-table";
 import classNames from "classnames";
 import { useMemo } from "react";
 import { useWindowSize } from "usehooks-ts";
-import CSVLink from "react-csv-downloader";
 
 import { FacetedFilter } from "../facetedFilters";
+
+import { Export } from "./export";
 
 export const filters = {
   type: ["LIMIT/BUY", "LIMIT/SELL", "MARKET/BUY", "MARKET/SELL"],
@@ -23,16 +20,6 @@ interface FiltersProps<TData> {
   allOpenOrders: Order[];
 }
 
-const csvColumns = [
-  "orderId",
-  "date",
-  "pair",
-  "type",
-  "price",
-  "amount",
-  "filled",
-].map((c) => ({ id: c }));
-
 export const Filters = <TData,>({
   availablePairs,
   table,
@@ -41,24 +28,6 @@ export const Filters = <TData,>({
   const { width } = useWindowSize();
   const responsiveFilter = useMemo(() => width <= 600, [width]);
   const hasFilters = table.getState().columnFilters.length > 0;
-  const exportedFileName = `Open_Orders_${new Date().getTime()}_Polkadex_Orderbook`;
-
-  const computeData = () => {
-    const data = allOpenOrders.map((order) => {
-      const isSell = order.side === "Ask";
-      const type = `${order.type}/${isSell ? "SELL" : "BUY"}`;
-      return {
-        orderId: order.orderId,
-        date: order.timestamp.toLocaleString().replaceAll(",", ""),
-        pair: order.market.name,
-        type,
-        price: String(order.price),
-        amount: order.quantity,
-        filled: order.filledQuantity,
-      };
-    });
-    return data;
-  };
 
   return (
     <div className="flex items-center gap-5 justify-between px-4 py-1.5">
@@ -128,16 +97,7 @@ export const Filters = <TData,>({
         )}
       </div>
       <div className="flex-auto flex items-center justify-end">
-        <CSVLink
-          columns={csvColumns}
-          datas={computeData}
-          filename={exportedFileName}
-        >
-          <Button.Outline appearance="secondary" size="sm">
-            <ArrowDownTrayIcon className="w-4 h-4 inline-block mr-1" />
-            Export
-          </Button.Outline>
-        </CSVLink>
+        <Export allOpenOrders={allOpenOrders} />
       </div>
     </div>
   );
