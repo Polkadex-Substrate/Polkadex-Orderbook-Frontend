@@ -58,7 +58,7 @@ export function Template() {
       >
         <Tabs
           defaultValue={searchParams.get("tab") || "transfer"}
-          onValueChange={(e) => router.replace(`/transactions/?tab=${e}`)}
+          onValueChange={(e) => router.replace(`/history/?tab=${e}`)}
         >
           <Header ref={headerRef} />
           <main className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-screen-2xl m-auto">
