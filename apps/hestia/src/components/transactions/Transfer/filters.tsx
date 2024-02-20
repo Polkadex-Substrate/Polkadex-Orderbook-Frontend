@@ -1,16 +1,13 @@
-import {
-  ArrowDownTrayIcon,
-  EllipsisVerticalIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Button, Icon, Popover, Typography } from "@polkadex/ux";
 import { Table } from "@tanstack/react-table";
 import classNames from "classnames";
 import { useMemo } from "react";
 import { useWindowSize } from "usehooks-ts";
-import CSVLink from "react-csv-downloader";
 
 import { FacetedFilter } from "../facetedFilters";
+
+import { Export } from "./export";
 
 export const filters = {
   from: ["Trading -> Funding", "Funding -> Trading", "Funding -> Funding"],
@@ -28,7 +25,6 @@ export const Filters = <TData,>({
   const { width } = useWindowSize();
   const responsiveFilter = useMemo(() => width <= 600, [width]);
   const hasFilters = table.getState().columnFilters.length > 0;
-  const exportedFileName = `Transfer_History_${new Date().getTime()}_Polkadex_Orderbook`;
 
   return (
     <div className="flex items-center gap-5 justify-between px-4 py-1.5">
@@ -98,12 +94,7 @@ export const Filters = <TData,>({
         )}
       </div>
       <div className="flex-auto flex items-center justify-end">
-        <CSVLink datas={[]} filename={exportedFileName}>
-          <Button.Outline appearance="secondary" size="sm" disabled>
-            <ArrowDownTrayIcon className="w-4 h-4 inline-block mr-1" />
-            Export
-          </Button.Outline>
-        </CSVLink>
+        <Export table={table} />
       </div>
     </div>
   );
