@@ -25,6 +25,7 @@ export const ResponsiveTable = ({
     type,
     quantity,
     filledQuantity,
+    averagePrice,
     status,
     fee,
   } = data;
@@ -91,6 +92,9 @@ export const ResponsiveTable = ({
         </ResponsiveCard>
         <ResponsiveCard label="Filled">
           <Typography.Text size="xs">{filledQuantity}</Typography.Text>
+        </ResponsiveCard>
+        <ResponsiveCard label="Average Filled Price">
+          <Typography.Text size="xs">{averagePrice}</Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Status">
           <Typography.Text size="xs">{status}</Typography.Text>

@@ -124,6 +124,18 @@ export const columns = [
     footer: (e) => e.column.id,
   }),
   orderHistoryColumnHelper.accessor((row) => row, {
+    id: "averageFilledPrice",
+    cell: (e) => (
+      <Typography.Text size="xs">{e.getValue().averagePrice}</Typography.Text>
+    ),
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Avg. Filled Price
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  orderHistoryColumnHelper.accessor((row) => row, {
     id: "status",
     cell: (e) => (
       <Typography.Text size="xs">{e.getValue().status}</Typography.Text>
