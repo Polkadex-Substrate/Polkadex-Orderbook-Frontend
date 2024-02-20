@@ -2,10 +2,10 @@ import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import { exportTradeHistory } from "@orderbook/core/helpers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
-import { Button } from "@polkadex/ux";
+import { Button, Tooltip, Typography } from "@polkadex/ux";
 import { useState } from "react";
 import CSVLink from "react-csv-downloader";
+import { endOfDay, subMonths } from "date-fns";
 
 const csvColumns = ["tradeId", "date", "pair", "type", "price", "amount"].map(
   (c) => ({
@@ -19,7 +19,6 @@ export const Export = () => {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
-  const { dateFrom, dateTo } = useSessionProvider();
   const { onHandleAlert, onHandleError, onHandleNotification } =
     useSettingsProvider();
 
@@ -30,6 +29,9 @@ export const Export = () => {
       message: "Gettting data ready...",
     });
     try {
+      const now = new Date();
+      const dateFrom = subMonths(now, 6);
+      const dateTo = endOfDay(now);
       const allTradeHistory = await exportTradeHistory(
         tradeAddress,
         dateFrom,
@@ -62,10 +64,19 @@ export const Export = () => {
         onHandleError(`Some error occured: ${(e as Error).message}`)
       }
     >
-      <Button.Outline appearance="secondary" size="sm" disabled={loading}>
-        <ArrowDownTrayIcon className="w-4 h-4 inline-block mr-1" />
-        {loading ? "Exporting..." : "Export"}
-      </Button.Outline>
+      <Tooltip>
+        <Tooltip.Trigger>
+          <Button.Outline appearance="secondary" size="sm" disabled={loading}>
+            <ArrowDownTrayIcon className="w-4 h-4 inline-block mr-1" />
+            {loading ? "Exporting..." : "Export"}
+          </Button.Outline>
+        </Tooltip.Trigger>
+        <Tooltip.Content side="left" className="px-2 py-1">
+          <Typography.Text size="sm" appearance="primary">
+            * Last 6 months
+          </Typography.Text>
+        </Tooltip.Content>
+      </Tooltip>
     </CSVLink>
   );
 };

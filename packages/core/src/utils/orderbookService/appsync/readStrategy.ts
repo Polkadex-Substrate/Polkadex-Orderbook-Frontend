@@ -457,9 +457,11 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     if (!orderHistoryQueryResult) {
       return [];
     }
-    const orderHistory = orderHistoryQueryResult?.map((item): Order => {
-      return this.mapApiOrderToOrder(item, this._marketList);
-    });
+    const orderHistory = orderHistoryQueryResult
+      ?.filter((item) => this._marketList.find((x) => x.id === item?.m))
+      ?.map((item): Order => {
+        return this.mapApiOrderToOrder(item, this._marketList);
+      });
     return orderHistory || [];
   }
 
@@ -480,25 +482,27 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     if (!queryResult) {
       return [];
     }
-    const trades = queryResult?.map((item: UserTrade): Trade => {
-      const market = this._marketList.find((x) => x.id === item?.m);
-      if (!market) {
-        throw new Error(
-          `[${this.constructor.name}:getTradeHistory] cannot find market`
-        );
-      }
-      return {
-        market,
-        price: Number(item.p) || 0,
-        qty: Number(item.q) || 0,
-        isReverted: item?.isReverted || false,
-        timestamp: new Date(Number(item?.t) || 0),
-        tradeId: item?.trade_id || "",
-        fee: 0,
-        side: item.s as OrderSide,
-        quote_qty: String(Number(item.p) * Number(item.q)),
-      };
-    });
+    const trades = queryResult
+      ?.filter((item) => this._marketList.find((x) => x.id === item?.m))
+      ?.map((item: UserTrade): Trade => {
+        const market = this._marketList.find((x) => x.id === item?.m);
+        if (!market) {
+          throw new Error(
+            `[${this.constructor.name}:getTradeHistory] cannot find market`
+          );
+        }
+        return {
+          market,
+          price: Number(item.p) || 0,
+          qty: Number(item.q) || 0,
+          isReverted: item?.isReverted || false,
+          timestamp: new Date(Number(item?.t) || 0),
+          tradeId: item?.trade_id || "",
+          fee: 0,
+          side: item.s as OrderSide,
+          quote_qty: String(Number(item.p) * Number(item.q)),
+        };
+      });
     return trades || [];
   }
 
