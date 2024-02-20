@@ -8,6 +8,12 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 });
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { withSentryConfig } = require("@sentry/nextjs");
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const withPWA = require("next-pwa")({
+  dest: "public",
+  register: true,
+  disable: process.env.NODE_ENV === "development",
+});
 
 const nextConfig = {
   transpilePackages: ["@orderbook/core"],
@@ -71,5 +77,5 @@ const sentryWebpackPluginOptions = {
 };
 
 module.exports = withBundleAnalyzer(
-  withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+  withSentryConfig(withPWA(nextConfig), sentryWebpackPluginOptions)
 );
