@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography, Input, Tabs, Tooltip } from "@polkadex/ux";
+import { Typography, Input, Tabs, Tooltip, ScrollArea } from "@polkadex/ux";
 import { useMemo, useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { OrdersProvider } from "@orderbook/core/providers";
@@ -64,7 +64,7 @@ export function Template() {
           <main className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-screen-2xl m-auto">
             <div className="flex-1 flex flex-col">
               <div ref={overviewRef} className="flex flex-col">
-                <div className="flex items-end justify-between gap-4 px-4 pt-6 pb-4  border-b border-secondary-base flex-wrap">
+                <div className="flex items-center justify-between gap-4 px-4 pt-6 pb-4  border-b border-secondary-base flex-wrap">
                   <Typography.Text bold size="lg">
                     Transactions
                   </Typography.Text>
@@ -86,16 +86,21 @@ export function Template() {
                     responsiveView && "flex-col"
                   )}
                 >
-                  <Tabs.List className="py-2">
-                    <Tabs.Trigger value="transfer">Transfer</Tabs.Trigger>
-                    <Tabs.Trigger value="openOrders">Open Orders</Tabs.Trigger>
-                    <Tabs.Trigger value="orderHistory">
-                      Order History
-                    </Tabs.Trigger>
-                    <Tabs.Trigger value="tradeHistory">
-                      Trade History
-                    </Tabs.Trigger>
-                  </Tabs.List>
+                  <ScrollArea className="max-w-80">
+                    <Tabs.List className="py-2 whitespace-nowrap">
+                      <Tabs.Trigger value="transfer">Transfer</Tabs.Trigger>
+                      <Tabs.Trigger value="openOrders">
+                        Open Orders
+                      </Tabs.Trigger>
+                      <Tabs.Trigger value="orderHistory">
+                        Order History
+                      </Tabs.Trigger>
+                      <Tabs.Trigger value="tradeHistory">
+                        Trade History
+                      </Tabs.Trigger>
+                    </Tabs.List>
+                    <ScrollArea.Bar orientation="horizontal" />
+                  </ScrollArea>
                   <div>
                     <Input.Search
                       className="py-2 text-sm"
