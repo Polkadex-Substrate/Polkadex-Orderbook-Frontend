@@ -37,29 +37,6 @@ export const Filters = <TData,>({
         {responsiveFilter ? (
           <>
             <Typography.Text appearance="secondary">Filters</Typography.Text>
-            <Popover>
-              <Popover.Trigger className="group">
-                <EllipsisVerticalIcon className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
-              </Popover.Trigger>
-              <Popover.Content className="flex flex-col gap-3 p-2">
-                {table.getColumn("pair") && (
-                  <FacetedFilter
-                    column={table.getColumn("pair")}
-                    title="Pair"
-                    values={availablePairs}
-                    withoutBorder
-                  />
-                )}
-                {table.getColumn("type") && (
-                  <FacetedFilter
-                    column={table.getColumn("type")}
-                    title="Type"
-                    values={filters.type}
-                    withoutBorder
-                  />
-                )}
-              </Popover.Content>
-            </Popover>
           </>
         ) : (
           <div className="flex items-center gap-3">
@@ -93,8 +70,33 @@ export const Filters = <TData,>({
           </Button.Outline>
         )}
       </div>
-      <div className="flex-auto flex items-center justify-end">
+      <div className="flex-auto flex items-center justify-end gap-2">
         <Export />
+        {responsiveFilter && (
+          <Popover>
+            <Popover.Trigger className="group">
+              <EllipsisVerticalIcon className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
+            </Popover.Trigger>
+            <Popover.Content className="flex flex-col gap-3 p-2">
+              {table.getColumn("pair") && (
+                <FacetedFilter
+                  column={table.getColumn("pair")}
+                  title="Pair"
+                  values={availablePairs}
+                  withoutBorder
+                />
+              )}
+              {table.getColumn("type") && (
+                <FacetedFilter
+                  column={table.getColumn("type")}
+                  title="Type"
+                  values={filters.type}
+                  withoutBorder
+                />
+              )}
+            </Popover.Content>
+          </Popover>
+        )}
       </div>
     </div>
   );

@@ -27,7 +27,14 @@ type Props = {
   searchTerm: string;
 };
 
-const responsiveKeys = ["id", "filled", "date", "status", "fee"];
+const responsiveKeys = [
+  "id",
+  "filled",
+  "date",
+  "status",
+  "fee",
+  "averageFilledPrice",
+];
 
 export const OrderHistory = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight, searchTerm }, ref) => {
