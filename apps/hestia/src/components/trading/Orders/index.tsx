@@ -6,7 +6,14 @@ import {
   RangeKeyDict,
   defaultStaticRanges,
 } from "react-date-range";
-import { Button, Tabs, GenericMessage, Checkbox, Popover } from "@polkadex/ux";
+import {
+  Button,
+  Tabs,
+  GenericMessage,
+  Checkbox,
+  Popover,
+  ScrollArea,
+} from "@polkadex/ux";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useOpenOrders } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
@@ -84,20 +91,23 @@ export const Orders = ({ maxHeight }: Props) => {
   return (
     <Tabs defaultValue="openOrders" className="min-w-[25rem]">
       <div className="lg:flex items-center justify-between border-r border-b border-primary">
-        <Tabs.List className="px-2 py-3">
-          <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
-            Open Orders({openOrders?.length || 0})
-          </Tabs.Trigger>
-          <Tabs.Trigger value="orderHistory" onClick={() => setShow(true)}>
-            Order History
-          </Tabs.Trigger>
-          <Tabs.Trigger value="tradeHistory" onClick={() => setShow(true)}>
-            Trade History
-          </Tabs.Trigger>
-          <Tabs.Trigger value="balances" onClick={() => setShow(false)}>
-            Balances
-          </Tabs.Trigger>
-        </Tabs.List>
+        <ScrollArea className="max-w-80">
+          <Tabs.List className="px-2 py-3 whitespace-nowrap">
+            <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
+              Open Orders({openOrders?.length || 0})
+            </Tabs.Trigger>
+            <Tabs.Trigger value="orderHistory" onClick={() => setShow(true)}>
+              Order History
+            </Tabs.Trigger>
+            <Tabs.Trigger value="tradeHistory" onClick={() => setShow(true)}>
+              Trade History
+            </Tabs.Trigger>
+            <Tabs.Trigger value="balances" onClick={() => setShow(false)}>
+              Balances
+            </Tabs.Trigger>
+          </Tabs.List>
+          <ScrollArea.Bar orientation="horizontal" />
+        </ScrollArea>
 
         {connected && show && (
           <div className="flex items-center gap-3 mx-2">
