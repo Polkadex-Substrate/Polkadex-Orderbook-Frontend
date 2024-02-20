@@ -80,7 +80,7 @@ export const Form = ({
     useWithdraw();
 
   const { mutateAsync, isLoading: transferLoading } = useAssetTransfer(refetch);
-  const { loading: fundgLoading, onChangeChainBalance } = useFunds();
+  const { loading: fundLoading, onChangeChainBalance } = useFunds();
 
   const { onToogleConnectTrading, onToogleConnectExtension } =
     useSettingsProvider();
@@ -226,7 +226,7 @@ export const Form = ({
 
   const formLoading = isTransferFromFunding ? depositLoading : withdrawLoading;
   const loading = isFundingToFunding
-    ? transferLoading || fundgLoading
+    ? transferLoading || fundLoading
     : formLoading;
 
   const disabled = !hasAccount || loading || !(isValid && dirty);
