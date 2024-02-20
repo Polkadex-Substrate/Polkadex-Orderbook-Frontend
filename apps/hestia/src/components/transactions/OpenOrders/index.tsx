@@ -173,7 +173,11 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
           onCancelOrder={onCancelOrder}
         />
         <div className="flex-1 flex flex-col">
-          <Filters table={table} availablePairs={availablePairs} />
+          <Filters
+            table={table}
+            availablePairs={availablePairs}
+            allOpenOrders={allOpenOrders}
+          />
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
               <div
