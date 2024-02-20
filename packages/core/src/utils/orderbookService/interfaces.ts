@@ -4,6 +4,7 @@ import { SignatureEnumSr25519 } from "@orderbook/core/helpers";
 
 import {
   AccountUpdateEvent,
+  UserAllHistoryProps,
   Asset,
   Balance,
   Kline,
@@ -36,6 +37,7 @@ export interface OrderbookReadStrategy extends BaseStrategy {
   getAssets: () => Promise<Asset[]>;
   getOpenOrders: (args: OrderHistoryProps) => Promise<Order[]>;
   getOrderHistory: (args: UserHistoryProps) => Promise<MaybePaginated<Order[]>>;
+  getAllOrderHistory: (args: UserAllHistoryProps) => Promise<Order[]>;
   getTradeHistory: (args: UserHistoryProps) => Promise<MaybePaginated<Trade[]>>;
   getLatestTradesForMarket: (
     args: LatestTradesPropsForMarket

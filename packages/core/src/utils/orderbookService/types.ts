@@ -143,6 +143,11 @@ export interface UserHistoryProps<T = null> {
   market?: string;
   batchLimit: number;
 }
+export interface UserAllHistoryProps {
+  address: string;
+  from: Date;
+  to: Date;
+}
 
 export interface TransactionHistoryProps<T = null> {
   address: string;

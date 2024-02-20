@@ -43,6 +43,7 @@ import {
   LatestTradesPropsForMarket,
   OrderSide,
   TransactionHistoryProps,
+  UserAllHistoryProps,
 } from "./../types";
 import {
   fetchBatchFromAppSync,
@@ -437,6 +438,29 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       },
     });
     return queryResult?.data?.findUserByTradeAccount?.items?.[0]?.main;
+  }
+
+  // For export purpose only
+  async getAllOrderHistory(args: UserAllHistoryProps): Promise<Order[]> {
+    if (!this.isReady()) {
+      await this.init();
+    }
+    const orderHistoryQueryResult = await fetchFullListFromAppSync<APIOrder>(
+      QUERIES.listOrderHistoryByTradeAccount,
+      {
+        trade_account: args.address,
+        from: args.from.toISOString(),
+        to: args.to.toISOString(),
+      },
+      "listOrderHistoryByTradeAccount"
+    );
+    if (!orderHistoryQueryResult) {
+      return [];
+    }
+    const orderHistory = orderHistoryQueryResult?.map((item): Order => {
+      return this.mapApiOrderToOrder(item, this._marketList);
+    });
+    return orderHistory || [];
   }
 
   private mapApiOrderToOrder(item: APIOrder, marketList: Market[]): Order {
