@@ -38,7 +38,7 @@ export const Profile = ({
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-2">
           <Button.Solid size="2sm" onClick={onOpenFundWallet}>
-            Fund wallet
+            Fund Account
           </Button.Solid>
           <Tooltip>
             <Tooltip.Trigger asChild>

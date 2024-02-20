@@ -15,13 +15,10 @@ import {
   getFacetedUniqueValues,
 } from "@tanstack/react-table";
 import classNames from "classnames";
-import { useTransactions } from "@orderbook/core/hooks";
-import { useProfile } from "@orderbook/core/providers/user/profile";
-import {
-  getChainFromTicker,
-  getFundingAccountDetail,
-} from "@orderbook/core/helpers";
+import { useAssets, useTransactions } from "@orderbook/core/hooks";
+import { TransferHistory, getChainFromTicker } from "@orderbook/core/helpers";
 import { useExtensionAccounts } from "@polkadex/react-providers";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { useSizeProvider } from "../provider";
 
@@ -31,15 +28,21 @@ import { ResponsiveTable } from "./responsiveTable";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
-const responsiveKeys = ["wallets", "fees", "date"];
+const responsiveKeys = ["wallets", "fees", "date", "txid"];
 const actionKeys = ["token", "amount", "date"];
 
 export const filters = {
   status: ["Confirmed", "Pending", "Failed", "Ready"],
-  from: ["Trading/Funding ", "Funding/Trading"],
+  from: ["Trading/Funding", "Funding/Trading", "Funding/Custom"],
 };
 
-export const History = () => {
+export const History = ({
+  subscanData,
+  subscanLoading,
+}: {
+  subscanData?: TransferHistory[];
+  subscanLoading?: boolean;
+}) => {
   const { tableMaxHeight } = useSizeProvider();
 
   const { width } = useWindowSize();
@@ -54,14 +57,43 @@ export const History = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  const { selectedAddresses } = useProfile();
+  const { selectedWallet } = useConnectWalletProvider();
   const { extensionAccounts } = useExtensionAccounts();
   const { deposits, loading, allWithdrawals } = useTransactions();
+  const { selectGetAsset } = useAssets();
 
-  const { mainAddress } = selectedAddresses;
-  const fundingWallet = useMemo(
-    () => getFundingAccountDetail(mainAddress, extensionAccounts),
-    [extensionAccounts, mainAddress]
+  const mainAddress = selectedWallet?.address;
+
+  const transferSubscanTransactions = useMemo(
+    () =>
+      subscanData?.map((e) => {
+        const tokenId = e.asset_unique_id.split("standard_assets/").join("");
+        const token = selectGetAsset(tokenId);
+        const fromData = extensionAccounts?.find(
+          (from) => from.address === e.from
+        );
+        return {
+          stid: e.hash,
+          amount: Number(e.amount),
+          status: e.success ? "CONFIRMED" : "PENDING",
+          fee: Number(e.fee) / 100000000000,
+          isReverted: false,
+          timestamp: new Date(e.block_timestamp * 1000),
+          token: {
+            ticker: token?.ticker,
+            name: token?.name,
+          },
+          txType: "TRANSFER",
+          wallets: {
+            fromWalletType: "Funding Account",
+            fromWalletName: fromData?.name,
+            fromWalletAddress: e.from,
+            toWalletAddress: e.to,
+            toWalletType: "Custom Account",
+          },
+        } as DepositData;
+      }),
+    [subscanData, selectGetAsset, extensionAccounts]
   );
 
   const depositsTransactions = useMemo(
@@ -78,13 +110,13 @@ export const History = () => {
           },
           wallets: {
             fromWalletType: "Funding Account",
-            fromWalletName: fundingWallet?.name ?? "",
-            fromWalletAddress: fundingWallet?.address ?? "",
+            fromWalletName: selectedWallet?.name ?? "",
+            fromWalletAddress: selectedWallet?.address ?? "",
             toWalletType: "Trading Account",
           },
         } as DepositData;
       }),
-    [deposits, fundingWallet?.name, fundingWallet?.address, mainAddress]
+    [deposits, selectedWallet?.name, selectedWallet?.address, mainAddress]
   );
 
   const withdrawalsTransactions = useMemo(
@@ -101,22 +133,24 @@ export const History = () => {
             },
             wallets: {
               fromWalletType: "Trading Account",
-              fromWalletName: fundingWallet?.name ?? "",
-              fromWalletAddress: fundingWallet?.address ?? "",
+              toWalletName: selectedWallet?.name ?? "",
+              toWalletAddress: selectedWallet?.address ?? "",
               toWalletType: "Funding Account",
             },
           };
         })
         ?.flatMap((withdrawal) => [withdrawal]),
-    [allWithdrawals, fundingWallet?.address, fundingWallet?.name]
+    [allWithdrawals, selectedWallet?.address, selectedWallet?.name]
   );
 
   const data = useMemo(
     () =>
-      [...depositsTransactions, ...withdrawalsTransactions]?.sort((a, b) =>
-        a.timestamp > b.timestamp ? -1 : 1
-      ),
-    [depositsTransactions, withdrawalsTransactions]
+      [
+        ...depositsTransactions,
+        ...withdrawalsTransactions,
+        ...(transferSubscanTransactions ?? []),
+      ]?.sort((a, b) => (a.timestamp > b.timestamp ? -1 : 1)),
+    [depositsTransactions, withdrawalsTransactions, transferSubscanTransactions]
   );
 
   const table = useReactTable({
@@ -151,7 +185,7 @@ export const History = () => {
     }
   }, [responsiveState, responsiveView]);
 
-  if (loading) return <SkeletonCollection />;
+  if (loading || (mainAddress && subscanLoading)) return <SkeletonCollection />;
   return (
     <Fragment>
       <ResponsiveTable

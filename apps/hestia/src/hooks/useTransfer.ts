@@ -6,7 +6,13 @@
  * - Toggle switch between deposit between Polkadex accounts
  */
 
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import { filterBlockedAssets } from "@orderbook/core/helpers";
 import {
   useAssets,
@@ -14,14 +20,16 @@ import {
   useFunds,
   useWithdraw,
 } from "@orderbook/core/hooks";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { BalanceFormatter } from "@orderbook/format";
 import { Asset } from "@orderbook/core/utils/orderbookService";
+
 export interface FilteredAssetProps extends Asset {
   free_balance?: string;
   onChainBalance?: string;
 }
 
+const types = ["deposit", "withdraw", "transfer"];
 export type SwitchType = "deposit" | "withdraw" | "transfer";
 
 const onChangeState = (onCallback: Dispatch<SetStateAction<boolean>>) => {
@@ -36,18 +44,26 @@ export function useTransfer() {
   const { loading: withdrawLoading } = useWithdraw();
   const { push } = useRouter();
   const params = useParams();
-
+  const searchParams = useSearchParams();
+  const typeParams = searchParams?.get("type");
   const [assetsInteraction, setAssetsInteraction] = useState(false);
   const [switchEnable, setSwitchEnable] = useState(false);
 
-  const [type, setType] = useState<SwitchType>("deposit");
+  const isValidParams = useMemo(
+    () => types.includes(typeParams?.toLowerCase() ?? ""),
+    [typeParams]
+  );
+
+  const [type, setType] = useState<SwitchType>(
+    isValidParams ? (typeParams as SwitchType) : "deposit"
+  );
 
   const onAssetsInteraction = (callback?: () => void) => {
     if (typeof callback === "function" && callback) callback();
     onChangeState(setAssetsInteraction);
   };
   const onChangeAsset = (asset: FilteredAssetProps) => {
-    push(`/transfer/${asset.ticker}`);
+    push(`/transfer/${asset.ticker}` + "?" + createQueryString("type", type));
     onAssetsInteraction();
   };
 
@@ -83,6 +99,15 @@ export function useTransfer() {
     return foundAsset ?? filteredNonBlockedAssets?.[0];
   }, [filteredNonBlockedAssets, params?.id]);
 
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams]
+  );
+
   return {
     loading: depositLoading || withdrawLoading,
     assetsInteraction,
@@ -93,5 +118,6 @@ export function useTransfer() {
     selectedAsset,
     switchEnable,
     onDisableSwitch: (v = false) => setSwitchEnable(v),
+    createQueryString,
   };
 }

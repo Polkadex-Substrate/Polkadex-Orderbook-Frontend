@@ -1,11 +1,11 @@
 "use client";
 
-import { Button, GenericMessage, Tabs, Typography } from "@polkadex/ux";
+import { GenericMessage, Tabs, Typography } from "@polkadex/ux";
 import { Fragment, useEffect, useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { useTransactions } from "@orderbook/core/hooks";
+import { useTransactions, useTransferHistory } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
-import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { usePathname, useRouter } from "next/navigation";
 
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 
@@ -18,10 +18,18 @@ import { useSizeProvider } from "./provider";
 
 import { Footer, Header } from "@/components/ui";
 import { useTransfer } from "@/hooks";
+import { defaultConfig } from "@/config";
+
+const sleep = async (ms: number) =>
+  await new Promise((resolve) => setTimeout(resolve, ms));
 
 export function Template() {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const { headerRef, footerRef, formwRef, helpRef, tableTitleRef } =
     useSizeProvider();
+
   const {
     onChangeAsset,
     selectedAsset,
@@ -29,12 +37,18 @@ export function Template() {
     onAssetsInteraction,
     type,
     onChangeType,
+    createQueryString,
   } = useTransfer();
 
   const { readyWithdrawals } = useTransactions();
   const { selectedAccount, selectedWallet } = useConnectWalletProvider();
-  const { onToogleConnectExtension } = useSettingsProvider();
   const [activeTab, setActiveTab] = useState("history");
+
+  const { data, isLoading, refetch } = useTransferHistory(
+    defaultConfig.subscanApi,
+    selectedWallet?.address as string,
+    !!selectedWallet
+  );
 
   useEffect(() => {
     if (readyWithdrawals?.length) setActiveTab("readyToClaim");
@@ -68,7 +82,14 @@ export function Template() {
                 selectedAsset={selectedAsset}
                 onAssetsInteraction={onAssetsInteraction}
                 type={type}
-                onChangeType={(e) => onChangeType(e)}
+                onChangeType={(e) => {
+                  onChangeType(e);
+                  router.push(pathname + "?" + createQueryString("type", e));
+                }}
+                refetch={async () => {
+                  await sleep(55000);
+                  await refetch();
+                }}
               />
             </div>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -87,7 +108,10 @@ export function Template() {
                 {selectedAccount || selectedWallet ? (
                   <Fragment>
                     <Tabs.Content value="history" className="flex flex-col">
-                      <History />
+                      <History
+                        subscanData={data?.pages?.[0]?.transfers}
+                        subscanLoading={isLoading}
+                      />
                     </Tabs.Content>
                     <Tabs.Content
                       value="readyToClaim"
@@ -98,9 +122,9 @@ export function Template() {
                   </Fragment>
                 ) : (
                   <GenericMessage
-                    title="Connect Trading Account"
+                    title="Connect your trading account"
                     illustration="ConnectAccount"
-                    onClick={() => onToogleConnectExtension()}
+                    className="bg-level-0 border-b border-primary"
                   />
                 )}
               </div>

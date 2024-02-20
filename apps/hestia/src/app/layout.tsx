@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body
         className={classNames(
-          "flex flex-col max-h-screen min-h-screen mx-auto border-x border-primary overflow-x-hidden",
+          "flex flex-col max-h-screen min-h-screen mx-auto overflow-x-hidden",
           GeistSans.className
         )}
       >
