@@ -1,8 +1,4 @@
-import {
-  ArrowDownTrayIcon,
-  EllipsisVerticalIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Button, Icon, Popover, Typography } from "@polkadex/ux";
 import { Table } from "@tanstack/react-table";
 import classNames from "classnames";
@@ -10,6 +6,8 @@ import { useMemo } from "react";
 import { useWindowSize } from "usehooks-ts";
 
 import { FacetedFilter } from "../facetedFilters";
+
+import { Export } from "./export";
 
 export const filters = {
   type: ["BUY", "SELL"],
@@ -96,10 +94,7 @@ export const Filters = <TData,>({
         )}
       </div>
       <div className="flex-auto flex items-center justify-end">
-        <Button.Outline appearance="secondary" size="sm">
-          <ArrowDownTrayIcon className="w-4 h-4 inline-block mr-1" />
-          Export
-        </Button.Outline>
+        <Export />
       </div>
     </div>
   );

@@ -39,6 +39,7 @@ export interface OrderbookReadStrategy extends BaseStrategy {
   getOrderHistory: (args: UserHistoryProps) => Promise<MaybePaginated<Order[]>>;
   getAllOrderHistory: (args: UserAllHistoryProps) => Promise<Order[]>;
   getTradeHistory: (args: UserHistoryProps) => Promise<MaybePaginated<Trade[]>>;
+  getAllTradeHistory: (args: UserAllHistoryProps) => Promise<Trade[]>;
   getLatestTradesForMarket: (
     args: LatestTradesPropsForMarket
   ) => Promise<PublicTrade[]>;
