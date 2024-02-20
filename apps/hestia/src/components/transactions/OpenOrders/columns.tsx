@@ -9,7 +9,7 @@ import {
   truncateString,
 } from "@polkadex/ux";
 import { OrderCancellation } from "@orderbook/core/providers/user/orders";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 
 import { filters } from "./filters";
 

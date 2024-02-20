@@ -1,6 +1,6 @@
 import { Trade } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
 
 import { filters } from "./filters";

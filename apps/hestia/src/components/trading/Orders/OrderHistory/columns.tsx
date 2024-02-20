@@ -1,7 +1,6 @@
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
-import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
+import { Tooltip, Typography } from "@polkadex/ux";
 
 const orderHistoryColumnHelper = createColumnHelper<Order>();
 
@@ -152,25 +151,6 @@ export const columns = [
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Fee
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  orderHistoryColumnHelper.accessor((row) => row, {
-    id: "id",
-    cell: (e) => (
-      <Copy value={e.getValue().orderId}>
-        <div className="flex items-center gap-1">
-          <DocumentDuplicateIcon className="w-4 h-4 text-actionInput" />
-          <Typography.Text size="xs">
-            {truncateString(e.getValue().orderId, 4)}
-          </Typography.Text>
-        </div>
-      </Copy>
-    ),
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        ID
       </Typography.Text>
     ),
     footer: (e) => e.column.id,

@@ -1,7 +1,7 @@
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 
 import { filters } from "./filters";
 

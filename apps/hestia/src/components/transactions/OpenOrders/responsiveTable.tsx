@@ -9,7 +9,7 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import { intlFormat } from "date-fns";
 import { Order } from "@orderbook/core/utils/orderbookService/types";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 import { OrderCancellation } from "@orderbook/core/providers/user/orders";
 
 import { ResponsiveCard } from "@/components/ui/ReadyToUse";
