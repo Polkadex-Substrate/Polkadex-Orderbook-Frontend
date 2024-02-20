@@ -1,10 +1,14 @@
 import "@/styles/globals.scss";
 import "@polkadex/ux/dist/index.css";
-import { GeistSans } from "geist/font/sans";
 import { ReactNode } from "react";
 import classNames from "classnames";
+import { Roboto } from "next/font/google";
 
 import { DynamicProviders } from "@/components/ui/DynamicProviders";
+const font = Roboto({
+  weight: ["100", "300", "400", "500", "700", "900"],
+  subsets: ["latin"],
+});
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -16,7 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body
         className={classNames(
           "flex flex-col max-h-screen min-h-screen mx-auto overflow-x-hidden",
-          GeistSans.className
+          font.className
         )}
       >
         <DynamicProviders>{children}</DynamicProviders>
