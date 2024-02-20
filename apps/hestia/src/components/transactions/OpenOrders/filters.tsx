@@ -23,7 +23,7 @@ interface FiltersProps<TData> {
   allOpenOrders: Order[];
 }
 
-const columns = [
+const csvColumns = [
   "orderId",
   "date",
   "pair",
@@ -129,7 +129,7 @@ export const Filters = <TData,>({
       </div>
       <div className="flex-auto flex items-center justify-end">
         <CSVLink
-          columns={columns}
+          columns={csvColumns}
           datas={computeData}
           filename={exportedFileName}
         >
