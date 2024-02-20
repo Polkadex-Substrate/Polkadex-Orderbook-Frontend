@@ -1,3 +1,5 @@
+"use client";
+
 import "@/styles/globals.scss";
 import "@polkadex/ux/dist/index.css";
 import { GeistSans } from "geist/font/sans";
