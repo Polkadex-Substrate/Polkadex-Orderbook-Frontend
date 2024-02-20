@@ -275,7 +275,9 @@ export const Form = ({
               <ArrowRightIcon
                 className={classNames(
                   "w-6 h-6 transition-all duration-300",
-                  isTransferFromFunding ? "max-sm:rotate-90" : "rotate-[360deg]"
+                  isTransferFromFunding || type === "transfer"
+                    ? "max-sm:rotate-90"
+                    : "max-sm:rotate-[450deg] rotate-[360deg]"
                 )}
               />
             </button>

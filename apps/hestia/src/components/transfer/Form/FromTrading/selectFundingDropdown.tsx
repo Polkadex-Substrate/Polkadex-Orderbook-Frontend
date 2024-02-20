@@ -151,9 +151,9 @@ export const SelectFundingDropdown = ({
         <Popover.Icon />
       </Popover.Trigger>
       <Popover.Content style={{ width }}>
-        <Searchable>
+        <Searchable className="bg-level-0">
           <Searchable.Input placeholder="Search account" />
-          <Searchable.List>
+          <Searchable.List className="overflow-hidden">
             <div className="flex gap-2">
               <div className="flex flex-col gap-2 pr-2 pt-2 pb-2 border-r border-r-primary">
                 {ExtensionsArrayWhitelist?.sort(

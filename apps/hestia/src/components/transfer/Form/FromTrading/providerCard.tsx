@@ -31,15 +31,16 @@ export const ProviderCard = ({
       role="button"
       onClick={installed ? action : undefined}
     >
-      <div className="flex justify-between items-center gap-3">
+      <div
+        className={classNames(
+          "flex justify-between items-center gap-3",
+          !installed && "opacity-30"
+        )}
+      >
         <div className="w-5 h-5">
           <IconComponent />
         </div>
-        <Typography.Text
-          size="xs"
-          appearance={installed ? "base" : "secondary"}
-          className="whitespace-nowrap"
-        >
+        <Typography.Text size="xs" className="whitespace-nowrap max-sm:hidden">
           {title}
         </Typography.Text>
       </div>
