@@ -28,7 +28,7 @@ import { ResponsiveTable } from "./responsiveTable";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
-const responsiveKeys = ["wallets", "fees", "date"];
+const responsiveKeys = ["wallets", "fees", "date", "txid"];
 const actionKeys = ["token", "amount", "date"];
 
 export const filters = {
