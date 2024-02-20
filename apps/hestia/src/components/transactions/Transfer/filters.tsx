@@ -99,7 +99,7 @@ export const Filters = <TData,>({
       </div>
       <div className="flex-auto flex items-center justify-end">
         <CSVLink datas={[]} filename={exportedFileName}>
-          <Button.Outline appearance="secondary" size="sm">
+          <Button.Outline appearance="secondary" size="sm" disabled>
             <ArrowDownTrayIcon className="w-4 h-4 inline-block mr-1" />
             Export
           </Button.Outline>
