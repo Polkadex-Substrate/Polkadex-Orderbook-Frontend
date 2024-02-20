@@ -2,7 +2,7 @@ import { Copy, Drawer, Typography, truncateString } from "@polkadex/ux";
 import { Dispatch, SetStateAction } from "react";
 import { intlFormat } from "date-fns";
 import { Trade } from "@orderbook/core/utils/orderbookService/types";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 
 import { ResponsiveCard } from "@/components/ui/ReadyToUse";
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useWindowSize } from "usehooks-ts";
 import { useMemo, useState } from "react";
 import {
   DateRangePicker,
@@ -44,6 +45,7 @@ const BUY = "BUY";
 const SELL = "SELL";
 
 export const Orders = ({ maxHeight }: Props) => {
+  const { width } = useWindowSize();
   const { dispatchUserSessionData, dateFrom, dateTo } = useSessionProvider();
   const { onToogleConnectTrading } = useSettingsProvider();
   const { openOrders } = useOpenOrders();
@@ -52,6 +54,8 @@ export const Orders = ({ maxHeight }: Props) => {
 
   const [show, setShow] = useState(true);
   const [filters, setFilters] = useState<Ifilters>(initialFilters);
+
+  const scrollAreaView = useMemo(() => width <= 470, [width]);
 
   const ranges = useMemo(() => {
     return [
@@ -91,7 +95,7 @@ export const Orders = ({ maxHeight }: Props) => {
   return (
     <Tabs defaultValue="openOrders" className="min-w-[25rem]">
       <div className="lg:flex items-center justify-between border-r border-b border-primary">
-        <ScrollArea className="max-w-80">
+        <ScrollArea className={`${scrollAreaView && "max-w-80"}`}>
           <Tabs.List className="px-2 py-3 whitespace-nowrap">
             <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
               Open Orders({openOrders?.length || 0})

@@ -32,6 +32,7 @@ export function Template() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const responsiveView = useMemo(() => width <= 675, [width]);
+  const scrollAreaView = useMemo(() => width <= 470, [width]);
 
   const maxHeight = useMemo(
     () =>
@@ -86,7 +87,7 @@ export function Template() {
                     responsiveView && "flex-col"
                   )}
                 >
-                  <ScrollArea className="max-w-80">
+                  <ScrollArea className={`${scrollAreaView && "max-w-80"}`}>
                     <Tabs.List className="py-2 whitespace-nowrap">
                       <Tabs.Trigger value="transfer">Transfer</Tabs.Trigger>
                       <Tabs.Trigger value="openOrders">
