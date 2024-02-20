@@ -72,6 +72,7 @@ export const Form = ({
 
   const isTransferFromFunding = type === "deposit";
   const isFundingToFunding = type === "transfer";
+  const isFromFunding = isTransferFromFunding || isFundingToFunding;
 
   const { selectedAccount, selectedWallet } = useConnectWalletProvider();
   const { loading: depositLoading, mutateAsync: onFetchDeposit } = useDeposit();
@@ -124,12 +125,12 @@ export const Form = ({
     e.preventDefault();
     e.stopPropagation();
     resetForm();
-    onChangeType(type === "deposit" ? "withdraw" : "deposit");
+    onChangeType(isFromFunding ? "withdraw" : "deposit");
   };
 
   const validationSchema = useMemo(
     () =>
-      isTransferFromFunding || isFundingToFunding
+      isFromFunding
         ? depositValidations(
             Number(selectedAsset?.onChainBalance) ?? 0,
             isPolkadexToken,
@@ -139,10 +140,9 @@ export const Form = ({
     [
       existentialBalance,
       isPolkadexToken,
-      isTransferFromFunding,
       selectedAsset?.free_balance,
       selectedAsset?.onChainBalance,
-      isFundingToFunding,
+      isFromFunding,
     ]
   );
 
@@ -220,10 +220,9 @@ export const Form = ({
   const isLocalAccountPresent = !!Object.keys(selectedAccount ?? {}).length;
   const isExtensionAccountPresent = !!Object.keys(selectedWallet ?? {}).length;
 
-  const hasAccount =
-    isTransferFromFunding || isFundingToFunding
-      ? isExtensionAccountPresent
-      : isLocalAccountPresent;
+  const hasAccount = isFromFunding
+    ? isExtensionAccountPresent
+    : isLocalAccountPresent;
 
   const formLoading = isTransferFromFunding ? depositLoading : withdrawLoading;
   const loading = isFundingToFunding
@@ -261,7 +260,7 @@ export const Form = ({
               isLocalAccountPresent={isLocalAccountPresent}
               isExtensionAccountPresent={isExtensionAccountPresent}
               focused={cardFocus}
-              fromFunding={isTransferFromFunding || isFundingToFunding}
+              fromFunding={isFromFunding}
               extensionAccountName={selectedWallet?.name}
               extensionAccountAddress={selectedWallet?.address}
               extensionAccountBalance={selectedAsset?.onChainBalance}
@@ -278,7 +277,7 @@ export const Form = ({
               <ArrowRightIcon
                 className={classNames(
                   "w-6 h-6 transition-all duration-300",
-                  isTransferFromFunding || isFundingToFunding
+                  isFromFunding
                     ? "max-sm:rotate-90"
                     : "max-sm:rotate-[450deg] rotate-[360deg]"
                 )}
@@ -399,7 +398,7 @@ export const Form = ({
               size="md"
               className="w-full py-5"
               onClick={() =>
-                isTransferFromFunding || isFundingToFunding
+                isFromFunding
                   ? onToogleConnectExtension()
                   : onToogleConnectTrading()
               }
