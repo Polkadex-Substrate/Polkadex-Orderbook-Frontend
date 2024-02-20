@@ -1,21 +1,10 @@
-"use client";
-
 import "@/styles/globals.scss";
 import "@polkadex/ux/dist/index.css";
 import { GeistSans } from "geist/font/sans";
 import { ReactNode } from "react";
 import classNames from "classnames";
-import dynamic from "next/dynamic";
 
-const DynamicProviders = dynamic(
-  () =>
-    import("@/components/ui/DynamicProviders").then(
-      (mod) => mod.DynamicProviders
-    ),
-  {
-    ssr: false,
-  }
-);
+import { DynamicProviders } from "@/components/ui/DynamicProviders";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
