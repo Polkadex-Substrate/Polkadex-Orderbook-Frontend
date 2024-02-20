@@ -15,6 +15,7 @@ const csvColumns = [
   "price",
   "amount",
   "filled",
+  "averagePrice",
   "status",
   "fee",
 ].map((c) => ({
@@ -60,6 +61,7 @@ export const Export = () => {
           price: String(order.price),
           amount: order.quantity,
           filled: order.filledQuantity,
+          averagePrice: String(order.averagePrice),
           status: order.status,
           fee: `${order.fee} ${feeTicker}`,
         };
