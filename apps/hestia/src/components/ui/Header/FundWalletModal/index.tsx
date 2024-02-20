@@ -27,7 +27,7 @@ export const FundWalletModal = ({
     >
       <Modal.Title className="flex justify-between items-center py-4 pl-4">
         <Typography.Text size="lg" bold>
-          Fund Wallet
+          Fund Account
         </Typography.Text>
         <Button.Icon
           variant="ghost"
@@ -55,7 +55,7 @@ export const FundWalletModal = ({
               title="Decentralized bridge"
               description="Bridge your crypto from Polkadot, Kusama & Parachains to Polkadex chain and vice versa."
             >
-              <div className="flex justify-between gap-2 items-center">
+              <div className="flex justify-between gap-2 sm:items-center max-sm:flex-col">
                 <Dropdown>
                   <Dropdown.Trigger className="flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1">
                     Polkadot-based
@@ -63,22 +63,68 @@ export const FundWalletModal = ({
                   </Dropdown.Trigger>
                   <Dropdown.Content>
                     <Dropdown.Label>Token/Chain</Dropdown.Label>
-                    <Dropdown.Item>USDT (Asset Hub chain)</Dropdown.Item>
-                    <Dropdown.Item>DOT (Polkadot chain)</Dropdown.Item>
-                    <Dropdown.Item>PHA (Phala chain)</Dropdown.Item>
-                    <Dropdown.Item>GLMR (Moombeam chain)</Dropdown.Item>
-                    <Dropdown.Item>ASTR (Astar chain)</Dropdown.Item>
-                    <Dropdown.Item>IBTC (Interlay chain)</Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() =>
+                        window.open(
+                          "https://thea.polkadex.trade/?chain=Asset%2520Hub"
+                        )
+                      }
+                    >
+                      USDT (Asset Hub chain)
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => window.open("https://thea.polkadex.trade")}
+                    >
+                      DOT (Polkadot chain)
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() =>
+                        window.open(
+                          "https://thea.polkadex.trade/?chain=Phala%2520Network"
+                        )
+                      }
+                    >
+                      PHA (Phala chain)
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() =>
+                        window.open(
+                          "https://thea.polkadex.trade/?chain=Moonbeam%2520Network"
+                        )
+                      }
+                    >
+                      GLMR (Moombeam chain)
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() =>
+                        window.open(
+                          "https://thea.polkadex.trade/?chain=Astar%2520Network"
+                        )
+                      }
+                    >
+                      ASTR (Astar chain)
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() =>
+                        window.open(
+                          "https://thea.polkadex.trade/?chain=Interlay"
+                        )
+                      }
+                    >
+                      IBTC (Interlay chain)
+                    </Dropdown.Item>
                   </Dropdown.Content>
                 </Dropdown>
                 <Dropdown>
-                  <Dropdown.Trigger className="flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1">
+                  <Dropdown.Trigger
+                    disabled
+                    className="opacity-40 flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1"
+                  >
                     Ethereym-based
                     <ChevronDownIcon className="w-3 h-3" />
                   </Dropdown.Trigger>
                   <Dropdown.Content>
                     <Dropdown.Label>Token/Chain</Dropdown.Label>
-                    <Dropdown.Item>Soon</Dropdown.Item>
                   </Dropdown.Content>
                 </Dropdown>
               </div>
@@ -99,13 +145,13 @@ export const FundWalletModal = ({
               icon="TransferToTrading"
               title="Transfer to trading account"
               description="Move funds from your funding account to your trading account."
-              href="/transfer"
+              href="/transfer/USDT?type=withdraw"
             />
             <Card
               icon="TransferToFunding"
               title="Transfer to funding account"
               description="Move funds from your trading account to your funding account."
-              href="/transfer"
+              href="/transfer/USDT?type=deposit"
             />
           </div>
         </div>
@@ -117,6 +163,7 @@ export const FundWalletModal = ({
           </div>
           <div className="flex flex-col gap-2">
             <Card
+              disabled
               icon="FreeCoin"
               title="Get 1 PDEX for free"
               description="Complete some tasks and get 1 free PDEX!"
@@ -130,34 +177,58 @@ export const FundWalletModal = ({
               target="_blank"
             />
             <Card icon="CentralizedExchange" title="Centralized exchanges">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <Button.Solid
                   appearance="secondary"
                   size="sm"
                   className="flex-1"
+                  asChild
                 >
-                  <Link href="/">Kucoin</Link>
+                  <Link
+                    href="https://www.kucoin.com/trade/PDEX-USDT?rcode=rPH7VCS"
+                    target="_blank"
+                  >
+                    Kucoin
+                  </Link>
                 </Button.Solid>
                 <Button.Solid
                   appearance="secondary"
                   size="sm"
                   className="flex-1"
+                  asChild
                 >
-                  <Link href="/">Gate.io</Link>
+                  <Link
+                    href="https://www.gate.io/trade/PDEX_USDT"
+                    target="_blank"
+                  >
+                    Gate.io
+                  </Link>
                 </Button.Solid>
                 <Button.Solid
                   appearance="secondary"
                   size="sm"
                   className="flex-1"
+                  asChild
                 >
-                  <Link href="/">AscendEX</Link>
+                  <Link
+                    href="https://ascendex.com/en/cashtrade-spottrading/usdt/pdex"
+                    target="_blank"
+                  >
+                    AscendEX
+                  </Link>
                 </Button.Solid>
                 <Button.Solid
                   appearance="secondary"
                   size="sm"
                   className="flex-1"
+                  asChild
                 >
-                  <Link href="/">CoinDCX</Link>
+                  <Link
+                    href="https://coindcx.com/trade/PDEXINR"
+                    target="_blank"
+                  >
+                    CoinDCX
+                  </Link>
                 </Button.Solid>
               </div>
             </Card>

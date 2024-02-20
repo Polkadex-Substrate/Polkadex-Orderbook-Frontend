@@ -34,16 +34,22 @@ import {
   withdrawValidations,
 } from "@orderbook/core/validations";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { useDeposit, useWithdraw } from "@orderbook/core/hooks";
+import {
+  useAssetTransfer,
+  useDeposit,
+  useFunds,
+  useWithdraw,
+} from "@orderbook/core/hooks";
+import { ExtensionAccount } from "@polkadex/react-providers";
 
 import { FromFunding } from "./fromFunding";
-import { FromTrading } from "./fromTrading";
+import { FromTrading } from "./FromTrading";
 
 import { FilteredAssetProps, SwitchType } from "@/hooks";
 import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
 const initialValues = { amount: 0.0 };
-
 export const Form = ({
+  refetch,
   selectedAsset,
   onAssetsInteraction,
   assetsInteraction,
@@ -55,9 +61,13 @@ export const Form = ({
   type: SwitchType;
   onChangeType: (e: SwitchType) => void;
   assetsInteraction?: boolean;
+  refetch: () => Promise<void>;
 }) => {
   const [cardFocus, setCardFocus] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [selectedExtensionAccount, setSelectedExtensionAccount] =
+    useState<ExtensionAccount | null>(null);
+
   const formRef = useRef<HTMLFormElement | null>(null);
 
   const isTransferFromFunding = type === "deposit";
@@ -66,6 +76,10 @@ export const Form = ({
   const { loading: depositLoading, mutateAsync: onFetchDeposit } = useDeposit();
   const { mutateAsync: onFetchWithdraws, loading: withdrawLoading } =
     useWithdraw();
+
+  const { mutateAsync, isLoading: transferLoading } = useAssetTransfer(refetch);
+  const { loading: fundgLoading, onChangeChainBalance } = useFunds();
+
   const { onToogleConnectTrading, onToogleConnectExtension } =
     useSettingsProvider();
 
@@ -114,7 +128,7 @@ export const Form = ({
 
   const validationSchema = useMemo(
     () =>
-      isTransferFromFunding
+      isTransferFromFunding || type === "transfer"
         ? depositValidations(
             Number(selectedAsset?.onChainBalance) ?? 0,
             isPolkadexToken,
@@ -127,6 +141,7 @@ export const Form = ({
       isTransferFromFunding,
       selectedAsset?.free_balance,
       selectedAsset?.onChainBalance,
+      type,
     ]
   );
 
@@ -160,6 +175,31 @@ export const Form = ({
     }
   };
 
+  const onSubmitTransfer = async ({ amount }: { amount: number }) => {
+    if (!selectedWallet) return;
+    try {
+      const address = selectedWallet?.address;
+
+      const asset: Record<string, string | null> = isPolkadexToken
+        ? { polkadex: null }
+        : { asset: selectedAsset?.id || null };
+
+      await mutateAsync({
+        asset,
+        dest: address,
+        amount: amount.toString(),
+        account: selectedWallet,
+      });
+    } finally {
+      resetForm({ values: initialValues });
+      const asset = isPolkadexToken ? "PDEX" : selectedAsset?.id || "PDEX";
+      onChangeChainBalance(asset);
+    }
+  };
+
+  const onHandleSubmit = isTransferFromFunding
+    ? onSubmitDeposit
+    : onSubmitWithdraw;
   const {
     handleSubmit,
     resetForm,
@@ -174,7 +214,7 @@ export const Form = ({
     validationSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: isTransferFromFunding ? onSubmitDeposit : onSubmitWithdraw,
+    onSubmit: type === "transfer" ? onSubmitTransfer : onHandleSubmit,
   });
   const isLocalAccountPresent = !!Object.keys(selectedAccount ?? {}).length;
   const isExtensionAccountPresent = !!Object.keys(selectedWallet ?? {}).length;
@@ -183,13 +223,15 @@ export const Form = ({
     ? isExtensionAccountPresent
     : isLocalAccountPresent;
 
-  const loading = isTransferFromFunding ? depositLoading : withdrawLoading;
+  const formLoading = isTransferFromFunding ? depositLoading : withdrawLoading;
+  const loading =
+    type === "transfer" ? transferLoading || fundgLoading : formLoading;
+
   const disabled = !hasAccount || loading || !(isValid && dirty);
 
   useEffect(() => {
     if (!isTransferFromFunding) tryUnlockTradeAccount(selectedAccount);
   }, [selectedAccount, isTransferFromFunding]);
-
   return (
     <Fragment>
       <Modal open={showPassword} onOpenChange={setShowPassword}>
@@ -233,7 +275,9 @@ export const Form = ({
               <ArrowRightIcon
                 className={classNames(
                   "w-6 h-6 transition-all duration-300",
-                  isTransferFromFunding ? "max-sm:rotate-90" : "rotate-[360deg]"
+                  isTransferFromFunding || type === "transfer"
+                    ? "max-sm:rotate-90"
+                    : "max-sm:rotate-[450deg] rotate-[360deg]"
                 )}
               />
             </button>
@@ -246,6 +290,14 @@ export const Form = ({
               extensionAccountBalance={selectedAsset?.onChainBalance}
               localAccountBalance={selectedAsset?.free_balance}
               selectedAssetTicker={selectedAsset?.ticker}
+              onChangeDirection={(e) => {
+                resetForm();
+                onChangeType(e);
+              }}
+              isFundingToFunding={type === "transfer"}
+              type={type}
+              selectedExtensionAccount={selectedExtensionAccount}
+              setSelectedExtensionAccount={setSelectedExtensionAccount}
             />
           </div>
           <div className="flex items-center border border-primary max-sm:flex-col">
@@ -254,7 +306,7 @@ export const Form = ({
               onClick={() => onAssetsInteraction()}
               className="flex items-center justify-between gap-4 px-5 py-4 max-sm:w-full max-sm:border-b sm:border-r border-primary hover:bg-level-1 duration-300 transition-colors min-w-60"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-1">
                 <Skeleton
                   loading={!selectedAsset?.ticker}
                   className="w-10 h-10"
@@ -269,13 +321,13 @@ export const Form = ({
                 </Skeleton>
                 <div
                   className={classNames(
-                    "flex flex-col",
+                    "flex flex-col flex-1",
                     !selectedAsset && "gap-2"
                   )}
                 >
                   <Skeleton
                     loading={!selectedAsset?.ticker}
-                    className="w-20 h-4"
+                    className="flex-1 min-h-4"
                   >
                     <Typography.Text size="md" bold>
                       {selectedAsset?.ticker}
@@ -283,7 +335,7 @@ export const Form = ({
                   </Skeleton>
                   <Skeleton
                     loading={!selectedAsset?.ticker}
-                    className="w-10 h-4"
+                    className="flex-1 min-h-4"
                   >
                     <Typography.Text
                       appearance="primary"
@@ -299,7 +351,6 @@ export const Form = ({
                 <ChevronDownIcon className="w-4 h-4" />
               </div>
             </div>
-
             <div
               className={classNames(
                 "w-full flex items-center justify-between gap-2 pr-4 h-full",
@@ -350,7 +401,7 @@ export const Form = ({
                   : onToogleConnectTrading()
               }
             >
-              Connect yor account
+              Connect your account
             </Button.Solid>
           ) : (
             <Button.Solid
