@@ -55,7 +55,7 @@ export const FundWalletModal = ({
               title="Decentralized bridge"
               description="Bridge your crypto from Polkadot, Kusama & Parachains to Polkadex chain and vice versa."
             >
-              <div className="flex justify-between gap-2 items-center">
+              <div className="flex justify-between gap-2 sm:items-center max-sm:flex-col">
                 <Dropdown>
                   <Dropdown.Trigger className="flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1">
                     Polkadot-based
@@ -177,7 +177,7 @@ export const FundWalletModal = ({
               target="_blank"
             />
             <Card icon="CentralizedExchange" title="Centralized exchanges">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <Button.Solid
                   appearance="secondary"
                   size="sm"
