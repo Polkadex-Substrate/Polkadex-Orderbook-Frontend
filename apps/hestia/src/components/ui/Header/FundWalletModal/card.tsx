@@ -5,10 +5,16 @@ import Link from "next/link";
 
 import { Icons } from "../..";
 
-type Props = { title: string; description?: string; icon?: keyof typeof Icons };
+type Props = {
+  title: string;
+  description?: string;
+  icon?: keyof typeof Icons;
+  disabled?: boolean;
+};
 type CardProps = ComponentPropsWithoutRef<"a"> & Props;
 
 export const Card = ({
+  disabled,
   title,
   description,
   children,
@@ -21,7 +27,8 @@ export const Card = ({
       <Link
         href={href}
         className={classNames(
-          "flex items-center gap-4 p-4 hover:bg-level-1 transition-colors duration-200"
+          "flex items-center gap-4 p-4 hover:bg-level-1 transition-colors duration-200",
+          disabled && "pointer-events-none opacity-40"
         )}
         {...props}
       >

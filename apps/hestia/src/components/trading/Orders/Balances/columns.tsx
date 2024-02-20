@@ -83,8 +83,7 @@ export const columns = [
           }}
           tradeLink={`/trading/${e.getValue().ticker}`}
           transferLink={{
-            pathname: "/transfer",
-            query: { token: e.getValue().ticker },
+            pathname: `/transfer/${e.getValue().ticker}`,
           }}
         />
       );
