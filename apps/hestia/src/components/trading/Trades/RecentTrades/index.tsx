@@ -14,7 +14,7 @@ import {
 import { RecentTradesModule } from "./module";
 
 export const RecentTrades = ({ id }: { id: string }) => {
-  const { list: allMarkets } = useMarkets();
+  const { list: allMarkets, loading: marketsLoading } = useMarkets();
   const currentMarket = getCurrentMarket(allMarkets, id);
 
   const quoteTicker = currentMarket?.quoteAsset?.ticker ?? "";
@@ -28,10 +28,12 @@ export const RecentTrades = ({ id }: { id: string }) => {
     (currentMarket && decimalPlaces(currentMarket.qty_step_size)) ??
     MIN_DIGITS_AFTER_DECIMAL;
 
-  const { isDecreasing, list } = useRecentTrades(currentMarket?.id as string);
+  const { isDecreasing, list, loading } = useRecentTrades(
+    currentMarket?.id as string
+  );
 
   const precision = Math.max(pricePrecision, amountPrecision);
-
+  console.log(loading, marketsLoading);
   return (
     <RecentTradesModule
       quoteTicker={quoteTicker}
@@ -39,6 +41,7 @@ export const RecentTrades = ({ id }: { id: string }) => {
       precision={precision}
       isDecreasing={isDecreasing}
       data={list}
+      loading={loading && marketsLoading}
     />
   );
 };
