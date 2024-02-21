@@ -13,6 +13,7 @@ import {
   Searchable,
   Typography,
   truncateString,
+  ScrollArea,
 } from "@polkadex/ux";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import {
@@ -178,41 +179,44 @@ export const SelectFundingDropdown = ({
                 <Searchable.Empty className="flex-1 flex items-center justify-center">
                   No result found
                 </Searchable.Empty>
-                <Searchable.Group heading="Accounts">
-                  {walletsFiltered.map((curr) => {
-                    const selected =
-                      selectedExtensionAccount?.address === curr.address;
+                <ScrollArea className="max-h-[400px]">
+                  <Searchable.Group heading="Accounts">
+                    {walletsFiltered.map((curr) => {
+                      const selected =
+                        selectedExtensionAccount?.address === curr.address;
 
-                    return (
-                      <Searchable.Item
-                        key={curr.name}
-                        value={curr.name}
-                        className={classNames(
-                          "mb-1 mr-1",
-                          selected && "bg-level-3"
-                        )}
-                        onSelect={() => {
-                          setSelectedExtensionAccount(curr);
-                          setOpen(false);
-                        }}
-                      >
-                        <div className="flex items-center justify-between gap-4 w-full flex-1">
-                          <AccountCard
-                            address={curr.address}
-                            name={curr.name}
-                            hoverable={false}
-                          />
-                          <CheckIcon
-                            className={`ml-auto h-4 w-4 ${
-                              selectedExtensionAccount?.address !==
-                                curr.address && "opacity-0"
-                            }`}
-                          />
-                        </div>
-                      </Searchable.Item>
-                    );
-                  })}
-                </Searchable.Group>
+                      return (
+                        <Searchable.Item
+                          key={curr.name}
+                          value={curr.name}
+                          className={classNames(
+                            "mb-1 mr-1",
+                            selected && "bg-level-3"
+                          )}
+                          onSelect={() => {
+                            setSelectedExtensionAccount(curr);
+                            setOpen(false);
+                          }}
+                        >
+                          <div className="flex items-center justify-between gap-4 w-full flex-1">
+                            <AccountCard
+                              address={curr.address}
+                              name={curr.name}
+                              hoverable={false}
+                            />
+                            <CheckIcon
+                              className={`ml-auto h-4 w-4 ${
+                                selectedExtensionAccount?.address !==
+                                  curr.address && "opacity-0"
+                              }`}
+                            />
+                          </div>
+                        </Searchable.Item>
+                      );
+                    })}
+                  </Searchable.Group>
+                  <ScrollArea.Bar orientation="vertical" />
+                </ScrollArea>
               </div>
             </div>
           </Searchable.List>

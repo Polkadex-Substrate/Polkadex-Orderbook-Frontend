@@ -53,12 +53,12 @@ export const Profile = ({
           <Tooltip>
             <Tooltip.Trigger asChild>
               <Button.Icon asChild>
-                <Link href="/transactions">
+                <Link href="/history">
                   <BookOpenIcon />
                 </Link>
               </Button.Icon>
             </Tooltip.Trigger>
-            <Tooltip.Content>Transactions</Tooltip.Content>
+            <Tooltip.Content>History</Tooltip.Content>
           </Tooltip>
           <Tooltip>
             <Tooltip.Trigger asChild>
