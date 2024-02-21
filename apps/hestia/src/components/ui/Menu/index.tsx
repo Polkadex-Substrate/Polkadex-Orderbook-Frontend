@@ -42,8 +42,8 @@ export const Menu = () => {
             <Card icon="WalletIcon" href="/balances">
               Balances
             </Card>
-            <Card icon="QueueListIcon" href="/transactions">
-              Transactions
+            <Card icon="QueueListIcon" href="/history">
+              History
             </Card>
             <Card icon="CircleStackIcon" href="/analytics" newBadge>
               Analytics
