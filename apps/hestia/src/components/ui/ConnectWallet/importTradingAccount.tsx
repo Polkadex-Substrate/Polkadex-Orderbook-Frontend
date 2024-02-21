@@ -147,7 +147,11 @@ export const ImportTradingAccount = ({
     : extensionAccountAddress;
 
   const buttonDisabled =
-    !(isValid && dirty) || !isValidFile || isError || !isSuccess;
+    !(isValid && dirty) ||
+    !isValidFile ||
+    isError ||
+    !isSuccess ||
+    isAlreadyExists;
 
   return (
     <Loading.Spinner active={loading}>
