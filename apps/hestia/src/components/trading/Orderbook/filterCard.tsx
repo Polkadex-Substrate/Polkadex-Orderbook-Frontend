@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { Button, Icon } from "@polkadex/ux";
 
 import * as Icons from "@/components/ui/Icons";
 
@@ -13,14 +14,14 @@ export const FilterCard = ({
 }) => {
   const IconComponent = Icons[icon];
   return (
-    <button
+    <Button.Icon
+      size="sm"
+      appearance="secondary"
+      variant="ghost"
       onClick={action}
-      className={classNames(
-        !active && "opacity-50",
-        "w-[1.8rem] h-[1.8rem] p-[0.25rem] hover:bg-level-1 transition-colors duration-300 rounded opacity-100"
-      )}
+      className={classNames("p-1", !active && "opacity-40")}
     >
       <IconComponent />
-    </button>
+    </Button.Icon>
   );
 };
