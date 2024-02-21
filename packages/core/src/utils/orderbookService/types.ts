@@ -36,6 +36,11 @@ export type Orderbook = {
   asks: BookLevel[];
 };
 
+export enum OrderTypeEnum {
+  LIMIT = "LIMIT",
+  MARKET = "MARKET",
+}
+
 export type OrderType = "LIMIT" | "MARKET";
 export type OrderStatus = "OPEN" | "CLOSED" | "CANCELLED";
 export type OrderSide = "Ask" | "Bid";

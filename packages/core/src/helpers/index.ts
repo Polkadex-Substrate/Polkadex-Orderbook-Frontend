@@ -36,3 +36,4 @@ export * from "./extensions";
 export * from "./validateAddress";
 export * from "./tryUnlockTradeAccount";
 export * from "./fetchCandles";
+export * from "./getNewClientId";
