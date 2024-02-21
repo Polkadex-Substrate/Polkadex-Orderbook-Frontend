@@ -65,7 +65,7 @@ export const Profile = ({
     ({ address }) => !mainProxiesAccounts.includes(address)
   );
 
-  const enableDropdown = linkedBrowserAccounts?.length >= 2;
+  const enableDropdown = localTradingAccounts?.length >= 2;
   return (
     <div className="flex flex-col sm:w-full md:w-[23rem] bg-level-0 rounded-sm border border-primary">
       <div className="flex flex-col gap-6 p-4 border-b border-primary">
@@ -187,7 +187,11 @@ export const Profile = ({
                     {otherBrowserAccounts?.length > 0 && (
                       <div className="flex items-center gap-2 mr-2">
                         <Separator.Horizontal className="bg-level-5" />
-                        <Typography.Text appearance="secondary" size="xs">
+                        <Typography.Text
+                          appearance="secondary"
+                          size="xs"
+                          className="whitespace-nowrap"
+                        >
                           from other funding account(s)
                         </Typography.Text>
                       </div>

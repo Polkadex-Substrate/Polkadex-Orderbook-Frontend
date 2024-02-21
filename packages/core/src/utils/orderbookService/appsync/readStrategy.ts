@@ -1,5 +1,9 @@
 import { GraphQLResult } from "@aws-amplify/api";
 import { unknownAsset } from "@orderbook/core/utils/orderbookService/appsync/constants";
+import {
+  DEFAULT_BATCH_LIMIT,
+  RECENT_TRADES_LIMIT,
+} from "@orderbook/core/constants";
 
 import {
   FindUserByMainAccountQuery,
@@ -39,6 +43,7 @@ import {
   LatestTradesPropsForMarket,
   OrderSide,
   TransactionHistoryProps,
+  UserAllHistoryProps,
 } from "./../types";
 import {
   fetchBatchFromAppSync,
@@ -223,7 +228,8 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         to: args.to.toISOString(),
         nextToken: args.pageParams,
       },
-      "listOrderHistoryByTradeAccount"
+      "listOrderHistoryByTradeAccount",
+      args.batchLimit
     );
     if (!orderHistoryQueryResult) {
       return { data: [], nextToken: null };
@@ -309,7 +315,8 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         to: args.to.toISOString(),
         nextToken: args.pageParams,
       },
-      "listTradesByTradeAccount"
+      "listTradesByTradeAccount",
+      args.batchLimit
     );
     if (!queryResult) {
       return { data: [], nextToken: null };
@@ -345,7 +352,8 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         m: args.market,
         limit: args.limit,
       },
-      "listRecentTrades"
+      "listRecentTrades",
+      RECENT_TRADES_LIMIT
     );
     if (!queryResult) {
       return [];
@@ -388,7 +396,8 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         to: args.to.toISOString(),
         transaction_type: args.transaction_type,
       },
-      "listTransactionsByMainAccount"
+      "listTransactionsByMainAccount",
+      DEFAULT_BATCH_LIMIT
     );
     if (!queryResult) {
       return { data: [], nextToken: null };
@@ -429,6 +438,72 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       },
     });
     return queryResult?.data?.findUserByTradeAccount?.items?.[0]?.main;
+  }
+
+  // For export purpose only
+  async getAllOrderHistory(args: UserAllHistoryProps): Promise<Order[]> {
+    if (!this.isReady()) {
+      await this.init();
+    }
+    const orderHistoryQueryResult = await fetchFullListFromAppSync<APIOrder>(
+      QUERIES.listOrderHistoryByTradeAccount,
+      {
+        trade_account: args.address,
+        from: args.from.toISOString(),
+        to: args.to.toISOString(),
+      },
+      "listOrderHistoryByTradeAccount"
+    );
+    if (!orderHistoryQueryResult) {
+      return [];
+    }
+    const orderHistory = orderHistoryQueryResult
+      ?.filter((item) => this._marketList.find((x) => x.id === item?.m))
+      ?.map((item): Order => {
+        return this.mapApiOrderToOrder(item, this._marketList);
+      });
+    return orderHistory || [];
+  }
+
+  // For export purpose only
+  async getAllTradeHistory(args: UserAllHistoryProps): Promise<Trade[]> {
+    if (!this.isReady()) {
+      await this.init();
+    }
+    const queryResult = await fetchFullListFromAppSync<UserTrade>(
+      QUERIES.listTradesByTradeAccount,
+      {
+        trade_account: args.address,
+        from: args.from.toISOString(),
+        to: args.to.toISOString(),
+      },
+      "listTradesByTradeAccount"
+    );
+    if (!queryResult) {
+      return [];
+    }
+    const trades = queryResult
+      ?.filter((item) => this._marketList.find((x) => x.id === item?.m))
+      ?.map((item: UserTrade): Trade => {
+        const market = this._marketList.find((x) => x.id === item?.m);
+        if (!market) {
+          throw new Error(
+            `[${this.constructor.name}:getTradeHistory] cannot find market`
+          );
+        }
+        return {
+          market,
+          price: Number(item.p) || 0,
+          qty: Number(item.q) || 0,
+          isReverted: item?.isReverted || false,
+          timestamp: new Date(Number(item?.t) || 0),
+          tradeId: item?.trade_id || "",
+          fee: 0,
+          side: item.s as OrderSide,
+          quote_qty: String(Number(item.p) * Number(item.q)),
+        };
+      });
+    return trades || [];
   }
 
   private mapApiOrderToOrder(item: APIOrder, marketList: Market[]): Order {

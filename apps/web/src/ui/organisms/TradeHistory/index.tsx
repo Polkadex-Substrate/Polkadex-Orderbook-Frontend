@@ -1,7 +1,6 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useTranslation } from "next-i18next";
 import { useEffect } from "react";
-import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useTradeHistory } from "@orderbook/core/hooks";
 import {
   Button,
@@ -10,6 +9,7 @@ import {
   TradeHistoryCard,
 } from "@polkadex/orderbook-ui/molecules";
 import { Ifilters } from "@orderbook/core/providers/types";
+import { DEFAULT_BATCH_LIMIT } from "@orderbook/core/constants";
 
 import { TransactionsSkeleton } from "../Transactions";
 
@@ -20,23 +20,11 @@ import { normalizeValue } from "@/utils/normalize";
 type Props = {
   filters: Ifilters;
   onHideTransactionDropdown: (v: boolean) => void;
-  market: string;
 };
 
-export const TradeHistory = ({
-  filters,
-  onHideTransactionDropdown,
-  market,
-}: Props) => {
-  const {
-    priceFixed,
-    amountFixed,
-    trades,
-    hasNextPage,
-    error,
-    isLoading,
-    onFetchNextPage,
-  } = useTradeHistory(market, filters);
+export const TradeHistory = ({ filters, onHideTransactionDropdown }: Props) => {
+  const { trades, hasNextPage, error, isLoading, onFetchNextPage } =
+    useTradeHistory(DEFAULT_BATCH_LIMIT, filters);
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`tradeHistory.${key}`);
@@ -86,18 +74,10 @@ export const TradeHistory = ({
                     data={[
                       { value: date },
                       {
-                        value: Decimal.format(
-                          trade.price,
-                          Number(priceFixed),
-                          ","
-                        ),
+                        value: String(trade.price),
                       },
                       {
-                        value: Decimal.format(
-                          trade.qty,
-                          Number(amountFixed),
-                          ","
-                        ),
+                        value: String(trade.qty),
                       },
                     ]}
                   />

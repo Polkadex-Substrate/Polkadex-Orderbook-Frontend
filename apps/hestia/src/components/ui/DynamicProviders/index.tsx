@@ -100,6 +100,9 @@ export const DynamicProviders = ({ children }: { children: ReactNode }) => {
               console.log("onSuccess", e);
               toast.success(e.toString());
             },
+            onInfo: (e) => {
+              toast.info(e.toString());
+            },
           }}
         >
           <ExtensionsProvider>
