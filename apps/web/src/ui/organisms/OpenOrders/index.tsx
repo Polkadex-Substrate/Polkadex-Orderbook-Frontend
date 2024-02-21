@@ -23,7 +23,7 @@ export const OpenOrders = ({
   onHideTransactionDropdown,
   market,
 }: Props) => {
-  const { isLoading, openOrders } = useOpenOrders(market, filters);
+  const { isLoading, openOrders } = useOpenOrders(filters);
   const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, market);
 

@@ -28,17 +28,15 @@ import { columns } from "./columns";
 import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
 
 export const OpenOrdersTable = ({
-  market,
   filters,
   maxHeight,
 }: {
-  market: string;
   filters: Ifilters;
   maxHeight: string;
 }) => {
   const { onCancelOrder: cancelOrder } = useOrders();
   const { selectedAccount } = useConnectWalletProvider();
-  const { isLoading, openOrders } = useOpenOrders(market, filters);
+  const { isLoading, openOrders } = useOpenOrders(filters);
   const { width } = useWindowSize();
 
   const [showPassword, setShowPassword] = useState(false);

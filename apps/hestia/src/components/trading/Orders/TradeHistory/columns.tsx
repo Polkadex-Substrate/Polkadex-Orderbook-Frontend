@@ -1,7 +1,6 @@
 import { Trade } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
-import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
+import { Tooltip, Typography } from "@polkadex/ux";
 
 const tradeHistoryColumnHelper = createColumnHelper<Trade>();
 
@@ -65,7 +64,7 @@ export const columns = [
           size="xs"
           bold
           appearance={isSell ? "danger" : "success"}
-          className="capitalize"
+          className="uppercase"
         >
           {isSell ? "Sell" : "Buy"}
         </Typography.Text>
@@ -91,34 +90,13 @@ export const columns = [
     footer: (e) => e.column.id,
   }),
   tradeHistoryColumnHelper.accessor((row) => row, {
-    id: "quantity",
+    id: "amount",
     cell: (e) => {
       return <Typography.Text size="xs">{e.getValue().qty}</Typography.Text>;
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Quantity
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  tradeHistoryColumnHelper.accessor((row) => row, {
-    id: "id",
-    cell: (e) => {
-      return (
-        <Copy value={e.getValue().tradeId}>
-          <div className="flex items-center gap-1">
-            <DocumentDuplicateIcon className="w-4 h-4 text-actionInput" />
-            <Typography.Text size="xs">
-              {truncateString(e.getValue().tradeId, 4)}
-            </Typography.Text>
-          </div>
-        </Copy>
-      );
-    },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        ID
+        Amount
       </Typography.Text>
     ),
     footer: (e) => e.column.id,

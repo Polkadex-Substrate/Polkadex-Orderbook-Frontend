@@ -18,6 +18,7 @@ import {
 } from "@polkadex/ux";
 import { useOrderHistory } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
+import { DEFAULT_BATCH_LIMIT } from "@orderbook/core/constants";
 
 import { Loading } from "../loading";
 import { OrderHistoryResponsiveCard } from "../responsiveCard";
@@ -25,16 +26,14 @@ import { OrderHistoryResponsiveCard } from "../responsiveCard";
 import { columns } from "./columns";
 
 export const OrderHistoryTable = ({
-  market,
   filters,
   maxHeight,
 }: {
-  market: string;
   filters: Ifilters;
   maxHeight: string;
 }) => {
   const { isLoading, orderHistory, error, hasNextPage, onFetchNextPage } =
-    useOrderHistory(market, filters);
+    useOrderHistory(DEFAULT_BATCH_LIMIT, filters);
   const { width } = useWindowSize();
   const table = useReactTable({
     data: orderHistory,
