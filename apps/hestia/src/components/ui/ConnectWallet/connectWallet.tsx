@@ -120,7 +120,7 @@ export const chains = [
   },
   {
     name: "Ethereum Wallets",
-    description: "Moombeam, Astar, Ethereum, etc.",
+    description: "Moonbeam, Astar, Ethereum, etc.",
     icon: "ETH",
     active: false,
   },

@@ -18,6 +18,14 @@ const withPWA = require("next-pwa")({
 const nextConfig = {
   transpilePackages: ["@orderbook/core"],
   reactStrictMode: false,
+  generateBuildId: async () => {
+    try {
+      const gitCommitHash = execSync("git rev-parse HEAD").toString().trim();
+      return gitCommitHash;
+    } catch (error) {
+      return "orderbookDefaultId";
+    }
+  },
   // Optional build-time configuration options
   sentry: {
     // See the sections below for information on the following options:
