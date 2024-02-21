@@ -52,7 +52,7 @@ export const OrdersProvider: T.OrdersComponent = ({ children }) => {
           api,
           address,
           orderType,
-          side,
+          side === "Buy" ? "Bid" : "Ask",
           symbol[0],
           symbol[1],
           amount,
