@@ -1,7 +1,6 @@
 "use client";
 
 import { Dropdown, Typography } from "@polkadex/ux";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 import { FilterCard } from "./filterCard";
 
@@ -24,7 +23,7 @@ export const Header = ({
     <div className="flex items-center justify-between p-2">
       <Typography.Heading
         type="h3"
-        className="text-sm font-semibold text-primary"
+        className="text-sm font-medium text-primary"
       >
         Orderbook
       </Typography.Heading>
@@ -49,10 +48,7 @@ export const Header = ({
         <Dropdown>
           <Dropdown.Trigger className="items-center inline-flex opacity-50 transition-opacity ease-out duration-300 hover:opacity-100 w-full">
             <Typography.Text>{selectedDecimal}</Typography.Text>
-            <ChevronDownIcon
-              className="ml-1 h-3 w-3 text-gray-500"
-              aria-hidden="true"
-            />
+            <Dropdown.Icon className="w-3 h-3" />
           </Dropdown.Trigger>
           <Dropdown.Content>
             {decimalSizes
