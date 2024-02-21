@@ -54,7 +54,7 @@ export const Orderbook = ({
           filterState !== "OrderDesc" ? "flex-col" : "flex-col-reverse",
           "flex flex-1 flex-col gap-1 border-t border-t-primary py-1 bg-level-0 overflow-y-hidden hover:overflow-y-auto"
         )}
-        style={{ scrollbarGutter: "stable" }}
+        style={{ scrollbarGutter: loading ? "inherit" : "stable" }}
       >
         <Skeleton loading={!!loading}>
           <Table
