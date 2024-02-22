@@ -53,7 +53,7 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
         throw new Error(resp.body);
       }
     } else {
-      throw new Error("cancel order failed: No valid response from server");
+      throw new Error("Cancel order failed: No valid response from server");
     }
   }
 
