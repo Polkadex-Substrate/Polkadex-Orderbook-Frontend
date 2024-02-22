@@ -96,7 +96,14 @@ export const UnlockAccount = ({
           <Interaction.Action type="submit" disabled={!(isValid && dirty)}>
             {message}
           </Interaction.Action>
-          <Interaction.Close onClick={handleClose}>Cancel</Interaction.Close>
+          <Interaction.Close
+            onClick={(e) => {
+              e.preventDefault();
+              handleClose();
+            }}
+          >
+            Cancel
+          </Interaction.Close>
         </Interaction.Footer>
       </Interaction>
     </form>
