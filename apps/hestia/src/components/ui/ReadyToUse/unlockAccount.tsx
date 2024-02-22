@@ -46,7 +46,10 @@ export const UnlockAccount = ({
     });
 
   const digitsLeft = useMemo(
-    () => 5 - Array.from(String(values.password), (v) => Number(v)).length,
+    () =>
+      5 -
+      Array.from(String(values.password.replace(/\s/g, "")), (v) => Number(v))
+        .length,
     [values]
   );
 
