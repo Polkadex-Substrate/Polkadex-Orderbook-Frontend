@@ -39,7 +39,7 @@ export const Orderbook = ({
 
   return (
     <div
-      className="flex flex-1 flex-col border-r border-r-primary min-w-[23rem] min-h-[25rem] overflow-hidden"
+      className="flex flex-1 flex-col border-r border-r-primary sm:min-w-[23rem] min-h-[25rem] overflow-hidden"
       style={{ maxHeight }}
     >
       <Header
@@ -54,7 +54,10 @@ export const Orderbook = ({
           filterState !== "OrderDesc" ? "flex-col" : "flex-col-reverse",
           "flex flex-1 flex-col border-t border-t-primary bg-level-0 overflow-y-hidden hover:overflow-y-auto"
         )}
-        style={{ scrollbarGutter: loading ? "inherit" : "stable" }}
+        style={{
+          scrollbarGutter:
+            loading || !bids.length || !asks.length ? "inherit" : "stable",
+        }}
       >
         <Skeleton loading={!!loading}>
           <Table

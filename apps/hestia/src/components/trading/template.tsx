@@ -38,7 +38,7 @@ export function Template({ id }: { id: string }) {
             <AssetInfo currentMarket={currentMarket} />
             <Graph id={id} />
           </div>
-          <div className="flex min-h-[22rem] flex-1 max-md:flex-wrap">
+          <div className="flex min-h-[22rem] flex-1 max-md:flex-wrap max-md:flex-col">
             <Orderbook maxHeight={tableMaxHeight as string} id={id} />
             <Trades maxHeight={tableMaxHeight as string} id={id} />
           </div>
