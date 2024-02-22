@@ -75,20 +75,6 @@ export const OpenOrdersTable = ({
   if (!openOrders.length)
     return <GenericMessage title={"No open orders"} illustration="NoData" />;
 
-  if (responsiveView) {
-    return (
-      <div
-        className="flex-1 overflow-y-hidden hover:overflow-y-auto"
-        style={{ maxHeight, scrollbarGutter: "stable" }}
-      >
-        <OpenOrderResponsiveCard
-          orders={openOrders}
-          onCancelOrder={onCancelOrder}
-        />
-      </div>
-    );
-  }
-
   return (
     <>
       <Modal open={showPassword} onOpenChange={setShowPassword}>
@@ -104,53 +90,60 @@ export const OpenOrdersTable = ({
         className="flex-1 overflow-y-hidden hover:overflow-y-auto"
         style={{ maxHeight, scrollbarGutter: "stable" }}
       >
-        <PolkadexTable className="w-full" even>
-          <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <PolkadexTable.Row key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <PolkadexTable.Head
-                      className={classNames(
-                        "px-2 text-primary font-semibold text-xs"
-                      )}
-                      key={header.id}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </PolkadexTable.Head>
-                  );
-                })}
-              </PolkadexTable.Row>
-            ))}
-          </PolkadexTable.Header>
-          <PolkadexTable.Body>
-            {table.getRowModel().rows.map((row) => {
-              return (
-                <PolkadexTable.Row
-                  key={row.id}
-                  className={classNames("hover:bg-level-1 cursor-pointer")}
-                >
-                  {row.getVisibleCells().map((cell) => {
+        {responsiveView ? (
+          <OpenOrderResponsiveCard
+            orders={openOrders}
+            onCancelOrder={onCancelOrder}
+          />
+        ) : (
+          <PolkadexTable className="w-full" even>
+            <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <PolkadexTable.Row key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
                     return (
-                      <PolkadexTable.Cell
-                        key={cell.id}
-                        className={classNames("px-2 py-4 text-xs")}
+                      <PolkadexTable.Head
+                        className={classNames(
+                          "px-2 text-primary font-semibold text-xs"
+                        )}
+                        key={header.id}
                       >
                         {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
+                          header.column.columnDef.header,
+                          header.getContext()
                         )}
-                      </PolkadexTable.Cell>
+                      </PolkadexTable.Head>
                     );
                   })}
                 </PolkadexTable.Row>
-              );
-            })}
-          </PolkadexTable.Body>
-        </PolkadexTable>
+              ))}
+            </PolkadexTable.Header>
+            <PolkadexTable.Body>
+              {table.getRowModel().rows.map((row) => {
+                return (
+                  <PolkadexTable.Row
+                    key={row.id}
+                    className={classNames("hover:bg-level-1 cursor-pointer")}
+                  >
+                    {row.getVisibleCells().map((cell) => {
+                      return (
+                        <PolkadexTable.Cell
+                          key={cell.id}
+                          className={classNames("px-2 py-4 text-xs")}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </PolkadexTable.Cell>
+                      );
+                    })}
+                  </PolkadexTable.Row>
+                );
+              })}
+            </PolkadexTable.Body>
+          </PolkadexTable>
+        )}
       </div>
     </>
   );
