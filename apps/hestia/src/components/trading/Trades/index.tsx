@@ -20,7 +20,7 @@ export const Trades = ({
         style={{ maxHeight }}
       >
         <div className="flex items-center justify-between border-b border-primary">
-          <Tabs.List className="px-2 py-3">
+          <Tabs.List className="px-2 py-2.5">
             <Tabs.Trigger value="markets">Markets</Tabs.Trigger>
             <Tabs.Trigger value="recentTrades">Recent Trades</Tabs.Trigger>
           </Tabs.List>
