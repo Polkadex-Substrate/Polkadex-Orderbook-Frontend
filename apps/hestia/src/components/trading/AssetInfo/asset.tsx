@@ -6,6 +6,7 @@ import {
   tokenAppearance,
 } from "@polkadex/ux";
 import { useState } from "react";
+import classNames from "classnames";
 
 import { TokenInfo } from "./tokenInfo";
 export const Asset = ({
@@ -13,34 +14,54 @@ export const Asset = ({
   quoteTicker,
   tokenName,
   loading,
+  inlineView,
 }: {
   baseTicker: string;
   quoteTicker: string;
   tokenName: string;
   loading: boolean;
+  inlineView?: boolean;
 }) => {
   const [state, setState] = useState(false);
   return (
-    <div className="flex items-center gap-2 px-4 md:border-r border-primary min-w-[10rem]">
-      <Skeleton loading={!baseTicker} className="w-full h-full">
+    <div
+      className={classNames(
+        "flex items-center gap-2 px-4  min-w-[10rem]",
+        inlineView ? "py-1" : "md:border-r border-primary"
+      )}
+    >
+      <Skeleton
+        loading={!baseTicker}
+        className="w-full h-full  max-w-6 max-h-6"
+      >
         <Token
           appearance={baseTicker as keyof typeof tokenAppearance}
           name={baseTicker}
-          size="sm"
+          size="md"
           className="rounded-full border border-primary"
         />
       </Skeleton>
       <HoverCard open={!loading && state} onOpenChange={setState}>
-        <HoverCard.Trigger className="flex flex-1 w-full h-full">
-          <div className="flex flex-col gap-0.5 flex-1 h-full justify-center">
-            <Skeleton loading={loading}>
+        <HoverCard.Trigger className="flex h-full flex-1">
+          <div
+            className={classNames(
+              "flex flex-row-reverse gap-0.5 flex-1 h-full",
+              inlineView
+                ? "items-center justify-between"
+                : "flex-col justify-center"
+            )}
+          >
+            <Skeleton loading={loading} className=" min-h-4 min-w-12">
               <div className="flex items-center gap-1 cursor-default">
-                <Typography.Text size="xs" appearance="primary" bold>
+                <Typography.Text size="xs" appearance="primary">
                   {tokenName}
                 </Typography.Text>
               </div>
             </Skeleton>
-            <Skeleton loading={!baseTicker || !quoteTicker}>
+            <Skeleton
+              loading={!baseTicker || !quoteTicker}
+              className=" min-h-4 min-w-8 "
+            >
               <Typography.Text size="md" bold className="leading-none">
                 {baseTicker}/{quoteTicker}
               </Typography.Text>

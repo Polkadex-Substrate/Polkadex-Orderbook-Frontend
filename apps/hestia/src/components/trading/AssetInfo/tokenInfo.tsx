@@ -44,7 +44,7 @@ export const TokenInfo = ({
         </InfoCard>
         <div className="flex flex-col gap-4">
           <Typography.Text appearance="primary">About Polkadot</Typography.Text>
-          <Typography.Paragraph className="leading-6">
+          <Typography.Paragraph className="leading-6" size="sm">
             Polkadot is an open-source sharded multichain protocol that connects
             and secures a network of specialized blockchains, facilitating
             cross-chain transfer of any data or asset types, not just tokens,
