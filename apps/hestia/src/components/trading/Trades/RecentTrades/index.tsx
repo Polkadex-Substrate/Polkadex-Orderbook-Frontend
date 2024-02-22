@@ -33,7 +33,6 @@ export const RecentTrades = ({ id }: { id: string }) => {
   );
 
   const precision = Math.max(pricePrecision, amountPrecision);
-  console.log(loading, marketsLoading);
   return (
     <RecentTradesModule
       quoteTicker={quoteTicker}

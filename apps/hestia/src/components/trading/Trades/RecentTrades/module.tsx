@@ -37,10 +37,12 @@ export const RecentTradesModule = ({
   });
 
   return (
-    <Skeleton loading={!loading} className="h-full w-full">
+    <Skeleton loading={loading} className="h-full w-full">
       <div
         className="flex-1 h-full overflow-hidden hover:overflow-auto"
-        style={{ scrollbarGutter: "stable" }}
+        style={{
+          scrollbarGutter: loading || !data.length ? "inherit" : "stable",
+        }}
       >
         {data?.length ? (
           <table className="w-full">
@@ -98,7 +100,11 @@ export const RecentTradesModule = ({
             </tbody>
           </table>
         ) : (
-          <GenericMessage title="No data" illustration="NoData" />
+          <GenericMessage
+            title="No data"
+            illustration="NoData"
+            className="bg-level-0"
+          />
         )}
       </div>
     </Skeleton>
