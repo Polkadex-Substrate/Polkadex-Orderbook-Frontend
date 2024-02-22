@@ -16,7 +16,7 @@ export const Trades = ({
   return (
     <Tabs defaultValue="markets">
       <div
-        className="flex flex-1 flex-col sm:min-w-[22rem] min-h-[25rem]"
+        className="flex flex-1 flex-col sm:min-w-[20rem] min-h-[25rem]"
         style={{ maxHeight }}
       >
         <div className="flex items-center justify-between border-b border-primary">
@@ -42,10 +42,7 @@ export const Trades = ({
             </Dropdown.Content>
           </Dropdown>
         </div>
-        <Tabs.Content
-          value="markets"
-          // className="flex flex-col flex-1 h-full border-t border-primary overflow-auto"
-        >
+        <Tabs.Content value="markets" className="bg-level-0">
           <Markets />
         </Tabs.Content>
         <Tabs.Content
