@@ -21,16 +21,14 @@ import { OpenOrderResponsiveCard } from "../responsiveCard";
 import { columns } from "./columns";
 
 export const OpenOrdersTable = ({
-  market,
   filters,
   maxHeight,
 }: {
-  market: string;
   filters: Ifilters;
   maxHeight: string;
 }) => {
   const { onCancelOrder } = useOrders();
-  const { isLoading, openOrders } = useOpenOrders(market, filters);
+  const { isLoading, openOrders } = useOpenOrders(filters);
   const { width } = useWindowSize();
 
   const responsiveView = useMemo(

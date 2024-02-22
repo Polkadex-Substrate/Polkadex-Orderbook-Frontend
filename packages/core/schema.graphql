@@ -14,8 +14,6 @@ type Asset {
     symbol: String!
     # asset name of the asset; Bitcoin
     name: String!
-    # withdrawal fee of the asset; eg 0.0005
-    withdrawal_fee: String!
     # asset_id of the asset; eg 123456789
     asset_id: String!
 }

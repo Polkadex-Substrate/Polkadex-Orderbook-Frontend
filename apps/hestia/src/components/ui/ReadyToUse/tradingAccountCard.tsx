@@ -114,7 +114,7 @@ export const TradingAccountCard = ({
           {type}
         </div>
         {enabledExtensionAccount ? (
-          <Skeleton loading={isLoading} className="w-20 h-4">
+          <Skeleton loading={isLoading} className="max-w-32 h-4">
             <HoverCard>
               <HoverCard.Trigger>
                 <Typography.Text appearance="primary" size="xs">

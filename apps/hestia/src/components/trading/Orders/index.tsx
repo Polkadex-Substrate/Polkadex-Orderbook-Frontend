@@ -1,12 +1,20 @@
 "use client";
 
+import { useWindowSize } from "usehooks-ts";
 import { useMemo, useState } from "react";
 import {
   DateRangePicker,
   RangeKeyDict,
   defaultStaticRanges,
 } from "react-date-range";
-import { Button, Tabs, GenericMessage, Checkbox, Popover } from "@polkadex/ux";
+import {
+  Button,
+  Tabs,
+  GenericMessage,
+  Checkbox,
+  Popover,
+  ScrollArea,
+} from "@polkadex/ux";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useOpenOrders } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
@@ -31,21 +39,23 @@ const initialFilters: Ifilters = {
 
 type Props = {
   maxHeight: string;
-  id: string;
 };
 
 const BUY = "BUY";
 const SELL = "SELL";
 
-export const Orders = ({ maxHeight, id }: Props) => {
+export const Orders = ({ maxHeight }: Props) => {
+  const { width } = useWindowSize();
   const { dispatchUserSessionData, dateFrom, dateTo } = useSessionProvider();
   const { onToogleConnectTrading } = useSettingsProvider();
-  const { openOrders } = useOpenOrders(id);
+  const { openOrders } = useOpenOrders();
   const { selectedAddresses } = useProfile();
   const connected = selectedAddresses.tradeAddress.length > 0;
 
   const [show, setShow] = useState(true);
   const [filters, setFilters] = useState<Ifilters>(initialFilters);
+
+  const scrollAreaView = useMemo(() => width <= 470, [width]);
 
   const ranges = useMemo(() => {
     return [
@@ -83,22 +93,25 @@ export const Orders = ({ maxHeight, id }: Props) => {
   };
 
   return (
-    <Tabs defaultValue="openOrders" className="min-w-[25rem]">
+    <Tabs defaultValue="openOrders" className="sm:min-w-[25rem]">
       <div className="lg:flex items-center justify-between border-r border-b border-primary">
-        <Tabs.List className="px-2 py-2.5">
-          <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
-            Open Orders({openOrders?.length || 0})
-          </Tabs.Trigger>
-          <Tabs.Trigger value="orderHistory" onClick={() => setShow(true)}>
-            Order History
-          </Tabs.Trigger>
-          <Tabs.Trigger value="tradeHistory" onClick={() => setShow(true)}>
-            Trade History
-          </Tabs.Trigger>
-          <Tabs.Trigger value="balances" onClick={() => setShow(false)}>
-            Balances
-          </Tabs.Trigger>
-        </Tabs.List>
+        <ScrollArea className={`${scrollAreaView && "max-w-80"}`}>
+          <Tabs.List className="px-2 py-3 whitespace-nowrap">
+            <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
+              Open Orders({openOrders?.length || 0})
+            </Tabs.Trigger>
+            <Tabs.Trigger value="orderHistory" onClick={() => setShow(true)}>
+              Order History
+            </Tabs.Trigger>
+            <Tabs.Trigger value="tradeHistory" onClick={() => setShow(true)}>
+              Trade History
+            </Tabs.Trigger>
+            <Tabs.Trigger value="balances" onClick={() => setShow(false)}>
+              Balances
+            </Tabs.Trigger>
+          </Tabs.List>
+          <ScrollArea.Bar orientation="horizontal" />
+        </ScrollArea>
 
         {connected && show && (
           <div className="flex items-center gap-3 mx-2">
@@ -137,25 +150,13 @@ export const Orders = ({ maxHeight, id }: Props) => {
       {connected ? (
         <>
           <Tabs.Content value="openOrders">
-            <OpenOrdersTable
-              filters={filters}
-              market={id}
-              maxHeight={maxHeight}
-            />
+            <OpenOrdersTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
           <Tabs.Content value="orderHistory">
-            <OrderHistoryTable
-              filters={filters}
-              market={id}
-              maxHeight={maxHeight}
-            />
+            <OrderHistoryTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
           <Tabs.Content value="tradeHistory">
-            <TradeHistoryTable
-              filters={filters}
-              market={id}
-              maxHeight={maxHeight}
-            />
+            <TradeHistoryTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
           <Tabs.Content value="balances">
             <BalancesTable maxHeight={maxHeight} />

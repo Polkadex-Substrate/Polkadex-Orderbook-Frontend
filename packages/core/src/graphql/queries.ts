@@ -63,7 +63,6 @@ export const getAllAssets = /* GraphQL */ `query GetAllAssets($limit: Int, $next
     items {
       symbol
       name
-      withdrawal_fee
       asset_id
       __typename
     }

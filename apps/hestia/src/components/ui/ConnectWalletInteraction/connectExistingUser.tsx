@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { Multistep } from "@polkadex/ux";
@@ -50,8 +52,8 @@ export const ConnectExistingUser = ({
 
   const filteredAccounts = useMemo(
     () =>
-      localTradingAccounts?.filter(
-        (item) => mainProxiesAccounts?.includes(item.address)
+      localTradingAccounts?.filter((item) =>
+        mainProxiesAccounts?.includes(item.address)
       ),
     [localTradingAccounts, mainProxiesAccounts]
   );

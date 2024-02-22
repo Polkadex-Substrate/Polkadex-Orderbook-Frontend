@@ -75,11 +75,11 @@ export const fetchListFromAppSync = async <T = any[]>(
   return { response: fullResponse, nextToken };
 };
 
-const LIST_LIMIT = 15;
 export const fetchBatchFromAppSync = async <T = any[]>(
   query: string,
   variables: Record<string, any>,
-  key: string
+  key: string,
+  LIST_LIMIT: number
 ): Promise<{ response: any[]; nextToken: Maybe<string> }> => {
   let nextToken = variables.nextToken;
   let response: any[] = [];

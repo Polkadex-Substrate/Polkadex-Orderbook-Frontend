@@ -47,7 +47,7 @@ export function Template({ id }: { id: string }) {
           ref={marketRef}
           className="flex flex-wrap border-t border-t-primary"
         >
-          <Orders maxHeight={ordersMaxHeight as string} id={id} />
+          <Orders maxHeight={ordersMaxHeight as string} />
           <PlaceOrder ref={placeOrderRef} market={currentMarket} />
         </div>
       </main>

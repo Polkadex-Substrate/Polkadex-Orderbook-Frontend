@@ -159,6 +159,13 @@ export const OrderHistoryResponsiveCard = ({ orders }: { orders: Order[] }) => {
         </div>
 
         <div className="flex flex-col gap-1">
+          <Typography.Text appearance="primary">
+            Avg. Filled Price
+          </Typography.Text>
+          <Typography.Text>{order.averagePrice}</Typography.Text>
+        </div>
+
+        <div className="flex flex-col gap-1">
           <Typography.Text appearance="primary">Fee</Typography.Text>
           <Typography.Text>
             {order.fee} {feeTicker}
