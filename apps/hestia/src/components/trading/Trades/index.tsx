@@ -14,9 +14,9 @@ export const Trades = ({
   id: string;
 }) => {
   return (
-    <Tabs defaultValue="markets">
+    <Tabs defaultValue="markets" className="flex-initial max-xl:flex-1">
       <div
-        className="flex flex-1 flex-col sm:min-w-[20rem] min-h-[25rem]"
+        className="flex h-full flex-col sm:min-w-[20rem] min-h-[25rem]"
         style={{ maxHeight }}
       >
         <div className="flex items-center justify-between border-b border-primary">

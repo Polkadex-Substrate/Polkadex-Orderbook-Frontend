@@ -79,7 +79,10 @@ export const TVChartContainer = ({
         </div>
       )}
       <div
-        className={classNames(!isChartReady && "hidden", "w-full h-[100%]")}
+        className={classNames(
+          !isChartReady && "hidden",
+          "w-full h-[100%] flex flex-col flex-1 [&_iframe]:h-full  [&_iframe]:flex-1"
+        )}
         id="tv_chart_container"
       />
     </>
