@@ -28,7 +28,9 @@ export const columns = ({
       );
     },
     header: () => (
-      <Typography.Text size="xs">Price({quoteTicker})</Typography.Text>
+      <Typography.Text size="xs" appearance="primary">
+        Price({quoteTicker})
+      </Typography.Text>
     ),
     footer: (e) => e.column.id,
   }),
@@ -36,10 +38,16 @@ export const columns = ({
     id: "amount",
     cell: (e) => {
       const amountFormatter = Decimal.format(e.getValue(), precision, ",");
-      return <Typography.Text size="xs">{amountFormatter}</Typography.Text>;
+      return (
+        <Typography.Text size="xs" appearance="primary">
+          {amountFormatter}
+        </Typography.Text>
+      );
     },
     header: () => (
-      <Typography.Text size="xs">Amount({baseTicker})</Typography.Text>
+      <Typography.Text size="xs" appearance="primary">
+        Amount({baseTicker})
+      </Typography.Text>
     ),
     footer: (e) => e.column.id,
   }),
@@ -53,7 +61,11 @@ export const columns = ({
       }).format(new Date());
       return <Typography.Text size="xs">{date}</Typography.Text>;
     },
-    header: () => <Typography.Text size="xs">Time</Typography.Text>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Time
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
 ];
