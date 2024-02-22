@@ -6,6 +6,7 @@ import {
 import classNames from "classnames";
 import { useMarkets } from "@orderbook/core/index";
 import { Skeleton, Illustrations, GenericMessage } from "@polkadex/ux";
+import { useMemo } from "react";
 
 import { columns } from "./columns";
 import { Tickers } from "./tickers";
@@ -23,6 +24,7 @@ export const Markets = () => {
     handleShowFavourite,
     id,
     list,
+    loading: loadingMarkets,
   } = useMarkets();
 
   const hasMarkets = !!list?.length;
@@ -39,6 +41,11 @@ export const Markets = () => {
     ? { title: "No markets", illustration: "NoData" }
     : { title: "No result found", illustration: "NoResultFound" };
 
+  const loading = useMemo(
+    () => loadingMarkets || !hasMarkets,
+    [loadingMarkets, hasMarkets]
+  );
+
   return (
     <div className="flex-1 h-full grid grid-rows-[auto,1fr,auto] overflow-hidden">
       <Filters
@@ -47,11 +54,11 @@ export const Markets = () => {
         onChangeFavorite={handleShowFavourite}
         activeFavorite={fieldValue.showFavourite}
       />
-      <div
-        className="flex flex-col flex-1 border-t border-t-primary overflow-y-hidden hover:overflow-y-auto"
-        style={{ scrollbarGutter: "stable" }}
-      >
-        <Skeleton loading={!hasMarkets}>
+      <Skeleton loading={loading} className="h-full">
+        <div
+          className="flex flex-col flex-1 border-t border-t-primary overflow-y-hidden hover:overflow-y-auto"
+          style={{ scrollbarGutter: "stable" }}
+        >
           {!hasMarkets || !marketTokens.length ? (
             <GenericMessage {...messageProps} />
           ) : (
@@ -119,12 +126,14 @@ export const Markets = () => {
               </tbody>
             </table>
           )}
-        </Skeleton>
-      </div>
+        </div>
+      </Skeleton>
+
       <Tickers
         tickers={marketTickers}
         activeTicker={fieldValue.marketsTabsSelected}
         onChangeTicker={handleMarketsTabsSelected}
+        loading={loading}
       />
     </div>
   );
