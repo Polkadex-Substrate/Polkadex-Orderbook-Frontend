@@ -43,7 +43,7 @@ export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
                 </Dropdown.Content>
               </Dropdown>
             </div>
-            <Markets />
+            <Markets favorite={state === "Favorite"} />
           </div>
         ) : (
           <div />

@@ -1,48 +1,61 @@
 import { useMemo } from "react";
 import { useMarkets, useTickers } from "@orderbook/core/hooks";
 import { isNegative } from "@orderbook/core/helpers";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 import classNames from "classnames";
 
 import { MarketCard } from "./marketCard";
 
 type Props = {
-  pair?: string;
-  market?: string;
+  pair: string;
+  market: string;
   change: number;
   price: number;
   positive: boolean;
 };
 
-export const Markets = () => {
-  const { list: markets } = useMarkets();
+export const Markets = ({ favorite }: { favorite: boolean }) => {
+  const { list: allMarkets } = useMarkets();
   const { tickers } = useTickers();
+  const { favoriteMarkets: favouriteMarketIds } = useProfile();
+
+  const selectedMarkets = useMemo(() => {
+    if (favorite)
+      return allMarkets.filter((m) => favouriteMarketIds.includes(m.id));
+    else return allMarkets;
+  }, [allMarkets, favorite, favouriteMarketIds]);
 
   const data: Props[] = useMemo(() => {
-    return tickers.map((ticker) => {
-      const market = markets.find((m) => m.id === ticker.market);
-      const positive = !isNegative(ticker.priceChangePercent24Hr.toString());
-      return {
-        pair: market?.baseAsset?.ticker,
-        market: market?.quoteAsset?.ticker,
-        change: Math.abs(ticker.priceChangePercent24Hr),
-        price: ticker.currentPrice,
-        positive,
-      };
-    });
-  }, [markets, tickers]);
+    return tickers
+      .map((ticker) => {
+        const market = selectedMarkets.find((m) => m.id === ticker.market);
+        const positive = !isNegative(ticker.priceChangePercent24Hr.toString());
+        if (market) {
+          return {
+            pair: market?.baseAsset?.ticker,
+            market: market?.quoteAsset?.ticker,
+            change: Math.abs(ticker.priceChangePercent24Hr),
+            price: ticker.currentPrice,
+            positive,
+          };
+        }
+        return {} as Props;
+      })
+      .filter((t) => t.market && t.pair);
+  }, [selectedMarkets, tickers]);
 
-  const length = useMemo(() => data.length, [data.length]);
+  const isCarouselActive = useMemo(() => data.length > 3, [data.length]);
 
   return (
     <div className="overflow-hidden">
       <div
         className={classNames(
           "inline-flex gap-4",
-          length > 4 && "animate-infiniteHorizontalScroll"
+          isCarouselActive && "animate-infiniteHorizontalScroll"
         )}
       >
         <AllMarkets data={data} />
-        {length > 4 && <AllMarkets data={data} />}
+        {isCarouselActive && <AllMarkets data={data} />}
       </div>
     </div>
   );
@@ -50,19 +63,15 @@ export const Markets = () => {
 
 const AllMarkets = ({ data }: { data: Props[] }) => (
   <div className="inline-flex gap-2">
-    {data.map(
-      ({ market, pair, change, price, positive }) =>
-        pair &&
-        market && (
-          <MarketCard
-            key={`${market}/${pair}`}
-            pair={pair}
-            market={market}
-            change={change}
-            price={price}
-            positive={positive}
-          />
-        )
-    )}
+    {data.map(({ market, pair, change, price, positive }) => (
+      <MarketCard
+        key={`${market}/${pair}`}
+        pair={pair}
+        market={market}
+        change={change}
+        price={price}
+        positive={positive}
+      />
+    ))}
   </div>
 );
