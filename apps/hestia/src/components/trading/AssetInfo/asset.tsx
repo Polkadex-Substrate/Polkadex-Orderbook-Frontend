@@ -30,10 +30,7 @@ export const Asset = ({
         inlineView ? "py-1" : "md:border-r border-primary"
       )}
     >
-      <Skeleton
-        loading={!baseTicker}
-        className="w-full h-full  max-w-6 max-h-6"
-      >
+      <Skeleton loading={!baseTicker} className="w-full h-8 max-w-8">
         <Token
           appearance={baseTicker as keyof typeof tokenAppearance}
           name={baseTicker}
@@ -51,7 +48,7 @@ export const Asset = ({
                 : "flex-col justify-center"
             )}
           >
-            <Skeleton loading={loading} className=" min-h-4 min-w-12">
+            <Skeleton loading={loading} className="h-4 max-h-4 max-w-12">
               <div className="flex items-center gap-1 cursor-default">
                 <Typography.Text size="xs" appearance="primary">
                   {tokenName}
@@ -60,7 +57,7 @@ export const Asset = ({
             </Skeleton>
             <Skeleton
               loading={!baseTicker || !quoteTicker}
-              className=" min-h-4 min-w-8 "
+              className="h-4 max-h-4 max-w-8 "
             >
               <Typography.Text size="md" bold className="leading-none">
                 {baseTicker}/{quoteTicker}
