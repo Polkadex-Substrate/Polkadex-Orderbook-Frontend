@@ -96,7 +96,7 @@ export const Orders = ({ maxHeight }: Props) => {
     <Tabs defaultValue="openOrders" className="sm:min-w-[25rem]">
       <div className="lg:flex items-center justify-between border-r border-b border-primary">
         <ScrollArea className={`${scrollAreaView && "max-w-80"}`}>
-          <Tabs.List className="px-2 py-3 whitespace-nowrap">
+          <Tabs.List className="px-2 py-2.5 whitespace-nowrap">
             <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
               Open Orders({openOrders?.length || 0})
             </Tabs.Trigger>
@@ -166,6 +166,7 @@ export const Orders = ({ maxHeight }: Props) => {
         <GenericMessage
           title="Connect your trading account to start trading."
           illustration="ConnectAccount"
+          className="bg-level-0"
         >
           <Button.Solid onClick={() => onToogleConnectTrading()}>
             Connect Trading Account
