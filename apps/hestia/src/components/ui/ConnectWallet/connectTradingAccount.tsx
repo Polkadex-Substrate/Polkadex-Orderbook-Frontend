@@ -35,7 +35,7 @@ export const ConnectTradingAccount = ({
   enabledExtensionAccount?: boolean;
 }) => {
   return (
-    <Interaction className="bg-backgroundBase rounded-sm md:max-w-[24rem]">
+    <Interaction className="bg-backgroundBase rounded-sm md:max-w-[24rem] pb-6">
       <Interaction.Title onClose={onClose} size="lg">
         Select / Import Trading Account
       </Interaction.Title>

@@ -17,7 +17,10 @@ import { useFormik } from "formik";
 import { useDropzone } from "react-dropzone";
 import classNames from "classnames";
 import { useExtensionAccountFromBrowserAccount } from "@orderbook/core/hooks";
-import { useExtensionAccounts } from "@polkadex/react-providers";
+import {
+  useExtensionAccounts,
+  useUserAccounts,
+} from "@polkadex/react-providers";
 import {
   EncryptedJsonEncoding,
   EncryptedJsonVersion,
@@ -79,6 +82,7 @@ export const ImportTradingAccount = ({
 }) => {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
+  const { localAddresses } = useUserAccounts();
 
   const [state, setState] = useState(initialState);
 
@@ -101,7 +105,7 @@ export const ImportTradingAccount = ({
     });
 
   const isValidFile = useMemo(() => {
-    if (!whitelistBrowserAccounts) return true;
+    if (!whitelistBrowserAccounts?.length) return true;
     return (
       values.file?.address &&
       whitelistBrowserAccounts.includes(values.file?.address)
@@ -125,6 +129,11 @@ export const ImportTradingAccount = ({
     true
   );
 
+  const isAlreadyExists = useMemo(
+    () => localAddresses?.includes(values?.file?.address as string),
+    [localAddresses, values?.file?.address]
+  );
+
   const browserAccountAddress =
     values?.file?.address && truncateString(values?.file?.address);
 
@@ -138,7 +147,11 @@ export const ImportTradingAccount = ({
     : extensionAccountAddress;
 
   const buttonDisabled =
-    !(isValid && dirty) || !isValidFile || isError || !isSuccess;
+    !(isValid && dirty) ||
+    !isValidFile ||
+    isError ||
+    !isSuccess ||
+    isAlreadyExists;
 
   return (
     <Loading.Spinner active={loading}>
@@ -180,7 +193,8 @@ export const ImportTradingAccount = ({
                 )}
                 {!isValidFile && (
                   <ErrorMessage withIcon={false}>
-                    Selected trade account not linked to funding.
+                    This trading account is not linked to the selected funding
+                    account.
                   </ErrorMessage>
                 )}
                 {isValidFile && !isError && (
@@ -208,7 +222,13 @@ export const ImportTradingAccount = ({
 
                 {isValidFile && isError && (
                   <ErrorMessage withIcon={false}>
-                    No funding linked to trade account.
+                    No funding account linked to this trading account.
+                  </ErrorMessage>
+                )}
+
+                {isValidFile && !loading && isAlreadyExists && (
+                  <ErrorMessage withIcon={false}>
+                    This trading account is already available in the device.
                   </ErrorMessage>
                 )}
               </div>

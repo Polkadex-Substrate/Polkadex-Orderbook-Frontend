@@ -1,3 +1,5 @@
+"use client";
+
 import { Multistep } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
