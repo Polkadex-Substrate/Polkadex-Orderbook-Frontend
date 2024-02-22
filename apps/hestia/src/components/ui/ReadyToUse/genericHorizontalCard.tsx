@@ -14,6 +14,7 @@ interface GenericHorizontalCardProps
   icon: IconsProps;
   loading?: boolean;
   error?: string;
+  disabled?: boolean;
 }
 export const GenericHorizontalCard = ({
   title,
@@ -21,6 +22,7 @@ export const GenericHorizontalCard = ({
   children,
   loading,
   error,
+  disabled,
   ...props
 }: PropsWithChildren<GenericHorizontalCardProps>) => {
   const isStringType = typeof children === "string";
@@ -29,7 +31,12 @@ export const GenericHorizontalCard = ({
 
   return (
     <Loading.Spinner active={!!loading}>
-      <div {...elementProps} className="flex flex-col gap-3 group">
+      <div
+        {...elementProps}
+        className={`flex flex-col gap-3 group ${
+          disabled && "opacity-40 pointer-events-none"
+        }`}
+      >
         <div className="flex items-center justify-between px-4 py-3 rounded-md border border-level-5 group-hover:bg-level-4 duration-300 transition-colors">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4">

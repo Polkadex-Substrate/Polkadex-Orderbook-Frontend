@@ -27,7 +27,7 @@ const SelectChain = ({
             key={value.name}
             onClick={() => onChange(value)}
             disabled={!value.active}
-            className="p-0"
+            className={`p-0 ${!value.active && "pointer-events-none"}`}
           >
             <Card
               title={value.name}
