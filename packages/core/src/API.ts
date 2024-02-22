@@ -58,7 +58,6 @@ export type Asset = {
   __typename: "Asset",
   symbol: string,
   name: string,
-  withdrawal_fee: string,
   asset_id: string,
 };
 
@@ -317,7 +316,6 @@ export type GetAllAssetsQuery = {
       __typename: "Asset",
       symbol: string,
       name: string,
-      withdrawal_fee: string,
       asset_id: string,
     } | null > | null,
     nextToken?: string | null,

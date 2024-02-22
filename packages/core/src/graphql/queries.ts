@@ -63,7 +63,6 @@ export const getAllAssets = /* GraphQL */ `query GetAllAssets($limit: Int, $next
     items {
       symbol
       name
-      withdrawal_fee
       asset_id
       __typename
     }
@@ -342,7 +341,6 @@ export const listOrderHistoryByTradeAccount = /* GraphQL */ `query ListOrderHist
   APITypes.ListOrderHistoryByTradeAccountQueryVariables,
   APITypes.ListOrderHistoryByTradeAccountQuery
 >;
-
 export const listOpenOrdersByMainAccount = /* GraphQL */ `query ListOpenOrdersByMainAccount(
   $main_account: String!
   $limit: Int
