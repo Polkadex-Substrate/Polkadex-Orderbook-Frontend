@@ -77,7 +77,13 @@ export const Table = ({
   });
 
   if (!orders.length)
-    return <GenericMessage title="No data" illustration="NoData" />;
+    return (
+      <GenericMessage
+        title="No data"
+        illustration="NoData"
+        className="bg-level-0 p-0"
+      />
+    );
 
   return (
     <div
