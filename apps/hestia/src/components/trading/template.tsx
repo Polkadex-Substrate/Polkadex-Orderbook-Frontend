@@ -33,12 +33,12 @@ export function Template({ id }: { id: string }) {
       <ConnectTradingInteraction />
       <Header ref={headerRef} />
       <main className="flex flex-1 flex-col overflow-auto">
-        <div className="flex flex-1 flex-wrap">
-          <div className="flex flex-col flex-grow border-r border-primary min-h-[26rem]">
+        <div className="flex flex-1 flex-wrap max-lg:flex-col">
+          <div className="flex flex-1 flex-col flex-grow border-r border-primary min-h-[26rem]">
             <AssetInfo currentMarket={currentMarket} />
             <Graph id={id} />
           </div>
-          <div className="flex min-h-[22rem] flex-1 max-md:flex-wrap max-md:flex-col">
+          <div className="flex min-h-[22rem] max-md:flex-wrap max-md:flex-col">
             <Orderbook maxHeight={tableMaxHeight as string} id={id} />
             <Trades maxHeight={tableMaxHeight as string} id={id} />
           </div>
