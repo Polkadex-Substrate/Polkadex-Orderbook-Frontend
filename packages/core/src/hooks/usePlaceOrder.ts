@@ -56,9 +56,9 @@ export function usePlaceOrder(
   } = useProfile();
 
   const {
-    currentPrice,
-    onSetCurrentPrice,
-    onSetCurrentAmount,
+    price: currentPrice,
+    onSetPrice: onSetCurrentPrice,
+    onSetAmount: onSetCurrentAmount,
     amount: selectedAmountFromOrderbookTable,
   } = useOrders();
 
@@ -139,7 +139,7 @@ export function usePlaceOrder(
       ...tab,
       priceLimit: 0,
     });
-    onSetCurrentPrice(0);
+    onSetCurrentPrice("");
   }, [setTab, tab, onSetCurrentPrice]);
 
   // Reset the current amount
@@ -560,7 +560,7 @@ export function usePlaceOrder(
 
   // Change tab if currentPrice/currentAmount (selected from orderbook table) is different from the current price/amount in the form
   useEffect(() => {
-    if (currentPrice !== tab.priceLimit)
+    if (+currentPrice !== tab.priceLimit)
       setTab((prev) => ({ ...prev, priceLimit: Number(currentPrice) }));
 
     if (Number(selectedAmountFromOrderbookTable) !== tab.amountLimit)

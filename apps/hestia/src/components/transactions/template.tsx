@@ -3,7 +3,6 @@
 import { Typography, Input, Tabs, Tooltip, ScrollArea } from "@polkadex/ux";
 import { useMemo, useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { OrdersProvider } from "@orderbook/core/providers";
 import { useElementSize, useWindowSize } from "usehooks-ts";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import classNames from "classnames";
@@ -124,13 +123,11 @@ export function Template() {
               </Tabs.Content>
               <Tabs.Content value="openOrders" className="flex-1 flex">
                 {tradeAddress?.length ? (
-                  <OrdersProvider>
-                    <OpenOrders
-                      ref={tableRowsRef}
-                      maxHeight={maxHeight}
-                      searchTerm={searchTerm}
-                    />
-                  </OrdersProvider>
+                  <OpenOrders
+                    ref={tableRowsRef}
+                    maxHeight={maxHeight}
+                    searchTerm={searchTerm}
+                  />
                 ) : (
                   <ConnectAccountWrapper />
                 )}

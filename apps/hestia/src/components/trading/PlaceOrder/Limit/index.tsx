@@ -16,20 +16,19 @@ export const LimitOrder = ({
   availableQuoteAmount: number;
   availableBaseAmount: number;
 }) => {
-  const { currentPrice, amount } = useOrders();
-
+  const { price: currentPrice, amount } = useOrders();
   return (
     <div className="flex flex-auto gap-2 flex-wrap">
       <BuyOrder
         market={market}
         availableQuoteAmount={availableQuoteAmount}
-        currentPrice={currentPrice}
+        currentPrice={+currentPrice}
         amount={amount}
       />
       <SellOrder
         market={market}
         availableBaseAmount={availableBaseAmount}
-        currentPrice={currentPrice}
+        currentPrice={+currentPrice}
         amount={amount}
       />
     </div>

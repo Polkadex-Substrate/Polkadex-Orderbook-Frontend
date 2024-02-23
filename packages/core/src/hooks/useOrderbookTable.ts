@@ -21,7 +21,11 @@ export function useOrderbookTable({
   asks,
   bids,
 }: Props) {
-  const { currentPrice, onSetCurrentPrice, onSetCurrentAmount } = useOrders();
+  const {
+    price: currentPrice,
+    onSetPrice: onSetCurrentPrice,
+    onSetAmount: onSetCurrentAmount,
+  } = useOrders();
 
   /**
    * @description -Get Volume of the orders
@@ -41,7 +45,7 @@ export function useOrderbookTable({
     (index: number, side: "asks" | "bids"): void => {
       const arr = side === "asks" ? asks : bids;
       const priceToSet = arr[index] && Number(arr[index][0]);
-      if (currentPrice !== priceToSet) onSetCurrentPrice(priceToSet);
+      if (+currentPrice !== priceToSet) onSetCurrentPrice(String(priceToSet));
     },
     [asks, bids, currentPrice, onSetCurrentPrice]
   );
