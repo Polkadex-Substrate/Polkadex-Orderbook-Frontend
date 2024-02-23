@@ -4,6 +4,8 @@ import { isNegative } from "@orderbook/core/helpers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import classNames from "classnames";
 
+import { SkeletonCollection } from "../ReadyToUse";
+
 import { MarketCard } from "./marketCard";
 
 type Props = {
@@ -15,8 +17,8 @@ type Props = {
 };
 
 export const Markets = ({ favorite }: { favorite: boolean }) => {
-  const { list: allMarkets } = useMarkets();
-  const { tickers } = useTickers();
+  const { list: allMarkets, loading } = useMarkets();
+  const { tickers, tickerLoading } = useTickers();
   const { favoriteMarkets: favouriteMarketIds } = useProfile();
 
   const selectedMarkets = useMemo(() => {
@@ -45,6 +47,19 @@ export const Markets = ({ favorite }: { favorite: boolean }) => {
   }, [selectedMarkets, tickers]);
 
   const isCarouselActive = useMemo(() => data.length > 3, [data.length]);
+
+  if (loading || tickerLoading)
+    return (
+      <div
+        className={classNames(
+          "flex items-center px-2",
+          "[&>div]:flex-row",
+          "[&>div]:p-0"
+        )}
+      >
+        <SkeletonCollection rows={3} className="w-40 h-3" />
+      </div>
+    );
 
   return (
     <div className="overflow-hidden">
