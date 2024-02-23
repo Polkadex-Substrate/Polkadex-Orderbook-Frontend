@@ -3,6 +3,7 @@ import { useUserAccounts } from "@polkadex/react-providers";
 import {
   createCancelOrderPayloadSigned,
   isAssetPDEX,
+  isValidAddress,
 } from "@orderbook/core/helpers";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
@@ -31,7 +32,7 @@ export const useCancelOrder = () => {
         throw new Error("You are not connected to blockchain");
 
       const keyringPair = wallet.getPair(tradeAddress);
-      if (tradeAddress?.trim().length === 0 || !keyringPair)
+      if (!isValidAddress(tradeAddress) || !keyringPair)
         throw new Error("Invalid Trading Account");
 
       if (keyringPair?.isLocked)

@@ -5,7 +5,6 @@ export * from "./useMnemonic";
 export * from "./useMarkets";
 export * from "./useOrderbook";
 export * from "./useOrderbookTable";
-export * from "./usePlaceOrder";
 export * from "./useLimitOrder";
 export * from "./useMarketOrder";
 export * from "./useAppearance";

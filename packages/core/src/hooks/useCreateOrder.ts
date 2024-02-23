@@ -4,6 +4,7 @@ import {
   createOrderPayload,
   getNewClientId,
   getNonce,
+  isValidAddress,
   signPayload,
 } from "@orderbook/core/helpers";
 
@@ -44,7 +45,7 @@ export const useCreateOrder = () => {
         throw new Error("You are not connected to blockchain");
 
       const keyringPair = wallet.getPair(tradeAddress);
-      if (tradeAddress?.trim().length === 0 || !keyringPair)
+      if (!isValidAddress(tradeAddress) || !keyringPair)
         throw new Error("Invalid Trading Account");
 
       const timestamp = getNonce();
