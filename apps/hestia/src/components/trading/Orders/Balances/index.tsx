@@ -49,7 +49,7 @@ export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
       style={{ maxHeight, scrollbarGutter: "stable" }}
     >
       <PolkadexTable className="w-full" even>
-        <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
+        <PolkadexTable.Header className="sticky top-0 bg-level-0">
           {table.getHeaderGroups().map((headerGroup) => (
             <PolkadexTable.Row key={headerGroup.id}>
               {headerGroup.headers.map((header) => {

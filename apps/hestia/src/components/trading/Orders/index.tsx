@@ -93,8 +93,8 @@ export const Orders = ({ maxHeight }: Props) => {
   };
 
   return (
-    <Tabs defaultValue="openOrders" className="sm:min-w-[25rem]">
-      <div className="lg:flex items-center justify-between border-r border-b border-primary">
+    <Tabs defaultValue="openOrders" className="flex-1 h-full">
+      <div className="lg:flex items-center justify-between border-b border-primary">
         <ScrollArea className={`${scrollAreaView && "max-w-80"}`}>
           <Tabs.List className="px-2 py-2.5 whitespace-nowrap">
             <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
@@ -149,16 +149,16 @@ export const Orders = ({ maxHeight }: Props) => {
 
       {connected ? (
         <>
-          <Tabs.Content value="openOrders">
+          <Tabs.Content value="openOrders" className="bg-level-0">
             <OpenOrdersTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
-          <Tabs.Content value="orderHistory">
+          <Tabs.Content value="orderHistory" className="bg-level-0">
             <OrderHistoryTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
-          <Tabs.Content value="tradeHistory">
+          <Tabs.Content value="tradeHistory" className="bg-level-0">
             <TradeHistoryTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
-          <Tabs.Content value="balances">
+          <Tabs.Content value="balances" className="bg-level-0">
             <BalancesTable maxHeight={maxHeight} />
           </Tabs.Content>
         </>

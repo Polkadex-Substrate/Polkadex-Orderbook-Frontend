@@ -65,7 +65,7 @@ export const TradeHistoryTable = ({
         <TradeHistoryResponsiveCard trades={trades} />
       ) : (
         <PolkadexTable className="w-full" even>
-          <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
+          <PolkadexTable.Header className="sticky top-0 bg-level-0">
             {table.getHeaderGroups().map((headerGroup) => (
               <PolkadexTable.Row key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -97,7 +97,7 @@ export const TradeHistoryTable = ({
                     return (
                       <PolkadexTable.Cell
                         key={cell.id}
-                        className={classNames("px-2 py-4 text-xs")}
+                        className={classNames("px-2 py-3 text-xs")}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
