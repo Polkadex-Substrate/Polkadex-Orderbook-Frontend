@@ -106,7 +106,7 @@ export const NewTradingAccount = ({
                   {...getFieldProps("name")}
                   placeholder="Enter a name"
                 >
-                  <Input.Label>ccount name</Input.Label>
+                  <Input.Label>Account name</Input.Label>
                   <Interaction.Action
                     appearance="secondary"
                     onClick={(e) => {
