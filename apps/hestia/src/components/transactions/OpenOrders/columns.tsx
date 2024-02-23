@@ -8,7 +8,7 @@ import {
   Typography,
   truncateString,
 } from "@polkadex/ux";
-import { OrderCancellation } from "@orderbook/core/providers/user/orders";
+import { CancelOrderArgs } from "@orderbook/core/hooks";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 
 import { filters } from "./filters";
@@ -18,7 +18,7 @@ const columnHelper = createColumnHelper<Order>();
 export const columns = ({
   onCancelOrder,
 }: {
-  onCancelOrder: (value: OrderCancellation) => void;
+  onCancelOrder: (value: CancelOrderArgs) => void;
 }) => [
   columnHelper.accessor((row) => row, {
     id: "id",

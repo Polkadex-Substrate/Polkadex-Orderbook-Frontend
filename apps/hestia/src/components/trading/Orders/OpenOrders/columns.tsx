@@ -1,14 +1,14 @@
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Button, PopConfirm, Tooltip, Typography } from "@polkadex/ux";
-import { OrderCancellation } from "@orderbook/core/providers/user/orders";
+import { CancelOrderArgs } from "@orderbook/core/hooks";
 
 const openOrderColumnHelper = createColumnHelper<Order>();
 
 export const columns = ({
   onCancelOrder,
 }: {
-  onCancelOrder: (value: OrderCancellation) => void;
+  onCancelOrder: (value: CancelOrderArgs) => void;
 }) => [
   openOrderColumnHelper.accessor((row) => row, {
     id: "date",

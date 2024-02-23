@@ -1,12 +1,11 @@
 import { Button, Tokens, Typography, truncateString } from "@polkadex/ux";
 import { Order, Trade } from "@orderbook/core/utils/orderbookService/types";
-import { OrderCancellation } from "@orderbook/core/providers/user/orders";
 import {
   ArrowLeftCircleIcon,
   ArrowRightCircleIcon,
 } from "@heroicons/react/24/solid";
 import classNames from "classnames";
-import { AssetsProps } from "@orderbook/core/hooks";
+import { AssetsProps, CancelOrderArgs } from "@orderbook/core/hooks";
 import { getChainFromTicker } from "@orderbook/core/helpers";
 
 import { ActionsCard } from "@/components/balances/Table/actionsCard";
@@ -18,7 +17,7 @@ export const OpenOrderResponsiveCard = ({
   onCancelOrder,
 }: {
   orders: Order[];
-  onCancelOrder: (value: OrderCancellation) => void;
+  onCancelOrder: (value: CancelOrderArgs) => void;
 }) => {
   return orders.map((order, i) => {
     const isSell = order.side === "Ask";

@@ -10,7 +10,7 @@ import { Dispatch, SetStateAction } from "react";
 import { intlFormat } from "date-fns";
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import { OrderCancellation } from "@orderbook/core/providers/user/orders";
+import { CancelOrderArgs } from "@orderbook/core/hooks";
 
 import { ResponsiveCard } from "@/components/ui/ReadyToUse";
 
@@ -23,7 +23,7 @@ export const ResponsiveTable = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
   data: Order | null;
-  onCancelOrder: (payload: OrderCancellation) => void;
+  onCancelOrder: (payload: CancelOrderArgs) => void;
 }) => {
   if (!data) return null;
   const {
