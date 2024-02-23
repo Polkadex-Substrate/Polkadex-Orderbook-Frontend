@@ -17,6 +17,7 @@ import {
   useOrderbook,
   useMarkets,
   useTickers,
+  useCreateOrder,
 } from "@orderbook/core/hooks";
 
 type FormValues = {
@@ -58,10 +59,14 @@ export function usePlaceOrder(
     currentPrice,
     onSetCurrentPrice,
     onSetCurrentAmount,
-    onPlaceOrders,
-    execute: { isLoading: isOrderLoading, isSuccess: isOrderExecuted },
     amount: selectedAmountFromOrderbookTable,
   } = useOrders();
+
+  const {
+    mutateAsync: onPlaceOrders,
+    isLoading: isOrderLoading,
+    isSuccess: isOrderExecuted,
+  } = useCreateOrder();
 
   const { loading: isMarketFetching, list } = useMarkets();
   const currentMarket = getCurrentMarket(list, market);
@@ -325,11 +330,10 @@ export function usePlaceOrder(
       return;
     }
     onPlaceOrders({
-      order_type: isLimit ? "LIMIT" : "MARKET",
+      orderType: isLimit ? "LIMIT" : "MARKET",
       symbol: [currentMarket?.baseAsset?.id, currentMarket?.quoteAsset?.id],
-      side: isSell ? "Sell" : "Buy",
+      side: isSell ? "Ask" : "Bid",
       price: isLimit ? Number(formPrice) : 0,
-      market: currentMarket.id,
       amount: Number(amount),
     });
   };

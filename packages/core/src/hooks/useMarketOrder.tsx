@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { FormikHelpers } from "formik";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useCreateOrder } from "@orderbook/core/hooks";
 import {
   cleanPositiveFloatInput,
   decimalPlaces,
@@ -30,7 +30,7 @@ export const useMarketOrder = ({
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
-  const { onPlaceOrders } = useOrders();
+  const { mutateAsync: onPlaceOrders } = useCreateOrder();
 
   const minAmount = useMemo(() => market?.minQty || 0, [market?.minQty]);
 
@@ -85,11 +85,10 @@ export const useMarketOrder = ({
       return;
     }
     await onPlaceOrders({
-      order_type: "MARKET",
+      orderType: "MARKET",
       symbol: [market?.baseAsset?.id, market?.quoteAsset?.id],
-      side: isSell ? "Sell" : "Buy",
+      side: isSell ? "Ask" : "Bid",
       price: 0,
-      market: market.id,
       amount: Number(amount),
     });
   };

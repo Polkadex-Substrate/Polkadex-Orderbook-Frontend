@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import BigNumber from "bignumber.js";
 import { FormikHelpers } from "formik";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useOrders } from "@orderbook/core/providers/user/orders";
 import { Decimal } from "@orderbook/core/utils";
 import {
   cleanPositiveFloatInput,
@@ -12,7 +11,7 @@ import {
   precisionRegExp,
   trimFloat,
 } from "@orderbook/core/helpers";
-import { useTickers } from "@orderbook/core/hooks";
+import { useCreateOrder, useTickers } from "@orderbook/core/hooks";
 import { Market } from "@orderbook/core/utils/orderbookService/types";
 
 type FormValues = {
@@ -47,7 +46,7 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
     selectedAddresses: { tradeAddress },
   } = useProfile();
 
-  const { onPlaceOrders } = useOrders();
+  const { mutateAsync: onPlaceOrders } = useCreateOrder();
 
   // Get estimated total amount
   const getEstimatedTotal = useCallback(
@@ -212,11 +211,10 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
       return;
     }
     await onPlaceOrders({
-      order_type: "LIMIT",
+      orderType: "LIMIT",
       symbol: [market?.baseAsset?.id, market?.quoteAsset?.id],
-      side: isSell ? "Sell" : "Buy",
+      side: isSell ? "Ask" : "Bid",
       price: Number(price),
-      market: market.id,
       amount: Number(amount),
     });
   };
