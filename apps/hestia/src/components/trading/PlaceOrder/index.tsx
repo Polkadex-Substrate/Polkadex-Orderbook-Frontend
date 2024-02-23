@@ -50,7 +50,7 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
     }, [selectedAccount]);
 
     return (
-      <Tabs defaultValue="limit">
+      <Tabs defaultValue="limit" className="flex-1 flex">
         <div className="flex items-center justify-between border-b border-primary">
           <Tabs.List className="px-2 py-2.5">
             <Tabs.Trigger value="limit">Limit</Tabs.Trigger>
@@ -60,8 +60,7 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
             </Tabs.Trigger>
           </Tabs.List>
         </div>
-
-        <div ref={ref}>
+        <div ref={ref} className="flex flex-1">
           {isPasswordProtected ? (
             <Unlock
               onAction={() => setIsPasswordProtected(false)}
@@ -72,7 +71,7 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
               <Tabs.Content
                 value="limit"
                 id="placeOrderContent"
-                className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
+                className="flex flex-1 flex-col gap-1 bg-level-0 p-2 "
               >
                 <LimitOrder
                   market={market}
@@ -83,7 +82,7 @@ export const PlaceOrder = forwardRef<HTMLDivElement, Props>(
               <Tabs.Content
                 value="market"
                 id="placeOrderContent"
-                className="flex flex-1 flex-col gap-1 border-l border-l-primary bg-level-0 p-2"
+                className="flex flex-1 flex-col gap-1 bg-level-0 p-2"
               >
                 <MarketOrder
                   market={market}

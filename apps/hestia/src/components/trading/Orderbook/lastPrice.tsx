@@ -11,7 +11,7 @@ export const LastPrice = ({
   loading: boolean;
 }) => {
   return (
-    <div className="flex justify-between gap-2 px-2 py-4 border-y border-secondary bg-level-1">
+    <div className="flex justify-between gap-2 px-2 py-2 bg-level-1">
       <Typography.Text appearance="secondary" className="whitespace-nowrap">
         Last price
       </Typography.Text>

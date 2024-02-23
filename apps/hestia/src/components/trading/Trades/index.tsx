@@ -14,11 +14,8 @@ export const Trades = ({
   id: string;
 }) => {
   return (
-    <Tabs defaultValue="markets" className="flex-initial max-xl:flex-1">
-      <div
-        className="flex h-full flex-col sm:min-w-[20rem] min-h-[25rem]"
-        style={{ maxHeight }}
-      >
+    <Tabs defaultValue="markets" className="flex-initial max-xl:flex-1 h-full">
+      <div className="flex h-full flex-col" style={{ height: maxHeight }}>
         <div className="flex items-center justify-between border-b border-primary">
           <Tabs.List className="px-2 py-2.5">
             <Tabs.Trigger value="markets">Markets</Tabs.Trigger>
@@ -45,10 +42,7 @@ export const Trades = ({
         <Tabs.Content value="markets" className="bg-level-0">
           <Markets />
         </Tabs.Content>
-        <Tabs.Content
-          value="recentTrades"
-          className="xs:min-h-[25rem] min-h-[22rem]"
-        >
+        <Tabs.Content value="recentTrades">
           <RecentTrades id={id} />
         </Tabs.Content>
       </div>

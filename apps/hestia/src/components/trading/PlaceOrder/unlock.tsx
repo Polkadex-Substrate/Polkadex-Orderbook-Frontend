@@ -48,10 +48,10 @@ export const Unlock = ({
 
   return (
     <Interaction
-      className="bg-backgroundBase rounded-sm h-full"
+      className="bg-backgroundBase rounded-sm h-full flex-1"
       withAnimation={false}
     >
-      <Interaction.Content className="flex flex-col gap-1 flex-1">
+      <Interaction.Content className="flex flex-col gap-1 flex-1 justify-center">
         <div className="flex flex-col gap-8 items-center">
           <div className="flex flex-col text-center items-center gap-5">
             <div className="flex items-center justify-center rounded-full w-12 h-12 bg-level-2">
@@ -68,7 +68,6 @@ export const Unlock = ({
           </div>
           <div className="flex flex-col gap-2 w-full px-6 items-center">
             <Input.Passcode
-              focusOnInit
               value={values.password}
               onValuesChange={(e) => {
                 if (error) setError("");

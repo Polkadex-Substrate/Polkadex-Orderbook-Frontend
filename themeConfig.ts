@@ -48,6 +48,9 @@ const border = {
 export const themeConfig = {
   theme: {
     extend: {
+      screens: {
+        "1xl": "1380px",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

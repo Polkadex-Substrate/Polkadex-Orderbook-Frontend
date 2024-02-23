@@ -39,8 +39,8 @@ export const Orderbook = ({
 
   return (
     <div
-      className="flex flex-col border-r border-r-primary sm:min-w-[20rem] min-h-[25rem] overflow-hidden max-xl:flex-1"
-      style={{ maxHeight }}
+      className="flex flex-col border-r border-r-primary overflow-hidden max-xl:flex-1 h-full"
+      style={{ height: maxHeight }}
     >
       <Header
         selectedDecimal={sizeState.size}

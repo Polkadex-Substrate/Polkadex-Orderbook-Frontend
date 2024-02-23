@@ -32,7 +32,7 @@ export const TradingAccountSuccessfull = ({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   return (
-    <Interaction className="md:max-w-[24rem]">
+    <Interaction className="md:max-w-[24rem] bg-backgroundBase rounded-sm">
       <Interaction.Content className="flex flex-col gap-6 flex-1 mb-4">
         <div className="flex flex-col items-center text-center gap-5">
           <div className="max-w-[8rem]">
