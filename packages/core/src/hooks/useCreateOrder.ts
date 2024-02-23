@@ -40,7 +40,7 @@ export const useCreateOrder = () => {
       orderType,
       amount,
     }: CreateOrderArgs) => {
-      if (!api || !api?.isConnected)
+      if (!api?.isConnected)
         throw new Error("You are not connected to blockchain");
 
       const keyringPair = wallet.getPair(tradeAddress);
