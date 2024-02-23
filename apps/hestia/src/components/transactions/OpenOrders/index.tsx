@@ -2,7 +2,11 @@ import { forwardRef, useEffect, useMemo, useState } from "react";
 import { useWindowSize } from "usehooks-ts";
 import classNames from "classnames";
 import { Order } from "@orderbook/core/utils/orderbookService/types";
-import { useOpenOrders } from "@orderbook/core/hooks";
+import {
+  useCancelOrder,
+  useOpenOrders,
+  CancelOrderArgs,
+} from "@orderbook/core/hooks";
 import { GenericMessage, Loading, Modal, Table } from "@polkadex/ux";
 import {
   ColumnFiltersState,
@@ -14,10 +18,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  OrderCancellation,
-  useOrders,
-} from "@orderbook/core/providers/user/orders";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
 
@@ -40,10 +40,10 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight, searchTerm }, ref) => {
     const { width } = useWindowSize();
     const { selectedAccount } = useConnectWalletProvider();
-    const { onCancelOrder: cancelOrder } = useOrders();
+    const { mutateAsync: cancelOrder } = useCancelOrder();
     const { isLoading, openOrders: allOpenOrders } = useOpenOrders();
     const [showPassword, setShowPassword] = useState(false);
-    const [orderPayload, setOrderPayload] = useState<OrderCancellation | null>(
+    const [orderPayload, setOrderPayload] = useState<CancelOrderArgs | null>(
       null
     );
     const [responsiveState, setResponsiveState] = useState(false);
@@ -54,7 +54,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     const [rowsPerPage, setRowsPerPage] = useState(15);
     const [page, setPage] = useState(1);
 
-    const onCancelOrder = async (payload: OrderCancellation | null) => {
+    const onCancelOrder = async (payload: CancelOrderArgs | null) => {
       if (!payload) return;
       if (selectedAccount?.isLocked) {
         setShowPassword(true);

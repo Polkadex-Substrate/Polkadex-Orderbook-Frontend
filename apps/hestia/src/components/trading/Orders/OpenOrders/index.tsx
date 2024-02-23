@@ -10,8 +10,7 @@ import {
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
-import { useOpenOrders } from "@orderbook/core/hooks";
-import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useCancelOrder, useOpenOrders } from "@orderbook/core/hooks";
 import { useWindowSize } from "usehooks-ts";
 import { Ifilters } from "@orderbook/core/providers/types";
 
@@ -27,7 +26,7 @@ export const OpenOrdersTable = ({
   filters: Ifilters;
   maxHeight: string;
 }) => {
-  const { onCancelOrder } = useOrders();
+  const { mutateAsync: onCancelOrder } = useCancelOrder();
   const { isLoading, openOrders } = useOpenOrders(filters);
   const { width } = useWindowSize();
 
