@@ -15,7 +15,10 @@ export const Trades = ({
 }) => {
   return (
     <Tabs defaultValue="markets" className="flex-initial max-xl:flex-1 h-full">
-      <div className="flex h-full flex-col" style={{ height: maxHeight }}>
+      <div
+        className="flex h-full flex-col overflow-hidden"
+        style={{ height: maxHeight }}
+      >
         <div className="flex items-center justify-between border-b border-primary">
           <Tabs.List className="px-2 py-2.5">
             <Tabs.Trigger value="markets">Markets</Tabs.Trigger>
