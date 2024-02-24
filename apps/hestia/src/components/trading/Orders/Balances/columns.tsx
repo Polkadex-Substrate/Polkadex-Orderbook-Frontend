@@ -1,5 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { Typography, Token } from "@polkadex/ux";
+import { Typography, Token, tokenAppearance } from "@polkadex/ux";
 import { AssetsProps } from "@orderbook/core/hooks";
 import { getChainFromTicker } from "@orderbook/core/helpers";
 
@@ -17,6 +17,7 @@ export const columns = [
         <div className="flex items-center gap-1">
           <Token
             name={ticker}
+            appearance={ticker as keyof typeof tokenAppearance}
             size="sm"
             className="rounded-full border border-secondary"
           />
