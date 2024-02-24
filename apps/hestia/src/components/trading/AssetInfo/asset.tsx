@@ -38,7 +38,7 @@ export const Asset = ({
           className="rounded-full border border-primary"
         />
       </Skeleton>
-      <HoverCard open={!loading && state} onOpenChange={setState}>
+      <HoverCard open={false} onOpenChange={setState}>
         <HoverCard.Trigger className="flex h-full flex-1">
           <div
             className={classNames(
