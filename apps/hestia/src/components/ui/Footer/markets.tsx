@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useWindowSize } from "usehooks-ts";
 import { useMarkets, useTickers } from "@orderbook/core/hooks";
 import { isNegative } from "@orderbook/core/helpers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export const Markets = ({ favorite }: { favorite: boolean }) => {
+  const { width } = useWindowSize();
   const { list: allMarkets, loading } = useMarkets();
   const { tickers, tickerLoading } = useTickers();
   const { favoriteMarkets: favouriteMarketIds } = useProfile();
@@ -46,7 +48,11 @@ export const Markets = ({ favorite }: { favorite: boolean }) => {
       .filter((t) => t.market && t.pair);
   }, [selectedMarkets, tickers]);
 
-  const isCarouselActive = useMemo(() => data.length > 3, [data.length]);
+  const isCarouselActive = useMemo(() => {
+    if (width < 600) return data.length > 1;
+    if (width < 1200) return data.length > 2;
+    return data.length > 3;
+  }, [data.length, width]);
 
   if (loading || tickerLoading)
     return (
