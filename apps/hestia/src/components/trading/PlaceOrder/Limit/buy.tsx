@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 import { Button, Input, Tooltip, Spinner } from "@polkadex/ux";
 import classNames from "classnames";
 import { useFormik } from "formik";
@@ -27,20 +27,13 @@ const initialValues = {
 export const BuyOrder = ({
   market,
   availableQuoteAmount,
-  price: currentPrice,
-  amount: currentAmount,
-  total: currentTotal,
 }: {
   market?: Market;
   availableQuoteAmount: number;
-  price: string;
-  amount: string;
-  total: string;
 }) => {
   const { onToogleConnectTrading } = useSettingsProvider();
 
   const {
-    setFieldValue,
     handleSubmit,
     errors,
     isValid,
@@ -50,10 +43,7 @@ export const BuyOrder = ({
     resetForm,
     isSubmitting,
   } = useFormik({
-    initialValues: {
-      ...initialValues,
-      price: currentPrice ? currentPrice.toString() : "",
-    },
+    initialValues,
     validationSchema: limitOrderValidations({
       maxMarketPrice: market?.maxPrice || 0,
       minMarketPrice: market?.minPrice || 0,
@@ -100,18 +90,6 @@ export const BuyOrder = ({
     else if (name === AMOUNT) onChangeAmount(value);
     else onChangeTotal(value);
   };
-
-  useEffect(() => {
-    if (currentPrice) setFieldValue("price", currentPrice);
-  }, [setFieldValue, currentPrice]);
-
-  useEffect(() => {
-    if (currentAmount) setFieldValue("amount", currentAmount);
-  }, [setFieldValue, currentAmount]);
-
-  useEffect(() => {
-    if (currentTotal) setFieldValue("total", currentTotal);
-  }, [setFieldValue, currentTotal]);
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>

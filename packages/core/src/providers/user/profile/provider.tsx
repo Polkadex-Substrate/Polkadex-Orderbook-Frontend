@@ -166,9 +166,26 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     [extensionAccounts]
   );
 
-  const onSetPrice = (payload: string) => setPrice(payload);
-  const onSetAmount = (payload: string) => setAmount(payload);
-  const onSetTotal = (payload: string) => setTotal(payload);
+  const onSetPrice = (payload: string) => {
+    setPrice(payload);
+    setTimeout(() => {
+      setPrice("");
+    }, 200);
+  };
+
+  const onSetAmount = (payload: string) => {
+    setAmount(payload);
+    setTimeout(() => {
+      setAmount("");
+    }, 200);
+  };
+
+  const onSetTotal = (payload: string) => {
+    setTotal(payload);
+    setTimeout(() => {
+      setTotal("");
+    }, 200);
+  };
 
   return (
     <Provider

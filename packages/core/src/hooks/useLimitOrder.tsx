@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import BigNumber from "bignumber.js";
 import { FormikHelpers } from "formik";
 import { useProfile } from "@orderbook/core/providers/user/profile";
@@ -28,13 +28,17 @@ type Props = {
 };
 
 export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
-  const pricePrecision = market ? decimalPlaces(market.price_tick_size) : 0;
-  const qtyPrecision = market ? decimalPlaces(market.qty_step_size) : 0;
+  const { pricePrecision, qtyPrecision, totalPrecision } = useMemo(() => {
+    const pricePrecision = decimalPlaces(market?.price_tick_size || 0);
+    const qtyPrecision = decimalPlaces(market?.qty_step_size || 0);
+    const totalPrecision = Math.max(pricePrecision, qtyPrecision);
+    return { pricePrecision, qtyPrecision, totalPrecision };
+  }, [market?.price_tick_size, market?.qty_step_size]);
+
   const minAmount = market?.minQty || 0;
   const minPrice = market?.minPrice || 0;
   const amountTickSize = market?.qty_step_size || 0;
   const priceTickSize = market?.price_tick_size || 0;
-  const totalPrecision = Math.max(pricePrecision, qtyPrecision);
   const minTotal = 1;
   const totalTickSize = 0.5;
 
@@ -44,7 +48,24 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
 
   const {
     selectedAddresses: { tradeAddress },
+    price: roughPrice,
+    amount: roughAmount,
+    total: roughTotal,
   } = useProfile();
+
+  const { currentPrice, currentAmount, currentTotal } = useMemo(() => {
+    const currentPrice = Decimal.format(roughPrice, pricePrecision);
+    const currentAmount = Decimal.format(roughAmount, qtyPrecision);
+    const currentTotal = Decimal.format(roughTotal, totalPrecision);
+    return { currentPrice, currentAmount, currentTotal };
+  }, [
+    pricePrecision,
+    qtyPrecision,
+    roughAmount,
+    roughPrice,
+    roughTotal,
+    totalPrecision,
+  ]);
 
   const { mutateAsync: onPlaceOrders } = useCreateOrder();
 
@@ -76,14 +97,14 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
             : "";
 
         setValues({
-          ...values,
+          amount,
           price: convertedValue,
           total,
         });
       }
     },
 
-    [pricePrecision, calculateTotal, setValues, values]
+    [pricePrecision, calculateTotal, setValues, values.amount]
   );
 
   const onChangeAmount = useCallback(
@@ -95,13 +116,13 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
           convertedValue && price ? calculateTotal(price, convertedValue) : "";
 
         setValues({
-          ...values,
+          price,
           amount: convertedValue,
           total: total && formatNumber(Decimal.format(total, totalPrecision)),
         });
       }
     },
-    [qtyPrecision, calculateTotal, setValues, values, totalPrecision]
+    [qtyPrecision, calculateTotal, setValues, values.price, totalPrecision]
   );
 
   const onChangeTotal = useCallback(
@@ -218,6 +239,18 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
       amount: Number(amount),
     });
   };
+
+  useEffect(() => {
+    if (+currentPrice) onChangePrice(currentPrice);
+  }, [currentPrice, onChangePrice]);
+
+  useEffect(() => {
+    if (+currentAmount) onChangeAmount(currentAmount);
+  }, [onChangeAmount, currentAmount]);
+
+  useEffect(() => {
+    if (+currentTotal) onChangeTotal(currentTotal);
+  }, [onChangeTotal, currentTotal]);
 
   return {
     isSignedIn: tradeAddress?.length > 0,

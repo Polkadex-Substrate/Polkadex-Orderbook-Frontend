@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 import { Button, Input, Tooltip, Spinner } from "@polkadex/ux";
 import classNames from "classnames";
 import { useFormik } from "formik";
@@ -27,20 +27,13 @@ const initialValues = {
 export const SellOrder = ({
   market,
   availableBaseAmount,
-  price: currentPrice,
-  amount: currentAmount,
-  total: currentTotal,
 }: {
   market?: Market;
   availableBaseAmount: number;
-  price: string;
-  amount: string;
-  total: string;
 }) => {
   const { onToogleConnectTrading } = useSettingsProvider();
 
   const {
-    setFieldValue,
     handleSubmit,
     errors,
     isValid,
@@ -96,18 +89,6 @@ export const SellOrder = ({
     else if (name === AMOUNT) onChangeAmount(value);
     else onChangeTotal(value);
   };
-
-  useEffect(() => {
-    if (currentPrice) setFieldValue("price", currentPrice);
-  }, [setFieldValue, currentPrice]);
-
-  useEffect(() => {
-    if (currentAmount) setFieldValue("amount", currentAmount);
-  }, [setFieldValue, currentAmount]);
-
-  useEffect(() => {
-    if (currentTotal) setFieldValue("total", currentTotal);
-  }, [setFieldValue, currentTotal]);
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
