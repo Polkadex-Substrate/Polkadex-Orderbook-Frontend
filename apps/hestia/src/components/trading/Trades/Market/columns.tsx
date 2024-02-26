@@ -2,7 +2,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { createColumnHelper } from "@tanstack/react-table";
 import classNames from "classnames";
 import { Decimal, InitialMarkets, isNegative } from "@orderbook/core/index";
-import { Typography, Token, tokenAppearance } from "@polkadex/ux";
+import { Typography, Token } from "@polkadex/ux";
 
 const columnHelper = createColumnHelper<InitialMarkets>();
 
@@ -48,7 +48,11 @@ export const columns = ({
         </div>
       );
     },
-    header: () => <Typography.Text size="xs">Coin</Typography.Text>,
+    header: () => (
+      <Typography.Text size="xs" className="ml-1">
+        Market
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row, {
