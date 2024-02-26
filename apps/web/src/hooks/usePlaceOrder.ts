@@ -3,7 +3,6 @@ import { FormikErrors, FormikHelpers } from "formik";
 import { useTranslation } from "next-i18next";
 import { Decimal } from "@orderbook/core/utils";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useOrders } from "@orderbook/core/providers/user/orders";
 import {
   cleanPositiveFloatInput,
   decimalPlaces,
@@ -53,14 +52,11 @@ export function usePlaceOrder(
 
   const {
     selectedAddresses: { tradeAddress },
-  } = useProfile();
-
-  const {
     price: currentPrice,
     onSetPrice: onSetCurrentPrice,
     onSetAmount: onSetCurrentAmount,
     amount: selectedAmountFromOrderbookTable,
-  } = useOrders();
+  } = useProfile();
 
   const {
     mutateAsync: onPlaceOrders,

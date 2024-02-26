@@ -4,7 +4,7 @@ import {
   accumulateVolume,
   calcMaxVolume,
 } from "@orderbook/core/helpers";
-import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 export type Props = {
   asks: string[][];
@@ -26,7 +26,7 @@ export function useOrderbookTable({
     onSetPrice: onSetCurrentPrice,
     onSetAmount: onSetCurrentAmount,
     onSetTotal: onSetCurrentTotal,
-  } = useOrders();
+  } = useProfile();
 
   /**
    * @description -Get Volume of the orders

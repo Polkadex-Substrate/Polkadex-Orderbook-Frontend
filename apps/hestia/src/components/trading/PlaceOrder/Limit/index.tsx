@@ -2,7 +2,7 @@
 "use client";
 
 import { Market } from "@orderbook/core/utils/orderbookService/types";
-import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { BuyOrder } from "./buy";
 import { SellOrder } from "./sell";
@@ -16,20 +16,22 @@ export const LimitOrder = ({
   availableQuoteAmount: number;
   availableBaseAmount: number;
 }) => {
-  const { price: currentPrice, amount } = useOrders();
+  const { price, amount, total } = useProfile();
   return (
     <div className="flex flex-auto gap-2 flex-wrap">
       <BuyOrder
         market={market}
         availableQuoteAmount={availableQuoteAmount}
-        currentPrice={+currentPrice}
+        price={price}
         amount={amount}
+        total={total}
       />
       <SellOrder
         market={market}
         availableBaseAmount={availableBaseAmount}
-        currentPrice={+currentPrice}
+        price={price}
         amount={amount}
+        total={total}
       />
     </div>
   );

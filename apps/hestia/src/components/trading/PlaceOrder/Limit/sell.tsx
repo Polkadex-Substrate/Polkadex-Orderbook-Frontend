@@ -27,13 +27,15 @@ const initialValues = {
 export const SellOrder = ({
   market,
   availableBaseAmount,
-  currentPrice,
-  amount,
+  price: currentPrice,
+  amount: currentAmount,
+  total: currentTotal,
 }: {
   market?: Market;
   availableBaseAmount: number;
-  currentPrice?: number;
+  price: string;
   amount: string;
+  total: string;
 }) => {
   const { onToogleConnectTrading } = useSettingsProvider();
 
@@ -100,8 +102,12 @@ export const SellOrder = ({
   }, [setFieldValue, currentPrice]);
 
   useEffect(() => {
-    if (amount) setFieldValue("amount", amount);
-  }, [setFieldValue, amount]);
+    if (currentAmount) setFieldValue("amount", currentAmount);
+  }, [setFieldValue, currentAmount]);
+
+  useEffect(() => {
+    if (currentTotal) setFieldValue("total", currentTotal);
+  }, [setFieldValue, currentTotal]);
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
