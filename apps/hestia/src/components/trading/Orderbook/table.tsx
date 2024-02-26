@@ -131,7 +131,7 @@ export const Table = ({
                     <PolkadexTable.Cell
                       key={cell.id}
                       className={classNames(
-                        "px-2 py-1 hover:bg-level-1 text-xs",
+                        "px-2 py-1 text-xs",
                         firstCol ? "text-left" : "text-right",
                         firstCol && "font-semibold",
                         active &&

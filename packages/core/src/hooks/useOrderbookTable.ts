@@ -25,6 +25,7 @@ export function useOrderbookTable({
     price: currentPrice,
     onSetPrice: onSetCurrentPrice,
     onSetAmount: onSetCurrentAmount,
+    onSetTotal: onSetCurrentTotal,
   } = useOrders();
 
   /**
@@ -69,9 +70,9 @@ export function useOrderbookTable({
   // Change market amount on click on total/sum field
   const changeMarketAmountSumClick = useCallback(
     (index: number) => {
-      onSetCurrentAmount(cumulativeVolume[index].toString());
+      onSetCurrentTotal(cumulativeVolume[index].toString());
     },
-    [onSetCurrentAmount, cumulativeVolume]
+    [onSetCurrentTotal, cumulativeVolume]
   );
 
   /**
