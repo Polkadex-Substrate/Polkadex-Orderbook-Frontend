@@ -1,13 +1,8 @@
 import { ApiPromise } from "@polkadot/api";
 import { Codec } from "@polkadot/types/types";
 import { KeyringPair } from "@polkadot/keyring/types";
-import {
-  OrderKindEnum,
-  OrderSide,
-  OrderSideEnum,
-  OrderType,
-  OrderTypeEnum,
-} from "@orderbook/core/providers/types";
+
+import { OrderSide, OrderType, OrderTypeEnum } from "../utils/orderbookService";
 
 import { isAssetPDEX } from "./isAssetPDEX";
 import { signPayload } from "./enclavePayloadSigner";
@@ -23,17 +18,15 @@ export const createOrderPayload = (
   price: number,
   timestamp = 0,
   clientOrderId: Uint8Array,
-  mainAddress: string,
+  mainAddress: string
 ): Codec => {
   const baseAssetId = !isAssetPDEX(baseAsset) ? baseAsset : "PDEX";
   const quoteAssetId = !isAssetPDEX(quoteAsset) ? quoteAsset : "PDEX";
   const orderType = { [type.toUpperCase()]: null };
   const orderSide = {
-    [side === OrderSideEnum.Buy ? OrderKindEnum.Bid : OrderKindEnum.Ask]: null,
+    [side]: null,
   };
-  const isMarketBid =
-    type === OrderTypeEnum.MARKET && side === OrderSideEnum.Buy;
-  console.log("is market bid", isMarketBid);
+  const isMarketBid = type === OrderTypeEnum.MARKET && side === "Bid";
   const ZERO = "0"; // for signature verification you have to specify like this.
   const jsonPayload = {
     user: proxyAddress,
@@ -47,7 +40,6 @@ export const createOrderPayload = (
     timestamp: timestamp,
     client_order_id: clientOrderId,
   };
-  console.log("jsonPayload for order", jsonPayload);
   return api.createType("OrderPayload", jsonPayload);
 };
 
@@ -56,7 +48,7 @@ export const createCancelOrderPayloadSigned = (
   userKeyring: KeyringPair,
   orderId: string,
   base: string,
-  quote: string,
+  quote: string
 ) => {
   const orderIdCodec = api.createType("order_id", orderId);
   const tradingPair = `${base}-${quote}`;

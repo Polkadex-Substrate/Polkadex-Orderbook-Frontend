@@ -9,12 +9,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
-import { GenericMessage, Modal, Table as PolkadexTable } from "@polkadex/ux";
-import { useOpenOrders } from "@orderbook/core/hooks";
 import {
-  useOrders,
-  OrderCancellation,
-} from "@orderbook/core/providers/user/orders";
+  useCancelOrder,
+  useOpenOrders,
+  CancelOrderArgs,
+} from "@orderbook/core/hooks";
+import { GenericMessage, Modal, Table as PolkadexTable } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { Ifilters } from "@orderbook/core/providers/types";
 import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
@@ -34,13 +34,13 @@ export const OpenOrdersTable = ({
   filters: Ifilters;
   maxHeight: string;
 }) => {
-  const { onCancelOrder: cancelOrder } = useOrders();
+  const { mutateAsync: cancelOrder } = useCancelOrder();
   const { selectedAccount } = useConnectWalletProvider();
   const { isLoading, openOrders } = useOpenOrders(filters);
   const { width } = useWindowSize();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [orderPayload, setOrderPayload] = useState<OrderCancellation | null>(
+  const [orderPayload, setOrderPayload] = useState<CancelOrderArgs | null>(
     null
   );
 
@@ -49,7 +49,7 @@ export const OpenOrdersTable = ({
     [width]
   );
 
-  const onCancelOrder = async (payload: OrderCancellation | null) => {
+  const onCancelOrder = async (payload: CancelOrderArgs | null) => {
     if (!payload) return;
     if (selectedAccount?.isLocked) {
       setShowPassword(true);

@@ -13,6 +13,9 @@ import { Provider } from "./context";
 import * as T from "./types";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
+  const [price, setPrice] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+  const [total, setTotal] = useState<string>("");
   const [activeAccount, setActiveAccount] = useState<T.UserAddressTuple>({
     mainAddress: "",
     tradeAddress: "",
@@ -163,9 +166,37 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     [extensionAccounts]
   );
 
+  const onSetPrice = (payload: string) => {
+    setPrice(payload);
+    setTimeout(() => {
+      setPrice("");
+    }, 200);
+  };
+
+  const onSetAmount = (payload: string) => {
+    setAmount(payload);
+    setTimeout(() => {
+      setAmount("");
+    }, 200);
+  };
+
+  const onSetTotal = (payload: string) => {
+    setTotal(payload);
+    setTimeout(() => {
+      setTotal("");
+    }, 200);
+  };
+
   return (
     <Provider
       value={{
+        price,
+        amount,
+        total,
+        onSetPrice,
+        onSetAmount,
+        onSetTotal,
+
         onUserSelectTradingAddress,
         selectedAddresses: activeAccount,
         onUserSelectMainAddress,

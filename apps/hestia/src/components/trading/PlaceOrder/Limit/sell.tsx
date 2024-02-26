@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 import { Button, Input, Tooltip, Spinner } from "@polkadex/ux";
 import classNames from "classnames";
 import { useFormik } from "formik";
@@ -27,19 +27,13 @@ const initialValues = {
 export const SellOrder = ({
   market,
   availableBaseAmount,
-  currentPrice,
-  amount,
 }: {
   market?: Market;
   availableBaseAmount: number;
-  currentPrice?: number;
-  amount: string;
 }) => {
   const { onToogleConnectTrading } = useSettingsProvider();
 
   const {
-    touched,
-    setFieldValue,
     handleSubmit,
     errors,
     isValid,
@@ -96,19 +90,9 @@ export const SellOrder = ({
     else onChangeTotal(value);
   };
 
-  useEffect(() => {
-    if (currentPrice) setFieldValue("price", currentPrice);
-  }, [setFieldValue, currentPrice]);
-
-  useEffect(() => {
-    if (amount) setFieldValue("amount", amount);
-  }, [setFieldValue, amount]);
-
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
-      <Tooltip
-        open={touched.price && !!errors.price && !!values.price && isSignedIn}
-      >
+      <Tooltip open={!!errors.price && !!values.price && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
@@ -138,11 +122,7 @@ export const SellOrder = ({
         </Tooltip.Content>
       </Tooltip>
 
-      <Tooltip
-        open={
-          touched.amount && !!errors.amount && !!values.amount && isSignedIn
-        }
-      >
+      <Tooltip open={!!errors.amount && !!values.amount && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
