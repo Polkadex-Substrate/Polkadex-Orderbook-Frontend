@@ -89,15 +89,6 @@ export const FundWalletModal = ({
                     <Dropdown.Item
                       onClick={() =>
                         window.open(
-                          "https://thea.polkadex.trade/?chain=Moonbeam%2520Network"
-                        )
-                      }
-                    >
-                      GLMR (Moombeam chain)
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() =>
-                        window.open(
                           "https://thea.polkadex.trade/?chain=Astar%2520Network"
                         )
                       }
@@ -116,15 +107,21 @@ export const FundWalletModal = ({
                   </Dropdown.Content>
                 </Dropdown>
                 <Dropdown>
-                  <Dropdown.Trigger
-                    disabled
-                    className="opacity-40 flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1"
-                  >
-                    Ethereym-based
+                  <Dropdown.Trigger className="flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1">
+                    Ethereum-based
                     <ChevronDownIcon className="w-3 h-3" />
                   </Dropdown.Trigger>
                   <Dropdown.Content>
                     <Dropdown.Label>Token/Chain</Dropdown.Label>
+                    <Dropdown.Item
+                      onClick={() =>
+                        window.open(
+                          "https://thea.polkadex.trade/?chain=Moonbeam%2520Network"
+                        )
+                      }
+                    >
+                      GLMR (Moonbeam chain)
+                    </Dropdown.Item>
                   </Dropdown.Content>
                 </Dropdown>
               </div>
@@ -145,13 +142,13 @@ export const FundWalletModal = ({
               icon="TransferToTrading"
               title="Transfer to trading account"
               description="Move funds from your funding account to your trading account."
-              href="/transfer/USDT?type=withdraw"
+              href="/transfer/USDT?type=deposit"
             />
             <Card
               icon="TransferToFunding"
               title="Transfer to funding account"
               description="Move funds from your trading account to your funding account."
-              href="/transfer/USDT?type=deposit"
+              href="/transfer/USDT?type=withdraw"
             />
           </div>
         </div>
