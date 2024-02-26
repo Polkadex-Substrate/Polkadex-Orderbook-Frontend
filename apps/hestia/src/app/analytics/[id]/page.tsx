@@ -12,5 +12,6 @@ const Template = dynamic(
   }
 );
 export default function Page() {
+  return;
   return <Template />;
 }
