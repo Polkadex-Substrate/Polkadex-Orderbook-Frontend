@@ -1,7 +1,7 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { FormikHelpers } from "formik";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useCreateOrder } from "@orderbook/core/hooks";
 import {
   cleanPositiveFloatInput,
   decimalPlaces,
@@ -29,8 +29,9 @@ export const useMarketOrder = ({
 }: Props) => {
   const {
     selectedAddresses: { tradeAddress },
+    amount: roughAmount,
   } = useProfile();
-  const { onPlaceOrders } = useOrders();
+  const { mutateAsync: onPlaceOrders } = useCreateOrder();
 
   const minAmount = useMemo(() => market?.minQty || 0, [market?.minQty]);
 
@@ -40,17 +41,20 @@ export const useMarketOrder = ({
     return [qtyPrecision, qtyStepSize];
   }, [market?.qty_step_size]);
 
+  const currentAmount = useMemo(() => {
+    return Decimal.format(roughAmount, qtyPrecision);
+  }, [qtyPrecision, roughAmount]);
+
   const onChangeAmount = useCallback(
     (amount: string) => {
       const convertedValue = cleanPositiveFloatInput(amount);
       if (convertedValue.match(precisionRegExp(qtyPrecision || 0))) {
         setValues({
-          ...values,
           amount,
         });
       }
     },
-    [qtyPrecision, setValues, values]
+    [qtyPrecision, setValues]
   );
 
   const onIncreaseAmount = useCallback(() => {
@@ -85,14 +89,17 @@ export const useMarketOrder = ({
       return;
     }
     await onPlaceOrders({
-      order_type: "MARKET",
+      orderType: "MARKET",
       symbol: [market?.baseAsset?.id, market?.quoteAsset?.id],
-      side: isSell ? "Sell" : "Buy",
+      side: isSell ? "Ask" : "Bid",
       price: 0,
-      market: market.id,
       amount: Number(amount),
     });
   };
+
+  useEffect(() => {
+    if (+currentAmount) onChangeAmount(currentAmount);
+  }, [onChangeAmount, currentAmount]);
 
   return {
     isSignedIn: tradeAddress?.length > 0,

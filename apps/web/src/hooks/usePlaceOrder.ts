@@ -3,7 +3,6 @@ import { FormikErrors, FormikHelpers } from "formik";
 import { useTranslation } from "next-i18next";
 import { Decimal } from "@orderbook/core/utils";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useOrders } from "@orderbook/core/providers/user/orders";
 import {
   cleanPositiveFloatInput,
   decimalPlaces,
@@ -17,6 +16,7 @@ import {
   useOrderbook,
   useMarkets,
   useTickers,
+  useCreateOrder,
 } from "@orderbook/core/hooks";
 
 type FormValues = {
@@ -52,16 +52,17 @@ export function usePlaceOrder(
 
   const {
     selectedAddresses: { tradeAddress },
+    price: currentPrice,
+    onSetPrice: onSetCurrentPrice,
+    onSetAmount: onSetCurrentAmount,
+    amount: selectedAmountFromOrderbookTable,
   } = useProfile();
 
   const {
-    currentPrice,
-    onSetCurrentPrice,
-    onSetCurrentAmount,
-    onPlaceOrders,
-    execute: { isLoading: isOrderLoading, isSuccess: isOrderExecuted },
-    amount: selectedAmountFromOrderbookTable,
-  } = useOrders();
+    mutateAsync: onPlaceOrders,
+    isLoading: isOrderLoading,
+    isSuccess: isOrderExecuted,
+  } = useCreateOrder();
 
   const { loading: isMarketFetching, list } = useMarkets();
   const currentMarket = getCurrentMarket(list, market);
@@ -134,7 +135,7 @@ export function usePlaceOrder(
       ...tab,
       priceLimit: 0,
     });
-    onSetCurrentPrice(0);
+    onSetCurrentPrice("");
   }, [setTab, tab, onSetCurrentPrice]);
 
   // Reset the current amount
@@ -325,11 +326,10 @@ export function usePlaceOrder(
       return;
     }
     onPlaceOrders({
-      order_type: isLimit ? "LIMIT" : "MARKET",
+      orderType: isLimit ? "LIMIT" : "MARKET",
       symbol: [currentMarket?.baseAsset?.id, currentMarket?.quoteAsset?.id],
-      side: isSell ? "Sell" : "Buy",
+      side: isSell ? "Ask" : "Bid",
       price: isLimit ? Number(formPrice) : 0,
-      market: currentMarket.id,
       amount: Number(amount),
     });
   };
@@ -556,7 +556,7 @@ export function usePlaceOrder(
 
   // Change tab if currentPrice/currentAmount (selected from orderbook table) is different from the current price/amount in the form
   useEffect(() => {
-    if (currentPrice !== tab.priceLimit)
+    if (+currentPrice !== tab.priceLimit)
       setTab((prev) => ({ ...prev, priceLimit: Number(currentPrice) }));
 
     if (Number(selectedAmountFromOrderbookTable) !== tab.amountLimit)

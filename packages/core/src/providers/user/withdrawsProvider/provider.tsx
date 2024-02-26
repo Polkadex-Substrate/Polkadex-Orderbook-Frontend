@@ -1,6 +1,6 @@
 import { useReducer } from "react";
 import { ApiPromise } from "@polkadot/api";
-import { Codec, Signer } from "@polkadot/types/types";
+import { Signer } from "@polkadot/types/types";
 import * as mutations from "@orderbook/core/graphql/mutations";
 import { useNativeApi } from "@orderbook/core/providers/public//nativeApi";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
@@ -19,7 +19,6 @@ import {
   useUserAccounts,
   useExtensionAccounts,
 } from "@polkadex/react-providers";
-import { parseMutationError } from "@orderbook/core/providers/user/orders/helper";
 
 import { useProfile } from "../profile";
 
@@ -82,7 +81,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
         });
       }
     } catch (error) {
-      const errorText = parseMutationError(error);
+      const errorText = (error as Error).message || (error as string);
       dispatch(A.withdrawsData());
       settingsState.onHandleError(errorText);
     }

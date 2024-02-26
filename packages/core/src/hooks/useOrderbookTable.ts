@@ -4,7 +4,7 @@ import {
   accumulateVolume,
   calcMaxVolume,
 } from "@orderbook/core/helpers";
-import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 export type Props = {
   asks: string[][];
@@ -21,7 +21,12 @@ export function useOrderbookTable({
   asks,
   bids,
 }: Props) {
-  const { currentPrice, onSetCurrentPrice, onSetCurrentAmount } = useOrders();
+  const {
+    price: currentPrice,
+    onSetPrice: onSetCurrentPrice,
+    onSetAmount: onSetCurrentAmount,
+    onSetTotal: onSetCurrentTotal,
+  } = useProfile();
 
   /**
    * @description -Get Volume of the orders
@@ -41,7 +46,7 @@ export function useOrderbookTable({
     (index: number, side: "asks" | "bids"): void => {
       const arr = side === "asks" ? asks : bids;
       const priceToSet = arr[index] && Number(arr[index][0]);
-      if (currentPrice !== priceToSet) onSetCurrentPrice(priceToSet);
+      if (+currentPrice !== priceToSet) onSetCurrentPrice(String(priceToSet));
     },
     [asks, bids, currentPrice, onSetCurrentPrice]
   );
@@ -65,9 +70,9 @@ export function useOrderbookTable({
   // Change market amount on click on total/sum field
   const changeMarketAmountSumClick = useCallback(
     (index: number) => {
-      onSetCurrentAmount(cumulativeVolume[index].toString());
+      onSetCurrentTotal(cumulativeVolume[index].toString());
     },
-    [onSetCurrentAmount, cumulativeVolume]
+    [onSetCurrentTotal, cumulativeVolume]
   );
 
   /**

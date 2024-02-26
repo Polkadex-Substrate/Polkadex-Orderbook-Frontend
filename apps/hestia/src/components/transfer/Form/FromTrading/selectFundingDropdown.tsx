@@ -26,7 +26,7 @@ import {
 } from "react";
 import { useResizeObserver } from "usehooks-ts";
 import classNames from "classnames";
-import { isValidAddressAddress } from "@orderbook/core/helpers";
+import { isValidAddress } from "@orderbook/core/helpers";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ProviderCard } from "./providerCard";
@@ -72,9 +72,9 @@ export const SelectFundingDropdown = ({
   const onPaste = async () => {
     try {
       const address = await navigator.clipboard.readText();
-      const isValidAddress = isValidAddressAddress(address);
+      const isValid = isValidAddress(address);
 
-      if (isValidAddress)
+      if (isValid)
         setSelectedExtensionAccount({
           name: "Custom address",
           address,
