@@ -19,7 +19,7 @@
     "@orderbook/tsconfig": "*",
     "@polkadex/react-providers": "^1.2.0",
     "@polkadex/types": "^1.2.2",
-    "@polkadex/ux": "^6.7.0",
+    "@polkadex/ux": "^6.8.0",
     "@polkadot-cloud/assets": "^0.3.4",
     "@sentry/nextjs": "^7.99.0",
     "@talismn/connect-wallets": "^1.2.3",
