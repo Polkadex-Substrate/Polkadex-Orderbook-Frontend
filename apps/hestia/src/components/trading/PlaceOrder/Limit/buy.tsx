@@ -38,7 +38,6 @@ export const BuyOrder = ({
   const { onToogleConnectTrading } = useSettingsProvider();
 
   const {
-    touched,
     setFieldValue,
     handleSubmit,
     errors,
@@ -110,9 +109,7 @@ export const BuyOrder = ({
 
   return (
     <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
-      <Tooltip
-        open={touched.price && !!errors.price && !!values.price && isSignedIn}
-      >
+      <Tooltip open={!!errors.price && !!values.price && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
@@ -142,11 +139,7 @@ export const BuyOrder = ({
         </Tooltip.Content>
       </Tooltip>
 
-      <Tooltip
-        open={
-          touched.amount && !!errors.amount && !!values.amount && isSignedIn
-        }
-      >
+      <Tooltip open={!!errors.amount && !!values.amount && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
