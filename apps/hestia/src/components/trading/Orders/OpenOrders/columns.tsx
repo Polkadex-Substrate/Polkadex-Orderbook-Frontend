@@ -108,7 +108,9 @@ export const columns = ({
       const roundedPercent = Math.min(100, percent).toFixed(2);
       const width = `${roundedPercent}%`;
       return (
-        <FilledCard width={width}>{e.getValue().filledQuantity}</FilledCard>
+        <FilledCard width={width}>
+          {e.getValue().filledQuantity} {e.getValue().market.quoteAsset.ticker}
+        </FilledCard>
       );
     },
     header: () => (

@@ -58,7 +58,9 @@ export const ResponsiveTable = ({
         <ResponsiveCard label="Price">{price}</ResponsiveCard>
         <ResponsiveCard label="Amount">{quantity}</ResponsiveCard>
         <ResponsiveCard label="Filled">
-          <FilledCard width={width}>{filledQuantity}</FilledCard>
+          <FilledCard width={width}>
+            {filledQuantity} {market.quoteAsset.ticker}
+          </FilledCard>
         </ResponsiveCard>
       </Drawer.Content>
       <Drawer.Footer className="p-4">

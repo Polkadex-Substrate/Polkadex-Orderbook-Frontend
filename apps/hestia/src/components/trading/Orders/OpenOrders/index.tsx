@@ -23,14 +23,13 @@ import { useConnectWalletProvider } from "@orderbook/core/providers/user/connect
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 
 import { Loading } from "../loading";
-import { OpenOrderResponsiveCard } from "../responsiveCard";
 
 import { columns } from "./columns";
 import { ResponsiveTable } from "./responsiveTable";
 
 import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
 
-const responsiveKeys = ["date", "price", "amount"];
+const responsiveKeys = ["date", "price"];
 const actionKeys = ["date", "price", "amount"];
 const widthKeys = ["15%", "15%", "20%", "25%", "100%", "fit-content"];
 
@@ -109,10 +108,7 @@ export const OpenOrdersTable = ({
         className="flex-1 overflow-y-hidden hover:overflow-y-auto scrollbar-hide"
         style={{ maxHeight }}
       >
-        <PolkadexTable
-          className="w-full [&_th]:border-b [&_th]:border-primary"
-          even
-        >
+        <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
           <PolkadexTable.Header className="sticky top-0 bg-level-0 z-[2]">
             {table.getHeaderGroups().map((headerGroup) => (
               <PolkadexTable.Row key={headerGroup.id}>
