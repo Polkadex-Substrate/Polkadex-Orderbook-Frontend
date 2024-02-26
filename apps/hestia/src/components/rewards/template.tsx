@@ -41,7 +41,7 @@ export function Template() {
           <div ref={overviewRef} className="flex flex-col">
             <div className="flex items-end justify-between gap-4 px-4 pt-6 pb-4  border-b border-secondary-base flex-wrap">
               <Typography.Text bold size="lg">
-                Analytics
+                Rewards
               </Typography.Text>
               <InformationCircleIcon className="w-6 h-6 text-primary" />
             </div>

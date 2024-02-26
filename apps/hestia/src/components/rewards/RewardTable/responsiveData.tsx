@@ -29,7 +29,7 @@ export const ResponsiveData = ({
         <Button.Solid
           appearance="secondary"
           className="w-full"
-          onClick={() => router.push(`/analytics/${data?.token}`)}
+          onClick={() => router.push(`/rewards/${data?.token}`)}
         >
           Open metrics
         </Button.Solid>

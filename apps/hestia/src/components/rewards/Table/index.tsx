@@ -62,9 +62,7 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
                     ? {
                         role: "button",
                         onClick: () =>
-                          router.push(
-                            `/analytics/${value.ticker}${value.pair}`
-                          ),
+                          router.push(`/rewards/${value.ticker}${value.pair}`),
                       }
                     : {};
 

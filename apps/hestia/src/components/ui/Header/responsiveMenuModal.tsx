@@ -64,6 +64,13 @@ export const ResponsiveMenuModal = ({
                   >
                     Trade
                   </HeaderLink.Single>
+                  <HeaderLink.Single
+                    size="lg"
+                    href="/rewards"
+                    className="text-lg"
+                  >
+                    Rewards
+                  </HeaderLink.Single>
                   <HeaderLink.Accordion
                     items={[
                       {

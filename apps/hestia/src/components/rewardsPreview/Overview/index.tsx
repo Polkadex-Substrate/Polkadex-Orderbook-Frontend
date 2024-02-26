@@ -12,7 +12,7 @@ export const Overview = forwardRef<HTMLDivElement>((_, ref) => {
     <div ref={ref}>
       <div className="flex items-center justify-between gap-2 p-4 pb-4 border-b border-secondary-base">
         <Link
-          href="/analytics"
+          href="/rewards"
           className="text-primary flex items-center gap-2 flex-wrap transition-colors duration-300 hover:text-current"
         >
           <ArrowLeftIcon className="w-5 h-5" />

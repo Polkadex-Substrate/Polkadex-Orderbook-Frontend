@@ -45,8 +45,8 @@ export const Menu = () => {
             <Card icon="QueueListIcon" href="/history">
               History
             </Card>
-            <Card icon="CircleStackIcon" href="/analytics" newBadge>
-              Analytics
+            <Card icon="CircleStackIcon" href="/rewards" newBadge>
+              Rewards
             </Card>
             <Card icon="ArrowRightIcon" href="/">
               Bridge

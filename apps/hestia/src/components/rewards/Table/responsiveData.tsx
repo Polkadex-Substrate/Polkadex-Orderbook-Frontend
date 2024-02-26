@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 import { ResponsiveCard } from "./responsiveCard";
 
-import { Data } from "./";
+import { Data } from ".";
 
 export const ResponsiveData = ({
   open,
