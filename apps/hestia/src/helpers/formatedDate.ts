@@ -8,7 +8,7 @@ export const formatedDate = (value: Date, short = true) =>
         hour: "numeric",
         minute: "numeric",
       })
-        .format(value)
+        .format(new Date(value))
         .replace(",", "")
     : intlFormat(
         value,

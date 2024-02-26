@@ -52,6 +52,7 @@ export const OpenOrdersTable = ({
   const [responsiveState, setResponsiveState] = useState(false);
   const [responsiveData, setResponsiveData] = useState<Order | null>(null);
   const responsiveView = useMemo(() => width < 500 || width <= 715, [width]);
+  const isResponsive = useMemo(() => width <= 1265, [width]);
 
   const onCancelOrder = async (payload: CancelOrderArgs | null) => {
     if (!payload) return;
@@ -105,8 +106,10 @@ export const OpenOrdersTable = ({
         onCancelOrder={onCancelOrder}
       />
       <div
-        className="flex-1 overflow-y-hidden hover:overflow-y-auto scrollbar-hide"
-        style={{ maxHeight }}
+        className="flex-1 h-full overflow-auto scrollbar-hide"
+        style={{
+          maxHeight: isResponsive ? "384px" : maxHeight,
+        }}
       >
         <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
           <PolkadexTable.Header className="sticky top-0 bg-level-0 z-[2]">

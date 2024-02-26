@@ -69,7 +69,7 @@ export function Template({ id }: { id: string }) {
         <div
           className={classNames(
             "1xl:col-span-3 xl:col-span-2 lg:col-span-3 h-fit",
-            "h-full flex flex-1 border-t border-primary border-r max-xl:min-h-96"
+            "h-full flex flex-1 border-t border-primary border-r"
           )}
         >
           <Orders maxHeight={ordersMaxHeight as string} />

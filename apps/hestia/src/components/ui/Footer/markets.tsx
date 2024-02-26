@@ -63,7 +63,7 @@ export const Markets = ({ favorite }: { favorite: boolean }) => {
           "[&>div]:p-0"
         )}
       >
-        <SkeletonCollection rows={3} className="w-40 h-3" />
+        <SkeletonCollection rows={3} className="w-10 h-3" />
       </div>
     );
 
