@@ -51,7 +51,7 @@ export const columns = ({
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Coin
+        Market
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
