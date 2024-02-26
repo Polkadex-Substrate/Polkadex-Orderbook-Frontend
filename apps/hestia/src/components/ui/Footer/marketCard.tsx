@@ -1,4 +1,5 @@
 import { Typography } from "@polkadex/ux";
+import Link from "next/link";
 
 export const MarketCard = ({
   pair,
@@ -16,7 +17,10 @@ export const MarketCard = ({
   const marketChange = `${positive ? "+" : "-"} ${change} %`;
   const marketName = `${pair}/${market}`;
   return (
-    <div className="flex gap-2">
+    <Link
+      href={`/trading/${marketName.replace("/", "")}`}
+      className="flex gap-2 ml-2"
+    >
       <Typography.Text size="xs" bold>
         {marketName}
       </Typography.Text>
@@ -31,6 +35,6 @@ export const MarketCard = ({
       <Typography.Text size="xs" bold appearance="secondary">
         {price}
       </Typography.Text>
-    </div>
+    </Link>
   );
 };
