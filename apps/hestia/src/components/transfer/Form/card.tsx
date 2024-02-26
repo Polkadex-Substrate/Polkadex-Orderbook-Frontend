@@ -51,7 +51,7 @@ export const Card = ({
             Another Funding Account
           </Dropdown.Item>
         </Dropdown.Content>
-        <Dropdown.Overlay />
+        <Dropdown.Overlay className="z-[40]" />
       </Dropdown>
       {children}
     </div>

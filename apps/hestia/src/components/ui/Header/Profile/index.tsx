@@ -81,7 +81,7 @@ export const Profile = ({
           <Popover.Content>
             <Content />
           </Popover.Content>
-          <Popover.Overlay />
+          <Popover.Overlay className="z-[40]" />
         </Popover>
         <Button.Icon variant="ghost" onClick={onOpenMenu}>
           <Bars2Icon />

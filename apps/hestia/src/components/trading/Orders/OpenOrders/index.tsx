@@ -2,10 +2,11 @@
 
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
@@ -19,13 +20,19 @@ import { useWindowSize } from "usehooks-ts";
 import { Ifilters } from "@orderbook/core/providers/types";
 import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { Order } from "@orderbook/core/utils/orderbookService/types";
 
 import { Loading } from "../loading";
 import { OpenOrderResponsiveCard } from "../responsiveCard";
 
 import { columns } from "./columns";
+import { ResponsiveTable } from "./responsiveTable";
 
 import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
+
+const responsiveKeys = ["date", "price", "amount"];
+const actionKeys = ["date", "price", "amount"];
+const widthKeys = ["15%", "15%", "20%", "25%", "100%", "fit-content"];
 
 export const OpenOrdersTable = ({
   filters,
@@ -43,11 +50,9 @@ export const OpenOrdersTable = ({
   const [orderPayload, setOrderPayload] = useState<CancelOrderArgs | null>(
     null
   );
-
-  const responsiveView = useMemo(
-    () => width < 500 || (width >= 715 && width <= 1115),
-    [width]
-  );
+  const [responsiveState, setResponsiveState] = useState(false);
+  const [responsiveData, setResponsiveData] = useState<Order | null>(null);
+  const responsiveView = useMemo(() => width < 500 || width <= 715, [width]);
 
   const onCancelOrder = async (payload: CancelOrderArgs | null) => {
     if (!payload) return;
@@ -64,11 +69,19 @@ export const OpenOrdersTable = ({
     data: openOrders,
     columns: columns({ onCancelOrder }),
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   useEffect(() => {
     if (selectedAccount) tryUnlockTradeAccount(selectedAccount);
   }, [selectedAccount]);
+
+  useEffect(() => {
+    if (!responsiveView && !!responsiveState) {
+      setResponsiveState(false);
+      setResponsiveData(null);
+    }
+  }, [responsiveState, responsiveView]);
 
   if (isLoading) return <Loading />;
 
@@ -76,7 +89,7 @@ export const OpenOrdersTable = ({
     return <GenericMessage title={"No open orders"} illustration="NoData" />;
 
   return (
-    <>
+    <Fragment>
       <Modal open={showPassword} onOpenChange={setShowPassword}>
         <Modal.Content>
           <UnlockAccount
@@ -86,65 +99,98 @@ export const OpenOrdersTable = ({
           />
         </Modal.Content>
       </Modal>
+      <ResponsiveTable
+        data={responsiveData}
+        onOpenChange={setResponsiveState}
+        open={responsiveState}
+        onCancelOrder={onCancelOrder}
+      />
       <div
-        className="flex-1 overflow-y-hidden hover:overflow-y-auto"
-        style={{ maxHeight, scrollbarGutter: "stable" }}
+        className="flex-1 overflow-y-hidden hover:overflow-y-auto scrollbar-hide"
+        style={{ maxHeight }}
       >
-        {responsiveView ? (
-          <OpenOrderResponsiveCard
-            orders={openOrders}
-            onCancelOrder={onCancelOrder}
-          />
-        ) : (
-          <PolkadexTable className="w-full" even>
-            <PolkadexTable.Header className="sticky top-0 bg-level-0">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <PolkadexTable.Row key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
+        <PolkadexTable
+          className="w-full [&_th]:border-b [&_th]:border-primary"
+          even
+        >
+          <PolkadexTable.Header className="sticky top-0 bg-level-0 z-[2]">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <PolkadexTable.Row key={headerGroup.id}>
+                {headerGroup.headers.map((header, i) => {
+                  const getSorted = header.column.getIsSorted();
+                  const isActionTab = actionKeys.includes(header.id);
+                  const handleSort = (): void => {
+                    const isDesc = getSorted === "desc";
+                    header.column.toggleSorting(!isDesc);
+                  };
+                  if (responsiveView && responsiveKeys.includes(header.id))
+                    return null;
+
+                  return (
+                    <PolkadexTable.Head
+                      key={header.id}
+                      className={classNames(
+                        "px-2 text-primary font-semibold text-xs",
+                        !isActionTab && "cursor-pointer"
+                      )}
+                      style={{ width: widthKeys[i] }}
+                      {...(isActionTab && { onClick: handleSort })}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                      {isActionTab && <PolkadexTable.Icon />}
+                    </PolkadexTable.Head>
+                  );
+                })}
+              </PolkadexTable.Row>
+            ))}
+          </PolkadexTable.Header>
+          <PolkadexTable.Body>
+            {table.getRowModel().rows.map((row) => {
+              return (
+                <PolkadexTable.Row
+                  key={row.id}
+                  className={classNames("hover:bg-level-1 cursor-pointer")}
+                >
+                  {row.getVisibleCells().map((cell) => {
+                    if (
+                      responsiveView &&
+                      responsiveKeys.includes(cell.column.id)
+                    )
+                      return null;
+
+                    const responsiveProps = responsiveView
+                      ? {
+                          className: "cursor-pointer",
+                          onClick: () => {
+                            setResponsiveState(true);
+                            setResponsiveData(row.original);
+                          },
+                        }
+                      : {};
                     return (
-                      <PolkadexTable.Head
-                        className={classNames(
-                          "px-2 text-primary font-semibold text-xs"
-                        )}
-                        key={header.id}
+                      <PolkadexTable.Cell
+                        key={cell.id}
+                        className="px-2 py-3 text-xs"
+                        {...responsiveProps}
                       >
                         {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
+                          cell.column.columnDef.cell,
+                          cell.getContext()
                         )}
-                      </PolkadexTable.Head>
+                      </PolkadexTable.Cell>
                     );
                   })}
                 </PolkadexTable.Row>
-              ))}
-            </PolkadexTable.Header>
-            <PolkadexTable.Body>
-              {table.getRowModel().rows.map((row) => {
-                return (
-                  <PolkadexTable.Row
-                    key={row.id}
-                    className={classNames("hover:bg-level-1 cursor-pointer")}
-                  >
-                    {row.getVisibleCells().map((cell) => {
-                      return (
-                        <PolkadexTable.Cell
-                          key={cell.id}
-                          className={classNames("px-2 py-3 text-xs")}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </PolkadexTable.Cell>
-                      );
-                    })}
-                  </PolkadexTable.Row>
-                );
-              })}
-            </PolkadexTable.Body>
-          </PolkadexTable>
-        )}
+              );
+            })}
+          </PolkadexTable.Body>
+        </PolkadexTable>
       </div>
-    </>
+    </Fragment>
   );
 };
