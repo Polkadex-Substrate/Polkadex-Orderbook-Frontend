@@ -31,7 +31,7 @@ export const ResponsiveMenuModal = ({
       closeOnClickOutside
       className={classNames(
         "flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto",
-        "top-1/2 right-0 transform -translate-y-1/2" // fix that in polkadex/ux
+        "sm:top-1/2 sm:right-0 sm:transform sm:-translate-y-1/2" // fix that in polkadex/ux
       )}
     >
       <Modal.Title className="flex justify-between items-center py-4 pl-4">
