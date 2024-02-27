@@ -39,7 +39,6 @@ export const BuyOrder = ({
     initialValues,
     validationSchema: marketOrderValidations({
       minQuantity: market?.minQty || 0,
-      maxQuantity: market?.maxQty || 0,
       availableBalance: availableQuoteAmount,
     }),
     validateOnChange: true,
