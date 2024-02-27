@@ -157,10 +157,8 @@ export const getAllMarkets = /* GraphQL */ `query GetAllMarkets {
   getAllMarkets {
     items {
       market
-      max_order_price
-      min_order_price
-      min_order_qty
-      max_order_qty
+      max_volume
+      min_volume
       price_tick_size
       qty_step_size
       base_asset_precision
