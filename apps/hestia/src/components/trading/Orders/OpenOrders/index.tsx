@@ -129,7 +129,7 @@ export const OpenOrdersTable = ({
                     <PolkadexTable.Head
                       key={header.id}
                       className={classNames(
-                        "px-2 text-primary font-semibold text-xs",
+                        "text-xs",
                         !isActionTab && "cursor-pointer"
                       )}
                       style={{ width: widthKeys[i] }}
@@ -151,10 +151,7 @@ export const OpenOrdersTable = ({
           <PolkadexTable.Body>
             {table.getRowModel().rows.map((row) => {
               return (
-                <PolkadexTable.Row
-                  key={row.id}
-                  className={classNames("hover:bg-level-1 cursor-pointer")}
-                >
+                <PolkadexTable.Row key={row.id} className="hover:bg-level-1">
                   {row.getVisibleCells().map((cell) => {
                     if (
                       responsiveView &&
@@ -174,7 +171,7 @@ export const OpenOrdersTable = ({
                     return (
                       <PolkadexTable.Cell
                         key={cell.id}
-                        className="px-2 py-3 text-xs"
+                        className="text-xs"
                         {...responsiveProps}
                       >
                         {flexRender(

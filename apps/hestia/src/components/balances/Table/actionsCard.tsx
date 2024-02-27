@@ -7,16 +7,24 @@ export const ActionsCard = ({
   depositLink,
   tradeLink,
   transferLink,
+  hideButton,
 }: {
   withdrawLink: LinkProps["href"];
   depositLink: LinkProps["href"];
   tradeLink: LinkProps["href"];
   transferLink: LinkProps["href"];
+  hideButton?: boolean;
 }) => (
   <div className="flex items-center justify-end gap-2">
-    <Button.Solid asChild size="xs" appearance="secondary">
-      <Link href={tradeLink}>Trade</Link>
-    </Button.Solid>
+    {hideButton ? (
+      <Button.Solid asChild size="xs" appearance="secondary">
+        <Link href={transferLink}>Transfer</Link>
+      </Button.Solid>
+    ) : (
+      <Button.Solid asChild size="xs" appearance="secondary">
+        <Link href={tradeLink}>Trade</Link>
+      </Button.Solid>
+    )}
     <Dropdown>
       <Dropdown.Trigger className="group">
         <EllipsisVerticalIcon className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
@@ -36,11 +44,13 @@ export const ActionsCard = ({
             </Link>
           </Typography.Text>
         </Dropdown.Item>
-        <Dropdown.Item>
-          <Typography.Text asChild size="sm">
-            <Link href={transferLink}>Transfer</Link>
-          </Typography.Text>
-        </Dropdown.Item>
+        {!hideButton && (
+          <Dropdown.Item>
+            <Typography.Text asChild size="sm">
+              <Link href={transferLink}>Transfer</Link>
+            </Typography.Text>
+          </Dropdown.Item>
+        )}
       </Dropdown.Content>
     </Dropdown>
   </div>

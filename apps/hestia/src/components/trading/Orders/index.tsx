@@ -1,4 +1,5 @@
 "use client";
+// TODO: Replace Buy/Sell/Calendar filter
 
 import { useWindowSize } from "usehooks-ts";
 import { Fragment, useMemo, useState } from "react";
@@ -124,43 +125,53 @@ export const Orders = ({ maxHeight }: Props) => {
               <EllipsisVerticalIcon className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
             </Popover.Trigger>
             <Popover.Content className="flex flex-col gap-3 p-2">
-              <Checkbox.Solid
+              <Checkbox.Outline
                 id={BUY}
                 checked={filters.onlyBuy}
                 onCheckedChange={() => onChangeFilters(BUY)}
               >
-                <Checkbox.Label htmlFor={BUY}>Buy</Checkbox.Label>
-              </Checkbox.Solid>
-              <Checkbox.Solid
+                <Checkbox.Label appearance="primary" htmlFor={BUY}>
+                  Buy
+                </Checkbox.Label>
+              </Checkbox.Outline>
+              <Checkbox.Outline
                 id={SELL}
                 checked={filters.onlySell}
                 onCheckedChange={() => onChangeFilters(SELL)}
               >
-                <Checkbox.Label htmlFor={SELL}>Sell</Checkbox.Label>
-              </Checkbox.Solid>
+                <Checkbox.Label appearance="primary" htmlFor={SELL}>
+                  Sell
+                </Checkbox.Label>
+              </Checkbox.Outline>
             </Popover.Content>
           </Popover>
         ) : (
           <Fragment>
             {connected && show && (
               <div className="flex items-center gap-3 mx-2">
-                <Checkbox.Solid
+                <Checkbox.Outline
                   id={BUY}
                   checked={filters.onlyBuy}
                   onCheckedChange={() => onChangeFilters(BUY)}
                 >
-                  <Checkbox.Label htmlFor={BUY}>Buy</Checkbox.Label>
-                </Checkbox.Solid>
-                <Checkbox.Solid
+                  <Checkbox.Label appearance="primary" htmlFor={BUY}>
+                    Buy
+                  </Checkbox.Label>
+                </Checkbox.Outline>
+                <Checkbox.Outline
                   id={SELL}
                   checked={filters.onlySell}
                   onCheckedChange={() => onChangeFilters(SELL)}
                 >
-                  <Checkbox.Label htmlFor={SELL}>Sell</Checkbox.Label>
-                </Checkbox.Solid>
+                  <Checkbox.Label appearance="primary" htmlFor={SELL}>
+                    Sell
+                  </Checkbox.Label>
+                </Checkbox.Outline>
                 <Popover>
-                  <Popover.Trigger>
-                    <CalendarDaysIcon className="w-5 h-5" />
+                  <Popover.Trigger asChild>
+                    <Button.Icon variant="light" size="2sm" className="p-1">
+                      <CalendarDaysIcon />
+                    </Button.Icon>
                   </Popover.Trigger>
                   <Popover.Content>
                     <DateRangePicker

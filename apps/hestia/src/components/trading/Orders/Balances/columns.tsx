@@ -18,7 +18,7 @@ export const columns = [
           <Token
             name={ticker}
             appearance={ticker as keyof typeof tokenAppearance}
-            size="sm"
+            size="xs"
             className="rounded-full border border-secondary"
           />
           <Typography.Text size="xs" className="uppercase">
@@ -70,6 +70,7 @@ export const columns = [
       const chainName = getChainFromTicker(e.getValue().ticker);
       return (
         <ActionsCard
+          hideButton
           withdrawLink={{
             pathname: "https://thea.polkadex.trade/withdraw",
             query: chainName && {
