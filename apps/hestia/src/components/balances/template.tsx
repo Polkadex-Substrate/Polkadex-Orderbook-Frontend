@@ -4,8 +4,7 @@ import { HoverCard, Popover, Typography, Checkbox, Input } from "@polkadex/ux";
 import { useElementSize, useWindowSize } from "usehooks-ts";
 import { useMemo } from "react";
 import Link from "next/link";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { RiMore2Line, RiInformation2Line } from "@remixicon/react";
 import { useAssets } from "@orderbook/core/hooks";
 
 import { Overview } from "./Overview";
@@ -46,7 +45,7 @@ export function Template() {
               <Typography.Text bold size="lg">
                 Balances
               </Typography.Text>
-              <InformationCircleIcon className="w-6 h-6 text-primary" />
+              <RiInformation2Line className="w-6 h-6 text-primary" />
             </div>
             <Overview />
             <div className="py-2 flex items-center justify-between gap-2 border-b border-primary px-4">
@@ -82,7 +81,7 @@ export function Template() {
               ) : (
                 <Popover>
                   <Popover.Trigger className="group">
-                    <EllipsisVerticalIcon className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
+                    <RiMore2Line className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
                   </Popover.Trigger>
                   <Popover.Content className="flex flex-col gap-5 p-4">
                     <Typography.Text appearance="secondary" size="xs">

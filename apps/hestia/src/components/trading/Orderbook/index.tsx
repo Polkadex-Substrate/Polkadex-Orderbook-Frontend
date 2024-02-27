@@ -4,7 +4,7 @@ import {
   useOrderbook,
 } from "@orderbook/core/index";
 import classNames from "classnames";
-import { Skeleton } from "@polkadex/ux";
+import { Skeleton, Typography } from "@polkadex/ux";
 
 import { Header } from "./header";
 import { LastPrice } from "./lastPrice";
@@ -22,7 +22,6 @@ export const Orderbook = ({
   const currentMarket = getCurrentMarket(list, id);
   const {
     isPriceUp,
-    hasMarket,
     asks,
     bids,
     lastPriceValue,
@@ -51,21 +50,33 @@ export const Orderbook = ({
       />
       <div
         className={classNames(
-          filterState !== "OrderDesc" ? "flex-col" : "flex-col-reverse",
           "flex flex-1 flex-col border-t border-t-primary bg-level-0 overflow-y-hidden hover:overflow-y-auto"
         )}
-        style={{
-          scrollbarGutter:
-            loading || !bids.length || !asks.length ? "inherit" : "stable",
-        }}
       >
+        <div className="grid grid-cols-[30%_35%_35%] p-2 sticky top-0 left-0">
+          <Typography.Text size="xs" appearance="primary">
+            Price {!loading && `(${quoteUnit})`}
+          </Typography.Text>
+          <Typography.Text
+            size="xs"
+            appearance="primary"
+            className="justify-self-end"
+          >
+            Amount {!loading && `(${baseUnit})`}
+          </Typography.Text>
+          <Typography.Text
+            size="xs"
+            appearance="primary"
+            className="justify-self-end"
+          >
+            Total {!loading && `(${baseUnit})`}
+          </Typography.Text>
+        </div>
         <Skeleton loading={!!loading}>
           <Table
             precision={sizeState.length}
             isSell
             active={filterState !== "OrderDesc"}
-            baseTicker={baseUnit ?? ""}
-            quoteTicker={quoteUnit ?? ""}
             asks={asks}
             bids={bids}
             orders={asks}
@@ -75,13 +86,12 @@ export const Orderbook = ({
           loading={!!loading}
           lastPrice={lastPriceValue}
           isPriceUp={isPriceUp}
+          inverted={filterState === "OrderDesc"}
         />
         <Skeleton loading={!!loading}>
           <Table
             precision={sizeState.length}
             active={filterState !== "OrderAsc"}
-            baseTicker={baseUnit ?? ""}
-            quoteTicker={quoteUnit ?? ""}
             asks={asks}
             bids={bids}
             orders={bids}

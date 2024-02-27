@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { Interaction, Loading, Input, Button, Typography } from "@polkadex/ux";
 import { useFormik } from "formik";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { generateUsername } from "friendly-username-generator";
 import { importAccountValidations } from "@orderbook/core/validations";
+import { RiEyeOffLine, RiEyeLine } from "@remixicon/react";
 
 import { OptionalField } from "../ReadyToUse";
 
@@ -121,7 +121,11 @@ export const ImportTradingAccountMnemonic = ({
                     type="button"
                     onClick={() => setShow(!show)}
                   >
-                    {show ? <EyeIcon /> : <EyeSlashIcon />}
+                    {show ? (
+                      <RiEyeLine className="w-full h-full" />
+                    ) : (
+                      <RiEyeOffLine className="w-full h-full" />
+                    )}
                   </Button.Icon>
                 </div>
               </OptionalField>

@@ -1,4 +1,4 @@
-import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import { RiMore2Line } from "@remixicon/react";
 import { MouseEvent, useState } from "react";
 import {
   Button,
@@ -80,7 +80,7 @@ export const TradingAccountCard = ({
             <Dropdown open={open} onOpenChange={setOpen}>
               <Dropdown.Trigger>
                 <Button.Icon asChild size="sm" variant="ghost">
-                  <EllipsisVerticalIcon className="text-primary group-hover:text-current duration-300 transition-colors" />
+                  <RiMore2Line className="text-primary group-hover:text-current duration-300 transition-colors" />
                 </Button.Icon>
               </Dropdown.Trigger>
               <Dropdown.Content>

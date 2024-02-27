@@ -1,6 +1,6 @@
 import { Typography, Tooltip, Separator } from "@polkadex/ux";
 import Link from "next/link";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { RiArrowDownLine } from "@remixicon/react";
 
 import { Icons } from "..";
 
@@ -25,7 +25,7 @@ export const TradingFee = ({
           <Typography.Text size="xs" appearance="primary">
             0.5 PDEX
           </Typography.Text>
-          <ChevronDownIcon className="w-3 h-3 text-primary group-hover:rotate-180 duration-300 transition-transform" />
+          <RiArrowDownLine className="w-3 h-3 text-primary group-hover:rotate-180 duration-300 transition-transform" />
         </div>
       </Tooltip.Trigger>
       <Tooltip.Content className="max-w-[300px] p-4">

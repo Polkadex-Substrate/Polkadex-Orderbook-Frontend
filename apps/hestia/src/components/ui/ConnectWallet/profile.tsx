@@ -1,11 +1,11 @@
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import {
-  ArrowsRightLeftIcon,
-  ChevronDownIcon,
-  PlusIcon,
-  PowerIcon,
-  InformationCircleIcon,
-} from "@heroicons/react/24/solid";
+  RiAddLine,
+  RiArrowDownLine,
+  RiArrowLeftRightLine,
+  RiInformationLine,
+  RiMore2Line,
+  RiShutDownLine,
+} from "@remixicon/react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import {
@@ -76,7 +76,7 @@ export const Profile = ({
           <PopConfirm>
             <PopConfirm.Trigger asChild>
               <Button.Icon size="sm" variant="light" appearance="danger">
-                <PowerIcon />
+                <RiShutDownLine className="w-full h-full" />
               </Button.Icon>
             </PopConfirm.Trigger>
             <PopConfirm.Content>
@@ -104,7 +104,7 @@ export const Profile = ({
                 className="flex items-center gap-1"
                 onClick={onSwitch}
               >
-                <ArrowsRightLeftIcon
+                <RiArrowLeftRightLine
                   name="Exchange"
                   className="w-3 h-3 text-primary"
                 />
@@ -118,7 +118,7 @@ export const Profile = ({
                 Connect Wallet
               </Button.Solid>
               <div className="flex items-center gap-2">
-                <InformationCircleIcon className="w-7 h-7 text-attention-base" />
+                <RiInformationLine className="w-7 h-7 text-attention-base" />
                 <Typography.Paragraph appearance="primary" size="xs">
                   <span className="text-attention-base">(Optional)</span> Your
                   funding account is only required for signing transactions and
@@ -140,7 +140,7 @@ export const Profile = ({
               variant="outline"
               className="h-auto bg-level-3"
             >
-              <PlusIcon className="w-6 h-6" />
+              <RiAddLine className="w-6 h-6" />
             </Button.Icon>
             <Dropdown open={enableDropdown && state} onOpenChange={setState}>
               <Dropdown.Trigger
@@ -155,7 +155,7 @@ export const Profile = ({
                     hoverable={false}
                   >
                     {enableDropdown && (
-                      <ChevronDownIcon className="h-3 w-3 transition-transform duration-300 text-primary" />
+                      <RiArrowDownLine className="h-3 w-3 transition-transform duration-300 text-primary" />
                     )}
                   </AccountCard.Inverted>
                 </div>
@@ -292,7 +292,7 @@ const TradingAccountCard = ({
         <Dropdown>
           <Dropdown.Trigger>
             <Button.Icon asChild size="sm" variant="ghost">
-              <EllipsisVerticalIcon className="text-primary group-hover:text-current duration-300 transition-colors" />
+              <RiMore2Line className="text-primary group-hover:text-current duration-300 transition-colors" />
             </Button.Icon>
           </Dropdown.Trigger>
           <Dropdown.Content>

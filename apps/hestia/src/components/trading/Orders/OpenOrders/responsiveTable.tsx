@@ -2,7 +2,7 @@ import { Copy, Drawer, Typography, truncateString } from "@polkadex/ux";
 import { Dispatch, SetStateAction } from "react";
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { CancelOrderArgs } from "@orderbook/core/hooks";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { RiFileCopyLine } from "@remixicon/react";
 
 import { CancelOrderAction } from "./cancelOrderAction";
 
@@ -43,7 +43,7 @@ export const ResponsiveTable = ({
         <ResponsiveCard label="ID">
           <Copy value={orderId}>
             <div className="flex items-center gap-1">
-              <DocumentDuplicateIcon className="w-4 h-4 text-actionInput" />
+              <RiFileCopyLine className="w-4 h-4 text-actionInput" />
               <Typography.Text>{truncateString(orderId, 6)}</Typography.Text>
             </div>
           </Copy>

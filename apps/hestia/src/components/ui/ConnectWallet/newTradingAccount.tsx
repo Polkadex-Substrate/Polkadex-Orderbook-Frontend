@@ -1,6 +1,5 @@
 "use client";
 
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import {
   Button,
@@ -16,6 +15,7 @@ import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { createAccountValidations } from "@orderbook/core/validations";
 import { useTradingAccountFee } from "@orderbook/core/hooks";
+import { RiEyeOffLine, RiEyeLine } from "@remixicon/react";
 
 import {
   ErrorMessage,
@@ -136,7 +136,11 @@ export const NewTradingAccount = ({
                     type="button"
                     onClick={() => setShow(!show)}
                   >
-                    {show ? <EyeIcon /> : <EyeSlashIcon />}
+                    {show ? (
+                      <RiEyeLine className="w-full h-full" />
+                    ) : (
+                      <RiEyeOffLine className="w-full h-full" />
+                    )}
                   </Button.Icon>
                 </div>
               </OptionalField>

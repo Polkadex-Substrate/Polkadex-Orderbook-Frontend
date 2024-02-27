@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { Tokens, Tooltip, Typography, truncateString } from "@polkadex/ux";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { getChainFromTicker } from "@orderbook/core/helpers";
+import { RiArrowRightLine } from "@remixicon/react";
 
 import { ReadyToClaimProps } from ".";
 
@@ -67,7 +67,7 @@ export const columns = [
           )}
 
           <div className="flex items-center justify-center bg-level-1 w-6 h-6 rounded-md">
-            <ArrowRightIcon className="w-4 h-4 text-primary" />
+            <RiArrowRightLine className="w-4 h-4 text-primary" />
           </div>
           <Tooltip>
             <Tooltip.Trigger>

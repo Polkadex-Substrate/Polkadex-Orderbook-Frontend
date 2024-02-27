@@ -1,4 +1,4 @@
-import * as Icons from "@heroicons/react/24/outline";
+import * as Icons from "@remixicon/react";
 import { Typography } from "@polkadex/ux";
 import classNames from "classnames";
 import Link, { LinkProps } from "next/link";

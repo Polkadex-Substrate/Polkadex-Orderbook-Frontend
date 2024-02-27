@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { RiArrowDownLine } from "@remixicon/react";
 import { Icons, Typography, truncateString } from "@polkadex/ux";
 import classNames from "classnames";
 
@@ -41,7 +41,7 @@ export const Trigger = ({
           <Typography.Text size="xs" bold className="whitespace-nowrap">
             {browserAccount}
           </Typography.Text>
-          <ChevronDownIcon className="w-3 h-3" />
+          <RiArrowDownLine className="w-3 h-3" />
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
-import { TrashIcon } from "@heroicons/react/24/outline";
 import { Button, PopConfirm } from "@polkadex/ux";
+import { RiDeleteBin2Line } from "@remixicon/react";
 import React from "react";
 
 export const CancelOrderAction = ({
@@ -23,7 +23,7 @@ export const CancelOrderAction = ({
             className="p-1"
             variant="ghost"
           >
-            <TrashIcon />
+            <RiDeleteBin2Line className="w-full h-full" />
           </Button.Icon>
         )}
       </PopConfirm.Trigger>

@@ -1,6 +1,6 @@
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { Button, Icons, Typography } from "@polkadex/ux";
 import Link from "next/link";
+import { RiExternalLinkLine } from "@remixicon/react";
 
 import { Rewards } from "@/components/ui/Icons/rewards";
 
@@ -20,7 +20,7 @@ export const Info = () => {
         <Button.Underline asChild className="p-0 gap-2 justify-start text-sm">
           <Link href="/">
             Read more
-            <ArrowTopRightOnSquareIcon className="w-3 h-3" />
+            <RiExternalLinkLine className="w-3 h-3" />
           </Link>
         </Button.Underline>
         <div className="flex gap-4 items-center">

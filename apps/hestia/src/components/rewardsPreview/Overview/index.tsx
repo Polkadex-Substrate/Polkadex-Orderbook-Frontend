@@ -1,9 +1,8 @@
 "use client";
 import { Button, Token, Typography } from "@polkadex/ux";
-import { ArrowLeftIcon, ArrowUpIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { forwardRef } from "react";
-import { ShareIcon, StarIcon } from "@heroicons/react/24/outline";
+import { RiArrowLeftLine, RiShareLine, RiStarLine } from "@remixicon/react";
 
 import { OverviewCard } from "./overviewCard";
 
@@ -15,15 +14,15 @@ export const Overview = forwardRef<HTMLDivElement>((_, ref) => {
           href="/rewards"
           className="text-primary flex items-center gap-2 flex-wrap transition-colors duration-300 hover:text-current"
         >
-          <ArrowLeftIcon className="w-5 h-5" />
+          <RiArrowLeftLine className="w-5 h-5" />
           <Typography.Text size="md">All markets</Typography.Text>
         </Link>
         <div className="flex items-center gap-2">
           <Button.Icon appearance="tertiary" variant="light">
-            <StarIcon />
+            <RiStarLine className="w-full h-full" />
           </Button.Icon>
           <Button.Icon appearance="tertiary" variant="light">
-            <ShareIcon />
+            <RiShareLine className="w-full h-full" />
           </Button.Icon>
         </div>
       </div>

@@ -3,7 +3,7 @@
 import { Typography, Input } from "@polkadex/ux";
 import { useElementSize } from "usehooks-ts";
 import { useMemo } from "react";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { RiInformation2Line } from "@remixicon/react";
 
 import { Table } from "./Table";
 import { Help } from "./Help";
@@ -43,7 +43,7 @@ export function Template() {
               <Typography.Text bold size="lg">
                 Rewards
               </Typography.Text>
-              <InformationCircleIcon className="w-6 h-6 text-primary" />
+              <RiInformation2Line className="w-6 h-6 text-primary" />
             </div>
             <div className="flex items-center justify-between gap-2 border-b border-primary px-4 w-full p-2">
               <Typography.Text appearance="primary" bold>

@@ -19,10 +19,9 @@ import {
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useOpenOrders } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
-import { CalendarDaysIcon } from "@heroicons/react/24/solid";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { RiCalendarLine, RiMore2Line } from "@remixicon/react";
 
 import { OpenOrdersTable } from "./OpenOrders";
 import { OrderHistoryTable } from "./OrderHistory";
@@ -122,7 +121,7 @@ export const Orders = ({ maxHeight }: Props) => {
         {scrollAreaView ? (
           <Popover>
             <Popover.Trigger className="group">
-              <EllipsisVerticalIcon className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
+              <RiMore2Line className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
             </Popover.Trigger>
             <Popover.Content className="flex flex-col gap-3 p-2">
               <Checkbox.Outline
@@ -170,7 +169,7 @@ export const Orders = ({ maxHeight }: Props) => {
                 <Popover>
                   <Popover.Trigger asChild>
                     <Button.Icon variant="light" size="2sm" className="p-1">
-                      <CalendarDaysIcon />
+                      <RiCalendarLine className="w-full h-full" />
                     </Button.Icon>
                   </Popover.Trigger>
                   <Popover.Content>

@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Button, Modal, Typography } from "@polkadex/ux";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+import { RiCloseLine } from "@remixicon/react";
 
 import { Card } from "./card";
 
@@ -30,7 +30,7 @@ export const NotificationsModal = ({
           rounded
           onClick={() => onOpenChange(false)}
         >
-          <XMarkIcon className="text-primary" />
+          <RiCloseLine className="w-full h-full text-primary" />
         </Button.Icon>
       </Modal.Title>
       <Modal.Content className="flex flex-col flex-1 gap-6">

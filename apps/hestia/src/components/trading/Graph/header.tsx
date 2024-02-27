@@ -1,8 +1,7 @@
-import { ArrowsPointingOutIcon } from "@heroicons/react/24/solid";
-import { CameraIcon } from "@heroicons/react/24/outline";
 import { Button, Dropdown, Tabs, Typography } from "@polkadex/ux";
 import { useResizeObserver } from "usehooks-ts";
 import { useMemo, useRef } from "react";
+import { RiFullscreenLine, RiScreenshot2Line } from "@remixicon/react";
 
 import { ResolutionString } from "../../../../public/static/charting_library/charting_library";
 
@@ -97,7 +96,7 @@ export const Header = ({
             variant="ghost"
             onClick={onScreenshot}
           >
-            <CameraIcon />
+            <RiScreenshot2Line className="w-full h-full" />
           </Button.Icon>
           <Button.Icon
             size="sm"
@@ -105,7 +104,7 @@ export const Header = ({
             variant="ghost"
             onClick={onChangeFullScreen}
           >
-            <ArrowsPointingOutIcon />
+            <RiFullscreenLine className="w-full h-full" />
           </Button.Icon>
         </div>
       </div>

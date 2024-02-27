@@ -1,9 +1,9 @@
-import { EllipsisVerticalIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Button, Icon, Popover, Typography } from "@polkadex/ux";
 import { Table } from "@tanstack/react-table";
 import classNames from "classnames";
 import { useMemo } from "react";
 import { useWindowSize } from "usehooks-ts";
+import { RiMore2Line, RiCloseLine } from "@remixicon/react";
 
 import { FacetedFilter } from "../facetedFilters";
 
@@ -39,7 +39,7 @@ export const Filters = <TData,>({
             <Typography.Text appearance="secondary">Filters</Typography.Text>
             <Popover>
               <Popover.Trigger className="group">
-                <EllipsisVerticalIcon className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
+                <RiMore2Line className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
               </Popover.Trigger>
               <Popover.Content className="flex flex-col gap-3 p-2">
                 {table.getColumn("token") && (
@@ -87,7 +87,7 @@ export const Filters = <TData,>({
             onClick={() => table.resetColumnFilters()}
           >
             <Icon className="w-3 h-3">
-              <XMarkIcon />
+              <RiCloseLine className="w-full h-full" />
             </Icon>
             <Typography.Text size="sm">Reset</Typography.Text>
           </Button.Outline>

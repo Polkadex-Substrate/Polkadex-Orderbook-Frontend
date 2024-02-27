@@ -1,11 +1,16 @@
 "use client";
 
-import { Bars2Icon, BellIcon, BookOpenIcon } from "@heroicons/react/24/outline";
-import { Button, Icons, Popover, Tooltip } from "@polkadex/ux";
+import { Button, Popover, Tooltip } from "@polkadex/ux";
 import { useMemo } from "react";
 import Link from "next/link";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { useWindowSize } from "react-use";
+import {
+  RiBookReadLine,
+  RiMenuLine,
+  RiNotification3Line,
+  RiWalletLine,
+} from "@remixicon/react";
 
 import { Trigger } from "./trigger";
 import { Content } from "./content";
@@ -47,7 +52,7 @@ export const Profile = ({
             <Tooltip.Trigger asChild>
               <Button.Icon className="max-sm:p-0">
                 <Link href="/balances">
-                  <Icons.Wallet className="h-full w-full" />
+                  <RiWalletLine className="h-full w-full" />
                 </Link>
               </Button.Icon>
             </Tooltip.Trigger>
@@ -57,7 +62,7 @@ export const Profile = ({
             <Tooltip.Trigger asChild>
               <Button.Icon asChild>
                 <Link href="/history">
-                  <BookOpenIcon className="h-full w-full" />
+                  <RiBookReadLine className="h-full w-full" />
                 </Link>
               </Button.Icon>
             </Tooltip.Trigger>
@@ -66,7 +71,7 @@ export const Profile = ({
           <Tooltip>
             <Tooltip.Trigger asChild>
               <Button.Icon onClick={onOpenNotifications}>
-                <BellIcon className="h-full w-full" />
+                <RiNotification3Line className="h-full w-full" />
               </Button.Icon>
             </Tooltip.Trigger>
             <Tooltip.Content>Notifications</Tooltip.Content>
@@ -90,7 +95,7 @@ export const Profile = ({
         )}
 
         <Button.Icon variant="ghost" onClick={onOpenMenu}>
-          <Bars2Icon className="h-full w-full" />
+          <RiMenuLine className="h-full w-full" />
         </Button.Icon>
       </div>
     );

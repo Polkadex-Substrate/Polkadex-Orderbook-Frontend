@@ -116,8 +116,8 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
 
   const filteredAccounts = useMemo(
     () =>
-      localTradingAccounts?.filter(
-        (item) => mainProxiesAccounts?.includes(item.address)
+      localTradingAccounts?.filter((item) =>
+        mainProxiesAccounts?.includes(item.address)
       ),
     [localTradingAccounts, mainProxiesAccounts]
   );

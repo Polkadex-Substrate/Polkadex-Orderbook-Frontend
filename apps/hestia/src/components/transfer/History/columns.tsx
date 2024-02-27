@@ -5,8 +5,8 @@ import { Transaction } from "@orderbook/core/utils/orderbookService";
 import { Tokens, Typography, truncateString } from "@polkadex/ux";
 import { intlFormat } from "date-fns";
 import Link from "next/link";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { getChainFromTicker } from "@orderbook/core/helpers";
+import { RiExternalLinkLine } from "@remixicon/react";
 
 import { filters } from ".";
 
@@ -153,7 +153,7 @@ export const columns = [
       const value = e.getValue().stid.toString();
       return isTransfer ? (
         <div className="flex items-center gap-1.5 hover:underline">
-          <ArrowTopRightOnSquareIcon className="w-3 h-3 text-primary" />
+          <RiExternalLinkLine className="w-3 h-3 text-primary" />
           <Typography.Text asChild size="sm">
             <Link
               href={`https://polkadex.subscan.io/extrinsic/${value}`}

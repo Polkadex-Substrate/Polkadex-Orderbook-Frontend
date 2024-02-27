@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { RiArrowDownLine } from "@remixicon/react";
 import {
   Button,
   Dropdown,
@@ -66,7 +66,7 @@ export const TradingAccountSuccessfull = ({
                 >
                   <Button.Solid appearance="secondary" size="sm">
                     Download as
-                    <ChevronDownIcon className="h-3 w-3 ml-1 transition-transform duration-300 text-primary" />
+                    <RiArrowDownLine className="h-3 w-3 ml-1 transition-transform duration-300 text-primary" />
                   </Button.Solid>
                 </Dropdown.Trigger>
                 <Dropdown.Content>

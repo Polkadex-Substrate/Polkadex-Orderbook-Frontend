@@ -54,6 +54,9 @@ export const themeConfig = {
       minHeight: {
         webKit: "-webkit-fill-available",
       },
+      height: {
+        webKit: "-webkit-fill-available",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

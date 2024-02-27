@@ -1,6 +1,6 @@
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { Button } from "@polkadex/ux";
 import Link from "next/link";
+import { RiExternalLinkLine } from "@remixicon/react";
 
 import { Card } from "./card";
 
@@ -14,7 +14,7 @@ export const HowItWorks = () => {
         <Button.Underline asChild className="p-0 gap-2 justify-start text-sm">
           <Link href="/">
             Start trading
-            <ArrowTopRightOnSquareIcon className="w-3 h-3" />
+            <RiExternalLinkLine className="w-3 h-3" />
           </Link>
         </Button.Underline>
       </Card>
@@ -25,7 +25,7 @@ export const HowItWorks = () => {
         <Button.Underline asChild className="p-0 gap-2 justify-start text-sm">
           <Link href="/">
             Discover how the points are calculated
-            <ArrowTopRightOnSquareIcon className="w-3 h-3" />
+            <RiExternalLinkLine className="w-3 h-3" />
           </Link>
         </Button.Underline>
       </Card>

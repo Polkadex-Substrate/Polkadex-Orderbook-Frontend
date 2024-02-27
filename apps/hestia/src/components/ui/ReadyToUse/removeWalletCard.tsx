@@ -1,5 +1,5 @@
-import { TrashIcon } from "@heroicons/react/24/solid";
 import { Button, Typography, truncateString, Tooltip } from "@polkadex/ux";
+import { RiDeleteBin2Line } from "@remixicon/react";
 
 export const RemoveWalletCard = ({
   name,
@@ -20,7 +20,7 @@ export const RemoveWalletCard = ({
         <Tooltip>
           <Tooltip.Trigger>
             <Button.Icon onClick={undefined} rounded disabled>
-              <TrashIcon />
+              <RiDeleteBin2Line className="w-full h-full" />
             </Button.Icon>
           </Tooltip.Trigger>
           <Tooltip.Content className=" max-w-[14rem]">
@@ -30,7 +30,7 @@ export const RemoveWalletCard = ({
         </Tooltip>
       ) : (
         <Button.Icon onClick={onClick} rounded>
-          <TrashIcon />
+          <RiDeleteBin2Line className="w-full h-full" />
         </Button.Icon>
       )}
       <Typography.Text appearance="primary" className="truncate max-w-64">

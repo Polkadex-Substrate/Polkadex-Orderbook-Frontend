@@ -9,8 +9,8 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import { intlFormat } from "date-fns";
 import { Order } from "@orderbook/core/utils/orderbookService/types";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { CancelOrderArgs } from "@orderbook/core/hooks";
+import { RiFileCopyLine } from "@remixicon/react";
 
 import { ResponsiveCard } from "@/components/ui/ReadyToUse";
 
@@ -49,7 +49,7 @@ export const ResponsiveTable = ({
         <ResponsiveCard label="Order ID">
           <Copy value={orderId}>
             <div className="flex items-center gap-1">
-              <DocumentDuplicateIcon className="w-4 h-4 text-actionInput" />
+              <RiFileCopyLine className="w-4 h-4 text-actionInput" />
               <Typography.Text size="xs">
                 {truncateString(orderId, 6)}
               </Typography.Text>

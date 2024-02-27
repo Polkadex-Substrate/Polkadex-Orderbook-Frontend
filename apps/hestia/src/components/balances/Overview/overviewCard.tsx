@@ -1,4 +1,4 @@
-import * as Icons from "@heroicons/react/24/solid";
+import * as Icons from "@remixicon/react";
 import { Typography } from "@polkadex/ux";
 import Link, { LinkProps } from "next/link";
 import React, { HTMLAttributeAnchorTarget, PropsWithChildren } from "react";

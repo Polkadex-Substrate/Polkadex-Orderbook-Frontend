@@ -1,4 +1,3 @@
-import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import { exportOrderHistory } from "@orderbook/core/helpers";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
@@ -6,6 +5,7 @@ import { Button, Tooltip, Typography } from "@polkadex/ux";
 import { useState } from "react";
 import CSVLink from "react-csv-downloader";
 import { endOfDay, subMonths } from "date-fns";
+import { RiDownload2Line } from "@remixicon/react";
 
 const csvColumns = [
   "orderId",
@@ -83,7 +83,7 @@ export const Export = () => {
       <Tooltip>
         <Tooltip.Trigger>
           <Button.Outline appearance="secondary" size="sm" disabled={loading}>
-            <ArrowDownTrayIcon className="w-4 h-4 inline-block mr-1" />
+            <RiDownload2Line className="w-4 h-4 inline-block mr-1" />
             {loading ? "Exporting..." : "Export"}
           </Button.Outline>
         </Tooltip.Trigger>

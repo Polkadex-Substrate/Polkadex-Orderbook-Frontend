@@ -1,8 +1,8 @@
-import { StarIcon } from "@heroicons/react/24/solid";
 import { createColumnHelper } from "@tanstack/react-table";
 import classNames from "classnames";
 import { Decimal, InitialMarkets, isNegative } from "@orderbook/core/index";
 import { Typography, Token, tokenAppearance } from "@polkadex/ux";
+import { RiStarLine } from "@remixicon/react";
 
 const columnHelper = createColumnHelper<InitialMarkets>();
 
@@ -25,7 +25,7 @@ export const columns = ({
               onChangeFavourite(id);
             }}
           >
-            <StarIcon
+            <RiStarLine
               className={classNames(
                 isFavourite ? "text-primary-base" : "text-primary-disabled",
                 "w-3 h-3"

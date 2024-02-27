@@ -1,6 +1,6 @@
-import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import { Typography } from "@polkadex/ux";
 import Link from "next/link";
+import { RiArrowRightLine } from "@remixicon/react";
 
 import { InfoCard } from "./infoCard";
 
@@ -56,7 +56,7 @@ export const TokenInfo = ({
 
         <Link href="/" className="text-primary-base">
           View more
-          <ArrowRightIcon className="w-3 h-3 inline-block ml-2" />
+          <RiArrowRightLine className="w-3 h-3 inline-block ml-2" />
         </Link>
       </div>
     </div>

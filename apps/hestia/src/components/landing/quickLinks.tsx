@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button, Typography } from "@polkadex/ux";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { RiArrowRightLine } from "@remixicon/react";
 
 import { Icons } from "@/components/ui";
 
@@ -21,7 +21,7 @@ export const QuickLinks = () => {
         >
           <Button.Underline className="p-0 h-fit w-fit">
             Explore FAQ
-            <ArrowRightIcon className="w-4 h-4 mr-4" />
+            <RiArrowRightLine className="w-4 h-4 mr-4" />
           </Button.Underline>
         </Link>
       </div>

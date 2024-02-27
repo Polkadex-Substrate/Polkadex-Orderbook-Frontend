@@ -1,9 +1,9 @@
-import { Bars2Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { getMarketUrl } from "@orderbook/core/helpers";
 import { Button, Logo, Typography } from "@polkadex/ux";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useWindowSize } from "usehooks-ts";
+import { RiCloseLine, RiMenuLine } from "@remixicon/react";
 
 export const Header = () => {
   const [state, setState] = useState(false);
@@ -34,13 +34,13 @@ export const Header = () => {
         className="hidden max-md:flex"
         onClick={() => setState(true)}
       >
-        <Bars2Icon />
+        <RiMenuLine className="w-full h-full" />
       </Button.Icon>
       {state && (
         <div className="flex flex-col z-10 fixed top-0 right-0 w-screen h-screen bg-level-0 rounded-sm">
           <div className="flex justify-end p-2">
             <Button.Icon size="lg" rounded onClick={() => setState(false)}>
-              <XMarkIcon />
+              <RiCloseLine className="w-full h-full" />
             </Button.Icon>
           </div>
           <div className="flex flex-col justify-between flex-1 p-6">

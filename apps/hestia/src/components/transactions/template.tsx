@@ -2,7 +2,7 @@
 
 import { Typography, Input, Tabs, Tooltip, ScrollArea } from "@polkadex/ux";
 import { useMemo, useState } from "react";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { RiInformation2Line } from "@remixicon/react";
 import { useElementSize, useWindowSize } from "usehooks-ts";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import classNames from "classnames";
@@ -70,7 +70,7 @@ export function Template() {
                   </Typography.Text>
                   <Tooltip>
                     <Tooltip.Trigger>
-                      <InformationCircleIcon className="w-6 h-6 text-primary" />
+                      <RiInformation2Line className="w-6 h-6 text-primary" />
                     </Tooltip.Trigger>
                     <Tooltip.Content className="w-52" side="left">
                       <Typography.Text>

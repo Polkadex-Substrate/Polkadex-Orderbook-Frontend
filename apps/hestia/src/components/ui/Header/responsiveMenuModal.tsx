@@ -1,14 +1,14 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Button, Modal, Typography } from "@polkadex/ux";
-import { XMarkIcon } from "@heroicons/react/24/solid";
-import {
-  GlobeAltIcon,
-  MoonIcon,
-  SwatchIcon,
-} from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { getMarketUrl } from "@orderbook/core/helpers";
 import { useWindowSize } from "usehooks-ts";
+import {
+  RiCloseLine,
+  RiEarthLine,
+  RiMoonLine,
+  RiPaletteLine,
+} from "@remixicon/react";
 
 import QrCode from "../../../../public/img/qrCode.png";
 
@@ -41,7 +41,7 @@ export const ResponsiveMenuModal = ({
           rounded
           onClick={() => onOpenChange(false)}
         >
-          <XMarkIcon className="w-full h-full" />
+          <RiCloseLine className="w-full h-full" />
         </Button.Icon>
       </Modal.Title>
       <Modal.Content className="flex flex-col flex-1">
@@ -123,7 +123,7 @@ export const ResponsiveMenuModal = ({
               <div className="flex flex-col gap-5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <GlobeAltIcon className="w-4 h-4 text-primary" />
+                    <RiEarthLine className="w-4 h-4 text-primary" />
                     <Typography.Text size="lg">Language</Typography.Text>
                   </div>
                   <Typography.Text appearance="primary">
@@ -132,7 +132,7 @@ export const ResponsiveMenuModal = ({
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <MoonIcon className="w-4 h-4 text-primary" />
+                    <RiMoonLine className="w-4 h-4 text-primary" />
                     <Typography.Text size="lg">Appearance</Typography.Text>
                   </div>
                   <Typography.Text appearance="primary">
@@ -141,7 +141,7 @@ export const ResponsiveMenuModal = ({
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <SwatchIcon className="w-4 h-4 text-primary" />
+                    <RiPaletteLine className="w-4 h-4 text-primary" />
                     <Typography.Text size="lg">Color Prefence</Typography.Text>
                   </div>
                   <div className="flex items-center gap-2">

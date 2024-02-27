@@ -1,17 +1,27 @@
 "use client";
-
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import classNames from "classnames";
 import { useOrderbookTable } from "@orderbook/core/hooks";
-import { useRef } from "react";
-import { GenericMessage, Typography } from "@polkadex/ux";
+import { Fragment, MutableRefObject, useRef } from "react";
+import {
+  GenericMessage,
+  Table as PolkadexTable,
+  Typography,
+} from "@polkadex/ux";
 import { Decimal } from "@orderbook/core/utils";
 
-import { GenericAction } from "./columns";
+import { GenericAction, columns } from "./columns";
 
 export const Table = ({
   isSell = false,
   precision,
   active,
+  baseTicker,
+  quoteTicker,
   orders,
   asks,
   bids,
@@ -19,6 +29,8 @@ export const Table = ({
   isSell?: boolean;
   precision: number;
   active?: boolean;
+  baseTicker: string;
+  quoteTicker: string;
   orders: string[][];
   bids: string[][];
   asks: string[][];
@@ -33,7 +45,7 @@ export const Table = ({
     volumeData,
   } = useOrderbookTable({
     orders,
-    contentRef,
+    contentRef: contentRef as MutableRefObject<HTMLDivElement>,
     isSell,
     asks,
     bids,
@@ -63,24 +75,22 @@ export const Table = ({
       />
     );
 
-  if (!active) return null;
   return (
     <div
       ref={contentRef}
       className={classNames(
-        !active && "hidden",
-        "flex flex-col gap-0.5 flex-1 relative overflow-auto scrollbar-hide cursor-pointer"
+        "flex flex-col gap-1 flex-1 relative",
+        !active && "hidden"
       )}
+      style={{ scrollbarGutter: "stable" }}
     >
       {orders.map((order, i) => {
         const price = order[0];
         const amount = order[1];
-        const widthSize = `${volumeData[i]?.value || 1}%`;
-
         return (
           <div
             key={i}
-            className="relative grid grid-cols-[30%_35%_35%] py-1"
+            className="relative grid grid-cols-[30%_35%_35%] px-2 py-1"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -88,17 +98,15 @@ export const Table = ({
             }}
           >
             <div
-              style={{ width: widthSize }}
               className={classNames(
-                "absolute w-full h-full right-0",
-                isSell ? "bg-danger-base/15" : "bg-success-base/15"
+                "absolute w-full h-full",
+                isSell ? "bg-danger-base/10" : "bg-success-base/10"
               )}
             />
             <Typography.Text
               appearance={isSell ? "danger" : "success"}
               size="xs"
               bold
-              className="pl-2"
               onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -135,7 +143,7 @@ export const Table = ({
                 event.stopPropagation();
                 onChangeTotal(i);
               }}
-              className="justify-self-end pr-2"
+              className="justify-self-end"
             >
               <Decimal fixed={precision} thousSep=",">
                 {total[i]}

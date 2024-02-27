@@ -1,4 +1,4 @@
-import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import { RiMore2Line } from "@remixicon/react";
 import { Button, Dropdown, Typography } from "@polkadex/ux";
 import Link, { LinkProps } from "next/link";
 
@@ -27,7 +27,7 @@ export const ActionsCard = ({
     )}
     <Dropdown>
       <Dropdown.Trigger className="group">
-        <EllipsisVerticalIcon className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
+        <RiMore2Line className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
       </Dropdown.Trigger>
       <Dropdown.Content>
         <Dropdown.Item>

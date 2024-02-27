@@ -1,7 +1,7 @@
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { RiFileCopyLine } from "@remixicon/react";
 
 import { filters } from "./filters";
 
@@ -13,7 +13,7 @@ export const columns = () => [
     cell: (e) => (
       <Copy value={e.getValue().orderId}>
         <div className="flex items-center gap-2">
-          <DocumentDuplicateIcon className="w-4 h-4 text-actionInput" />
+          <RiFileCopyLine className="w-4 h-4 text-actionInput" />
           <Typography.Text size="xs">
             {truncateString(e.getValue().orderId, 4)}
           </Typography.Text>
