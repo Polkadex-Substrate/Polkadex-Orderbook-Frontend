@@ -73,9 +73,9 @@ export const TVChartContainer = ({
   }, [isDarkTheme, isChartReady, tvWidget]);
 
   return (
-    <>
+    <div className="relative flex flex-col flex-1 h-full">
       {!isChartReady && (
-        <div className="flex-1 flex items-center justify-center">
+        <div className="absolute top-0 left-0 bg-level-0 h-full w-full flex-1 flex items-center justify-center">
           <Spinner.Keyboard />
         </div>
       )}
@@ -86,6 +86,6 @@ export const TVChartContainer = ({
         )}
         id="tv_chart_container"
       />
-    </>
+    </div>
   );
 };
