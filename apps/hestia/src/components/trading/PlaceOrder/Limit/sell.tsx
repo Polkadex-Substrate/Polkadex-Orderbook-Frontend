@@ -46,10 +46,10 @@ export const SellOrder = ({
     initialValues,
     validationSchema: limitOrderValidations({
       isSell: true,
-      maxMarketPrice: market?.maxPrice || 0,
       minMarketPrice: market?.minPrice || 0,
       minQuantity: market?.minQty || 0,
-      maxQuantity: market?.maxQty || 0,
+      minVolume: market?.minVolume || 0,
+      maxVolume: market?.maxVolume || 0,
       availableBalance: availableBaseAmount,
     }),
     onSubmit: async (e) => {
