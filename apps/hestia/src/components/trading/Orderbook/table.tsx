@@ -54,6 +54,8 @@ export const Table = ({
     changeMarketPrice(selectedIndex, isSell ? "asks" : "bids");
   };
 
+  if (!active) return null;
+
   if (!orders.length)
     return (
       <GenericMessage
@@ -63,7 +65,6 @@ export const Table = ({
       />
     );
 
-  if (!active) return null;
   return (
     <div
       ref={contentRef}

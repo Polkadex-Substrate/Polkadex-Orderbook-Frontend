@@ -56,7 +56,13 @@ export const OrderHistoryTable = ({
   if (isLoading) return <Loading />;
 
   if (!orderHistory.length)
-    return <GenericMessage title={"No items found"} illustration="NoData" />;
+    return (
+      <GenericMessage
+        title={"No items found"}
+        illustration="NoData"
+        className="bg-level-0"
+      />
+    );
 
   return (
     <Fragment>

@@ -34,7 +34,7 @@ export const SizeProvider = ({ children }: { children: ReactNode }) => {
   const [placeOrderRef, placeOrderHeight] = useSizeObserver();
 
   const tableMaxHeight = useMemo(
-    () => `calc(100vh - ${marketHeight + headerHeight + footerHeight + 4}px)`,
+    () => `calc(100vh - ${marketHeight + headerHeight + footerHeight + 6}px)`,
     [headerHeight, footerHeight, marketHeight]
   );
 

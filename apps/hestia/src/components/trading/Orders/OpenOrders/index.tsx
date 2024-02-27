@@ -86,7 +86,13 @@ export const OpenOrdersTable = ({
   if (isLoading) return <Loading />;
 
   if (!openOrders.length)
-    return <GenericMessage title={"No open orders"} illustration="NoData" />;
+    return (
+      <GenericMessage
+        title={"No open orders"}
+        illustration="NoData"
+        className="bg-level-0"
+      />
+    );
 
   return (
     <Fragment>

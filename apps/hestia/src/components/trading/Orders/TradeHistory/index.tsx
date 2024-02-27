@@ -53,7 +53,13 @@ export const TradeHistoryTable = ({
   if (isLoading) return <Loading />;
 
   if (!trades.length)
-    return <GenericMessage title={"No items found"} illustration="NoData" />;
+    return (
+      <GenericMessage
+        title={"No items found"}
+        illustration="NoData"
+        className="bg-level-0"
+      />
+    );
 
   return (
     <Fragment>
