@@ -47,7 +47,7 @@ export const Profile = ({
             <Tooltip.Trigger asChild>
               <Button.Icon asChild>
                 <Link href="/balances">
-                  <Icons.Wallet />
+                  <Icons.Wallet className="text-primary" />
                 </Link>
               </Button.Icon>
             </Tooltip.Trigger>
@@ -57,7 +57,7 @@ export const Profile = ({
             <Tooltip.Trigger asChild>
               <Button.Icon asChild>
                 <Link href="/history">
-                  <BookOpenIcon />
+                  <BookOpenIcon className="text-primary" />
                 </Link>
               </Button.Icon>
             </Tooltip.Trigger>
@@ -66,7 +66,7 @@ export const Profile = ({
           <Tooltip>
             <Tooltip.Trigger asChild>
               <Button.Icon onClick={onOpenNotifications}>
-                <BellIcon />
+                <BellIcon className="text-primary" />
               </Button.Icon>
             </Tooltip.Trigger>
             <Tooltip.Content>Notifications</Tooltip.Content>
@@ -90,7 +90,7 @@ export const Profile = ({
         )}
 
         <Button.Icon variant="ghost" onClick={onOpenMenu}>
-          <Bars2Icon />
+          <Bars2Icon className="text-primary" />
         </Button.Icon>
       </div>
     );

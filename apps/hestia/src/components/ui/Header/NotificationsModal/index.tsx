@@ -34,7 +34,7 @@ export const NotificationsModal = ({
           rounded
           onClick={() => onOpenChange(false)}
         >
-          <XMarkIcon />
+          <XMarkIcon className="text-primary" />
         </Button.Icon>
       </Modal.Title>
       <Modal.Content className="flex flex-col flex-1 gap-6">
