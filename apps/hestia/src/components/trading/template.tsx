@@ -5,6 +5,7 @@ import { useMarkets } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
 import classNames from "classnames";
 import { useWindowSize } from "react-use";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
@@ -28,6 +29,18 @@ export function Template({ id }: { id: string }) {
     tableMaxHeight,
     marketRef,
   } = useSizeProvider();
+  const { selectedWallet, selectedAccount } = useConnectWalletProvider();
+
+  // Move to useConnectWalletProvider
+  const tradingWalletPresent = useMemo(
+    () => !!Object.keys(selectedAccount ?? {})?.length,
+    [selectedAccount]
+  );
+
+  const fundWalletPresent = useMemo(
+    () => !!Object.keys(selectedWallet ?? {})?.length,
+    [selectedWallet]
+  );
   const { width } = useWindowSize();
 
   const { list } = useMarkets();
@@ -90,7 +103,7 @@ export function Template({ id }: { id: string }) {
           <PlaceOrder ref={placeOrderRef} market={currentMarket} />
         </div>
       </main>
-      {responsiveView ? (
+      {responsiveView && (tradingWalletPresent || fundWalletPresent) ? (
         <ResponsiveProfile />
       ) : (
         <Footer ref={footerRef} marketsActive />

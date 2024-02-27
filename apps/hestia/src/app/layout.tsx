@@ -16,15 +16,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icon.png" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta
-          name="viewport"
-          content="width=device-width,initial-scale=1.5,user-scalable=no"
-        />
       </head>
       <body
         className={classNames(
-          "flex flex-col max-h-screen min-h-screen mx-auto overflow-x-hidden",
+          "flex flex-col max-h-screen max:sm:min-h-webKit min-h-screen min0 mx-auto overflow-x-hidden",
           font.className
         )}
       >
