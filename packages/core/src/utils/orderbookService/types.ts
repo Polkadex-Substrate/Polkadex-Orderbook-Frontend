@@ -12,9 +12,7 @@ export interface MarketBase {
 
 export interface Market extends MarketBase {
   minPrice: number;
-  maxPrice: number;
   minQty: number;
-  maxQty: number;
   maxVolume: number;
   minVolume: number;
   basePrecision: number;

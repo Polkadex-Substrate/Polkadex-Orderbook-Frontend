@@ -72,14 +72,10 @@ type KlinesConnection {
 type Market {
     # market symbol of the market; eg 123-456
     market: String!
-    # max price config; eg 1000
-    max_order_price: String!
-    # min price config; eg 0.1
-    min_order_price: String!
-    # min qty config; eg 0.001
-    min_order_qty: String!
-    # max qty config; eg 1000
-    max_order_qty: String!
+    # max volume config; eg 1000
+    max_volume: String!
+    # min volume config; eg 0.1
+    min_volume: String!
     # price tick size config; eg 0.1
     price_tick_size: String!
     # qty tick size config; eg 0.001

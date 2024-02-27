@@ -45,10 +45,10 @@ export const BuyOrder = ({
   } = useFormik({
     initialValues,
     validationSchema: limitOrderValidations({
-      maxMarketPrice: market?.maxPrice || 0,
       minMarketPrice: market?.minPrice || 0,
       minQuantity: market?.minQty || 0,
-      maxQuantity: market?.maxQty || 0,
+      minVolume: market?.minVolume || 0,
+      maxVolume: market?.maxVolume || 0,
       availableBalance: availableQuoteAmount,
     }),
     validateOnChange: true,
