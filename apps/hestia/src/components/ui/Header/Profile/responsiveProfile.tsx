@@ -21,7 +21,7 @@ export const ResponsiveProfile = () => {
   );
   return (
     <Popover>
-      <Popover.Trigger superpositionTrigger>
+      <Popover.Trigger>
         <Trigger
           responsive
           browserAccountPresent={tradingWalletPresent}

@@ -67,7 +67,7 @@ export const Profile = ({
 
   const enableDropdown = localTradingAccounts?.length >= 2;
   return (
-    <div className="flex flex-col sm:w-full md:w-[23rem] bg-level-0 rounded-sm border border-primary">
+    <div className="flex flex-col flex-1 md:w-[23rem] bg-level-0 rounded-sm border border-primary max-sm:w-[90vw]">
       <div className="flex flex-col gap-6 p-4 border-b border-primary">
         <div className="flex items-center justify-between">
           <Typography.Text appearance="secondary" size="sm">
@@ -118,8 +118,12 @@ export const Profile = ({
                 Connect Wallet
               </Button.Solid>
               <div className="flex items-center gap-2">
-                <RiInformationLine className="w-7 h-7 text-attention-base" />
-                <Typography.Paragraph appearance="primary" size="xs">
+                <RiInformationLine className="w-4 h-4 text-attention-base" />
+                <Typography.Paragraph
+                  appearance="primary"
+                  className=" whitespace-normal"
+                  size="xs"
+                >
                   <span className="text-attention-base">(Optional)</span> Your
                   funding account is only required for signing transactions and
                   account management.
