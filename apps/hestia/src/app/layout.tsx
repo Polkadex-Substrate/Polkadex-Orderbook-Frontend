@@ -16,6 +16,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icon.png" />
+        <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1.5,user-scalable=no"
+        />
       </head>
       <body
         className={classNames(
