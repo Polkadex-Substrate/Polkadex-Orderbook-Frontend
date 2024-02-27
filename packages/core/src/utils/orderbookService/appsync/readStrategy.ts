@@ -181,6 +181,7 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
         baseAsset,
         quoteAsset,
         minPrice: Number(item?.price_tick_size) || 0,
+        minQty: Number(item?.qty_step_size) || 0,
         basePrecision: Number(item?.base_asset_precision) || 0,
         quotePrecision: Number(item?.quote_asset_precision) || 0,
         maxVolume: Number(item?.max_volume),
