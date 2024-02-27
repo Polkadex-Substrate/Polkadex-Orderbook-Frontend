@@ -1,10 +1,7 @@
 import { Copy, Drawer, Typography, truncateString } from "@polkadex/ux";
 import { Dispatch, SetStateAction } from "react";
 import { Order } from "@orderbook/core/utils/orderbookService/types";
-import { CancelOrderArgs } from "@orderbook/core/hooks";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-
-import { CancelOrderAction } from "./cancelOrderAction";
 
 import { FilledCard, ResponsiveCard } from "@/components/ui/ReadyToUse";
 import { formatedDate } from "@/helpers";
@@ -12,15 +9,14 @@ export const ResponsiveTable = ({
   open,
   onOpenChange,
   data,
-  onCancelOrder,
 }: {
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
   data: Order | null;
-  onCancelOrder: (value: CancelOrderArgs) => void;
 }) => {
   if (!data) return null;
   const {
+    status,
     type,
     side,
     market,
@@ -29,12 +25,16 @@ export const ResponsiveTable = ({
     filledQuantity,
     timestamp,
     orderId,
+    averagePrice,
+    fee,
   } = data;
   const date = formatedDate(timestamp);
   const percent = (Number(filledQuantity) / Number(quantity)) * 100;
   const isSell = side === "Ask";
   const roundedPercent = Math.min(100, percent).toFixed(2);
   const width = `${roundedPercent}%`;
+  const ticker =
+    side === "Bid" ? market.baseAsset.ticker : market.quoteAsset.ticker;
 
   return (
     <Drawer closeOnClickOutside open={open} onOpenChange={onOpenChange}>
@@ -67,23 +67,26 @@ export const ResponsiveTable = ({
         <ResponsiveCard label="Price">{price}</ResponsiveCard>
         <ResponsiveCard label="Amount">{quantity}</ResponsiveCard>
         <ResponsiveCard label="Filled">
-          <FilledCard responsive width={width}>
+          <FilledCard width={width} responsive>
             {filledQuantity} {market.quoteAsset.ticker}
           </FilledCard>
         </ResponsiveCard>
+        <ResponsiveCard label="Avg. Filled Price">
+          {averagePrice}
+        </ResponsiveCard>
+        <ResponsiveCard label="Fees">
+          {fee} {ticker}
+        </ResponsiveCard>
+
+        <ResponsiveCard label="Status">
+          <Typography.Text
+            appearance="primary"
+            className="first-letter:uppercase"
+          >
+            {status.toLowerCase()}
+          </Typography.Text>
+        </ResponsiveCard>
       </Drawer.Content>
-      <Drawer.Footer className="p-4">
-        <CancelOrderAction
-          responsive
-          onCancel={() =>
-            onCancelOrder({
-              orderId: orderId,
-              base: market.baseAsset.id,
-              quote: market.quoteAsset.id,
-            })
-          }
-        />
-      </Drawer.Footer>
     </Drawer>
   );
 };

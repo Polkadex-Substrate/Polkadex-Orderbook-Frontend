@@ -71,13 +71,14 @@ export const TVChartContainer = ({
       ...options.studies_overrides,
     });
   }, [isDarkTheme, isChartReady, tvWidget]);
+  if (!isChartReady)
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        <Spinner.Keyboard />
+      </div>
+    );
   return (
     <>
-      {!isChartReady && (
-        <div className="flex-1 flex items-center justify-center">
-          <Spinner.Keyboard />
-        </div>
-      )}
       <div
         className={classNames(
           !isChartReady && "hidden",

@@ -18,11 +18,11 @@ export const columns = ({
   openOrderColumnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => {
-      const formattedDate = formatedDate(e.getValue().timestamp);
+      const date = formatedDate(e.getValue().timestamp);
       return (
         <Tooltip>
           <Tooltip.Trigger>
-            <Typography.Text size="xs">{formattedDate}</Typography.Text>
+            <Typography.Text size="xs">{date}</Typography.Text>
           </Tooltip.Trigger>
           <Tooltip.Content>
             <Typography.Text>
