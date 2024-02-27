@@ -2,25 +2,20 @@ import { Trade } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Tooltip, Typography } from "@polkadex/ux";
 
+import { formatedDate } from "@/helpers";
+
 const tradeHistoryColumnHelper = createColumnHelper<Trade>();
 
 export const columns = [
   tradeHistoryColumnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => {
-      const formattedDate = new Intl.DateTimeFormat("en-US", {
-        month: "numeric",
-        day: "2-digit",
-        hour: "numeric",
-        minute: "numeric",
-      })
-        .format(e.getValue().timestamp)
-        .replace(",", "");
+      const date = formatedDate(e.getValue().timestamp);
 
       return (
         <Tooltip>
           <Tooltip.Trigger>
-            <Typography.Text size="xs">{formattedDate}</Typography.Text>
+            <Typography.Text size="xs">{date}</Typography.Text>
           </Tooltip.Trigger>
           <Tooltip.Content>
             <Typography.Text>
@@ -64,7 +59,6 @@ export const columns = [
           size="xs"
           bold
           appearance={isSell ? "danger" : "success"}
-          className="uppercase"
         >
           {isSell ? "Sell" : "Buy"}
         </Typography.Text>
@@ -92,7 +86,11 @@ export const columns = [
   tradeHistoryColumnHelper.accessor((row) => row, {
     id: "amount",
     cell: (e) => {
-      return <Typography.Text size="xs">{e.getValue().qty}</Typography.Text>;
+      return (
+        <Typography.Text size="xs">
+          {e.getValue().qty} {e.getValue().market.quoteAsset.ticker}
+        </Typography.Text>
+      );
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">

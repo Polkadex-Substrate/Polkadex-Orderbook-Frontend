@@ -11,7 +11,7 @@ export const formatedDate = (value: Date, short = true) =>
         .format(new Date(value))
         .replace(",", "")
     : intlFormat(
-        value,
+        new Date(value),
         {
           year: "numeric",
           month: "short",

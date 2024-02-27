@@ -30,7 +30,7 @@ export const ResponsiveTable = ({
     timestamp,
     orderId,
   } = data;
-  const date = formatedDate(timestamp);
+  const date = formatedDate(timestamp, false);
   const percent = (Number(filledQuantity) / Number(quantity)) * 100;
   const isSell = side === "Ask";
   const roundedPercent = Math.min(100, percent).toFixed(2);
@@ -50,13 +50,12 @@ export const ResponsiveTable = ({
         </ResponsiveCard>
         <ResponsiveCard label="Date">{date}</ResponsiveCard>
         <ResponsiveCard label="Type">
-          <Typography.Text size="xs" className="first-letter:uppercase" bold>
+          <Typography.Text className="first-letter:uppercase" bold>
             {type.toLowerCase()}
           </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Side">
           <Typography.Text
-            size="xs"
             className="first-letter:uppercase"
             bold
             appearance={isSell ? "danger" : "success"}
