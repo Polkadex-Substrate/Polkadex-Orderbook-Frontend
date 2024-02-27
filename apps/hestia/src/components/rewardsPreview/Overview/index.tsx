@@ -2,7 +2,12 @@
 import { Button, Token, Typography } from "@polkadex/ux";
 import Link from "next/link";
 import { forwardRef } from "react";
-import { RiArrowLeftLine, RiShareLine, RiStarLine } from "@remixicon/react";
+import {
+  RiArrowLeftLine,
+  RiArrowUpSLine,
+  RiShareLine,
+  RiStarLine,
+} from "@remixicon/react";
 
 import { OverviewCard } from "./overviewCard";
 
@@ -51,7 +56,7 @@ export const Overview = forwardRef<HTMLDivElement>((_, ref) => {
             <div className="flex items-center gap-1">
               <Typography.Text bold>$898.20k</Typography.Text>
               <div className="flex items-center text-success-base">
-                <ArrowUpIcon className="w-4 h-4" />
+                <RiArrowUpSLine className="w-4 h-4" />
                 <Typography.Text size="xs" bold>
                   1.01%
                 </Typography.Text>
@@ -62,7 +67,7 @@ export const Overview = forwardRef<HTMLDivElement>((_, ref) => {
             <div className="flex items-center gap-1">
               <Typography.Text>$559.83k</Typography.Text>
               <div className="flex items-center text-success-base">
-                <ArrowUpIcon className="w-4 h-4" />
+                <RiArrowUpSLine className="w-4 h-4" />
                 <Typography.Text size="xs" bold>
                   2.54%
                 </Typography.Text>
