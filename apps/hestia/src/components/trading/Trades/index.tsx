@@ -1,7 +1,6 @@
 "use client";
 
-import { Dropdown, Tabs } from "@polkadex/ux";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { Tabs } from "@polkadex/ux";
 
 import { Markets } from "./Market";
 import { RecentTrades } from "./RecentTrades";

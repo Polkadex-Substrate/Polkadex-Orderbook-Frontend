@@ -1,9 +1,12 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
 import { useMarkets } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
 import classNames from "classnames";
+import { useWindowSize } from "react-use";
+
+import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
 import { AssetInfo } from "./AssetInfo";
 import { Graph } from "./Graph";
@@ -25,9 +28,12 @@ export function Template({ id }: { id: string }) {
     tableMaxHeight,
     marketRef,
   } = useSizeProvider();
+  const { width } = useWindowSize();
 
   const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, id);
+  const responsiveView = useMemo(() => width < 640, [width]);
+
   return (
     <Fragment>
       <ConnectTradingInteraction />
@@ -84,7 +90,11 @@ export function Template({ id }: { id: string }) {
           <PlaceOrder ref={placeOrderRef} market={currentMarket} />
         </div>
       </main>
-      <Footer ref={footerRef} marketsActive />
+      {responsiveView ? (
+        <ResponsiveProfile />
+      ) : (
+        <Footer ref={footerRef} marketsActive />
+      )}
     </Fragment>
   );
 }

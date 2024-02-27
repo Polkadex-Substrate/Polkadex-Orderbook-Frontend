@@ -7,11 +7,13 @@ export const Trigger = ({
   extensionAccountPresent,
   extensionAccountName,
   browserAccountAddress,
+  responsive,
 }: {
   extensionAccountName: string;
   browserAccountAddress: string;
   browserAccountPresent: boolean;
   extensionAccountPresent: boolean;
+  responsive?: boolean;
 }) => {
   const extensionAccount = extensionAccountPresent
     ? extensionAccountName
@@ -25,7 +27,7 @@ export const Trigger = ({
     <div
       className={classNames(
         "flex items-center pr-1 py-1 border-x border-primary hover:bg-level-1 duration-300 transition-colors",
-        "max-sm:p-2 max-sm:z-10 max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:w-screen max-sm:bg-level-0 max-sm:border-y"
+        responsive && "w-screen py-2"
       )}
     >
       <div className="flex items-center justify-center mx-1 w-10 h-10 px-2">

@@ -5,6 +5,7 @@ import { Button, Icons, Popover, Tooltip } from "@polkadex/ux";
 import { useMemo } from "react";
 import Link from "next/link";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useWindowSize } from "react-use";
 
 import { Trigger } from "./trigger";
 import { Content } from "./content";
@@ -21,6 +22,7 @@ export const Profile = ({
   onOpenFundWallet: () => void;
   showFundingWallet: boolean;
 }) => {
+  const { width } = useWindowSize();
   const { selectedWallet, selectedAccount } = useConnectWalletProvider();
 
   // Move to useConnectWalletProvider
@@ -32,6 +34,7 @@ export const Profile = ({
     () => !!Object.keys(selectedWallet ?? {})?.length,
     [selectedWallet]
   );
+  const responsiveView = useMemo(() => width > 640, [width]);
 
   if (tradingWalletPresent || fundWalletPresent)
     return (
@@ -69,20 +72,23 @@ export const Profile = ({
             <Tooltip.Content>Notifications</Tooltip.Content>
           </Tooltip>
         </div>
-        <Popover>
-          <Popover.Trigger superpositionTrigger>
-            <Trigger
-              browserAccountPresent={tradingWalletPresent}
-              extensionAccountPresent={fundWalletPresent}
-              extensionAccountName={selectedWallet?.name ?? ""}
-              browserAccountAddress={selectedAccount?.address ?? ""}
-            />
-          </Popover.Trigger>
-          <Popover.Content>
-            <Content />
-          </Popover.Content>
-          <Popover.Overlay className="z-[40]" />
-        </Popover>
+        {responsiveView && (
+          <Popover>
+            <Popover.Trigger superpositionTrigger>
+              <Trigger
+                browserAccountPresent={tradingWalletPresent}
+                extensionAccountPresent={fundWalletPresent}
+                extensionAccountName={selectedWallet?.name ?? ""}
+                browserAccountAddress={selectedAccount?.address ?? ""}
+              />
+            </Popover.Trigger>
+            <Popover.Content>
+              <Content />
+            </Popover.Content>
+            <Popover.Overlay className="z-[10]" />
+          </Popover>
+        )}
+
         <Button.Icon variant="ghost" onClick={onOpenMenu}>
           <Bars2Icon />
         </Button.Icon>
