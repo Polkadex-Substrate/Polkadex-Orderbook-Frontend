@@ -17,7 +17,7 @@ import { ResponsiveTable } from "./responsiveTable";
 
 const responsiveKeys = ["inOrders", "fundingAccount"];
 const widthKeys = ["10%", "25%", "25%", "25%", "fit-content"];
-const responsiveWidthKeys = ["30%", "60%", "fit-content"];
+const responsiveWidthKeys = ["30%", "auto", "65%"];
 
 export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
   const [responsiveState, setResponsiveState] = useState(false);
