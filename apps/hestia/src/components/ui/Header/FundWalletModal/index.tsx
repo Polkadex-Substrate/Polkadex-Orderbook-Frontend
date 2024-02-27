@@ -3,7 +3,6 @@ import { Button, Dropdown, Modal, Typography } from "@polkadex/ux";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import classNames from "classnames";
 
 import { Card } from "./card";
 
@@ -20,10 +19,7 @@ export const FundWalletModal = ({
       onOpenChange={onOpenChange}
       placement="top right"
       closeOnClickOutside
-      className={classNames(
-        "flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto",
-        "sm:top-1/2 sm:right-0 sm:transform sm:-translate-y-1/2" // fix that in polkadex/ux
-      )}
+      className="flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto"
     >
       <Modal.Title className="flex justify-between items-center py-4 pl-4">
         <Typography.Text size="lg" bold>
