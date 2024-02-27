@@ -68,7 +68,7 @@ export function Template({ id }: { id: string }) {
         </div>
         <div
           className={classNames(
-            "1xl:col-span-3 xl:col-span-2 lg:col-span-3 h-fit",
+            "1xl:col-span-3 xl:col-span-2 lg:col-span-3",
             "h-full flex flex-1 border-t border-primary border-r"
           )}
         >

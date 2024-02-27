@@ -16,7 +16,7 @@ export const Trades = ({
   return (
     <Tabs defaultValue="markets" className="flex-initial max-xl:flex-1 h-full">
       <div
-        className="flex h-full flex-col overflow-hidden"
+        className="flex-1 flex h-full flex-col overflow-hidden"
         style={{ height: maxHeight }}
       >
         <div className="flex border-b border-primary">
