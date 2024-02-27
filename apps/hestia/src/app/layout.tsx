@@ -14,8 +14,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <link rel="manifest" href={"/manifest.json"} />
-        <link rel={"apple-touch-icon"} href={"/icon.png"} />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel={"apple-touch-icon"} href="/icon.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
       </head>
       <body
         className={classNames(
