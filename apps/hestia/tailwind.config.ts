@@ -14,7 +14,10 @@ const config = {
   ...themeConfig,
   plugins: [
     require("tailwindcss-animate"),
-    plugin(function ({ addUtilities }) {
+    plugin(function ({ addUtilities, addBase, theme }) {
+      addBase({
+        html: { color: theme("colors.white") },
+      });
       addUtilities({
         ".scrollbar-hide": {
           "-ms-overflow-style": "none",
