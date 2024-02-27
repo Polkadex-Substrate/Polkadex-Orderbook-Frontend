@@ -47,6 +47,11 @@ export function Template({ id }: { id: string }) {
   const currentMarket = getCurrentMarket(list, id);
   const responsiveView = useMemo(() => width < 640, [width]);
 
+  const isResponsive = useMemo(
+    () => responsiveView && (tradingWalletPresent || fundWalletPresent),
+    [responsiveView, tradingWalletPresent, fundWalletPresent]
+  );
+
   return (
     <Fragment>
       <ConnectTradingInteraction />
@@ -103,7 +108,7 @@ export function Template({ id }: { id: string }) {
           <PlaceOrder ref={placeOrderRef} market={currentMarket} />
         </div>
       </main>
-      {responsiveView && (tradingWalletPresent || fundWalletPresent) ? (
+      {isResponsive ? (
         <ResponsiveProfile />
       ) : (
         <Footer ref={footerRef} marketsActive />

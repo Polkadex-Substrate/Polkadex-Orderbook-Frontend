@@ -21,7 +21,7 @@ export const ResponsiveProfile = () => {
   );
   return (
     <Popover>
-      <Popover.Trigger>
+      <Popover.Trigger className="border-t border-primary bg-level-1 sticky bottom-0 z-10">
         <Trigger
           responsive
           browserAccountPresent={tradingWalletPresent}
