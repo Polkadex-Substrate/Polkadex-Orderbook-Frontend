@@ -345,6 +345,7 @@ export function usePlaceOrder(
 
     const amountType = isSell ? "amountSell" : "amountBuy";
     const priceType = isSell ? "priceSell" : "priceBuy";
+    const totalType = isSell ? "totalSell" : "totalBuy";
 
     const total = isSell ? formValues.totalSell : formValues.totalBuy;
     const absoluteTotal = getAbsoluteNumber(total);
@@ -356,25 +357,11 @@ export function usePlaceOrder(
           minMarketPrice: currentMarket?.minPrice,
         }),
       });
-    } else if (isLimit && +formPrice > Number(currentMarket?.maxPrice)) {
-      setFormErrors({
-        ...errors,
-        [priceType]: t("maxMarketPrice", {
-          maxMarketPrice: currentMarket?.maxPrice,
-        }),
-      });
     } else if (+amount < Number(currentMarket?.minQty)) {
       setFormErrors({
         ...errors,
         [amountType]: t("minMarketAmount", {
           minMarketAmount: currentMarket?.minQty,
-        }),
-      });
-    } else if (+amount > Number(currentMarket?.maxQty)) {
-      setFormErrors({
-        ...errors,
-        [amountType]: t("maxMarketAmount", {
-          maxMarketAmount: currentMarket?.maxQty,
         }),
       });
     } else if (
@@ -385,12 +372,22 @@ export function usePlaceOrder(
       setFormErrors({ ...errors, [amountType]: t("notEnoughBalance") });
     } else if (!isLimit && +amount > +userAvailableBalance) {
       setFormErrors({ ...errors, [amountType]: t("notEnoughBalance") });
+    } else if (absoluteTotal > Number(currentMarket?.maxVolume)) {
+      setFormErrors({
+        ...errors,
+        [totalType]: `Maximum volume: ${currentMarket?.maxVolume}`,
+      });
+    } else if (absoluteTotal < Number(currentMarket?.minVolume)) {
+      setFormErrors({
+        ...errors,
+        [totalType]: `Minimum volume: ${currentMarket?.minVolume}`,
+      });
     }
   }, [
     availableBaseAmount,
     availableQuoteAmount,
-    currentMarket?.maxQty,
-    currentMarket?.maxPrice,
+    currentMarket?.minVolume,
+    currentMarket?.maxVolume,
     currentMarket?.minQty,
     currentMarket?.minPrice,
     formValues,
