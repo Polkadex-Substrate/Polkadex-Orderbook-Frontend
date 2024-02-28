@@ -1,5 +1,3 @@
-// TODO: Fix responsive interaction (reflect columns updates)
-
 "use client";
 
 import { Fragment, useEffect, useMemo, useState } from "react";

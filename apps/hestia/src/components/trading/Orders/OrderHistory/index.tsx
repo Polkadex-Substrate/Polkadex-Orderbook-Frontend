@@ -1,4 +1,3 @@
-// TODO: Fix responsive interaction (reflect columns updates)
 "use client";
 
 import InfiniteScroll from "react-infinite-scroll-component";

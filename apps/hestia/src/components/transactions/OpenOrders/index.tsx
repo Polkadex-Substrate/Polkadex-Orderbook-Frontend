@@ -172,7 +172,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
           open={responsiveState}
           onCancelOrder={onCancelOrder}
         />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col pt-1">
           <Filters
             table={table}
             availablePairs={availablePairs}
@@ -204,7 +204,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
                           return (
                             <Table.Head
                               className={classNames(
-                                "px-2 text-primary font-semibold text-xs"
+                                "px-2 text-primary text-xs"
                               )}
                               key={header.id}
                             >

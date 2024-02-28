@@ -148,7 +148,7 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
           onOpenChange={setResponsiveState}
           open={responsiveState}
         />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col pt-1">
           <Filters table={table} availablePairs={availablePairs} />
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
@@ -176,7 +176,7 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
                           return (
                             <Table.Head
                               className={classNames(
-                                "px-2 text-primary font-semibold text-xs"
+                                "px-2 text-primary text-xs"
                               )}
                               key={header.id}
                             >
