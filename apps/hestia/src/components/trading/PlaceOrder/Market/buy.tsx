@@ -11,6 +11,7 @@ import { marketOrderValidations } from "@orderbook/core/validations";
 import { Balance } from "../balance";
 
 import { Range } from "@/components/ui/Temp/range";
+import { TradingFee } from "@/components/ui/ReadyToUse";
 
 const AMOUNT = "Amount";
 
@@ -105,10 +106,12 @@ export const BuyOrder = ({
           {errors.amount}
         </Tooltip.Content>
       </Tooltip>
-
-      <Balance baseTicker={market?.quoteAsset?.ticker || ""}>
-        {availableQuoteAmount}
-      </Balance>
+      <div className="flex items-center gap-2 justify-between">
+        <TradingFee ticker={market?.baseAsset?.ticker || ""} />
+        <Balance baseTicker={market?.quoteAsset?.ticker || ""}>
+          {availableQuoteAmount}
+        </Balance>
+      </div>
       <div className="my-2">
         <Range
           ranges={[
