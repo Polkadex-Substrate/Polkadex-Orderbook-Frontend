@@ -27,8 +27,14 @@ type State = {
 export const SizeProvider = ({ children }: { children: ReactNode }) => {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const footerRef = useRef<HTMLDivElement | null>(null);
-  const { height: headerHeight = 0 } = useResizeObserver({ ref: headerRef });
-  const { height: footerHeight = 0 } = useResizeObserver({ ref: footerRef });
+  const { height: headerHeight = 0 } = useResizeObserver({
+    ref: headerRef,
+    box: "border-box",
+  });
+  const { height: footerHeight = 0 } = useResizeObserver({
+    ref: footerRef,
+    box: "border-box",
+  });
 
   const [marketRef, marketHeight] = useSizeObserver();
   const [placeOrderRef, placeOrderHeight] = useSizeObserver();
