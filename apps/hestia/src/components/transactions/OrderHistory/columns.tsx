@@ -5,6 +5,8 @@ import { RiFileCopyLine } from "@remixicon/react";
 
 import { filters } from "./filters";
 
+import { FilledCard } from "@/components/ui/ReadyToUse";
+
 const columnHelper = createColumnHelper<Order>();
 
 export const columns = () => [
@@ -111,6 +113,25 @@ export const columns = () => [
     },
   }),
   columnHelper.accessor((row) => row, {
+    id: "status",
+    cell: (e) => (
+      <Typography.Text size="xs">
+        {e.getValue().status.toUpperCase()}
+      </Typography.Text>
+    ),
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Status
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+    filterFn: (row, id, value: typeof filters.status) => {
+      return value?.some((val) =>
+        val.toLowerCase().includes(row.getValue<Order>(id).status.toLowerCase())
+      );
+    },
+  }),
+  columnHelper.accessor((row) => row, {
     id: "price",
     cell: (e) => {
       const isMarket = e.getValue().type === "MARKET";
@@ -148,10 +169,16 @@ export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "filled",
     cell: (e) => {
+      const percent =
+        (Number(e.getValue().filledQuantity) / Number(e.getValue().quantity)) *
+        100;
+
+      const roundedPercent = Math.min(100, percent).toFixed(2);
+      const width = `${roundedPercent}%`;
       return (
-        <Typography.Text size="xs">
+        <FilledCard width={width}>
           {e.getValue().filledQuantity} {e.getValue().market.baseAsset.ticker}
-        </Typography.Text>
+        </FilledCard>
       );
     },
     header: () => (
@@ -174,25 +201,6 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row, {
-    id: "status",
-    cell: (e) => (
-      <Typography.Text size="xs">
-        {e.getValue().status.toUpperCase()}
-      </Typography.Text>
-    ),
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Status
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-    filterFn: (row, id, value: typeof filters.status) => {
-      return value?.some((val) =>
-        val.toLowerCase().includes(row.getValue<Order>(id).status.toLowerCase())
-      );
-    },
   }),
   columnHelper.accessor((row) => row, {
     id: "fee",
