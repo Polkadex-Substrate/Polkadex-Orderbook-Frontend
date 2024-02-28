@@ -1,18 +1,13 @@
-import {
-  Button,
-  Copy,
-  Drawer,
-  PopConfirm,
-  Typography,
-  truncateString,
-} from "@polkadex/ux";
+import { Copy, Drawer, Typography, truncateString } from "@polkadex/ux";
 import { Dispatch, SetStateAction } from "react";
 import { intlFormat } from "date-fns";
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { CancelOrderArgs } from "@orderbook/core/hooks";
 import { RiFileCopyLine } from "@remixicon/react";
 
-import { ResponsiveCard } from "@/components/ui/ReadyToUse";
+import { CancelOrderAction } from "./cancelOrderAction";
+
+import { FilledCard, ResponsiveCard } from "@/components/ui/ReadyToUse";
 
 export const ResponsiveTable = ({
   open,
@@ -38,6 +33,11 @@ export const ResponsiveTable = ({
   } = data;
   const isSell = side === "Ask";
   const title = `${type}/${isSell ? "Sell" : "Buy"}`;
+
+  const percent = (Number(filledQuantity) / Number(quantity)) * 100;
+  const roundedPercent = Math.min(100, percent).toFixed(2);
+  const width = `${roundedPercent}%`;
+
   return (
     <Drawer
       closeOnClickOutside
@@ -102,38 +102,22 @@ export const ResponsiveTable = ({
           </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Filled">
-          <Typography.Text size="xs">
+          <FilledCard width={width}>
             {filledQuantity} {market.baseAsset.ticker}
-          </Typography.Text>
+          </FilledCard>
         </ResponsiveCard>
-        <ResponsiveCard label="Action">
-          <PopConfirm>
-            <PopConfirm.Trigger asChild>
-              <Button.Solid className="py-0.5 h-auto" size="xs">
-                Cancel Order
-              </Button.Solid>
-            </PopConfirm.Trigger>
-            <PopConfirm.Content>
-              <PopConfirm.Title>Cancel order</PopConfirm.Title>
-              <PopConfirm.Description>
-                Are you sure you want to cancel this order?
-              </PopConfirm.Description>
-              <PopConfirm.Close>No</PopConfirm.Close>
-              <PopConfirm.Button
-                size="sm"
-                onClick={() =>
-                  onCancelOrder({
-                    orderId: orderId,
-                    base: market.baseAsset.id,
-                    quote: market.quoteAsset.id,
-                  })
-                }
-              >
-                Yes cancel
-              </PopConfirm.Button>
-            </PopConfirm.Content>
-          </PopConfirm>
-        </ResponsiveCard>
+        <Drawer.Footer className="p-4">
+          <CancelOrderAction
+            responsive
+            onCancel={() =>
+              onCancelOrder({
+                orderId: orderId,
+                base: market.baseAsset.id,
+                quote: market.quoteAsset.id,
+              })
+            }
+          />
+        </Drawer.Footer>
       </Drawer.Content>
     </Drawer>
   );

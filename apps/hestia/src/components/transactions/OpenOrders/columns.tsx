@@ -1,17 +1,13 @@
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
-import {
-  Button,
-  Copy,
-  PopConfirm,
-  Tooltip,
-  Typography,
-  truncateString,
-} from "@polkadex/ux";
+import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
 import { CancelOrderArgs } from "@orderbook/core/hooks";
 import { RiFileCopyLine } from "@remixicon/react";
 
 import { filters } from "./filters";
+import { CancelOrderAction } from "./cancelOrderAction";
+
+import { FilledCard } from "@/components/ui/ReadyToUse";
 
 const columnHelper = createColumnHelper<Order>();
 
@@ -157,10 +153,18 @@ export const columns = ({
   columnHelper.accessor((row) => row, {
     id: "filled",
     cell: (e) => {
+      const percent =
+        (Number(e.getValue().filledQuantity) / Number(e.getValue().quantity)) *
+        100;
+
+      const roundedPercent = Math.min(100, percent).toFixed(2);
+      const width = `${roundedPercent}%`;
       return (
-        <Typography.Text size="xs">
-          {e.getValue().filledQuantity} {e.getValue().market.baseAsset.ticker}
-        </Typography.Text>
+        <div style={{ width: "75%" }}>
+          <FilledCard width={width}>
+            {e.getValue().filledQuantity} {e.getValue().market.baseAsset.ticker}
+          </FilledCard>
+        </div>
       );
     },
     header: () => (
@@ -174,31 +178,15 @@ export const columns = ({
     id: "actions",
     cell: (e) => {
       return (
-        <PopConfirm>
-          <PopConfirm.Trigger asChild>
-            <Button.Solid className="py-0.5 h-auto" size="xs">
-              Cancel Order
-            </Button.Solid>
-          </PopConfirm.Trigger>
-          <PopConfirm.Content>
-            <PopConfirm.Title>Cancel order</PopConfirm.Title>
-            <PopConfirm.Description>
-              Are you sure you want to cancel this order?
-            </PopConfirm.Description>
-            <PopConfirm.Close>No</PopConfirm.Close>
-            <PopConfirm.Button
-              onClick={() =>
-                onCancelOrder({
-                  orderId: e.getValue().orderId,
-                  base: e.getValue().market.baseAsset.id,
-                  quote: e.getValue().market.quoteAsset.id,
-                })
-              }
-            >
-              Yes cancel
-            </PopConfirm.Button>
-          </PopConfirm.Content>
-        </PopConfirm>
+        <CancelOrderAction
+          onCancel={() =>
+            onCancelOrder({
+              orderId: e.getValue().orderId,
+              base: e.getValue().market.baseAsset.id,
+              quote: e.getValue().market.quoteAsset.id,
+            })
+          }
+        />
       );
     },
     header: () => null,
