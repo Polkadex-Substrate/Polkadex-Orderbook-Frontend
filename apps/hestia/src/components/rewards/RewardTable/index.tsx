@@ -1,9 +1,9 @@
 "use client";
 
 import { Button, Table as PolkadexTable } from "@polkadex/ux";
-import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
 import { useWindowSize } from "usehooks-ts";
 import { Fragment, forwardRef, useEffect, useMemo, useState } from "react";
+import { RiExpandUpDownLine } from "@remixicon/react";
 
 import { ResponsiveData } from "./responsiveData";
 
@@ -38,17 +38,17 @@ export const RewardTable = forwardRef<HTMLDivElement, { maxHeight: string }>(
                 <PolkadexTable.Row className="border-none">
                   <PolkadexTable.Head>
                     Epoch
-                    <ChevronUpDownIcon className="w-4 h-4 text-primary ml-0.5 inline-block align-middle" />
+                    <RiExpandUpDownLine className="w-4 h-4 text-primary ml-0.5 inline-block align-middle" />
                   </PolkadexTable.Head>
                   {!responsiveView && (
                     <PolkadexTable.Head className="text-right">
                       Score
-                      <ChevronUpDownIcon className="w-4 h-4 text-primary ml-0.5 inline-block align-middle" />
+                      <RiExpandUpDownLine className="w-4 h-4 text-primary ml-0.5 inline-block align-middle" />
                     </PolkadexTable.Head>
                   )}
                   <PolkadexTable.Head className="text-right">
                     Rewards
-                    <ChevronUpDownIcon className="w-4 h-4 text-primary ml-0.5 inline-block align-middle" />
+                    <RiExpandUpDownLine className="w-4 h-4 text-primary ml-0.5 inline-block align-middle" />
                   </PolkadexTable.Head>
                   {!responsiveView && (
                     <PolkadexTable.Head className="text-right" />

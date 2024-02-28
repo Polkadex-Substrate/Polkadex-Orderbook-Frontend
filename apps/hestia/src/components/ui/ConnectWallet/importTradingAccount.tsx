@@ -1,9 +1,3 @@
-import {
-  EyeIcon,
-  EyeSlashIcon,
-  FolderPlusIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
 import { useMemo, useState } from "react";
 import {
   Button,
@@ -25,6 +19,12 @@ import {
   EncryptedJsonEncoding,
   EncryptedJsonVersion,
 } from "@polkadot/util-crypto/types";
+import {
+  RiDeleteBin2Line,
+  RiEyeLine,
+  RiEyeOffLine,
+  RiFolderUploadLine,
+} from "@remixicon/react";
 
 import { ErrorMessage, OptionalField } from "../ReadyToUse";
 
@@ -214,7 +214,11 @@ export const ImportTradingAccount = ({
                           setShow(!show);
                         }}
                       >
-                        {show ? <EyeIcon /> : <EyeSlashIcon />}
+                        {show ? (
+                          <RiEyeLine className="w-full h-full" />
+                        ) : (
+                          <RiEyeOffLine className="w-full h-full" />
+                        )}
                       </Button.Icon>
                     </div>
                   </OptionalField>
@@ -242,7 +246,7 @@ export const ImportTradingAccount = ({
                 )}
               >
                 <input {...getInputProps()} />
-                <FolderPlusIcon className="w-7 h-7 text-primary" />
+                <RiFolderUploadLine className="w-7 h-7 text-primary" />
                 <div className="flex flex-col">
                   <Typography.Text>Choose a file</Typography.Text>
                   <Typography.Text appearance="primary">
@@ -259,7 +263,7 @@ export const ImportTradingAccount = ({
             <div className="flex items-center gap-3">
               {!!values?.file && (
                 <Button.Icon onClick={() => resetForm()}>
-                  <TrashIcon />
+                  <RiDeleteBin2Line className="w-full h-full" />
                 </Button.Icon>
               )}
               <Interaction.Action

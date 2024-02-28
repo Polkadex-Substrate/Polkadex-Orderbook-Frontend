@@ -1,22 +1,17 @@
 "use client";
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+
 import classNames from "classnames";
 import { useOrderbookTable } from "@orderbook/core/hooks";
-import { MutableRefObject, useRef } from "react";
-import { GenericMessage, Table as PolkadexTable } from "@polkadex/ux";
+import { useRef } from "react";
+import { GenericMessage, Typography } from "@polkadex/ux";
+import { Decimal } from "@orderbook/core/utils";
 
-import { GenericAction, columns } from "./columns";
+import { GenericAction } from "./columns";
 
 export const Table = ({
   isSell = false,
   precision,
   active,
-  baseTicker,
-  quoteTicker,
   orders,
   asks,
   bids,
@@ -24,8 +19,6 @@ export const Table = ({
   isSell?: boolean;
   precision: number;
   active?: boolean;
-  baseTicker: string;
-  quoteTicker: string;
   orders: string[][];
   bids: string[][];
   asks: string[][];
@@ -40,7 +33,7 @@ export const Table = ({
     volumeData,
   } = useOrderbookTable({
     orders,
-    contentRef: contentRef as MutableRefObject<HTMLDivElement>,
+    contentRef,
     isSell,
     asks,
     bids,
@@ -61,95 +54,97 @@ export const Table = ({
     changeMarketPrice(selectedIndex, isSell ? "asks" : "bids");
   };
 
-  const { getHeaderGroups, getRowModel } = useReactTable({
-    data: orders,
-    columns: columns({
-      total,
-      precision,
-      isPriceUp: isSell,
-      baseTicker,
-      quoteTicker,
-      onChangePrice,
-      onChangeTotal,
-      onChangeAmount,
-    }),
-    getCoreRowModel: getCoreRowModel(),
-  });
+  if (!active) return null;
 
   if (!orders.length)
-    return <GenericMessage title="No data" illustration="NoData" />;
+    return (
+      <GenericMessage
+        title="No data"
+        illustration="NoData"
+        className="bg-level-0 p-0"
+      />
+    );
 
   return (
     <div
       ref={contentRef}
       className={classNames(
         !active && "hidden",
-        "flex-1 overflow-y-hidden hover:overflow-y-auto"
+        "flex flex-col gap-0.5 flex-1 relative overflow-auto scrollbar-hide cursor-pointer"
       )}
-      style={{ scrollbarGutter: "stable" }}
     >
-      <PolkadexTable className="w-full">
-        <PolkadexTable.Header className="sticky top-0 bg-level-0">
-          {getHeaderGroups().map((headerGroup) => (
-            <PolkadexTable.Row key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <PolkadexTable.Head
-                    align={header.id === "price" ? "left" : "right"}
-                    className={"px-2 text-primary font-medium text-xs"}
-                    key={header.id}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </PolkadexTable.Head>
-                );
-              })}
-            </PolkadexTable.Row>
-          ))}
-        </PolkadexTable.Header>
-        <PolkadexTable.Body>
-          {getRowModel().rows.map((row, ind) => {
-            return (
-              <PolkadexTable.Row
-                key={row.id}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onChangeAllValues(ind);
-                }}
-                className={classNames("hover:bg-level-1 cursor-pointer ")}
+      {orders.map((order, i) => {
+        const price = order[0];
+        const amount = order[1];
+        const widthSize = `${volumeData[i]?.value || 1}%`;
+
+        return (
+          <div
+            key={i}
+            className="relative grid grid-cols-[30%_35%_35%] py-1"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onChangeAllValues(i);
+            }}
+          >
+            <div
+              style={{ width: widthSize }}
+              className={classNames(
+                "absolute w-full h-full right-0",
+                isSell ? "bg-danger-base/15" : "bg-success-base/15"
+              )}
+            />
+            <Typography.Text
+              appearance={isSell ? "danger" : "success"}
+              size="xs"
+              bold
+              className="pl-2"
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onChangePrice(i);
+              }}
+            >
+              <Decimal
+                fixed={precision}
+                thousSep=","
+                // prevValue={orders[i + 1] ? orders[i + 1][0] : 0}
               >
-                {row.getVisibleCells().map((cell, i) => {
-                  const firstCol = i === 0;
-                  const value = cell.getValue();
-                  const active = firstCol && (value as string[])[0] === "8.654";
-                  return (
-                    <PolkadexTable.Cell
-                      key={cell.id}
-                      className={classNames(
-                        "px-2 py-1 text-xs",
-                        firstCol ? "text-left" : "text-right",
-                        firstCol && "font-semibold",
-                        active &&
-                          "before:absolute before:left-[-1%] before:content-[''] before:top-1/2 before:transform before:-translate-y-1/2 before:block before:h-0 before:w-0 before:border-x-4 before:border-x-transparent before:border-b-[6px] before:border-b-attention-base before:rotate-90"
-                      )}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </PolkadexTable.Cell>
-                  );
-                })}
-              </PolkadexTable.Row>
-            );
-          })}
-        </PolkadexTable.Body>
-      </PolkadexTable>
+                {price}
+              </Decimal>
+            </Typography.Text>
+            <Typography.Text
+              size="xs"
+              bold
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onChangeAmount(i);
+              }}
+              className="justify-self-end"
+            >
+              <Decimal fixed={precision} thousSep=",">
+                {amount}
+              </Decimal>
+            </Typography.Text>
+            <Typography.Text
+              size="xs"
+              bold
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onChangeTotal(i);
+              }}
+              className="justify-self-end pr-2"
+            >
+              <Decimal fixed={precision} thousSep=",">
+                {total[i]}
+              </Decimal>
+            </Typography.Text>
+          </div>
+        );
+      })}
     </div>
   );
 };

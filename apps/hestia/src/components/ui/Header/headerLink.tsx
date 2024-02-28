@@ -15,23 +15,16 @@ const AccordionMenu = ({
   children,
 }: PropsWithChildren<DropdownProps>) => (
   <Accordion type="multiple">
-    <Accordion.Item
-      value={children?.toString() ?? ""}
-      className="data-[state=closed]:gap-0"
-    >
+    <Accordion.Item value={children?.toString() ?? ""}>
       <Accordion.Trigger>
         <Typography.Text size="lg" bold>
           {children as string}
         </Typography.Text>
+        <Accordion.Icon />
       </Accordion.Trigger>
       <Accordion.Content className="flex flex-col gap-3">
         {items.map(({ href, label }, i) => (
-          <Typography.Text
-            key={i}
-            size="md"
-            asChild
-            className="transition-colors ease-out duration-300 hover:text-primary-base"
-          >
+          <Typography.Text key={i} size="md" asChild>
             <Link href={href} target="_blank" className="w-full">
               {label}
             </Link>

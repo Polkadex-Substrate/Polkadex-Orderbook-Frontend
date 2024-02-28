@@ -71,17 +71,21 @@ export const TVChartContainer = ({
       ...options.studies_overrides,
     });
   }, [isDarkTheme, isChartReady, tvWidget]);
+
   return (
-    <>
+    <div className="relative flex flex-col flex-1 h-full">
       {!isChartReady && (
-        <div className="flex-1 flex items-center justify-center">
+        <div className="absolute top-0 left-0 bg-level-0 h-full w-full flex-1 flex items-center justify-center">
           <Spinner.Keyboard />
         </div>
       )}
       <div
-        className={classNames(!isChartReady && "hidden", "w-full h-[100%]")}
+        className={classNames(
+          !isChartReady && "hidden",
+          "w-full h-[100%] flex flex-col flex-1 [&_iframe]:h-full  [&_iframe]:flex-1"
+        )}
         id="tv_chart_container"
       />
-    </>
+    </div>
   );
 };

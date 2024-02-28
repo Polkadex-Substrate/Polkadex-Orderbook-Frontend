@@ -1,4 +1,4 @@
-import { MutableRefObject, useCallback, useEffect } from "react";
+import { RefObject, useCallback, useEffect, useState } from "react";
 import {
   mapValues,
   accumulateVolume,
@@ -11,7 +11,7 @@ export type Props = {
   bids: string[][];
   isSell?: boolean;
   orders: string[][];
-  contentRef?: MutableRefObject<HTMLDivElement> | null;
+  contentRef?: RefObject<HTMLDivElement> | null;
 };
 
 export function useOrderbookTable({
@@ -21,6 +21,7 @@ export function useOrderbookTable({
   asks,
   bids,
 }: Props) {
+  const [mount, setMount] = useState(false);
   const {
     price: currentPrice,
     onSetPrice: onSetCurrentPrice,
@@ -84,10 +85,11 @@ export function useOrderbookTable({
 
   const volumeData = mapValues(maxVolume, cumulativeVolume);
   useEffect(() => {
-    // Make sure the scroll is always down
-    if (isSell && !!contentRef?.current)
+    if (!mount && isSell && !!contentRef?.current) {
       contentRef.current.scrollTop = contentRef.current.scrollHeight;
-  }, [isSell, contentRef, orders]);
+      setMount(true);
+    }
+  }, [isSell, contentRef, orders, mount]);
 
   return {
     volumeData,

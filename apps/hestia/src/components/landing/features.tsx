@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Button, Typography } from "@polkadex/ux";
 import Image from "next/image";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { getMarketUrl } from "@orderbook/core/helpers";
+import { RiArrowRightLine } from "@remixicon/react";
 
 import SpeedImage from "../../../public/img/speed.webp";
 import PadLock from "../../../public/img/padlock.webp";
@@ -118,7 +118,7 @@ export const Features = () => {
           size="base"
         >
           Read more about Polkadex Orderbook
-          <ArrowRightIcon className="w-4 h-4 ml-3 inline-block max-md:rotate-90" />
+          <RiArrowRightLine className="w-4 h-4 ml-3 inline-block max-md:rotate-90" />
         </Typography.Text>
         <Link href={lastUsedMarketUrl}>
           <Button.Solid>Start trading</Button.Solid>

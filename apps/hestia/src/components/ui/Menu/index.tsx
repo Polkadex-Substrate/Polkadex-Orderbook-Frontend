@@ -39,34 +39,34 @@ export const Menu = () => {
       >
         <div className="flex flex-col gap-4">
           <div className="flex flex-col">
-            <Card icon="WalletIcon" href="/balances">
+            <Card icon="RiWalletLine" href="/balances">
               Balances
             </Card>
-            <Card icon="QueueListIcon" href="/history">
+            <Card icon="RiFileListLine" href="/history">
               History
             </Card>
-            <Card icon="CircleStackIcon" href="/analytics" newBadge>
-              Analytics
+            <Card icon="RiCoinLine" href="/rewards" newBadge>
+              Rewards
             </Card>
-            <Card icon="ArrowRightIcon" href="/">
+            <Card icon="RiArrowUpDownLine" href="/">
               Bridge
             </Card>
-            <Card icon="ArrowPathIcon" href="/">
+            <Card icon="RiRouteLine" href="/">
               Swap
             </Card>
-            <Card icon="ArrowsRightLeftIcon" href="/transfer">
+            <Card icon="RiArrowLeftRightLine" href="/transfer">
               Transfer
             </Card>
           </div>
         </div>
         <div className="flex flex-col">
-          <Card icon="ArchiveBoxIcon" href="/">
+          <Card icon="RiArchiveStackLine" href="/">
             Legal Links
           </Card>
-          <Card icon="StarIcon" href="/">
+          <Card icon="RiStarLine" href="/">
             Listings
           </Card>
-          <Card icon="LifebuoyIcon" href="/">
+          <Card icon="RiCustomerServiceLine" href="/">
             Help Center
           </Card>
         </div>

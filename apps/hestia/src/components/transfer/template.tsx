@@ -2,7 +2,7 @@
 
 import { GenericMessage, Tabs, Typography } from "@polkadex/ux";
 import { Fragment, useEffect, useState } from "react";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { RiInformation2Line } from "@remixicon/react";
 import { useTransactions, useTransferHistory } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { usePathname, useRouter } from "next/navigation";
@@ -75,7 +75,7 @@ export function Template() {
                 <Typography.Text bold size="lg">
                   Transfer
                 </Typography.Text>
-                <InformationCircleIcon className="w-6 h-6 text-primary" />
+                <RiInformation2Line className="w-6 h-6 text-primary" />
               </div>
               <Form
                 assetsInteraction={assetsInteraction}

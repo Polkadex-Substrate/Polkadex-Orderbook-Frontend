@@ -1,7 +1,8 @@
 "use client";
+// TODO: Replace Buy/Sell/Calendar filter
 
 import { useWindowSize } from "usehooks-ts";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import {
   DateRangePicker,
   RangeKeyDict,
@@ -18,14 +19,15 @@ import {
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useOpenOrders } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
-import { CalendarDaysIcon } from "@heroicons/react/24/solid";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { RiCalendarLine, RiMore2Line } from "@remixicon/react";
 
 import { OpenOrdersTable } from "./OpenOrders";
 import { OrderHistoryTable } from "./OrderHistory";
 import { BalancesTable } from "./Balances";
 import { TradeHistoryTable } from "./TradeHistory";
+
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "@/styles/calendar.scss";
@@ -55,7 +57,7 @@ export const Orders = ({ maxHeight }: Props) => {
   const [show, setShow] = useState(true);
   const [filters, setFilters] = useState<Ifilters>(initialFilters);
 
-  const scrollAreaView = useMemo(() => width <= 470, [width]);
+  const scrollAreaView = useMemo(() => width <= 600, [width]);
 
   const ranges = useMemo(() => {
     return [
@@ -92,11 +94,15 @@ export const Orders = ({ maxHeight }: Props) => {
     }
   };
 
+  const maxWidth = useMemo(
+    () => (scrollAreaView ? `${width - 40}px` : "auto"),
+    [width, scrollAreaView]
+  );
   return (
-    <Tabs defaultValue="openOrders" className="min-w-[25rem]">
-      <div className="lg:flex items-center justify-between border-r border-b border-primary">
-        <ScrollArea className={`${scrollAreaView && "max-w-80"}`}>
-          <Tabs.List className="px-2 py-3 whitespace-nowrap">
+    <Tabs defaultValue="openOrders" className="flex-1 h-full">
+      <div className="flex items-center justify-between border-b border-primary">
+        <ScrollArea className=" overflow-hidden" style={{ maxWidth }}>
+          <Tabs.List className="px-2 py-2.5 whitespace-nowrap">
             <Tabs.Trigger value="openOrders" onClick={() => setShow(true)}>
               Open Orders({openOrders?.length || 0})
             </Tabs.Trigger>
@@ -110,62 +116,101 @@ export const Orders = ({ maxHeight }: Props) => {
               Balances
             </Tabs.Trigger>
           </Tabs.List>
-          <ScrollArea.Bar orientation="horizontal" />
+          {scrollAreaView && <ScrollArea.Bar orientation="horizontal" />}
         </ScrollArea>
-
-        {connected && show && (
-          <div className="flex items-center gap-3 mx-2">
-            <Checkbox.Solid
-              id={BUY}
-              checked={filters.onlyBuy}
-              onCheckedChange={() => onChangeFilters(BUY)}
-            >
-              <Checkbox.Label htmlFor={BUY}>Buy</Checkbox.Label>
-            </Checkbox.Solid>
-            <Checkbox.Solid
-              id={SELL}
-              checked={filters.onlySell}
-              onCheckedChange={() => onChangeFilters(SELL)}
-            >
-              <Checkbox.Label htmlFor={SELL}>Sell</Checkbox.Label>
-            </Checkbox.Solid>
-            <Popover>
-              <Popover.Trigger>
-                <CalendarDaysIcon className="w-5 h-5" />
-              </Popover.Trigger>
-              <Popover.Content>
-                <DateRangePicker
-                  ranges={ranges}
-                  onChange={onChangeDateRange}
-                  rangeColors={["#E6007A"]}
-                  staticRanges={defaultStaticRanges}
-                  inputRanges={[]}
-                />
-              </Popover.Content>
-            </Popover>
-          </div>
+        {scrollAreaView ? (
+          <Popover>
+            <Popover.Trigger className="group">
+              <RiMore2Line className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
+            </Popover.Trigger>
+            <Popover.Content className="flex flex-col gap-3 p-2">
+              <Checkbox.Outline
+                id={BUY}
+                checked={filters.onlyBuy}
+                onCheckedChange={() => onChangeFilters(BUY)}
+              >
+                <Checkbox.Label appearance="primary" htmlFor={BUY}>
+                  Buy
+                </Checkbox.Label>
+              </Checkbox.Outline>
+              <Checkbox.Outline
+                id={SELL}
+                checked={filters.onlySell}
+                onCheckedChange={() => onChangeFilters(SELL)}
+              >
+                <Checkbox.Label appearance="primary" htmlFor={SELL}>
+                  Sell
+                </Checkbox.Label>
+              </Checkbox.Outline>
+            </Popover.Content>
+          </Popover>
+        ) : (
+          <Fragment>
+            {connected && show && (
+              <div className="flex items-center gap-3 mx-2">
+                <Checkbox.Outline
+                  id={BUY}
+                  checked={filters.onlyBuy}
+                  onCheckedChange={() => onChangeFilters(BUY)}
+                >
+                  <Checkbox.Label appearance="primary" htmlFor={BUY}>
+                    Buy
+                  </Checkbox.Label>
+                </Checkbox.Outline>
+                <Checkbox.Outline
+                  id={SELL}
+                  checked={filters.onlySell}
+                  onCheckedChange={() => onChangeFilters(SELL)}
+                >
+                  <Checkbox.Label appearance="primary" htmlFor={SELL}>
+                    Sell
+                  </Checkbox.Label>
+                </Checkbox.Outline>
+                <Popover>
+                  <Popover.Trigger asChild>
+                    <Button.Icon variant="light" size="2sm" className="p-1">
+                      <RiCalendarLine className="w-full h-full" />
+                    </Button.Icon>
+                  </Popover.Trigger>
+                  <Popover.Content>
+                    <DateRangePicker
+                      ranges={ranges}
+                      onChange={onChangeDateRange}
+                      rangeColors={["#E6007A"]}
+                      staticRanges={defaultStaticRanges}
+                      inputRanges={[]}
+                    />
+                  </Popover.Content>
+                </Popover>
+              </div>
+            )}
+          </Fragment>
         )}
       </div>
 
       {connected ? (
-        <>
-          <Tabs.Content value="openOrders">
+        <Fragment>
+          <Tabs.Content
+            value="openOrders"
+            className="flex-1 flex flex-col bg-level-0"
+          >
             <OpenOrdersTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
-          <Tabs.Content value="orderHistory">
+          <Tabs.Content value="orderHistory" className="bg-level-0">
             <OrderHistoryTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
-          <Tabs.Content value="tradeHistory">
+          <Tabs.Content value="tradeHistory" className="bg-level-0">
             <TradeHistoryTable filters={filters} maxHeight={maxHeight} />
           </Tabs.Content>
-          <Tabs.Content value="balances">
+          <Tabs.Content value="balances" className="bg-level-0">
             <BalancesTable maxHeight={maxHeight} />
           </Tabs.Content>
-        </>
+        </Fragment>
       ) : (
         <GenericMessage
           title="Connect your trading account to start trading."
           illustration="ConnectAccount"
+          className="bg-level-0"
         >
           <Button.Solid onClick={() => onToogleConnectTrading()}>
             Connect Trading Account

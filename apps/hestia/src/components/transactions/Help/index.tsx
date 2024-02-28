@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@polkadex/ux";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { forwardRef } from "react";
 import Link from "next/link";
+import { RiExternalLinkLine } from "@remixicon/react";
 
 import { Card } from "./card";
 
@@ -16,7 +16,7 @@ export const Help = forwardRef<HTMLDivElement>((_, ref) => {
           target="_blank"
         >
           <Button.Icon variant="outline">
-            <ArrowTopRightOnSquareIcon />
+            <RiExternalLinkLine className="w-full h-full" />
           </Button.Icon>
         </Link>
       </Card>

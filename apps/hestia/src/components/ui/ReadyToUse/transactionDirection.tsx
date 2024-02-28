@@ -1,5 +1,5 @@
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Tooltip, Typography } from "@polkadex/ux";
+import { RiArrowRightLine } from "@remixicon/react";
 import React from "react";
 
 export const TransactionDirection = ({
@@ -39,7 +39,7 @@ export const TransactionDirection = ({
         </Tooltip>
       )}
       <div className="flex items-center justify-center bg-level-1 w-5 h-5 rounded-md">
-        <ArrowRightIcon className="w-3 h-3 text-primary" />
+        <RiArrowRightLine className="w-3 h-3 text-primary" />
       </div>
       <Tooltip>
         <Tooltip.Trigger>

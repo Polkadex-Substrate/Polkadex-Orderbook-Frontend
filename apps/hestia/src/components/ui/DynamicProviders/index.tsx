@@ -88,20 +88,20 @@ export const DynamicProviders = ({ children }: { children: ReactNode }) => {
   const params = useParams();
   return (
     <Fragment>
-      <Toaster />
+      <Toaster position="top-right" />
       <QueryClientProvider client={queryClient}>
         <SettingProvider
           defaultToast={{
             onError: (e) => {
               console.log("onError", e);
-              toast.error(e.toString());
+              toast.error(e.toString(), { closeButton: true });
             },
             onSuccess: (e) => {
               console.log("onSuccess", e);
-              toast.success(e.toString());
+              toast.success(e.toString(), { closeButton: true });
             },
             onInfo: (e) => {
-              toast.info(e.toString());
+              toast.info(e.toString(), { closeButton: true });
             },
           }}
         >

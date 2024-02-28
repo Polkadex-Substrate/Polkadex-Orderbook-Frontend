@@ -1,8 +1,8 @@
 import CSVLink from "react-csv-downloader";
-import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import { Button } from "@polkadex/ux";
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { useCallback } from "react";
+import { RiDownload2Line } from "@remixicon/react";
 
 const csvColumns = [
   "orderId",
@@ -43,7 +43,7 @@ export const Export = ({ allOpenOrders }: Props) => {
       filename={exportedFileName}
     >
       <Button.Outline appearance="secondary" size="sm">
-        <ArrowDownTrayIcon className="w-4 h-4 inline-block mr-1" />
+        <RiDownload2Line className="w-4 h-4 inline-block mr-1" />
         Export
       </Button.Outline>
     </CSVLink>

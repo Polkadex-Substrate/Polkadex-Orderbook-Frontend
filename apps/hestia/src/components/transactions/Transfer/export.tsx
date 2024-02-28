@@ -1,7 +1,7 @@
-import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import { Button } from "@polkadex/ux";
 import { Table } from "@tanstack/react-table";
 import CSVLink from "react-csv-downloader";
+import { RiDownload2Line } from "@remixicon/react";
 
 import { TransferHistoryData } from "./columns";
 
@@ -56,7 +56,7 @@ export const Export = <TData,>({ table }: ExportProps<TData>) => {
       filename={exportedFileName}
     >
       <Button.Outline appearance="secondary" size="sm">
-        <ArrowDownTrayIcon className="w-4 h-4 inline-block mr-1" />
+        <RiDownload2Line className="w-4 h-4 inline-block mr-1" />
         Export Page Data
       </Button.Outline>
     </CSVLink>

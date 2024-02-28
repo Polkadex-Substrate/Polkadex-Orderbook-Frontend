@@ -1,5 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { Typography, Token } from "@polkadex/ux";
+import { Typography, Token, tokenAppearance } from "@polkadex/ux";
 import { AssetsProps } from "@orderbook/core/hooks";
 import { getChainFromTicker } from "@orderbook/core/helpers";
 
@@ -17,7 +17,8 @@ export const columns = [
         <div className="flex items-center gap-1">
           <Token
             name={ticker}
-            size="sm"
+            appearance={ticker as keyof typeof tokenAppearance}
+            size="xs"
             className="rounded-full border border-secondary"
           />
           <Typography.Text size="xs" className="uppercase">
@@ -69,6 +70,7 @@ export const columns = [
       const chainName = getChainFromTicker(e.getValue().ticker);
       return (
         <ActionsCard
+          hideButton
           withdrawLink={{
             pathname: "https://thea.polkadex.trade/withdraw",
             query: chainName && {

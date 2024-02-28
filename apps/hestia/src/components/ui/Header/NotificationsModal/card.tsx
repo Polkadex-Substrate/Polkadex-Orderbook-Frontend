@@ -1,5 +1,5 @@
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { Typography } from "@polkadex/ux";
+import { RiArrowRightSLine } from "@remixicon/react";
 import classNames from "classnames";
 import { ComponentProps, PropsWithChildren } from "react";
 
@@ -39,7 +39,7 @@ export const Card = ({
         </div>
         <div className="flex items-center justify-between gap-2">
           <Typography.Text appearance="primary">{children}</Typography.Text>
-          <ChevronRightIcon className="min-w-[16px] min-h-[16px] w-4 h-4 text-primary" />
+          <RiArrowRightSLine className="min-w-[16px] min-h-[16px] w-4 h-4 text-primary" />
         </div>
       </div>
     </div>

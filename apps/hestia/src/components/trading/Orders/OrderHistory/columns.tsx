@@ -1,6 +1,9 @@
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
-import { Tooltip, Typography } from "@polkadex/ux";
+import { HoverCard, Tooltip, Typography } from "@polkadex/ux";
+
+import { formatedDate } from "@/helpers";
+import { FilledCard } from "@/components/ui/ReadyToUse";
 
 const orderHistoryColumnHelper = createColumnHelper<Order>();
 
@@ -8,28 +11,32 @@ export const columns = [
   orderHistoryColumnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => {
-      const formattedDate = new Intl.DateTimeFormat("en-US", {
-        month: "numeric",
-        day: "2-digit",
-        hour: "numeric",
-        minute: "numeric",
-      })
-        .format(e.getValue().timestamp)
-        .replace(",", "");
-
+      const date = formatedDate(e.getValue().timestamp);
+      const status = e.getValue().status;
       return (
-        <Tooltip>
-          <Tooltip.Trigger>
-            <Typography.Text size="xs">{formattedDate}</Typography.Text>
-          </Tooltip.Trigger>
-          <Tooltip.Content>
-            <Typography.Text>
-              <Typography.Text size="xs">
-                {e.getValue().timestamp.toLocaleString()}
+        <div className="flex flex-col items-start">
+          <Tooltip>
+            <Tooltip.Trigger>
+              <Typography.Text size="xs">{date}</Typography.Text>
+            </Tooltip.Trigger>
+            <Tooltip.Content>
+              <Typography.Text>
+                <Typography.Text size="xs">
+                  {e.getValue().timestamp.toLocaleString()}
+                </Typography.Text>
               </Typography.Text>
+            </Tooltip.Content>
+          </Tooltip>
+          <div className="flex items-center">
+            <Typography.Text
+              appearance="primary"
+              size="xs"
+              className="first-letter:uppercase"
+            >
+              {status.toLowerCase()}
             </Typography.Text>
-          </Tooltip.Content>
-        </Tooltip>
+          </div>
+        </div>
       );
     },
     header: () => (
@@ -42,41 +49,30 @@ export const columns = [
 
   orderHistoryColumnHelper.accessor((row) => row, {
     id: "pair",
-    cell: (e) => (
-      <Typography.Text bold size="xs">
-        {e.getValue().market.name}
-      </Typography.Text>
-    ),
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Pair
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-
-  orderHistoryColumnHelper.accessor((row) => row, {
-    id: "type",
     cell: (e) => {
       const isSell = e.getValue().side === "Ask";
 
-      const title = `${e.getValue().type.toLowerCase()}/${
-        isSell ? "Sell" : "Buy"
-      }`;
       return (
-        <Typography.Text
-          size="xs"
-          bold
-          appearance={isSell ? "danger" : "success"}
-          className="uppercase"
-        >
-          {title}
-        </Typography.Text>
+        <div className="flex flex-col">
+          <Typography.Text bold size="xs">
+            {e.getValue().market.name}
+          </Typography.Text>
+          <div className="flex items-center">
+            <Typography.Text
+              size="xs"
+              className="first-letter:uppercase"
+              bold
+              appearance={isSell ? "danger" : "success"}
+            >
+              {e.getValue().type.toLowerCase()} / {isSell ? "Sell" : "Buy"}
+            </Typography.Text>
+          </div>
+        </div>
       );
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Type
+        Pair/Type
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
@@ -113,36 +109,37 @@ export const columns = [
   }),
   orderHistoryColumnHelper.accessor((row) => row, {
     id: "filled",
-    cell: (e) => (
-      <Typography.Text size="xs">{e.getValue().filledQuantity}</Typography.Text>
-    ),
+    cell: (e) => {
+      const percent =
+        (Number(e.getValue().filledQuantity) / Number(e.getValue().quantity)) *
+        100;
+
+      const roundedPercent = Math.min(100, percent).toFixed(2);
+      const width = `${roundedPercent}%`;
+      return (
+        <HoverCard closeDelay={10}>
+          <HoverCard.Trigger>
+            <FilledCard width={width}>
+              {e.getValue().filledQuantity}{" "}
+              {e.getValue().market.quoteAsset.ticker}
+            </FilledCard>
+          </HoverCard.Trigger>
+          <HoverCard.Content
+            className="flex items-center gap-2"
+            sideOffset={2}
+            side="top"
+          >
+            <Typography.Text appearance="primary">
+              Avg. Filled Price:
+            </Typography.Text>
+            <Typography.Text>{e.getValue().averagePrice}</Typography.Text>
+          </HoverCard.Content>
+        </HoverCard>
+      );
+    },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Filled
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  orderHistoryColumnHelper.accessor((row) => row, {
-    id: "averageFilledPrice",
-    cell: (e) => (
-      <Typography.Text size="xs">{e.getValue().averagePrice}</Typography.Text>
-    ),
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Avg. Filled Price
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  orderHistoryColumnHelper.accessor((row) => row, {
-    id: "status",
-    cell: (e) => (
-      <Typography.Text size="xs">{e.getValue().status}</Typography.Text>
-    ),
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Status
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
@@ -155,7 +152,7 @@ export const columns = [
           ? e.getValue().market.baseAsset.ticker
           : e.getValue().market.quoteAsset.ticker;
       return (
-        <Typography.Text size="xs">
+        <Typography.Text size="xs" className="whitespace-nowrap">
           {e.getValue().fee} {ticker}
         </Typography.Text>
       );

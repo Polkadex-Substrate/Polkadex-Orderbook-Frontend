@@ -44,8 +44,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <HeaderLink.Single href={lastUsedMarketUrl}>
               Trade
             </HeaderLink.Single>
-            <HeaderLink.Single href="/markets">Markets</HeaderLink.Single>
-            <HeaderLink.Single href="/analytics">Analytics</HeaderLink.Single>
+            <HeaderLink.Single href="/rewards">Rewards</HeaderLink.Single>
             <HeaderLink.Dropdown
               items={[
                 {

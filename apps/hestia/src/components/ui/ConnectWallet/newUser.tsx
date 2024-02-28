@@ -1,5 +1,5 @@
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { Typography, Icon, Illustrations, Interaction } from "@polkadex/ux";
+import { RiArrowRightSLine } from "@remixicon/react";
 
 export const NewUser = ({
   onContinue,
@@ -54,7 +54,7 @@ export const NewUser = ({
               <Typography.Text className="text-primary-base">
                 Read More
               </Typography.Text>
-              <ChevronRightIcon className="w-4 h-4" />
+              <RiArrowRightSLine className="w-4 h-4" />
             </button>
           </div>
         </div>

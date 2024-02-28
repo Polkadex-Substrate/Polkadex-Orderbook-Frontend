@@ -3,7 +3,7 @@
 import { Button, Typography } from "@polkadex/ux";
 import { useElementSize } from "usehooks-ts";
 import { useMemo } from "react";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { RiExternalLinkLine } from "@remixicon/react";
 
 import { Rewards } from "../ui/Icons/rewards";
 
@@ -90,7 +90,7 @@ export function Template() {
                     </div>
                   </div>
                   <Button.Icon variant="outline">
-                    <ArrowTopRightOnSquareIcon />
+                    <RiExternalLinkLine className="w-full h-full" />
                   </Button.Icon>
                 </div>
               </div>

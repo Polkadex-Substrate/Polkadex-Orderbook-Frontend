@@ -7,8 +7,8 @@ import {
   truncateString,
 } from "@polkadex/ux";
 import { intlFormat } from "date-fns";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { RiExternalLinkLine } from "@remixicon/react";
 
 import { TransferHistoryData } from "./columns";
 
@@ -90,7 +90,7 @@ const ResponsiveTable = ({
             >
               {shortLink}
               <Button.Icon variant="outline" size="xs">
-                <ArrowTopRightOnSquareIcon />
+                <RiExternalLinkLine className="w-full h-full" />
               </Button.Icon>
             </Typography.Text>
           </Link>

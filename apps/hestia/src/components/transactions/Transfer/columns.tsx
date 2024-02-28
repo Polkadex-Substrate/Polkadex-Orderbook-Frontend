@@ -7,7 +7,7 @@ import {
   truncateString,
 } from "@polkadex/ux";
 import { createColumnHelper } from "@tanstack/react-table";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { RiExternalLinkLine } from "@remixicon/react";
 
 import { filters } from "./filters";
 
@@ -183,7 +183,7 @@ export const columns = () => [
           >
             {shortLink}
             <Button.Icon variant="outline" size="xs">
-              <ArrowTopRightOnSquareIcon />
+              <RiExternalLinkLine className="w-full h-full" />
             </Button.Icon>
           </Typography.Text>
         </Link>

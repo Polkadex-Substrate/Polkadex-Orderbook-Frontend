@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Decimal } from "@orderbook/core/utils";
 import {
   getChainFromTicker,
@@ -9,12 +9,21 @@ import {
 } from "@orderbook/core/helpers";
 import { useMarkets, useTickers } from "@orderbook/core/hooks";
 import { Market } from "@orderbook/core/utils/orderbookService";
+import { useResizeObserver } from "usehooks-ts";
+import classNames from "classnames";
 
 import { Asset } from "./asset";
 import { Card } from "./card";
 
 export const AssetInfo = ({ currentMarket }: { currentMarket?: Market }) => {
   const [state, setState] = useState("USDT");
+
+  const ref = useRef<HTMLDivElement | null>(null);
+  const { width = 0 } = useResizeObserver({
+    ref,
+    box: "border-box",
+  });
+  const maxWidth = useMemo(() => width < 590, [width]);
 
   const { currentTicker, tickerLoading } = useTickers(currentMarket?.id);
   const { loading } = useMarkets();
@@ -60,14 +69,25 @@ export const AssetInfo = ({ currentMarket }: { currentMarket?: Market }) => {
   );
 
   return (
-    <div className="flex gap-3 flex-wrap border-b border-primary py-2">
+    <div
+      className={classNames(
+        "flex flex-wrap border-b border-primary ",
+        maxWidth ? "flex-col" : "gap-3"
+      )}
+    >
       <Asset
         baseTicker={baseTicker}
         quoteTicker={quoteTicker}
         tokenName={chainName}
         loading={tickerLoading || loading}
+        inlineView={maxWidth}
       />
-      <div className="flex flex-1 flex-wrap gap-3 justify-between px-3 py-1 min-w-[20rem]">
+      <div
+        className={classNames(
+          "flex flex-1 flex-wrap gap-3 justify-between px-3 py-1 min-w-[20rem]",
+          maxWidth && " border-t border-primary"
+        )}
+      >
         <Card.Single
           label={`Price ${quoteTicker}`}
           color={negative ? "red" : "green"}

@@ -1,9 +1,13 @@
 "use client";
 import { Button, Token, Typography } from "@polkadex/ux";
-import { ArrowLeftIcon, ArrowUpIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { forwardRef } from "react";
-import { ShareIcon, StarIcon } from "@heroicons/react/24/outline";
+import {
+  RiArrowLeftLine,
+  RiArrowUpSLine,
+  RiShareLine,
+  RiStarLine,
+} from "@remixicon/react";
 
 import { OverviewCard } from "./overviewCard";
 
@@ -12,18 +16,18 @@ export const Overview = forwardRef<HTMLDivElement>((_, ref) => {
     <div ref={ref}>
       <div className="flex items-center justify-between gap-2 p-4 pb-4 border-b border-secondary-base">
         <Link
-          href="/analytics"
+          href="/rewards"
           className="text-primary flex items-center gap-2 flex-wrap transition-colors duration-300 hover:text-current"
         >
-          <ArrowLeftIcon className="w-5 h-5" />
+          <RiArrowLeftLine className="w-5 h-5" />
           <Typography.Text size="md">All markets</Typography.Text>
         </Link>
         <div className="flex items-center gap-2">
           <Button.Icon appearance="tertiary" variant="light">
-            <StarIcon />
+            <RiStarLine className="w-full h-full" />
           </Button.Icon>
           <Button.Icon appearance="tertiary" variant="light">
-            <ShareIcon />
+            <RiShareLine className="w-full h-full" />
           </Button.Icon>
         </div>
       </div>
@@ -52,7 +56,7 @@ export const Overview = forwardRef<HTMLDivElement>((_, ref) => {
             <div className="flex items-center gap-1">
               <Typography.Text bold>$898.20k</Typography.Text>
               <div className="flex items-center text-success-base">
-                <ArrowUpIcon className="w-4 h-4" />
+                <RiArrowUpSLine className="w-4 h-4" />
                 <Typography.Text size="xs" bold>
                   1.01%
                 </Typography.Text>
@@ -63,7 +67,7 @@ export const Overview = forwardRef<HTMLDivElement>((_, ref) => {
             <div className="flex items-center gap-1">
               <Typography.Text>$559.83k</Typography.Text>
               <div className="flex items-center text-success-base">
-                <ArrowUpIcon className="w-4 h-4" />
+                <RiArrowUpSLine className="w-4 h-4" />
                 <Typography.Text size="xs" bold>
                   2.54%
                 </Typography.Text>

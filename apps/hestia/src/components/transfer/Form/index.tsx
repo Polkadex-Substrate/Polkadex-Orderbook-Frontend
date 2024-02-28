@@ -18,7 +18,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { ArrowRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { RiArrowDownLine, RiArrowRightLine } from "@remixicon/react";
 import classNames from "classnames";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import {
@@ -274,7 +274,7 @@ export const Form = ({
               onClick={handleChanteType}
               className="h-full flex items-center justify-center p-2 max-sm:w-full max-sm:border-y border-primary hover:bg-level-1 duration-300 transition-colors"
             >
-              <ArrowRightIcon
+              <RiArrowRightLine
                 className={classNames(
                   "w-6 h-6 transition-all duration-300",
                   isFromFunding
@@ -350,7 +350,7 @@ export const Form = ({
                 </div>
               </div>
               <div>
-                <ChevronDownIcon className="w-4 h-4" />
+                <RiArrowDownLine className="w-4 h-4" />
               </div>
             </div>
             <div

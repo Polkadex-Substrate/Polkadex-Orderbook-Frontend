@@ -1,6 +1,6 @@
-import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import { Typography } from "@polkadex/ux";
 import Link from "next/link";
+import { RiArrowRightLine } from "@remixicon/react";
 
 import { InfoCard } from "./infoCard";
 
@@ -44,7 +44,7 @@ export const TokenInfo = ({
         </InfoCard>
         <div className="flex flex-col gap-4">
           <Typography.Text appearance="primary">About Polkadot</Typography.Text>
-          <Typography.Paragraph className="leading-6">
+          <Typography.Paragraph className="leading-6" size="sm">
             Polkadot is an open-source sharded multichain protocol that connects
             and secures a network of specialized blockchains, facilitating
             cross-chain transfer of any data or asset types, not just tokens,
@@ -56,7 +56,7 @@ export const TokenInfo = ({
 
         <Link href="/" className="text-primary-base">
           View more
-          <ArrowRightIcon className="w-3 h-3 inline-block ml-2" />
+          <RiArrowRightLine className="w-3 h-3 inline-block ml-2" />
         </Link>
       </div>
     </div>

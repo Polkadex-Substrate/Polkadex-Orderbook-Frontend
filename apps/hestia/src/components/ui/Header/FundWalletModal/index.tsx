@@ -1,9 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Button, Dropdown, Modal, Typography } from "@polkadex/ux";
-import { XMarkIcon } from "@heroicons/react/24/solid";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { RiCloseLine, RiArrowDownLine } from "@remixicon/react";
 import Link from "next/link";
-import classNames from "classnames";
 
 import { Card } from "./card";
 
@@ -20,10 +18,7 @@ export const FundWalletModal = ({
       onOpenChange={onOpenChange}
       placement="top right"
       closeOnClickOutside
-      className={classNames(
-        "flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto",
-        "top-1/2 right-0 transform -translate-y-1/2" // fix that in polkadex/ux
-      )}
+      className="flex flex-col border-primary bg-level-0 border-x w-screen h-webKit md:max-w-md overflow-x-hidden overflow-y-auto"
     >
       <Modal.Title className="flex justify-between items-center py-4 pl-4">
         <Typography.Text size="lg" bold>
@@ -36,7 +31,7 @@ export const FundWalletModal = ({
           rounded
           onClick={() => onOpenChange(false)}
         >
-          <XMarkIcon />
+          <RiCloseLine className="h-full w-full" />
         </Button.Icon>
       </Modal.Title>
       <Modal.Content className="flex flex-col flex-1 gap-6">
@@ -59,7 +54,7 @@ export const FundWalletModal = ({
                 <Dropdown>
                   <Dropdown.Trigger className="flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1">
                     Polkadot-based
-                    <ChevronDownIcon className="w-3 h-3" />
+                    <RiArrowDownLine className="w-3 h-3" />
                   </Dropdown.Trigger>
                   <Dropdown.Content>
                     <Dropdown.Label>Token/Chain</Dropdown.Label>
@@ -109,7 +104,7 @@ export const FundWalletModal = ({
                 <Dropdown>
                   <Dropdown.Trigger className="flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1">
                     Ethereum-based
-                    <ChevronDownIcon className="w-3 h-3" />
+                    <RiArrowDownLine className="w-3 h-3" />
                   </Dropdown.Trigger>
                   <Dropdown.Content>
                     <Dropdown.Label>Token/Chain</Dropdown.Label>

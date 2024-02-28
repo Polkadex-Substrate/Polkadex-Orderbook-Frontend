@@ -64,7 +64,7 @@ export const Table = forwardRef<
             className="overflow-y-hidden hover:overflow-y-auto px-3 min-h-[300px]"
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
-            <PolkadexTable>
+            <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
               <PolkadexTable.Header>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <PolkadexTable.Row

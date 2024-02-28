@@ -3,35 +3,38 @@
 import {
   PropsWithChildren,
   ReactNode,
+  Ref,
   createContext,
   useContext,
   useMemo,
+  useRef,
 } from "react";
-import { useElementSize } from "usehooks-ts";
+import { useResizeObserver } from "usehooks-ts";
 
 import { useSizeObserver } from "@/hooks";
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
-type GenericRef<T = HTMLDivElement> = (node: T | null) => void;
 type State = {
-  headerRef: GenericRef;
-  footerRef: GenericRef;
-  marketRef: GenericRef;
-  placeOrderRef: GenericRef;
+  headerRef: Ref<HTMLDivElement>;
+  footerRef: Ref<HTMLDivElement>;
+  marketRef: Ref<HTMLDivElement>;
+  placeOrderRef: Ref<HTMLDivElement>;
   tableMaxHeight: string;
   ordersMaxHeight: string;
 };
-// useElementSize Deprecated -> useResizeObserver
 export const SizeProvider = ({ children }: { children: ReactNode }) => {
-  const [headerRef, { height: headerHeight = 0 }] = useElementSize();
-  const [footerRef, { height: footerHeight = 0 }] = useElementSize();
+  const headerRef = useRef<HTMLDivElement | null>(null);
+  const footerRef = useRef<HTMLDivElement | null>(null);
+  const { height: headerHeight = 0 } = useResizeObserver({ ref: headerRef });
+  const { height: footerHeight = 0 } = useResizeObserver({ ref: footerRef });
+
   const [marketRef, marketHeight] = useSizeObserver();
   const [placeOrderRef, placeOrderHeight] = useSizeObserver();
 
   const tableMaxHeight = useMemo(
-    () => `calc(100vh - ${marketHeight + headerHeight + footerHeight + 1}px)`,
+    () => `calc(100vh - ${marketHeight + headerHeight + footerHeight + 6}px)`,
     [headerHeight, footerHeight, marketHeight]
   );
 

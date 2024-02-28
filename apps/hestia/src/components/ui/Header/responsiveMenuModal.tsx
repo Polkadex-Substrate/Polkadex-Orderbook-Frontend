@@ -1,15 +1,14 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Button, Modal, Typography } from "@polkadex/ux";
-import { XMarkIcon } from "@heroicons/react/24/solid";
-import {
-  GlobeAltIcon,
-  MoonIcon,
-  SwatchIcon,
-} from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { getMarketUrl } from "@orderbook/core/helpers";
 import { useWindowSize } from "usehooks-ts";
-import classNames from "classnames";
+import {
+  RiCloseLine,
+  RiEarthLine,
+  RiMoonLine,
+  RiPaletteLine,
+} from "@remixicon/react";
 
 import QrCode from "../../../../public/img/qrCode.png";
 
@@ -29,10 +28,7 @@ export const ResponsiveMenuModal = ({
       onOpenChange={onOpenChange}
       placement="top right"
       closeOnClickOutside
-      className={classNames(
-        "flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto",
-        "top-1/2 right-0 transform -translate-y-1/2" // fix that in polkadex/ux
-      )}
+      className="flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto"
     >
       <Modal.Title className="flex justify-between items-center py-4 pl-4">
         <Typography.Text size="lg" bold>
@@ -45,7 +41,7 @@ export const ResponsiveMenuModal = ({
           rounded
           onClick={() => onOpenChange(false)}
         >
-          <XMarkIcon />
+          <RiCloseLine className="w-full h-full" />
         </Button.Icon>
       </Modal.Title>
       <Modal.Content className="flex flex-col flex-1">
@@ -66,10 +62,10 @@ export const ResponsiveMenuModal = ({
                   </HeaderLink.Single>
                   <HeaderLink.Single
                     size="lg"
-                    href="/markets"
+                    href="/rewards"
                     className="text-lg"
                   >
-                    Markets
+                    Rewards
                   </HeaderLink.Single>
                   <HeaderLink.Accordion
                     items={[
@@ -127,7 +123,7 @@ export const ResponsiveMenuModal = ({
               <div className="flex flex-col gap-5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <GlobeAltIcon className="w-4 h-4 text-primary" />
+                    <RiEarthLine className="w-4 h-4 text-primary" />
                     <Typography.Text size="lg">Language</Typography.Text>
                   </div>
                   <Typography.Text appearance="primary">
@@ -136,7 +132,7 @@ export const ResponsiveMenuModal = ({
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <MoonIcon className="w-4 h-4 text-primary" />
+                    <RiMoonLine className="w-4 h-4 text-primary" />
                     <Typography.Text size="lg">Appearance</Typography.Text>
                   </div>
                   <Typography.Text appearance="primary">
@@ -145,7 +141,7 @@ export const ResponsiveMenuModal = ({
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <SwatchIcon className="w-4 h-4 text-primary" />
+                    <RiPaletteLine className="w-4 h-4 text-primary" />
                     <Typography.Text size="lg">Color Prefence</Typography.Text>
                   </div>
                   <div className="flex items-center gap-2">

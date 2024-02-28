@@ -1,6 +1,5 @@
 "use client";
 
-import { CheckIcon } from "@heroicons/react/24/outline";
 import {
   ExtensionAccount,
   useExtensionAccounts,
@@ -28,6 +27,7 @@ import { useResizeObserver } from "usehooks-ts";
 import classNames from "classnames";
 import { isValidAddress } from "@orderbook/core/helpers";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { RiCheckLine } from "@remixicon/react";
 
 import { ProviderCard } from "./providerCard";
 import { AccountCard } from "./accountCard";
@@ -204,7 +204,7 @@ export const SelectFundingDropdown = ({
                               name={curr.name}
                               hoverable={false}
                             />
-                            <CheckIcon
+                            <RiCheckLine
                               className={`ml-auto h-4 w-4 ${
                                 selectedExtensionAccount?.address !==
                                   curr.address && "opacity-0"
@@ -222,7 +222,7 @@ export const SelectFundingDropdown = ({
           </Searchable.List>
         </Searchable>
       </Popover.Content>
-      <Popover.Overlay />
+      <Popover.Overlay className="z-[10]" />
     </Popover>
   );
 };

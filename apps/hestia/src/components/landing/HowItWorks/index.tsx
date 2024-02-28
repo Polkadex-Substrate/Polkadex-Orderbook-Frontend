@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button, Typography } from "@polkadex/ux";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { getMarketUrl } from "@orderbook/core/helpers";
+import { RiArrowRightLine } from "@remixicon/react";
 
 import { Card } from "./card";
 
@@ -54,7 +54,7 @@ export const HowItWorks = () => {
           size="base"
         >
           Click this small button to begin trading
-          <ArrowRightIcon className="w-4 h-4 ml-3 inline-block max-md:rotate-90" />
+          <RiArrowRightLine className="w-4 h-4 ml-3 inline-block max-md:rotate-90" />
         </Typography.Text>
         <Button.Solid className="w-full">
           <Link href={lastUsedMarketUrl} className="w-full">

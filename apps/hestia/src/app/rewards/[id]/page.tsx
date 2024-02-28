@@ -3,7 +3,8 @@
 import dynamic from "next/dynamic";
 
 const Template = dynamic(
-  () => import("@/components/analytics/template").then((mod) => mod.Template),
+  () =>
+    import("@/components/rewardsPreview/template").then((mod) => mod.Template),
   {
     ssr: false,
   }

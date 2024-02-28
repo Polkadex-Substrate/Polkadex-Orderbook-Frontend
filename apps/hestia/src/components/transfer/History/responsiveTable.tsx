@@ -1,8 +1,8 @@
 import { Drawer, Token, Typography, truncateString } from "@polkadex/ux";
 import { Dispatch, SetStateAction } from "react";
 import { intlFormat } from "date-fns";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { RiExternalLinkLine } from "@remixicon/react";
 
 import { DepositData } from "./columns";
 
@@ -61,7 +61,7 @@ export const ResponsiveTable = ({
         {data.txType === "TRANSFER" && (
           <ResponsiveCard label="Hash">
             <div className="flex items-center gap-1.5 hover:underline">
-              <ArrowTopRightOnSquareIcon className="w-3 h-3 text-primary" />
+              <RiExternalLinkLine className="w-3 h-3 text-primary" />
               <Typography.Text asChild size="sm">
                 <Link
                   href={`https://polkadex.subscan.io/extrinsic/${data.stid}`}

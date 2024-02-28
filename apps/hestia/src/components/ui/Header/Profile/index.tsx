@@ -1,10 +1,16 @@
 "use client";
 
-import { Bars2Icon, BellIcon, BookOpenIcon } from "@heroicons/react/24/outline";
-import { Button, Icons, Popover, Tooltip } from "@polkadex/ux";
+import { Button, Popover, Tooltip } from "@polkadex/ux";
 import { useMemo } from "react";
 import Link from "next/link";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useWindowSize } from "react-use";
+import {
+  RiBookReadLine,
+  RiMenuLine,
+  RiNotification3Line,
+  RiWalletLine,
+} from "@remixicon/react";
 
 import { Trigger } from "./trigger";
 import { Content } from "./content";
@@ -21,6 +27,7 @@ export const Profile = ({
   onOpenFundWallet: () => void;
   showFundingWallet: boolean;
 }) => {
+  const { width } = useWindowSize();
   const { selectedWallet, selectedAccount } = useConnectWalletProvider();
 
   // Move to useConnectWalletProvider
@@ -32,6 +39,7 @@ export const Profile = ({
     () => !!Object.keys(selectedWallet ?? {})?.length,
     [selectedWallet]
   );
+  const responsiveView = useMemo(() => width > 640, [width]);
 
   if (tradingWalletPresent || fundWalletPresent)
     return (
@@ -42,9 +50,9 @@ export const Profile = ({
           </Button.Solid>
           <Tooltip>
             <Tooltip.Trigger asChild>
-              <Button.Icon asChild>
+              <Button.Icon className="max-sm:p-0">
                 <Link href="/balances">
-                  <Icons.Wallet />
+                  <RiWalletLine className="h-full w-full" />
                 </Link>
               </Button.Icon>
             </Tooltip.Trigger>
@@ -54,7 +62,7 @@ export const Profile = ({
             <Tooltip.Trigger asChild>
               <Button.Icon asChild>
                 <Link href="/history">
-                  <BookOpenIcon />
+                  <RiBookReadLine className="h-full w-full" />
                 </Link>
               </Button.Icon>
             </Tooltip.Trigger>
@@ -63,28 +71,31 @@ export const Profile = ({
           <Tooltip>
             <Tooltip.Trigger asChild>
               <Button.Icon onClick={onOpenNotifications}>
-                <BellIcon />
+                <RiNotification3Line className="h-full w-full" />
               </Button.Icon>
             </Tooltip.Trigger>
             <Tooltip.Content>Notifications</Tooltip.Content>
           </Tooltip>
         </div>
-        <Popover>
-          <Popover.Trigger superpositionTrigger>
-            <Trigger
-              browserAccountPresent={tradingWalletPresent}
-              extensionAccountPresent={fundWalletPresent}
-              extensionAccountName={selectedWallet?.name ?? ""}
-              browserAccountAddress={selectedAccount?.address ?? ""}
-            />
-          </Popover.Trigger>
-          <Popover.Content>
-            <Content />
-          </Popover.Content>
-          <Popover.Overlay />
-        </Popover>
+        {responsiveView && (
+          <Popover>
+            <Popover.Trigger superpositionTrigger>
+              <Trigger
+                browserAccountPresent={tradingWalletPresent}
+                extensionAccountPresent={fundWalletPresent}
+                extensionAccountName={selectedWallet?.name ?? ""}
+                browserAccountAddress={selectedAccount?.address ?? ""}
+              />
+            </Popover.Trigger>
+            <Popover.Content>
+              <Content />
+            </Popover.Content>
+            <Popover.Overlay className="z-[10]" />
+          </Popover>
+        )}
+
         <Button.Icon variant="ghost" onClick={onOpenMenu}>
-          <Bars2Icon />
+          <RiMenuLine className="h-full w-full" />
         </Button.Icon>
       </div>
     );

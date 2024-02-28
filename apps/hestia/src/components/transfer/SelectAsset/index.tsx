@@ -1,7 +1,7 @@
 import { Button, Checkbox, Modal, Typography, Input } from "@polkadex/ux";
-import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useAssets } from "@orderbook/core/hooks";
 import classNames from "classnames";
+import { RiCloseLine } from "@remixicon/react";
 
 import { Table } from "./table";
 
@@ -43,7 +43,7 @@ export const SelectAsset = ({
           rounded
           onClick={onOpenChange}
         >
-          <XMarkIcon />
+          <RiCloseLine className="w-full h-full" />
         </Button.Icon>
       </Modal.Title>
       <Modal.Content className="flex flex-col flex-1">

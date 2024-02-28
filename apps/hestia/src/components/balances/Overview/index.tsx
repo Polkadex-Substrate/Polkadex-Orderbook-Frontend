@@ -1,14 +1,14 @@
 "use client";
 import { HoverCard, Typography } from "@polkadex/ux";
 import { useState } from "react";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { RiEyeOffLine, RiEyeLine } from "@remixicon/react";
 
 import { OverviewCard } from "./overviewCard";
 
 export const Overview = () => {
   const [view, setView] = useState(true);
 
-  const IconComponent: typeof EyeIcon = view ? EyeIcon : EyeSlashIcon;
+  const IconComponent: typeof RiEyeLine = view ? RiEyeLine : RiEyeOffLine;
 
   const fiatAmount = view ? `$0.00` : "********";
   const amount = view ? (0.0).toFixed(8) : "********";
@@ -45,20 +45,20 @@ export const Overview = () => {
       </div>
       <div className="flex items-center gap-2 sm:max-w-[25rem] w-full flex-wrap">
         <OverviewCard
-          icon="ArrowDownTrayIcon"
+          icon="RiSkipDownLine"
           target="_blank"
           href="https://thea.polkadex.trade/deposit"
         >
           Deposit
         </OverviewCard>
         <OverviewCard
-          icon="ArrowUpTrayIcon"
+          icon="RiSkipUpLine"
           target="_blank"
           href="https://thea.polkadex.trade/withdraw"
         >
           Withdraw
         </OverviewCard>
-        <OverviewCard icon="ArrowsRightLeftIcon" href="/transfer">
+        <OverviewCard icon="RiArrowLeftRightLine" href="/transfer">
           Transfer
         </OverviewCard>
       </div>

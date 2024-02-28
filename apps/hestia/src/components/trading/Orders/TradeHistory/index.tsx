@@ -1,10 +1,11 @@
 "use client";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useWindowSize } from "usehooks-ts";
 import {
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
@@ -17,11 +18,15 @@ import {
 import { useTradeHistory } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
 import { DEFAULT_BATCH_LIMIT } from "@orderbook/core/constants";
+import { Trade } from "@orderbook/core/utils/orderbookService/types";
 
 import { Loading } from "../loading";
-import { TradeHistoryResponsiveCard } from "../responsiveCard";
 
 import { columns } from "./columns";
+import { ResponsiveTable } from "./responsiveTable";
+const responsiveKeys = ["type", "price"];
+const actionKeys = ["date", "price", "amount", "fee"];
+const widthKeys = ["20%", "20%", "20%", "20%", "20%"];
 
 export const TradeHistoryTable = ({
   filters,
@@ -37,49 +42,70 @@ export const TradeHistoryTable = ({
     data: trades,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
-  const responsiveView = useMemo(
-    () => width < 500 || (width >= 715 && width <= 1000),
-    [width]
-  );
+  const [responsiveState, setResponsiveState] = useState(false);
+  const [responsiveData, setResponsiveData] = useState<Trade | null>(null);
+  const responsiveView = useMemo(() => width < 500 || width <= 715, [width]);
+  const isResponsive = useMemo(() => width <= 1265, [width]);
 
   if (isLoading) return <Loading />;
 
   if (!trades.length)
-    return <GenericMessage title={"No items found"} illustration="NoData" />;
+    return (
+      <GenericMessage
+        title={"No items found"}
+        illustration="NoData"
+        className="bg-level-0"
+      />
+    );
 
   return (
-    <InfiniteScroll
-      className="flex-1 overflow-y-hidden hover:overflow-y-auto"
-      style={{ scrollbarGutter: "stable" }}
-      dataLength={trades.length}
-      next={() => {
-        onFetchNextPage();
-      }}
-      hasMore={Boolean(hasNextPage)}
-      height={maxHeight}
-      loader={<Spinner.Keyboard className="h-6 mx-auto my-2" />}
-    >
-      {responsiveView ? (
-        <TradeHistoryResponsiveCard trades={trades} />
-      ) : (
-        <PolkadexTable className="w-full" even>
-          <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
+    <Fragment>
+      <ResponsiveTable
+        data={responsiveData}
+        onOpenChange={setResponsiveState}
+        open={responsiveState}
+      />
+      <InfiniteScroll
+        className="flex-1 h-full overflow-auto scrollbar-hide"
+        dataLength={trades.length}
+        next={() => {
+          onFetchNextPage();
+        }}
+        hasMore={Boolean(hasNextPage)}
+        height={isResponsive ? "384px" : maxHeight}
+        loader={<Spinner.Keyboard className="h-6 mx-auto my-2" />}
+      >
+        <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
+          <PolkadexTable.Header className="sticky top-0 bg-level-0 z-[2]">
             {table.getHeaderGroups().map((headerGroup) => (
               <PolkadexTable.Row key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map((header, i) => {
+                  const getSorted = header.column.getIsSorted();
+                  const isActionTab = actionKeys.includes(header.id);
+                  const handleSort = (): void => {
+                    const isDesc = getSorted === "desc";
+                    header.column.toggleSorting(!isDesc);
+                  };
+                  if (responsiveView && responsiveKeys.includes(header.id))
+                    return null;
                   return (
                     <PolkadexTable.Head
-                      className={classNames(
-                        "px-2 text-primary font-semibold text-xs"
-                      )}
                       key={header.id}
+                      className={classNames(
+                        "text-xs",
+                        !isActionTab && "cursor-pointer"
+                      )}
+                      style={{ width: widthKeys[i] }}
+                      {...(isActionTab && { onClick: handleSort })}
                     >
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
                       )}
+                      {isActionTab && <PolkadexTable.Icon />}
                     </PolkadexTable.Head>
                   );
                 })}
@@ -91,13 +117,29 @@ export const TradeHistoryTable = ({
               return (
                 <PolkadexTable.Row
                   key={row.id}
-                  className={classNames("hover:bg-level-1 cursor-pointer")}
+                  className={classNames("hover:bg-level-1")}
                 >
                   {row.getVisibleCells().map((cell) => {
+                    if (
+                      responsiveView &&
+                      responsiveKeys.includes(cell.column.id)
+                    )
+                      return null;
+
+                    const responsiveProps = responsiveView
+                      ? {
+                          className: "cursor-pointer",
+                          onClick: () => {
+                            setResponsiveState(true);
+                            setResponsiveData(row.original);
+                          },
+                        }
+                      : {};
                     return (
                       <PolkadexTable.Cell
                         key={cell.id}
-                        className={classNames("px-2 py-4 text-xs")}
+                        className={classNames("text-xs")}
+                        {...responsiveProps}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
@@ -111,15 +153,15 @@ export const TradeHistoryTable = ({
             })}
           </PolkadexTable.Body>
         </PolkadexTable>
-      )}
-      {!isLoading && error && (
-        <div className="flex flex-col items-center justify-center gap-2">
-          <p>{error}</p>
-          <Button.Solid onClick={() => onFetchNextPage()} size="sm">
-            Try again
-          </Button.Solid>
-        </div>
-      )}
-    </InfiniteScroll>
+        {!isLoading && error && (
+          <div className="flex flex-col items-center justify-center gap-2">
+            <p>{error}</p>
+            <Button.Solid onClick={() => onFetchNextPage()} size="sm">
+              Try again
+            </Button.Solid>
+          </div>
+        )}
+      </InfiniteScroll>
+    </Fragment>
   );
 };

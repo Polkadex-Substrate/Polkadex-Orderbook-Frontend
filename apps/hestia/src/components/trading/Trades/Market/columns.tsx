@@ -1,8 +1,8 @@
-import { StarIcon } from "@heroicons/react/24/solid";
 import { createColumnHelper } from "@tanstack/react-table";
 import classNames from "classnames";
 import { Decimal, InitialMarkets, isNegative } from "@orderbook/core/index";
-import { Typography, Token } from "@polkadex/ux";
+import { Typography, Token, tokenAppearance } from "@polkadex/ux";
+import { RiStarLine } from "@remixicon/react";
 
 const columnHelper = createColumnHelper<InitialMarkets>();
 
@@ -25,7 +25,7 @@ export const columns = ({
               onChangeFavourite(id);
             }}
           >
-            <StarIcon
+            <RiStarLine
               className={classNames(
                 isFavourite ? "text-primary-base" : "text-primary-disabled",
                 "w-3 h-3"
@@ -36,7 +36,8 @@ export const columns = ({
             <Token
               size="xs"
               name={baseAsset.ticker as string}
-              className="rounded-full bg-level-2"
+              appearance={baseAsset.ticker as keyof typeof tokenAppearance}
+              className="rounded-full border border-secondary"
             />
             <Typography.Text size="xs" className="uppercase">
               {baseAsset.ticker}/
@@ -49,7 +50,7 @@ export const columns = ({
       );
     },
     header: () => (
-      <Typography.Text size="xs" className="ml-1">
+      <Typography.Text size="xs" appearance="primary">
         Market
       </Typography.Text>
     ),
@@ -60,7 +61,11 @@ export const columns = ({
     cell: (e) => {
       return <Typography.Text size="xs">{e.getValue().last}</Typography.Text>;
     },
-    header: () => <Typography.Text size="xs">Price</Typography.Text>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Price
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row, {
@@ -79,7 +84,11 @@ export const columns = ({
         </Typography.Text>
       );
     },
-    header: () => <Typography.Text size="xs">Change</Typography.Text>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Change
+      </Typography.Text>
+    ),
     footer: (e) => e.column.id,
   }),
 ];

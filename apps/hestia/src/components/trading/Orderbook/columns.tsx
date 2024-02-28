@@ -50,7 +50,9 @@ export const columns = ({
       );
     },
     header: () => (
-      <Typography.Text size="xs">Price({quoteTicker})</Typography.Text>
+      <Typography.Text size="xs" appearance="primary">
+        Price({quoteTicker})
+      </Typography.Text>
     ),
     footer: (e) => e.column.id,
   }),
@@ -74,7 +76,9 @@ export const columns = ({
       );
     },
     header: () => (
-      <Typography.Text size="xs">Amount({baseTicker})</Typography.Text>
+      <Typography.Text size="xs" appearance="primary">
+        Amount({baseTicker})
+      </Typography.Text>
     ),
     footer: (e) => e.column.id,
   }),
@@ -98,7 +102,9 @@ export const columns = ({
       );
     },
     header: () => (
-      <Typography.Text size="xs">Total({quoteTicker})</Typography.Text>
+      <Typography.Text size="xs" appearance="primary">
+        Total({quoteTicker})
+      </Typography.Text>
     ),
     footer: (e) => e.column.id,
   }),

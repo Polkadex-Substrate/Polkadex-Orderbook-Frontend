@@ -1,4 +1,3 @@
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import {
   Typography,
   Icon,
@@ -9,6 +8,7 @@ import {
 import { TradeAccount } from "@orderbook/core/providers/types";
 import classNames from "classnames";
 import { KeyringPair } from "@polkadot/keyring/types";
+import { RiArrowRightSLine } from "@remixicon/react";
 
 import { GenericHorizontalCard, TradingAccountCard } from "../ReadyToUse";
 
@@ -130,7 +130,7 @@ export const ExistingUser = ({
                   <Typography.Text className="text-primary-base">
                     Read More
                   </Typography.Text>
-                  <ChevronRightIcon className="w-3 h-3" />
+                  <RiArrowRightSLine className="w-3 h-3" />
                 </button>
               </div>
             </>

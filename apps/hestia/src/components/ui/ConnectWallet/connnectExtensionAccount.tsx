@@ -20,7 +20,7 @@ export const ConnectExtensionAccount = ({
   onConnectCallback: () => void;
 }) => {
   return (
-    <Interaction>
+    <Interaction className="bg-backgroundBase rounded-sm">
       <Interaction.Title onClose={onClose} size="lg">
         Connect wallet
       </Interaction.Title>

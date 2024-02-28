@@ -18,7 +18,7 @@ const Single = ({
     green: "text-success-base",
   };
   return (
-    <div className="flex flex-col gap-1 place-content-center flex-1">
+    <div className="flex flex-col gap-1 place-content-center flex-1 py-2">
       <Skeleton loading={!!loading} className="min-h-[1rem]">
         <Typography.Text
           size="sm"
@@ -58,8 +58,13 @@ const WithDropdown = ({
   loading?: boolean;
 }>) => {
   return (
-    <div className="flex flex-1 flex-col gap-0.5 place-content-center">
-      <Skeleton loading={!!loading} className="min-h-[1rem]">
+    <div
+      className={classNames(
+        "flex flex-1 flex-col place-content-center",
+        loading && "gap-1"
+      )}
+    >
+      <Skeleton loading={!!loading} className="max-h-4">
         <Typography.Text bold className="whitespace-nowrap">
           {children}
         </Typography.Text>
@@ -70,9 +75,9 @@ const WithDropdown = ({
         </Typography.Text>
         <Skeleton loading={!!loading}>
           <Dropdown>
-            <Dropdown.Trigger className="bg-level-4 px-1 py-0.5 rounded gap-1">
+            <Dropdown.Trigger className="bg-level-2 px-1 py-0.5 rounded gap-0.5">
               <Typography.Text size="xs">{selected}</Typography.Text>
-              <Dropdown.Icon />
+              <Dropdown.Icon className="w-3 h-3" />
             </Dropdown.Trigger>
             <Dropdown.Content>
               {items.map((value, i) => (
