@@ -36,14 +36,12 @@ export const ResponsiveTable = ({
           <Copy value={tradeId}>
             <div className="flex items-center gap-1">
               <RiFileCopyLine className="w-4 h-4 text-actionInput" />
-              <Typography.Text size="xs">
-                {truncateString(tradeId, 6)}
-              </Typography.Text>
+              <Typography.Text>{truncateString(tradeId, 6)}</Typography.Text>
             </div>
           </Copy>
         </ResponsiveCard>
         <ResponsiveCard label="Date">
-          <Typography.Text size="xs">
+          <Typography.Text>
             {intlFormat(
               new Date(timestamp),
               {
@@ -58,13 +56,10 @@ export const ResponsiveTable = ({
           </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Pair">
-          <Typography.Text bold size="xs">
-            {market.name}
-          </Typography.Text>
+          <Typography.Text bold>{market.name}</Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Type">
           <Typography.Text
-            size="xs"
             bold
             appearance={isSell ? "danger" : "success"}
             className="uppercase"
@@ -73,12 +68,12 @@ export const ResponsiveTable = ({
           </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Price">
-          <Typography.Text size="xs">
+          <Typography.Text>
             {price} {market.quoteAsset.ticker}
           </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Amount">
-          <Typography.Text size="xs">
+          <Typography.Text>
             {qty} {market.baseAsset.ticker}
           </Typography.Text>
         </ResponsiveCard>
