@@ -115,10 +115,11 @@ export const OpenOrdersTable = ({
         className="flex-1 h-full overflow-auto scrollbar-hide"
         style={{
           maxHeight: isResponsive ? "384px" : maxHeight,
+          minHeight: isResponsive ? "384px" : "auto",
         }}
       >
         <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
-          <PolkadexTable.Header className="sticky top-0 bg-level-0 z-[2]">
+          <PolkadexTable.Header className="sticky top-0 bg-level-0">
             {table.getHeaderGroups().map((headerGroup) => (
               <PolkadexTable.Row key={headerGroup.id}>
                 {headerGroup.headers.map((header, i) => {

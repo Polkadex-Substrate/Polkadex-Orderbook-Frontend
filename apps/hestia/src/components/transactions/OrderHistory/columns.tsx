@@ -116,7 +116,9 @@ export const columns = () => [
       const isMarket = e.getValue().type === "MARKET";
       return (
         <Typography.Text size="xs">
-          {isMarket ? "---" : e.getValue().price}
+          {isMarket
+            ? "---"
+            : `${e.getValue().price} ${e.getValue().market.quoteAsset.ticker}`}
         </Typography.Text>
       );
     },
@@ -131,7 +133,9 @@ export const columns = () => [
     id: "amount",
     cell: (e) => {
       return (
-        <Typography.Text size="xs">{e.getValue().quantity}</Typography.Text>
+        <Typography.Text size="xs">
+          {e.getValue().quantity} {e.getValue().market.baseAsset.ticker}
+        </Typography.Text>
       );
     },
     header: () => (
@@ -146,7 +150,7 @@ export const columns = () => [
     cell: (e) => {
       return (
         <Typography.Text size="xs">
-          {e.getValue().filledQuantity}
+          {e.getValue().filledQuantity} {e.getValue().market.baseAsset.ticker}
         </Typography.Text>
       );
     },
@@ -160,11 +164,13 @@ export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "averageFilledPrice",
     cell: (e) => (
-      <Typography.Text size="xs">{e.getValue().averagePrice}</Typography.Text>
+      <Typography.Text size="xs">
+        {e.getValue().averagePrice} {e.getValue().market.quoteAsset.ticker}
+      </Typography.Text>
     ),
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Avg. Filled Price
+        Avg Price
       </Typography.Text>
     ),
     footer: (e) => e.column.id,

@@ -82,7 +82,7 @@ export const OrderHistoryTable = ({
         loader={<Spinner.Keyboard className="h-6 mx-auto my-2" />}
       >
         <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
-          <PolkadexTable.Header className="sticky top-0 bg-level-0 z-[2]">
+          <PolkadexTable.Header className="sticky top-0 bg-level-0">
             {table.getHeaderGroups().map((headerGroup) => (
               <PolkadexTable.Row key={headerGroup.id}>
                 {headerGroup.headers.map((header, i) => {

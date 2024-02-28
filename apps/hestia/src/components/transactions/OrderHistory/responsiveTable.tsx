@@ -35,7 +35,12 @@ export const ResponsiveTable = ({
     side === "Bid" ? market.baseAsset.ticker : market.quoteAsset.ticker;
   const isMarket = type === "MARKET";
   return (
-    <Drawer closeOnClickOutside open={open} onOpenChange={onOpenChange}>
+    <Drawer
+      closeOnClickOutside
+      open={open}
+      onOpenChange={onOpenChange}
+      shouldScaleBackground={false}
+    >
       <Drawer.Title className="px-4">
         <Typography.Heading size="base">
           Order ID # {truncateString(orderId, 6)}
@@ -84,17 +89,23 @@ export const ResponsiveTable = ({
         </ResponsiveCard>
         <ResponsiveCard label="Price">
           <Typography.Text size="xs">
-            {isMarket ? "---" : price}
+            {isMarket ? "---" : `${price} ${market.quoteAsset.ticker}`}
           </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Amount">
-          <Typography.Text size="xs">{quantity}</Typography.Text>
+          <Typography.Text size="xs">
+            {quantity} {market.baseAsset.ticker}
+          </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Filled">
-          <Typography.Text size="xs">{filledQuantity}</Typography.Text>
+          <Typography.Text size="xs">
+            {filledQuantity} {market.baseAsset.ticker}
+          </Typography.Text>
         </ResponsiveCard>
-        <ResponsiveCard label="Average Filled Price">
-          <Typography.Text size="xs">{averagePrice}</Typography.Text>
+        <ResponsiveCard label="Average Price">
+          <Typography.Text size="xs">
+            {averagePrice} {market.quoteAsset.ticker}
+          </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Status">
           <Typography.Text size="xs">{status}</Typography.Text>

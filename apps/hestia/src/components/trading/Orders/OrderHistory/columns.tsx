@@ -84,7 +84,9 @@ export const columns = [
       const isMarket = e.getValue().type === "MARKET";
       return (
         <Typography.Text size="xs">
-          {isMarket ? "---" : e.getValue().price}
+          {isMarket
+            ? "---"
+            : `${e.getValue().price} ${e.getValue().market.quoteAsset.ticker}`}
         </Typography.Text>
       );
     },
@@ -98,7 +100,9 @@ export const columns = [
   orderHistoryColumnHelper.accessor((row) => row, {
     id: "amount",
     cell: (e) => (
-      <Typography.Text size="xs">{e.getValue().quantity}</Typography.Text>
+      <Typography.Text size="xs">
+        {e.getValue().quantity} {e.getValue().market.baseAsset.ticker}
+      </Typography.Text>
     ),
     header: () => (
       <Typography.Text size="xs" appearance="primary">
@@ -121,7 +125,7 @@ export const columns = [
           <HoverCard.Trigger>
             <FilledCard width={width}>
               {e.getValue().filledQuantity}{" "}
-              {e.getValue().market.quoteAsset.ticker}
+              {e.getValue().market.baseAsset.ticker}
             </FilledCard>
           </HoverCard.Trigger>
           <HoverCard.Content
@@ -129,10 +133,11 @@ export const columns = [
             sideOffset={2}
             side="top"
           >
-            <Typography.Text appearance="primary">
-              Avg. Filled Price:
+            <Typography.Text appearance="primary">Avg Price:</Typography.Text>
+            <Typography.Text>
+              {e.getValue().averagePrice}{" "}
+              {e.getValue().market.quoteAsset.ticker}
             </Typography.Text>
-            <Typography.Text>{e.getValue().averagePrice}</Typography.Text>
           </HoverCard.Content>
         </HoverCard>
       );
