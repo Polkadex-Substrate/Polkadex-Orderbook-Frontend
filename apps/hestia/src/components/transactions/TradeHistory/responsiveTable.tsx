@@ -20,7 +20,12 @@ export const ResponsiveTable = ({
   const isSell = side === "Ask";
   const title = isSell ? "Sell" : "Buy";
   return (
-    <Drawer closeOnClickOutside open={open} onOpenChange={onOpenChange}>
+    <Drawer
+      closeOnClickOutside
+      open={open}
+      onOpenChange={onOpenChange}
+      shouldScaleBackground={false}
+    >
       <Drawer.Title className="px-4">
         <Typography.Heading size="base">
           Trade ID # {truncateString(tradeId, 6)}
@@ -68,10 +73,14 @@ export const ResponsiveTable = ({
           </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Price">
-          <Typography.Text size="xs">{price}</Typography.Text>
+          <Typography.Text size="xs">
+            {price} {market.quoteAsset.ticker}
+          </Typography.Text>
         </ResponsiveCard>
         <ResponsiveCard label="Amount">
-          <Typography.Text size="xs">{qty}</Typography.Text>
+          <Typography.Text size="xs">
+            {qty} {market.baseAsset.ticker}
+          </Typography.Text>
         </ResponsiveCard>
       </Drawer.Content>
     </Drawer>
