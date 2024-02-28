@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import { color, variant } from "styled-system";
-import { bgStyleVariants, Direction } from "@orderbook/core/helpers";
+import { Direction } from "@orderbook/core/helpers";
 
 import * as T from "./types";
 
@@ -88,7 +88,6 @@ export const Container: any = styled("div")<T.ModalStyleProps>(
       },
     },
   }),
-  bgStyleVariants,
   color
 );
 

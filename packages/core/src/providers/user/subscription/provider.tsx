@@ -17,7 +17,7 @@ import {
 } from "@orderbook/core/utils/orderbookService";
 import { Bar } from "@orderbook/core/utils/charting_library";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@orderbook/core/constants";
+import { DEFAULT_BATCH_LIMIT, QUERY_KEYS } from "@orderbook/core/constants";
 import { useOrderbookService } from "@orderbook/core/providers/public/orderbookServiceProvider/useOrderbookService";
 import {
   decimalPlaces,
@@ -32,7 +32,7 @@ import {
 import {
   removeOrderFromList,
   replaceOrPushOrder,
-} from "@orderbook/core/utils/orderbookService/appsync_v1/helpers";
+} from "@orderbook/core/utils/orderbookService/appsync/helpers";
 import { useOrderbook } from "@orderbook/core/hooks";
 
 import { useProfile } from "../profile";
@@ -69,7 +69,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         // Update OpenOrders Realtime
         queryClient.setQueryData(
           QUERY_KEYS.openOrders(tradeAddress),
-          (oldOpenOrders: Order[]) => {
+          (oldOpenOrders?: Order[]) => {
             const prevOpenOrders = [...(oldOpenOrders || [])];
 
             let updatedOpenOrders: Order[] = [];
@@ -85,7 +85,12 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 
         // Update OrderHistory Realtime
         queryClient.setQueryData(
-          QUERY_KEYS.orderHistory(dateFrom, dateTo, tradeAddress),
+          QUERY_KEYS.orderHistory(
+            dateFrom,
+            dateTo,
+            tradeAddress,
+            DEFAULT_BATCH_LIMIT
+          ),
           (
             oldOrderHistory: InfiniteData<MaybePaginated<Order[]>> | undefined
           ) => {
@@ -122,7 +127,9 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
           }
         );
       } catch (error) {
-        onHandleError(`Order updates channel ${error?.message ?? error}`);
+        onHandleError(
+          `Order updates channel ${(error as Error)?.message ?? error}`
+        );
       }
     },
     [dateFrom, dateTo, onHandleError, queryClient, tradeAddress]
@@ -132,7 +139,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
     (trade: PublicTrade) => {
       if (market) {
         queryClient.setQueryData(QUERY_KEYS.recentTrades(market), (oldData) => {
-          const oldRecentTrades = oldData as PublicTrade[];
+          const oldRecentTrades = oldData ? (oldData as PublicTrade[]) : [];
           return [trade, ...oldRecentTrades];
         });
       }
@@ -181,7 +188,12 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
     (payload: Trade) => {
       try {
         queryClient.setQueryData(
-          QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
+          QUERY_KEYS.tradeHistory(
+            dateFrom,
+            dateTo,
+            mainAddress,
+            DEFAULT_BATCH_LIMIT
+          ),
           (
             oldTradeHistory: InfiniteData<MaybePaginated<Trade[]>> | undefined
           ) => {
@@ -210,10 +222,12 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
           }
         );
       } catch (error) {
-        onHandleError(`User trades channel error: ${error?.message ?? error}`);
+        onHandleError(
+          `User trades channel error: ${(error as Error)?.message ?? error}`
+        );
       }
     },
-    [dateFrom, dateTo, onHandleError, queryClient, tradeAddress]
+    [dateFrom, dateTo, onHandleError, queryClient, mainAddress]
   );
 
   const onTransactionsUpdate = useCallback(
@@ -221,7 +235,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
       try {
         if (payload) {
           queryClient.setQueryData(
-            QUERY_KEYS.transactions(mainAddress),
+            QUERY_KEYS.transactions(mainAddress, payload.txType),
             (oldData: MaybePaginated<Transaction[]> | undefined) => {
               const transactions = _.cloneDeep(oldData?.data as Transaction[]);
               const index = transactions.findIndex(
@@ -245,8 +259,8 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 
   const onTickerUpdates = useCallback(
     (ticker: Ticker) => {
-      queryClient.setQueryData(QUERY_KEYS.tickers(), (prevData: Ticker[]) => {
-        const newTickers = [...prevData];
+      queryClient.setQueryData(QUERY_KEYS.tickers(), (prevData?: Ticker[]) => {
+        const newTickers = [...(prevData || [])];
         const idx = newTickers?.findIndex((x) => x.market === ticker.market);
 
         const priceChange = Number(ticker.close) - Number(ticker.open);
@@ -307,8 +321,8 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         // Update trading account balance
         queryClient.setQueryData(
           QUERY_KEYS.tradingBalances(mainAddress),
-          (oldData): Balance[] => {
-            const prevData = [...(oldData as Balance[])];
+          (oldData?: Balance[]): Balance[] => {
+            const prevData = [...((oldData || []) as Balance[])];
             const old = prevData.find(
               (i) => i.asset.id.toString() === updateBalance.assetId.toString()
             );
@@ -340,7 +354,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         // Update chain balance
         queryClient.setQueryData(
           QUERY_KEYS.onChainBalances(mainAddress),
-          (prevData) => {
+          (prevData?: Map<string, number>) => {
             const oldData = new Map(prevData as Map<string, number>);
             oldData.set(updateBalance.assetId, Number(onChainBalance));
             return oldData;

@@ -2,15 +2,15 @@ import * as C from "./constants";
 import * as T from "./types";
 
 export interface ToggleChartRebuildAction {
-  type: string;
+  type: typeof C.TOGGLE_CHART_REBUILD;
 }
 
 export interface ToggleMarketSelectorAction {
-  type: string;
+  type: typeof C.TOGGLE_MARKET_SELECTOR;
 }
 
 export interface ToggleOpenOrdersPairsSwitcher {
-  type: string;
+  type: typeof C.TOGGLE_ORDERS_PAIRS_SWITCHER;
   payload: boolean;
 }
 

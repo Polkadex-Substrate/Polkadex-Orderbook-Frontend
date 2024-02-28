@@ -30,6 +30,7 @@ export type SettingProviderProps = PropsWithChildren<{
 type ToastActions = {
   onError: (value: string) => void;
   onSuccess: (value: string) => void;
+  onInfo?: (value: string) => void;
 };
 
 export type SettingContextProps = SettingState & {

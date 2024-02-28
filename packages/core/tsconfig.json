@@ -3,11 +3,7 @@
   "compilerOptions": {
     "lib": ["DOM"],
     "types": [
-      "gapi",
       "jest",
-      "gapi.client.drive-v3",
-      "google.accounts",
-      "bignumber"
     ],
     "paths": {
       "@orderbook/core/*": ["./src/*"]

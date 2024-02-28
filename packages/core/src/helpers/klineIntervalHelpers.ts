@@ -30,14 +30,22 @@ export const getResolutionInMilliSeconds = (resolution: string): number => {
 };
 
 export const getAbsoluteResolution = (currentResolution: string): string => {
-  const getCorrectResolutions = {
-    "1": "1m",
-    "5": "5m",
-    "15": "15m",
-    "30": "30m",
-    "60": "1h",
-    "120": "2h",
-    "360": "6h",
-  };
-  return getCorrectResolutions[currentResolution] || currentResolution;
+  switch (currentResolution) {
+    case "1":
+      return "1m";
+    case "5":
+      return "5m";
+    case "15":
+      return "15m";
+    case "30":
+      return "30m";
+    case "60":
+      return "1h";
+    case "120":
+      return "2h";
+    case "360":
+      return "6h";
+    default:
+      return currentResolution;
+  }
 };

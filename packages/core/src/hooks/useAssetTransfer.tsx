@@ -24,7 +24,6 @@ export const useAssetTransfer = (onRefetch: () => Promise<void>) => {
       amount,
       account,
     }: AssetTransferParams) => {
-      // TODO: Fix types or Handle Error...
       const amountFormatted = new BigNumber(amount)
         .multipliedBy(UNIT_BN)
         .toString();

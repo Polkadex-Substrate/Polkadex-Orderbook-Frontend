@@ -1,17 +1,17 @@
-import { MutableRefObject, useCallback, useEffect } from "react";
+import { RefObject, useCallback, useEffect, useState } from "react";
 import {
   mapValues,
   accumulateVolume,
   calcMaxVolume,
 } from "@orderbook/core/helpers";
-import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 export type Props = {
   asks: string[][];
   bids: string[][];
   isSell?: boolean;
   orders: string[][];
-  contentRef?: MutableRefObject<HTMLDivElement> | null;
+  contentRef?: RefObject<HTMLDivElement> | null;
 };
 
 export function useOrderbookTable({
@@ -21,7 +21,13 @@ export function useOrderbookTable({
   asks,
   bids,
 }: Props) {
-  const { currentPrice, onSetCurrentPrice, onSetCurrentAmount } = useOrders();
+  const [mount, setMount] = useState(false);
+  const {
+    price: currentPrice,
+    onSetPrice: onSetCurrentPrice,
+    onSetAmount: onSetCurrentAmount,
+    onSetTotal: onSetCurrentTotal,
+  } = useProfile();
 
   /**
    * @description -Get Volume of the orders
@@ -41,7 +47,7 @@ export function useOrderbookTable({
     (index: number, side: "asks" | "bids"): void => {
       const arr = side === "asks" ? asks : bids;
       const priceToSet = arr[index] && Number(arr[index][0]);
-      if (currentPrice !== priceToSet) onSetCurrentPrice(priceToSet);
+      if (+currentPrice !== priceToSet) onSetCurrentPrice(String(priceToSet));
     },
     [asks, bids, currentPrice, onSetCurrentPrice]
   );
@@ -65,9 +71,9 @@ export function useOrderbookTable({
   // Change market amount on click on total/sum field
   const changeMarketAmountSumClick = useCallback(
     (index: number) => {
-      onSetCurrentAmount(cumulativeVolume[index].toString());
+      onSetCurrentTotal(cumulativeVolume[index].toString());
     },
-    [onSetCurrentAmount, cumulativeVolume]
+    [onSetCurrentTotal, cumulativeVolume]
   );
 
   /**
@@ -79,10 +85,11 @@ export function useOrderbookTable({
 
   const volumeData = mapValues(maxVolume, cumulativeVolume);
   useEffect(() => {
-    // Make sure the scroll is always down
-    if (isSell && !!contentRef?.current)
+    if (!mount && isSell && !!contentRef?.current) {
       contentRef.current.scrollTop = contentRef.current.scrollHeight;
-  }, [isSell, contentRef, orders]);
+      setMount(true);
+    }
+  }, [isSell, contentRef, orders, mount]);
 
   return {
     volumeData,

@@ -1,3 +1,5 @@
+import { SettingActions } from "@orderbook/core/providers/public/settings/actions";
+
 import * as T from "./types";
 import * as C from "./constants";
 
@@ -34,7 +36,10 @@ export const initialState: T.SettingState = {
   connectTrading: false,
 };
 
-export const settingReducer = (state: T.SettingState, action) => {
+export const settingReducer = (
+  state: T.SettingState,
+  action: SettingActions
+) => {
   switch (action.type) {
     case C.SETTINGS_CHANGE_THEME: {
       isBrowser &&

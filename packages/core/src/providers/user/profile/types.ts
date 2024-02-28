@@ -7,6 +7,9 @@ export interface UserAddressTuple {
 }
 
 export type ProfileContextState = {
+  price: string;
+  amount: string;
+  total: string;
   selectedAddresses: UserAddressTuple;
   allAccounts: UserAddressTuple[];
   favoriteMarkets: string[];
@@ -16,6 +19,9 @@ export type ProfileContextState = {
 };
 
 export type ProfileContextInterface = ProfileContextState & {
+  onSetPrice: (payload: string) => void;
+  onSetAmount: (payload: string) => void;
+  onSetTotal: (payload: string) => void;
   onUserSelectTradingAddress: (value: {
     tradeAddress: string;
     isNew?: true;

@@ -16,12 +16,18 @@ export const Context = createContext<ProfileContextInterface>({
   onUserResetTradingAddress: () => {},
   onResetSelectedExtension: () => {},
   setSelectedExtension: () => {},
+  onSetPrice: () => {},
+  onSetAmount: () => {},
+  onSetTotal: () => {},
   allAccounts: [],
   avatar: "",
   favoriteMarkets: [],
   isBannerShown: false,
   selectedAddresses: { mainAddress: "", tradeAddress: "" },
   selectedExtension: null,
+  price: "",
+  amount: "",
+  total: "",
 });
 
 export const Provider = ({ value, children }: ProfileProviderProps) => {

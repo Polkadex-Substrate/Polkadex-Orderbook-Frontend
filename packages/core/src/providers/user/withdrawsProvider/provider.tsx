@@ -12,6 +12,7 @@ import {
   sendQueryToAppSync,
   signPayload,
   getFundingAccountDetail,
+  SignatureEnumSr25519,
 } from "@orderbook/core/helpers";
 import { useFunds } from "@orderbook/core/hooks";
 import {
@@ -40,7 +41,10 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     is_success: boolean;
     body: string;
   };
-  const onFetchWithdraws = async ({ asset, amount }) => {
+  const onFetchWithdraws = async ({
+    asset,
+    amount,
+  }: A.WithdrawsFetch["payload"]) => {
     dispatch(A.withdrawsFetch({ asset, amount }));
     try {
       const keyringPair = wallet.getPair(tradeAddress);
@@ -77,12 +81,16 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
         });
       }
     } catch (error) {
+      const errorText = (error as Error).message || (error as string);
       dispatch(A.withdrawsData());
-      settingsState.onHandleError(error?.message ?? error);
+      settingsState.onHandleError(errorText);
     }
   };
 
-  const executeWithdraw = async (withdrawPayload, address) => {
+  const executeWithdraw = async (
+    withdrawPayload: [string, string, object, SignatureEnumSr25519],
+    address: string
+  ) => {
     const payload = JSON.stringify({ Withdraw: withdrawPayload });
     return await sendQueryToAppSync({
       query: mutations.withdraw,
@@ -144,8 +152,8 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
       }
     } catch (error) {
       dispatch(A.withdrawClaimCancel(sid));
-      settingsState.onHandleError(error?.message ?? error);
-      dispatch(A.withdrawsError(error));
+      settingsState.onHandleError((error as Error)?.message ?? error);
+      dispatch(A.withdrawsError((error as Error)?.message ?? error));
     } finally {
       for (const assetId of assetIds) {
         await onChangeChainBalance(assetId);

@@ -6,10 +6,7 @@ import {
   getAddressFromMnemonic,
   registerMainAccount,
 } from "@orderbook/core/helpers";
-import {
-  getProxiesLinkedToMain,
-  useProfile,
-} from "@orderbook/core/providers/user/profile";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
@@ -51,8 +48,8 @@ export function useAddProxyAccount({
       appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
         queryClient.setQueryData(
           QUERY_KEYS.singleProxyAccounts(main),
-          (proxies: string[]) => {
-            return [...proxies, pair.address];
+          (proxies?: string[]): string[] => {
+            return proxies ? [...proxies, pair.address] : [pair.address];
           }
         );
       });
@@ -60,7 +57,7 @@ export function useAddProxyAccount({
       const proxy = getAddressFromMnemonic(mnemonic);
 
       const registeredProxies =
-        (await getProxiesLinkedToMain(main))?.proxies || [];
+        await appsyncOrderbookService.query.getTradingAddresses(main);
 
       if (registeredProxies.length === 0) {
         await registerMainAccount(api, proxy, signer, main);
@@ -68,14 +65,14 @@ export function useAddProxyAccount({
         await addProxyToAccount(api, proxy, signer, main);
       }
 
-      const { pair } = wallet.add(mnemonic, name, password);
+      const { pair } = wallet.addFromMnemonic(mnemonic, name, password);
       await onUserSelectTradingAddress({
         tradeAddress: pair.address,
         isNew: true,
       });
       onSetTempMnemonic(mnemonic);
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       onError?.(error);
       console.log(error);
     },

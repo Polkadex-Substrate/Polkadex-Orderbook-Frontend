@@ -3,8 +3,9 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 
 import { getAddressFromMnemonic } from "../helpers";
 import { useNativeApi } from "../providers/public/nativeApi";
-import { getProxiesLinkedToMain, useProfile } from "../providers/user/profile";
+import { useProfile } from "../providers/user/profile";
 import { QUERY_KEYS } from "../constants";
+import { appsyncOrderbookService } from "../utils/orderbookService";
 
 export const useTradingAccountFee = () => {
   const { api, connected } = useNativeApi();
@@ -22,7 +23,7 @@ export const useTradingAccountFee = () => {
       if (!signer) throw new Error("signer is not defined");
 
       const registeredProxies =
-        (await getProxiesLinkedToMain(mainAddress))?.proxies || [];
+        await appsyncOrderbookService.query.getTradingAddresses(mainAddress);
 
       const mnemonic = mnemonicGenerate();
       const proxyAddress = getAddressFromMnemonic(mnemonic);

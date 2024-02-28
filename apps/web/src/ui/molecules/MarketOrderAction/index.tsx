@@ -8,12 +8,12 @@ import {
   SliderPercentage,
   Skeleton,
 } from "@polkadex/orderbook-ui/molecules";
-import { usePlaceOrder } from "@orderbook/core/hooks";
 import { Decimal } from "@polkadex/orderbook-ui/atoms";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import * as S from "./styles";
 
+import { usePlaceOrder } from "@/hooks";
 import { normalizeValue } from "@/utils/normalize";
 
 type FormValues = {

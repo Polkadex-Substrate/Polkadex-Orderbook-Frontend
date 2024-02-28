@@ -1,28 +1,19 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import { getCurrentMarket, sortOrdersDescendingTime } from "../helpers";
-import { Ifilters } from "../providers/types";
+import { sortOrdersDescendingTime } from "../helpers";
 import { useSettingsProvider } from "../providers/public/settings";
 import { useProfile } from "../providers/user/profile";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { QUERY_KEYS } from "../constants";
+import { Ifilters } from "../providers/types";
 
-import { useMarkets } from "./useMarkets";
-
-export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
+export const useOpenOrders = (filters?: Ifilters) => {
   const { onHandleError } = useSettingsProvider();
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
-
-  const { list: markets } = useMarkets();
-  const currentMarket = getCurrentMarket(markets, defaultMarket);
-
-  const userLoggedIn = tradeAddress !== "";
-  const shouldFetchOpenOrders = Boolean(
-    userLoggedIn && currentMarket && tradeAddress
-  );
+  const shouldFetchOpenOrders = Boolean(tradeAddress?.length > 0);
 
   const {
     data: openOrders,
@@ -44,18 +35,8 @@ export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
     },
   });
 
-  const openOrdersSorted = sortOrdersDescendingTime(openOrders);
-  const [filteredOpenOrders, setFilteredOpenOrders] =
-    useState(openOrdersSorted);
-
-  useEffect(() => {
-    let openOrdersList = openOrdersSorted;
-
-    if (filters?.hiddenPairs) {
-      openOrdersList = openOrdersList.filter((order) => {
-        return order.market.id === currentMarket?.id;
-      });
-    }
+  const filteredOpenOrders = useMemo(() => {
+    let openOrdersList = sortOrdersDescendingTime(openOrders);
 
     if (filters?.onlyBuy && filters.onlySell) {
       // Nothing to do
@@ -69,17 +50,11 @@ export const useOpenOrders = (filters: Ifilters, defaultMarket: string) => {
       );
     }
 
-    setFilteredOpenOrders(openOrdersList);
-  }, [
-    filters?.hiddenPairs,
-    filters?.onlyBuy,
-    filters?.onlySell,
-    openOrdersSorted,
-    currentMarket?.id,
-  ]);
+    return openOrdersList;
+  }, [filters?.onlyBuy, filters?.onlySell, openOrders]);
 
   return {
     openOrders: filteredOpenOrders,
-    isLoading: isLoading || isFetching,
+    isLoading: !shouldFetchOpenOrders || isLoading || isFetching,
   };
 };

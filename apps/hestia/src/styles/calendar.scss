@@ -1,0 +1,113 @@
+.rdrDateRangePickerWrapper {
+  display: flex;
+  border: 1px solid black;
+  box-shadow: #e6007a;
+  @media screen and (max-width: 836px) {
+    flex-direction: column;
+  }
+
+  .rdrCalendarWrapper {
+    color: white;
+  }
+  .rdrDateDisplayWrapper {
+    background: rgb(19 20 25) !important;
+  }
+  .rdrDateDisplayItem {
+    background: black;
+  }
+  .rdrDateDisplayItemActive {
+    border-color: #e6007a;
+  }
+  .rdrDefinedRangesWrapper {
+    border-right-color: rgb(31 34 41);
+    background: black;
+    width: 100%;
+  }
+  .rdrStaticRange {
+    border-bottom-color: rgb(31 34 41);
+    padding: 0;
+    background: black;
+    :hover {
+      background: rgb(19 20 25) !important;
+    }
+  }
+  .rdrDateRangeWrapper {
+    background: black;
+  }
+  .rdrDay span,
+  .rdrDayNumber span {
+    color: white;
+  }
+
+  .rdrDayPassive span {
+    opacity: 0.5;
+  }
+  .rdrDay span,
+  .rdrDayPassive .rdrDayNumber span {
+    font-weight: 500;
+  }
+
+  .rdrStaticRangeLabel {
+    @media screen and (min-width: 1144px) {
+      white-space: nowrap;
+    }
+  }
+  .rdrStaticRange:hover .rdrStaticRangeLabel,
+  .rdrStaticRange:focus .rdrStaticRangeLabel {
+    background: black;
+  }
+
+  .rdrMonthPicker,
+  .rdrYearPicker {
+    background: black;
+    border-radius: 0.5rem;
+    border: 1px solid #e6007a;
+    position: relative;
+
+    .rdrNextPrevButton {
+      color: whitesmoke;
+      background: black;
+      transition: background 0.5s ease-in-out;
+      :hover {
+        background: black;
+      }
+    }
+
+    select {
+      option {
+        background: black;
+      }
+      color: white;
+    }
+
+    .rdrDayToday .rdrDayNumber span::after {
+      border: none;
+      height: 0;
+    }
+
+    .rdrInRange,
+    .rdrStartEdge,
+    .rdrEndEdge {
+      background: #e6007a;
+    }
+
+    .rdrDay {
+      span {
+        border-color: #e6007a;
+      }
+    }
+  }
+
+  .rdrMonthPicker::after,
+  .rdrYearPicker::after {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid white;
+    position: absolute;
+    top: 45%;
+    right: 12px;
+    content: "";
+  }
+}

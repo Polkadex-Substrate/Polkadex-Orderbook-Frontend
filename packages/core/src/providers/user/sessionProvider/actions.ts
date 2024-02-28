@@ -1,5 +1,3 @@
-import { CommonError } from "../../types";
-
 import { SESSION_FETCH, SESSION_DATA, SESSION_ERROR } from "./constants";
 
 export interface UserSessionPayload {
@@ -17,7 +15,7 @@ export interface UserSessionData {
 
 export interface UserSessionError {
   type: typeof SESSION_ERROR;
-  error: CommonError;
+  error: Error;
 }
 
 export type SessionAction =
@@ -30,13 +28,13 @@ export const userSessionFetch = (): UserSessionFetch => ({
 });
 
 export const userSessionData = (
-  payload: UserSessionPayload,
+  payload: UserSessionPayload
 ): UserSessionData => ({
   type: SESSION_DATA,
   payload,
 });
 
-export const userSessionError = (error: CommonError): UserSessionError => ({
+export const userSessionError = (error: Error): UserSessionError => ({
   type: SESSION_ERROR,
   error,
 });

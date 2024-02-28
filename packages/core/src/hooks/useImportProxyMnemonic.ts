@@ -18,9 +18,9 @@ export const useImportProxyAccountMnemonic = (props: MutateHookProps) => {
 
   const { mutateAsync, status, error } = useMutation({
     mutationFn: async ({ mnemonic, name, password }: ImportFromMnemonic) => {
-      if (!isReady) throw new Error("Can't import before initialization");
+      if (!isReady) throw new Error("Can't import before initialization.");
 
-      const { pair } = wallet.add(mnemonic, name, password);
+      const { pair } = wallet.addFromMnemonic(mnemonic, name, password);
 
       const isValidPair = await appsyncOrderbookService.query.getFundingAddress(
         pair.address

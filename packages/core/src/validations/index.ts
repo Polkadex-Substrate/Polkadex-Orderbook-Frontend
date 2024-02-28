@@ -166,9 +166,14 @@ export const typeValidations = Yup.object().shape({
 export const unLockAccountValidations = Yup.object().shape({
   password: Yup.string()
     .required("Required")
-    .matches(/^[0-9]+$/, "Must be only digits")
-    .min(5, "Must be exactly 5 digits")
-    .max(5, "Must be exactly 5 digits"),
+    .test("", "Must be only digits", (value) =>
+      value ? /^[0-9]+$/.test(value.replace(/\s+/g, "")) : false
+    )
+    .test(
+      "",
+      "Must be exactly 5 digits",
+      (value) => value?.replace(/\s+/g, "")?.length === 5
+    ),
 });
 export const createAccountValidations = Yup.object().shape({
   name: Yup.string()
@@ -221,3 +226,86 @@ export const importValiations = () => {
 export const buySellValidation = Yup.object().shape({
   password: Yup.string().matches(/^[0-9]+$/, "Must be only digits"),
 });
+
+type LimitOrderValidations = {
+  isSell?: boolean;
+  minMarketPrice: number;
+  minQuantity: number;
+  maxVolume: number;
+  minVolume: number;
+  availableBalance: number;
+};
+export const limitOrderValidations = ({
+  minMarketPrice,
+  minQuantity,
+  minVolume,
+  maxVolume,
+  availableBalance,
+}: LimitOrderValidations) =>
+  Yup.object().shape({
+    price: Yup.string()
+      .required("Required")
+      .test("Valid number", "Must be a number", (value) =>
+        value ? /^\d+(\.\d+)?$/.test(value) : false
+      )
+      .test(
+        "Min Price",
+        `Minimum price: ${minMarketPrice}`,
+        (value) => Number(value || 0) >= minMarketPrice
+      ),
+    amount: Yup.string()
+      .required("Required")
+      .test("Valid number", "Must be a number", (value) =>
+        value ? /^\d+(\.\d+)?$/.test(value) : false
+      )
+      .test(
+        "Min Quantity",
+        `Minimum amount: ${minQuantity}`,
+        (value) => Number(value || 0) >= minQuantity
+      )
+      .test(
+        "Balance check",
+        `You don't have enough balance`,
+        (value) => +(Number(value) || 0) <= availableBalance
+      ),
+    total: Yup.string()
+      .test("Valid number", "Must be a number", (value) =>
+        value ? /^\d+(\.\d+)?$/.test(value) : false
+      )
+      .test(
+        "Min Volume",
+        `Minimum volume: ${minVolume}`,
+        (value) => Number(value || 0) >= minVolume
+      )
+      .test(
+        "Max Volume",
+        `Maximum volume: ${maxVolume}`,
+        (value) => Number(value || 0) <= maxVolume
+      ),
+  });
+
+type MarketOrderValidations = {
+  minQuantity: number;
+  availableBalance: number;
+};
+
+export const marketOrderValidations = ({
+  minQuantity,
+  availableBalance,
+}: MarketOrderValidations) =>
+  Yup.object().shape({
+    amount: Yup.string()
+      .test("Valid number", "Must be a number", (value) =>
+        value ? /^\d+(\.\d+)?$/.test(value) : false
+      )
+      .test(
+        "Min Quantity",
+        `Minimum amount: ${minQuantity}`,
+        (value) => Number(value || 0) >= minQuantity
+      )
+      .test(
+        "Balance check",
+        `You don't have enough balance`,
+        (value) => +(value || 0) <= availableBalance
+      ),
+  });

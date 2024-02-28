@@ -1,14 +1,12 @@
 import { useRef } from "react";
 import { useTranslation } from "next-i18next";
 import { Button, Icon } from "@polkadex/orderbook-ui/molecules";
-import { useClickOutside } from "@orderbook/core/hooks";
 
 import * as S from "./styles";
 import * as T from "./types";
 
 export const FAQsidebar = ({ closeSidebar, show }: T.Props) => {
   const ref = useRef(null);
-  useClickOutside(ref, closeSidebar);
 
   const { t: translation } = useTranslation("organisms");
   const t = (key: string) => translation(`faqSideBar.${key}`);

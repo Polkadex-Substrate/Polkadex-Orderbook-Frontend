@@ -1,10 +1,7 @@
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useUserAccounts } from "@polkadex/react-providers";
-import {
-  getProxiesLinkedToMain,
-  useProfile,
-} from "@orderbook/core/providers/user/profile";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   removeFromStorage,
@@ -37,7 +34,7 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
       appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
         queryClient.setQueryData(
           QUERY_KEYS.singleProxyAccounts(main),
-          (proxies: string[]) => {
+          (proxies?: string[]) => {
             return proxies?.filter((value) => value !== proxy);
           }
         );
@@ -78,14 +75,16 @@ const isTradingAccountRemovedFromDb = async (
   // TODO: Temp solution, backend issue
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
-      const { proxies }: { proxies: string[] } =
-        await getProxiesLinkedToMain(mainAddress);
+      const proxies =
+        await appsyncOrderbookService.query.getTradingAddresses(mainAddress);
       if (!proxies.includes(tradeAddress)) {
         break;
       }
       throw new Error("Proxy not removed yet from database");
-    } catch (error) {
-      console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
+    } catch (error: unknown) {
+      console.error(
+        `Attempt ${attempt + 1} failed: ${(error as Error).message}`
+      );
     }
     if (attempt < maxAttempts)
       await new Promise((resolve) => setTimeout(resolve, 10000));

@@ -15,19 +15,8 @@ const TradingTemplate = dynamic(
   }
 );
 
-const OrdersProvider = dynamic(
-  () => import("@orderbook/core/providers").then((mod) => mod.OrdersProvider),
-  {
-    ssr: false,
-  }
-);
-
 const Trading = () => {
-  return (
-    <OrdersProvider>
-      <TradingTemplate />
-    </OrdersProvider>
-  );
+  return <TradingTemplate />;
 };
 
 export default Trading;

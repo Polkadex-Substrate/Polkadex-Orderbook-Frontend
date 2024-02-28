@@ -1,10 +1,27 @@
 import { useMutation } from "@tanstack/react-query";
 import { useUserAccounts } from "@polkadex/react-providers";
-import { DecodedFile } from "@orderbook/frontend/src/ui/templates/ConnectWallet/importTradingAccount";
+import {
+  EncryptedJsonEncoding,
+  EncryptedJsonVersion,
+} from "@polkadot/util-crypto/types";
 
 import { useProfile } from "../providers/user/profile";
 
 import { MutateHookProps } from "./types";
+
+export interface DecodedFile {
+  encoded: string;
+  encoding: {
+    content: string[];
+    type: EncryptedJsonEncoding | EncryptedJsonEncoding[];
+    version: EncryptedJsonVersion;
+  };
+  address: string;
+  meta: {
+    name: string;
+    whenCreated: number;
+  };
+}
 
 export type ImportFromFile = {
   file: DecodedFile;
