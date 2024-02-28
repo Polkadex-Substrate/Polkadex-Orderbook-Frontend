@@ -88,7 +88,7 @@ export const OpenOrdersTable = ({
   if (!openOrders.length)
     return (
       <GenericMessage
-        title={"No open orders"}
+        title={"No items found"}
         illustration="NoData"
         className="bg-level-0"
       />
