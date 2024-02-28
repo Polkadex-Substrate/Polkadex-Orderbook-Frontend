@@ -163,7 +163,7 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
                   )}
                   even
                 >
-                  <Table.Header className="sticky top-0 bg-backgroundBase">
+                  <Table.Header className="sticky top-0 bg-backgroundBase z-[2]">
                     {table.getHeaderGroups().map((headerGroup) => (
                       <Table.Row key={headerGroup.id}>
                         {headerGroup.headers.map((header) => {
