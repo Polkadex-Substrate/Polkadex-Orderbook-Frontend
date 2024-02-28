@@ -24,7 +24,7 @@ export const TradingFee = ({
         <div className="flex items-center gap-1">
           <Icons.Fuel className="w-3 h-3 text-placeholder" />
           <Typography.Text size="xs" appearance="primary">
-            0.5 {ticker}
+            0.1&#37;
           </Typography.Text>
           <RiArrowDownLine className="w-3 h-3 text-primary group-hover:rotate-180 duration-300 transition-transform" />
         </div>
