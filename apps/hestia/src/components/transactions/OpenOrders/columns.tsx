@@ -8,6 +8,7 @@ import { filters } from "./filters";
 import { CancelOrderAction } from "./cancelOrderAction";
 
 import { FilledCard } from "@/components/ui/ReadyToUse";
+import { formatedDate } from "@/helpers";
 
 const columnHelper = createColumnHelper<Order>();
 
@@ -38,18 +39,12 @@ export const columns = ({
   columnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => {
-      const formattedDate = new Intl.DateTimeFormat("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
-        .format(e.getValue().timestamp)
-        .replace(",", "");
+      const date = formatedDate(e.getValue().timestamp);
 
       return (
         <Tooltip>
           <Tooltip.Trigger>
-            <Typography.Text size="xs">{formattedDate}</Typography.Text>
+            <Typography.Text size="xs">{date}</Typography.Text>
           </Tooltip.Trigger>
           <Tooltip.Content>
             <Typography.Text>
