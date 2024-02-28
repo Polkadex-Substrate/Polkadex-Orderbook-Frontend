@@ -101,7 +101,7 @@ export const ResponsiveTable = ({
             {filledQuantity} {market.baseAsset.ticker}
           </FilledCard>
         </ResponsiveCard>
-        <Drawer.Footer className="p-4">
+        <Drawer.Footer>
           <CancelOrderAction
             responsive
             onCancel={() =>
