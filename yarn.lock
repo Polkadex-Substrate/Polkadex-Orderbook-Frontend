@@ -4128,10 +4128,10 @@
     usehooks-ts "^2.9.1"
     vaul "^0.8.0"
 
-"@polkadex/ux@^6.7.0":
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.7.0.tgz#3d54db045d89d25c2584790ae024fac385f524c7"
-  integrity sha512-e6x693+qIyINNvFyVVxYkI808J1tcwkISIoVyddFsMg0smE2gT9polxgINc7W28hKOUxau9K9Ihq7ctAi5iXJQ==
+"@polkadex/ux@^6.8.0":
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.8.0.tgz#0c06cdbac6595d98ca3cc23ba6299b311b09dad3"
+  integrity sha512-tKcOihvttutnNU4qvvcWhI847lDqCngIYDswDZllOk0o/N9qVd9pShTJ3lEX5eXLjBFvC7S+ROMEzbDuCIb5Yw==
   dependencies:
     "@floating-ui/react" "^0.26.4"
     "@headlessui/react" "^1.7.18"
@@ -6546,6 +6546,11 @@
   dependencies:
     "@rooks/use-mutation-observer" "^4.11.2"
     resize-observer-polyfill "^1.5.1"
+
+"@remixicon/react@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@remixicon/react/-/react-4.2.0.tgz#9093ea394e288ee9a88d0613bd38739c728f02ac"
+  integrity sha512-eGhKpZ88OU0qkcY9pJu6khBmItDV82nU130E6C68yc+FbljueHlUYy/4CrJsmf860RIDMay2Rpzl27OSJ81miw==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -10692,11 +10697,6 @@ functions-have-names@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
-
-geist@^1.2.1:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/geist/-/geist-1.2.2.tgz#6e0c70afb7a99efaa403368b4935c62650619a06"
-  integrity sha512-uRDrxhvdnPwWJmh+K5+/5LXSKwvJzaYCl9tDXgiBi4hj7hB4K7+n/WLcvJMFs5btvyn0r9OSwCd1s6CmqAsxEw==
 
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
