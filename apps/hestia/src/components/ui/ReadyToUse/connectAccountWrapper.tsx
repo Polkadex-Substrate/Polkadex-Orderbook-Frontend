@@ -12,7 +12,7 @@ export const ConnectAccountWrapper = ({
     <>
       {funding ? (
         <GenericMessage
-          title="Connect your Funding account to proceed."
+          title="Please Connect your Funding account."
           illustration="ConnectAccount"
         >
           <Button.Solid onClick={() => onToogleConnectExtension()}>
@@ -21,7 +21,7 @@ export const ConnectAccountWrapper = ({
         </GenericMessage>
       ) : (
         <GenericMessage
-          title="Connect your Trading account to proceed."
+          title="Please Connect your Trading account."
           illustration="ConnectAccount"
         >
           <Button.Solid onClick={() => onToogleConnectTrading()}>

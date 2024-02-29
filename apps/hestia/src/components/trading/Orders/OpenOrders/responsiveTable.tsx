@@ -63,11 +63,15 @@ export const ResponsiveTable = ({
             {isSell ? "Sell" : "Buy"}
           </Typography.Text>
         </ResponsiveCard>
-        <ResponsiveCard label="Price">{price}</ResponsiveCard>
-        <ResponsiveCard label="Amount">{quantity}</ResponsiveCard>
+        <ResponsiveCard label="Price">
+          {price} {market.quoteAsset.ticker}
+        </ResponsiveCard>
+        <ResponsiveCard label="Amount">
+          {quantity} {market.baseAsset.ticker}
+        </ResponsiveCard>
         <ResponsiveCard label="Filled">
           <FilledCard responsive width={width}>
-            {filledQuantity} {market.quoteAsset.ticker}
+            {filledQuantity} {market.baseAsset.ticker}
           </FilledCard>
         </ResponsiveCard>
       </Drawer.Content>

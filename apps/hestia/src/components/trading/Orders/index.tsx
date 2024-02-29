@@ -8,19 +8,11 @@ import {
   RangeKeyDict,
   defaultStaticRanges,
 } from "react-date-range";
-import {
-  Button,
-  Tabs,
-  GenericMessage,
-  Checkbox,
-  Popover,
-  ScrollArea,
-} from "@polkadex/ux";
+import { Button, Tabs, Checkbox, Popover, ScrollArea } from "@polkadex/ux";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useOpenOrders } from "@orderbook/core/hooks";
 import { Ifilters } from "@orderbook/core/providers/types";
 import { useSessionProvider } from "@orderbook/core/providers/user/sessionProvider";
-import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { RiCalendarLine, RiMore2Line } from "@remixicon/react";
 
 import { OpenOrdersTable } from "./OpenOrders";
@@ -31,6 +23,7 @@ import { TradeHistoryTable } from "./TradeHistory";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "@/styles/calendar.scss";
+import { ConnectAccountWrapper } from "@/components/ui/ReadyToUse";
 
 const initialFilters: Ifilters = {
   onlyBuy: false,
@@ -49,10 +42,11 @@ const SELL = "SELL";
 export const Orders = ({ maxHeight }: Props) => {
   const { width } = useWindowSize();
   const { dispatchUserSessionData, dateFrom, dateTo } = useSessionProvider();
-  const { onToogleConnectTrading } = useSettingsProvider();
   const { openOrders } = useOpenOrders();
-  const { selectedAddresses } = useProfile();
-  const connected = selectedAddresses.tradeAddress.length > 0;
+  const {
+    selectedAddresses: { tradeAddress, mainAddress },
+  } = useProfile();
+  const connected = tradeAddress?.length > 0;
 
   const [show, setShow] = useState(true);
   const [filters, setFilters] = useState<Ifilters>(initialFilters);
@@ -188,35 +182,37 @@ export const Orders = ({ maxHeight }: Props) => {
         )}
       </div>
 
-      {connected ? (
-        <Fragment>
-          <Tabs.Content
-            value="openOrders"
-            className="flex-1 flex flex-col bg-level-0"
-          >
-            <OpenOrdersTable filters={filters} maxHeight={maxHeight} />
-          </Tabs.Content>
-          <Tabs.Content value="orderHistory" className="bg-level-0">
-            <OrderHistoryTable filters={filters} maxHeight={maxHeight} />
-          </Tabs.Content>
-          <Tabs.Content value="tradeHistory" className="bg-level-0">
-            <TradeHistoryTable filters={filters} maxHeight={maxHeight} />
-          </Tabs.Content>
-          <Tabs.Content value="balances" className="bg-level-0">
-            <BalancesTable maxHeight={maxHeight} />
-          </Tabs.Content>
-        </Fragment>
-      ) : (
-        <GenericMessage
-          title="Connect your trading account to start trading."
-          illustration="ConnectAccount"
-          className="bg-level-0"
-        >
-          <Button.Solid onClick={() => onToogleConnectTrading()}>
-            Connect Trading Account
-          </Button.Solid>
-        </GenericMessage>
-      )}
+      <Tabs.Content
+        value="openOrders"
+        className="flex-1 flex flex-col bg-level-0"
+      >
+        {connected ? (
+          <OpenOrdersTable filters={filters} maxHeight={maxHeight} />
+        ) : (
+          <ConnectAccountWrapper />
+        )}
+      </Tabs.Content>
+      <Tabs.Content value="orderHistory" className="bg-level-0">
+        {connected ? (
+          <OrderHistoryTable filters={filters} maxHeight={maxHeight} />
+        ) : (
+          <ConnectAccountWrapper />
+        )}
+      </Tabs.Content>
+      <Tabs.Content value="tradeHistory" className="bg-level-0">
+        {connected ? (
+          <TradeHistoryTable filters={filters} maxHeight={maxHeight} />
+        ) : (
+          <ConnectAccountWrapper />
+        )}
+      </Tabs.Content>
+      <Tabs.Content value="balances" className="bg-level-0">
+        {mainAddress?.length > 0 ? (
+          <BalancesTable maxHeight={maxHeight} />
+        ) : (
+          <ConnectAccountWrapper funding />
+        )}
+      </Tabs.Content>
     </Tabs>
   );
 };

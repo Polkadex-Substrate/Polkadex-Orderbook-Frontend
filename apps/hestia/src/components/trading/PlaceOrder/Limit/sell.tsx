@@ -152,7 +152,7 @@ export const SellOrder = ({
         </Tooltip.Content>
       </Tooltip>
       <div className="flex items-center gap-2 justify-between">
-        <TradingFee ticker="PDEX" />
+        <TradingFee ticker={market?.quoteAsset.ticker || ""} />
         <Balance baseTicker={market?.baseAsset?.ticker || ""}>
           {availableBaseAmount}
         </Balance>

@@ -237,7 +237,9 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
           queryClient.setQueryData(
             QUERY_KEYS.transactions(mainAddress, payload.txType),
             (oldData: MaybePaginated<Transaction[]> | undefined) => {
-              const transactions = _.cloneDeep(oldData?.data as Transaction[]);
+              const transactions = _.cloneDeep(
+                (oldData?.data || []) as Transaction[]
+              );
               const index = transactions.findIndex(
                 ({ stid }) => Number(stid) === Number(payload.stid)
               );
