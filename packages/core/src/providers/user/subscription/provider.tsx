@@ -49,7 +49,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 }) => {
   const queryClient = useQueryClient();
   const path = usePathname();
-  const { onHandleError } = useSettingsProvider();
+  const { onHandleError, onHandleNotification } = useSettingsProvider();
   const { isReady, markets } = useOrderbookService();
   const { dateFrom, dateTo } = useSessionProvider();
   const {
@@ -73,9 +73,38 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
             const prevOpenOrders = [...(oldOpenOrders || [])];
 
             let updatedOpenOrders: Order[] = [];
+
+            const order = prevOpenOrders.find(
+              (order) => order.orderId === payload.orderId
+            );
+
             if (payload.status === "OPEN") {
+              if (order) {
+                const isSell = order.side === "Ask";
+                const type =
+                  order.type.charAt(0) + order.type.toLowerCase().slice(1);
+                const side = isSell ? "Sell" : "Buy";
+                onHandleNotification({
+                  type: "Information",
+                  message: `${type} ${side} Order Partially Filled`,
+                  description: `Partial filled exchange ${type.toLowerCase()} ${side.toLowerCase()} order for ${order.quantity} ${order.market.baseAsset.ticker} by using ${order.market.quoteAsset.ticker}`,
+                });
+              }
+
               updatedOpenOrders = replaceOrPushOrder(prevOpenOrders, payload);
             } else {
+              if (order) {
+                const isSell = order.side === "Ask";
+                const type =
+                  order.type.charAt(0) + order.type.toLowerCase().slice(1);
+                const side = isSell ? "Sell" : "Buy";
+                onHandleNotification({
+                  type: "Information",
+                  message: `${type} ${side} Order Filled`,
+                  description: `Filled exchange ${type.toLowerCase()} ${side.toLowerCase()} order for ${order.quantity} ${order.market.baseAsset.ticker} by using ${order.market.quoteAsset.ticker}`,
+                });
+              }
+
               // Remove from Open Orders if it is closed
               updatedOpenOrders = removeOrderFromList(prevOpenOrders, payload);
             }
@@ -132,7 +161,14 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         );
       }
     },
-    [dateFrom, dateTo, onHandleError, queryClient, tradeAddress]
+    [
+      dateFrom,
+      dateTo,
+      onHandleError,
+      queryClient,
+      tradeAddress,
+      onHandleNotification,
+    ]
   );
 
   const onRecentTradeUpdates = useCallback(

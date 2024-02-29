@@ -73,10 +73,11 @@ export const SettingProvider: T.SettingComponent = ({
 
   const onHandleNotification = useCallback(
     (payload: T.NotificationPayload) => {
-      if (payload.type === "Error") defaultToast.onError(payload.message);
-      else if (payload.type === "Information")
-        defaultToast?.onInfo?.(payload.message);
-      else defaultToast.onSuccess(payload.message);
+      const { type, message, description } = payload;
+      if (type === "Error") defaultToast.onError(message, description);
+      else if (type === "Information")
+        defaultToast?.onInfo?.(message, description);
+      else defaultToast.onSuccess(message, description);
       dispatch(A.notificationPush(payload));
     },
     [defaultToast]
