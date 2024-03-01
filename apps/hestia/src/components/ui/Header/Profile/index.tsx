@@ -96,10 +96,13 @@ export const Profile = ({
       </div>
     );
   return (
-    <div>
+    <div className="flex items-center gap-2">
       <Button.Solid size="2sm" className="font-medium" onClick={onClick}>
         Connect wallet
       </Button.Solid>
+      <Button.Icon variant="ghost" onClick={onOpenMenu}>
+        <RiMenuLine className="h-full w-full" />
+      </Button.Icon>
     </div>
   );
 };
