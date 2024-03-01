@@ -90,7 +90,7 @@ export const Profile = ({
             <Popover.Content>
               <Content />
             </Popover.Content>
-            <Popover.Overlay className="z-[10]" />
+            <Popover.Overlay />
           </Popover>
         )}
 

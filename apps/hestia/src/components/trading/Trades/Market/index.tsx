@@ -28,7 +28,6 @@ export const Markets = () => {
   } = useMarkets();
 
   const hasMarkets = !!list?.length;
-  console.log("markets", marketTokens);
   const table = useReactTable({
     data: marketTokens,
     columns: columns({ onChangeFavourite: handleSelectedFavorite }),

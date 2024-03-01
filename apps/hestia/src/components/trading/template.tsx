@@ -6,8 +6,7 @@ import { getCurrentMarket } from "@orderbook/core/helpers";
 import { useWindowSize } from "react-use";
 import classNames from "classnames";
 import { useResizeObserver } from "usehooks-ts";
-
-import { Resizable, ImperativePanelHandle } from "../ui/Temp/resizable";
+import { Resizable, ImperativePanelHandle } from "@polkadex/ux";
 
 import { AssetInfo } from "./AssetInfo";
 import { Orderbook } from "./Orderbook";
@@ -71,7 +70,7 @@ export function Template({ id }: { id: string }) {
             ref={mainPanelRef}
             defaultSize={80}
             minSize={50}
-            className="flex min-h-[500px]"
+            className="flex min-h-[400px]"
           >
             <Resizable direction="horizontal">
               <Resizable.Panel minSize={40}>

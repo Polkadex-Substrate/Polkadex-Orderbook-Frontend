@@ -34,7 +34,7 @@ export const ResponsiveProfile = () => {
       <Popover.Content sideOffset={10}>
         <Content />
       </Popover.Content>
-      <Popover.Overlay className="z-[10]" />
+      <Popover.Overlay />
     </Popover>
   ) : null;
 };
