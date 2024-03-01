@@ -131,7 +131,11 @@ export function Template({ id }: { id: string }) {
       )}
 
       {mobileView && (
-        <ResponsiveInteraction isResponsive={mobileView} ref={interactionRef} />
+        <ResponsiveInteraction
+          isResponsive={mobileView}
+          ref={interactionRef}
+          market={currentMarket}
+        />
       )}
       <Footer marketsActive ref={footerRef} />
     </Fragment>
