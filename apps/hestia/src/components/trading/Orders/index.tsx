@@ -181,7 +181,7 @@ export const Orders = () => {
       </div>
       <Tabs.Content
         value="openOrders"
-        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[320px] max-sm:min-h-[290px]"
+        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
       >
         {connected ? (
           <OpenOrdersTable filters={filters} />
@@ -191,7 +191,7 @@ export const Orders = () => {
       </Tabs.Content>
       <Tabs.Content
         value="orderHistory"
-        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[320px] max-sm:min-h-[290px]"
+        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
       >
         {connected ? (
           <OrderHistoryTable filters={filters} />
@@ -201,7 +201,7 @@ export const Orders = () => {
       </Tabs.Content>
       <Tabs.Content
         value="tradeHistory"
-        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[320px] max-sm:min-h-[290px]"
+        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
       >
         {connected ? (
           <TradeHistoryTable filters={filters} />
@@ -211,7 +211,7 @@ export const Orders = () => {
       </Tabs.Content>
       <Tabs.Content
         value="balances"
-        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[320px] max-sm:min-h-[290px]"
+        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
       >
         {mainAddress?.length > 0 ? (
           <BalancesTable />
