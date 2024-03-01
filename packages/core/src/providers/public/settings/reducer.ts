@@ -2,7 +2,7 @@ import { SettingActions } from "@orderbook/core/providers/public/settings/action
 
 import * as T from "./types";
 import * as C from "./constants";
-import { extraNotifications } from "./notifications";
+import { getNotifications } from "./helpers";
 
 const defaultTheme = "dark";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,12 +18,7 @@ const language = ((isBrowser && localStorage.getItem(C.DEFAULTLANGUAGENAME)) ??
 const currency = ((isBrowser && localStorage.getItem(C.DEFAULTCURRENCYNAME)) ??
   "USD") as T.SettingState["currency"];
 
-const notifications: T.Notification[] = extraNotifications.concat(
-  JSON.parse(
-    isBrowser &&
-      (window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME) as string)
-  ) || []
-);
+const notifications = getNotifications();
 
 export const initialState: T.SettingState = {
   theme,

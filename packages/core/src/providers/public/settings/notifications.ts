@@ -1,15 +1,15 @@
 import * as T from "./types";
 
-export const extraNotifications: T.Notification[] = [
+export const additionalNotifications: T.Notification[] = [
   {
     category: "Announcements",
     date: new Date().getTime(),
     message: "GMLR/USDT available",
     description:
-      "Plus, the Polkadex community is now accepting Moombeam token listing proposals.",
+      "Plus, the Polkadex community is now accepting Moonbeam token listing proposals.",
     id: "random id",
     type: "Information",
-    active: false,
+    active: true,
     href: "/transfer",
   },
   {
