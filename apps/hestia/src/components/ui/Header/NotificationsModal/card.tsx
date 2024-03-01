@@ -19,7 +19,7 @@ export const Card = ({
   return (
     <div
       className={classNames(
-        "flex items-center gap-4 p-4 hover:bg-level-1 transition-colors duration-200",
+        "flex items-center gap-4 p-4 hover:bg-level-1 transition-colors duration-200 cursor-pointer",
         !active && "opacity-40"
       )}
       {...props}
@@ -30,7 +30,7 @@ export const Card = ({
           active ? "bg-primary-base" : "bg-secondary-base"
         )}
       />
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 w-full">
         <div className="flex max-sm:flex-col-reverse sm:items-center justify-between gap-2">
           <Typography.Text bold>{title}</Typography.Text>
           <Typography.Text size="xs" appearance="secondary">

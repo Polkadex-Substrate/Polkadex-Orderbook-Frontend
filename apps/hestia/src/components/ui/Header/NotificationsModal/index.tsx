@@ -1,6 +1,10 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useMemo } from "react";
 import { Button, Modal, Typography } from "@polkadex/ux";
 import { RiCloseLine } from "@remixicon/react";
+import {
+  useSettingsProvider,
+  Notification,
+} from "@orderbook/core/providers/public/settings";
 
 import { Card } from "./card";
 
@@ -11,6 +15,23 @@ export const NotificationsModal = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const { notifications: allNotifications } = useSettingsProvider();
+  const notifications: { [category: string]: Notification[] } = useMemo(() => {
+    return allNotifications.reduce<{ [category: string]: Notification[] }>(
+      (acc, notification) => {
+        acc[notification.category] = [
+          ...(acc[notification.category] || []),
+          notification,
+        ];
+        acc[notification.category].sort((a, b) =>
+          a.active === b.active ? 0 : a.active ? -1 : 1
+        );
+        return acc;
+      },
+      {}
+    );
+  }, [allNotifications]);
+
   return (
     <Modal
       open={open}
@@ -34,40 +55,31 @@ export const NotificationsModal = ({
         </Button.Icon>
       </Modal.Title>
       <Modal.Content className="flex flex-col flex-1 gap-6">
-        <div className="flex flex-col gap-3">
-          <Typography.Text appearance="secondary" className="px-4">
-            General
-          </Typography.Text>
-          <div className="flex flex-col gap-2">
-            <Card
-              title="Transfer ready to claim"
-              date="2024-01-02 09:14:38"
-              active
-            >
-              Your transfer of 4200 USDT from your trading account to your
-              funding account is ready to claim.
-            </Card>
-            <Card title="4200 USDT transfer" date="2024-01-02 08:12:03">
-              Your transfer of 4200 USDT from your trading account to your
-              funding account is currently processing.
-            </Card>
-          </div>
-        </div>
-        <div className="flex flex-col gap-3">
-          <Typography.Text appearance="secondary" className="px-4">
-            Announcements
-          </Typography.Text>
-          <div className="flex flex-col gap-2">
-            <Card title="GMLR/USDT available" date="2024-01-02 09:14:38" active>
-              Plus, the Polkadex community is now accepting Moombeam token
-              listing proposals.
-            </Card>
-            <Card title="Maintenance schedule" date="2024-01-02 08:12:03">
-              Polkadex Orderbook will undergo a sheduled downtime on Jan 11th at
-              5.30 AM UTC.
-            </Card>
-          </div>
-        </div>
+        {Object.keys(notifications).map((category, index) => {
+          return (
+            <div key={index} className="flex flex-col gap-3">
+              <Typography.Text appearance="secondary" className="px-4">
+                {category}
+              </Typography.Text>
+              <div className="flex flex-col gap-2">
+                {notifications[category].map(
+                  ({ id, message, date, active, description }) => {
+                    return (
+                      <Card
+                        key={id}
+                        title={message}
+                        date={new Date(date).toLocaleString()}
+                        active={active}
+                      >
+                        {description}
+                      </Card>
+                    );
+                  }
+                )}
+              </div>
+            </div>
+          );
+        })}
       </Modal.Content>
       <Modal.Footer className="p-4">
         <Button.Solid className="w-full" appearance="secondary">
