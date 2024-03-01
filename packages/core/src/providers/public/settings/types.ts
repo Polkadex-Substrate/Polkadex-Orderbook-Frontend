@@ -1,15 +1,20 @@
 import { FC, PropsWithChildren } from "react";
 
+export type NotificationCategory = "General" | "Announcements";
+
 export type NotificationPayload = {
   type: "Error" | "Information" | "Success" | "Loading" | "Attention";
   message: string;
-  description?: string;
+  description: string;
+  showToast?: boolean;
+  category: NotificationCategory;
 };
 
-export interface Notification extends NotificationPayload {
-  id: number | string;
+export interface Notification extends Omit<NotificationPayload, "showToast"> {
+  id: string;
   date: number;
   active?: boolean;
+  category: NotificationCategory;
 }
 export interface SettingState {
   chartRebuild: boolean;
@@ -47,7 +52,7 @@ export type SettingContextProps = SettingState & {
   onClearNotifications: () => void;
   onHandleError: ToastActions["onError"];
   onHandleAlert: ToastActions["onSuccess"];
-  onHandleNotification: (value: NotificationPayload) => void;
+  onHandleInfo: ToastActions["onInfo"];
   onToogleConnectExtension: (value?: boolean) => void;
   onToogleConnectTrading: (value?: boolean) => void;
 };

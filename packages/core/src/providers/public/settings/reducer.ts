@@ -4,7 +4,7 @@ import * as T from "./types";
 import * as C from "./constants";
 
 const defaultTheme = "dark";
-// @eslint-ignore
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isBrowser = (process as any).browser;
 const defaultLanguage = isBrowser && navigator.language.substring(0, 2);
 
@@ -97,8 +97,12 @@ export const settingReducer = (
         id: new Date().getTime().toString(36) + new Date().getUTCMilliseconds(),
         active: true,
         date: Date.now(),
-        ...action.payload,
+        category: action.payload.category,
+        message: action.payload.message,
+        type: action.payload.type,
+        description: action.payload.description,
       };
+
       if (prevObj?.length >= 16) prevObj.shift();
 
       window.localStorage.setItem(

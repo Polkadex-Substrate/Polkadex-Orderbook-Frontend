@@ -11,8 +11,6 @@ export const SettingProvider: T.SettingComponent = ({
 }) => {
   const [state, dispatch] = useReducer(settingReducer, initialState);
 
-  // Actions
-
   // Global Setting Actions
   const onToogleConnectExtension = (payload?: boolean) =>
     dispatch(A.toogleConnectExtension(payload));
@@ -51,6 +49,7 @@ export const SettingProvider: T.SettingComponent = ({
     []
   );
 
+  // Notifications Actions
   const onPushNotification = useCallback(
     (payload: T.NotificationPayload) => dispatch(A.notificationPush(payload)),
     []
@@ -71,18 +70,6 @@ export const SettingProvider: T.SettingComponent = ({
     []
   );
 
-  const onHandleNotification = useCallback(
-    (payload: T.NotificationPayload) => {
-      const { type, message, description } = payload;
-      if (type === "Error") defaultToast.onError(message, description);
-      else if (type === "Information")
-        defaultToast?.onInfo?.(message, description);
-      else defaultToast.onSuccess(message, description);
-      dispatch(A.notificationPush(payload));
-    },
-    [defaultToast]
-  );
-
   return (
     <Provider
       value={{
@@ -99,7 +86,7 @@ export const SettingProvider: T.SettingComponent = ({
         onReadNotification,
         onHandleError: defaultToast.onError,
         onHandleAlert: defaultToast.onSuccess,
-        onHandleNotification,
+        onHandleInfo: defaultToast.onInfo,
         onToogleConnectExtension,
         onToogleConnectTrading,
       }}
