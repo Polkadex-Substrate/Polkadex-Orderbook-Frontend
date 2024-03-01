@@ -58,7 +58,7 @@ export const NotificationsModal = ({
         {Object.keys(notifications).map((category, index) => {
           return (
             <div key={index} className="flex flex-col gap-3">
-              <Typography.Text appearance="secondary" className="px-4">
+              <Typography.Text appearance="primary" className="px-4">
                 {category}
               </Typography.Text>
               <div className="flex flex-col gap-2">
