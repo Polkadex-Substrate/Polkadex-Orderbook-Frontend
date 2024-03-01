@@ -183,7 +183,7 @@ export const Orders = () => {
         value="openOrders"
         className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[320px] max-sm:min-h-[290px]"
       >
-        {!connected ? (
+        {connected ? (
           <OpenOrdersTable filters={filters} />
         ) : (
           <ConnectAccountWrapper />
