@@ -1,5 +1,3 @@
-// TODO: Fix responsive interaction (reflect columns updates)
-
 "use client";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
@@ -88,7 +86,7 @@ export const OpenOrdersTable = ({
   if (!openOrders.length)
     return (
       <GenericMessage
-        title={"No open orders"}
+        title={"No items found"}
         illustration="NoData"
         className="bg-level-0"
       />
@@ -115,6 +113,7 @@ export const OpenOrdersTable = ({
         className="flex-1 h-full overflow-auto scrollbar-hide"
         style={{
           maxHeight: isResponsive ? "384px" : maxHeight,
+          minHeight: isResponsive ? "384px" : "auto",
         }}
       >
         <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">

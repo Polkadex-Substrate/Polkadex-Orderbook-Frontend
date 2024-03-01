@@ -75,7 +75,11 @@ export const columns = ({
   openOrderColumnHelper.accessor((row) => row, {
     id: "price",
     cell: (e) => {
-      return <Typography.Text size="xs">{e.getValue().price}</Typography.Text>;
+      return (
+        <Typography.Text size="xs">
+          {e.getValue().price} {e.getValue().market.quoteAsset.ticker}
+        </Typography.Text>
+      );
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
@@ -88,7 +92,9 @@ export const columns = ({
     id: "amount",
     cell: (e) => {
       return (
-        <Typography.Text size="xs">{e.getValue().quantity}</Typography.Text>
+        <Typography.Text size="xs">
+          {e.getValue().quantity} {e.getValue().market.baseAsset.ticker}
+        </Typography.Text>
       );
     },
     header: () => (
@@ -109,7 +115,7 @@ export const columns = ({
       const width = `${roundedPercent}%`;
       return (
         <FilledCard width={width}>
-          {e.getValue().filledQuantity} {e.getValue().market.quoteAsset.ticker}
+          {e.getValue().filledQuantity} {e.getValue().market.baseAsset.ticker}
         </FilledCard>
       );
     },

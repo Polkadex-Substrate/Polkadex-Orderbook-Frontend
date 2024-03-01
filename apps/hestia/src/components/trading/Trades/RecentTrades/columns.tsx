@@ -53,12 +53,12 @@ export const columns = ({
   }),
   columnHelper.accessor((row) => row.timestamp, {
     id: "date",
-    cell: () => {
+    cell: (e) => {
       const date = new Intl.DateTimeFormat("en-US", {
         hour: "numeric",
         minute: "2-digit",
         second: "2-digit",
-      }).format(new Date());
+      }).format(e.getValue());
       return <Typography.Text size="xs">{date}</Typography.Text>;
     },
     header: () => (

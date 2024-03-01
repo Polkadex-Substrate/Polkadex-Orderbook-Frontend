@@ -5,6 +5,8 @@ import { RiFileCopyLine } from "@remixicon/react";
 
 import { filters } from "./filters";
 
+import { formatedDate } from "@/helpers";
+
 const columnHelper = createColumnHelper<Trade>();
 
 export const columns = () => [
@@ -32,18 +34,12 @@ export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => {
-      const formattedDate = new Intl.DateTimeFormat("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
-        .format(e.getValue().timestamp)
-        .replace(",", "");
+      const date = formatedDate(e.getValue().timestamp);
 
       return (
         <Tooltip>
           <Tooltip.Trigger>
-            <Typography.Text size="xs">{formattedDate}</Typography.Text>
+            <Typography.Text size="xs">{date}</Typography.Text>
           </Tooltip.Trigger>
           <Tooltip.Content>
             <Typography.Text>
@@ -116,7 +112,11 @@ export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "price",
     cell: (e) => {
-      return <Typography.Text size="xs">{e.getValue().price}</Typography.Text>;
+      return (
+        <Typography.Text size="xs">
+          {e.getValue().price} {e.getValue().market.quoteAsset.ticker}
+        </Typography.Text>
+      );
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
@@ -128,7 +128,11 @@ export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "amount",
     cell: (e) => {
-      return <Typography.Text size="xs">{e.getValue().qty}</Typography.Text>;
+      return (
+        <Typography.Text size="xs">
+          {e.getValue().qty} {e.getValue().market.baseAsset.ticker}
+        </Typography.Text>
+      );
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">

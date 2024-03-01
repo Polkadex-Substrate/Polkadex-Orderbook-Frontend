@@ -5,6 +5,9 @@ import { RiFileCopyLine } from "@remixicon/react";
 
 import { filters } from "./filters";
 
+import { FilledCard } from "@/components/ui/ReadyToUse";
+import { formatedDate } from "@/helpers";
+
 const columnHelper = createColumnHelper<Order>();
 
 export const columns = () => [
@@ -30,18 +33,12 @@ export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "date",
     cell: (e) => {
-      const formattedDate = new Intl.DateTimeFormat("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
-        .format(e.getValue().timestamp)
-        .replace(",", "");
+      const date = formatedDate(e.getValue().timestamp);
 
       return (
         <Tooltip>
           <Tooltip.Trigger>
-            <Typography.Text size="xs">{formattedDate}</Typography.Text>
+            <Typography.Text size="xs">{date}</Typography.Text>
           </Tooltip.Trigger>
           <Tooltip.Content>
             <Typography.Text>
@@ -111,65 +108,6 @@ export const columns = () => [
     },
   }),
   columnHelper.accessor((row) => row, {
-    id: "price",
-    cell: (e) => {
-      const isMarket = e.getValue().type === "MARKET";
-      return (
-        <Typography.Text size="xs">
-          {isMarket ? "---" : e.getValue().price}
-        </Typography.Text>
-      );
-    },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Price
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row, {
-    id: "amount",
-    cell: (e) => {
-      return (
-        <Typography.Text size="xs">{e.getValue().quantity}</Typography.Text>
-      );
-    },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Amount
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row, {
-    id: "filled",
-    cell: (e) => {
-      return (
-        <Typography.Text size="xs">
-          {e.getValue().filledQuantity}
-        </Typography.Text>
-      );
-    },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Filled
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row, {
-    id: "averageFilledPrice",
-    cell: (e) => (
-      <Typography.Text size="xs">{e.getValue().averagePrice}</Typography.Text>
-    ),
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Avg. Filled Price
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row, {
     id: "status",
     cell: (e) => (
       <Typography.Text size="xs">
@@ -187,6 +125,77 @@ export const columns = () => [
         val.toLowerCase().includes(row.getValue<Order>(id).status.toLowerCase())
       );
     },
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "price",
+    cell: (e) => {
+      const isMarket = e.getValue().type === "MARKET";
+      return (
+        <Typography.Text size="xs">
+          {isMarket
+            ? "---"
+            : `${e.getValue().price} ${e.getValue().market.quoteAsset.ticker}`}
+        </Typography.Text>
+      );
+    },
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Price
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "amount",
+    cell: (e) => {
+      return (
+        <Typography.Text size="xs">
+          {e.getValue().quantity} {e.getValue().market.baseAsset.ticker}
+        </Typography.Text>
+      );
+    },
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Amount
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "filled",
+    cell: (e) => {
+      const percent =
+        (Number(e.getValue().filledQuantity) / Number(e.getValue().quantity)) *
+        100;
+
+      const roundedPercent = Math.min(100, percent).toFixed(2);
+      const width = `${roundedPercent}%`;
+      return (
+        <FilledCard width={width}>
+          {e.getValue().filledQuantity} {e.getValue().market.baseAsset.ticker}
+        </FilledCard>
+      );
+    },
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Filled
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "averageFilledPrice",
+    cell: (e) => (
+      <Typography.Text size="xs">
+        {e.getValue().averagePrice} {e.getValue().market.quoteAsset.ticker}
+      </Typography.Text>
+    ),
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Avg Price
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row, {
     id: "fee",

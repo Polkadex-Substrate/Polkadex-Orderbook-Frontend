@@ -155,8 +155,8 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
     availableBalance: number,
     isSell?: boolean
   ) => {
-    let price = values.price || String(lastPriceValue);
-    if (price === "0") price = String(lastPriceValue);
+    const price = values.price || String(lastPriceValue);
+    if (!price || price === "0") return;
     if (isSell) {
       const amount = `${availableBalance * percent * 0.01}`;
       const total = getAbsoluteNumber(

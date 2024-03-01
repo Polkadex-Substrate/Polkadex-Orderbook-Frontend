@@ -3,6 +3,7 @@ import { FC, PropsWithChildren } from "react";
 export type NotificationPayload = {
   type: "Error" | "Information" | "Success" | "Loading" | "Attention";
   message: string;
+  description?: string;
 };
 
 export interface Notification extends NotificationPayload {
@@ -28,9 +29,9 @@ export type SettingProviderProps = PropsWithChildren<{
 }>;
 
 type ToastActions = {
-  onError: (value: string) => void;
-  onSuccess: (value: string) => void;
-  onInfo?: (value: string) => void;
+  onError: (title: string, description?: string) => void;
+  onSuccess: (title: string, description?: string) => void;
+  onInfo?: (title: string, description?: string) => void;
 };
 
 export type SettingContextProps = SettingState & {

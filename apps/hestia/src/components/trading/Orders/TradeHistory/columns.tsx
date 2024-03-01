@@ -74,7 +74,11 @@ export const columns = [
   tradeHistoryColumnHelper.accessor((row) => row, {
     id: "price",
     cell: (e) => {
-      return <Typography.Text size="xs">{e.getValue().price}</Typography.Text>;
+      return (
+        <Typography.Text size="xs">
+          {e.getValue().price} {e.getValue().market.quoteAsset.ticker}
+        </Typography.Text>
+      );
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
@@ -88,7 +92,7 @@ export const columns = [
     cell: (e) => {
       return (
         <Typography.Text size="xs">
-          {e.getValue().qty} {e.getValue().market.quoteAsset.ticker}
+          {e.getValue().qty} {e.getValue().market.baseAsset.ticker}
         </Typography.Text>
       );
     },
