@@ -10,7 +10,7 @@ import { ResponsiveProfile } from "@/components/ui/Header/Profile/responsiveProf
 
 export const ResponsiveInteraction = forwardRef<
   HTMLDivElement,
-  { isResponsive?: boolean; market: Market }
+  { isResponsive?: boolean; market?: Market }
 >(({ isResponsive, market }, ref) => {
   const [buy, setBuy] = useState(false);
   const [sell, setSell] = useState(false);
