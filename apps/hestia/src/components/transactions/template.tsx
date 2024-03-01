@@ -73,7 +73,7 @@ export function Template() {
                       <RiInformation2Line className="w-6 h-6 text-primary" />
                     </Tooltip.Trigger>
                     <Tooltip.Content className="w-52" side="left">
-                      <Typography.Text>
+                      <Typography.Text className="text-primary">
                         Explore detailed records of your Transfers & Orders
                         here.
                       </Typography.Text>
