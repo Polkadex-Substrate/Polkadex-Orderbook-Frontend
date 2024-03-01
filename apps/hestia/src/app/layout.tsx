@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body
         className={classNames(
-          "flex flex-col max-h-screen max:sm:min-h-webKit min-h-screen mx-auto overflow-x-hidden",
+          "flex flex-col min-h-screen overflow-x-hidden",
           font.className
         )}
       >

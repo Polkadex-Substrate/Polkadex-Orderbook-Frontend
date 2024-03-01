@@ -145,7 +145,7 @@ export const DepositHistory = ({
           title="No transactions found"
           illustration="NoData"
           className="bg-level-2"
-          imageProps={{ className: "w-12 mx-auto" }}
+          imageProps={{ className: "w-10 self-center" }}
         />
       )}
     </S.Wrapper>

@@ -28,6 +28,7 @@ export const Markets = () => {
   } = useMarkets();
 
   const hasMarkets = !!list?.length;
+  console.log("markets", marketTokens);
   const table = useReactTable({
     data: marketTokens,
     columns: columns({ onChangeFavourite: handleSelectedFavorite }),
@@ -55,10 +56,7 @@ export const Markets = () => {
         activeFavorite={fieldValue.showFavourite}
       />
       <Skeleton loading={loading} className="h-full">
-        <div
-          className="flex flex-col flex-1 border-t border-t-primary overflow-y-hidden hover:overflow-y-auto"
-          style={{ scrollbarGutter: "stable" }}
-        >
+        <div className="flex flex-col flex-1 border-t border-t-primary overflow-y-hidden scrollbar-hide">
           {!hasMarkets || !marketTokens.length ? (
             <GenericMessage {...messageProps} />
           ) : (

@@ -26,8 +26,8 @@ export const Trigger = ({
   return (
     <div
       className={classNames(
-        "flex items-center pr-1 border-x border-primary hover:bg-level-1 duration-300 transition-colors",
-        responsive ? "w-screen py-3 " : "py-1"
+        "flex items-center  hover:bg-level-1 duration-300 transition-colors",
+        responsive ? "w-full" : "border-x border-primary pr-1"
       )}
     >
       <div className="flex items-center justify-center mx-1 w-10 h-10 px-2">

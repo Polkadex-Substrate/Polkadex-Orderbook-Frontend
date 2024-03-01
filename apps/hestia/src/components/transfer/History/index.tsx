@@ -286,6 +286,9 @@ export const History = ({
             title="No result found"
             illustration="NoResultFound"
             className="bg-level-1 border-y border-y-primary"
+            imageProps={{
+              className: "w-10 self-center",
+            }}
           />
         )}
       </div>

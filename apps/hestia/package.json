@@ -39,6 +39,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-resizable-panels": "^2.0.11",
     "react-sparklines": "^1.7.0",
     "react-use": "^17.4.0",
     "sass": "^1.68.0",

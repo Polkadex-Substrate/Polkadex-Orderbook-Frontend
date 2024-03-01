@@ -19,9 +19,10 @@ export const ResponsiveProfile = () => {
     () => !!Object.keys(selectedWallet ?? {})?.length,
     [selectedWallet]
   );
-  return (
+
+  return fundWalletPresent || tradingWalletPresent ? (
     <Popover>
-      <Popover.Trigger className="border-t border-primary bg-level-1 sticky bottom-0 z-10">
+      <Popover.Trigger>
         <Trigger
           responsive
           browserAccountPresent={tradingWalletPresent}
@@ -35,5 +36,5 @@ export const ResponsiveProfile = () => {
       </Popover.Content>
       <Popover.Overlay className="z-[10]" />
     </Popover>
-  );
+  ) : null;
 };

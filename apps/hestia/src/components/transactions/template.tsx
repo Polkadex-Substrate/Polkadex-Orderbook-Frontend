@@ -1,12 +1,14 @@
 "use client";
 
 import { Typography, Input, Tabs, Tooltip, ScrollArea } from "@polkadex/ux";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { RiInformation2Line } from "@remixicon/react";
-import { useElementSize, useWindowSize } from "usehooks-ts";
+import { useElementSize, useResizeObserver, useWindowSize } from "usehooks-ts";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import classNames from "classnames";
 import { useRouter, useSearchParams } from "next/navigation";
+
+import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
 import { Help } from "./Help";
 import { TransferHistory } from "./Transfer";
@@ -23,11 +25,40 @@ export function Template() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { width } = useWindowSize();
-  const [headerRef, { height: headerHeight = 0 }] = useElementSize();
-  const [footerRef, { height: footerHeight = 0 }] = useElementSize();
-  const [helpRef, { height: helpeight = 0 }] = useElementSize();
+
+  const footerRef = useRef<HTMLDivElement | null>(null);
+  const headerRef = useRef<HTMLDivElement | null>(null);
+  const helpRef = useRef<HTMLDivElement | null>(null);
+  const overviewRef = useRef<HTMLDivElement | null>(null);
+  const interactionRef = useRef<HTMLDivElement | null>(null);
+
+  const { height: overviewHeight = 0 } = useResizeObserver({
+    ref: overviewRef,
+    box: "border-box",
+  });
+
+  const { height: helpHeight = 0 } = useResizeObserver({
+    ref: helpRef,
+    box: "border-box",
+  });
+
+  const { height: headerHeight = 0 } = useResizeObserver({
+    ref: headerRef,
+    box: "border-box",
+  });
+
+  const { height: footerHeight = 0 } = useResizeObserver({
+    ref: footerRef,
+    box: "border-box",
+  });
+
+  const { height: interactionHeight = 0 } = useResizeObserver({
+    ref: interactionRef,
+    box: "border-box",
+  });
+
   const [tableRowsRef, { height: tableRowsHeight = 0 }] = useElementSize();
-  const [overviewRef, { height: overviewHeight = 0 }] = useElementSize();
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const responsiveView = useMemo(() => width <= 675, [width]);
@@ -36,18 +67,14 @@ export function Template() {
   const maxHeight = useMemo(
     () =>
       `calc(100vh - ${
-        overviewHeight +
-        headerHeight +
-        footerHeight +
-        helpeight +
-        tableRowsHeight +
-        1
+        overviewHeight + headerHeight + helpHeight + tableRowsHeight + 1
       }px)`,
-    [headerHeight, footerHeight, overviewHeight, helpeight, tableRowsHeight]
+    [headerHeight, overviewHeight, helpHeight, tableRowsHeight]
   );
   const {
     selectedAddresses: { mainAddress, tradeAddress },
   } = useProfile();
+  const mobileView = useMemo(() => width < 640, [width]);
 
   return (
     <>
@@ -61,7 +88,14 @@ export function Template() {
           onValueChange={(e) => router.replace(`/history/?tab=${e}`)}
         >
           <Header ref={headerRef} />
-          <main className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-screen-2xl m-auto">
+          <main
+            className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
+            style={{
+              paddingBottom: mobileView
+                ? `${interactionHeight}px`
+                : `${footerHeight}px`,
+            }}
+          >
             <div className="flex-1 flex flex-col">
               <div ref={overviewRef} className="flex flex-col">
                 <div className="flex items-center justify-between gap-4 px-4 pt-6 pb-4  border-b border-secondary-base flex-wrap">
@@ -157,6 +191,14 @@ export function Template() {
               <Help ref={helpRef} />
             </div>
           </main>
+          {mobileView && (
+            <div
+              ref={interactionRef}
+              className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full"
+            >
+              <ResponsiveProfile />
+            </div>
+          )}
           <Footer ref={footerRef} />
         </Tabs>
       </div>

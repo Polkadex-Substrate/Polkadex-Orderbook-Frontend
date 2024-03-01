@@ -1,13 +1,15 @@
 "use client";
 
 import { GenericMessage, Tabs, Typography } from "@polkadex/ux";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { RiInformation2Line } from "@remixicon/react";
 import { useTransactions, useTransferHistory } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { usePathname, useRouter } from "next/navigation";
+import { useWindowSize } from "react-use";
 
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
+import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
 import { Help } from "./Help";
 import { SelectAsset } from "./SelectAsset";
@@ -26,9 +28,18 @@ const sleep = async (ms: number) =>
 export function Template() {
   const router = useRouter();
   const pathname = usePathname();
+  const { width } = useWindowSize();
 
-  const { headerRef, footerRef, formwRef, helpRef, tableTitleRef } =
-    useSizeProvider();
+  const {
+    headerRef,
+    footerRef,
+    formwRef,
+    helpRef,
+    tableTitleRef,
+    interactionRef,
+    interactionHeight,
+    footerHeight,
+  } = useSizeProvider();
 
   const {
     onChangeAsset,
@@ -54,6 +65,8 @@ export function Template() {
     if (readyWithdrawals?.length) setActiveTab("readyToClaim");
   }, [readyWithdrawals?.length]);
 
+  const mobileView = useMemo(() => width < 640, [width]);
+
   return (
     <Fragment>
       <ConnectTradingInteraction />
@@ -68,7 +81,14 @@ export function Template() {
         vaul-drawer-wrapper=""
       >
         <Header ref={headerRef} />
-        <main className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto">
+        <main
+          className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
+          style={{
+            paddingBottom: mobileView
+              ? `${interactionHeight}px`
+              : `${footerHeight}px`,
+          }}
+        >
           <div className="flex flex-col flex-1">
             <div ref={formwRef} className="flex-1 flex flex-col">
               <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-secondary-base flex-wrap">
@@ -125,6 +145,9 @@ export function Template() {
                     title="Connect your trading account"
                     illustration="ConnectAccount"
                     className="bg-level-0 border-b border-primary"
+                    imageProps={{
+                      className: "w-10 self-center",
+                    }}
                   />
                 )}
               </div>
@@ -132,6 +155,14 @@ export function Template() {
             <Help ref={helpRef} />
           </div>
         </main>
+        {mobileView && (
+          <div
+            ref={interactionRef}
+            className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full"
+          >
+            <ResponsiveProfile />
+          </div>
+        )}
         <Footer ref={footerRef} />
       </div>
     </Fragment>

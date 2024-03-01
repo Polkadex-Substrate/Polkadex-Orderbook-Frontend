@@ -15,7 +15,7 @@ export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
     return (
       <footer
         ref={ref}
-        className="md:grid md:grid-flow-col-dense md:grid-cols-2 border-y border-primary"
+        className="max-md:hidden md:grid md:grid-flow-col-dense md:grid-cols-2 border-y border-primary fixed bottom-0 left-0 w-full bg-level-0"
       >
         {marketsActive ? (
           <div className="col-span-4 flex flex-auto">

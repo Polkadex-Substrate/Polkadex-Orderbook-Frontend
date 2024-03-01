@@ -133,7 +133,13 @@ export const Table = forwardRef<
           </div>
         </div>
       ) : (
-        <GenericMessage title="No data" illustration="NoData" />
+        <GenericMessage
+          title="No data"
+          illustration="NoData"
+          imageProps={{
+            className: "w-10 self-center",
+          }}
+        />
       )}
     </Fragment>
   );

@@ -1,118 +1,140 @@
 "use client";
 
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useRef } from "react";
 import { useMarkets } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
-import classNames from "classnames";
 import { useWindowSize } from "react-use";
-import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import classNames from "classnames";
+import { useResizeObserver } from "usehooks-ts";
 
-import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
+import { Resizable, ImperativePanelHandle } from "../ui/Temp/resizable";
 
 import { AssetInfo } from "./AssetInfo";
-import { Graph } from "./Graph";
 import { Orderbook } from "./Orderbook";
 import { Trades } from "./Trades";
 import { Orders } from "./Orders";
 import { PlaceOrder } from "./PlaceOrder";
-import { useSizeProvider } from "./provider";
+import { Graph } from "./Graph";
+import { ResponsiveInteraction } from "./PlaceOrder/responsiveInteraction";
+import { Responsive } from "./responsive";
 
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { Footer, Header } from "@/components/ui";
 
 export function Template({ id }: { id: string }) {
-  const {
-    footerRef,
-    headerRef,
-    ordersMaxHeight,
-    placeOrderRef,
-    tableMaxHeight,
-    marketRef,
-  } = useSizeProvider();
-  const { selectedWallet, selectedAccount } = useConnectWalletProvider();
+  const footerRef = useRef<HTMLDivElement | null>(null);
+  const interactionRef = useRef<HTMLDivElement | null>(null);
 
-  // Move to useConnectWalletProvider
-  const tradingWalletPresent = useMemo(
-    () => !!Object.keys(selectedAccount ?? {})?.length,
-    [selectedAccount]
-  );
+  const { height: footerHeight = 0 } = useResizeObserver({
+    ref: footerRef,
+    box: "border-box",
+  });
+  const { height: interactionHeight = 0 } = useResizeObserver({
+    ref: interactionRef,
+    box: "border-box",
+  });
+  const mainPanelRef = useRef<ImperativePanelHandle>(null);
+  const orderbookPanelRef = useRef<ImperativePanelHandle>(null);
 
-  const fundWalletPresent = useMemo(
-    () => !!Object.keys(selectedWallet ?? {})?.length,
-    [selectedWallet]
-  );
   const { width } = useWindowSize();
 
   const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, id);
-  const responsiveView = useMemo(() => width < 640, [width]);
 
-  const isResponsive = useMemo(
-    () => responsiveView && (tradingWalletPresent || fundWalletPresent),
-    [responsiveView, tradingWalletPresent, fundWalletPresent]
-  );
+  const mobileView = useMemo(() => width < 640, [width]);
+  const desktopView = useMemo(() => width >= 1280, [width]);
 
   return (
     <Fragment>
       <ConnectTradingInteraction />
-      <Header ref={headerRef} />
-      <main
-        className={classNames(
-          "overflow-auto flex-1",
-          "grid grid-cols-1",
-          "1xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-1"
-        )}
-      >
+      <Header />
+      {mobileView ? (
         <div
-          className={classNames(
-            "max-xl:min-h-96",
-            "1xl:col-span-3 xl:col-span-2 lg:col-span-3"
-          )}
+          className="flex flex-col h-full min-h-screen"
+          style={{
+            paddingBottom: `${interactionHeight}px`,
+          }}
         >
-          <div className="flex flex-col flex-grow border-r border-primary h-full w-full">
-            <AssetInfo currentMarket={currentMarket} />
-            <Graph id={id} />
-          </div>
+          <Responsive id={id} />
+          <Orders />
         </div>
-        <div
-          className={classNames(
-            "max-xl:min-h-96 flex flex-col",
-            "1xl:col-span-1 xl:col-span-1 lg:col-span-1"
-          )}
-        >
-          <Orderbook maxHeight={tableMaxHeight as string} id={id} />
-        </div>
-        <div
-          className={classNames(
-            "1xl:col-span-1 xl:col-span-1 lg:col-span-1",
-            "max-1xl:border-t max-1xl:border-x max-1xl:border-primary max-xl:min-h-96"
-          )}
-        >
-          <Trades maxHeight={tableMaxHeight as string} id={id} />
-        </div>
-        <div
-          className={classNames(
-            "1xl:col-span-3 xl:col-span-2 lg:col-span-3",
-            "h-full flex flex-1 border-t border-primary border-r"
-          )}
-        >
-          <Orders maxHeight={ordersMaxHeight as string} />
-        </div>
-        <div
-          ref={marketRef}
-          className={classNames(
-            "1xl:col-span-2 xl:col-span-2 lg:col-span-4",
-            "flex flex-1 border-t border-primary"
-          )}
-        >
-          <PlaceOrder ref={placeOrderRef} market={currentMarket} />
-        </div>
-      </main>
-      {isResponsive ? (
-        <ResponsiveProfile />
       ) : (
-        <Footer ref={footerRef} marketsActive />
+        <Resizable
+          direction="vertical"
+          className="flex-1 h-full"
+          vaul-drawer-wrapper=""
+          style={{
+            paddingBottom: `${footerHeight}px`,
+          }}
+        >
+          <Resizable.Panel
+            ref={mainPanelRef}
+            defaultSize={80}
+            minSize={50}
+            className="flex min-h-[500px]"
+          >
+            <Resizable direction="horizontal">
+              <Resizable.Panel minSize={40}>
+                <div className="flex flex-col flex-grow h-full w-full">
+                  <AssetInfo currentMarket={currentMarket} />
+                  <Graph id={id} />
+                </div>
+              </Resizable.Panel>
+              <Resizable.Handle />
+              <Resizable.Panel
+                ref={orderbookPanelRef}
+                defaultSize={22}
+                minSize={21}
+                className="min-w-[280px]"
+              >
+                <Orderbook id={id} />
+              </Resizable.Panel>
+              {desktopView && (
+                <Fragment>
+                  <Resizable.Handle />
+                  <Resizable.Panel
+                    defaultSize={22}
+                    minSize={21}
+                    collapsible
+                    collapsedSize={0}
+                  >
+                    <Trades id={id} />
+                  </Resizable.Panel>
+                </Fragment>
+              )}
+            </Resizable>
+          </Resizable.Panel>
+          <Resizable.Handle />
+          <Resizable.Panel
+            className={classNames(
+              desktopView || mobileView ? "min-h-[310px]" : "min-h-[700px]"
+            )}
+          >
+            <Resizable direction={desktopView ? "horizontal" : "vertical"}>
+              <Resizable.Panel defaultSize={58} minSize={58}>
+                <Orders />
+              </Resizable.Panel>
+              <Resizable.Handle />
+              {!mobileView && (
+                <Resizable.Panel
+                  className="border-x border-primary min-h-[310px]"
+                  collapsible
+                  collapsedSize={0}
+                  defaultValue={38}
+                  minSize={38}
+                >
+                  <PlaceOrder market={currentMarket} />
+                </Resizable.Panel>
+              )}
+            </Resizable>
+          </Resizable.Panel>
+        </Resizable>
       )}
+
+      {mobileView && (
+        <ResponsiveInteraction isResponsive={mobileView} ref={interactionRef} />
+      )}
+      <Footer marketsActive ref={footerRef} />
     </Fragment>
   );
 }

@@ -62,6 +62,9 @@ export const Table = ({
         title="No data"
         illustration="NoData"
         className="bg-level-0 p-0"
+        imageProps={{
+          className: "w-10 self-center",
+        }}
       />
     );
 

@@ -137,6 +137,9 @@ export const Table = forwardRef<
           title="No result found"
           illustration="NoResultFound"
           className="bg-level-1"
+          imageProps={{
+            className: "w-10 self-center",
+          }}
         />
       )}
     </Fragment>

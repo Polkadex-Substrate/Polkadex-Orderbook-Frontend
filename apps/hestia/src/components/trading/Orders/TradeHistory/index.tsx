@@ -28,13 +28,7 @@ const responsiveKeys = ["type", "price"];
 const actionKeys = ["date", "price", "amount", "fee"];
 const widthKeys = ["20%", "20%", "20%", "20%", "20%"];
 
-export const TradeHistoryTable = ({
-  filters,
-  maxHeight,
-}: {
-  filters: Ifilters;
-  maxHeight: string;
-}) => {
+export const TradeHistoryTable = ({ filters }: { filters: Ifilters }) => {
   const { isLoading, trades, hasNextPage, onFetchNextPage, error } =
     useTradeHistory(DEFAULT_BATCH_LIMIT, filters);
   const { width } = useWindowSize();
@@ -48,7 +42,6 @@ export const TradeHistoryTable = ({
   const [responsiveState, setResponsiveState] = useState(false);
   const [responsiveData, setResponsiveData] = useState<Trade | null>(null);
   const responsiveView = useMemo(() => width < 500 || width <= 715, [width]);
-  const isResponsive = useMemo(() => width <= 1265, [width]);
 
   if (isLoading) return <Loading />;
 
@@ -58,6 +51,9 @@ export const TradeHistoryTable = ({
         title={"No items found"}
         illustration="NoData"
         className="bg-level-0"
+        imageProps={{
+          className: "w-10 self-center",
+        }}
       />
     );
 
@@ -75,7 +71,6 @@ export const TradeHistoryTable = ({
           onFetchNextPage();
         }}
         hasMore={Boolean(hasNextPage)}
-        height={isResponsive ? "384px" : maxHeight}
         loader={<Spinner.Keyboard className="h-6 mx-auto my-2" />}
       >
         <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">

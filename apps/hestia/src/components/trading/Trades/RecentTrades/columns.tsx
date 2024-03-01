@@ -58,6 +58,7 @@ export const columns = ({
         hour: "numeric",
         minute: "2-digit",
         second: "2-digit",
+        hourCycle: "h23",
       }).format(e.getValue());
       return <Typography.Text size="xs">{date}</Typography.Text>;
     },
