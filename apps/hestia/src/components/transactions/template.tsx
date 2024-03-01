@@ -7,6 +7,7 @@ import { useElementSize, useResizeObserver, useWindowSize } from "usehooks-ts";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import classNames from "classnames";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
@@ -75,12 +76,14 @@ export function Template() {
     selectedAddresses: { mainAddress, tradeAddress },
   } = useProfile();
   const mobileView = useMemo(() => width < 640, [width]);
+  const { browserAccountPresent, extensionAccountPresent } =
+    useConnectWalletProvider();
 
   return (
     <>
       <ConnectTradingInteraction />
       <div
-        className="flex flex-1 flex-col bg-backgroundBase max-sm:pb-16"
+        className="flex flex-1 flex-col bg-backgroundBase h-full"
         vaul-drawer-wrapper=""
       >
         <Tabs
@@ -191,12 +194,15 @@ export function Template() {
               <Help ref={helpRef} />
             </div>
           </main>
-          {mobileView && (
+          {mobileView && (browserAccountPresent || extensionAccountPresent) && (
             <div
               ref={interactionRef}
               className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full"
             >
-              <ResponsiveProfile />
+              <ResponsiveProfile
+                extensionAccountPresent={extensionAccountPresent}
+                browserAccountPresent={browserAccountPresent}
+              />
             </div>
           )}
           <Footer ref={footerRef} />

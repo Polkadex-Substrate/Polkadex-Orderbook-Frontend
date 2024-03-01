@@ -28,20 +28,16 @@ export const Profile = ({
   showFundingWallet: boolean;
 }) => {
   const { width } = useWindowSize();
-  const { selectedWallet, selectedAccount } = useConnectWalletProvider();
+  const {
+    selectedWallet,
+    selectedAccount,
+    browserAccountPresent,
+    extensionAccountPresent,
+  } = useConnectWalletProvider();
 
-  // Move to useConnectWalletProvider
-  const tradingWalletPresent = useMemo(
-    () => !!Object.keys(selectedAccount ?? {})?.length,
-    [selectedAccount]
-  );
-  const fundWalletPresent = useMemo(
-    () => !!Object.keys(selectedWallet ?? {})?.length,
-    [selectedWallet]
-  );
   const responsiveView = useMemo(() => width > 640, [width]);
 
-  if (tradingWalletPresent || fundWalletPresent)
+  if (browserAccountPresent || extensionAccountPresent)
     return (
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-2">
@@ -81,8 +77,8 @@ export const Profile = ({
           <Popover>
             <Popover.Trigger superpositionTrigger>
               <Trigger
-                browserAccountPresent={tradingWalletPresent}
-                extensionAccountPresent={fundWalletPresent}
+                browserAccountPresent={browserAccountPresent}
+                extensionAccountPresent={extensionAccountPresent}
                 extensionAccountName={selectedWallet?.name ?? ""}
                 browserAccountAddress={selectedAccount?.address ?? ""}
               />

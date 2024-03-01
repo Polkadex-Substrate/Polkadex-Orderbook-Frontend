@@ -1,7 +1,7 @@
 "use client";
 
 import { GenericMessage, Tabs, Typography } from "@polkadex/ux";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { RiInformation2Line } from "@remixicon/react";
 import { useTransactions, useTransferHistory } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
@@ -19,7 +19,7 @@ import { ReadyToClaim } from "./ReadyToClaim";
 import { useSizeProvider } from "./provider";
 
 import { Footer, Header } from "@/components/ui";
-import { useTransfer } from "@/hooks";
+import { useResizeObserver, useTransfer } from "@/hooks";
 import { defaultConfig } from "@/config";
 
 const sleep = async (ms: number) =>
@@ -32,14 +32,19 @@ export function Template() {
 
   const {
     headerRef,
-    footerRef,
-    formwRef,
     helpRef,
     tableTitleRef,
+    formwRef,
     interactionRef,
     interactionHeight,
-    footerHeight,
+    tableMaxHeight,
   } = useSizeProvider();
+  const footerRef = useRef<HTMLDivElement | null>(null);
+
+  const { height: footerHeight = 0 } = useResizeObserver({
+    ref: footerRef,
+    box: "border-box",
+  });
 
   const {
     onChangeAsset,
@@ -52,7 +57,9 @@ export function Template() {
   } = useTransfer();
 
   const { readyWithdrawals } = useTransactions();
-  const { selectedAccount, selectedWallet } = useConnectWalletProvider();
+  const { selectedWallet, browserAccountPresent, extensionAccountPresent } =
+    useConnectWalletProvider();
+
   const [activeTab, setActiveTab] = useState("history");
 
   const { data, isLoading, refetch } = useTransferHistory(
@@ -77,7 +84,7 @@ export function Template() {
         onChangeAsset={onChangeAsset}
       />
       <div
-        className="flex flex-1 flex-col bg-backgroundBase max-sm:pb-16"
+        className="flex flex-1 flex-col bg-backgroundBase h-full"
         vaul-drawer-wrapper=""
       >
         <Header ref={headerRef} />
@@ -125,12 +132,13 @@ export function Template() {
                     </Tabs.Trigger>
                   </Tabs.List>
                 </div>
-                {selectedAccount || selectedWallet ? (
+                {browserAccountPresent || extensionAccountPresent ? (
                   <Fragment>
                     <Tabs.Content value="history" className="flex flex-col">
                       <History
                         subscanData={data?.pages?.[0]?.transfers}
                         subscanLoading={isLoading}
+                        tableMaxHeight={tableMaxHeight}
                       />
                     </Tabs.Content>
                     <Tabs.Content
@@ -145,9 +153,6 @@ export function Template() {
                     title="Connect your trading account"
                     illustration="ConnectAccount"
                     className="bg-level-0 border-b border-primary"
-                    imageProps={{
-                      className: "w-10 self-center",
-                    }}
                   />
                 )}
               </div>
@@ -155,12 +160,15 @@ export function Template() {
             <Help ref={helpRef} />
           </div>
         </main>
-        {mobileView && (
+        {mobileView && (browserAccountPresent || extensionAccountPresent) && (
           <div
             ref={interactionRef}
             className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full"
           >
-            <ResponsiveProfile />
+            <ResponsiveProfile
+              extensionAccountPresent={extensionAccountPresent}
+              browserAccountPresent={browserAccountPresent}
+            />
           </div>
         )}
         <Footer ref={footerRef} />

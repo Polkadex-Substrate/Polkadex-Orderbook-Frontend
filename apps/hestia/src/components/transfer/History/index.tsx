@@ -20,8 +20,6 @@ import { TransferHistory, getChainFromTicker } from "@orderbook/core/helpers";
 import { useExtensionAccounts } from "@polkadex/react-providers";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
-import { useSizeProvider } from "../provider";
-
 import { DepositData, columns } from "./columns";
 import { Filters } from "./Filters";
 import { ResponsiveTable } from "./responsiveTable";
@@ -39,12 +37,12 @@ export const filters = {
 export const History = ({
   subscanData,
   subscanLoading,
+  tableMaxHeight,
 }: {
   subscanData?: TransferHistory[];
   subscanLoading?: boolean;
+  tableMaxHeight?: string;
 }) => {
-  const { tableMaxHeight } = useSizeProvider();
-
   const { width } = useWindowSize();
 
   const responsiveView = useMemo(() => width <= 1040, [width]);

@@ -11,15 +11,12 @@ import {
 } from "react";
 import { useResizeObserver } from "usehooks-ts";
 
-import { useSizeObserver } from "@/hooks";
-
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
 type GenericRef<T = HTMLDivElement> = MutableRefObject<T | null>;
 type State = {
   headerRef: GenericRef;
-  footerRef: (node: HTMLDivElement | null) => void;
   helpRef: GenericRef;
   tableTitleRef: GenericRef;
   formwRef: GenericRef;
@@ -27,7 +24,6 @@ type State = {
   interactionRef: GenericRef;
   tableMaxHeight: string;
   interactionHeight: number;
-  footerHeight: number;
 };
 
 // useElementSize Deprecated -> useResizeObserver
@@ -48,8 +44,6 @@ export const SizeProvider = ({ children }: { children: ReactNode }) => {
     ref: headerRef,
     box: "border-box",
   });
-
-  const [footerRef, footerHeight] = useSizeObserver();
 
   const { height: tableTitleHeight = 0 } = useResizeObserver({
     ref: tableTitleRef,
@@ -88,7 +82,6 @@ export const SizeProvider = ({ children }: { children: ReactNode }) => {
     <Provider
       value={{
         headerRef,
-        footerRef,
         helpRef,
         tableTitleRef,
         formwRef,
@@ -96,7 +89,6 @@ export const SizeProvider = ({ children }: { children: ReactNode }) => {
         filtersRef,
         interactionRef,
         interactionHeight,
-        footerHeight,
       }}
     >
       {children}
