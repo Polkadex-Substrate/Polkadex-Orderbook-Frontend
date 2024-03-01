@@ -32,7 +32,7 @@ export const ResponsiveData = ({
         <Button.Solid
           appearance="secondary"
           className="w-full"
-          onClick={() => router.push(`/analitycs/${data?.ticker}${data?.pair}`)}
+          onClick={() => router.push(`/rewards/${data?.ticker}${data?.pair}`)}
         >
           Open metrics
         </Button.Solid>

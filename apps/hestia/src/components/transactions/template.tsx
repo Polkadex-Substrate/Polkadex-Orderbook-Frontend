@@ -3,7 +3,7 @@
 import { Typography, Input, Tabs, Tooltip, ScrollArea } from "@polkadex/ux";
 import { useMemo, useRef, useState } from "react";
 import { RiInformation2Line } from "@remixicon/react";
-import { useElementSize, useResizeObserver, useWindowSize } from "usehooks-ts";
+import { useResizeObserver, useWindowSize } from "usehooks-ts";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import classNames from "classnames";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -21,7 +21,6 @@ import { Footer, Header } from "@/components/ui";
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ConnectAccountWrapper } from "@/components/ui/ReadyToUse";
 
-// useElementSize Deprecated -> useResizeObserver
 export function Template() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -32,6 +31,7 @@ export function Template() {
   const helpRef = useRef<HTMLDivElement | null>(null);
   const overviewRef = useRef<HTMLDivElement | null>(null);
   const interactionRef = useRef<HTMLDivElement | null>(null);
+  const tableRowsRef = useRef<HTMLDivElement | null>(null);
 
   const { height: overviewHeight = 0 } = useResizeObserver({
     ref: overviewRef,
@@ -57,8 +57,10 @@ export function Template() {
     ref: interactionRef,
     box: "border-box",
   });
-
-  const [tableRowsRef, { height: tableRowsHeight = 0 }] = useElementSize();
+  const { height: tableRowsHeight = 0 } = useResizeObserver({
+    ref: tableRowsRef,
+    box: "border-box",
+  });
 
   const [searchTerm, setSearchTerm] = useState("");
 
