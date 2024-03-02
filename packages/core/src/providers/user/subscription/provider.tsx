@@ -85,29 +85,16 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 
             if (payload.status === "OPEN") {
               if (order) {
-                const isSell = order.side === "Ask";
-                const type =
-                  order.type.charAt(0) + order.type.toLowerCase().slice(1);
-                const side = isSell ? "Sell" : "Buy";
-                onHandleInfo?.(
-                  `${type} ${side} Order Partially Filled`,
-                  `Partial filled exchange ${type.toLowerCase()} ${side.toLowerCase()} order for ${order.quantity} ${order.market.baseAsset.ticker} by using ${order.market.quoteAsset.ticker}`
-                );
+                const notf = NOTIFICATIONS.partialFilledOrder(order);
+                onPushNotification(notf);
+                onHandleInfo?.(notf.message, notf.description);
               }
-
-              onPushNotification(NOTIFICATIONS.placeOrder(payload));
-
               updatedOpenOrders = replaceOrPushOrder(prevOpenOrders, payload);
             } else {
               if (order && payload.status === "CLOSED") {
-                const isSell = order.side === "Ask";
-                const type =
-                  order.type.charAt(0) + order.type.toLowerCase().slice(1);
-                const side = isSell ? "Sell" : "Buy";
-                onHandleInfo?.(
-                  `${type} ${side} Order Filled`,
-                  `Filled exchange ${type.toLowerCase()} ${side.toLowerCase()} order for ${order.quantity} ${order.market.baseAsset.ticker} by using ${order.market.quoteAsset.ticker}`
-                );
+                const notf = NOTIFICATIONS.filledOrder(order);
+                onPushNotification(notf);
+                onHandleInfo?.(notf.message, notf.description);
               }
 
               // Remove from Open Orders if it is closed
