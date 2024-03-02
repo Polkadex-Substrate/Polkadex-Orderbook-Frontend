@@ -92,7 +92,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 
               updatedOpenOrders = replaceOrPushOrder(prevOpenOrders, payload);
             } else {
-              if (order) {
+              if (order && payload.status === "CLOSED") {
                 const isSell = order.side === "Ask";
                 const type =
                   order.type.charAt(0) + order.type.toLowerCase().slice(1);
