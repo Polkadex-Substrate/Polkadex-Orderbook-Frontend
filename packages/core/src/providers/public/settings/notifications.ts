@@ -4,13 +4,13 @@ export const additionalNotifications: T.Notification[] = [
   {
     category: "Announcements",
     date: new Date().getTime(),
-    message: "GMLR/USDT available",
+    message: "Hestia UI Upgrade 🎉 ",
     description:
-      "Plus, the Polkadex community is now accepting Moonbeam token listing proposals.",
+      "Introducing the new Hestia version of Orderbook! 🚀 Experience a sleek and intuitive UI overhaul designed to enhance your trading journey. Seamlessly navigate markets with improved functionality and aesthetics. Upgrade now to discover the future of trading!",
     id: "random id",
     type: "Information",
     active: true,
-    href: "/transfer",
+    href: "/trading/PDEXUSDT",
   },
   {
     category: "General",
