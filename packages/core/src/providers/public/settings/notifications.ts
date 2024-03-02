@@ -1,5 +1,8 @@
 import * as T from "./types";
 
+// Change only this to add/delete categories
+export const notificationCategories = ["General", "Announcements"] as const;
+
 export const additionalNotifications: T.Notification[] = [
   {
     category: "Announcements",

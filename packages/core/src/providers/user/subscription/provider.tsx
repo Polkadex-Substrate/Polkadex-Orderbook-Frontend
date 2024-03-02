@@ -17,7 +17,11 @@ import {
 } from "@orderbook/core/utils/orderbookService";
 import { Bar } from "@orderbook/core/utils/charting_library";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
-import { DEFAULT_BATCH_LIMIT, QUERY_KEYS } from "@orderbook/core/constants";
+import {
+  DEFAULT_BATCH_LIMIT,
+  QUERY_KEYS,
+  NOTIFICATIONS,
+} from "@orderbook/core/constants";
 import { useOrderbookService } from "@orderbook/core/providers/public/orderbookServiceProvider/useOrderbookService";
 import {
   decimalPlaces,
@@ -49,7 +53,8 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 }) => {
   const queryClient = useQueryClient();
   const path = usePathname();
-  const { onHandleError, onHandleInfo } = useSettingsProvider();
+  const { onHandleError, onHandleInfo, onPushNotification } =
+    useSettingsProvider();
   const { isReady, markets } = useOrderbookService();
   const { dateFrom, dateTo } = useSessionProvider();
   const {
@@ -89,6 +94,8 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
                   `Partial filled exchange ${type.toLowerCase()} ${side.toLowerCase()} order for ${order.quantity} ${order.market.baseAsset.ticker} by using ${order.market.quoteAsset.ticker}`
                 );
               }
+
+              onPushNotification(NOTIFICATIONS.placeOrder(payload));
 
               updatedOpenOrders = replaceOrPushOrder(prevOpenOrders, payload);
             } else {
@@ -159,7 +166,15 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         );
       }
     },
-    [dateFrom, dateTo, onHandleError, queryClient, tradeAddress, onHandleInfo]
+    [
+      dateFrom,
+      dateTo,
+      onHandleError,
+      queryClient,
+      tradeAddress,
+      onHandleInfo,
+      onPushNotification,
+    ]
   );
 
   const onRecentTradeUpdates = useCallback(

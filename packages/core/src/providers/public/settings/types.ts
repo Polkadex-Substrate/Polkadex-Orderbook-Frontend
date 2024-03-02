@@ -1,16 +1,17 @@
 import { FC, PropsWithChildren } from "react";
 
-export type NotificationCategory = "General" | "Announcements";
+import * as N from "./notifications";
+
+export type NotificationCategory = (typeof N.notificationCategories)[number];
 
 export type NotificationPayload = {
   type: "Error" | "Information" | "Success" | "Loading" | "Attention";
   message: string;
   description: string;
-  showToast?: boolean;
   category: NotificationCategory;
 };
 
-export interface Notification extends Omit<NotificationPayload, "showToast"> {
+export interface Notification extends NotificationPayload {
   id: string;
   date: number;
   active: boolean;
