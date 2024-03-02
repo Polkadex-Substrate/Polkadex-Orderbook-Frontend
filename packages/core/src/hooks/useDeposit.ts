@@ -13,7 +13,7 @@ type DepositArgs = {
 };
 
 export const useDeposit = () => {
-  const { onHandleError, onHandleInfo } = useSettingsProvider();
+  const { onHandleError, onHandleInfo, onHandleAlert } = useSettingsProvider();
   const { api } = useNativeApi();
   const { isReady } = useOrderbookService();
 
@@ -41,11 +41,9 @@ export const useDeposit = () => {
       onHandleError(errorMessage);
     },
     onSuccess: () =>
-      onHandleNotification({
-        type: "Success",
-        message:
-          "Congratulations! You have successfully deposited assets to your trading account.",
-      }),
+      onHandleAlert(
+        "Congratulations! You have successfully deposited assets to your trading account."
+      ),
   });
 
   return { mutateAsync, loading: status === "loading" };

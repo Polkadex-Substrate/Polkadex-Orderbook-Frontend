@@ -22,7 +22,7 @@ export const useWithdrawClaim = () => {
     getSigner,
   } = useProfile();
   const { api } = useNativeApi();
-  const { onHandleInfo, onHandleError } = useSettingsProvider();
+  const { onHandleInfo, onHandleError, onHandleAlert } = useSettingsProvider();
   const { onChangeChainBalance } = useFunds();
   const { isReady } = useOrderbookService();
   const { extensionAccounts } = useExtensionAccounts();
@@ -75,11 +75,9 @@ export const useWithdrawClaim = () => {
       onHandleError(errorMessage);
     },
     onSuccess: () =>
-      onHandleNotification({
-        type: "Success",
-        message:
-          "Congratulations! You have successfully withdrawn your assets to your funding account.",
-      }),
+      onHandleAlert(
+        "Congratulations! You have successfully withdrawn your assets to your funding account."
+      ),
   });
 
   return { mutateAsync, loading: status === "loading" };

@@ -22,7 +22,7 @@ export const useWithdraw = () => {
     selectedAddresses: { mainAddress, tradeAddress },
   } = useProfile();
   const { api } = useNativeApi();
-  const { onHandleNotification, onHandleError } = useSettingsProvider();
+  const { onHandleAlert, onHandleError } = useSettingsProvider();
   const { wallet } = useUserAccounts();
   const { isReady } = useOrderbookService();
 
@@ -57,11 +57,9 @@ export const useWithdraw = () => {
       onHandleError(errorMessage);
     },
     onSuccess: () =>
-      onHandleNotification({
-        type: "Success",
-        message:
-          "Your withdrawal is being processed and will be available for you to claim in a few minutes",
-      }),
+      onHandleAlert(
+        "Your withdrawal is being processed and will be available for you to claim in a few minutes"
+      ),
   });
 
   return { mutateAsync, loading: status === "loading" };

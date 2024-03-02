@@ -15,7 +15,7 @@ interface AssetTransferParams {
 }
 export const useAssetTransfer = (onRefetch: () => Promise<void>) => {
   const { api } = useNativeApi();
-  const { onHandleError, onHandleNotification } = useSettingsProvider();
+  const { onHandleError, onHandleAlert } = useSettingsProvider();
 
   return useMutation({
     mutationFn: async ({
@@ -44,11 +44,9 @@ export const useAssetTransfer = (onRefetch: () => Promise<void>) => {
       onHandleError(error?.message ?? error),
     onSuccess: async () => {
       await onRefetch();
-      onHandleNotification({
-        type: "Success",
-        message:
-          "Deposit sent successfully. Please wait a few seconds to see the transaction in the history.",
-      });
+      onHandleAlert(
+        "Deposit sent successfully. Please wait a few seconds to see the transaction in the history."
+      );
     },
   });
 };
