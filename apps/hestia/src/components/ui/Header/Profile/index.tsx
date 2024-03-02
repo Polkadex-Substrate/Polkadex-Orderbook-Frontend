@@ -15,17 +15,21 @@ import {
 import { Trigger } from "./trigger";
 import { Content } from "./content";
 
+import Badge from "@/components/ui/Temp/badge";
+
 export const Profile = ({
   onClick,
   onOpenMenu,
   onOpenNotifications,
   onOpenFundWallet,
+  unreadNotifications,
 }: {
   onClick: () => void;
   onOpenMenu: () => void;
   onOpenNotifications: () => void;
   onOpenFundWallet: () => void;
   showFundingWallet: boolean;
+  unreadNotifications: number;
 }) => {
   const { width } = useWindowSize();
   const { selectedWallet, selectedAccount } = useConnectWalletProvider();
@@ -70,9 +74,11 @@ export const Profile = ({
           </Tooltip>
           <Tooltip>
             <Tooltip.Trigger asChild>
-              <Button.Icon onClick={onOpenNotifications}>
-                <RiNotification3Line className="h-full w-full" />
-              </Button.Icon>
+              <Badge value={unreadNotifications}>
+                <Button.Icon onClick={onOpenNotifications}>
+                  <RiNotification3Line className="h-full w-full" />
+                </Button.Icon>
+              </Badge>
             </Tooltip.Trigger>
             <Tooltip.Content>Notifications</Tooltip.Content>
           </Tooltip>
