@@ -23,6 +23,17 @@ export const NOTIFICATIONS = {
       type: "Success",
     };
   },
+  cancelOrder: (order: Order): NotificationPayload => {
+    const isSell = order.side === "Ask";
+    const type = order.type.charAt(0) + order.type.toLowerCase().slice(1);
+    const side = isSell ? "Sell" : "Buy";
+    return {
+      category: "General",
+      message: `${type} ${side} Order Cancelled`,
+      description: `Cancelled exchange ${type.toLowerCase()} ${side.toLowerCase()} order for ${order.quantity} ${order.market.baseAsset.ticker}`,
+      type: "Information",
+    };
+  },
   partialFilledOrder: (order: Order): NotificationPayload => {
     const isSell = order.side === "Ask";
     const type = order.type.charAt(0) + order.type.toLowerCase().slice(1);

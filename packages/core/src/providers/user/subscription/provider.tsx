@@ -79,20 +79,23 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 
             let updatedOpenOrders: Order[] = [];
 
-            const order = prevOpenOrders.find(
+            const findOrder = prevOpenOrders.find(
               (order) => order.orderId === payload.orderId
             );
 
             if (payload.status === "OPEN") {
-              if (order) {
-                const notf = NOTIFICATIONS.partialFilledOrder(order);
+              if (findOrder) {
+                const notf = NOTIFICATIONS.partialFilledOrder(findOrder);
                 onPushNotification(notf);
                 onHandleInfo?.(notf.message, notf.description);
               }
               updatedOpenOrders = replaceOrPushOrder(prevOpenOrders, payload);
             } else {
-              if (order && payload.status === "CLOSED") {
-                const notf = NOTIFICATIONS.filledOrder(order);
+              if (payload.status === "CANCELLED") {
+                onPushNotification(NOTIFICATIONS.cancelOrder(payload));
+              }
+              if (findOrder && payload.status === "CLOSED") {
+                const notf = NOTIFICATIONS.filledOrder(findOrder);
                 onPushNotification(notf);
                 onHandleInfo?.(notf.message, notf.description);
               }
