@@ -16,7 +16,6 @@ import { TableRewards } from "./TableRewards";
 
 import { Footer, Header } from "@/components/ui";
 
-// useElementSize Deprecated -> useResizeObserver
 export function Template() {
   const { width } = useWindowSize();
 

@@ -18,7 +18,7 @@ export const Trades = ({ id }: { id: string }) => {
         <Tabs.Content value="markets" className="bg-level-0">
           <Markets />
         </Tabs.Content>
-        <Tabs.Content value="recentTrades">
+        <Tabs.Content value="recentTrades" className="bg-level-0">
           <RecentTrades id={id} />
         </Tabs.Content>
       </div>

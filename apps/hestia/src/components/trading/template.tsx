@@ -113,17 +113,20 @@ export function Template({ id }: { id: string }) {
               <Resizable.Panel defaultSize={58} minSize={58}>
                 <Orders />
               </Resizable.Panel>
-              <Resizable.Handle />
+
               {!mobileView && (
-                <Resizable.Panel
-                  className="border-x border-primary min-h-[310px]"
-                  collapsible
-                  collapsedSize={0}
-                  defaultValue={38}
-                  minSize={38}
-                >
-                  <PlaceOrder market={currentMarket} />
-                </Resizable.Panel>
+                <Fragment>
+                  <Resizable.Handle />
+                  <Resizable.Panel
+                    className="border-x border-primary min-h-[310px]"
+                    collapsible
+                    collapsedSize={0}
+                    defaultValue={38}
+                    minSize={38}
+                  >
+                    <PlaceOrder market={currentMarket} />
+                  </Resizable.Panel>
+                </Fragment>
               )}
             </Resizable>
           </Resizable.Panel>
