@@ -13,6 +13,9 @@ interface CardProps extends ComponentProps<"div"> {
   title: string;
   active?: boolean;
   href?: string;
+  onRead: () => void;
+  onRemove: () => void;
+  onRedirect: () => void;
 }
 
 export const Card = ({
@@ -20,6 +23,9 @@ export const Card = ({
   title,
   active,
   href,
+  onRead,
+  onRemove,
+  onRedirect,
   children,
   ...props
 }: PropsWithChildren<CardProps>) => {
@@ -47,15 +53,15 @@ export const Card = ({
           </div>
           <div className="opacity-0 group-hover:opacity-100 flex bg-level-2/50 rounded shadow-lg">
             {active && (
-              <Button.Icon size="2sm" variant="ghost">
+              <Button.Icon size="2sm" variant="ghost" onClick={onRead}>
                 <RiCheckDoubleFill className="w-full h-full" />
               </Button.Icon>
             )}
-            <Button.Icon size="2sm" variant="ghost">
+            <Button.Icon size="2sm" variant="ghost" onClick={onRemove}>
               <RiDeleteBin5Line className="w-full h-full" />
             </Button.Icon>
             {href && (
-              <Button.Icon size="2sm" variant="ghost">
+              <Button.Icon size="2sm" variant="ghost" onClick={onRedirect}>
                 <RiExternalLinkLine className="w-full h-full" />
               </Button.Icon>
             )}

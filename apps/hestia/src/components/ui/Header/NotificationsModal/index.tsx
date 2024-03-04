@@ -15,8 +15,12 @@ export const NotificationsModal = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { notifications: allNotifications, onReadAllNotifications } =
-    useSettingsProvider();
+  const {
+    notifications: allNotifications,
+    onReadAllNotifications,
+    onReadNotification,
+    onRemoveNotification,
+  } = useSettingsProvider();
   const notifications: { [category: string]: Notification[] } = useMemo(() => {
     return allNotifications.reduce<{ [category: string]: Notification[] }>(
       (acc, notification) => {
@@ -24,9 +28,6 @@ export const NotificationsModal = ({
           ...(acc[notification.category] || []),
           notification,
         ];
-        acc[notification.category].sort((a, b) =>
-          a.active === b.active ? 0 : a.active ? -1 : 1
-        );
         return acc;
       },
       {}
@@ -74,6 +75,17 @@ export const NotificationsModal = ({
                           date={new Date(date).toLocaleDateString()}
                           active={active}
                           href={href}
+                          onRead={() => onReadNotification(id)}
+                          onRemove={() => onRemoveNotification(id)}
+                          onRedirect={() => {
+                            onReadNotification(id);
+                            href &&
+                              window.open(
+                                href,
+                                "_blank",
+                                "noopener, noreferrer"
+                              );
+                          }}
                         >
                           {description}
                         </Card>
