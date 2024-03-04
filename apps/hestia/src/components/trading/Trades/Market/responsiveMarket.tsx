@@ -142,7 +142,9 @@ export const ResponsiveMarket = ({
                               key={cell.id}
                               role="button"
                               onClick={() =>
-                                handleChangeMarket(row.original.name, () => {})
+                                handleChangeMarket(row.original.name, () =>
+                                  onOpenChange(false)
+                                )
                               }
                             >
                               {flexRender(
