@@ -1,7 +1,6 @@
 import { NotificationCategory } from "@orderbook/core/providers/public/settings";
 import { Button, Typography } from "@polkadex/ux";
 import {
-  RiArrowRightSLine,
   RiExternalLinkLine,
   RiDeleteBin5Line,
   RiCheckDoubleFill,
@@ -54,7 +53,7 @@ export const Card = ({
               {date}
             </Typography.Text>
           </div>
-          <div className="opacity-0 group-hover:opacity-100 flex bg-level-2/50 rounded shadow-lg">
+          <div className="opacity-0 group-hover:opacity-100 flex bg-level-2/50 rounded shadow-lg relative -top-1">
             {active && (
               <Button.Icon size="2sm" variant="ghost" onClick={onRead}>
                 <RiCheckDoubleFill className="w-full h-full" />
@@ -74,7 +73,6 @@ export const Card = ({
         </div>
         <div className="flex items-center justify-between gap-2">
           <Typography.Text appearance="primary">{children}</Typography.Text>
-          <RiArrowRightSLine className="min-w-[16px] min-h-[16px] w-4 h-4 text-primary" />
         </div>
       </div>
     </div>
