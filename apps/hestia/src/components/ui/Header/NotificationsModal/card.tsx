@@ -1,3 +1,4 @@
+import { NotificationCategory } from "@orderbook/core/providers/public/settings";
 import { Button, Typography } from "@polkadex/ux";
 import {
   RiArrowRightSLine,
@@ -10,6 +11,7 @@ import { ComponentProps, PropsWithChildren } from "react";
 
 interface CardProps extends ComponentProps<"div"> {
   date: string;
+  category: NotificationCategory;
   title: string;
   active?: boolean;
   href?: string;
@@ -20,6 +22,7 @@ interface CardProps extends ComponentProps<"div"> {
 
 export const Card = ({
   date,
+  category,
   title,
   active,
   href,
@@ -57,9 +60,11 @@ export const Card = ({
                 <RiCheckDoubleFill className="w-full h-full" />
               </Button.Icon>
             )}
-            <Button.Icon size="2sm" variant="ghost" onClick={onRemove}>
-              <RiDeleteBin5Line className="w-full h-full" />
-            </Button.Icon>
+            {category === "General" && (
+              <Button.Icon size="2sm" variant="ghost" onClick={onRemove}>
+                <RiDeleteBin5Line className="w-full h-full" />
+              </Button.Icon>
+            )}
             {href && (
               <Button.Icon size="2sm" variant="ghost" onClick={onRedirect}>
                 <RiExternalLinkLine className="w-full h-full" />

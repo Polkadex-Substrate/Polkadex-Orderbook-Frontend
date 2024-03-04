@@ -3,6 +3,7 @@ import { Button, Modal, Typography } from "@polkadex/ux";
 import { RiCloseLine } from "@remixicon/react";
 import {
   useSettingsProvider,
+  NotificationCategory,
   Notification,
 } from "@orderbook/core/providers/public/settings";
 
@@ -18,6 +19,7 @@ export const NotificationsModal = ({
   const {
     notifications: allNotifications,
     onReadAllNotifications,
+    onClearNotifications,
     onReadNotification,
     onRemoveNotification,
   } = useSettingsProvider();
@@ -71,6 +73,7 @@ export const NotificationsModal = ({
                       return (
                         <Card
                           key={id}
+                          category={category as NotificationCategory}
                           title={message}
                           date={new Date(date).toLocaleDateString()}
                           active={active}
@@ -97,13 +100,20 @@ export const NotificationsModal = ({
             );
           })}
       </Modal.Content>
-      <Modal.Footer className="p-4">
+      <Modal.Footer className="p-4 flex gap-2">
         <Button.Solid
           onClick={onReadAllNotifications}
           className="w-full"
           appearance="secondary"
         >
           Mark all as read
+        </Button.Solid>
+        <Button.Solid
+          onClick={onClearNotifications}
+          className="w-full"
+          appearance="secondary"
+        >
+          Remove all
         </Button.Solid>
       </Modal.Footer>
     </Modal>
