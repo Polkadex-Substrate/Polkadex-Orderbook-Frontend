@@ -64,7 +64,7 @@ export const NOTIFICATIONS = {
   transferToTradingAccount: (tx: Transaction): NotificationPayload => {
     return {
       category: "General",
-      message: `${tx.amount} ${tx.asset.ticker} transfer`,
+      message: `${tx.amount} ${tx.asset.ticker} Transfer`,
       description: `Your transfer of ${tx.amount} ${tx.asset.ticker} from your funding account to your trading account has been successfully processed.`,
       type: "Success",
       href: "/history",
@@ -82,7 +82,7 @@ export const NOTIFICATIONS = {
   transferToFundingAccount: (tx: Transaction): NotificationPayload => {
     return {
       category: "General",
-      message: `${tx.amount} ${tx.asset.ticker} transfer`,
+      message: `${tx.amount} ${tx.asset.ticker} Transfer`,
       description: `Your transfer of ${tx.amount} ${tx.asset.ticker} from your trading account to your funding account has been successfully processed.`,
       type: "Success",
       href: "/history",
@@ -94,7 +94,7 @@ export const NOTIFICATIONS = {
   }): NotificationPayload => {
     return {
       category: "General",
-      message: `${tx.amount} ${tx.asset} transfer`,
+      message: `${tx.amount} ${tx.asset} Transfer`,
       description: `Your transfer of ${tx.amount} ${tx.asset} from your funding account to another funding account has been successfully processed.`,
       type: "Success",
       href: "/history",
