@@ -56,6 +56,7 @@ export function Template({ id }: { id: string }) {
         <Resizable
           direction="vertical"
           className="flex-1 h-full"
+          autoSaveId="persistence"
           vaul-drawer-wrapper=""
           style={{
             paddingBottom: `${footerHeight}px`,
@@ -67,7 +68,7 @@ export function Template({ id }: { id: string }) {
             minSize={50}
             className="flex min-h-[400px]"
           >
-            <Resizable direction="horizontal">
+            <Resizable direction="horizontal" autoSaveId="persistence">
               <Resizable.Panel minSize={40}>
                 <div className="flex flex-col flex-grow h-full w-full">
                   <AssetInfo currentMarket={currentMarket} />
@@ -78,7 +79,7 @@ export function Template({ id }: { id: string }) {
               {(tabletView || desktopView) && (
                 <Resizable.Panel
                   ref={orderbookPanelRef}
-                  defaultSize={22}
+                  defaultSize={21}
                   minSize={21}
                   className="min-w-[290px]"
                 >
@@ -90,7 +91,7 @@ export function Template({ id }: { id: string }) {
                 <Fragment>
                   <Resizable.Handle />
                   <Resizable.Panel
-                    defaultSize={22}
+                    defaultSize={21}
                     minSize={21}
                     collapsible
                     collapsedSize={0}
@@ -108,7 +109,10 @@ export function Template({ id }: { id: string }) {
               desktopView && "min-h-[310px]"
             )}
           >
-            <Resizable direction={desktopView ? "horizontal" : "vertical"}>
+            <Resizable
+              direction={desktopView ? "horizontal" : "vertical"}
+              autoSaveId="persistence"
+            >
               {tabletView && (
                 <Resizable direction="horizontal" className="max-h-[320px]">
                   <Resizable.Panel
