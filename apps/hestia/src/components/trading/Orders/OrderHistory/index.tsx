@@ -30,7 +30,13 @@ const responsiveKeys = ["date", "price", "fee"];
 const actionKeys = ["date", "price", "amount", "fee"];
 const widthKeys = ["15%", "15%", "20%", "25%", "100%", "fit-content"];
 
-export const OrderHistoryTable = ({ filters }: { filters: Ifilters }) => {
+export const OrderHistoryTable = ({
+  filters,
+  height,
+}: {
+  filters: Ifilters;
+  height: number;
+}) => {
   const { isLoading, orderHistory, error, hasNextPage, onFetchNextPage } =
     useOrderHistory(DEFAULT_BATCH_LIMIT, filters);
   const { width } = useWindowSize();
@@ -74,6 +80,7 @@ export const OrderHistoryTable = ({ filters }: { filters: Ifilters }) => {
         }}
         hasMore={Boolean(hasNextPage)}
         loader={<Spinner.Keyboard className="h-6 mx-auto my-2" />}
+        height={`${height}px`}
       >
         <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
           <PolkadexTable.Header className="sticky top-0 bg-level-0 z-[2]">

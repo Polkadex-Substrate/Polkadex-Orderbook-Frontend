@@ -28,7 +28,13 @@ const responsiveKeys = ["type", "price"];
 const actionKeys = ["date", "price", "amount", "fee"];
 const widthKeys = ["20%", "20%", "20%", "20%", "20%"];
 
-export const TradeHistoryTable = ({ filters }: { filters: Ifilters }) => {
+export const TradeHistoryTable = ({
+  filters,
+  height,
+}: {
+  filters: Ifilters;
+  height: number;
+}) => {
   const { isLoading, trades, hasNextPage, onFetchNextPage, error } =
     useTradeHistory(DEFAULT_BATCH_LIMIT, filters);
   const { width } = useWindowSize();
@@ -72,6 +78,7 @@ export const TradeHistoryTable = ({ filters }: { filters: Ifilters }) => {
         }}
         hasMore={Boolean(hasNextPage)}
         loader={<Spinner.Keyboard className="h-6 mx-auto my-2" />}
+        height={`${height}px`}
       >
         <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
           <PolkadexTable.Header className="sticky top-0 bg-level-0 z-[2]">

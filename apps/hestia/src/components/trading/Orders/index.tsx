@@ -24,6 +24,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "@/styles/calendar.scss";
 import { ConnectAccountWrapper } from "@/components/ui/ReadyToUse";
+import { useSizeObserver } from "@/hooks";
 
 const initialFilters: Ifilters = {
   onlyBuy: false,
@@ -39,6 +40,8 @@ export const Orders = () => {
   const { width } = useWindowSize();
   const { dispatchUserSessionData, dateFrom, dateTo } = useSessionProvider();
   const { openOrders } = useOpenOrders();
+  const [ref, height] = useSizeObserver();
+
   const {
     selectedAddresses: { tradeAddress, mainAddress },
   } = useProfile();
@@ -179,46 +182,48 @@ export const Orders = () => {
           </Fragment>
         )}
       </div>
-      <Tabs.Content
-        value="openOrders"
-        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
-      >
-        {connected ? (
-          <OpenOrdersTable filters={filters} />
-        ) : (
-          <ConnectAccountWrapper />
-        )}
-      </Tabs.Content>
-      <Tabs.Content
-        value="orderHistory"
-        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
-      >
-        {connected ? (
-          <OrderHistoryTable filters={filters} />
-        ) : (
-          <ConnectAccountWrapper />
-        )}
-      </Tabs.Content>
-      <Tabs.Content
-        value="tradeHistory"
-        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
-      >
-        {connected ? (
-          <TradeHistoryTable filters={filters} />
-        ) : (
-          <ConnectAccountWrapper />
-        )}
-      </Tabs.Content>
-      <Tabs.Content
-        value="balances"
-        className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
-      >
-        {mainAddress?.length > 0 ? (
-          <BalancesTable />
-        ) : (
-          <ConnectAccountWrapper funding />
-        )}
-      </Tabs.Content>
+      <div className="h-full flex-1 flex flex-col" ref={ref}>
+        <Tabs.Content
+          value="openOrders"
+          className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
+        >
+          {connected ? (
+            <OpenOrdersTable filters={filters} />
+          ) : (
+            <ConnectAccountWrapper />
+          )}
+        </Tabs.Content>
+        <Tabs.Content
+          value="orderHistory"
+          className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
+        >
+          {connected ? (
+            <OrderHistoryTable filters={filters} height={height} />
+          ) : (
+            <ConnectAccountWrapper />
+          )}
+        </Tabs.Content>
+        <Tabs.Content
+          value="tradeHistory"
+          className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
+        >
+          {connected ? (
+            <TradeHistoryTable filters={filters} height={height} />
+          ) : (
+            <ConnectAccountWrapper />
+          )}
+        </Tabs.Content>
+        <Tabs.Content
+          value="balances"
+          className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
+        >
+          {mainAddress?.length > 0 ? (
+            <BalancesTable />
+          ) : (
+            <ConnectAccountWrapper funding />
+          )}
+        </Tabs.Content>
+      </div>
     </Tabs>
   );
 };
