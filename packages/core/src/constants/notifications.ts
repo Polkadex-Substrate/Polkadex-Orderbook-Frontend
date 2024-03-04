@@ -112,7 +112,7 @@ export const NOTIFICATIONS = {
   removeTradingAccount: (): NotificationPayload => {
     return {
       category: "General",
-      message: `Trading Account removed from blockchain`,
+      message: `Trading account removed`,
       description: `Your trading account have been successfully removed from the blockchain. Don't worry your funds are safe. You can create another trading account to start trading with them.`,
       type: "Success",
       href: "/transfer/PDEX",
