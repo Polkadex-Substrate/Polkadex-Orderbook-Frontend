@@ -84,12 +84,7 @@ export const settingReducer = (
     }
 
     case C.NOTIFICATION_PUSH: {
-      const localData =
-        isBrowser && window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME);
-      const prevObj: T.Notification[] =
-        JSON.parse(localData as string)?.sort(
-          (a: T.Notification, b: T.Notification) => a.date - b.date
-        ) || [];
+      const prevObj = getNotifications();
       const data: T.Notification = {
         id: new Date().getTime().toString(36) + new Date().getUTCMilliseconds(),
         active: true,
@@ -98,17 +93,16 @@ export const settingReducer = (
         message: action.payload.message,
         type: action.payload.type,
         description: action.payload.description,
+        href: action.payload.href,
       };
 
       if (prevObj?.length >= 16) prevObj.shift();
 
-      window.localStorage.setItem(
-        C.DEFAULTNOTIFICATIONNAME,
-        JSON.stringify([...prevObj, data])
-      );
+      setNotifications([data, ...prevObj]);
+
       return {
         ...state,
-        notifications: [...state.notifications, data],
+        notifications: [data, ...prevObj],
       };
     }
 
