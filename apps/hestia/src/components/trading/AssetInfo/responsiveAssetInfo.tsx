@@ -1,11 +1,14 @@
 import { Skeleton, Typography } from "@polkadex/ux";
-import { useMemo } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Decimal } from "@orderbook/core/utils";
 import { hasOnlyZeros, isNegative } from "@orderbook/core/helpers";
 import { useMarkets, useTickers } from "@orderbook/core/hooks";
 import { Market } from "@orderbook/core/utils/orderbookService";
 import { RiArrowDownSLine } from "@remixicon/react";
 import classNames from "classnames";
+import { useWindowSize } from "react-use";
+
+import { ResponsiveMarket } from "../Trades/Market/responsiveMarket";
 
 import { Card } from "./card";
 
@@ -14,9 +17,12 @@ export const ResponsiveAssetInfo = ({
 }: {
   currentMarket?: Market;
 }) => {
+  const [open, setOpen] = useState(false);
+
   const { currentTicker, tickerLoading } = useTickers(currentMarket?.id);
   const { loading } = useMarkets();
 
+  const { width } = useWindowSize();
   const currentPrice = currentTicker?.close ?? "0.00";
 
   const changeFormatted = useMemo(
@@ -59,75 +65,86 @@ export const ResponsiveAssetInfo = ({
     [changeFormatted]
   );
 
+  useEffect(() => {
+    if (width >= 954 && open) setOpen(false);
+  }, [width, open]);
+
   return (
-    <div className="flex p-2 border-b border-primary">
-      <div className="flex flex-1 flex-col gap-3">
-        <div className="flex gap-2">
-          <div className="flex flex-col">
-            <Typography.Text size="lg" bold>
-              PDEX
-            </Typography.Text>
-            <Typography.Text size="xs" appearance="primary">
-              /USDT
-            </Typography.Text>
+    <Fragment>
+      <ResponsiveMarket open={open} onOpenChange={setOpen} />
+      <div className="flex gap-2 border-b border-primary p-1">
+        <div className="flex flex-1 flex-col gap-3">
+          <div
+            role="button"
+            onClick={() => setOpen(true)}
+            className="flex gap-2 p-1 rounded-md duration-200 transition-colors hover:bg-level-1 w-fit"
+          >
+            <div className="flex flex-col">
+              <Typography.Text size="lg" bold>
+                PDEX
+              </Typography.Text>
+              <Typography.Text size="xs" appearance="primary">
+                /USDT
+              </Typography.Text>
+            </div>
+            <RiArrowDownSLine className="w-5 h-5 mt-1 text-primary" />
           </div>
-          <RiArrowDownSLine className="w-5 h-5 mt-1 text-primary" />
+          <div
+            className={classNames(
+              "flex flex-col p-1",
+              (tickerLoading || loading) && "gap-1"
+            )}
+          >
+            <Skeleton
+              loading={tickerLoading || loading}
+              className="max-w-20 min-h-4"
+            >
+              <Typography.Text
+                size="xl"
+                bold
+                appearance={negative ? "danger" : "success"}
+              >
+                {priceFormatted}
+              </Typography.Text>
+            </Skeleton>
+            <Skeleton
+              loading={tickerLoading || loading}
+              className="max-w-8 min-h-4"
+            >
+              <Typography.Text
+                size="xs"
+                appearance={negative ? "danger" : "success"}
+              >
+                {changeFormatted}
+              </Typography.Text>
+            </Skeleton>
+          </div>
         </div>
-        <div
-          className={classNames(
-            "flex flex-col",
-            (tickerLoading || loading) && "gap-1"
-          )}
-        >
-          <Skeleton
-            loading={tickerLoading || loading}
-            className="max-w-20 min-h-4"
-          >
-            <Typography.Text
-              size="xl"
-              bold
-              appearance={negative ? "danger" : "success"}
+        <div className="flex gap-8">
+          <div className="flex flex-col p-1">
+            <Card.Single label="24h High" loading={tickerLoading || loading}>
+              {currentTicker?.high}
+            </Card.Single>
+            <Card.Single label="24 Low" loading={tickerLoading || loading}>
+              {currentTicker?.low}
+            </Card.Single>
+          </div>
+          <div className="flex flex-col p-1">
+            <Card.Single
+              label={`24 Volume ${currentMarket?.baseAsset.ticker}`}
+              loading={tickerLoading || loading}
             >
-              {priceFormatted}
-            </Typography.Text>
-          </Skeleton>
-          <Skeleton
-            loading={tickerLoading || loading}
-            className="max-w-8 min-h-4"
-          >
-            <Typography.Text
-              size="xs"
-              appearance={negative ? "danger" : "success"}
+              {volumeFormattedBase}
+            </Card.Single>
+            <Card.Single
+              label={`24 Volume ${currentMarket?.quoteAsset.ticker}`}
+              loading={tickerLoading || loading}
             >
-              {changeFormatted}
-            </Typography.Text>
-          </Skeleton>
+              {volumeFormattedQuote}
+            </Card.Single>
+          </div>
         </div>
       </div>
-      <div className="flex gap-8">
-        <div className="flex flex-col">
-          <Card.Single label="24h High" loading={tickerLoading || loading}>
-            {currentTicker?.high}
-          </Card.Single>
-          <Card.Single label="24 Low" loading={tickerLoading || loading}>
-            {currentTicker?.low}
-          </Card.Single>
-        </div>
-        <div className="flex flex-col">
-          <Card.Single
-            label={`24 Volume ${currentMarket?.baseAsset.ticker}`}
-            loading={tickerLoading || loading}
-          >
-            {volumeFormattedBase}
-          </Card.Single>
-          <Card.Single
-            label={`24 Volume ${currentMarket?.quoteAsset.ticker}`}
-            loading={tickerLoading || loading}
-          >
-            {volumeFormattedQuote}
-          </Card.Single>
-        </div>
-      </div>
-    </div>
+    </Fragment>
   );
 };
