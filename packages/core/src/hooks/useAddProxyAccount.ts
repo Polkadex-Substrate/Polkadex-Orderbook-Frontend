@@ -10,7 +10,8 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
-import { QUERY_KEYS } from "../constants";
+import { NOTIFICATIONS, QUERY_KEYS } from "../constants";
+import { useSettingsProvider } from "../providers/public/settings";
 
 export type AddProxyAccountArgs = {
   mnemonic: string;
@@ -31,6 +32,7 @@ export function useAddProxyAccount({
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
   const { getSigner, onUserSelectTradingAddress } = useProfile();
+  const { onPushNotification } = useSettingsProvider();
 
   const { mutateAsync, status, error } = useMutation({
     mutationFn: async ({
@@ -76,7 +78,10 @@ export function useAddProxyAccount({
       onError?.(error);
       console.log(error);
     },
-    onSuccess: () => onSuccess?.("Trading account created"),
+    onSuccess: () => {
+      onSuccess?.("Trading account created");
+      onPushNotification(NOTIFICATIONS.newTradingAccount());
+    },
   });
 
   return {

@@ -10,7 +10,8 @@ import {
 import { ACTIVE_ACCOUNT_KEY } from "@orderbook/core/providers/user/profile/constants";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
-import { QUERY_KEYS } from "../constants";
+import { NOTIFICATIONS, QUERY_KEYS } from "../constants";
+import { useSettingsProvider } from "../providers/public/settings";
 
 export type RemoveProxyAccountArgs = {
   proxy: string;
@@ -22,6 +23,7 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
   const { getSigner, selectedAddresses, onUserLogout } = useProfile();
+  const { onPushNotification } = useSettingsProvider();
 
   const { mutateAsync, status, error } = useMutation({
     mutationFn: async ({ proxy, main }: RemoveProxyAccountArgs) => {
@@ -55,8 +57,10 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
       props?.onError?.(error as Error);
       console.log(error);
     },
-    onSuccess: () =>
-      props?.onSuccess?.("Trading account removed from blockchain"),
+    onSuccess: () => {
+      props?.onSuccess?.("Trading account removed from blockchain");
+      onPushNotification(NOTIFICATIONS.removeTradingAccount());
+    },
   });
 
   return {

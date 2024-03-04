@@ -19,7 +19,7 @@ export const NOTIFICATIONS = {
     const type = _type.charAt(0) + _type.toLowerCase().slice(1);
     return {
       category: "General",
-      message: `${type} ${side} Order Placed`,
+      message: `${type} ${side} Order Placed 🎉`,
       description: `Placed exchange ${type.toLowerCase()} ${side.toLowerCase()} order for ${quantity} ${baseTicker} by using ${quoteTicker}.`,
       type: "Success",
       href: "/history?tab=openOrders",
@@ -55,7 +55,7 @@ export const NOTIFICATIONS = {
     const side = isSell ? "Sell" : "Buy";
     return {
       category: "General",
-      message: `${type} ${side} Order Filled`,
+      message: `${type} ${side} Order Filled 🎉`,
       description: `Filled exchange ${type.toLowerCase()} ${side.toLowerCase()} order for ${order.quantity} ${order.market.baseAsset.ticker} by using ${order.market.quoteAsset.ticker}.`,
       type: "Information",
       href: "/history?tab=orderHistory",
@@ -64,7 +64,7 @@ export const NOTIFICATIONS = {
   transferToTradingAccount: (tx: Transaction): NotificationPayload => {
     return {
       category: "General",
-      message: `${tx.amount} ${tx.asset.ticker} Transfer`,
+      message: `${tx.amount} ${tx.asset.ticker} Transfer 🎉`,
       description: `Your transfer of ${tx.amount} ${tx.asset.ticker} from your funding account to your trading account has been successfully processed.`,
       type: "Success",
       href: "/history",
@@ -73,7 +73,7 @@ export const NOTIFICATIONS = {
   claimTransfer: (tx: Transaction): NotificationPayload => {
     return {
       category: "General",
-      message: `Transfer ready to claim`,
+      message: `Transfer ready to claim 🎉`,
       description: `Your transfer of ${tx.amount} ${tx.asset.ticker} from your trading account to your funding account is ready to claim.`,
       type: "Success",
       href: "/transfer",
@@ -82,7 +82,7 @@ export const NOTIFICATIONS = {
   transferToFundingAccount: (tx: Transaction): NotificationPayload => {
     return {
       category: "General",
-      message: `${tx.amount} ${tx.asset.ticker} Transfer`,
+      message: `${tx.amount} ${tx.asset.ticker} Transfer 🎉`,
       description: `Your transfer of ${tx.amount} ${tx.asset.ticker} from your trading account to your funding account has been successfully processed.`,
       type: "Success",
       href: "/history",
@@ -94,10 +94,28 @@ export const NOTIFICATIONS = {
   }): NotificationPayload => {
     return {
       category: "General",
-      message: `${tx.amount} ${tx.asset} Transfer`,
+      message: `${tx.amount} ${tx.asset} Transfer 🎉`,
       description: `Your transfer of ${tx.amount} ${tx.asset} from your funding account to another funding account has been successfully processed.`,
       type: "Success",
       href: "/history",
+    };
+  },
+  newTradingAccount: (): NotificationPayload => {
+    return {
+      category: "General",
+      message: `New Trading Account Created 🎉`,
+      description: `Your new trading account have been successfully created. Transfer funds from your funding account to your trading account to start trading.`,
+      type: "Success",
+      href: "/transfer/PDEX",
+    };
+  },
+  removeTradingAccount: (): NotificationPayload => {
+    return {
+      category: "General",
+      message: `Trading Account removed from blockchain`,
+      description: `Your trading account have been successfully removed from the blockchain. Don't worry your funds are safe. You can create another trading account to start trading with them.`,
+      type: "Success",
+      href: "/transfer/PDEX",
     };
   },
 };
