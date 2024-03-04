@@ -17,6 +17,7 @@ export const Context = createContext<SettingContextProps>({
   onPushNotification: () => {},
   onRemoveNotification: () => {},
   onReadNotification: () => {},
+  onReadAllNotifications: () => {},
   onClearNotifications: () => {},
   onToogleConnectExtension: () => {},
   onToogleConnectTrading: () => {},

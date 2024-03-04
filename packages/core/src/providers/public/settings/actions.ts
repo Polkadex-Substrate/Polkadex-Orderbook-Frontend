@@ -56,6 +56,9 @@ export interface NotificationMarkAsRead {
   type: typeof C.NOTIFICATION_MARK_AS_READ;
   payload: number | string;
 }
+export interface AllNotificationMarkAsRead {
+  type: typeof C.ALL_NOTIFICATION_MARK_AS_READ;
+}
 
 export interface CheckHasExtension {
   type: typeof C.CHECK_HAS_EXTENSION;
@@ -72,6 +75,7 @@ export type SettingActions =
   | NotificationDeleteAll
   | NotificationDeleteById
   | NotificationMarkAsRead
+  | AllNotificationMarkAsRead
   | CheckHasExtension
   | ToogleConnectExtension
   | ToogleConnectTrading;
@@ -149,6 +153,10 @@ export const notificationMarkAsRead = (
 ): NotificationMarkAsRead => ({
   type: C.NOTIFICATION_MARK_AS_READ,
   payload,
+});
+
+export const allNotificationMarkAsRead = (): AllNotificationMarkAsRead => ({
+  type: C.ALL_NOTIFICATION_MARK_AS_READ,
 });
 
 export const checkHasExtension = (): CheckHasExtension => ({

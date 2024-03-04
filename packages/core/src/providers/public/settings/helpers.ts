@@ -27,3 +27,9 @@ export const getNotifications = (): T.Notification[] => {
 
   return filteredAdditionalNotifications.concat(localNotifications);
 };
+export const setNotifications = (notifications: T.Notification[]) => {
+  localStorage.setItem(
+    C.DEFAULTNOTIFICATIONNAME,
+    JSON.stringify(notifications)
+  );
+};

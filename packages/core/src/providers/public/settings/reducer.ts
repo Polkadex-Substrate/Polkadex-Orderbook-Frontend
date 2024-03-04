@@ -2,7 +2,7 @@ import { SettingActions } from "@orderbook/core/providers/public/settings/action
 
 import * as T from "./types";
 import * as C from "./constants";
-import { getNotifications } from "./helpers";
+import { getNotifications, setNotifications } from "./helpers";
 
 const defaultTheme = "dark";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -190,6 +190,15 @@ export const settingReducer = (
           }),
         ],
       };
+    }
+
+    case C.ALL_NOTIFICATION_MARK_AS_READ: {
+      const notifications = state.notifications.map((e) => ({
+        ...e,
+        active: false,
+      }));
+      setNotifications(notifications);
+      return { ...state, notifications };
     }
 
     case C.CHECK_HAS_EXTENSION: {

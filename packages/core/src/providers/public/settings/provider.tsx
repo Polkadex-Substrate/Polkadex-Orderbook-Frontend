@@ -64,6 +64,10 @@ export const SettingProvider: T.SettingComponent = ({
     (value: T.Notification["id"]) => dispatch(A.notificationMarkAsRead(value)),
     []
   );
+  const onReadAllNotifications = useCallback(
+    () => dispatch(A.allNotificationMarkAsRead()),
+    []
+  );
 
   const onClearNotifications = useCallback(
     () => dispatch(A.notificationDeleteAll()),
@@ -84,6 +88,7 @@ export const SettingProvider: T.SettingComponent = ({
         onClearNotifications,
         onRemoveNotification,
         onReadNotification,
+        onReadAllNotifications,
         onHandleError: defaultToast.onError,
         onHandleAlert: defaultToast.onSuccess,
         onHandleInfo: defaultToast.onInfo,

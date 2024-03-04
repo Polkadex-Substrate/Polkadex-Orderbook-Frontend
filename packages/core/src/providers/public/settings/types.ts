@@ -50,6 +50,7 @@ export type SettingContextProps = SettingState & {
   onPushNotification: (value: NotificationPayload) => void;
   onRemoveNotification: (value: Notification["id"]) => void;
   onReadNotification: (value: Notification["id"]) => void;
+  onReadAllNotifications: () => void;
   onClearNotifications: () => void;
   onHandleError: ToastActions["onError"];
   onHandleAlert: ToastActions["onSuccess"];

@@ -15,7 +15,8 @@ export const NotificationsModal = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { notifications: allNotifications } = useSettingsProvider();
+  const { notifications: allNotifications, onReadAllNotifications } =
+    useSettingsProvider();
   const notifications: { [category: string]: Notification[] } = useMemo(() => {
     return allNotifications.reduce<{ [category: string]: Notification[] }>(
       (acc, notification) => {
@@ -55,34 +56,40 @@ export const NotificationsModal = ({
         </Button.Icon>
       </Modal.Title>
       <Modal.Content className="flex flex-col flex-1 gap-6">
-        {Object.keys(notifications).map((category, index) => {
-          return (
-            <div key={index} className="flex flex-col gap-3">
-              <Typography.Text appearance="primary" className="px-4">
-                {category}
-              </Typography.Text>
-              <div className="flex flex-col gap-2">
-                {notifications[category].map(
-                  ({ id, message, date, active, description }) => {
-                    return (
-                      <Card
-                        key={id}
-                        title={message}
-                        date={new Date(date).toLocaleString()}
-                        active={active}
-                      >
-                        {description}
-                      </Card>
-                    );
-                  }
-                )}
+        {Object.keys(notifications)
+          .sort()
+          .map((category, index) => {
+            return (
+              <div key={index} className="flex flex-col gap-3">
+                <Typography.Text appearance="primary" className="px-4">
+                  {category}
+                </Typography.Text>
+                <div className="flex flex-col gap-2">
+                  {notifications[category].map(
+                    ({ id, message, date, active, description }) => {
+                      return (
+                        <Card
+                          key={id}
+                          title={message}
+                          date={new Date(date).toLocaleString()}
+                          active={active}
+                        >
+                          {description}
+                        </Card>
+                      );
+                    }
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </Modal.Content>
       <Modal.Footer className="p-4">
-        <Button.Solid className="w-full" appearance="secondary">
+        <Button.Solid
+          onClick={onReadAllNotifications}
+          className="w-full"
+          appearance="secondary"
+        >
           Mark all as read
         </Button.Solid>
       </Modal.Footer>
