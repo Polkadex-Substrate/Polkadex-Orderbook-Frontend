@@ -1,9 +1,6 @@
 import { ResolutionString } from "@orderbook/core/utils/charting_library";
 
-import {
-  ChartPropertiesOverrides,
-  ChartingLibraryWidgetOptions,
-} from "../../../../public/static/charting_library/charting_library";
+import { ChartPropertiesOverrides } from "../../../../public/static/charting_library/charting_library";
 import { themeConfig, commom } from "../../../../../../themeConfig";
 
 type Options = {
@@ -41,46 +38,6 @@ export const options: Options = {
     "mainSeriesProperties.areaStyle.linewidth": 2,
   },
 };
-
-export const defaultWidgetOptions = {
-  library_path: "/static/charting_library/",
-  charts_storage_api_version: "1.1",
-  client_id: "tradingview.com",
-  user_id: "public_user_id",
-  fullscreen: false,
-  autosize: true,
-  container: "tv_chart_container",
-  disabled_features: [
-    "volume_force_overlay",
-    "header_symbol_search",
-    "use_localstorage_for_settings",
-    "header_compare",
-    "header_fullscreen_button",
-    "header_indicators",
-    "header_resolutions",
-    "header_saveload",
-    "header_undo_redo",
-    "header_chart_type",
-    "header_screenshot",
-    "header_settings",
-    "go_to_date",
-    "hide_left_toolbar_by_default",
-    "timeframes_toolbar",
-    "header_widget",
-  ],
-  enabled_features: [
-    "use_localstorage_for_settings",
-    "side_toolbar_in_fullscreen_mode",
-    "save_chart_properties_to_local_storage",
-    "iframe_loading_compatibility_mode",
-  ],
-  custom_css_url: "/static/style.css/",
-  loading_screen: {
-    foregroundColor: "transparent",
-  },
-  auto_save_delay: 5,
-  load_last_chart: true,
-} as Partial<ChartingLibraryWidgetOptions>;
 
 export const supported_resolutions = [
   { id: "1", description: "1m" },
