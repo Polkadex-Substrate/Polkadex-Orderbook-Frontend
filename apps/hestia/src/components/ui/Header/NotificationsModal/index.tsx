@@ -73,6 +73,7 @@ export const NotificationsModal = ({
                       return (
                         <Card
                           key={id}
+                          onClick={() => onReadNotification(id)}
                           category={category as NotificationCategory}
                           title={message}
                           date={new Date(date).toLocaleDateString()}

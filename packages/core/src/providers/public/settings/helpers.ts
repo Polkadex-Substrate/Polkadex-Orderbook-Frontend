@@ -33,3 +33,11 @@ export const setNotifications = (notifications: T.Notification[]) => {
     JSON.stringify(notifications)
   );
 };
+
+export const removeAllNotifications = () => {
+  // Keep notifications which are not general
+  const notifications = getNotifications().filter(
+    (e) => e.category !== "General"
+  );
+  setNotifications(notifications);
+};

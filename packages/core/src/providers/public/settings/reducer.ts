@@ -2,7 +2,11 @@ import { SettingActions } from "@orderbook/core/providers/public/settings/action
 
 import * as T from "./types";
 import * as C from "./constants";
-import { getNotifications, setNotifications } from "./helpers";
+import {
+  getNotifications,
+  removeAllNotifications,
+  setNotifications,
+} from "./helpers";
 
 const defaultTheme = "dark";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -86,7 +90,9 @@ export const settingReducer = (
     case C.NOTIFICATION_PUSH: {
       const prevObj = getNotifications();
       const data: T.Notification = {
-        id: new Date().getTime().toString(36) + new Date().getUTCMilliseconds(),
+        id:
+          new Date().getTime().toString(36) +
+          new Date().getUTCMilliseconds() * Math.floor(Math.random() * 100),
         active: true,
         date: Date.now(),
         category: action.payload.category,
@@ -106,12 +112,14 @@ export const settingReducer = (
       };
     }
 
-    case C.NOTIFICATION_DELETE_ALL:
-      isBrowser && window.localStorage.removeItem(C.DEFAULTNOTIFICATIONNAME);
+    case C.NOTIFICATION_DELETE_ALL: {
+      removeAllNotifications();
+      const notifications = getNotifications();
       return {
         ...state,
-        notifications: [],
+        notifications,
       };
+    }
 
     case C.TOOGLE_CONNECT_EXTENSION:
       return {
@@ -126,33 +134,20 @@ export const settingReducer = (
       };
 
     case C.NOTIFICATION_DELETE_BY_ID: {
-      const localNotifications = window.localStorage.getItem(
-        C.DEFAULTNOTIFICATIONNAME
-      );
-      const prevObj: T.Notification[] =
-        JSON.parse(localNotifications as string) || [];
+      const prevObj = getNotifications();
 
       const newObj = prevObj?.filter((item) => item.id !== action.payload);
 
-      isBrowser &&
-        window.localStorage.setItem(
-          C.DEFAULTNOTIFICATIONNAME,
-          JSON.stringify([...newObj])
-        );
+      setNotifications(newObj);
 
       return {
         ...state,
-        notifications: [
-          ...state?.notifications?.filter((item) => item.id !== action.payload),
-        ],
+        notifications: newObj,
       };
     }
 
     case C.NOTIFICATION_MARK_AS_READ: {
-      const localNotifications =
-        isBrowser && window.localStorage.getItem(C.DEFAULTNOTIFICATIONNAME);
-      const prevObj: T.Notification[] =
-        JSON.parse(localNotifications as string) || [];
+      const prevObj: T.Notification[] = getNotifications();
 
       const newObj = prevObj?.map((item) => {
         if (item.id === action.payload)
@@ -163,26 +158,11 @@ export const settingReducer = (
 
         return item;
       });
-
-      isBrowser &&
-        window.localStorage.setItem(
-          C.DEFAULTNOTIFICATIONNAME,
-          JSON.stringify([...newObj])
-        );
+      setNotifications(newObj);
 
       return {
         ...state,
-        notifications: [
-          ...state?.notifications?.map((item) => {
-            if (item.id === action.payload) {
-              return {
-                ...item,
-                active: false,
-              };
-            }
-            return item;
-          }),
-        ],
+        notifications: newObj,
       };
     }
 
