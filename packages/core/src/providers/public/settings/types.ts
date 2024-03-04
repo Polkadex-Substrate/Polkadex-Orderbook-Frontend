@@ -9,14 +9,13 @@ export type NotificationPayload = {
   message: string;
   description: string;
   category: NotificationCategory;
+  href?: string;
 };
 
 export interface Notification extends NotificationPayload {
   id: string;
   date: number;
   active: boolean;
-  category: NotificationCategory;
-  href?: string;
 }
 export interface SettingState {
   chartRebuild: boolean;

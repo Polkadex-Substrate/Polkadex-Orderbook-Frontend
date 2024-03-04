@@ -283,12 +283,23 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
               return { data: transactions, nextToken: null };
             }
           );
+
+          if (payload.txType === "DEPOSIT") {
+            onPushNotification(NOTIFICATIONS.transferToTradingAccount(payload));
+          } else if (payload.txType === "WITHDRAW") {
+            if (payload.status === "READY")
+              onPushNotification(NOTIFICATIONS.claimTransfer(payload));
+            else if (payload.status === "CONFIRMED")
+              onPushNotification(
+                NOTIFICATIONS.transferToFundingAccount(payload)
+              );
+          }
         }
       } catch (error) {
         onHandleError("Something has gone wrong while updating transactions");
       }
     },
-    [mainAddress, onHandleError, queryClient]
+    [mainAddress, onHandleError, queryClient, onPushNotification]
   );
 
   const onTickerUpdates = useCallback(
