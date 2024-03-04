@@ -9,8 +9,11 @@ import { RecentTrades } from "./Trades/RecentTrades";
 
 export function Responsive({ id }: { id: string }) {
   return (
-    <Tabs defaultValue="graph" className="flex-1 h-full flex min-h-[400px]">
-      <Tabs.List className="px-2 py-2.5 whitespace-nowrap">
+    <Tabs
+      defaultValue="graph"
+      className="flex-1 h-full flex min-h-[400px] border-b border-primary"
+    >
+      <Tabs.List className="px-2 py-2.5 whitespace-nowrap border-b border-primary">
         <Tabs.Trigger value="graph">Chart</Tabs.Trigger>
         <Tabs.Trigger value="orderbook">Orderbook</Tabs.Trigger>
         <Tabs.Trigger value="markets">Markets</Tabs.Trigger>
