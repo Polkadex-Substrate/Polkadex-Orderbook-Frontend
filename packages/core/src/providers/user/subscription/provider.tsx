@@ -223,7 +223,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
           QUERY_KEYS.tradeHistory(
             dateFrom,
             dateTo,
-            mainAddress,
+            tradeAddress,
             DEFAULT_BATCH_LIMIT
           ),
           (
@@ -259,7 +259,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         );
       }
     },
-    [dateFrom, dateTo, onHandleError, queryClient, mainAddress]
+    [dateFrom, dateTo, onHandleError, queryClient, tradeAddress]
   );
 
   const onTransactionsUpdate = useCallback(
