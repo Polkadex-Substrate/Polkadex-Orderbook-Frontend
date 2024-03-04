@@ -5,7 +5,6 @@ import { useMarkets } from "@orderbook/core/hooks";
 import { getCurrentMarket } from "@orderbook/core/helpers";
 import { useWindowSize } from "react-use";
 import classNames from "classnames";
-import { useResizeObserver } from "usehooks-ts";
 import { Resizable, ImperativePanelHandle } from "@polkadex/ux";
 
 import { AssetInfo } from "./AssetInfo";
@@ -20,19 +19,12 @@ import { ResponsiveAssetInfo } from "./AssetInfo/responsiveAssetInfo";
 
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { Footer, Header } from "@/components/ui";
+import { useSizeObserver } from "@/hooks";
 
 export function Template({ id }: { id: string }) {
-  const footerRef = useRef<HTMLDivElement | null>(null);
-  const interactionRef = useRef<HTMLDivElement | null>(null);
+  const [footerRef, footerHeight] = useSizeObserver();
+  const [interactionRef, interactionHeight] = useSizeObserver();
 
-  const { height: footerHeight = 0 } = useResizeObserver({
-    ref: footerRef,
-    box: "border-box",
-  });
-  const { height: interactionHeight = 0 } = useResizeObserver({
-    ref: interactionRef,
-    box: "border-box",
-  });
   const mainPanelRef = useRef<ImperativePanelHandle>(null);
   const orderbookPanelRef = useRef<ImperativePanelHandle>(null);
 
@@ -118,12 +110,9 @@ export function Template({ id }: { id: string }) {
           >
             <Resizable direction={desktopView ? "horizontal" : "vertical"}>
               {tabletView && (
-                <Resizable
-                  direction="horizontal"
-                  className="max-h-[320px] border-t border-primary"
-                >
+                <Resizable direction="horizontal" className="max-h-[320px]">
                   <Resizable.Panel
-                    className="border-x border-primary min-h-[310px] min-w-[615px]"
+                    className="min-h-[310px] min-w-[615px]"
                     collapsible
                     collapsedSize={0}
                     defaultValue={60}
@@ -150,7 +139,7 @@ export function Template({ id }: { id: string }) {
                 <Fragment>
                   <Resizable.Handle />
                   <Resizable.Panel
-                    className="border-x border-primary min-h-[310px]"
+                    className="min-h-[310px]"
                     collapsible
                     collapsedSize={0}
                     defaultValue={38}
@@ -164,7 +153,6 @@ export function Template({ id }: { id: string }) {
           </Resizable.Panel>
         </Resizable>
       )}
-
       {mobileView ? (
         <ResponsiveInteraction
           isResponsive={mobileView}
