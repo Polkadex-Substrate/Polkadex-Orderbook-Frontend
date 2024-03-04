@@ -1,10 +1,11 @@
-import { Loading, Skeleton, Typography } from "@polkadex/ux";
-import { useMemo, useState } from "react";
+import { Skeleton, Typography } from "@polkadex/ux";
+import { useMemo } from "react";
 import { Decimal } from "@orderbook/core/utils";
 import { hasOnlyZeros, isNegative } from "@orderbook/core/helpers";
 import { useMarkets, useTickers } from "@orderbook/core/hooks";
 import { Market } from "@orderbook/core/utils/orderbookService";
 import { RiArrowDownSLine } from "@remixicon/react";
+import classNames from "classnames";
 
 import { Card } from "./card";
 
@@ -60,7 +61,7 @@ export const ResponsiveAssetInfo = ({
 
   return (
     <div className="flex p-2 border-b border-primary">
-      <div className="flex flex-1 flex-col gap-2">
+      <div className="flex flex-1 flex-col gap-3">
         <div className="flex gap-2">
           <div className="flex flex-col">
             <Typography.Text size="lg" bold>
@@ -72,18 +73,32 @@ export const ResponsiveAssetInfo = ({
           </div>
           <RiArrowDownSLine className="w-5 h-5 mt-1 text-primary" />
         </div>
-        <div className="flex flex-col">
-          <Skeleton loading={tickerLoading || loading}>
+        <div
+          className={classNames(
+            "flex flex-col",
+            (tickerLoading || loading) && "gap-1"
+          )}
+        >
+          <Skeleton
+            loading={tickerLoading || loading}
+            className="max-w-20 min-h-4"
+          >
             <Typography.Text
-              size="lg"
+              size="xl"
               bold
               appearance={negative ? "danger" : "success"}
             >
               {priceFormatted}
             </Typography.Text>
           </Skeleton>
-          <Skeleton loading={tickerLoading || loading}>
-            <Typography.Text appearance={negative ? "danger" : "success"}>
+          <Skeleton
+            loading={tickerLoading || loading}
+            className="max-w-8 min-h-4"
+          >
+            <Typography.Text
+              size="xs"
+              appearance={negative ? "danger" : "success"}
+            >
               {changeFormatted}
             </Typography.Text>
           </Skeleton>
