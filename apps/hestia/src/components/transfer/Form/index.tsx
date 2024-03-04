@@ -177,9 +177,9 @@ export const Form = ({
   };
 
   const onSubmitTransfer = async ({ amount }: { amount: number }) => {
-    if (!selectedWallet) return;
+    if (!selectedWallet || !selectedExtensionAccount?.address) return;
     try {
-      const address = selectedWallet?.address;
+      const destAddress = selectedExtensionAccount?.address;
 
       const asset: Record<string, string | null> = isPolkadexToken
         ? { polkadex: null }
@@ -187,9 +187,10 @@ export const Form = ({
 
       await mutateAsync({
         asset,
-        dest: address,
+        dest: destAddress,
         amount: amount.toString(),
         account: selectedWallet,
+        ticker: selectedAsset?.ticker,
       });
     } finally {
       resetForm({ values: initialValues });

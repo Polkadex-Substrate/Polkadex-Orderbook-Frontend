@@ -88,4 +88,16 @@ export const NOTIFICATIONS = {
       href: "/history",
     };
   },
+  customTransfer: (tx: {
+    amount: string;
+    asset: string;
+  }): NotificationPayload => {
+    return {
+      category: "General",
+      message: `${tx.amount} ${tx.asset} transfer`,
+      description: `Your transfer of ${tx.amount} ${tx.asset} from your funding account to another funding account has been successfully processed.`,
+      type: "Success",
+      href: "/history",
+    };
+  },
 };
