@@ -66,13 +66,14 @@ export const NotificationsModal = ({
                 </Typography.Text>
                 <div className="flex flex-col gap-2">
                   {notifications[category].map(
-                    ({ id, message, date, active, description }) => {
+                    ({ id, message, date, active, description, href }) => {
                       return (
                         <Card
                           key={id}
                           title={message}
-                          date={new Date(date).toLocaleString()}
+                          date={new Date(date).toLocaleDateString()}
                           active={active}
+                          href={href}
                         >
                           {description}
                         </Card>
