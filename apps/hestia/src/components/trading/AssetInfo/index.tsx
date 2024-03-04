@@ -39,7 +39,7 @@ export const AssetInfo = ({ currentMarket }: { currentMarket?: Market }) => {
     [currentTicker.priceChangePercent24Hr]
   );
 
-  const volumeFormatted = useMemo(
+  const volumeFormattedQuote = useMemo(
     () =>
       Decimal.format(
         Number(currentTicker?.quoteVolume),
@@ -47,6 +47,16 @@ export const AssetInfo = ({ currentMarket }: { currentMarket?: Market }) => {
         ","
       ),
     [currentTicker?.quoteVolume, currentMarket?.quotePrecision]
+  );
+
+  const volumeFormattedBase = useMemo(
+    () =>
+      Decimal.format(
+        Number(currentTicker?.baseVolume),
+        currentMarket?.basePrecision ?? 0,
+        ","
+      ),
+    [currentTicker?.baseVolume, currentMarket?.basePrecision]
   );
 
   const priceFormatted = useMemo(
@@ -111,12 +121,12 @@ export const AssetInfo = ({ currentMarket }: { currentMarket?: Market }) => {
         </Card.Single>
         <Card.WithDropdown
           label="24 Volume"
-          items={[quoteTicker]}
+          items={[quoteTicker, baseTicker]}
           selected={state}
           onChange={(e: string) => setState(e)}
           loading={tickerLoading || loading}
         >
-          {volumeFormatted}
+          {state === quoteTicker ? volumeFormattedQuote : volumeFormattedBase}
         </Card.WithDropdown>
       </div>
     </div>

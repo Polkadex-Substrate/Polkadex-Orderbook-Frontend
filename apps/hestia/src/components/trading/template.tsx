@@ -16,6 +16,7 @@ import { PlaceOrder } from "./PlaceOrder";
 import { Graph } from "./Graph";
 import { ResponsiveInteraction } from "./PlaceOrder/responsiveInteraction";
 import { Responsive } from "./responsive";
+import { ResponsiveAssetInfo } from "./AssetInfo/responsiveAssetInfo";
 
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { Footer, Header } from "@/components/ui";
@@ -40,8 +41,9 @@ export function Template({ id }: { id: string }) {
   const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, id);
 
-  const mobileView = useMemo(() => width < 640, [width]);
+  const mobileView = useMemo(() => width <= 954, [width]);
   const desktopView = useMemo(() => width >= 1280, [width]);
+  const tabletView = useMemo(() => width >= 954 && width <= 1280, [width]);
 
   return (
     <Fragment>
@@ -54,6 +56,7 @@ export function Template({ id }: { id: string }) {
             paddingBottom: `${interactionHeight}px`,
           }}
         >
+          <ResponsiveAssetInfo currentMarket={currentMarket} />
           <Responsive id={id} />
           <Orders />
         </div>
@@ -80,14 +83,17 @@ export function Template({ id }: { id: string }) {
                 </div>
               </Resizable.Panel>
               <Resizable.Handle />
-              <Resizable.Panel
-                ref={orderbookPanelRef}
-                defaultSize={22}
-                minSize={21}
-                className="min-w-[280px]"
-              >
-                <Orderbook id={id} />
-              </Resizable.Panel>
+              {(tabletView || desktopView) && (
+                <Resizable.Panel
+                  ref={orderbookPanelRef}
+                  defaultSize={22}
+                  minSize={21}
+                  className="min-w-[290px]"
+                >
+                  <Orderbook id={id} />
+                </Resizable.Panel>
+              )}
+
               {desktopView && (
                 <Fragment>
                   <Resizable.Handle />
@@ -106,15 +112,41 @@ export function Template({ id }: { id: string }) {
           <Resizable.Handle />
           <Resizable.Panel
             className={classNames(
-              desktopView || mobileView ? "min-h-[310px]" : "min-h-[700px]"
+              tabletView && "min-h-[700px]",
+              desktopView && "min-h-[310px]"
             )}
           >
             <Resizable direction={desktopView ? "horizontal" : "vertical"}>
+              {tabletView && (
+                <Resizable
+                  direction="horizontal"
+                  className="max-h-[320px] border-t border-primary"
+                >
+                  <Resizable.Panel
+                    className="border-x border-primary min-h-[310px] min-w-[615px]"
+                    collapsible
+                    collapsedSize={0}
+                    defaultValue={60}
+                    minSize={38}
+                  >
+                    <PlaceOrder market={currentMarket} />
+                  </Resizable.Panel>
+                  <Resizable.Handle />
+                  <Resizable.Panel
+                    defaultSize={22}
+                    minSize={21}
+                    collapsible
+                    collapsedSize={0}
+                    className="min-w-[310px]"
+                  >
+                    <Trades id={id} />
+                  </Resizable.Panel>
+                </Resizable>
+              )}
               <Resizable.Panel defaultSize={58} minSize={58}>
                 <Orders />
               </Resizable.Panel>
-
-              {!mobileView && (
+              {desktopView && (
                 <Fragment>
                   <Resizable.Handle />
                   <Resizable.Panel
@@ -133,14 +165,15 @@ export function Template({ id }: { id: string }) {
         </Resizable>
       )}
 
-      {mobileView && (
+      {mobileView ? (
         <ResponsiveInteraction
           isResponsive={mobileView}
           ref={interactionRef}
           market={currentMarket}
         />
+      ) : (
+        <Footer marketsActive ref={footerRef} />
       )}
-      <Footer marketsActive ref={footerRef} />
     </Fragment>
   );
 }
