@@ -1,6 +1,6 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@orderbook/core";
+import { LmpLeaderboard, QUERY_KEYS } from "@orderbook/core";
 
 export const useLeaderBoard = (market: string) => {
   const { api, lmp } = useNativeApi();
@@ -12,7 +12,26 @@ export const useLeaderBoard = (market: string) => {
       if (!api?.isConnected || !lmp) return;
       const currentEpoch = await lmp.queryCurrentEpoch();
       const accounts = await lmp.getTopAccounts(currentEpoch, market);
-      return accounts;
+
+      const res = accounts.map(async (address, i): Promise<LmpLeaderboard> => {
+        const reward = await lmp.getEligibleRewards(
+          currentEpoch,
+          market,
+          address
+        );
+        const totalReward = reward.marketMaking + reward.trading;
+
+        // TODO: Add score later
+        return {
+          rank: i + 1,
+          address,
+          rewards: totalReward,
+          score: "----",
+          token: "PDEX",
+        };
+      });
+
+      return await Promise.all(res);
     },
     enabled,
   });

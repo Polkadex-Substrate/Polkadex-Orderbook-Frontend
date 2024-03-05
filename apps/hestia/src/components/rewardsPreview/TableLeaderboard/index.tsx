@@ -3,151 +3,93 @@
 import { Skeleton, Table } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { forwardRef, useEffect, useMemo, useState } from "react";
-import { useLeaderBoard } from "@orderbook/core/hooks";
+import { LmpLeaderboard, useLeaderBoard } from "@orderbook/core/hooks";
 
 import { AccountCard } from "./accountCard";
-
-export type FakeData = (typeof fakeData)[0];
+import { ResponsiveTable } from "./responsiveTable";
 
 type Props = { market: string; maxHeight: string };
 
 export const TableLeaderboard = forwardRef<HTMLDivElement, Props>(
-  ({ maxHeight, market }, ref) => {
-    const [state, setState] = useState<FakeData | null>(null);
+  ({ maxHeight, market }) => {
     const { width } = useWindowSize();
+    const { accounts, isLoading } = useLeaderBoard(market);
+
+    const [responsiveState, setResponsiveState] = useState(false);
+    const [responsiveData, setResponsiveData] = useState<LmpLeaderboard | null>(
+      null
+    );
     const responsiveView = useMemo(() => width <= 400, [width]);
 
-    const { isLoading } = useLeaderBoard(market);
-
     useEffect(() => {
-      if (!responsiveView && !!state) setState(null);
-    }, [responsiveView, state]);
+      if (!responsiveView && !!responsiveState) {
+        setResponsiveState(false);
+        setResponsiveData(null);
+      }
+    }, [responsiveState, responsiveView]);
 
     return (
-      <div className="flex h-full min-h-[440px] flex-col justify-between border-b border-secondary-base">
-        {isLoading ? (
-          <Skeleton loading />
-        ) : (
-          <div
-            className="overflow-y-hidden hover:overflow-y-auto px-3"
-            style={{ maxHeight, scrollbarGutter: "stable" }}
-          >
-            <Table>
-              <Table.Header className="[&_th]:border-none">
-                <Table.Row className="border-none">
-                  <Table.Head>#</Table.Head>
-                  <Table.Head>Account</Table.Head>
-                  {!responsiveView && (
-                    <Table.Head align="right">Rewards (PDEX)</Table.Head>
-                  )}
-                  <Table.Head align="right">Score</Table.Head>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {fakeData.map((value, i) => {
-                  const responsiveProps = responsiveView && {
-                    role: "button",
-                    onClick: () => setState(value),
-                  };
-                  const rank = i + 1;
+      <>
+        <ResponsiveTable
+          data={responsiveData}
+          onOpenChange={setResponsiveState}
+          open={responsiveState}
+        />
+        <div className="flex h-full min-h-[440px] flex-col justify-between border-b border-secondary-base">
+          {isLoading ? (
+            <Skeleton loading />
+          ) : (
+            <div
+              className="overflow-y-hidden hover:overflow-y-auto px-3"
+              style={{ maxHeight, scrollbarGutter: "stable" }}
+            >
+              <Table>
+                <Table.Header className="[&_th]:border-none">
+                  <Table.Row className="border-none">
+                    <Table.Head>#</Table.Head>
+                    <Table.Head>Account</Table.Head>
+                    {!responsiveView && (
+                      <Table.Head align="right">Rewards (PDEX)</Table.Head>
+                    )}
+                    <Table.Head align="right">Score</Table.Head>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {accounts?.map((value) => {
+                    const responsiveProps = responsiveView && {
+                      role: "button",
+                      onClick: () => {
+                        setResponsiveState(true);
+                        setResponsiveData(value);
+                      },
+                    };
 
-                  return (
-                    <Table.Row key={value.id} {...responsiveProps}>
-                      <Table.Cell>{rank.toString()}</Table.Cell>
-                      <Table.Cell align="right">
-                        <AccountCard address={value.name} />
-                      </Table.Cell>
-                      {!responsiveView && (
-                        <>
-                          <Table.Cell align="right">
-                            {value.rewards.toString()}
-                          </Table.Cell>
-                        </>
-                      )}
-                      <Table.Cell className="flex justify-end">
-                        {value.score.toString()}
-                      </Table.Cell>
-                    </Table.Row>
-                  );
-                })}
-              </Table.Body>
-            </Table>
-          </div>
-        )}
-      </div>
+                    return (
+                      <Table.Row key={value.address} {...responsiveProps}>
+                        <Table.Cell>{value.rank.toString()}</Table.Cell>
+                        <Table.Cell align="right">
+                          <AccountCard address={value.address} />
+                        </Table.Cell>
+                        {!responsiveView && (
+                          <>
+                            <Table.Cell align="right">
+                              {value.rewards.toString()}
+                            </Table.Cell>
+                          </>
+                        )}
+                        <Table.Cell className="flex justify-end">
+                          {value.score.toString()}
+                        </Table.Cell>
+                      </Table.Row>
+                    );
+                  })}
+                </Table.Body>
+              </Table>
+            </div>
+          )}
+        </div>
+      </>
     );
   }
 );
 TableLeaderboard.displayName = "TableLeaderboard";
-const fakeData = [
-  {
-    id: 2,
-    name: "A5tDrP..QyD9vH",
-    rewards: 0.42,
-    token: "PDEX",
-    score: 600,
-  },
-  {
-    id: 4,
-    name: "DfG8mV..LXwMh1",
-    rewards: 0.15,
-    token: "PDEX",
-    score: 500,
-  },
-  {
-    id: 7,
-    name: "U3Tm8w..RsHdKm",
-    rewards: 0.32,
-    token: "PDEX",
-    score: 550,
-  },
-  {
-    id: 10,
-    name: "Y4pR7t..FmG2CwQ",
-    rewards: 0.28,
-    token: "PDEX",
-    score: 590,
-  },
-  {
-    id: 11,
-    name: "55ybbt..FmG2CwQ",
-    rewards: 0.28,
-    token: "PDEX",
-    score: 590,
-  },
-  {
-    id: 12,
-    name: "g3pR7t..F1G2CwQ",
-    rewards: 0.28,
-    token: "PDEX",
-    score: 590,
-  },
-  {
-    id: 13,
-    name: "45hg7t..FG2CwQ",
-    rewards: 0.28,
-    token: "PDEX",
-    score: 590,
-  },
-  {
-    id: 22,
-    name: "55ybbt..F1G2CwQ",
-    rewards: 0.28,
-    token: "PDEX",
-    score: 590,
-  },
-  {
-    id: 23,
-    name: "tr24fd..FmG2CwQ",
-    rewards: 0.28,
-    token: "PDEX",
-    score: 590,
-  },
-  {
-    id: 24,
-    name: "glr37t..FmG2CwQ",
-    rewards: 0.28,
-    token: "PDEX",
-    score: 590,
-  },
-];

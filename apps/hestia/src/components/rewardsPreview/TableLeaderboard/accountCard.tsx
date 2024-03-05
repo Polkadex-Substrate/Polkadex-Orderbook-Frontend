@@ -1,4 +1,4 @@
-import { Icons, Typography } from "@polkadex/ux";
+import { Icons, Typography, truncateString } from "@polkadex/ux";
 
 export const AccountCard = ({ address }: { address: string }) => {
   return (
@@ -6,7 +6,7 @@ export const AccountCard = ({ address }: { address: string }) => {
       <div className="flex place-items-center">
         <Icons.Avatar className="w-6 h-6 text-red-500" />
       </div>
-      <Typography.Text> {address}</Typography.Text>
+      <Typography.Text> {truncateString(address, 5)}</Typography.Text>
     </div>
   );
 };

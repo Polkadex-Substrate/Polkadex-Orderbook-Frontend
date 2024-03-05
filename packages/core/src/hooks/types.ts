@@ -13,6 +13,13 @@ export type LmpMarketConfig = Market &
     rewards: { marketMaking: number; trading: number; isClaimable: boolean };
   };
 
+export type LmpLeaderboard = {
+  rank: number;
+  address: string;
+  rewards: number;
+  token: string;
+  score: string;
+};
 export interface MutateHookProps {
   onSuccess?: (message?: string) => void;
   onError?: (error: Error) => void;
