@@ -1,9 +1,9 @@
 import { Button, Drawer } from "@polkadex/ux";
 import { useRouter } from "next/navigation";
 
-import { ResponsiveCard } from "./responsiveCard";
-
 import { Data } from ".";
+
+import { ResponsiveCard } from "@/components/ui/ReadyToUse";
 
 export const ResponsiveData = ({
   open,

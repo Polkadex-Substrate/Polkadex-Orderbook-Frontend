@@ -2,6 +2,7 @@ import { Tokens, Table as PolkadexTable } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { Fragment, forwardRef, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLmpMarkets } from "@orderbook/core/hooks";
 
 import { MarketCard } from "./marketCard";
 import { ResponsiveData } from "./responsiveData";
@@ -16,6 +17,9 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
     const { width } = useWindowSize();
     const router = useRouter();
     const responsiveView = useMemo(() => width <= 1000, [width]);
+
+    const { markets, isLoading } = useLmpMarkets();
+    console.log(markets, isLoading);
 
     useEffect(() => {
       if (!responsiveView && !!state) setState(null);
@@ -113,7 +117,12 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
               </PolkadexTable.Body>
             </PolkadexTable>
           </div>
-          <TablePagination ref={ref} />
+          <TablePagination
+            ref={ref}
+            page={1}
+            nextButtonDisabled
+            prevButtonDisabled
+          />
         </div>
       </Fragment>
     );

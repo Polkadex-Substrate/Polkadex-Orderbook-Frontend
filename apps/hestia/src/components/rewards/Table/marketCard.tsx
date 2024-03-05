@@ -11,14 +11,16 @@ export const MarketCard = ({
   return (
     <div className="flex items-center gap-2">
       <div className="flex items-center">
-        <Token
-          appearance={pairIcon as keyof typeof tokenAppearance}
-          name={pairIcon}
-          className="rounded-full"
-          size="sm"
-        />
-        <div className="w-10 h-10 p-1.5 rounded-full bg-level-0 border border-secondary -ml-2">
+        <div className="w-10 h-10 p-1.5 rounded-full bg-level-0 border border-secondary z-10">
           <Token name={icon} />
+        </div>
+        <div className="-ml-2">
+          <Token
+            appearance={pairIcon as keyof typeof tokenAppearance}
+            name={pairIcon}
+            size="sm"
+            className="rounded-full"
+          />
         </div>
       </div>
       <Typography.Text size="sm">{marketName}</Typography.Text>
