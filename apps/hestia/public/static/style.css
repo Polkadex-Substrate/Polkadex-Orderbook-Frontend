@@ -4,7 +4,7 @@
 }
 
 :root:not(.theme-dark) {
-  --tv-color-pane-background: #06070A ;
+  --tv-color-pane-background: #06070A;
   --tv-color-platform-background: #06070A;
 }
 
