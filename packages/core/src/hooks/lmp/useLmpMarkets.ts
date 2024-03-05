@@ -1,8 +1,9 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useQuery } from "@tanstack/react-query";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { Market, Ticker } from "@orderbook/core/utils/orderbookService";
 
-import { QUERY_KEYS, useMarkets, useTickers } from "../..";
+import { LmpMarketConfig, QUERY_KEYS, useMarkets, useTickers } from "../..";
 
 export const useLmpMarkets = () => {
   const { api, lmp } = useNativeApi();
@@ -46,10 +47,15 @@ export const useLmpMarkets = () => {
         );
 
         // Fetch market score later
-        return { ...market, ...ticker, score: "---", rewards };
+        return {
+          ...(market as Market),
+          ...(ticker as Ticker),
+          score: "------",
+          rewards,
+        } as LmpMarketConfig;
       });
 
-      return Promise.all(res);
+      return await Promise.all(res);
     },
     enabled,
   });
