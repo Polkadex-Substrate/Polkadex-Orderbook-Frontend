@@ -1,6 +1,6 @@
 import {
   RiAddLine,
-  RiArrowDownLine,
+  RiArrowDownSLine,
   RiArrowLeftRightLine,
   RiInformationLine,
   RiMore2Line,
@@ -159,7 +159,7 @@ export const Profile = ({
                     hoverable={false}
                   >
                     {enableDropdown && (
-                      <RiArrowDownLine className="h-3 w-3 transition-transform duration-300 text-primary" />
+                      <RiArrowDownSLine className="h-3 w-3 transition-transform duration-300 text-primary" />
                     )}
                   </AccountCard.Inverted>
                 </div>

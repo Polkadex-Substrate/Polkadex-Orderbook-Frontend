@@ -99,6 +99,8 @@ type ConnectWalletState = {
   mainProxiesLoading: boolean;
   mainProxiesSuccess: boolean;
   importFromMnemonicError: unknown;
+  browserAccountPresent: boolean;
+  extensionAccountPresent: boolean;
 };
 
 export const ConnectWalletProvider = ({
@@ -284,9 +286,22 @@ export const ConnectWalletProvider = ({
       console.log("error", error);
     }
   };
+
+  const browserAccountPresent = useMemo(
+    () => !!Object.keys(selectedAccount ?? {})?.length,
+    [selectedAccount]
+  );
+
+  const extensionAccountPresent = useMemo(
+    () => !!Object.keys(selectedWallet ?? {})?.length,
+    [selectedWallet]
+  );
+
   return (
     <Provider
       value={{
+        browserAccountPresent,
+        extensionAccountPresent,
         selectedWallet,
         selectedAccount,
         selectedExtension,
@@ -382,6 +397,8 @@ export const Context = createContext<ConnectWalletState>({
   mainProxiesAccounts: [],
   mainProxiesLoading: false,
   mainProxiesSuccess: false,
+  extensionAccountPresent: false,
+  browserAccountPresent: false,
 });
 
 const Provider = ({

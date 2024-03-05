@@ -1,6 +1,6 @@
 import { Typography, Tooltip, Separator } from "@polkadex/ux";
 import Link from "next/link";
-import { RiArrowDownLine } from "@remixicon/react";
+import { RiArrowDownSLine } from "@remixicon/react";
 
 import { Icons } from "..";
 
@@ -26,7 +26,7 @@ export const TradingFee = ({
           <Typography.Text size="xs" appearance="primary">
             0.1&#37;
           </Typography.Text>
-          <RiArrowDownLine className="w-3 h-3 text-primary group-hover:rotate-180 duration-300 transition-transform" />
+          <RiArrowDownSLine className="w-3 h-3 text-primary group-hover:rotate-180 duration-300 transition-transform" />
         </div>
       </Tooltip.Trigger>
       <Tooltip.Content className="max-w-[300px] p-4">

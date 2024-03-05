@@ -46,9 +46,9 @@ export const Header = ({
           />
         </div>
         <Dropdown>
-          <Dropdown.Trigger className="items-center inline-flex opacity-50 transition-opacity ease-out duration-300 hover:opacity-100 w-full">
-            <Typography.Text>{selectedDecimal}</Typography.Text>
-            <Dropdown.Icon className="w-3 h-3" />
+          <Dropdown.Trigger className="gap-1 items-center opacity-50 transition-opacity ease-out duration-300 hover:opacity-100 w-full">
+            <Typography.Text size="xs">{selectedDecimal}</Typography.Text>
+            <Dropdown.Icon />
           </Dropdown.Trigger>
           <Dropdown.Content>
             {decimalSizes

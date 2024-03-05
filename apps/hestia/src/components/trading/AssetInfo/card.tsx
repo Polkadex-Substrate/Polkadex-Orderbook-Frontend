@@ -82,7 +82,7 @@ const WithDropdown = ({
             <Dropdown.Content>
               {items.map((value, i) => (
                 <Dropdown.Item onClick={() => onChange(value)} key={i}>
-                  <Typography.Text>{value}</Typography.Text>
+                  <Typography.Text size="xs">{value}</Typography.Text>
                 </Dropdown.Item>
               ))}
             </Dropdown.Content>

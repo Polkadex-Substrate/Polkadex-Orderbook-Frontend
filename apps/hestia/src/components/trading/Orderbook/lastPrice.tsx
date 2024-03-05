@@ -17,16 +17,9 @@ export const LastPrice = ({
     <div
       className={classNames(
         inverted && "order-1",
-        "flex items-center justify-between gap-2 p-2 border-y border-primary bg-level-1"
+        "flex items-center justify-between gap-2 p-2 border-y border-primary"
       )}
     >
-      <Typography.Text
-        size="xs"
-        appearance="primary"
-        className="whitespace-nowrap"
-      >
-        Last price
-      </Typography.Text>
       <Skeleton loading={loading} className="h-4 max-w-20">
         <div className="flex items-center gap-1">
           <div className="flex items-center gap-1 text-sm font-semibold leading-none">
@@ -51,6 +44,13 @@ export const LastPrice = ({
           </Typography.Text>
         </div>
       </Skeleton>
+      <Typography.Text
+        size="xs"
+        appearance="primary"
+        className="whitespace-nowrap"
+      >
+        Last price
+      </Typography.Text>
     </div>
   );
 };

@@ -222,7 +222,7 @@ export const SelectFundingDropdown = ({
           </Searchable.List>
         </Searchable>
       </Popover.Content>
-      <Popover.Overlay className="z-[10]" />
+      <Popover.Overlay />
     </Popover>
   );
 };

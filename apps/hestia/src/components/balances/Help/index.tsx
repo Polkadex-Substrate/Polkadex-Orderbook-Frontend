@@ -8,7 +8,10 @@ import { Card } from "./card";
 
 export const Help = forwardRef<HTMLDivElement>((_, ref) => {
   return (
-    <div ref={ref} className="flex items-center max-md:flex-col">
+    <div
+      ref={ref}
+      className="flex items-center max-md:flex-col border-t border-primary"
+    >
       <Card title="Having Trouble?" description="Feel free to get in touch.">
         <Button.Icon variant="outline">
           <RiExternalLinkLine className="w-full h-full" />{" "}

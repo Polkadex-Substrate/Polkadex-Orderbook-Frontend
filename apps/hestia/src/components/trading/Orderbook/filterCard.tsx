@@ -21,7 +21,7 @@ export const FilterCard = ({
       onClick={action}
       className={classNames("p-1", !active && "opacity-40")}
     >
-      <IconComponent />
+      <IconComponent className="w-full h-full" />
     </Button.Icon>
   );
 };
