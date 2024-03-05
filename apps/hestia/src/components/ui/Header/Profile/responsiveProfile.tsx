@@ -1,31 +1,27 @@
 "use client";
 
 import { Popover } from "@polkadex/ux";
-import { useMemo } from "react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { Content } from "./content";
 import { Trigger } from "./trigger";
 
-export const ResponsiveProfile = () => {
+export const ResponsiveProfile = ({
+  browserAccountPresent,
+  extensionAccountPresent,
+}: {
+  browserAccountPresent: boolean;
+  extensionAccountPresent: boolean;
+}) => {
   const { selectedWallet, selectedAccount } = useConnectWalletProvider();
 
-  const tradingWalletPresent = useMemo(
-    () => !!Object.keys(selectedAccount ?? {})?.length,
-    [selectedAccount]
-  );
-
-  const fundWalletPresent = useMemo(
-    () => !!Object.keys(selectedWallet ?? {})?.length,
-    [selectedWallet]
-  );
-  return (
+  return browserAccountPresent || extensionAccountPresent ? (
     <Popover>
-      <Popover.Trigger className="border-t border-primary bg-level-1 sticky bottom-0 z-10">
+      <Popover.Trigger>
         <Trigger
           responsive
-          browserAccountPresent={tradingWalletPresent}
-          extensionAccountPresent={fundWalletPresent}
+          browserAccountPresent={browserAccountPresent}
+          extensionAccountPresent={extensionAccountPresent}
           extensionAccountName={selectedWallet?.name ?? ""}
           browserAccountAddress={selectedAccount?.address ?? ""}
         />
@@ -33,7 +29,7 @@ export const ResponsiveProfile = () => {
       <Popover.Content sideOffset={10}>
         <Content />
       </Popover.Content>
-      <Popover.Overlay className="z-[10]" />
+      <Popover.Overlay />
     </Popover>
-  );
+  ) : null;
 };

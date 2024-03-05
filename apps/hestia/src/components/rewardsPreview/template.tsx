@@ -1,13 +1,14 @@
 "use client";
 
 import { Button, Typography } from "@polkadex/ux";
-import { useElementSize } from "usehooks-ts";
-import { useMemo } from "react";
+import { useResizeObserver } from "usehooks-ts";
+import { useMemo, useRef } from "react";
 import { RiExternalLinkLine } from "@remixicon/react";
-import { useMarkets } from "@orderbook/core/hooks";
-import { getCurrentMarket } from "@orderbook/core/helpers";
+import { useWindowSize } from "react-use";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { Rewards } from "../ui/Icons/rewards";
+import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
 import { TableLeaderboard } from "./TableLeaderboard";
 import { Overview } from "./Overview";
@@ -15,42 +16,70 @@ import { TableRewards } from "./TableRewards";
 
 import { Footer, Header } from "@/components/ui";
 
-// useElementSize Deprecated -> useResizeObserver
 export function Template({ id }: { id: string }) {
-  const { list } = useMarkets();
-  const currentMarket = getCurrentMarket(list, id);
+  const { width } = useWindowSize();
 
-  const [headerRef, { height: headerHeight = 0 }] = useElementSize();
-  const [footerRef, { height: footerHeight = 0 }] = useElementSize();
-  const [tableTitlesRef, { height: tableTitleHeight = 0 }] = useElementSize();
-  const [tableRowsRef, { height: tableRowsHeight = 0 }] = useElementSize();
-  const [overviewRef, { height: overviewHeight = 0 }] = useElementSize();
+  const footerRef = useRef<HTMLDivElement | null>(null);
+  const headerRef = useRef<HTMLDivElement | null>(null);
+  const tableTitlesRef = useRef<HTMLDivElement | null>(null);
+  const overviewRef = useRef<HTMLDivElement | null>(null);
+  const interactionRef = useRef<HTMLDivElement | null>(null);
+  const tableRowsRef = useRef<HTMLDivElement | null>(null);
+
+  const { height: overviewHeight = 0 } = useResizeObserver({
+    ref: overviewRef,
+    box: "border-box",
+  });
+
+  const { height: tableTitleHeight = 0 } = useResizeObserver({
+    ref: tableTitlesRef,
+    box: "border-box",
+  });
+
+  const { height: headerHeight = 0 } = useResizeObserver({
+    ref: headerRef,
+    box: "border-box",
+  });
+
+  const { height: footerHeight = 0 } = useResizeObserver({
+    ref: footerRef,
+    box: "border-box",
+  });
+
+  const { height: interactionHeight = 0 } = useResizeObserver({
+    ref: interactionRef,
+    box: "border-box",
+  });
+  const { height: tableRowsHeight = 0 } = useResizeObserver({
+    ref: tableRowsRef,
+    box: "border-box",
+  });
 
   const maxHeight = useMemo(
     () =>
       `calc(100vh - ${
-        overviewHeight +
-        headerHeight +
-        footerHeight +
-        tableTitleHeight +
-        tableRowsHeight +
-        1
+        overviewHeight + headerHeight + tableTitleHeight + tableRowsHeight + 1
       }px)`,
-    [
-      headerHeight,
-      footerHeight,
-      overviewHeight,
-      tableTitleHeight,
-      tableRowsHeight,
-    ]
+    [headerHeight, overviewHeight, tableTitleHeight, tableRowsHeight]
   );
+
+  const mobileView = useMemo(() => width < 640, [width]);
+  const { browserAccountPresent, extensionAccountPresent } =
+    useConnectWalletProvider();
   return (
     <div
-      className="flex flex-1 flex-col bg-backgroundBase max-sm:pb-16"
+      className="flex flex-1 flex-col bg-backgroundBase"
       vaul-drawer-wrapper=""
     >
       <Header ref={headerRef} />
-      <main className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-screen-2xl m-auto">
+      <main
+        className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
+        style={{
+          paddingBottom: mobileView
+            ? `${interactionHeight}px`
+            : `${footerHeight}px`,
+        }}
+      >
         <div className="flex-1 flex flex-col">
           <Overview ref={overviewRef} />
           <div className="flex flex-1 max-lg:flex-col flex-wrap">
@@ -79,7 +108,7 @@ export function Template({ id }: { id: string }) {
                 <TableLeaderboard
                   ref={tableRowsRef}
                   maxHeight={maxHeight}
-                  market={currentMarket?.id as string}
+                  market={id}
                 />
                 <div className="flex items-center justify-between px-5 py-8 min-w-[20rem] h-fit gap-10 first:border-r border-secondary-base">
                   <div className="flex items-center gap-2">
@@ -107,6 +136,17 @@ export function Template({ id }: { id: string }) {
           </div>
         </div>
       </main>
+      {mobileView && (browserAccountPresent || extensionAccountPresent) && (
+        <div
+          ref={interactionRef}
+          className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full"
+        >
+          <ResponsiveProfile
+            extensionAccountPresent={extensionAccountPresent}
+            browserAccountPresent={browserAccountPresent}
+          />
+        </div>
+      )}
       <Footer ref={footerRef} />
     </div>
   );

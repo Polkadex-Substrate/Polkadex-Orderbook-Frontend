@@ -19,7 +19,7 @@
     "@polkadex/polkadex-api": "^3.0.5",
     "@polkadex/react-providers": "^1.2.0",
     "@polkadex/types": "^1.2.2",
-    "@polkadex/ux": "^6.8.0",
+    "@polkadex/ux": "^6.9.0",
     "@polkadot-cloud/assets": "^0.3.4",
     "@remixicon/react": "^4.2.0",
     "@sentry/nextjs": "^7.99.0",

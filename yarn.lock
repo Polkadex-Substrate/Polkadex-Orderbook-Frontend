@@ -4144,14 +4144,13 @@
     usehooks-ts "^2.9.1"
     vaul "^0.8.0"
 
-"@polkadex/ux@^6.8.0":
-  version "6.8.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.8.0.tgz#0c06cdbac6595d98ca3cc23ba6299b311b09dad3"
-  integrity sha512-tKcOihvttutnNU4qvvcWhI847lDqCngIYDswDZllOk0o/N9qVd9pShTJ3lEX5eXLjBFvC7S+ROMEzbDuCIb5Yw==
+"@polkadex/ux@^6.9.0":
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.9.0.tgz#82d3be6b827b3f4acfe968d68a2f82f08c85dff4"
+  integrity sha512-EunJSvBUzcUxLA59BuTPk5xZ6CfzHzQFoQRfQG8qZSvZCQ7U5XfFK9Kv6Jk2QQacn+Kv4wUZ6WmKtsrno0z54w==
   dependencies:
     "@floating-ui/react" "^0.26.4"
     "@headlessui/react" "^1.7.18"
-    "@heroicons/react" "^2.0.18"
     "@polkadex/react-providers" "*"
     "@polkadot-cloud/assets" "^0.1.35"
     "@radix-ui/react-accordion" "^1.1.2"
@@ -4167,6 +4166,7 @@
     "@radix-ui/react-tabs" "^1.0.4"
     "@radix-ui/react-toggle-group" "^1.0.4"
     "@radix-ui/react-tooltip" "^1.0.7"
+    "@remixicon/react" "^4.2.0"
     cmdk "^0.2.1"
     react-resizable-panels "^2.0.9"
     react-use "^17.4.0"
