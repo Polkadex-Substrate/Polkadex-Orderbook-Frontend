@@ -35,7 +35,7 @@ export const Hero = () => {
             </div>
           </div>
           <Typography.Heading size={width > 700 ? "7xl" : "3xl"}>
-            Trade on the CEXiest decentralized exchange
+            Trade on the CEXiest Decentralized Exchange
           </Typography.Heading>
         </div>
 

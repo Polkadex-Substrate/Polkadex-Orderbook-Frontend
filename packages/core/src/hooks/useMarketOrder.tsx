@@ -94,6 +94,7 @@ export const useMarketOrder = ({
       side: isSell ? "Ask" : "Bid",
       price: 0,
       amount: Number(amount),
+      market,
     });
   };
 

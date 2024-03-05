@@ -19,15 +19,11 @@ export const Export = () => {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
-  const { onHandleAlert, onHandleError, onHandleNotification } =
-    useSettingsProvider();
+  const { onHandleAlert, onHandleError, onHandleInfo } = useSettingsProvider();
 
   const prepareData = async () => {
     setLoading(true);
-    onHandleNotification({
-      type: "Information",
-      message: "Gettting data ready...",
-    });
+    onHandleInfo?.("Gettting data ready...");
     try {
       const now = new Date();
       const dateFrom = subMonths(now, 6);

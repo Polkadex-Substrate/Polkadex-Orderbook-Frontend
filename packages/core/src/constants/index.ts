@@ -1,5 +1,6 @@
 import BigNumber from "bignumber.js";
 export * from "./queryKeys";
+export * from "./notifications";
 export const UNIT = BigInt(1000_000_000_000);
 export const UNIT_BN = new BigNumber(UNIT.toString());
 export const DEFAULT_TRADING_VIEW_INTERVAL = "5";

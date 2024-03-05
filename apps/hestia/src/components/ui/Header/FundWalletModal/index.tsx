@@ -18,7 +18,7 @@ export const FundWalletModal = ({
       onOpenChange={onOpenChange}
       placement="top right"
       closeOnClickOutside
-      className="flex flex-col border-primary bg-level-0 border-x w-screen h-screen md:max-w-md overflow-x-hidden overflow-y-auto"
+      className="flex flex-col border-primary bg-level-0 border-x w-screen min-h-webKit md:max-w-md overflow-x-hidden overflow-y-auto"
     >
       <Modal.Title className="flex justify-between items-center py-4 pl-4">
         <Typography.Text size="lg" bold>

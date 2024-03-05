@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, forwardRef, useState } from "react";
+import { Fragment, forwardRef, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { Logo } from "@polkadex/ux";
@@ -17,8 +17,16 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const [menu, setMenu] = useState(false);
   const [notifications, setNotifications] = useState(false);
   const [fundWallet, setFundWallet] = useState(false);
-  const { connectExtension, onToogleConnectExtension } = useSettingsProvider();
+  const {
+    connectExtension,
+    onToogleConnectExtension,
+    notifications: allNotifications,
+  } = useSettingsProvider();
   const lastUsedMarketUrl = getMarketUrl();
+
+  const unreadNotifications = useMemo(() => {
+    return allNotifications.filter((e) => e.active).length;
+  }, [allNotifications]);
 
   return (
     <Fragment>
@@ -93,6 +101,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
         </div>
         <Profile
           showFundingWallet
+          unreadNotifications={unreadNotifications}
           onClick={() => onToogleConnectExtension(!connectExtension)}
           onOpenMenu={() => setMenu(true)}
           onOpenNotifications={() => setNotifications(true)}

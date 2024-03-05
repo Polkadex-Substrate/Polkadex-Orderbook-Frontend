@@ -74,11 +74,9 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
           }
         }
         dispatch(A.withdrawsData());
-        settingsState.onHandleNotification({
-          type: "Success",
-          message:
-            "Your withdrawal is being processed and will be available for you to claim in a few minutes",
-        });
+        settingsState.onHandleAlert(
+          "Your withdrawal is being processed and will be available for you to claim in a few minutes"
+        );
       }
     } catch (error) {
       const errorText = (error as Error).message || (error as string);
@@ -121,11 +119,9 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
       if (!signer) throw new Error("Signer is not defined");
 
       // TODO: Move this toast as callback to signAndSendExtrinsic,
-      settingsState.onHandleNotification({
-        type: "Information",
-        message:
-          "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
-      });
+      settingsState.onHandleAlert(
+        "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins."
+      );
       dispatch(A.withdrawsClaimFetch({ sid, assetIds }));
 
       const res = await claimWithdrawal(
@@ -139,11 +135,9 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
         // TODO?: Check delay
         // for ux
         setTimeout(() => {
-          settingsState.onHandleNotification({
-            type: "Success",
-            message:
-              "Congratulations! You have successfully withdrawn your assets to your funding account.",
-          });
+          settingsState.onHandleAlert(
+            "Congratulations! You have successfully withdrawn your assets to your funding account."
+          );
 
           dispatch(A.withdrawClaimReset());
         }, 3000);
