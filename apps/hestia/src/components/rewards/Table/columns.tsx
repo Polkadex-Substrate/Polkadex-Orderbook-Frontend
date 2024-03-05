@@ -1,6 +1,7 @@
 import { LmpMarketConfig } from "@orderbook/core/index";
 import { Tokens, Typography } from "@polkadex/ux";
 import { createColumnHelper } from "@tanstack/react-table";
+import Link from "next/link";
 
 import { MarketCard } from "./marketCard";
 
@@ -15,15 +16,17 @@ export const columns = () => [
         quoteAsset: { ticker: quoteTicker },
       } = e.getValue();
       return (
-        <MarketCard
-          marketName={`${baseTicker}/${quoteTicker}`}
-          icon={baseTicker as keyof typeof Tokens}
-          pairIcon={quoteTicker as keyof typeof Tokens}
-        />
+        <Link href={`/rewards/${baseTicker}${quoteTicker}`}>
+          <MarketCard
+            marketName={`${baseTicker}/${quoteTicker}`}
+            icon={baseTicker as keyof typeof Tokens}
+            pairIcon={quoteTicker as keyof typeof Tokens}
+          />
+        </Link>
       );
     },
     header: () => (
-      <Typography.Text size="sm" appearance="primary">
+      <Typography.Text size="sm" appearance="primary" className="ml-2">
         Market
       </Typography.Text>
     ),

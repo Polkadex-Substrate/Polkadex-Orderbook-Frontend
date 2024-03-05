@@ -1,38 +1,56 @@
-import { Button, Drawer } from "@polkadex/ux";
+import { Dispatch, SetStateAction } from "react";
+import { Button, Drawer, Tokens } from "@polkadex/ux";
 import { useRouter } from "next/navigation";
+import { LmpMarketConfig } from "@orderbook/core/index";
 
-import { Data } from ".";
+import { MarketCard } from "./marketCard";
 
 import { ResponsiveCard } from "@/components/ui/ReadyToUse";
 
 export const ResponsiveData = ({
   open,
-  onClose,
+  onOpenChange,
   data,
 }: {
   open: boolean;
-  onClose: () => void;
-  data: Data | null;
+  onOpenChange: Dispatch<SetStateAction<boolean>>;
+  data: LmpMarketConfig | null;
 }) => {
   const router = useRouter();
-
+  if (!data) return null;
   return (
-    <Drawer closeOnClickOutside open={open} onClose={onClose}>
+    <Drawer
+      open={open}
+      onOpenChange={onOpenChange}
+      closeOnClickOutside
+      shouldScaleBackground={false}
+    >
       <Drawer.Title className="px-4">
-        {data?.ticker}/{data?.pair}
+        <MarketCard
+          marketName={`${data?.baseAsset.ticker}/${data?.quoteAsset.ticker}`}
+          icon={data?.baseAsset.ticker as keyof typeof Tokens}
+          pairIcon={data?.quoteAsset.ticker as keyof typeof Tokens}
+        />
       </Drawer.Title>
       <Drawer.Content className="flex flex-col gap-2 p-4">
         <ResponsiveCard label="Score">{data?.score}</ResponsiveCard>
-        <ResponsiveCard label="TVL">{data?.tvl}</ResponsiveCard>
-        <ResponsiveCard label="APY">{data?.apy}</ResponsiveCard>
-        <ResponsiveCard label="Volume 24h">{data?.vol24}</ResponsiveCard>
-        <ResponsiveCard label="Volume 7d">{data?.vol7d}</ResponsiveCard>
+        <ResponsiveCard label="Total Rewards">
+          {Number(data?.rewards.marketMaking) + Number(data?.rewards.trading)}{" "}
+          PDEX
+        </ResponsiveCard>
+        <ResponsiveCard label="Volume 24h">
+          {data?.quoteVolume.toFixed(4)} {data?.quoteAsset.ticker}
+        </ResponsiveCard>
       </Drawer.Content>
       <Drawer.Footer className="p-4">
         <Button.Solid
           appearance="secondary"
           className="w-full"
-          onClick={() => router.push(`/analitycs/${data?.ticker}${data?.pair}`)}
+          onClick={() =>
+            router.push(
+              `/rewards/${data?.baseAsset.ticker}${data?.quoteAsset.ticker}`
+            )
+          }
         >
           Open metrics
         </Button.Solid>

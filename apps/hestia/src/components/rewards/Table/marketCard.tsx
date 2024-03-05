@@ -11,7 +11,7 @@ export const MarketCard = ({
   return (
     <div className="flex items-center gap-2">
       <div className="flex items-center">
-        <div className="w-10 h-10 p-1.5 rounded-full bg-level-0 border border-secondary z-10">
+        <div className="w-10 h-10 p-1.5 rounded-full bg-level-0 border border-secondary z-[1]">
           <Token name={icon} />
         </div>
         <div className="-ml-2">

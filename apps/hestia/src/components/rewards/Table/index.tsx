@@ -1,7 +1,6 @@
 import { Table as PolkadexTable, GenericMessage } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { Fragment, forwardRef, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { LmpMarketConfig, useLmpMarkets } from "@orderbook/core/hooks";
 import {
   flexRender,
@@ -16,7 +15,7 @@ import { ResponsiveData } from "./responsiveData";
 import { TablePagination } from "@/components/ui";
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
-const responsiveKeys = ["a"];
+const responsiveKeys = ["volume24h"];
 
 export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
   ({ maxHeight }, ref) => {
@@ -24,8 +23,7 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
     const [responsiveData, setResponsiveData] =
       useState<LmpMarketConfig | null>(null);
     const { width } = useWindowSize();
-    const router = useRouter();
-    const responsiveView = useMemo(() => width <= 1000, [width]);
+    const responsiveView = useMemo(() => width <= 500, [width]);
 
     const { markets, isLoading } = useLmpMarkets();
 
@@ -55,14 +53,14 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
 
     return (
       <Fragment>
-        {/* <ResponsiveData
+        <ResponsiveData
           data={responsiveData}
           onOpenChange={setResponsiveState}
           open={responsiveState}
-        /> */}
+        />
         <div className="flex-1 flex flex-col justify-between border-b border-secondary-base">
           <div
-            className="overflow-y-hidden hover:overflow-y-auto"
+            className="overflow-y-hidden hover:overflow-y-auto mt-1"
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
             <PolkadexTable>
@@ -96,7 +94,7 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
                   return (
                     <PolkadexTable.Row
                       key={row.id}
-                      className={classNames("hover:bg-level-1 cursor-pointer")}
+                      className={classNames("hover:bg-level-0 cursor-pointer")}
                     >
                       {row.getVisibleCells().map((cell) => {
                         if (
@@ -105,11 +103,12 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
                         )
                           return null;
 
-                        const responsiveProps = !responsiveView
+                        const responsiveProps = responsiveView
                           ? {
-                              role: "button",
-                              // Change this later
-                              onClick: () => router.push(`/rewards/$`),
+                              onClick: () => {
+                                setResponsiveState(true);
+                                setResponsiveData(row.original);
+                              },
                             }
                           : {};
 
@@ -117,7 +116,7 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
                           <PolkadexTable.Cell
                             key={cell.id}
                             align="right"
-                            className={classNames("!py-3")}
+                            className={classNames("!py-2")}
                             {...responsiveProps}
                           >
                             {flexRender(

@@ -4,6 +4,7 @@ import { Typography, Input } from "@polkadex/ux";
 import { useResizeObserver } from "usehooks-ts";
 import { useMemo, useRef } from "react";
 import { RiInformation2Line } from "@remixicon/react";
+import { useLmpMarkets } from "@orderbook/core/hooks";
 
 import { Table } from "./Table";
 import { Help } from "./Help";
@@ -11,6 +12,7 @@ import { Help } from "./Help";
 import { Footer, Header } from "@/components/ui";
 
 export function Template() {
+  const { markets } = useLmpMarkets();
   const headerRef = useRef(null);
   const footerRef = useRef(null);
   const helpRef = useRef(null);
@@ -68,7 +70,7 @@ export function Template() {
             </div>
             <div className="flex items-center justify-between gap-2 border-b border-primary px-4 w-full p-2">
               <Typography.Text appearance="primary" bold>
-                Markets (5)
+                Markets {`(${markets?.length || 0})`}
               </Typography.Text>
               <div>
                 <Input.Search placeholder="Search markets.." />
