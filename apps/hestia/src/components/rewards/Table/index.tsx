@@ -132,12 +132,14 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
               </PolkadexTable.Body>
             </PolkadexTable>
           </div>
-          <TablePagination
-            ref={ref}
-            page={1}
-            nextButtonDisabled
-            prevButtonDisabled
-          />
+          <div className="[&_svg]:scale-150">
+            <TablePagination
+              ref={ref}
+              page={1}
+              nextButtonDisabled
+              prevButtonDisabled
+            />
+          </div>
         </div>
       </Fragment>
     );
