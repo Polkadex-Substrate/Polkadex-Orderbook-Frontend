@@ -1,8 +1,8 @@
 "use client";
 
 import { Typography, Input } from "@polkadex/ux";
-import { useElementSize } from "usehooks-ts";
-import { useMemo } from "react";
+import { useResizeObserver } from "usehooks-ts";
+import { useMemo, useRef } from "react";
 import { RiInformation2Line } from "@remixicon/react";
 
 import { Table } from "./Table";
@@ -10,13 +10,34 @@ import { Help } from "./Help";
 
 import { Footer, Header } from "@/components/ui";
 
-// useElementSize Deprecated -> useResizeObserver
 export function Template() {
-  const [headerRef, { height: headerHeight = 0 }] = useElementSize();
-  const [footerRef, { height: footerHeight = 0 }] = useElementSize();
-  const [helpRef, { height: helpeight = 0 }] = useElementSize();
-  const [tableRowsRef, { height: tableRowsHeight = 0 }] = useElementSize();
-  const [overviewRef, { height: overviewHeight = 0 }] = useElementSize();
+  const headerRef = useRef(null);
+  const footerRef = useRef(null);
+  const helpRef = useRef(null);
+  const tableRowsRef = useRef(null);
+  const overviewRef = useRef(null);
+
+  const { height: headerHeight = 0 } = useResizeObserver({
+    ref: headerRef,
+    box: "border-box",
+  });
+
+  const { height: footerHeight = 0 } = useResizeObserver({
+    ref: footerRef,
+    box: "border-box",
+  });
+  const { height: helpeight = 0 } = useResizeObserver({
+    ref: headerRef,
+    box: "border-box",
+  });
+  const { height: tableRowsHeight = 0 } = useResizeObserver({
+    ref: tableRowsRef,
+    box: "border-box",
+  });
+  const { height: overviewHeight = 0 } = useResizeObserver({
+    ref: overviewRef,
+    box: "border-box",
+  });
 
   const maxHeight = useMemo(
     () =>
