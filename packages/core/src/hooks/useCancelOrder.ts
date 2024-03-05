@@ -19,8 +19,7 @@ export type CancelOrderArgs = {
 
 export const useCancelOrder = () => {
   const { wallet } = useUserAccounts();
-  const { onHandleError, onHandleAlert, onHandleNotification } =
-    useSettingsProvider();
+  const { onHandleError, onHandleAlert, onHandleInfo } = useSettingsProvider();
   const {
     selectedAddresses: { mainAddress, tradeAddress },
   } = useProfile();
@@ -38,10 +37,7 @@ export const useCancelOrder = () => {
       if (keyringPair?.isLocked)
         throw new Error("Please unlock your account first");
 
-      onHandleNotification({
-        type: "Information",
-        message: "Cancelling order...",
-      });
+      onHandleInfo?.("Cancelling order...");
 
       const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
       const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;

@@ -1,15 +1,21 @@
 import { FC, PropsWithChildren } from "react";
 
+import * as N from "./notifications";
+
+export type NotificationCategory = (typeof N.notificationCategories)[number];
+
 export type NotificationPayload = {
   type: "Error" | "Information" | "Success" | "Loading" | "Attention";
   message: string;
-  description?: string;
+  description: string;
+  category: NotificationCategory;
+  href?: string;
 };
 
 export interface Notification extends NotificationPayload {
-  id: number | string;
+  id: string;
   date: number;
-  active?: boolean;
+  active: boolean;
 }
 export interface SettingState {
   chartRebuild: boolean;
@@ -44,10 +50,11 @@ export type SettingContextProps = SettingState & {
   onPushNotification: (value: NotificationPayload) => void;
   onRemoveNotification: (value: Notification["id"]) => void;
   onReadNotification: (value: Notification["id"]) => void;
+  onReadAllNotifications: () => void;
   onClearNotifications: () => void;
   onHandleError: ToastActions["onError"];
   onHandleAlert: ToastActions["onSuccess"];
-  onHandleNotification: (value: NotificationPayload) => void;
+  onHandleInfo: ToastActions["onInfo"];
   onToogleConnectExtension: (value?: boolean) => void;
   onToogleConnectTrading: (value?: boolean) => void;
 };

@@ -22,6 +22,8 @@ export const NOTIFICATION_DELETE_BY_ID =
   "Settings Provider/NOTIFICATION_DELETE_BY_ID";
 export const NOTIFICATION_MARK_AS_READ =
   "Settings Provider/NOTIFICATION_MARK_AS_READ";
+export const ALL_NOTIFICATION_MARK_AS_READ =
+  "Settings Provider/ALL_NOTIFICATION_MARK_AS_READ";
 
 export const CHECK_HAS_EXTENSION = "Settings Provider/CHECK_HAS_EXTENSION";
 export const APP_NAME = "Polkadex Orderbook";

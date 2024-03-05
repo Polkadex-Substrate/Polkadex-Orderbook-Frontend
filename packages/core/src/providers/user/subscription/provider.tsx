@@ -17,7 +17,11 @@ import {
 } from "@orderbook/core/utils/orderbookService";
 import { Bar } from "@orderbook/core/utils/charting_library";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
-import { DEFAULT_BATCH_LIMIT, QUERY_KEYS } from "@orderbook/core/constants";
+import {
+  DEFAULT_BATCH_LIMIT,
+  QUERY_KEYS,
+  NOTIFICATIONS,
+} from "@orderbook/core/constants";
 import { useOrderbookService } from "@orderbook/core/providers/public/orderbookServiceProvider/useOrderbookService";
 import {
   decimalPlaces,
@@ -49,7 +53,8 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 }) => {
   const queryClient = useQueryClient();
   const path = usePathname();
-  const { onHandleError, onHandleNotification } = useSettingsProvider();
+  const { onHandleError, onHandleInfo, onPushNotification } =
+    useSettingsProvider();
   const { isReady, markets } = useOrderbookService();
   const { dateFrom, dateTo } = useSessionProvider();
   const {
@@ -74,35 +79,25 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 
             let updatedOpenOrders: Order[] = [];
 
-            const order = prevOpenOrders.find(
+            const findOrder = prevOpenOrders.find(
               (order) => order.orderId === payload.orderId
             );
 
             if (payload.status === "OPEN") {
-              if (order) {
-                const isSell = order.side === "Ask";
-                const type =
-                  order.type.charAt(0) + order.type.toLowerCase().slice(1);
-                const side = isSell ? "Sell" : "Buy";
-                onHandleNotification({
-                  type: "Information",
-                  message: `${type} ${side} Order Partially Filled`,
-                  description: `Partial filled exchange ${type.toLowerCase()} ${side.toLowerCase()} order for ${order.quantity} ${order.market.baseAsset.ticker} by using ${order.market.quoteAsset.ticker}`,
-                });
+              if (findOrder) {
+                const notf = NOTIFICATIONS.partialFilledOrder(findOrder);
+                onPushNotification(notf);
+                onHandleInfo?.(notf.message, notf.description);
               }
-
               updatedOpenOrders = replaceOrPushOrder(prevOpenOrders, payload);
             } else {
-              if (order) {
-                const isSell = order.side === "Ask";
-                const type =
-                  order.type.charAt(0) + order.type.toLowerCase().slice(1);
-                const side = isSell ? "Sell" : "Buy";
-                onHandleNotification({
-                  type: "Information",
-                  message: `${type} ${side} Order Filled`,
-                  description: `Filled exchange ${type.toLowerCase()} ${side.toLowerCase()} order for ${order.quantity} ${order.market.baseAsset.ticker} by using ${order.market.quoteAsset.ticker}`,
-                });
+              if (payload.status === "CANCELLED") {
+                onPushNotification(NOTIFICATIONS.cancelOrder(payload));
+              }
+              if (findOrder && payload.status === "CLOSED") {
+                const notf = NOTIFICATIONS.filledOrder(findOrder);
+                onPushNotification(notf);
+                onHandleInfo?.(notf.message, notf.description);
               }
 
               // Remove from Open Orders if it is closed
@@ -167,7 +162,8 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
       onHandleError,
       queryClient,
       tradeAddress,
-      onHandleNotification,
+      onHandleInfo,
+      onPushNotification,
     ]
   );
 
@@ -287,12 +283,23 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
               return { data: transactions, nextToken: null };
             }
           );
+
+          if (payload.txType === "DEPOSIT") {
+            onPushNotification(NOTIFICATIONS.transferToTradingAccount(payload));
+          } else if (payload.txType === "WITHDRAW") {
+            if (payload.status === "READY")
+              onPushNotification(NOTIFICATIONS.claimTransfer(payload));
+            else if (payload.status === "CONFIRMED")
+              onPushNotification(
+                NOTIFICATIONS.transferToFundingAccount(payload)
+              );
+          }
         }
       } catch (error) {
         onHandleError("Something has gone wrong while updating transactions");
       }
     },
-    [mainAddress, onHandleError, queryClient]
+    [mainAddress, onHandleError, queryClient, onPushNotification]
   );
 
   const onTickerUpdates = useCallback(

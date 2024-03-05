@@ -13,7 +13,7 @@ type DepositArgs = {
 };
 
 export const useDeposit = () => {
-  const { onHandleError, onHandleNotification } = useSettingsProvider();
+  const { onHandleError, onHandleInfo, onHandleAlert } = useSettingsProvider();
   const { api } = useNativeApi();
   const { isReady } = useOrderbookService();
 
@@ -27,10 +27,7 @@ export const useDeposit = () => {
       if (account?.address?.trim().length === 0)
         throw new Error("Invalid account");
 
-      onHandleNotification({
-        type: "Information",
-        message: "Processing Deposit...",
-      });
+      onHandleInfo?.("Processing Deposit...");
 
       await appsyncOrderbookService.operation.deposit({
         api,
@@ -44,11 +41,9 @@ export const useDeposit = () => {
       onHandleError(errorMessage);
     },
     onSuccess: () =>
-      onHandleNotification({
-        type: "Success",
-        message:
-          "Congratulations! You have successfully deposited assets to your trading account.",
-      }),
+      onHandleAlert(
+        "Congratulations! You have successfully deposited assets to your trading account."
+      ),
   });
 
   return { mutateAsync, loading: status === "loading" };

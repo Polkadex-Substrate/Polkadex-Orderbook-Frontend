@@ -22,7 +22,7 @@ export const useWithdrawClaim = () => {
     getSigner,
   } = useProfile();
   const { api } = useNativeApi();
-  const { onHandleNotification, onHandleError } = useSettingsProvider();
+  const { onHandleInfo, onHandleError, onHandleAlert } = useSettingsProvider();
   const { onChangeChainBalance } = useFunds();
   const { isReady } = useOrderbookService();
   const { extensionAccounts } = useExtensionAccounts();
@@ -44,11 +44,9 @@ export const useWithdrawClaim = () => {
       const signer = getSigner(mainAddress);
       if (!signer) throw new Error("Signer is not defined");
 
-      onHandleNotification({
-        type: "Information",
-        message:
-          "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
-      });
+      onHandleInfo?.(
+        "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins."
+      );
 
       const ext = api.tx.ocex.claimWithdraw(sid, extensionAccount?.address);
       const res = await signAndSendExtrinsic(
@@ -77,11 +75,9 @@ export const useWithdrawClaim = () => {
       onHandleError(errorMessage);
     },
     onSuccess: () =>
-      onHandleNotification({
-        type: "Success",
-        message:
-          "Congratulations! You have successfully withdrawn your assets to your funding account.",
-      }),
+      onHandleAlert(
+        "Congratulations! You have successfully withdrawn your assets to your funding account."
+      ),
   });
 
   return { mutateAsync, loading: status === "loading" };
