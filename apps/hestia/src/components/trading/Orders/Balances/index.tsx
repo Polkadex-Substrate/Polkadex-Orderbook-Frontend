@@ -19,7 +19,7 @@ const responsiveKeys = ["inOrders", "fundingAccount"];
 const widthKeys = ["10%", "25%", "25%", "25%", "fit-content"];
 const responsiveWidthKeys = ["30%", "auto", "65%"];
 
-export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
+export const BalancesTable = () => {
   const [responsiveState, setResponsiveState] = useState(false);
   const [responsiveData, setResponsiveData] = useState<AssetsProps | null>(
     null
@@ -50,7 +50,15 @@ export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
   if (loading) return <Loading />;
 
   if (!assets?.length)
-    return <GenericMessage title={"No assets found"} illustration="NoData" />;
+    return (
+      <GenericMessage
+        title={"No assets found"}
+        illustration="NoData"
+        imageProps={{
+          className: "w-10 self-center",
+        }}
+      />
+    );
 
   return (
     <Fragment>
@@ -59,12 +67,7 @@ export const BalancesTable = ({ maxHeight }: { maxHeight: string }) => {
         onOpenChange={setResponsiveState}
         open={responsiveState}
       />
-      <div
-        className="flex-1 h-full overflow-auto scrollbar-hide"
-        style={{
-          maxHeight: isResponsive ? "384px" : maxHeight,
-        }}
-      >
+      <div className="flex-1 h-full overflow-auto scrollbar-hide">
         <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
           <PolkadexTable.Header className="sticky top-0 bg-level-0">
             {table.getHeaderGroups().map((headerGroup) => (

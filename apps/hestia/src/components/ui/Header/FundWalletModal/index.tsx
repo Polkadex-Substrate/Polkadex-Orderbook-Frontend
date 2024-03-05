@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Button, Dropdown, Modal, Typography } from "@polkadex/ux";
-import { RiCloseLine, RiArrowDownLine } from "@remixicon/react";
+import { RiCloseLine, RiArrowDownSLine } from "@remixicon/react";
 import Link from "next/link";
 
 import { Card } from "./card";
@@ -54,7 +54,7 @@ export const FundWalletModal = ({
                 <Dropdown>
                   <Dropdown.Trigger className="flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1">
                     Polkadot-based
-                    <RiArrowDownLine className="w-3 h-3" />
+                    <RiArrowDownSLine className="w-3 h-3" />
                   </Dropdown.Trigger>
                   <Dropdown.Content>
                     <Dropdown.Label>Token/Chain</Dropdown.Label>
@@ -104,7 +104,7 @@ export const FundWalletModal = ({
                 <Dropdown>
                   <Dropdown.Trigger className="flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1">
                     Ethereum-based
-                    <RiArrowDownLine className="w-3 h-3" />
+                    <RiArrowDownSLine className="w-3 h-3" />
                   </Dropdown.Trigger>
                   <Dropdown.Content>
                     <Dropdown.Label>Token/Chain</Dropdown.Label>

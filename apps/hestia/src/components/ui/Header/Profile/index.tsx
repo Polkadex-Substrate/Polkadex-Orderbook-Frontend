@@ -32,20 +32,16 @@ export const Profile = ({
   unreadNotifications: number;
 }) => {
   const { width } = useWindowSize();
-  const { selectedWallet, selectedAccount } = useConnectWalletProvider();
+  const {
+    selectedWallet,
+    selectedAccount,
+    browserAccountPresent,
+    extensionAccountPresent,
+  } = useConnectWalletProvider();
 
-  // Move to useConnectWalletProvider
-  const tradingWalletPresent = useMemo(
-    () => !!Object.keys(selectedAccount ?? {})?.length,
-    [selectedAccount]
-  );
-  const fundWalletPresent = useMemo(
-    () => !!Object.keys(selectedWallet ?? {})?.length,
-    [selectedWallet]
-  );
   const responsiveView = useMemo(() => width > 640, [width]);
 
-  if (tradingWalletPresent || fundWalletPresent)
+  if (browserAccountPresent || extensionAccountPresent)
     return (
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-2">
@@ -87,8 +83,8 @@ export const Profile = ({
           <Popover>
             <Popover.Trigger superpositionTrigger>
               <Trigger
-                browserAccountPresent={tradingWalletPresent}
-                extensionAccountPresent={fundWalletPresent}
+                browserAccountPresent={browserAccountPresent}
+                extensionAccountPresent={extensionAccountPresent}
                 extensionAccountName={selectedWallet?.name ?? ""}
                 browserAccountAddress={selectedAccount?.address ?? ""}
               />
@@ -96,7 +92,7 @@ export const Profile = ({
             <Popover.Content>
               <Content />
             </Popover.Content>
-            <Popover.Overlay className="z-[10]" />
+            <Popover.Overlay />
           </Popover>
         )}
 
@@ -106,10 +102,13 @@ export const Profile = ({
       </div>
     );
   return (
-    <div>
+    <div className="flex items-center gap-2">
       <Button.Solid size="2sm" className="font-medium" onClick={onClick}>
         Connect wallet
       </Button.Solid>
+      <Button.Icon variant="ghost" onClick={onOpenMenu}>
+        <RiMenuLine className="h-full w-full" />
+      </Button.Icon>
     </div>
   );
 };

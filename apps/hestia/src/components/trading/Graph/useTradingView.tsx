@@ -8,6 +8,7 @@ import {
 } from "@orderbook/core/helpers";
 import { useMarkets } from "@orderbook/core/index";
 import { useSubscription } from "@orderbook/core/providers/user/subscription";
+import { useWindowSize } from "react-use";
 
 import {
   ChartingLibraryWidgetOptions,
@@ -16,10 +17,12 @@ import {
   ResolutionString,
 } from "../../../../public/static/charting_library/charting_library";
 
-import { configurationData, defaultWidgetOptions } from "./config";
+import { configurationData } from "./config";
 import { getLastUsedReslution } from "./helper";
 
 export function useTradingView({ id }: { id: string }) {
+  const { width } = useWindowSize();
+  const mobileView = useMemo(() => width <= 954, [width]);
   const tvWidget = useRef<IChartingLibraryWidget>();
 
   const [isReady, setIsReady] = useState(false);
@@ -42,6 +45,51 @@ export function useTradingView({ id }: { id: string }) {
 
     return allSymbols;
   }, [list]);
+
+  const defaultWidgetOptions = useMemo(
+    () =>
+      ({
+        library_path: "/static/charting_library/",
+        charts_storage_api_version: "1.1",
+        client_id: "tradingview.com",
+        user_id: "public_user_id",
+        fullscreen: false,
+        autosize: true,
+        container: "tv_chart_container",
+        disabled_features: [
+          "volume_force_overlay",
+          "header_symbol_search",
+          "use_localstorage_for_settings",
+          "header_compare",
+          "header_fullscreen_button",
+          "header_indicators",
+          "header_resolutions",
+          "header_saveload",
+          "header_undo_redo",
+          "header_chart_type",
+          "header_screenshot",
+          "header_settings",
+          "go_to_date",
+          mobileView && "hide_left_toolbar_by_default",
+          "timeframes_toolbar",
+          "header_widget",
+        ],
+        enabled_features: [
+          "use_localstorage_for_settings",
+          "side_toolbar_in_fullscreen_mode",
+          "save_chart_properties_to_local_storage",
+          "iframe_loading_compatibility_mode",
+          mobileView && "hide_left_toolbar_by_default",
+        ],
+        custom_css_url: "/static/style.css/",
+        loading_screen: {
+          foregroundColor: "transparent",
+        },
+        auto_save_delay: 5,
+        load_last_chart: true,
+      }) as Partial<ChartingLibraryWidgetOptions>,
+    [mobileView]
+  );
 
   const widgetOptions = useMemo(() => {
     const resolution = getLastUsedReslution();
@@ -150,6 +198,7 @@ export function useTradingView({ id }: { id: string }) {
     currentMarket?.name,
     onCandleSubscribe,
     currentMarket?.price_tick_size,
+    defaultWidgetOptions,
   ]);
 
   const onChangeResolution = (e: ResolutionString) =>
@@ -173,6 +222,7 @@ export function useTradingView({ id }: { id: string }) {
       document.body.removeChild(downloadLink);
     }
   };
+
   const onChartReady = useCallback((v: boolean) => setIsReady(v), []);
   return {
     activeResolution,

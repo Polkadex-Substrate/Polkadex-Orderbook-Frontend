@@ -24,6 +24,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "@/styles/calendar.scss";
 import { ConnectAccountWrapper } from "@/components/ui/ReadyToUse";
+import { useSizeObserver } from "@/hooks";
 
 const initialFilters: Ifilters = {
   onlyBuy: false,
@@ -32,17 +33,15 @@ const initialFilters: Ifilters = {
   status: "All Orders",
 };
 
-type Props = {
-  maxHeight: string;
-};
-
 const BUY = "BUY";
 const SELL = "SELL";
 
-export const Orders = ({ maxHeight }: Props) => {
+export const Orders = () => {
   const { width } = useWindowSize();
   const { dispatchUserSessionData, dateFrom, dateTo } = useSessionProvider();
   const { openOrders } = useOpenOrders();
+  const [ref, height] = useSizeObserver();
+
   const {
     selectedAddresses: { tradeAddress, mainAddress },
   } = useProfile();
@@ -114,8 +113,10 @@ export const Orders = ({ maxHeight }: Props) => {
         </ScrollArea>
         {scrollAreaView ? (
           <Popover>
-            <Popover.Trigger className="group">
-              <RiMore2Line className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
+            <Popover.Trigger className="group" asChild>
+              <Button.Icon variant="ghost">
+                <RiMore2Line className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
+              </Button.Icon>
             </Popover.Trigger>
             <Popover.Content className="flex flex-col gap-3 p-2">
               <Checkbox.Outline
@@ -181,38 +182,48 @@ export const Orders = ({ maxHeight }: Props) => {
           </Fragment>
         )}
       </div>
-
-      <Tabs.Content
-        value="openOrders"
-        className="flex-1 flex flex-col bg-level-0"
-      >
-        {connected ? (
-          <OpenOrdersTable filters={filters} maxHeight={maxHeight} />
-        ) : (
-          <ConnectAccountWrapper />
-        )}
-      </Tabs.Content>
-      <Tabs.Content value="orderHistory" className="bg-level-0">
-        {connected ? (
-          <OrderHistoryTable filters={filters} maxHeight={maxHeight} />
-        ) : (
-          <ConnectAccountWrapper />
-        )}
-      </Tabs.Content>
-      <Tabs.Content value="tradeHistory" className="bg-level-0">
-        {connected ? (
-          <TradeHistoryTable filters={filters} maxHeight={maxHeight} />
-        ) : (
-          <ConnectAccountWrapper />
-        )}
-      </Tabs.Content>
-      <Tabs.Content value="balances" className="bg-level-0">
-        {mainAddress?.length > 0 ? (
-          <BalancesTable maxHeight={maxHeight} />
-        ) : (
-          <ConnectAccountWrapper funding />
-        )}
-      </Tabs.Content>
+      <div className="h-full flex-1 flex flex-col" ref={ref}>
+        <Tabs.Content
+          value="openOrders"
+          className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
+        >
+          {connected ? (
+            <OpenOrdersTable filters={filters} />
+          ) : (
+            <ConnectAccountWrapper />
+          )}
+        </Tabs.Content>
+        <Tabs.Content
+          value="orderHistory"
+          className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
+        >
+          {connected ? (
+            <OrderHistoryTable filters={filters} height={height} />
+          ) : (
+            <ConnectAccountWrapper />
+          )}
+        </Tabs.Content>
+        <Tabs.Content
+          value="tradeHistory"
+          className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
+        >
+          {connected ? (
+            <TradeHistoryTable filters={filters} height={height} />
+          ) : (
+            <ConnectAccountWrapper />
+          )}
+        </Tabs.Content>
+        <Tabs.Content
+          value="balances"
+          className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
+        >
+          {mainAddress?.length > 0 ? (
+            <BalancesTable />
+          ) : (
+            <ConnectAccountWrapper funding />
+          )}
+        </Tabs.Content>
+      </div>
     </Tabs>
   );
 };

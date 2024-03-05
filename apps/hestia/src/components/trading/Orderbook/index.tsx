@@ -10,13 +10,7 @@ import { Header } from "./header";
 import { LastPrice } from "./lastPrice";
 import { Table } from "./table";
 
-export const Orderbook = ({
-  maxHeight,
-  id,
-}: {
-  maxHeight: string;
-  id: string;
-}) => {
+export const Orderbook = ({ id }: { id: string }) => {
   const { list } = useMarkets();
 
   const currentMarket = getCurrentMarket(list, id);
@@ -37,10 +31,7 @@ export const Orderbook = ({
   } = useOrderbook(currentMarket?.id ?? "");
 
   return (
-    <div
-      className="flex flex-col border-r border-r-primary overflow-hidden max-xl:flex-1 h-full"
-      style={{ height: maxHeight }}
-    >
+    <div className="flex flex-col flex-1 h-full overflow-hidden">
       <Header
         selectedDecimal={sizeState.size}
         decimalSizes={initialState}
@@ -50,7 +41,7 @@ export const Orderbook = ({
       />
       <div
         className={classNames(
-          "flex flex-1 flex-col border-t border-t-primary bg-level-0 overflow-y-hidden hover:overflow-y-auto"
+          "grid flex-1 grid-rows-[auto_1fr_auto_1fr] border-t border-t-primary bg-level-0 overflow-auto h-full"
         )}
       >
         <div className="grid grid-cols-[30%_35%_35%] p-2 sticky top-0 left-0">

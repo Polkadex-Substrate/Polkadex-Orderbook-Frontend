@@ -12,7 +12,7 @@ const font = Roboto({
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scrollbar-hide">
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icon.png" />
@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body
         className={classNames(
-          "flex flex-col max-h-screen max:sm:min-h-webKit min-h-screen mx-auto overflow-x-hidden",
+          "flex flex-col min-h-screen overflow-x-hidden",
           font.className
         )}
       >

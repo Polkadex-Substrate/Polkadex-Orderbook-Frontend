@@ -184,6 +184,9 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
           title="No results found"
           illustration="NoResultFound"
           className="bg-level-1 border-b border-b-primary"
+          imageProps={{
+            className: "w-10 self-center",
+          }}
         />
       );
 

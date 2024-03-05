@@ -31,13 +31,7 @@ const responsiveKeys = ["date", "price"];
 const actionKeys = ["date", "price", "amount"];
 const widthKeys = ["15%", "15%", "20%", "25%", "100%", "fit-content"];
 
-export const OpenOrdersTable = ({
-  filters,
-  maxHeight,
-}: {
-  filters: Ifilters;
-  maxHeight: string;
-}) => {
+export const OpenOrdersTable = ({ filters }: { filters: Ifilters }) => {
   const { mutateAsync: cancelOrder } = useCancelOrder();
   const { selectedAccount } = useConnectWalletProvider();
   const { isLoading, openOrders } = useOpenOrders(filters);
@@ -50,7 +44,6 @@ export const OpenOrdersTable = ({
   const [responsiveState, setResponsiveState] = useState(false);
   const [responsiveData, setResponsiveData] = useState<Order | null>(null);
   const responsiveView = useMemo(() => width < 500 || width <= 715, [width]);
-  const isResponsive = useMemo(() => width <= 1265, [width]);
 
   const onCancelOrder = async (payload: CancelOrderArgs | null) => {
     if (!payload) return;
@@ -89,6 +82,9 @@ export const OpenOrdersTable = ({
         title={"No items found"}
         illustration="NoData"
         className="bg-level-0"
+        imageProps={{
+          className: "w-10 self-center",
+        }}
       />
     );
 
@@ -109,13 +105,7 @@ export const OpenOrdersTable = ({
         open={responsiveState}
         onCancelOrder={onCancelOrder}
       />
-      <div
-        className="flex-1 h-full overflow-auto scrollbar-hide"
-        style={{
-          maxHeight: isResponsive ? "384px" : maxHeight,
-          minHeight: isResponsive ? "384px" : "auto",
-        }}
-      >
+      <div className="flex-1 h-full overflow-auto scrollbar-hide">
         <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
           <PolkadexTable.Header className="sticky top-0 bg-level-0 z-[2]">
             {table.getHeaderGroups().map((headerGroup) => (

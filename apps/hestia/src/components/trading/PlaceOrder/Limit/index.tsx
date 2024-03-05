@@ -9,13 +9,24 @@ export const LimitOrder = ({
   market,
   availableQuoteAmount,
   availableBaseAmount,
+  isBuy,
+  isResponsive,
 }: {
   market?: Market;
   availableQuoteAmount: number;
   availableBaseAmount: number;
+  isBuy?: boolean;
+  isResponsive?: boolean;
 }) => {
+  if (isResponsive)
+    return isBuy ? (
+      <BuyOrder market={market} availableQuoteAmount={availableQuoteAmount} />
+    ) : (
+      <SellOrder market={market} availableBaseAmount={availableBaseAmount} />
+    );
+
   return (
-    <div className="flex flex-auto gap-2 flex-wrap">
+    <div className="flex flex-auto gap-2">
       <BuyOrder market={market} availableQuoteAmount={availableQuoteAmount} />
       <SellOrder market={market} availableBaseAmount={availableBaseAmount} />
     </div>

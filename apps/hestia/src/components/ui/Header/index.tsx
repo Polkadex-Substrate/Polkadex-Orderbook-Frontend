@@ -39,9 +39,9 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       <FundWalletModal open={fundWallet} onOpenChange={setFundWallet} />
       <header
         ref={ref}
-        className="flex justify-between items-center px-3 flex-wrap border-b border-primary"
+        className="flex justify-between items-center px-3 flex-wrap border-b border-primary sticky top-0 left-0 bg-backgroundBase z-10"
       >
-        <div className="flex-1 flex items-center gap-5 py-2">
+        <div className="flex-1 flex items-center gap-5 py-2 overflow-auto">
           <Link
             href={"/"}
             className="md:flex-1 md:max-w-[140px] max-md:w-8 max-md:h-8 max-md:overflow-hidden"

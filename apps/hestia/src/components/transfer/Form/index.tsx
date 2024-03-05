@@ -18,7 +18,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { RiArrowDownLine, RiArrowRightLine } from "@remixicon/react";
+import {
+  RiArrowDownLine,
+  RiArrowDownSLine,
+  RiArrowRightLine,
+} from "@remixicon/react";
 import classNames from "classnames";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import {
@@ -351,7 +355,7 @@ export const Form = ({
                 </div>
               </div>
               <div>
-                <RiArrowDownLine className="w-4 h-4" />
+                <RiArrowDownSLine className="w-4 h-4" />
               </div>
             </div>
             <div

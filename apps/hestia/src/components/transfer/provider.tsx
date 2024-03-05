@@ -1,68 +1,93 @@
 "use client";
 
 import {
+  MutableRefObject,
   PropsWithChildren,
   ReactNode,
   createContext,
   useContext,
   useMemo,
+  useRef,
 } from "react";
-import { useElementSize } from "usehooks-ts";
+import { useResizeObserver } from "usehooks-ts";
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
-type GenericRef<T = HTMLDivElement> = (node: T | null) => void;
+type GenericRef<T = HTMLDivElement> = MutableRefObject<T | null>;
 type State = {
   headerRef: GenericRef;
-  footerRef: GenericRef;
   helpRef: GenericRef;
   tableTitleRef: GenericRef;
   formwRef: GenericRef;
   filtersRef: GenericRef;
+  interactionRef: GenericRef;
   tableMaxHeight: string;
+  interactionHeight: number;
 };
 
-// useElementSize Deprecated -> useResizeObserver
 export const SizeProvider = ({ children }: { children: ReactNode }) => {
-  const [headerRef, { height: headerHeight = 0 }] = useElementSize();
-  const [footerRef, { height: footerHeight = 0 }] = useElementSize();
-  const [helpRef, { height: helpHeight = 0 }] = useElementSize();
-  const [tableTitleRef, { height: tableTitleHeight = 0 }] = useElementSize();
-  const [formwRef, { height: formHeight = 0 }] = useElementSize();
-  const [filtersRef, { height: filtersHeight = 0 }] = useElementSize();
+  const headerRef = useRef<HTMLDivElement | null>(null);
+  const helpRef = useRef<HTMLDivElement | null>(null);
+  const tableTitleRef = useRef<HTMLDivElement | null>(null);
+  const formwRef = useRef<HTMLDivElement | null>(null);
+  const filtersRef = useRef<HTMLDivElement | null>(null);
+  const interactionRef = useRef<HTMLDivElement | null>(null);
+
+  const { height: helpHeight = 0 } = useResizeObserver({
+    ref: helpRef,
+    box: "border-box",
+  });
+
+  const { height: headerHeight = 0 } = useResizeObserver({
+    ref: headerRef,
+    box: "border-box",
+  });
+
+  const { height: tableTitleHeight = 0 } = useResizeObserver({
+    ref: tableTitleRef,
+    box: "border-box",
+  });
+
+  const { height: formHeight = 0 } = useResizeObserver({
+    ref: formwRef,
+    box: "border-box",
+  });
+
+  const { height: filtersHeight = 0 } = useResizeObserver({
+    ref: filtersRef,
+    box: "border-box",
+  });
+
+  const { height: interactionHeight = 0 } = useResizeObserver({
+    ref: interactionRef,
+    box: "border-box",
+  });
 
   const tableMaxHeight = useMemo(
     () =>
       `calc(100vh - ${
         formHeight +
         headerHeight +
-        footerHeight +
         helpHeight +
         tableTitleHeight +
         filtersHeight +
         1
       }px)`,
-    [
-      filtersHeight,
-      headerHeight,
-      footerHeight,
-      formHeight,
-      helpHeight,
-      tableTitleHeight,
-    ]
+    [filtersHeight, headerHeight, formHeight, helpHeight, tableTitleHeight]
   );
 
   return (
     <Provider
       value={{
         headerRef,
-        footerRef,
         helpRef,
         tableTitleRef,
         formwRef,
         tableMaxHeight,
         filtersRef,
+        interactionRef,
+        interactionHeight,
       }}
     >
       {children}
