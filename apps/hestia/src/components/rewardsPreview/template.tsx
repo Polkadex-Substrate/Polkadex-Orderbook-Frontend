@@ -6,6 +6,8 @@ import { useMemo, useRef } from "react";
 import { RiExternalLinkLine } from "@remixicon/react";
 import { useWindowSize } from "react-use";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useMarkets } from "@orderbook/core/hooks";
+import { getCurrentMarket } from "@orderbook/core/helpers";
 
 import { Rewards } from "../ui/Icons/rewards";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
@@ -18,6 +20,8 @@ import { Footer, Header } from "@/components/ui";
 
 export function Template({ id }: { id: string }) {
   const { width } = useWindowSize();
+  const { list } = useMarkets();
+  const currentMarket = getCurrentMarket(list, id);
 
   const footerRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
@@ -81,7 +85,7 @@ export function Template({ id }: { id: string }) {
         }}
       >
         <div className="flex-1 flex flex-col">
-          <Overview ref={overviewRef} />
+          <Overview ref={overviewRef} market={currentMarket} />
           <div className="flex flex-1 max-lg:flex-col flex-wrap">
             <div className="flex-1 flex flex-col border-b border-secondary-base">
               <div
@@ -91,7 +95,12 @@ export function Template({ id }: { id: string }) {
                 <Typography.Heading size="md">
                   My trading rewards
                 </Typography.Heading>
-                <Button.Underline size="sm" appearance="secondary">
+                <Button.Underline
+                  size="sm"
+                  appearance="secondary"
+                  disabled
+                  className="pointer-events-none"
+                >
                   Export to CSV
                 </Button.Underline>
               </div>
@@ -108,7 +117,7 @@ export function Template({ id }: { id: string }) {
                 <TableLeaderboard
                   ref={tableRowsRef}
                   maxHeight={maxHeight}
-                  market={id}
+                  market={currentMarket?.id as string}
                 />
                 <div className="flex items-center justify-between px-5 py-8 min-w-[20rem] h-fit gap-10 first:border-r border-secondary-base">
                   <div className="flex items-center gap-2">

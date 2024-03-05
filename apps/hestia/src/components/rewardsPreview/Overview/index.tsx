@@ -1,5 +1,5 @@
 "use client";
-import { Button, Token, Typography } from "@polkadex/ux";
+import { Button, Token, Typography, tokenAppearance } from "@polkadex/ux";
 import Link from "next/link";
 import { forwardRef } from "react";
 import {
@@ -8,10 +8,16 @@ import {
   RiShareLine,
   RiStarLine,
 } from "@remixicon/react";
+import { Market } from "@orderbook/core/utils/orderbookService";
 
 import { OverviewCard } from "./overviewCard";
 
-export const Overview = forwardRef<HTMLDivElement>((_, ref) => {
+type Props = { market?: Market };
+
+export const Overview = forwardRef<HTMLDivElement, Props>(({ market }, ref) => {
+  // TODO: Add loading
+  if (!market) return <h1>Loading...</h1>;
+
   return (
     <div ref={ref}>
       <div className="flex items-center justify-between gap-2 p-4 pb-4 border-b border-secondary-base">
@@ -35,20 +41,24 @@ export const Overview = forwardRef<HTMLDivElement>((_, ref) => {
         <div className="flex flex-col gap-2 border-r border-secondary-base py-4 px-4 md:min-w-[18rem]">
           <div className="flex items-center">
             <Token
-              name="USDT"
-              size="lg"
-              appearance="USDT"
-              className="rounded-full"
+              name={market.baseAsset.ticker}
+              size="xl"
+              appearance={
+                market.baseAsset.ticker as keyof typeof tokenAppearance
+              }
+              className="rounded-full bg-level-1 border border-secondary z-[2]"
             />
             <Token
-              name="ASTR"
-              size="xl"
-              appearance="ASTR"
-              className="rounded-full -ml-2 bg-level-1 border border-secondary"
+              name={market.quoteAsset.ticker}
+              size="lg"
+              appearance={
+                market.quoteAsset.ticker as keyof typeof tokenAppearance
+              }
+              className="rounded-full -ml-3"
             />
           </div>
           <Typography.Text bold size="lg">
-            AST/USDT
+            {market.name}
           </Typography.Text>
         </div>
         <div className="flex items-center justify-between gap-8 p-4 flex-1 flex-wrap">
