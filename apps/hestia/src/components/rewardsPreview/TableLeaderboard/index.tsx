@@ -1,6 +1,6 @@
 "use client";
 
-import { Skeleton, Table } from "@polkadex/ux";
+import { GenericMessage, Skeleton, Table } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import { LmpLeaderboard, useLeaderBoard } from "@orderbook/core/hooks";
@@ -38,6 +38,15 @@ export const TableLeaderboard = forwardRef<HTMLDivElement, Props>(
         <div className="flex h-full min-h-[440px] flex-col justify-between border-b border-secondary-base">
           {isLoading ? (
             <Skeleton loading />
+          ) : !accounts || accounts?.length === 0 ? (
+            <GenericMessage
+              title="No results found"
+              illustration="NoResultFound"
+              className="bg-level-1 border-b border-b-primary"
+              imageProps={{
+                className: "w-16 self-center",
+              }}
+            />
           ) : (
             <div
               className="overflow-y-hidden hover:overflow-y-auto px-3"
