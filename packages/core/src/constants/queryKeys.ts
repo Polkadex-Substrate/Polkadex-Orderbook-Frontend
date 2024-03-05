@@ -64,4 +64,5 @@ export const QUERY_KEYS = {
     mainAddress,
   ],
   lmpMarkets: () => [PREFIX, "lmpMarkets"],
+  lmpLeaderboard: (market: string) => [PREFIX, "lmpLeaderboard", market],
 };

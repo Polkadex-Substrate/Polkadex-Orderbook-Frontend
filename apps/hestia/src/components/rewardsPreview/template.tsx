@@ -4,6 +4,8 @@ import { Button, Typography } from "@polkadex/ux";
 import { useElementSize } from "usehooks-ts";
 import { useMemo } from "react";
 import { RiExternalLinkLine } from "@remixicon/react";
+import { useMarkets } from "@orderbook/core/hooks";
+import { getCurrentMarket } from "@orderbook/core/helpers";
 
 import { Rewards } from "../ui/Icons/rewards";
 
@@ -14,7 +16,10 @@ import { TableRewards } from "./TableRewards";
 import { Footer, Header } from "@/components/ui";
 
 // useElementSize Deprecated -> useResizeObserver
-export function Template() {
+export function Template({ id }: { id: string }) {
+  const { list } = useMarkets();
+  const currentMarket = getCurrentMarket(list, id);
+
   const [headerRef, { height: headerHeight = 0 }] = useElementSize();
   const [footerRef, { height: footerHeight = 0 }] = useElementSize();
   const [tableTitlesRef, { height: tableTitleHeight = 0 }] = useElementSize();
@@ -71,7 +76,11 @@ export function Template() {
                 <Typography.Heading size="md">Leaderboard</Typography.Heading>
               </div>
               <div className="h-full flex flex-col">
-                <TableLeaderboard ref={tableRowsRef} maxHeight={maxHeight} />
+                <TableLeaderboard
+                  ref={tableRowsRef}
+                  maxHeight={maxHeight}
+                  market={currentMarket?.id as string}
+                />
                 <div className="flex items-center justify-between px-5 py-8 min-w-[20rem] h-fit gap-10 first:border-r border-secondary-base">
                   <div className="flex items-center gap-2">
                     <Rewards className="w-[5rem]" />

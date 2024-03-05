@@ -9,6 +9,6 @@ const Template = dynamic(
     ssr: false,
   }
 );
-export default function Page() {
-  return <Template />;
+export default function Page({ params }: { params: { id: string } }) {
+  return <Template id={params.id} />;
 }

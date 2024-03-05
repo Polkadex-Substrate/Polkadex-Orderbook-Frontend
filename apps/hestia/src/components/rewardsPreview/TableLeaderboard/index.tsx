@@ -1,75 +1,83 @@
 "use client";
 
-import { Table } from "@polkadex/ux";
+import { Skeleton, Table } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
-import { Fragment, forwardRef, useEffect, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
+import { useLeaderBoard } from "@orderbook/core/hooks";
 
 import { AccountCard } from "./accountCard";
 
 export type FakeData = (typeof fakeData)[0];
 
-export const TableLeaderboard = forwardRef<
-  HTMLDivElement,
-  { maxHeight: string }
->(({ maxHeight }, ref) => {
-  const [state, setState] = useState<FakeData | null>(null);
-  const { width } = useWindowSize();
-  const responsiveView = useMemo(() => width <= 1000, [width]);
+type Props = { market: string; maxHeight: string };
 
-  useEffect(() => {
-    if (!responsiveView && !!state) setState(null);
-  }, [responsiveView, state]);
+export const TableLeaderboard = forwardRef<HTMLDivElement, Props>(
+  ({ maxHeight, market }, ref) => {
+    const [state, setState] = useState<FakeData | null>(null);
+    const { width } = useWindowSize();
+    const responsiveView = useMemo(() => width <= 400, [width]);
 
-  return (
-    <div className="flex h-full flex-col justify-between border-b border-secondary-base">
-      <div
-        className="overflow-y-hidden hover:overflow-y-auto px-3"
-        style={{ maxHeight, scrollbarGutter: "stable" }}
-      >
-        <Table>
-          <Table.Header className="[&_th]:border-none">
-            <Table.Row className="border-none">
-              <Table.Head>#</Table.Head>
-              <Table.Head>Account</Table.Head>
-              {!responsiveView && (
-                <Table.Head align="right">Rewards (PDEX)</Table.Head>
-              )}
-              <Table.Head align="right">Score</Table.Head>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {fakeData.map((value, i) => {
-              const responsiveProps = responsiveView && {
-                role: "button",
-                onClick: () => setState(value),
-              };
-              const rank = i + 1;
+    const { isLoading } = useLeaderBoard(market);
 
-              return (
-                <Table.Row key={value.id} {...responsiveProps}>
-                  <Table.Cell>{rank.toString()}</Table.Cell>
-                  <Table.Cell align="right">
-                    <AccountCard address={value.name} />
-                  </Table.Cell>
+    useEffect(() => {
+      if (!responsiveView && !!state) setState(null);
+    }, [responsiveView, state]);
+
+    return (
+      <div className="flex h-full min-h-[440px] flex-col justify-between border-b border-secondary-base">
+        {isLoading ? (
+          <Skeleton loading />
+        ) : (
+          <div
+            className="overflow-y-hidden hover:overflow-y-auto px-3"
+            style={{ maxHeight, scrollbarGutter: "stable" }}
+          >
+            <Table>
+              <Table.Header className="[&_th]:border-none">
+                <Table.Row className="border-none">
+                  <Table.Head>#</Table.Head>
+                  <Table.Head>Account</Table.Head>
                   {!responsiveView && (
-                    <>
-                      <Table.Cell align="right" className="w-[10rem]">
-                        {value.rewards.toString()}
-                      </Table.Cell>
-                    </>
+                    <Table.Head align="right">Rewards (PDEX)</Table.Head>
                   )}
-                  <Table.Cell className="flex justify-end">
-                    {value.score.toString()}
-                  </Table.Cell>
+                  <Table.Head align="right">Score</Table.Head>
                 </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </Table>
+              </Table.Header>
+              <Table.Body>
+                {fakeData.map((value, i) => {
+                  const responsiveProps = responsiveView && {
+                    role: "button",
+                    onClick: () => setState(value),
+                  };
+                  const rank = i + 1;
+
+                  return (
+                    <Table.Row key={value.id} {...responsiveProps}>
+                      <Table.Cell>{rank.toString()}</Table.Cell>
+                      <Table.Cell align="right">
+                        <AccountCard address={value.name} />
+                      </Table.Cell>
+                      {!responsiveView && (
+                        <>
+                          <Table.Cell align="right">
+                            {value.rewards.toString()}
+                          </Table.Cell>
+                        </>
+                      )}
+                      <Table.Cell className="flex justify-end">
+                        {value.score.toString()}
+                      </Table.Cell>
+                    </Table.Row>
+                  );
+                })}
+              </Table.Body>
+            </Table>
+          </div>
+        )}
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 TableLeaderboard.displayName = "TableLeaderboard";
 const fakeData = [
   {
