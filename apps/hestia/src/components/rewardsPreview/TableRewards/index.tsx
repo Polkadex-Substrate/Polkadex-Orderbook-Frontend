@@ -17,15 +17,13 @@ import { useConnectWalletProvider } from "@orderbook/core/providers/user/connect
 import classNames from "classnames";
 import {
   useClaimReward,
-  useRewards,
+  useClaimableRewards,
   useTraderMetrics,
 } from "@orderbook/core/hooks";
 
 import { RewardsSkeleton } from "./loading";
 
 import { Icons } from "@/components/ui";
-
-export type Data = (typeof fakeData)[0];
 
 type Props = { maxHeight: string; market: string };
 
@@ -36,10 +34,10 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
       selectedAddresses: { mainAddress },
     } = useProfile();
 
-    const { tradeMetrics, isLoading: isTradeMetricsLoading } =
+    const { userMetrics, isLoading: isUserMetricsLoading } =
       useTraderMetrics(market);
     const { claimableRewards, isLoading: isRewardsLoading } =
-      useRewards(market);
+      useClaimableRewards(market);
     const {
       mutateAsync: onClaimReward,
       status: claimRewardStatus,
@@ -52,7 +50,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
       return rewards?.reduce((a, b) => a + b).toFixed(4);
     }, [claimableRewards]);
 
-    const [state, setState] = useState<Data | null>(null);
+    const [state, setState] = useState(null);
     const { width } = useWindowSize();
     const responsiveView = useMemo(() => width <= 1000, [width]);
 
@@ -93,11 +91,11 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                   My MM score
                 </Typography.Text>
                 <Skeleton
-                  loading={isTradeMetricsLoading}
+                  loading={isUserMetricsLoading}
                   className="h-4 w-28 flex-none"
                 >
                   <Typography.Text bold className="whitespace-nowrap">
-                    {tradeMetrics?.mmScore || 0}
+                    {userMetrics?.mmScore || 0}
                   </Typography.Text>
                 </Skeleton>
               </div>
@@ -115,11 +113,11 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                   My Trading score
                 </Typography.Text>
                 <Skeleton
-                  loading={isTradeMetricsLoading}
+                  loading={isUserMetricsLoading}
                   className="h-4 w-28 flex-none"
                 >
                   <Typography.Text bold className="whitespace-nowrap">
-                    {tradeMetrics?.tradingScore || 0}
+                    {userMetrics?.tradingScore || 0}
                   </Typography.Text>
                 </Skeleton>
               </div>
@@ -149,7 +147,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
           </div>
         </div>
 
-        {isRewardsLoading ? (
+        {isRewardsLoading || isUserMetricsLoading ? (
           <RewardsSkeleton />
         ) : (
           <div
@@ -157,19 +155,52 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
             <div className="flex flex-col gap-4">
+              {/* (userMetrics?.totalReward || 0) > 0 && */}
+              {
+                <div
+                  className={classNames("flex items-center justify-between")}
+                >
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className="flex flex-col items-center justify-center border border-primary rounded-md px-2 py-3 min-w-16">
+                      <Typography.Text bold size="md">
+                        {userMetrics?.currentEpoch}
+                      </Typography.Text>
+                      <Typography.Text size="xs" appearance="primary">
+                        Epoch
+                      </Typography.Text>
+                    </div>
+                    <div className="flex flex-1 flex-col">
+                      <Typography.Text bold size="md">
+                        {userMetrics?.totalReward?.toFixed(4)}{" "}
+                        {userMetrics?.token}
+                      </Typography.Text>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <Typography.Text size="xs" appearance="primary">
+                            35%
+                          </Typography.Text>
+                          <Typography.Text size="xs" appearance="primary">
+                            Claim after: {"1h 30m"}
+                          </Typography.Text>
+                        </div>
+                        <div className="w-full h-2 bg-level-2 rounded-full relative overflow-hidden">
+                          <div
+                            className="bg-primary-base absolute inset-0"
+                            style={{ width: "35%" }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
               {claimableRewards?.map((value) => {
                 const disabled =
                   claimRewardStatus === "loading" &&
                   loadingEpochs.includes(value.epoch);
 
-                // // TODO: Calculate this time
-                // const claimAfter =
-                //   value.claimBlock < value.currentBlockNumber ? null : "1h 20m";
                 const hasClaimed = value.isClaimed;
                 const readyToClaim = !hasClaimed;
-                // const inProgress = !readyToClaim && !hasClaimed;
-
-                // const progressStatus = inProgress ? "" : "Completed";
 
                 const status = hasClaimed ? "Claimed" : "Completed";
 
@@ -199,15 +230,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                             <Typography.Text size="xs" appearance="primary">
                               {status}
                             </Typography.Text>
-                            {/* {inProgress && (
-                              <Typography.Text size="xs" appearance="primary">
-                                Claim after: {claimAfter}
-                              </Typography.Text>
-                            )} */}
                           </div>
-                          {/* {inProgress && (
-                            <div className="w-full h-2 bg-level-2 rounded-full" />
-                          )} */}
                         </div>
                       </div>
                     </div>
@@ -243,29 +266,3 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
   }
 );
 TableRewards.displayName = "TableRewards";
-const fakeData = [
-  {
-    id: 1,
-    epoch: "2 hrs 51 min",
-    score: 92,
-    rewards: 1.0404,
-    token: "PDEX",
-    status: "50%",
-  },
-  {
-    id: 2,
-    epoch: "3 hrs 12 min",
-    score: 87,
-    rewards: 1.0201,
-    token: "PDEX",
-    status: "Completed",
-  },
-  {
-    id: 3,
-    epoch: "1 hrs 43 min",
-    score: 95,
-    rewards: 1.0556,
-    token: "PDEX",
-    status: "Claimed",
-  },
-];

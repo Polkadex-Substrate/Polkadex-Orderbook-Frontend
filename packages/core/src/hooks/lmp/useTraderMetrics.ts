@@ -23,10 +23,26 @@ export const useTraderMetrics = (market: string) => {
         market,
         mainAddress
       );
-      return traderMetrics;
+      const reward = await lmp.getEligibleRewards(
+        currentEpoch,
+        market,
+        mainAddress
+      );
+      const totalReward = reward.marketMaking + reward.trading;
+
+      const claimBlock = await lmp.getClaimBlock(currentEpoch);
+      const blocksToNextEpoch = await lmp.blocksToNextEpoch();
+
+      return {
+        ...traderMetrics,
+        ...reward,
+        currentEpoch,
+        totalReward,
+        token: "PDEX",
+      };
     },
     enabled,
   });
 
-  return { tradeMetrics: data, isLoading: status === "loading" };
+  return { userMetrics: data, isLoading: status === "loading" };
 };

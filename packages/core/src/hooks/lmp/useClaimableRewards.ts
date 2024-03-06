@@ -4,7 +4,7 @@ import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
 import { QUERY_KEYS } from "../..";
 
-export const useRewards = (market: string) => {
+export const useClaimableRewards = (market: string) => {
   const { api, lmp } = useNativeApi();
   const {
     selectedAddresses: { mainAddress },
