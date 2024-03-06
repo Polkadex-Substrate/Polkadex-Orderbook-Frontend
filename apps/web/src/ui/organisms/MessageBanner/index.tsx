@@ -27,8 +27,7 @@ export const MessageBanner = ({ link = "/transfer" }) => {
       <S.Banner>
         <p>
           <a
-            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf
-Polkadex_Excluded_Jurisdictions.pdf"
+            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Excluded_Jurisdictions.pdf"
             target="_blank"
             rel="noreferrer noopener"
           >
