@@ -10,7 +10,7 @@ export type IUserTradeAccount = {
 export type LmpMarketConfig = Market &
   Ticker & {
     score: string;
-    rewards: { marketMaking: number; trading: number; isClaimable: boolean };
+    rewards: { marketMaking: number; trading: number; isClaimed: boolean };
   };
 
 export type LmpLeaderboard = {

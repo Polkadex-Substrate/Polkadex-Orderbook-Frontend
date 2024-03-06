@@ -2,6 +2,7 @@ import { GraphQLResult } from "@aws-amplify/api";
 import BigNumber from "bignumber.js";
 import { signAndSendExtrinsic } from "@orderbook/core/helpers";
 import { UNIT_BN } from "@orderbook/core/constants";
+import { SubmittableExtrinsic } from "@polkadot/api/types";
 
 import {
   Cancel_orderMutation,
@@ -131,7 +132,10 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
     market,
     address,
   }: ClaimRewardArgs): Promise<void> {
-    const ext = await lmp.claimRewardsTx(epoch, market);
+    const ext = (await lmp.claimRewardsTx(
+      epoch,
+      market
+    )) as SubmittableExtrinsic<"promise">;
     const res = await signAndSendExtrinsic(api, ext, { signer }, address, true);
     if (!res.isSuccess) {
       throw new Error("Claim reward failed");
