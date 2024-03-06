@@ -18,7 +18,6 @@ export const useRewards = (market: string) => {
       if (!api?.isConnected || !lmp) return;
 
       const currentEpoch = await lmp.queryCurrentEpoch();
-
       const claimableEpochs = await lmp.listClaimableEpochs(
         market,
         mainAddress,
@@ -28,19 +27,11 @@ export const useRewards = (market: string) => {
       const res = claimableEpochs.map(async (epoch) => {
         const reward = await lmp.getEligibleRewards(epoch, market, mainAddress);
         const totalReward = reward.marketMaking + reward.trading;
-
-        const claimBlock = await lmp.getClaimBlock(epoch);
-        const currentBlockNumber = await lmp.getLatestBlockNumber();
-
-        // TODO: Add score later
         return {
           epoch,
-          score: "94620",
           totalReward,
           token: "PDEX",
-          claimBlock,
-          currentBlockNumber,
-          ...reward,
+          isClaimed: reward.isClaimed,
         };
       });
 

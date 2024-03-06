@@ -5,6 +5,7 @@ import {
   Button,
   Copy,
   Icon,
+  Skeleton,
   Spinner,
   Typography,
   truncateString,
@@ -14,7 +15,11 @@ import { forwardRef, useEffect, useMemo, useState } from "react";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import classNames from "classnames";
-import { useClaimReward, useRewards } from "@orderbook/core/hooks";
+import {
+  useClaimReward,
+  useRewards,
+  useTraderMetrics,
+} from "@orderbook/core/hooks";
 
 import { RewardsSkeleton } from "./loading";
 
@@ -31,12 +36,21 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
       selectedAddresses: { mainAddress },
     } = useProfile();
 
-    const { claimableRewards, isLoading } = useRewards(market);
+    const { tradeMetrics, isLoading: isTradeMetricsLoading } =
+      useTraderMetrics(market);
+    const { claimableRewards, isLoading: isRewardsLoading } =
+      useRewards(market);
     const {
       mutateAsync: onClaimReward,
       status: claimRewardStatus,
       loadingEpochs,
     } = useClaimReward();
+
+    const accumulatedRewards = useMemo(() => {
+      const rewards = claimableRewards?.map((r) => r.totalReward) || [];
+      if (rewards.length === 0) return 0;
+      return rewards?.reduce((a, b) => a + b).toFixed(4);
+    }, [claimableRewards]);
 
     const [state, setState] = useState<Data | null>(null);
     const { width } = useWindowSize();
@@ -59,7 +73,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                 <div className="flex items-center gap-1">
                   <RiFileCopyLine className="w-4 h-4 text-actionInput" />
                   <Typography.Text appearance="primary">
-                    {truncateString(mainAddress, 6)}
+                    {truncateString(mainAddress || "0xxxxxxxxxxxxx", 6)}
                   </Typography.Text>
                 </div>
               </Copy>
@@ -70,24 +84,51 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
               <div className="grid place-items-center bg-level-2 w-10 h-10 rounded-md">
                 <Icons.Transfer className="w-4 h-4" />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-1">
                 <Typography.Text
                   size="xs"
                   appearance="primary"
                   className="whitespace-nowrap"
                 >
-                  My score
+                  My MM score
                 </Typography.Text>
-                <Typography.Text bold className="whitespace-nowrap">
-                  95500
-                </Typography.Text>
+                <Skeleton
+                  loading={isTradeMetricsLoading}
+                  className="h-4 w-28 flex-none"
+                >
+                  <Typography.Text bold className="whitespace-nowrap">
+                    {tradeMetrics?.mmScore || 0}
+                  </Typography.Text>
+                </Skeleton>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <div className="grid place-items-center bg-level-2 w-10 h-10 rounded-md">
                 <Icons.Transfer className="w-4 h-4" />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-1">
+                <Typography.Text
+                  size="xs"
+                  appearance="primary"
+                  className="whitespace-nowrap"
+                >
+                  My Trading score
+                </Typography.Text>
+                <Skeleton
+                  loading={isTradeMetricsLoading}
+                  className="h-4 w-28 flex-none"
+                >
+                  <Typography.Text bold className="whitespace-nowrap">
+                    {tradeMetrics?.tradingScore || 0}
+                  </Typography.Text>
+                </Skeleton>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="grid place-items-center bg-level-2 w-10 h-10 rounded-md">
+                <Icons.Transfer className="w-4 h-4" />
+              </div>
+              <div className="flex flex-col gap-1">
                 <Typography.Text
                   size="xs"
                   appearance="primary"
@@ -95,15 +136,20 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                 >
                   Total rewards
                 </Typography.Text>
-                <Typography.Text bold className="whitespace-nowrap">
-                  10.056 PDEX
-                </Typography.Text>
+                <Skeleton
+                  loading={isRewardsLoading}
+                  className="h-4 w-28 flex-none"
+                >
+                  <Typography.Text bold className="whitespace-nowrap">
+                    {accumulatedRewards} PDEX
+                  </Typography.Text>
+                </Skeleton>
               </div>
             </div>
           </div>
         </div>
 
-        {isLoading ? (
+        {isRewardsLoading ? (
           <RewardsSkeleton />
         ) : (
           <div
@@ -136,12 +182,12 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                     key={value.epoch}
                   >
                     <div className="flex items-center gap-4 flex-1">
-                      <div className="flex flex-col items-center justify-center border border-primary rounded-md px-2 py-3">
+                      <div className="flex flex-col items-center justify-center border border-primary rounded-md px-2 py-3 min-w-16">
                         <Typography.Text bold size="md">
-                          {value.score}
+                          {value.epoch}
                         </Typography.Text>
                         <Typography.Text size="xs" appearance="primary">
-                          Score
+                          Epoch
                         </Typography.Text>
                       </div>
                       <div className="flex flex-1 flex-col">
