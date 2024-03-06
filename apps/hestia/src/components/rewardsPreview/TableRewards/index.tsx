@@ -1,6 +1,6 @@
 "use client";
 
-import { RiFileCopyLine } from "@remixicon/react";
+import { RiFileCopyLine, RiHandCoinLine, RiSortAsc } from "@remixicon/react";
 import {
   Button,
   Copy,
@@ -80,7 +80,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-2">
               <div className="grid place-items-center bg-level-2 w-10 h-10 rounded-md">
-                <Icons.Transfer className="w-4 h-4" />
+                <RiSortAsc className="w-4 h-4" />
               </div>
               <div className="flex flex-col gap-1">
                 <Typography.Text
@@ -124,7 +124,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
             </div>
             <div className="flex items-center gap-2">
               <div className="grid place-items-center bg-level-2 w-10 h-10 rounded-md">
-                <Icons.Transfer className="w-4 h-4" />
+                <RiHandCoinLine className="w-4 h-4" />
               </div>
               <div className="flex flex-col gap-1">
                 <Typography.Text
