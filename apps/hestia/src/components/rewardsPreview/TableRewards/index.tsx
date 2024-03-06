@@ -62,8 +62,8 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
 
     return (
       <div className="flex-1 flex flex-col border-b border-secondary-base">
-        <div className="flex items-center justify-between gap-4 bg-level-1 border-b border-primary px-4 py-6 flex-wrap">
-          <div className="flex items-center gap-3">
+        <div className="flex sm:!flex-row flex-col items-center justify-between gap-4 bg-level-1 border-b border-primary px-4 py-6 flex-wrap">
+          <div className="flex items-center gap-3 self-start">
             <Icon name="Avatar" className="w-10 h-10" />
             <div className="flex flex-col">
               <Typography.Text bold size="md">
@@ -79,7 +79,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
               </Copy>
             </div>
           </div>
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-8 self-start flex-wrap">
             <div className="flex items-center gap-2">
               <div className="grid place-items-center bg-level-2 w-10 h-10 rounded-md">
                 <RiSortAsc className="w-4 h-4" />
