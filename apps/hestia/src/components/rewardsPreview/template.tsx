@@ -104,7 +104,11 @@ export function Template({ id }: { id: string }) {
                   Export to CSV
                 </Button.Underline>
               </div>
-              <TableRewards ref={tableRowsRef} maxHeight={maxHeight} />
+              <TableRewards
+                ref={tableRowsRef}
+                maxHeight={maxHeight}
+                market={currentMarket?.id as string}
+              />
             </div>
             <div className="max-lg:w-full flex flex-col border-l border-primary">
               <div

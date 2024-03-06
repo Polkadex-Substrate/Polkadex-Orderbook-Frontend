@@ -7,17 +7,24 @@ import { forwardRef, useEffect, useMemo, useState } from "react";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import classNames from "classnames";
+import { useRewards } from "@orderbook/core/hooks";
+
+import { RewardsSkeleton } from "./loading";
 
 import { Icons } from "@/components/ui";
 
 export type Data = (typeof fakeData)[0];
 
-export const TableRewards = forwardRef<HTMLDivElement, { maxHeight: string }>(
-  ({ maxHeight }, ref) => {
+type Props = { maxHeight: string; market: string };
+
+export const TableRewards = forwardRef<HTMLDivElement, Props>(
+  ({ maxHeight, market }) => {
     const { selectedWallet } = useConnectWalletProvider();
     const {
       selectedAddresses: { mainAddress },
     } = useProfile();
+
+    const { rewards, isLoading } = useRewards(market);
 
     const [state, setState] = useState<Data | null>(null);
     const { width } = useWindowSize();
@@ -83,62 +90,74 @@ export const TableRewards = forwardRef<HTMLDivElement, { maxHeight: string }>(
             </div>
           </div>
         </div>
-        <div
-          className="overflow-y-hidden hover:overflow-y-auto p-3"
-          style={{ maxHeight, scrollbarGutter: "stable" }}
-        >
-          <div className="flex flex-col gap-4">
-            {fakeData.map((value) => {
-              // TestingPurposes
-              const readyToClaim = value.status === "Completed";
-              const inactive = value.status === "Claimed";
-              const inProgress = !readyToClaim && !inactive;
-              return (
-                <div
-                  className={classNames(
-                    "flex items-center justify-between",
-                    inactive && "opacity-50"
-                  )}
-                  key={value.id}
-                >
-                  <div className="flex items-center gap-4 flex-1">
-                    <div className="flex flex-col items-center justify-center border border-primary rounded-md px-2 py-3">
-                      <Typography.Text bold size="md">
-                        94890
-                      </Typography.Text>
-                      <Typography.Text size="xs" appearance="primary">
-                        Score
-                      </Typography.Text>
-                    </div>
-                    <div className="flex flex-1 flex-col">
-                      <Typography.Text bold size="md">
-                        {value.rewards} PDEX
-                      </Typography.Text>
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center justify-between">
-                          <Typography.Text size="xs" appearance="primary">
-                            {value.status}
-                          </Typography.Text>
-                          {inProgress && (
+
+        {isLoading ? (
+          <RewardsSkeleton />
+        ) : (
+          <div
+            className="overflow-y-hidden hover:overflow-y-auto p-3"
+            style={{ maxHeight, scrollbarGutter: "stable" }}
+          >
+            <div className="flex flex-col gap-4">
+              {rewards?.map((value) => {
+                const readyToClaim = value.isClaimable;
+                const hasClaimed = value.hasClaimed;
+                const inProgress = !readyToClaim && !hasClaimed;
+
+                const claimAfter =
+                  value.claimBlock < value.currentBlockNumber ? null : "1h 20m";
+
+                const progressStatus = inProgress ? "" : "Completed";
+
+                const status = hasClaimed ? "Claimed" : progressStatus;
+
+                return (
+                  <div
+                    className={classNames(
+                      "flex items-center justify-between",
+                      hasClaimed && "opacity-50"
+                    )}
+                    key={value.epoch}
+                  >
+                    <div className="flex items-center gap-4 flex-1">
+                      <div className="flex flex-col items-center justify-center border border-primary rounded-md px-2 py-3">
+                        <Typography.Text bold size="md">
+                          {value.score}
+                        </Typography.Text>
+                        <Typography.Text size="xs" appearance="primary">
+                          Score
+                        </Typography.Text>
+                      </div>
+                      <div className="flex flex-1 flex-col">
+                        <Typography.Text bold size="md">
+                          {value.totalReward.toFixed(4)} {value.token}
+                        </Typography.Text>
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center justify-between">
                             <Typography.Text size="xs" appearance="primary">
-                              Epoch: {value.epoch}
+                              {status}
                             </Typography.Text>
+                            {inProgress && (
+                              <Typography.Text size="xs" appearance="primary">
+                                Claim after: {claimAfter}
+                              </Typography.Text>
+                            )}
+                          </div>
+                          {inProgress && (
+                            <div className="w-full h-2 bg-level-2 rounded-full" />
                           )}
                         </div>
-                        {inProgress && (
-                          <div className="w-full h-2 bg-level-2 rounded-full" />
-                        )}
                       </div>
                     </div>
+                    {readyToClaim && (
+                      <Button.Solid size="sm">Claim rewards</Button.Solid>
+                    )}
                   </div>
-                  {readyToClaim && (
-                    <Button.Solid size="sm">Claim rewards</Button.Solid>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }
