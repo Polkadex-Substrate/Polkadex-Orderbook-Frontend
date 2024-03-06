@@ -18,20 +18,19 @@ export const useTraderMetrics = (market: string) => {
       if (!api?.isConnected || !lmp) return;
 
       const currentEpoch = await lmp.queryCurrentEpoch();
+
       const traderMetrics = await lmp.getTraderMetrics(
         currentEpoch,
         market,
         mainAddress
       );
+
       const reward = await lmp.getEligibleRewards(
         currentEpoch,
         market,
         mainAddress
       );
       const totalReward = reward.marketMaking + reward.trading;
-
-      const claimBlock = await lmp.getClaimBlock(currentEpoch);
-      const blocksToNextEpoch = await lmp.blocksToNextEpoch();
 
       return {
         ...traderMetrics,

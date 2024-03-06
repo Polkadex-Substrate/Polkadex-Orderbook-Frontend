@@ -36,8 +36,10 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
 
     const { userMetrics, isLoading: isUserMetricsLoading } =
       useTraderMetrics(market);
+
     const { claimableRewards, isLoading: isRewardsLoading } =
       useClaimableRewards(market);
+
     const {
       mutateAsync: onClaimReward,
       status: claimRewardStatus,
@@ -136,7 +138,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                 </Typography.Text>
                 <Skeleton
                   loading={isRewardsLoading}
-                  className="h-4 w-28 flex-none"
+                  className="h-4 w-32 flex-none"
                 >
                   <Typography.Text bold className="whitespace-nowrap">
                     {accumulatedRewards} PDEX
@@ -155,45 +157,44 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
             <div className="flex flex-col gap-4">
-              {/* (userMetrics?.totalReward || 0) > 0 && */}
-              {
-                <div
-                  className={classNames("flex items-center justify-between")}
-                >
-                  <div className="flex items-center gap-4 flex-1">
-                    <div className="flex flex-col items-center justify-center border border-primary rounded-md px-2 py-3 min-w-16">
-                      <Typography.Text bold size="md">
-                        {userMetrics?.currentEpoch}
-                      </Typography.Text>
-                      <Typography.Text size="xs" appearance="primary">
-                        Epoch
-                      </Typography.Text>
-                    </div>
-                    <div className="flex flex-1 flex-col">
-                      <Typography.Text bold size="md">
-                        {userMetrics?.totalReward?.toFixed(4)}{" "}
-                        {userMetrics?.token}
-                      </Typography.Text>
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center justify-between">
-                          <Typography.Text size="xs" appearance="primary">
-                            35%
-                          </Typography.Text>
-                          <Typography.Text size="xs" appearance="primary">
-                            Claim after: {"1h 30m"}
-                          </Typography.Text>
-                        </div>
-                        <div className="w-full h-2 bg-level-2 rounded-full relative overflow-hidden">
-                          <div
-                            className="bg-primary-base absolute inset-0"
-                            style={{ width: "35%" }}
-                          ></div>
-                        </div>
+              <div className={classNames("flex items-center justify-between")}>
+                <div className="flex items-center gap-4 flex-1">
+                  <div className="flex flex-col items-center justify-center border border-primary rounded-md px-2 py-3 min-w-16">
+                    <Typography.Text bold size="md">
+                      {userMetrics?.currentEpoch}
+                    </Typography.Text>
+                    <Typography.Text size="xs" appearance="primary">
+                      Epoch
+                    </Typography.Text>
+                  </div>
+                  <div className="flex flex-1 flex-col">
+                    <Typography.Text bold size="md">
+                      {userMetrics?.totalReward?.toFixed(4)}{" "}
+                      {userMetrics?.token}
+                    </Typography.Text>
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center justify-between">
+                        <Typography.Text size="xs" appearance="primary">
+                          {/* TODO: Calculate it */}
+                          35%
+                        </Typography.Text>
+                        <Typography.Text size="xs" appearance="primary">
+                          {/* TODO: Calculate it */}
+                          Claim after: {"1h 30m"}
+                        </Typography.Text>
+                      </div>
+                      <div className="w-full h-2 bg-level-2 rounded-full relative overflow-hidden">
+                        <div
+                          className="bg-primary-base absolute inset-0"
+                          // TODO: Calculate it
+                          style={{ width: "35%" }}
+                        ></div>
                       </div>
                     </div>
                   </div>
                 </div>
-              }
+              </div>
+
               {claimableRewards?.map((value) => {
                 const disabled =
                   claimRewardStatus === "loading" &&
