@@ -41,7 +41,6 @@ export const useRewards = (market: string) => {
           claimBlock,
           currentBlockNumber,
           hasClaimed: false,
-          ...reward,
         };
       });
 

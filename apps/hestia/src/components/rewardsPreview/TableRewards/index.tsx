@@ -41,7 +41,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
             <Icon name="Avatar" className="w-10 h-10" />
             <div className="flex flex-col">
               <Typography.Text bold size="md">
-                {selectedWallet?.name}
+                {selectedWallet?.name || "Unknown account"}
               </Typography.Text>
               <Copy value={mainAddress}>
                 <div className="flex items-center gap-1">
@@ -100,12 +100,12 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
           >
             <div className="flex flex-col gap-4">
               {rewards?.map((value) => {
-                const readyToClaim = value.isClaimable;
-                const hasClaimed = value.hasClaimed;
-                const inProgress = !readyToClaim && !hasClaimed;
-
+                // TODO: Calculate this time
                 const claimAfter =
                   value.claimBlock < value.currentBlockNumber ? null : "1h 20m";
+                const readyToClaim = claimAfter === null;
+                const hasClaimed = value.hasClaimed;
+                const inProgress = !readyToClaim && !hasClaimed;
 
                 const progressStatus = inProgress ? "" : "Completed";
 
