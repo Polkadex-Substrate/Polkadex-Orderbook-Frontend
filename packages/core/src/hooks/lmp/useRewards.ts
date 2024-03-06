@@ -40,7 +40,7 @@ export const useRewards = (market: string) => {
           token: "PDEX",
           claimBlock,
           currentBlockNumber,
-          hasClaimed: false,
+          ...reward,
         };
       });
 

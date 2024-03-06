@@ -12,6 +12,7 @@ import * as mutation from "../../../graphql/mutations";
 
 import { sendQueryToAppSync } from "./helpers";
 import {
+  ClaimRewardArgs,
   DepositArgs,
   ExecuteArgs,
   OrderbookOperationStrategy,
@@ -119,6 +120,21 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
     );
     if (!res.isSuccess) {
       throw new Error("Deposit failed");
+    }
+  }
+
+  async claimReward({
+    signer,
+    api,
+    lmp,
+    epoch,
+    market,
+    address,
+  }: ClaimRewardArgs): Promise<void> {
+    const ext = await lmp.claimRewardsTx(epoch, market);
+    const res = await signAndSendExtrinsic(api, ext, { signer }, address, true);
+    if (!res.isSuccess) {
+      throw new Error("Claim reward failed");
     }
   }
 }

@@ -32,8 +32,11 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
     } = useProfile();
 
     const { rewards, isLoading } = useRewards(market);
-    const { mutateAsync: onClaimReward, status: claimRewardStatus } =
-      useClaimReward();
+    const {
+      mutateAsync: onClaimReward,
+      status: claimRewardStatus,
+      loadingEpochs,
+    } = useClaimReward();
 
     const [state, setState] = useState<Data | null>(null);
     const { width } = useWindowSize();
@@ -42,8 +45,6 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
     useEffect(() => {
       if (!responsiveView && !!state) setState(null);
     }, [responsiveView, state]);
-
-    const disabled = claimRewardStatus === "loading";
 
     return (
       <div className="flex-1 flex flex-col border-b border-secondary-base">
@@ -111,11 +112,15 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
           >
             <div className="flex flex-col gap-4">
               {rewards?.map((value) => {
+                const disabled =
+                  claimRewardStatus === "loading" &&
+                  loadingEpochs.includes(value.epoch);
+
                 // TODO: Calculate this time
                 const claimAfter =
                   value.claimBlock < value.currentBlockNumber ? null : "1h 20m";
                 const readyToClaim = claimAfter === null;
-                const hasClaimed = value.hasClaimed;
+                const hasClaimed = value.isClaimed;
                 const inProgress = !readyToClaim && !hasClaimed;
 
                 const progressStatus = inProgress ? "" : "Completed";
@@ -163,7 +168,11 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                     {readyToClaim && (
                       <Button.Solid
                         onClick={() =>
-                          onClaimReward({ epoch: value.epoch, market })
+                          onClaimReward({
+                            epoch: value.epoch,
+                            market,
+                            reward: value.totalReward,
+                          })
                         }
                         size="sm"
                         disabled={disabled}
