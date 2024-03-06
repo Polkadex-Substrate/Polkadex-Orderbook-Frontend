@@ -8,6 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
+import { useRouter } from "next/navigation";
 
 import { columns } from "./columns";
 import { ResponsiveData } from "./responsiveData";
@@ -16,6 +17,7 @@ import { TablePagination } from "@/components/ui";
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
 const responsiveKeys = ["volume24h", "fee"];
+const actionKeys = ["score", "volume24h", "totalRewards"];
 
 export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
   ({ maxHeight }, ref) => {
@@ -23,9 +25,10 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
     const [responsiveData, setResponsiveData] =
       useState<LmpMarketConfig | null>(null);
     const { width } = useWindowSize();
-    const responsiveView = useMemo(() => width <= 540, [width]);
+    const responsiveView = useMemo(() => width <= 715, [width]);
 
     const { markets, isLoading } = useLmpMarkets();
+    const router = useRouter();
 
     const table = useReactTable({
       data: markets as LmpMarketConfig[],
@@ -40,7 +43,7 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
       }
     }, [responsiveState, responsiveView]);
 
-    if (isLoading) return <SkeletonCollection rows={8} />;
+    if (isLoading) return <SkeletonCollection rows={4} />;
 
     if (markets?.length === 0)
       return (
@@ -60,22 +63,32 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
         />
         <div className="flex-1 flex flex-col justify-between border-b border-secondary-base">
           <div
-            className="overflow-y-hidden hover:overflow-y-auto mt-1"
+            className="overflow-y-hidden hover:overflow-y-auto mt-1 px-2"
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
-            <PolkadexTable>
+            <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
               <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <PolkadexTable.Row key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
+                      const getSorted = header.column.getIsSorted();
+                      const isActionTab = actionKeys.includes(header.id);
+                      const handleSort = (): void => {
+                        const isDesc = getSorted === "desc";
+                        header.column.toggleSorting(!isDesc);
+                      };
                       if (responsiveView && responsiveKeys.includes(header.id))
                         return null;
 
                       return (
                         <PolkadexTable.Head
-                          className={classNames("px-2 text-primary text-xs")}
+                          className={classNames(
+                            " text-xs",
+                            !isActionTab && "cursor-pointer"
+                          )}
                           key={header.id}
                           align={`${header.index ? "right" : "left"}`}
+                          {...(isActionTab && { onClick: handleSort })}
                         >
                           {header.isPlaceholder
                             ? null
@@ -83,6 +96,7 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
                                 header.column.columnDef.header,
                                 header.getContext()
                               )}
+                          {isActionTab && <PolkadexTable.Icon />}
                         </PolkadexTable.Head>
                       );
                     })}
@@ -94,30 +108,33 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
                   return (
                     <PolkadexTable.Row
                       key={row.id}
-                      className={classNames("hover:bg-level-0 cursor-pointer")}
+                      className={classNames("hover:bg-level-1 cursor-pointer")}
                     >
                       {row.getVisibleCells().map((cell) => {
+                        const baseTicker =
+                          row.original.baseAsset?.ticker || "Unknown";
+                        const quoteTicker =
+                          row.original.quoteAsset?.ticker || "Unknown";
+
+                        const link = `/rewards/${baseTicker}${quoteTicker}`;
                         if (
                           responsiveView &&
                           responsiveKeys.includes(cell.column.id)
                         )
                           return null;
 
-                        const responsiveProps = responsiveView
-                          ? {
-                              onClick: () => {
-                                setResponsiveState(true);
-                                setResponsiveData(row.original);
-                              },
+                        const onClickAction = responsiveView
+                          ? () => {
+                              setResponsiveState(true);
+                              setResponsiveData(row.original);
                             }
-                          : {};
+                          : () => router.push(link);
 
                         return (
                           <PolkadexTable.Cell
                             key={cell.id}
                             align="right"
-                            className={classNames("!py-2")}
-                            {...responsiveProps}
+                            onClick={onClickAction}
                           >
                             {flexRender(
                               cell.column.columnDef.cell,

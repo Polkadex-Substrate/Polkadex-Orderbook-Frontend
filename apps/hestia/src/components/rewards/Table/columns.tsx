@@ -1,7 +1,6 @@
 import { LmpMarketConfig } from "@orderbook/core/index";
 import { Tokens, Typography } from "@polkadex/ux";
 import { createColumnHelper } from "@tanstack/react-table";
-import Link from "next/link";
 
 import { MarketCard } from "./marketCard";
 
@@ -14,17 +13,15 @@ export const columns = () => [
       const baseTicker = e.getValue().baseAsset?.ticker || "Unknown";
       const quoteTicker = e.getValue().quoteAsset?.ticker || "Unknown";
       return (
-        <Link href={`/rewards/${baseTicker}${quoteTicker}`}>
-          <MarketCard
-            marketName={`${baseTicker}/${quoteTicker}`}
-            icon={baseTicker as keyof typeof Tokens}
-            pairIcon={quoteTicker as keyof typeof Tokens}
-          />
-        </Link>
+        <MarketCard
+          marketName={`${baseTicker}/${quoteTicker}`}
+          icon={baseTicker as keyof typeof Tokens}
+          pairIcon={quoteTicker as keyof typeof Tokens}
+        />
       );
     },
     header: () => (
-      <Typography.Text size="sm" appearance="primary" className="ml-2">
+      <Typography.Text size="xs" appearance="primary" className="ml-2">
         Market
       </Typography.Text>
     ),
@@ -38,7 +35,7 @@ export const columns = () => [
       );
     },
     header: () => (
-      <Typography.Text size="sm" appearance="primary">
+      <Typography.Text size="xs" appearance="primary">
         Score
       </Typography.Text>
     ),
@@ -55,7 +52,7 @@ export const columns = () => [
       );
     },
     header: () => (
-      <Typography.Text size="sm" appearance="primary">
+      <Typography.Text size="xs" appearance="primary">
         Fee
       </Typography.Text>
     ),
@@ -72,7 +69,7 @@ export const columns = () => [
       );
     },
     header: () => (
-      <Typography.Text size="sm" appearance="primary">
+      <Typography.Text size="xs" appearance="primary">
         Volume 24h
       </Typography.Text>
     ),
@@ -88,7 +85,7 @@ export const columns = () => [
       );
     },
     header: () => (
-      <Typography.Text size="sm" appearance="primary">
+      <Typography.Text size="xs" appearance="primary">
         My Rewards
       </Typography.Text>
     ),
