@@ -5,9 +5,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { appsyncOrderbookService } from "@orderbook/core/utils/orderbookService";
 
-import { NOTIFICATIONS, QUERY_KEYS } from "../..";
-
-type ClaimRewardArgs = { market: string; epoch: number; reward: number };
+import { ClaimRewardArgs, NOTIFICATIONS, QUERY_KEYS } from "../..";
 
 export const useClaimReward = () => {
   const queryClient = useQueryClient();

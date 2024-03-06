@@ -31,7 +31,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
       selectedAddresses: { mainAddress },
     } = useProfile();
 
-    const { rewards, isLoading } = useRewards(market);
+    const { claimableRewards, isLoading } = useRewards(market);
     const {
       mutateAsync: onClaimReward,
       status: claimRewardStatus,
@@ -111,21 +111,21 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
             <div className="flex flex-col gap-4">
-              {rewards?.map((value) => {
+              {claimableRewards?.map((value) => {
                 const disabled =
                   claimRewardStatus === "loading" &&
                   loadingEpochs.includes(value.epoch);
 
-                // TODO: Calculate this time
-                const claimAfter =
-                  value.claimBlock < value.currentBlockNumber ? null : "1h 20m";
-                const readyToClaim = claimAfter === null;
+                // // TODO: Calculate this time
+                // const claimAfter =
+                //   value.claimBlock < value.currentBlockNumber ? null : "1h 20m";
                 const hasClaimed = value.isClaimed;
-                const inProgress = !readyToClaim && !hasClaimed;
+                const readyToClaim = !hasClaimed;
+                // const inProgress = !readyToClaim && !hasClaimed;
 
-                const progressStatus = inProgress ? "" : "Completed";
+                // const progressStatus = inProgress ? "" : "Completed";
 
-                const status = hasClaimed ? "Claimed" : progressStatus;
+                const status = hasClaimed ? "Claimed" : "Completed";
 
                 return (
                   <div
@@ -153,15 +153,15 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                             <Typography.Text size="xs" appearance="primary">
                               {status}
                             </Typography.Text>
-                            {inProgress && (
+                            {/* {inProgress && (
                               <Typography.Text size="xs" appearance="primary">
                                 Claim after: {claimAfter}
                               </Typography.Text>
-                            )}
+                            )} */}
                           </div>
-                          {inProgress && (
+                          {/* {inProgress && (
                             <div className="w-full h-2 bg-level-2 rounded-full" />
-                          )}
+                          )} */}
                         </div>
                       </div>
                     </div>

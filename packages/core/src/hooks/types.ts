@@ -20,6 +20,9 @@ export type LmpLeaderboard = {
   token: string;
   score: string;
 };
+
+export type ClaimRewardArgs = { market: string; epoch: number; reward: number };
+
 export interface MutateHookProps {
   onSuccess?: (message?: string) => void;
   onError?: (error: Error) => void;
