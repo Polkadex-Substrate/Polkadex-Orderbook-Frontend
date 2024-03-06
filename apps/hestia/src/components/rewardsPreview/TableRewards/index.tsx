@@ -1,8 +1,11 @@
 "use client";
 
-import { Button, Icon, Typography } from "@polkadex/ux";
+import { RiFileCopyLine } from "@remixicon/react";
+import { Button, Copy, Icon, Typography, truncateString } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { forwardRef, useEffect, useMemo, useState } from "react";
+import { useProfile } from "@orderbook/core/providers/user/profile";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import classNames from "classnames";
 
 import { Icons } from "@/components/ui";
@@ -11,6 +14,11 @@ export type Data = (typeof fakeData)[0];
 
 export const TableRewards = forwardRef<HTMLDivElement, { maxHeight: string }>(
   ({ maxHeight }, ref) => {
+    const { selectedWallet } = useConnectWalletProvider();
+    const {
+      selectedAddresses: { mainAddress },
+    } = useProfile();
+
     const [state, setState] = useState<Data | null>(null);
     const { width } = useWindowSize();
     const responsiveView = useMemo(() => width <= 1000, [width]);
@@ -26,11 +34,16 @@ export const TableRewards = forwardRef<HTMLDivElement, { maxHeight: string }>(
             <Icon name="Avatar" className="w-10 h-10" />
             <div className="flex flex-col">
               <Typography.Text bold size="md">
-                Orderbook Testing
+                {selectedWallet?.name}
               </Typography.Text>
-              <Typography.Text appearance="primary">
-                5DCj6qBHPv..bUwsboXnZ
-              </Typography.Text>
+              <Copy value={mainAddress}>
+                <div className="flex items-center gap-1">
+                  <RiFileCopyLine className="w-4 h-4 text-actionInput" />
+                  <Typography.Text appearance="primary">
+                    {truncateString(mainAddress, 6)}
+                  </Typography.Text>
+                </div>
+              </Copy>
             </div>
           </div>
           <div className="flex items-center gap-8">

@@ -21,7 +21,7 @@ export const useLmpMarkets = () => {
     allTickers?.length > 0;
 
   const { data, status } = useQuery({
-    queryKey: QUERY_KEYS.lmpMarkets(),
+    queryKey: QUERY_KEYS.lmpMarkets(mainAddress),
     queryFn: async () => {
       if (!api?.isConnected || !lmp) return [];
 
