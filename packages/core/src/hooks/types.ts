@@ -1,5 +1,5 @@
 import { TradeAccount } from "@orderbook/core/providers/types";
-import { Market, Ticker } from "@orderbook/core/utils/orderbookService";
+import { Asset } from "@orderbook/core/utils/orderbookService";
 
 export type IUserTradeAccount = {
   address: string;
@@ -7,11 +7,15 @@ export type IUserTradeAccount = {
   account?: TradeAccount;
 };
 
-export type LmpMarketConfig = Market &
-  Ticker & {
-    score: string;
-    rewards: { marketMaking: number; trading: number; isClaimed: boolean };
-  };
+export type LmpMarketConfig = {
+  marketScore: number;
+  totalMarketFee: number;
+  baseAsset?: Asset;
+  quoteAsset?: Asset;
+  rewards: { marketMaking: number; trading: number; isClaimed: boolean };
+  baseVolume24h: number;
+  quoteVolume24h: number;
+};
 
 export type LmpLeaderboard = {
   rank: number;

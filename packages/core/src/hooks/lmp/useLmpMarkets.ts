@@ -1,7 +1,6 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useQuery } from "@tanstack/react-query";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { Market, Ticker } from "@orderbook/core/utils/orderbookService";
 
 import { LmpMarketConfig, QUERY_KEYS, useMarkets, useTickers } from "../..";
 
@@ -28,7 +27,7 @@ export const useLmpMarkets = () => {
       const currentEpoch = await lmp.queryCurrentEpoch();
       const markets = await lmp.queryAllMarkets(currentEpoch);
 
-      const res = markets.map(async (m) => {
+      const res = markets.map(async (m): Promise<LmpMarketConfig> => {
         const baseId = m.base === "polkadex" ? "PDEX" : m.base;
         const quoteId = m.quote === "polkadex" ? "PDEX" : m.quote;
 
@@ -46,13 +45,20 @@ export const useLmpMarkets = () => {
           mainAddress
         );
 
-        // Fetch market score later
+        const { score, totalFee } = await lmp.getTotalScoreAndFeeForMarket(
+          currentEpoch,
+          `${baseId}-${quoteId}`
+        );
+
         return {
-          ...(market as Market),
-          ...(ticker as Ticker),
-          score: "------",
+          baseAsset: market?.baseAsset,
+          quoteAsset: market?.quoteAsset,
           rewards,
-        } as LmpMarketConfig;
+          marketScore: score,
+          totalMarketFee: totalFee,
+          baseVolume24h: ticker?.baseVolume || 0,
+          quoteVolume24h: ticker?.quoteVolume || 0,
+        };
       });
 
       return await Promise.all(res);

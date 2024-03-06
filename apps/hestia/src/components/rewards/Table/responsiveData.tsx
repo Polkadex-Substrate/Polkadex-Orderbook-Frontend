@@ -27,19 +27,19 @@ export const ResponsiveData = ({
     >
       <Drawer.Title className="px-4">
         <MarketCard
-          marketName={`${data?.baseAsset.ticker}/${data?.quoteAsset.ticker}`}
-          icon={data?.baseAsset.ticker as keyof typeof Tokens}
-          pairIcon={data?.quoteAsset.ticker as keyof typeof Tokens}
+          marketName={`${data?.baseAsset?.ticker}/${data?.quoteAsset?.ticker}`}
+          icon={data?.baseAsset?.ticker as keyof typeof Tokens}
+          pairIcon={data?.quoteAsset?.ticker as keyof typeof Tokens}
         />
       </Drawer.Title>
       <Drawer.Content className="flex flex-col gap-2 p-4">
-        <ResponsiveCard label="Score">{data?.score}</ResponsiveCard>
+        <ResponsiveCard label="Score">{data?.marketScore}</ResponsiveCard>
         <ResponsiveCard label="Total Rewards">
           {Number(data?.rewards.marketMaking) + Number(data?.rewards.trading)}{" "}
           PDEX
         </ResponsiveCard>
         <ResponsiveCard label="Volume 24h">
-          {data?.quoteVolume.toFixed(4)} {data?.quoteAsset.ticker}
+          {data?.quoteVolume24h.toFixed(4)} {data?.quoteAsset?.ticker}
         </ResponsiveCard>
       </Drawer.Content>
       <Drawer.Footer className="p-4">
@@ -48,7 +48,7 @@ export const ResponsiveData = ({
           className="w-full"
           onClick={() =>
             router.push(
-              `/rewards/${data?.baseAsset.ticker}${data?.quoteAsset.ticker}`
+              `/rewards/${data?.baseAsset?.ticker}${data?.quoteAsset?.ticker}`
             )
           }
         >

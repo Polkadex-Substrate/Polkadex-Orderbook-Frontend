@@ -11,10 +11,8 @@ export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "market",
     cell: (e) => {
-      const {
-        baseAsset: { ticker: baseTicker },
-        quoteAsset: { ticker: quoteTicker },
-      } = e.getValue();
+      const baseTicker = e.getValue().baseAsset?.ticker || "Unknown";
+      const quoteTicker = e.getValue().quoteAsset?.ticker || "Unknown";
       return (
         <Link href={`/rewards/${baseTicker}${quoteTicker}`}>
           <MarketCard
@@ -35,7 +33,9 @@ export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "score",
     cell: (e) => {
-      return <Typography.Text size="sm">{e.getValue().score}</Typography.Text>;
+      return (
+        <Typography.Text size="sm">{e.getValue().marketScore}</Typography.Text>
+      );
     },
     header: () => (
       <Typography.Text size="sm" appearance="primary">
@@ -65,7 +65,8 @@ export const columns = () => [
     cell: (e) => {
       return (
         <Typography.Text size="sm">
-          {e.getValue().quoteVolume.toFixed(4)} {e.getValue().quoteAsset.ticker}
+          {e.getValue().quoteVolume24h.toFixed(4)}{" "}
+          {e.getValue().quoteAsset?.ticker || ""}
         </Typography.Text>
       );
     },
