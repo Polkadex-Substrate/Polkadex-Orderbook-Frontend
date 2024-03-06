@@ -34,12 +34,15 @@ export const ResponsiveData = ({
       </Drawer.Title>
       <Drawer.Content className="flex flex-col gap-2 p-4">
         <ResponsiveCard label="Score">{data?.marketScore}</ResponsiveCard>
-        <ResponsiveCard label="Total Rewards">
-          {Number(data?.rewards.marketMaking) + Number(data?.rewards.trading)}{" "}
-          PDEX
+        <ResponsiveCard label="Fee">
+          {data.totalMarketFee.toFixed(4)} {data.quoteAsset?.ticker}
         </ResponsiveCard>
         <ResponsiveCard label="Volume 24h">
           {data?.quoteVolume24h.toFixed(4)} {data?.quoteAsset?.ticker}
+        </ResponsiveCard>
+        <ResponsiveCard label="My Rewards">
+          {Number(data?.rewards.marketMaking) + Number(data?.rewards.trading)}{" "}
+          PDEX
         </ResponsiveCard>
       </Drawer.Content>
       <Drawer.Footer className="p-4">

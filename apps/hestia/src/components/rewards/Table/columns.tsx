@@ -44,18 +44,19 @@ export const columns = () => [
     ),
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.rewards, {
-    id: "totalRewards",
+  columnHelper.accessor((row) => row, {
+    id: "fee",
     cell: (e) => {
       return (
         <Typography.Text size="sm">
-          {e.getValue().marketMaking + e.getValue().trading} PDEX
+          {e.getValue().totalMarketFee.toFixed(4)}{" "}
+          {e.getValue().quoteAsset?.ticker}
         </Typography.Text>
       );
     },
     header: () => (
       <Typography.Text size="sm" appearance="primary">
-        Total Rewards
+        Fee
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
@@ -73,6 +74,22 @@ export const columns = () => [
     header: () => (
       <Typography.Text size="sm" appearance="primary">
         Volume 24h
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row.rewards, {
+    id: "totalRewards",
+    cell: (e) => {
+      return (
+        <Typography.Text size="sm">
+          {e.getValue().marketMaking + e.getValue().trading} PDEX
+        </Typography.Text>
+      );
+    },
+    header: () => (
+      <Typography.Text size="sm" appearance="primary">
+        My Rewards
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
