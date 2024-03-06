@@ -34,7 +34,7 @@ export const ResponsiveData = ({
       </Drawer.Title>
       <Drawer.Content className="flex flex-col gap-2 p-4">
         <ResponsiveCard label="Score">{data?.marketScore}</ResponsiveCard>
-        <ResponsiveCard label="Fee">
+        <ResponsiveCard label="Total Fee">
           {data.totalMarketFee.toFixed(4)} {data.quoteAsset?.ticker}
         </ResponsiveCard>
         <ResponsiveCard label="Volume 24h">

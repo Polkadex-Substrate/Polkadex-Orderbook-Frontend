@@ -42,7 +42,7 @@ export const columns = () => [
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row, {
-    id: "fee",
+    id: "totalFee",
     cell: (e) => {
       return (
         <Typography.Text size="sm">
@@ -53,7 +53,7 @@ export const columns = () => [
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Fee
+        Total Fee
       </Typography.Text>
     ),
     footer: (e) => e.column.id,

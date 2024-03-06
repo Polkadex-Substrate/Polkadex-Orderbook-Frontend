@@ -16,7 +16,7 @@ import { ResponsiveData } from "./responsiveData";
 import { TablePagination } from "@/components/ui";
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
-const responsiveKeys = ["volume24h", "fee"];
+const responsiveKeys = ["volume24h", "totalFee"];
 const actionKeys = ["score", "volume24h", "totalRewards"];
 
 export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
@@ -25,7 +25,7 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
     const [responsiveData, setResponsiveData] =
       useState<LmpMarketConfig | null>(null);
     const { width } = useWindowSize();
-    const responsiveView = useMemo(() => width <= 715, [width]);
+    const responsiveView = useMemo(() => width <= 650, [width]);
 
     const { markets, isLoading } = useLmpMarkets();
     const router = useRouter();
