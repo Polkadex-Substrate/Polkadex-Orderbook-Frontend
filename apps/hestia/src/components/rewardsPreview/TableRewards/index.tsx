@@ -1,13 +1,20 @@
 "use client";
 
 import { RiFileCopyLine } from "@remixicon/react";
-import { Button, Copy, Icon, Typography, truncateString } from "@polkadex/ux";
+import {
+  Button,
+  Copy,
+  Icon,
+  Spinner,
+  Typography,
+  truncateString,
+} from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import classNames from "classnames";
-import { useRewards } from "@orderbook/core/hooks";
+import { useClaimReward, useRewards } from "@orderbook/core/hooks";
 
 import { RewardsSkeleton } from "./loading";
 
@@ -25,6 +32,8 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
     } = useProfile();
 
     const { rewards, isLoading } = useRewards(market);
+    const { mutateAsync: onClaimReward, status: claimRewardStatus } =
+      useClaimReward();
 
     const [state, setState] = useState<Data | null>(null);
     const { width } = useWindowSize();
@@ -33,6 +42,8 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
     useEffect(() => {
       if (!responsiveView && !!state) setState(null);
     }, [responsiveView, state]);
+
+    const disabled = claimRewardStatus === "loading";
 
     return (
       <div className="flex-1 flex flex-col border-b border-secondary-base">
@@ -150,7 +161,21 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                       </div>
                     </div>
                     {readyToClaim && (
-                      <Button.Solid size="sm">Claim rewards</Button.Solid>
+                      <Button.Solid
+                        onClick={() =>
+                          onClaimReward({ epoch: value.epoch, market })
+                        }
+                        size="sm"
+                        disabled={disabled}
+                      >
+                        {disabled ? (
+                          <div className="px-8">
+                            <Spinner.Keyboard className="w-4 h-4" />
+                          </div>
+                        ) : (
+                          "Claim rewards"
+                        )}
+                      </Button.Solid>
                     )}
                   </div>
                 );

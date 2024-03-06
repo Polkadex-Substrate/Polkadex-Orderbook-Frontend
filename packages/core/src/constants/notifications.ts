@@ -118,4 +118,13 @@ export const NOTIFICATIONS = {
       href: "/transfer/PDEX",
     };
   },
+  claimReward: ({ reward }: { reward: string }): NotificationPayload => {
+    return {
+      category: "General",
+      message: `Reward Claimed 🎉`,
+      description: `You have just claimed your reward of ${reward}. You can check your balance now.`,
+      type: "Success",
+      href: `/balances`,
+    };
+  },
 };
