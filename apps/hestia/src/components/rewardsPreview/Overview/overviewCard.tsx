@@ -1,4 +1,4 @@
-import { Typography } from "@polkadex/ux";
+import { Skeleton, Typography } from "@polkadex/ux";
 import classNames from "classnames";
 import React, { PropsWithChildren } from "react";
 
@@ -6,18 +6,25 @@ export const OverviewCard = ({
   label,
   side = "vertical",
   children,
-}: PropsWithChildren<{ label: string; side?: "horizontal" | "vertical" }>) => {
+  loading = false,
+}: PropsWithChildren<{
+  label: string;
+  side?: "horizontal" | "vertical";
+  loading?: boolean;
+}>) => {
   const isString = typeof children === "string";
   return (
     <div
       className={classNames(
         "flex",
         side === "horizontal"
-          ? "justify-between items-center gap-6 flex-row-reverse"
+          ? "justify-between items-center gap-4 flex-row-reverse"
           : "flex-col gap-1"
       )}
     >
-      {isString ? <Typography.Text>{children}</Typography.Text> : children}
+      <Skeleton loading={loading} className="w-32 h-4 max-w-32">
+        {isString ? <Typography.Text>{children}</Typography.Text> : children}
+      </Skeleton>
       <Typography.Text appearance="primary" size="xs">
         {label}
       </Typography.Text>

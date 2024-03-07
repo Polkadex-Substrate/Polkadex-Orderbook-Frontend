@@ -32,12 +32,26 @@ export const useTraderMetrics = (market: string) => {
       );
       const totalReward = reward.marketMaking + reward.trading;
 
+      const volumeGeneratedByUser = await lmp.getVolumeGeneratedByUserPerEpoch(
+        currentEpoch,
+        market,
+        mainAddress
+      );
+
+      const feePaidByUser = await lmp.getFeePaidByUserPerEpoch(
+        currentEpoch,
+        market,
+        mainAddress
+      );
+
       return {
         ...traderMetrics,
         ...reward,
         currentEpoch,
         totalReward,
         token: "PDEX",
+        volumeGeneratedByUser,
+        feePaidByUser,
       };
     },
     enabled,
