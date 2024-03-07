@@ -21,6 +21,7 @@ import {
   useTraderMetrics,
 } from "@orderbook/core/hooks";
 import { secondsToHm } from "@orderbook/core/helpers";
+import { TIME_INTERVAL } from "@orderbook/core/constants";
 
 import { RewardsSkeleton } from "./loading";
 
@@ -56,6 +57,16 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
     const [state, setState] = useState(null);
     const { width } = useWindowSize();
     const responsiveView = useMemo(() => width <= 1000, [width]);
+
+    const filledPercentage = useMemo(() => {
+      const timeToNextEpoch = (userMetrics?.blocksToNextEpoch || 0) * 12;
+      const epochDuration = TIME_INTERVAL.epochDuration;
+
+      const unfilledPercentage = (timeToNextEpoch / epochDuration) * 100;
+      const filledPercentage = 100 - unfilledPercentage;
+
+      return filledPercentage.toFixed(2);
+    }, [userMetrics?.blocksToNextEpoch]);
 
     useEffect(() => {
       if (!responsiveView && !!state) setState(null);
@@ -175,8 +186,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">
                         <Typography.Text size="xs" appearance="primary">
-                          {/* TODO: Calculate it */}
-                          35%
+                          {filledPercentage}%
                         </Typography.Text>
                         <Typography.Text size="xs" appearance="primary">
                           Claim after:{" "}
@@ -188,8 +198,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                       <div className="w-full h-2 bg-level-2 rounded-full relative overflow-hidden">
                         <div
                           className="bg-primary-base absolute inset-0"
-                          // TODO: Calculate it
-                          style={{ width: "35%" }}
+                          style={{ width: `${filledPercentage}%` }}
                         ></div>
                       </div>
                     </div>

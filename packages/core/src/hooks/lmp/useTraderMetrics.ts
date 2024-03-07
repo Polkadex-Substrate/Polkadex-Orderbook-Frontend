@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
-import { QUERY_KEYS } from "../..";
+import { QUERY_KEYS, TIME_INTERVAL } from "../..";
 
 export const useTraderMetrics = (market: string) => {
   const { api, lmp } = useNativeApi();
@@ -18,7 +18,9 @@ export const useTraderMetrics = (market: string) => {
       if (!api?.isConnected || !lmp) return;
 
       const currentEpoch = await lmp.queryCurrentEpoch();
-      const blocksToNextEpoch = await lmp.blocksToNextEpoch(200);
+      const blocksToNextEpoch = await lmp.blocksToNextEpoch(
+        TIME_INTERVAL.blocksInEpoch
+      );
 
       const traderMetrics = await lmp.getTraderMetrics(
         currentEpoch,
