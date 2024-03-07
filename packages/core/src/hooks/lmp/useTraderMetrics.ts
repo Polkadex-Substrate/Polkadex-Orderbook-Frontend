@@ -18,6 +18,7 @@ export const useTraderMetrics = (market: string) => {
       if (!api?.isConnected || !lmp) return;
 
       const currentEpoch = await lmp.queryCurrentEpoch();
+      const blocksToNextEpoch = await lmp.blocksToNextEpoch(200);
 
       const traderMetrics = await lmp.getTraderMetrics(
         currentEpoch,
@@ -52,6 +53,7 @@ export const useTraderMetrics = (market: string) => {
         token: "PDEX",
         volumeGeneratedByUser,
         feePaidByUser,
+        blocksToNextEpoch,
       };
     },
     enabled,

@@ -20,6 +20,7 @@ import {
   useClaimableRewards,
   useTraderMetrics,
 } from "@orderbook/core/hooks";
+import { secondsToHm } from "@orderbook/core/helpers";
 
 import { RewardsSkeleton } from "./loading";
 
@@ -179,8 +180,10 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                           35%
                         </Typography.Text>
                         <Typography.Text size="xs" appearance="primary">
-                          {/* TODO: Calculate it */}
-                          Claim after: {"1h 30m"}
+                          Claim after:{" "}
+                          {secondsToHm(
+                            (userMetrics?.blocksToNextEpoch || 0) * 12
+                          )}
                         </Typography.Text>
                       </div>
                       <div className="w-full h-2 bg-level-2 rounded-full relative overflow-hidden">
