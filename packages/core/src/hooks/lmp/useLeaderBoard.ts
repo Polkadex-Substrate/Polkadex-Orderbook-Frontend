@@ -10,12 +10,12 @@ export const useLeaderBoard = (market: string) => {
     queryKey: QUERY_KEYS.lmpLeaderboard(market),
     queryFn: async () => {
       if (!api?.isConnected || !lmp) return;
-      const currentEpoch = await lmp.queryCurrentEpoch();
+      const currentEpoch = (await lmp.queryCurrentEpoch()) - 1;
       const accounts = await lmp.getTopAccounts(currentEpoch, market);
 
       const res = accounts.map(async (address, i): Promise<LmpLeaderboard> => {
         const reward = await lmp.getEligibleRewards(
-          currentEpoch,
+          Math.max(0, currentEpoch), // Must be non-zero always
           market,
           address
         );

@@ -115,7 +115,9 @@ export function Template({ id }: { id: string }) {
                 ref={tableTitlesRef}
                 className="border-b border-primary py-3 px-4 w-full"
               >
-                <Typography.Heading size="md">Leaderboard</Typography.Heading>
+                <Typography.Heading size="md">
+                  Leaderboard (For previous epoch)
+                </Typography.Heading>
               </div>
               <div className="h-full flex flex-col">
                 <TableLeaderboard
