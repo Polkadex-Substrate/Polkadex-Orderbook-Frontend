@@ -61,7 +61,7 @@ export function Template({ id }: { id: string }) {
 
   const maxHeight = useMemo(
     () =>
-      `calc(100vh - ${
+      `calc(90vh - ${
         overviewHeight + headerHeight + tableTitleHeight + tableRowsHeight + 1
       }px)`,
     [headerHeight, overviewHeight, tableTitleHeight, tableRowsHeight]

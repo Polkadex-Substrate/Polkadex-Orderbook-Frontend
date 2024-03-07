@@ -258,10 +258,9 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                         }
                         size="sm"
                         disabled={disabled || loading}
-                        className="w-28"
                       >
                         {loading ? (
-                          <div className="px-8">
+                          <div className="px-9">
                             <Spinner.Keyboard className="w-4 h-4" />
                           </div>
                         ) : (
