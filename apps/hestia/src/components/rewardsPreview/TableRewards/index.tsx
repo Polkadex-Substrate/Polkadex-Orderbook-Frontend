@@ -258,6 +258,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                         }
                         size="sm"
                         disabled={disabled || loading}
+                        className="w-28"
                       >
                         {loading ? (
                           <div className="px-8">

@@ -4,7 +4,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { LmpMarketConfig, QUERY_KEYS, useMarkets, useTickers } from "../..";
 
-export const useLmpMarkets = () => {
+export const useLmpMarkets = (epoch?: number) => {
   const { api, lmp } = useNativeApi();
   const {
     selectedAddresses: { mainAddress },
@@ -24,7 +24,7 @@ export const useLmpMarkets = () => {
     queryFn: async () => {
       if (!api?.isConnected || !lmp) return [];
 
-      const currentEpoch = await lmp.queryCurrentEpoch();
+      const currentEpoch = epoch || (await lmp.queryCurrentEpoch());
       const markets = await lmp.queryAllMarkets(currentEpoch);
 
       const res = markets.map(async (m): Promise<LmpMarketConfig> => {
