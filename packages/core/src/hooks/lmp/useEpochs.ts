@@ -31,6 +31,7 @@ export const useEpochs = () => {
         else if (epoch === currentEpoch) status = "Ongoing";
         else status = "Upcoming";
 
+        // TODO: Fix from and to values
         return {
           epoch,
           from: "1 Mar",
