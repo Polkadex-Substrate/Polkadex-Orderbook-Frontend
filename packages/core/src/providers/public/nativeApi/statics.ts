@@ -1,7 +1,6 @@
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { RECONNECT_TIME_MS } from "@orderbook/core/providers/public/nativeApi/constants";
-
-import { apiTypes } from "./apiTypes";
+import { apiTypes } from "@polkadex/polkadex-api";
 
 export interface Statics {
   api: ApiPromise;

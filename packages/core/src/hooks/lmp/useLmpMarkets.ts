@@ -45,7 +45,7 @@ export const useLmpMarkets = (epoch?: number) => {
           mainAddress
         );
 
-        const { score, totalFee } = await lmp.getTotalScoreAndFeeForMarket(
+        const marketScore = await lmp.getTotalScoreAndFeeForMarket(
           currentEpoch,
           `${baseId}-${quoteId}`
         );
@@ -54,8 +54,8 @@ export const useLmpMarkets = (epoch?: number) => {
           baseAsset: market?.baseAsset,
           quoteAsset: market?.quoteAsset,
           rewards,
-          marketScore: score,
-          totalMarketFee: totalFee,
+          makerScore: marketScore.score,
+          traderScore: marketScore.totalFee,
           baseVolume24h: ticker?.baseVolume || 0,
           quoteVolume24h: ticker?.quoteVolume || 0,
         };

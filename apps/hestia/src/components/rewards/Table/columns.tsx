@@ -28,32 +28,29 @@ export const columns = () => [
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row, {
-    id: "score",
+    id: "makerScore",
     cell: (e) => {
       return (
-        <Typography.Text size="sm">{e.getValue().marketScore}</Typography.Text>
+        <Typography.Text size="sm">{e.getValue().makerScore}</Typography.Text>
       );
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Score
+        Maker Score
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row, {
-    id: "totalFee",
+    id: "traderScore",
     cell: (e) => {
       return (
-        <Typography.Text size="sm">
-          {e.getValue().totalMarketFee.toFixed(4)}{" "}
-          {e.getValue().quoteAsset?.ticker}
-        </Typography.Text>
+        <Typography.Text size="sm">{e.getValue().traderScore}</Typography.Text>
       );
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Total Fee
+        Trader Score
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
@@ -71,22 +68,6 @@ export const columns = () => [
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Volume 24h
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row.rewards, {
-    id: "totalRewards",
-    cell: (e) => {
-      return (
-        <Typography.Text size="sm">
-          {e.getValue().marketMaking + e.getValue().trading} PDEX
-        </Typography.Text>
-      );
-    },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        My Rewards
       </Typography.Text>
     ),
     footer: (e) => e.column.id,

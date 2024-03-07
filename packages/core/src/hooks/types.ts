@@ -8,8 +8,8 @@ export type IUserTradeAccount = {
 };
 
 export type LmpMarketConfig = {
-  marketScore: number;
-  totalMarketFee: number;
+  makerScore: number;
+  traderScore: number;
   baseAsset?: Asset;
   quoteAsset?: Asset;
   rewards: { marketMaking: number; trading: number; isClaimed: boolean };

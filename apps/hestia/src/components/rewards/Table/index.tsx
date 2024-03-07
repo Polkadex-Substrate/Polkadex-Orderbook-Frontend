@@ -16,8 +16,8 @@ import { ResponsiveData } from "./responsiveData";
 import { TablePagination } from "@/components/ui";
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
-const responsiveKeys = ["volume24h", "totalFee"];
-const actionKeys = ["score", "volume24h", "totalRewards"];
+const responsiveKeys = ["volume24h"];
+const actionKeys = ["makerScore", "traderScore", "volume24h", "totalRewards"];
 
 export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
   ({ maxHeight }, ref) => {
