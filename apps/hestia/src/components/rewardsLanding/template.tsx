@@ -1,7 +1,8 @@
 "use client";
 
 import { useResizeObserver } from "usehooks-ts";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
+import { useWindowSize } from "react-use";
 
 import { Info } from "./info";
 import { HowItWorks } from "./howItWorks";
@@ -11,6 +12,8 @@ import { CallToAction } from "./callToAction";
 import { Footer, Header } from "@/components/ui";
 
 export function Template() {
+  const { width } = useWindowSize();
+
   const footerRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
 
@@ -18,6 +21,7 @@ export function Template() {
     ref: footerRef,
     box: "border-box",
   });
+  const mobileView = useMemo(() => width <= 750, [width]);
 
   return (
     <div
@@ -36,7 +40,7 @@ export function Template() {
         <Faq />
         <CallToAction />
       </main>
-      <Footer marketsActive ref={footerRef} />
+      {!mobileView && <Footer marketsActive ref={footerRef} />}
     </div>
   );
 }

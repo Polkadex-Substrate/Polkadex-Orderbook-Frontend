@@ -7,7 +7,7 @@ import OrderbookImage from "../../../public/img/obHestia.svg";
 
 export const CallToAction = () => {
   return (
-    <div className="relative max-lg:flex-col flex items-center justify-between lg:gap-8 max-md:px-4 pl-10 border border-primary rounded-md my-10 overflow-hidden">
+    <div className="relative max-lg:flex-col flex items-center justify-between lg:gap-8 max-md:px-4 pl-10 border border-primary md:rounded-md my-10 overflow-hidden">
       <div className="flex flex-col gap-6 flex-1 max-w-[350px] max-lg:py-10 max-lg:text-center max-lg:items-center">
         <div className="flex flex-col gap-2">
           <Typography.Text size="xl" appearance="primary">
