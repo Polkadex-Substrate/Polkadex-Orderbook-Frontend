@@ -26,17 +26,15 @@ export function Template() {
     >
       <Header ref={headerRef} />
       <main
-        className="flex flex-1 overflow-auto w-full max-w-[1920px] m-auto"
+        className="flex flex-col flex-1 overflow-auto w-full max-w-[1100px] m-auto"
         style={{
           paddingBottom: `${footerHeight}px`,
         }}
       >
-        <div className="flex flex-col max-w-[1200px] mx-auto">
-          <Info />
-          <HowItWorks />
-          <Faq />
-          <CallToAction />
-        </div>
+        <Info />
+        <HowItWorks />
+        <Faq />
+        <CallToAction />
       </main>
       <Footer marketsActive ref={footerRef} />
     </div>
