@@ -170,8 +170,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                   </div>
                   <div className="flex flex-1 flex-col">
                     <Typography.Text bold size="md">
-                      {userMetrics?.totalReward?.toFixed(4)}{" "}
-                      {userMetrics?.token}
+                      ---------------
                     </Typography.Text>
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">

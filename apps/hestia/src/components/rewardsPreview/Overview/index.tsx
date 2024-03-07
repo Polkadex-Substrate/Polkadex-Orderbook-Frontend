@@ -66,27 +66,16 @@ export const Overview = forwardRef<HTMLDivElement, Props>(({ market }, ref) => {
 
         <div className="flex items-center justify-between gap-8 p-4 flex-1 flex-wrap">
           <OverviewCard label="Current Epoch" loading={isLoading}>
-            {userMetrics?.currentEpoch || 0}
-          </OverviewCard>
-          <OverviewCard label="Reward" loading={isLoading}>
             <Typography.Text bold>
-              {userMetrics?.totalReward.toFixed(4) || 0}{" "}
-              {userMetrics?.token || "PDEX"}
+              {userMetrics?.currentEpoch || 0}
             </Typography.Text>
           </OverviewCard>
-
-          <div className="flex flex-col gap-1">
-            <OverviewCard loading={isLoading} side="horizontal" label="Volume">
-              {`${userMetrics?.volumeGeneratedByUser.toFixed(4) || 0} ${market?.quoteAsset.ticker}`}
-            </OverviewCard>
-            <OverviewCard
-              loading={isLoading}
-              side="horizontal"
-              label="Fee Paid"
-            >
-              {`${userMetrics?.feePaidByUser.toFixed(4) || 0} ${market?.quoteAsset.ticker}`}
-            </OverviewCard>
-          </div>
+          <OverviewCard loading={isLoading} label="Volume Generated">
+            {`${userMetrics?.volumeGeneratedByUser.toFixed(4) || 0} ${market?.quoteAsset.ticker}`}
+          </OverviewCard>
+          <OverviewCard loading={isLoading} label="Fee Paid">
+            {`${userMetrics?.feePaidByUser.toFixed(4) || 0} ${market?.quoteAsset.ticker}`}
+          </OverviewCard>
         </div>
       </div>
     </div>
