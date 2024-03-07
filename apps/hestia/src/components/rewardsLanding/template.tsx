@@ -38,7 +38,6 @@ export function Template() {
           <CallToAction />
         </div>
       </main>
-
       <Footer marketsActive ref={footerRef} />
     </div>
   );

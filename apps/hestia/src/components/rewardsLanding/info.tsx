@@ -12,7 +12,7 @@ import { Rewards } from "@/components/ui/Icons/rewards";
 export const Info = () => {
   return (
     <div className="flex md:items-center max-md:flex-col-reverse justify-between gap-2 border-b border-primary px-3 max-md:py-4 max-md:px-8">
-      <div className="flex flex-col gap-4 pt-4 max-w-[550px]">
+      <div className="flex flex-col gap-4 pt-4 md:max-w-[450px]">
         <div className="flex flex-col gap-2">
           <Typography.Heading size="5xl">
             Liquidity Mining Program
