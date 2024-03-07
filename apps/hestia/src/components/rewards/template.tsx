@@ -2,7 +2,7 @@
 
 import { Typography, Tabs, Carousel, HoverCard, Skeleton } from "@polkadex/ux";
 import { useResizeObserver, useWindowSize } from "usehooks-ts";
-import { Fragment, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import {
   RiArrowLeftSLine,
   RiArrowRightSLine,
@@ -21,8 +21,9 @@ import { Footer, Header } from "@/components/ui";
 import { useSizeObserver } from "@/hooks";
 
 export function Template() {
-  const [tab, setTab] = useState(fakeData[1].id.toString());
+  const [tab, setTab] = useState("0");
   const { width } = useWindowSize();
+  const { epochs, isLoading } = useEpochs();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
@@ -67,7 +68,12 @@ export function Template() {
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
-  const { isLoading } = useEpochs();
+  useEffect(() => {
+    const epochsLength = epochs?.length || 0;
+    if (epochs && epochs?.length > 2) {
+      setTab(epochs[epochsLength - 2].epoch.toString());
+    }
+  }, [epochs]);
 
   return (
     <div
@@ -83,11 +89,7 @@ export function Template() {
             : `${footerHeight}px`,
         }}
       >
-        <Tabs
-          defaultValue={fakeData[1].id.toString()}
-          value={tab}
-          onValueChange={setTab}
-        >
+        <Tabs value={tab} onValueChange={setTab}>
           <div className="flex-1 flex flex-col">
             <div ref={overviewRef} className="flex flex-col">
               <div className="flex items-end justify-between gap-4 px-4 pt-6 pb-4 border-b border-secondary-base flex-wrap">
@@ -118,22 +120,24 @@ export function Template() {
                     />
                   ) : (
                     <Carousel
-                      options={{ align: "start" }}
-                      className="mx-8 max-md:w-full md:w-fit "
+                      options={{ align: "start", startIndex: 10 }}
+                      className="mx-8 max-md:w-full md:w-fit"
                     >
                       <Carousel.Content className="gap-2">
-                        {fakeData.map((value, i) => {
-                          const active = value.id.toString() === tab;
+                        {epochs?.map((value) => {
+                          const active = value.epoch.toString() === tab;
                           return (
                             <Carousel.Item
-                              key={value.id}
+                              key={value.epoch}
                               className="max-md:px-3 max-md:py-4 md:p-5 basis-1/2 md:basis-1/3"
                             >
                               <Tabs.Trigger
-                                value={value.id.toString()}
-                                key={value.id}
+                                value={value.epoch.toString()}
+                                key={value.epoch}
                               >
-                                <HoverCard defaultOpen={i === 2}>
+                                <HoverCard
+                                  defaultOpen={value.epoch.toString() === tab}
+                                >
                                   <HoverCard.Trigger>
                                     <div className="flex flex-col items-start">
                                       <Typography.Text
@@ -145,12 +149,13 @@ export function Template() {
                                         {value.from} - {value.to}
                                       </Typography.Text>
                                       <Typography.Text appearance="secondary">
-                                        {value.type}
+                                        {value.status === "Ongoing" && "*"}
+                                        Epoch {value.epoch}
                                       </Typography.Text>
                                     </div>
                                   </HoverCard.Trigger>
                                   <HoverCard.Content side="top">
-                                    {value.epoch}
+                                    {value.status}
                                   </HoverCard.Content>
                                 </HoverCard>
                               </Tabs.Trigger>
@@ -177,15 +182,9 @@ export function Template() {
                 </Tabs.List>
               </div>
             </div>
-            {fakeData.map((value) => (
-              <Tabs.Content
-                key={value.id}
-                value={value.id.toString()}
-                className="flex flex-col flex-1"
-              >
-                <Table ref={tableRowsRef} maxHeight={maxHeight} />
-              </Tabs.Content>
-            ))}
+            <div className="flex flex-col flex-1">
+              <Table ref={tableRowsRef} maxHeight={maxHeight} />
+            </div>
             <Help ref={helpRef} />
           </div>
         </Tabs>
@@ -211,33 +210,33 @@ export function Template() {
   );
 }
 
-const fakeData = [
-  {
-    id: 2,
-    from: "25 Jan",
-    to: "21 Feb",
-    epoch: "Ended",
-    type: "Previous period",
-  },
-  {
-    id: 1,
-    from: "22 Feb",
-    to: "20 Mar",
-    epoch: "Ended",
-    type: "Current period",
-  },
-  {
-    id: 3,
-    from: "21 Mar",
-    to: "10 Apr",
-    epoch: "20 days 2 hours 50 mins",
-    type: "Next period",
-  },
-  {
-    id: 4,
-    from: "21 Mar",
-    to: "10 Apr",
-    epoch: "50 days 1 hours 10 mins",
-    type: "Next period",
-  },
-];
+// const fakeData = [
+//   {
+//     id: 2,
+//     from: "25 Jan",
+//     to: "21 Feb",
+//     epoch: "Ended",
+//     type: "Previous period",
+//   },
+//   {
+//     id: 1,
+//     from: "22 Feb",
+//     to: "20 Mar",
+//     epoch: "Ended",
+//     type: "Current period",
+//   },
+//   {
+//     id: 3,
+//     from: "21 Mar",
+//     to: "10 Apr",
+//     epoch: "20 days 2 hours 50 mins",
+//     type: "Next period",
+//   },
+//   {
+//     id: 4,
+//     from: "21 Mar",
+//     to: "10 Apr",
+//     epoch: "50 days 1 hours 10 mins",
+//     type: "Next period",
+//   },
+// ];

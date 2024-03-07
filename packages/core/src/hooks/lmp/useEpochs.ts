@@ -24,11 +24,28 @@ export const useEpochs = () => {
 
       const allEpochs = prevEpochs.concat([currentEpoch, nextEpoch]);
 
-      console.log(allEpochs);
+      const res = allEpochs.map((epoch) => {
+        let status: string;
 
-      return allEpochs;
+        if (epoch < currentEpoch) status = "Ended";
+        else if (epoch === currentEpoch) status = "Ongoing";
+        else status = "Upcoming";
+
+        return {
+          epoch,
+          from: "1 Mar",
+          to: "28 Mar",
+          status,
+          duration: "28 days",
+        };
+      });
+
+      return res;
     },
     enabled,
   });
-  return { epochs: data, isLoading: status === "loading" };
+  return {
+    epochs: data,
+    isLoading: status === "loading",
+  };
 };
