@@ -1,6 +1,7 @@
-import { Typography, Tooltip, Separator } from "@polkadex/ux";
+import { Typography, Separator, HoverCard } from "@polkadex/ux";
 import Link from "next/link";
 import { RiArrowDownSLine } from "@remixicon/react";
+import { useState } from "react";
 
 import { Icons } from "..";
 
@@ -17,10 +18,19 @@ export const TradingFee = ({
   ticker: string;
   readMoreLink?: string;
 }) => {
+  const [open, setOpen] = useState(false);
+
   if (!ticker) return <div />;
   return (
-    <Tooltip>
-      <Tooltip.Trigger className="group">
+    <HoverCard open={open} onOpenChange={setOpen}>
+      <HoverCard.Trigger
+        className="group"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(true);
+        }}
+      >
         <div className="flex items-center gap-1">
           <Icons.Fuel className="w-3 h-3 text-placeholder" />
           <Typography.Text size="xs" appearance="primary">
@@ -28,8 +38,8 @@ export const TradingFee = ({
           </Typography.Text>
           <RiArrowDownSLine className="w-3 h-3 text-primary group-hover:rotate-180 duration-300 transition-transform" />
         </div>
-      </Tooltip.Trigger>
-      <Tooltip.Content className="max-w-[300px] p-4">
+      </HoverCard.Trigger>
+      <HoverCard.Content className="max-w-[300px] p-4">
         <div className="flex flex-col gap-3">
           <ResponsiveCard label="Taker fee">{takerFee}&#37;</ResponsiveCard>
           <ResponsiveCard label="Maker fee">{makerFee}&#37;</ResponsiveCard>
@@ -49,7 +59,7 @@ export const TradingFee = ({
             </Link>
           </Typography.Paragraph>
         </div>
-      </Tooltip.Content>
-    </Tooltip>
+      </HoverCard.Content>
+    </HoverCard>
   );
 };
