@@ -263,18 +263,20 @@ export const Profile = ({
               <Button.Solid onClick={onCreateTradingAccount}>
                 Create new account
               </Button.Solid>
-              <div className="flex items-center justify-around flex-1 gap-1">
-                <Typography.Text appearance="primary">
-                  Already have a trading account?
-                </Typography.Text>
-                <Button.Light
-                  onClick={onImportTradingAccount}
-                  appearance="primary"
-                  size="sm"
-                >
-                  Select / Import
-                </Button.Light>
-              </div>
+              {!!mainProxiesAccounts.length && (
+                <div className="flex items-center justify-around flex-1 gap-1">
+                  <Typography.Text appearance="primary">
+                    Already have a trading account?
+                  </Typography.Text>
+                  <Button.Light
+                    onClick={onImportTradingAccount}
+                    appearance="primary"
+                    size="sm"
+                  >
+                    Select / Import
+                  </Button.Light>
+                </div>
+              )}
             </div>
           </div>
         )}
