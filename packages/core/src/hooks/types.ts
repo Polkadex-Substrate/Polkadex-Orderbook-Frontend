@@ -12,7 +12,6 @@ export type LmpMarketConfig = {
   traderScore: number;
   baseAsset?: Asset;
   quoteAsset?: Asset;
-  rewards: { marketMaking: number; trading: number; isClaimed: boolean };
   baseVolume24h: number;
   quoteVolume24h: number;
 };

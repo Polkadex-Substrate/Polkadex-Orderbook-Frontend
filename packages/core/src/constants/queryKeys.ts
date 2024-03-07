@@ -64,7 +64,7 @@ export const QUERY_KEYS = {
     mainAddress,
   ],
   epochs: () => [PREFIX, "epochs"],
-  lmpMarkets: (mainAddress: string) => [PREFIX, "lmpMarkets", mainAddress],
+  lmpMarkets: (epoch: number) => [PREFIX, "lmpMarkets", epoch],
   lmpLeaderboard: (market: string) => [PREFIX, "lmpLeaderboard", market],
   lmpRewards: (market: string, mainAddress: string) => [
     PREFIX,

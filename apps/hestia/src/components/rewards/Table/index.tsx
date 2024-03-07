@@ -19,15 +19,17 @@ import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 const responsiveKeys = ["volume24h"];
 const actionKeys = ["makerScore", "traderScore", "volume24h", "totalRewards"];
 
-export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
-  ({ maxHeight }, ref) => {
+type Props = { maxHeight: string; selectedEpoch: number };
+
+export const Table = forwardRef<HTMLDivElement, Props>(
+  ({ maxHeight, selectedEpoch }, ref) => {
     const [responsiveState, setResponsiveState] = useState(false);
     const [responsiveData, setResponsiveData] =
       useState<LmpMarketConfig | null>(null);
     const { width } = useWindowSize();
     const responsiveView = useMemo(() => width <= 650, [width]);
 
-    const { markets, isLoading } = useLmpMarkets();
+    const { markets, isLoading } = useLmpMarkets(selectedEpoch);
     const router = useRouter();
 
     const table = useReactTable({

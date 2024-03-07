@@ -1,14 +1,10 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useQuery } from "@tanstack/react-query";
-import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { LmpMarketConfig, QUERY_KEYS, useMarkets, useTickers } from "../..";
 
 export const useLmpMarkets = (epoch?: number) => {
   const { api, lmp } = useNativeApi();
-  const {
-    selectedAddresses: { mainAddress },
-  } = useProfile();
   const { list: allMarkets } = useMarkets();
   const { tickers: allTickers } = useTickers();
 
@@ -20,7 +16,7 @@ export const useLmpMarkets = (epoch?: number) => {
     allTickers?.length > 0;
 
   const { data, status } = useQuery({
-    queryKey: QUERY_KEYS.lmpMarkets(mainAddress),
+    queryKey: QUERY_KEYS.lmpMarkets(epoch || 0),
     queryFn: async () => {
       if (!api?.isConnected || !lmp) return [];
 
@@ -39,12 +35,6 @@ export const useLmpMarkets = (epoch?: number) => {
           (e) => e.market === `${baseId}-${quoteId}`
         );
 
-        const rewards = await lmp.getEligibleRewards(
-          currentEpoch,
-          market?.id as string,
-          mainAddress
-        );
-
         const marketScore = await lmp.getTotalScoreAndFeeForMarket(
           currentEpoch,
           `${baseId}-${quoteId}`
@@ -53,7 +43,6 @@ export const useLmpMarkets = (epoch?: number) => {
         return {
           baseAsset: market?.baseAsset,
           quoteAsset: market?.quoteAsset,
-          rewards,
           makerScore: marketScore.score,
           traderScore: marketScore.totalFee,
           baseVolume24h: ticker?.baseVolume || 0,

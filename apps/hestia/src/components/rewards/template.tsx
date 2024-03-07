@@ -183,7 +183,11 @@ export function Template() {
               </div>
             </div>
             <div className="flex flex-col flex-1">
-              <Table ref={tableRowsRef} maxHeight={maxHeight} />
+              <Table
+                ref={tableRowsRef}
+                maxHeight={maxHeight}
+                selectedEpoch={+tab}
+              />
             </div>
             <Help ref={helpRef} />
           </div>
