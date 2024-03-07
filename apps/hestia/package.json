@@ -16,7 +16,7 @@
     "@orderbook/core": "*",
     "@orderbook/eslint-config": "*",
     "@orderbook/tsconfig": "*",
-    "@polkadex/polkadex-api": "^3.0.6",
+    "@polkadex/polkadex-api": "^3.0.7",
     "@polkadex/react-providers": "^1.2.0",
     "@polkadex/types": "^1.2.2",
     "@polkadex/ux": "^6.10.0",
