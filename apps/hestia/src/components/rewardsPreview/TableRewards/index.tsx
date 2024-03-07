@@ -209,7 +209,8 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
               {claimableRewards?.map((value) => {
                 const disabled =
                   claimRewardStatus === "loading" &&
-                  loadingEpochs.includes(value.epoch);
+                  !loadingEpochs.includes(value.epoch);
+                const loading = loadingEpochs.includes(value.epoch);
 
                 const hasClaimed = value.isClaimed;
                 const readyToClaim = !hasClaimed;
@@ -256,9 +257,9 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                           })
                         }
                         size="sm"
-                        disabled={disabled}
+                        disabled={disabled || loading}
                       >
-                        {disabled ? (
+                        {loading ? (
                           <div className="px-8">
                             <Spinner.Keyboard className="w-4 h-4" />
                           </div>

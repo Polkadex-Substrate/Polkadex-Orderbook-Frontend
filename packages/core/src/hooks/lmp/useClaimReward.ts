@@ -19,7 +19,8 @@ export const useClaimReward = () => {
     useSettingsProvider();
 
   const { mutateAsync, status } = useMutation({
-    mutationFn: async ({ epoch, market, reward }: ClaimRewardArgs) => {
+    mutationFn: async (args: ClaimRewardArgs) => {
+      const { epoch, market, reward } = args;
       setLoadingEpochs((prev) => {
         return [...prev, epoch];
       });
@@ -43,7 +44,12 @@ export const useClaimReward = () => {
 
       return { reward, epoch, market };
     },
-    onError: (error: Error) => onHandleError?.(error.message),
+    onError: (error: Error, args) => {
+      onHandleError?.(error.message);
+      setLoadingEpochs((prev) => {
+        return prev.filter((i) => i !== args?.epoch);
+      });
+    },
     onSuccess: (e) => {
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.lmpRewards(e.market, mainAddress),
