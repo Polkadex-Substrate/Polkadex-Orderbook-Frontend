@@ -138,7 +138,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                 </Typography.Text>
                 <Skeleton
                   loading={isRewardsLoading}
-                  className="h-4 w-32 flex-none"
+                  className="h-4 w-28 flex-none"
                 >
                   <Typography.Text bold className="whitespace-nowrap">
                     {accumulatedRewards} PDEX

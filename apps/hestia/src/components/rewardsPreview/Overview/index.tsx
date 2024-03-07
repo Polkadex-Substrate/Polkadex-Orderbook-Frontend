@@ -3,12 +3,7 @@
 import { Button, Token, Typography, tokenAppearance } from "@polkadex/ux";
 import Link from "next/link";
 import { forwardRef } from "react";
-import {
-  RiArrowLeftLine,
-  RiArrowUpSLine,
-  RiShareLine,
-  RiStarLine,
-} from "@remixicon/react";
+import { RiArrowLeftLine, RiShareLine, RiStarLine } from "@remixicon/react";
 import { Market } from "@orderbook/core/utils/orderbookService";
 import { useTraderMetrics } from "@orderbook/core/hooks";
 
@@ -70,41 +65,24 @@ export const Overview = forwardRef<HTMLDivElement, Props>(({ market }, ref) => {
         </div>
 
         <div className="flex items-center justify-between gap-8 p-4 flex-1 flex-wrap">
-          <OverviewCard label="TVL">
-            <div className="flex items-center gap-1">
-              <Typography.Text bold>$898.20k</Typography.Text>
-              <div className="flex items-center text-success-base">
-                <RiArrowUpSLine className="w-4 h-4" />
-                <Typography.Text size="xs" bold>
-                  1.01%
-                </Typography.Text>
-              </div>
-            </div>
+          <OverviewCard label="Current Epoch" loading={isLoading}>
+            {userMetrics?.currentEpoch || 0}
           </OverviewCard>
-          <OverviewCard label="Volume 24h">
-            <div className="flex items-center gap-1">
-              <Typography.Text>$559.83k</Typography.Text>
-              <div className="flex items-center text-success-base">
-                <RiArrowUpSLine className="w-4 h-4" />
-                <Typography.Text size="xs" bold>
-                  2.54%
-                </Typography.Text>
-              </div>
-            </div>
+          <OverviewCard label="Reward" loading={isLoading}>
+            <Typography.Text bold>
+              {userMetrics?.totalReward.toFixed(4) || 0}{" "}
+              {userMetrics?.token || "PDEX"}
+            </Typography.Text>
           </OverviewCard>
-          <OverviewCard label="24h fees">$479.59</OverviewCard>
+
           <div className="flex flex-col gap-1">
-            <OverviewCard
-              loading={isLoading}
-              side="horizontal"
-              label="Total Volume"
-            >
+            <OverviewCard loading={isLoading} side="horizontal" label="Volume">
               {`${userMetrics?.volumeGeneratedByUser.toFixed(4) || 0} ${market?.quoteAsset.ticker}`}
             </OverviewCard>
             <OverviewCard
               loading={isLoading}
               side="horizontal"
-              label="Total Fee Paid"
+              label="Fee Paid"
             >
               {`${userMetrics?.feePaidByUser.toFixed(4) || 0} ${market?.quoteAsset.ticker}`}
             </OverviewCard>

@@ -22,7 +22,7 @@ export const OverviewCard = ({
           : "flex-col gap-1"
       )}
     >
-      <Skeleton loading={loading} className="w-32 h-4 max-w-32">
+      <Skeleton loading={loading} className="flex-none w-32 h-4 max-w-32">
         {isString ? <Typography.Text>{children}</Typography.Text> : children}
       </Skeleton>
       <Typography.Text appearance="primary" size="xs">

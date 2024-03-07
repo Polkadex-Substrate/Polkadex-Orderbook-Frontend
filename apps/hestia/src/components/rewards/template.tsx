@@ -72,7 +72,7 @@ export function Template() {
     >
       <Header ref={headerRef} />
       <main
-        className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
+        className="flex flex-1 overflow-hidden border-x border-secondary-base w-full max-w-[1920px] m-auto"
         style={{
           paddingBottom: mobileView
             ? `${interactionHeight}px`
