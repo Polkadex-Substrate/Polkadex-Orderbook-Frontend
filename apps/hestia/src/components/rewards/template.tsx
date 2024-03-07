@@ -116,7 +116,7 @@ export function Template() {
                   {isLoading ? (
                     <Skeleton
                       loading
-                      className="h-[5.5rem] w-[33%] flex-none"
+                      className="h-[5.2rem] w-[32%] max-md:w-full flex-none"
                     />
                   ) : (
                     <Carousel
@@ -129,7 +129,7 @@ export function Template() {
                           return (
                             <Carousel.Item
                               key={value.epoch}
-                              className="max-md:px-3 max-md:py-4 md:p-5 basis-1/2 md:basis-1/3"
+                              className="max-md:px-3 max-md:py-4 md:p-5 basis-1/2 md:basis-1/3 max-md:!w-2 w-12"
                             >
                               <Tabs.Trigger
                                 value={value.epoch.toString()}
@@ -209,34 +209,3 @@ export function Template() {
     </div>
   );
 }
-
-// const fakeData = [
-//   {
-//     id: 2,
-//     from: "25 Jan",
-//     to: "21 Feb",
-//     epoch: "Ended",
-//     type: "Previous period",
-//   },
-//   {
-//     id: 1,
-//     from: "22 Feb",
-//     to: "20 Mar",
-//     epoch: "Ended",
-//     type: "Current period",
-//   },
-//   {
-//     id: 3,
-//     from: "21 Mar",
-//     to: "10 Apr",
-//     epoch: "20 days 2 hours 50 mins",
-//     type: "Next period",
-//   },
-//   {
-//     id: 4,
-//     from: "21 Mar",
-//     to: "10 Apr",
-//     epoch: "50 days 1 hours 10 mins",
-//     type: "Next period",
-//   },
-// ];
