@@ -43,7 +43,12 @@ export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
       }
     }, [responsiveState, responsiveView]);
 
-    if (isLoading) return <SkeletonCollection rows={4} />;
+    if (isLoading)
+      return (
+        <div className="[&_div]:flex-auto">
+          <SkeletonCollection className="h-16" rows={4} />
+        </div>
+      );
 
     if (markets?.length === 0)
       return (

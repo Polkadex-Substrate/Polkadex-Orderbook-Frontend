@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography, Tabs, Carousel, HoverCard } from "@polkadex/ux";
+import { Typography, Tabs, Carousel, HoverCard, Skeleton } from "@polkadex/ux";
 import { useResizeObserver, useWindowSize } from "usehooks-ts";
 import { Fragment, useMemo, useRef, useState } from "react";
 import {
@@ -9,6 +9,7 @@ import {
   RiInformation2Line,
 } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useEpochs } from "@orderbook/core/hooks";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
@@ -65,6 +66,9 @@ export function Template() {
   const mobileView = useMemo(() => width < 640, [width]);
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
+
+  const { isLoading } = useEpochs();
+
   return (
     <div
       className="flex flex-1 flex-col bg-backgroundBase h-full"
@@ -107,62 +111,69 @@ export function Template() {
                   </HoverCard.Content>
                 </HoverCard>
                 <Tabs.List className="w-full max-md:border-t border-primary">
-                  <Carousel
-                    options={{ align: "start" }}
-                    className="mx-8 max-md:w-full md:w-fit "
-                  >
-                    <Carousel.Content className="gap-2">
-                      {fakeData.map((value, i) => {
-                        const active = value.id.toString() === tab;
-                        return (
-                          <Carousel.Item
-                            key={value.id}
-                            className="max-md:px-3 max-md:py-4 md:p-5 basis-1/2 md:basis-1/3"
-                          >
-                            <Tabs.Trigger
-                              value={value.id.toString()}
+                  {isLoading ? (
+                    <Skeleton
+                      loading
+                      className="h-[5.5rem] w-[33%] flex-none"
+                    />
+                  ) : (
+                    <Carousel
+                      options={{ align: "start" }}
+                      className="mx-8 max-md:w-full md:w-fit "
+                    >
+                      <Carousel.Content className="gap-2">
+                        {fakeData.map((value, i) => {
+                          const active = value.id.toString() === tab;
+                          return (
+                            <Carousel.Item
                               key={value.id}
+                              className="max-md:px-3 max-md:py-4 md:p-5 basis-1/2 md:basis-1/3"
                             >
-                              <HoverCard defaultOpen={i === 2}>
-                                <HoverCard.Trigger>
-                                  <div className="flex flex-col items-start">
-                                    <Typography.Text
-                                      bold
-                                      appearance={
-                                        active ? "primary-base" : "primary"
-                                      }
-                                    >
-                                      {value.from} - {value.to}
-                                    </Typography.Text>
-                                    <Typography.Text appearance="secondary">
-                                      {value.type}
-                                    </Typography.Text>
-                                  </div>
-                                </HoverCard.Trigger>
-                                <HoverCard.Content side="top">
-                                  {value.epoch}
-                                </HoverCard.Content>
-                              </HoverCard>
-                            </Tabs.Trigger>
-                          </Carousel.Item>
-                        );
-                      })}
-                    </Carousel.Content>
-                    <Carousel.Previous
-                      className="h-full w-8 -left-8 border-x border-primary"
-                      variant="light"
-                      appearance="secondary"
-                    >
-                      <RiArrowLeftSLine className="w-full h-full" />
-                    </Carousel.Previous>
-                    <Carousel.Next
-                      className="h-full w-8 -right-8 border-x border-primary"
-                      variant="light"
-                      appearance="secondary"
-                    >
-                      <RiArrowRightSLine className="w-full h-full" />
-                    </Carousel.Next>
-                  </Carousel>
+                              <Tabs.Trigger
+                                value={value.id.toString()}
+                                key={value.id}
+                              >
+                                <HoverCard defaultOpen={i === 2}>
+                                  <HoverCard.Trigger>
+                                    <div className="flex flex-col items-start">
+                                      <Typography.Text
+                                        bold
+                                        appearance={
+                                          active ? "primary-base" : "primary"
+                                        }
+                                      >
+                                        {value.from} - {value.to}
+                                      </Typography.Text>
+                                      <Typography.Text appearance="secondary">
+                                        {value.type}
+                                      </Typography.Text>
+                                    </div>
+                                  </HoverCard.Trigger>
+                                  <HoverCard.Content side="top">
+                                    {value.epoch}
+                                  </HoverCard.Content>
+                                </HoverCard>
+                              </Tabs.Trigger>
+                            </Carousel.Item>
+                          );
+                        })}
+                      </Carousel.Content>
+                      <Carousel.Previous
+                        className="h-full w-8 -left-8 border-x border-primary"
+                        variant="light"
+                        appearance="secondary"
+                      >
+                        <RiArrowLeftSLine className="w-full h-full" />
+                      </Carousel.Previous>
+                      <Carousel.Next
+                        className="h-full w-8 -right-8 border-x border-primary"
+                        variant="light"
+                        appearance="secondary"
+                      >
+                        <RiArrowRightSLine className="w-full h-full" />
+                      </Carousel.Next>
+                    </Carousel>
+                  )}
                 </Tabs.List>
               </div>
             </div>
