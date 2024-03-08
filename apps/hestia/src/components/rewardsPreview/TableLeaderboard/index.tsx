@@ -7,6 +7,7 @@ import { LmpLeaderboard, useLeaderBoard } from "@orderbook/core/hooks";
 import {
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
@@ -34,6 +35,7 @@ export const TableLeaderboard = forwardRef<HTMLDivElement, Props>(
       data: accounts || [],
       columns: columns(),
       getCoreRowModel: getCoreRowModel(),
+      getSortedRowModel: getSortedRowModel(),
     });
 
     useEffect(() => {
