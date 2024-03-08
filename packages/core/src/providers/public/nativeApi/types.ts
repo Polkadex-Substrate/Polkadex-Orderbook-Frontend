@@ -27,6 +27,12 @@ export const orderbookTypes = {
     price: "String", // Price is defined in quote asset per unit base asset
     timestamp: "i64",
   },
+  CancelAllPayload: {
+    main: "AccountId",
+    proxy: "AccountId",
+    market: "String",
+    timestamp: "u64",
+  },
   order_id: "H256",
   TradingPair: {
     base_asset: "AssetId",
