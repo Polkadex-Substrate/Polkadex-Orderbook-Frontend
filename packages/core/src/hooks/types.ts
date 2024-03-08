@@ -21,7 +21,8 @@ export type LmpLeaderboard = {
   address: string;
   rewards: number;
   token: string;
-  score: string;
+  mmScore: number;
+  tradingScore: number;
 };
 
 export type ClaimRewardArgs = { market: string; epoch: number; reward: number };

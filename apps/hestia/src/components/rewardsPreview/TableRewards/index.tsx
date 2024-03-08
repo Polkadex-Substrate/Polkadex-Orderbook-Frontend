@@ -22,6 +22,7 @@ import {
 } from "@orderbook/core/hooks";
 import { secondsToHm } from "@orderbook/core/helpers";
 import { TIME_INTERVAL } from "@orderbook/core/constants";
+import { trimFloat } from "@polkadex/numericals";
 
 import { RewardsSkeleton } from "./loading";
 
@@ -131,7 +132,10 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                   className="h-4 w-28 flex-none"
                 >
                   <Typography.Text bold className="whitespace-nowrap">
-                    {userMetrics?.tradingScore || 0}
+                    {trimFloat({
+                      value: userMetrics?.tradingScore || 0,
+                      digitsAfterDecimal: 6,
+                    })}
                   </Typography.Text>
                 </Skeleton>
               </div>

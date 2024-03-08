@@ -10,24 +10,31 @@ export const useLeaderBoard = (market: string) => {
     queryKey: QUERY_KEYS.lmpLeaderboard(market),
     queryFn: async () => {
       if (!api?.isConnected || !lmp) return;
-      const currentEpoch = (await lmp.queryCurrentEpoch()) - 1;
-      const accounts = await lmp.getTopAccounts(currentEpoch, market);
+      const currentEpoch = await lmp.queryCurrentEpoch();
+      const previousEpoch = Math.max(currentEpoch - 1, 0); // Must be non-zero always
+
+      const accounts = await lmp.getTopAccounts(previousEpoch, market);
 
       const res = accounts.map(async (address, i): Promise<LmpLeaderboard> => {
         const reward = await lmp.getEligibleRewards(
-          Math.max(0, currentEpoch), // Must be non-zero always
+          previousEpoch,
           market,
           address
         );
         const totalReward = reward.marketMaking + reward.trading;
 
-        // TODO: Add score later
+        const traderMetrics = await lmp.getTraderMetrics(
+          previousEpoch,
+          market,
+          address
+        );
+
         return {
           rank: i + 1,
           address,
           rewards: totalReward,
-          score: "----",
           token: "PDEX",
+          ...traderMetrics,
         };
       });
 

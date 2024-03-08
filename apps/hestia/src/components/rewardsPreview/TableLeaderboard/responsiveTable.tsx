@@ -1,6 +1,7 @@
 import { LmpLeaderboard } from "@orderbook/core/hooks";
 import { Drawer, Typography, truncateString } from "@polkadex/ux";
 import { Dispatch, SetStateAction } from "react";
+import { trimFloat } from "@polkadex/numericals";
 
 import { ResponsiveCard } from "@/components/ui/ReadyToUse";
 
@@ -29,9 +30,24 @@ export const ResponsiveTable = ({
           {truncateString(data.address)}
         </ResponsiveCard>
         <ResponsiveCard label="Rewards">
-          {data.rewards} {data.token}
+          {trimFloat({
+            value: data.rewards,
+            digitsAfterDecimal: 4,
+          })}{" "}
+          {data.token}
         </ResponsiveCard>
-        <ResponsiveCard label="Score">{data.score}</ResponsiveCard>
+        <ResponsiveCard label="MM Score">
+          {trimFloat({
+            value: data.mmScore,
+            digitsAfterDecimal: 4,
+          })}
+        </ResponsiveCard>
+        <ResponsiveCard label="Trading Score">
+          {trimFloat({
+            value: data.tradingScore,
+            digitsAfterDecimal: 4,
+          })}
+        </ResponsiveCard>
       </Drawer.Content>
     </Drawer>
   );

@@ -6,6 +6,7 @@ import { forwardRef } from "react";
 import { RiArrowLeftLine, RiShareLine, RiStarLine } from "@remixicon/react";
 import { Market } from "@orderbook/core/utils/orderbookService";
 import { useTraderMetrics } from "@orderbook/core/hooks";
+import { trimFloat } from "@polkadex/numericals";
 
 import { OverviewCard } from "./overviewCard";
 import { MarketSkeleton } from "./loading";
@@ -71,10 +72,10 @@ export const Overview = forwardRef<HTMLDivElement, Props>(({ market }, ref) => {
             </Typography.Text>
           </OverviewCard>
           <OverviewCard loading={isLoading} label="Volume Generated">
-            {`${userMetrics?.volumeGeneratedByUser || 0} ${market?.quoteAsset.ticker}`}
+            {`${trimFloat({ value: userMetrics?.volumeGeneratedByUser || 0, digitsAfterDecimal: 4 })} ${market?.quoteAsset.ticker}`}
           </OverviewCard>
           <OverviewCard loading={isLoading} label="Fee Paid">
-            {`${userMetrics?.feePaidByUser || 0} ${market?.quoteAsset.ticker}`}
+            {`${trimFloat({ value: userMetrics?.feePaidByUser || 0, digitsAfterDecimal: 4 })} ${market?.quoteAsset.ticker}`}
           </OverviewCard>
         </div>
       </div>
