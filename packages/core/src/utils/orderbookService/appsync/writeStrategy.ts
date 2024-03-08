@@ -4,6 +4,7 @@ import { signAndSendExtrinsic } from "@orderbook/core/helpers";
 import { UNIT_BN } from "@orderbook/core/constants";
 
 import {
+  Cancel_allMutation,
   Cancel_orderMutation,
   Place_orderMutation,
   WithdrawMutation,
@@ -105,6 +106,31 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
       }
     } else {
       throw new Error("withdraw failed: No valid response from server");
+    }
+  }
+
+  async cancelAll(data: ExecuteArgs): Promise<void> {
+    const payload = JSON.stringify({ CancelAll: data.payload });
+    const result = await sendQueryToAppSync<GraphQLResult<Cancel_allMutation>>({
+      query: mutation.cancel_all,
+      variables: { input: { payload } },
+      token: data.token,
+    });
+    if (result.errors && result.errors.length > 0) {
+      let concatError = "";
+      result.errors.forEach((error) => {
+        concatError += error.message;
+        concatError += ":";
+      });
+      throw new Error(concatError);
+    }
+    if (result?.data?.cancel_all) {
+      const resp: UserActionLambdaResp = JSON.parse(result.data.cancel_all);
+      if (!resp.is_success) {
+        throw new Error(resp.body);
+      }
+    } else {
+      throw new Error("cancelAll failed: No valid response from server");
     }
   }
 
