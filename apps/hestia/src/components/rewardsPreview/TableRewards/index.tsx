@@ -10,8 +10,7 @@ import {
   Typography,
   truncateString,
 } from "@polkadex/ux";
-import { useWindowSize } from "usehooks-ts";
-import { forwardRef, useEffect, useMemo, useState } from "react";
+import { forwardRef, useMemo } from "react";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import classNames from "classnames";
@@ -55,10 +54,6 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
       return rewards?.reduce((a, b) => a + b).toFixed(4);
     }, [claimableRewards]);
 
-    const [state, setState] = useState(null);
-    const { width } = useWindowSize();
-    const responsiveView = useMemo(() => width <= 1000, [width]);
-
     const filledPercentage = useMemo(() => {
       const timeToNextEpoch = (userMetrics?.blocksToNextEpoch || 0) * 12;
       const epochDuration = TIME_INTERVAL.epochDuration;
@@ -68,10 +63,6 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
 
       return filledPercentage.toFixed(2);
     }, [userMetrics?.blocksToNextEpoch]);
-
-    useEffect(() => {
-      if (!responsiveView && !!state) setState(null);
-    }, [responsiveView, state]);
 
     return (
       <div className="flex-1 flex flex-col border-b border-secondary-base">

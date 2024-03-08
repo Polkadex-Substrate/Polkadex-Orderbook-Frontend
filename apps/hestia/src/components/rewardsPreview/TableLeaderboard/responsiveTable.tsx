@@ -39,13 +39,13 @@ export const ResponsiveTable = ({
         <ResponsiveCard label="MM Score">
           {trimFloat({
             value: data.mmScore,
-            digitsAfterDecimal: 4,
+            digitsAfterDecimal: 6,
           })}
         </ResponsiveCard>
         <ResponsiveCard label="Trading Score">
           {trimFloat({
             value: data.tradingScore,
-            digitsAfterDecimal: 4,
+            digitsAfterDecimal: 6,
           })}
         </ResponsiveCard>
       </Drawer.Content>
