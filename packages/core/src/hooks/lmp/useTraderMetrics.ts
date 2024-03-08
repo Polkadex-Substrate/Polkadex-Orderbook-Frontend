@@ -28,13 +28,6 @@ export const useTraderMetrics = (market: string) => {
         mainAddress
       );
 
-      const reward = await lmp.getEligibleRewards(
-        currentEpoch,
-        market,
-        mainAddress
-      );
-      const totalReward = reward.marketMaking + reward.trading;
-
       const volumeGeneratedByUser = await lmp.getVolumeGeneratedByUserPerEpoch(
         currentEpoch,
         market,
@@ -49,10 +42,7 @@ export const useTraderMetrics = (market: string) => {
 
       return {
         ...traderMetrics,
-        ...reward,
         currentEpoch,
-        totalReward,
-        token: "PDEX",
         volumeGeneratedByUser,
         feePaidByUser,
         blocksToNextEpoch,
