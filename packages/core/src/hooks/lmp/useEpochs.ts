@@ -3,6 +3,8 @@ import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
 import { QUERY_KEYS } from "../..";
 
+const STATUS = ["Ended", "Ongoing", "Upcoming"] as const;
+
 export const useEpochs = () => {
   const { api, lmp } = useNativeApi();
   const enabled = !!api && api?.isConnected && !!lmp;
@@ -25,17 +27,14 @@ export const useEpochs = () => {
       const allEpochs = prevEpochs.concat([currentEpoch, nextEpoch]);
 
       const res = allEpochs.map((epoch) => {
-        let status: string;
+        let status: (typeof STATUS)[number];
 
         if (epoch < currentEpoch) status = "Ended";
         else if (epoch === currentEpoch) status = "Ongoing";
         else status = "Upcoming";
 
-        // TODO: Fix from and to values
         return {
           epoch,
-          from: "1 Mar",
-          to: "28 Mar",
           status,
           duration: "28 days",
         };
