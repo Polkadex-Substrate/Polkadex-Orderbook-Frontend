@@ -84,9 +84,10 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
   }
 
   async withdraw(data: WithdrawArgs): Promise<void> {
+    const payload = JSON.stringify({ Withdraw: data.payload });
     const result = await sendQueryToAppSync<GraphQLResult<WithdrawMutation>>({
       query: mutation.withdraw,
-      variables: { input: { payload: data.payload } },
+      variables: { input: { payload } },
       token: data.address,
     });
     if (result.errors && result.errors.length > 0) {
