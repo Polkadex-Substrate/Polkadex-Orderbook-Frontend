@@ -37,7 +37,7 @@ export const columns = () => [
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Maker Score
+        Market Making Score
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
@@ -56,7 +56,7 @@ export const columns = () => [
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Trader Score
+        Trading Score
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
