@@ -6,6 +6,7 @@ import {
   useCancelOrder,
   useOpenOrders,
   CancelOrderArgs,
+  useCancelAllOrders,
 } from "@orderbook/core/hooks";
 import { GenericMessage, Loading, Modal, Table } from "@polkadex/ux";
 import {
@@ -41,6 +42,8 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     const { width } = useWindowSize();
     const { selectedAccount } = useConnectWalletProvider();
     const { mutateAsync: cancelOrder } = useCancelOrder();
+    const { mutateAsync: onCancelAllOrders } = useCancelAllOrders();
+
     const { isLoading, openOrders: allOpenOrders } = useOpenOrders();
     const [showPassword, setShowPassword] = useState(false);
     const [orderPayload, setOrderPayload] = useState<CancelOrderArgs | null>(
@@ -105,7 +108,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
       getFilteredRowModel: getFilteredRowModel(),
       getFacetedRowModel: getFacetedRowModel(),
       getFacetedUniqueValues: getFacetedUniqueValues(),
-      columns: columns({ onCancelOrder }),
+      columns: columns({ onCancelOrder, onCancelAllOrders }),
       getCoreRowModel: getCoreRowModel(),
     });
 

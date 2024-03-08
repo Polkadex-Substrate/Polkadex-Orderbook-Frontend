@@ -8,6 +8,7 @@ import { CancelOrderAction } from "./cancelOrderAction";
 
 import { FilledCard, ResponsiveCard } from "@/components/ui/ReadyToUse";
 import { formatedDate } from "@/helpers";
+
 export const ResponsiveTable = ({
   open,
   onOpenChange,
@@ -78,8 +79,8 @@ export const ResponsiveTable = ({
       <Drawer.Footer className="p-4">
         <CancelOrderAction
           responsive
-          onCancel={() =>
-            onCancelOrder({
+          onCancel={async () =>
+            await onCancelOrder({
               orderId: orderId,
               base: market.baseAsset.id,
               quote: market.quoteAsset.id,

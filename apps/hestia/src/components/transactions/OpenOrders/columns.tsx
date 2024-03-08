@@ -9,20 +9,23 @@ import { CancelOrderAction } from "./cancelOrderAction";
 
 import { FilledCard } from "@/components/ui/ReadyToUse";
 import { formatedDate } from "@/helpers";
+import { CancelAllOrdersAction } from "@/components/ui/ReadyToUse/cancelAllOrdersAction";
 
 const columnHelper = createColumnHelper<Order>();
 
 export const columns = ({
   onCancelOrder,
+  onCancelAllOrders,
 }: {
-  onCancelOrder: (value: CancelOrderArgs) => void;
+  onCancelOrder: (value: CancelOrderArgs) => Promise<void>;
+  onCancelAllOrders: (props: { market: string }) => Promise<void>;
 }) => [
   columnHelper.accessor((row) => row, {
     id: "id",
     cell: (e) => (
       <Copy value={e.getValue().orderId}>
         <div className="flex items-center gap-2">
-          <RiFileCopyLine className="w-4 h-4 text-actionInput" />
+          <RiFileCopyLine className="w-2.5 h-2.5 text-actionInput" />
           <Typography.Text size="xs">
             {truncateString(e.getValue().orderId, 4)}
           </Typography.Text>
@@ -174,8 +177,8 @@ export const columns = ({
     cell: (e) => {
       return (
         <CancelOrderAction
-          onCancel={() =>
-            onCancelOrder({
+          onCancel={async () =>
+            await onCancelOrder({
               orderId: e.getValue().orderId,
               base: e.getValue().market.baseAsset.id,
               quote: e.getValue().market.quoteAsset.id,
@@ -184,7 +187,19 @@ export const columns = ({
         />
       );
     },
-    header: () => null,
+    header: (e) => {
+      const marketMap = e.table
+        .getRowModel()
+        .rows.map((e) => e.original.market);
+      const markets = new Set(marketMap);
+      return (
+        <CancelAllOrdersAction
+          markets={Array.from(markets)}
+          orders={marketMap.length}
+          onCancel={async (market) => await onCancelAllOrders({ market })}
+        />
+      );
+    },
     footer: (e) => e.column.id,
   }),
 ];

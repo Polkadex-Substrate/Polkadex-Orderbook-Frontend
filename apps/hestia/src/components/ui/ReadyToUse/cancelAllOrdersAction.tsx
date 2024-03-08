@@ -18,7 +18,7 @@ export const CancelAllOrdersAction = ({
         <Typography.Text appearance="danger" size="xs">
           Cancell all
         </Typography.Text>
-        <Dropdown.Icon className="text-danger-base" />
+        <Dropdown.Icon className="text-danger-base w-3 h-3" />
       </Dropdown.Trigger>
       <Dropdown.Content>
         {markets?.map((e) => (
