@@ -58,7 +58,10 @@ export const OpenOrdersTable = ({ filters }: { filters: Ifilters }) => {
 
   const table = useReactTable({
     data: openOrders,
-    columns: columns({ onCancelOrder }),
+    columns: columns({
+      onCancelOrder,
+      onCancelAllOrders: (e) => window.alert(`Cancel:${e}`),
+    }),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });

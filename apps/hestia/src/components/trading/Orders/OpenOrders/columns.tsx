@@ -4,6 +4,7 @@ import { Tooltip, Typography } from "@polkadex/ux";
 import { CancelOrderArgs } from "@orderbook/core/hooks";
 
 import { CancelOrderAction } from "./cancelOrderAction";
+import { CancelAllOrdersAction } from "./cancelAllOrdersAction";
 
 import { formatedDate } from "@/helpers";
 import { FilledCard } from "@/components/ui/ReadyToUse";
@@ -12,8 +13,10 @@ const openOrderColumnHelper = createColumnHelper<Order>();
 
 export const columns = ({
   onCancelOrder,
+  onCancelAllOrders,
 }: {
   onCancelOrder: (value: CancelOrderArgs) => void;
+  onCancelAllOrders: (market: string) => void;
 }) => [
   openOrderColumnHelper.accessor((row) => row, {
     id: "date",
@@ -141,7 +144,19 @@ export const columns = ({
         />
       );
     },
-    header: () => null,
+    header: (e) => {
+      const marketMap = e.table
+        .getRowModel()
+        .rows.map((e) => e.original.market);
+      const markets = new Set(marketMap);
+      return (
+        <CancelAllOrdersAction
+          markets={Array.from(markets)}
+          orders={marketMap.length}
+          onCancel={(id) => onCancelAllOrders(id)}
+        />
+      );
+    },
     footer: (e) => e.column.id,
   }),
 ];
