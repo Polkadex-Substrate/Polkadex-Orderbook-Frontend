@@ -4079,10 +4079,10 @@
   dependencies:
     bignumber "^1.1.0"
 
-"@polkadex/polkadex-api@^3.0.8":
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/@polkadex/polkadex-api/-/polkadex-api-3.0.8.tgz#794fa55bffa091077214030bd86188cfb9174f5a"
-  integrity sha512-qdZ2Ltl+waI6N9AuwhvxDHGAH9E0jic7zfL7fyxSVT0qQaMqPB+Sem2avcAzlEm0am83YY6RCjJpTNprC9OVTQ==
+"@polkadex/polkadex-api@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/polkadex-api/-/polkadex-api-3.1.0.tgz#cbe2af5f82ab8ee9500416e5ad340abb2695d3ff"
+  integrity sha512-0iXRHS/QfxB7tTR0mMVpG6pfPtxWWTJ3hRR/o11+X2+fA/Jgq+/VMr18OnmlF5gNc0NUbucPwxCQKevfo6fQcQ==
   dependencies:
     "@polkadex/numericals" "*"
     "@polkadot/api" latest

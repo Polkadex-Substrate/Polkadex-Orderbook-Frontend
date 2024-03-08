@@ -71,10 +71,10 @@ export const Overview = forwardRef<HTMLDivElement, Props>(({ market }, ref) => {
             </Typography.Text>
           </OverviewCard>
           <OverviewCard loading={isLoading} label="Volume Generated">
-            {`${userMetrics?.volumeGeneratedByUser.toFixed(4) || 0} ${market?.quoteAsset.ticker}`}
+            {`${userMetrics?.volumeGeneratedByUser || 0} ${market?.quoteAsset.ticker}`}
           </OverviewCard>
           <OverviewCard loading={isLoading} label="Fee Paid">
-            {`${userMetrics?.feePaidByUser.toFixed(4) || 0} ${market?.quoteAsset.ticker}`}
+            {`${userMetrics?.feePaidByUser || 0} ${market?.quoteAsset.ticker}`}
           </OverviewCard>
         </div>
       </div>
