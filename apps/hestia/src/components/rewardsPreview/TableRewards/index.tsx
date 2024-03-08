@@ -1,29 +1,20 @@
 "use client";
 
 import { RiFileCopyLine, RiHandCoinLine, RiSortAsc } from "@remixicon/react";
-import {
-  Button,
-  Copy,
-  Icon,
-  Skeleton,
-  Spinner,
-  Typography,
-  truncateString,
-} from "@polkadex/ux";
+import { Copy, Icon, Skeleton, Typography, truncateString } from "@polkadex/ux";
 import { forwardRef, useMemo } from "react";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
-import classNames from "classnames";
 import {
   useClaimReward,
   useClaimableRewards,
   useTraderMetrics,
 } from "@orderbook/core/hooks";
-import { secondsToHm } from "@orderbook/core/helpers";
-import { TIME_INTERVAL } from "@orderbook/core/constants";
 import { trimFloat } from "@polkadex/numericals";
 
 import { RewardsSkeleton } from "./loading";
+import { ClaimReward } from "./claimReward";
+import { ProgressEpoch } from "./progressEpoch";
 
 import { Icons } from "@/components/ui";
 
@@ -53,16 +44,6 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
       if (rewards.length === 0) return 0;
       return rewards?.reduce((a, b) => a + b).toFixed(4);
     }, [claimableRewards]);
-
-    const filledPercentage = useMemo(() => {
-      const timeToNextEpoch = (userMetrics?.blocksToNextEpoch || 0) * 12;
-      const epochDuration = TIME_INTERVAL.epochDuration;
-
-      const unfilledPercentage = (timeToNextEpoch / epochDuration) * 100;
-      const filledPercentage = 100 - unfilledPercentage;
-
-      return filledPercentage.toFixed(2);
-    }, [userMetrics?.blocksToNextEpoch]);
 
     return (
       <div className="flex-1 flex flex-col border-b border-secondary-base">
@@ -164,106 +145,21 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
             <div className="flex flex-col gap-4">
-              <div className={classNames("flex items-center justify-between")}>
-                <div className="flex items-center gap-4 flex-1">
-                  <div className="flex flex-col items-center justify-center border border-primary rounded-md px-2 py-3 min-w-16">
-                    <Typography.Text bold size="md">
-                      {userMetrics?.currentEpoch}
-                    </Typography.Text>
-                    <Typography.Text size="xs" appearance="primary">
-                      Epoch
-                    </Typography.Text>
-                  </div>
-                  <div className="flex flex-1 flex-col">
-                    <Typography.Text bold size="md">
-                      ---------------
-                    </Typography.Text>
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center justify-between">
-                        <Typography.Text size="xs" appearance="primary">
-                          {filledPercentage}%
-                        </Typography.Text>
-                        <Typography.Text size="xs" appearance="primary">
-                          Claim after:{" "}
-                          {secondsToHm(
-                            (userMetrics?.blocksToNextEpoch || 0) * 12
-                          )}
-                        </Typography.Text>
-                      </div>
-                      <div className="w-full h-2 bg-level-2 rounded-full relative overflow-hidden">
-                        <div
-                          className="bg-primary-base absolute inset-0"
-                          style={{ width: `${filledPercentage}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ProgressEpoch
+                blocksToNextEpoch={userMetrics?.blocksToNextEpoch || 0}
+                currentEpoch={userMetrics?.currentEpoch || 0}
+              />
 
               {claimableRewards?.map((value) => {
-                const disabled =
-                  claimRewardStatus === "loading" &&
-                  !loadingEpochs.includes(value.epoch);
-                const loading = loadingEpochs.includes(value.epoch);
-
-                const hasClaimed = value.isClaimed;
-                const readyToClaim = !hasClaimed;
-
-                const status = hasClaimed ? "Claimed" : "Completed";
-
                 return (
-                  <div
-                    className={classNames(
-                      "flex items-center justify-between",
-                      hasClaimed && "opacity-50"
-                    )}
+                  <ClaimReward
                     key={value.epoch}
-                  >
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="flex flex-col items-center justify-center border border-primary rounded-md px-2 py-3 min-w-16">
-                        <Typography.Text bold size="md">
-                          {value.epoch}
-                        </Typography.Text>
-                        <Typography.Text size="xs" appearance="primary">
-                          Epoch
-                        </Typography.Text>
-                      </div>
-                      <div className="flex flex-1 flex-col">
-                        <Typography.Text bold size="md">
-                          {value.totalReward.toFixed(4)} {value.token}
-                        </Typography.Text>
-                        <div className="flex flex-col gap-1">
-                          <div className="flex items-center justify-between">
-                            <Typography.Text size="xs" appearance="primary">
-                              {status}
-                            </Typography.Text>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {readyToClaim && (
-                      <Button.Solid
-                        onClick={() =>
-                          onClaimReward({
-                            epoch: value.epoch,
-                            market,
-                            reward: value.totalReward,
-                          })
-                        }
-                        size="sm"
-                        disabled={disabled || loading}
-                      >
-                        {loading ? (
-                          <div className="px-9">
-                            <Spinner.Keyboard className="w-4 h-4" />
-                          </div>
-                        ) : (
-                          "Claim rewards"
-                        )}
-                      </Button.Solid>
-                    )}
-                  </div>
+                    value={value}
+                    market={market}
+                    claimRewardStatus={claimRewardStatus}
+                    loadingEpochs={loadingEpochs}
+                    onClaimReward={onClaimReward}
+                  />
                 );
               })}
             </div>
