@@ -3,7 +3,7 @@
 import { Button, Typography } from "@polkadex/ux";
 import Image from "next/image";
 
-import OrderbookImage from "../../../public/img/obHestia.svg";
+import OrderbookImage from "../../../public/img/obHestia.webp";
 
 export const CallToAction = () => {
   return (
@@ -27,6 +27,7 @@ export const CallToAction = () => {
       <Image
         alt="Orderbook preview"
         src={OrderbookImage}
+        placeholder="blur"
         style={{
           width: "100%",
           height: "100%",
