@@ -7,7 +7,7 @@ export const CancelAllOrdersAction = ({
   markets,
   orders,
 }: {
-  onCancel: (id: string) => void;
+  onCancel: (id: string) => Promise<void>;
   markets: MarketBase[];
   orders: number;
 }) => {
@@ -39,8 +39,8 @@ export const CancelAllOrdersAction = ({
                 <PopConfirm.Close>No</PopConfirm.Close>
                 <PopConfirm.Button
                   appearance="danger"
-                  onClick={() => {
-                    onCancel(e.id);
+                  onClick={async () => {
+                    await onCancel(e.id);
                     setState(false);
                   }}
                 >
