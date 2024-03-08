@@ -124,6 +124,7 @@ export type DepositArgs = {
 export interface OrderbookOperationStrategy extends BaseStrategy {
   placeOrder: (args: ExecuteArgs) => Promise<void>;
   cancelOrder: (args: ExecuteArgs) => Promise<void>;
+  cancelAll: (args: ExecuteArgs) => Promise<void>;
   withdraw: (args: WithdrawArgs) => Promise<void>;
   deposit: (args: DepositArgs) => Promise<void>;
 }

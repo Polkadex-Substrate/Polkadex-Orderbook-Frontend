@@ -8,7 +8,6 @@ export const CancelAllOrdersAction = ({
   orders,
 }: {
   onCancel: (id: string) => void;
-  responsive?: boolean;
   markets: MarketBase[];
   orders: number;
 }) => {

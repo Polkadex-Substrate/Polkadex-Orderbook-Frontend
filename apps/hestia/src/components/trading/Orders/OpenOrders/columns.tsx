@@ -16,7 +16,7 @@ export const columns = ({
   onCancelAllOrders,
 }: {
   onCancelOrder: (value: CancelOrderArgs) => void;
-  onCancelAllOrders: (market: string) => void;
+  onCancelAllOrders: (props: { market: string }) => void;
 }) => [
   openOrderColumnHelper.accessor((row) => row, {
     id: "date",
@@ -153,7 +153,7 @@ export const columns = ({
         <CancelAllOrdersAction
           markets={Array.from(markets)}
           orders={marketMap.length}
-          onCancel={(id) => onCancelAllOrders(id)}
+          onCancel={(market) => onCancelAllOrders({ market })}
         />
       );
     },

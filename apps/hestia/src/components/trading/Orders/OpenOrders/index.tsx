@@ -12,6 +12,7 @@ import {
   useCancelOrder,
   useOpenOrders,
   CancelOrderArgs,
+  useCancelAllOrders,
 } from "@orderbook/core/hooks";
 import { GenericMessage, Modal, Table as PolkadexTable } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
@@ -35,6 +36,7 @@ export const OpenOrdersTable = ({ filters }: { filters: Ifilters }) => {
   const { mutateAsync: cancelOrder } = useCancelOrder();
   const { selectedAccount } = useConnectWalletProvider();
   const { isLoading, openOrders } = useOpenOrders(filters);
+  const { mutateAsync: onCancelAllOrders } = useCancelAllOrders();
   const { width } = useWindowSize();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -60,7 +62,7 @@ export const OpenOrdersTable = ({ filters }: { filters: Ifilters }) => {
     data: openOrders,
     columns: columns({
       onCancelOrder,
-      onCancelAllOrders: (e) => window.alert(`Cancel:${e}`),
+      onCancelAllOrders,
     }),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
