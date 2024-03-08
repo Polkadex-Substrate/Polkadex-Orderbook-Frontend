@@ -6,7 +6,7 @@ export const AccountCard = ({ address }: { address: string }) => {
       <div className="flex place-items-center">
         <Icons.Avatar className="w-6 h-6 text-red-500" />
       </div>
-      <Typography.Text> {truncateString(address, 5)}</Typography.Text>
+      <Typography.Text size="xs"> {truncateString(address, 6)}</Typography.Text>
     </div>
   );
 };

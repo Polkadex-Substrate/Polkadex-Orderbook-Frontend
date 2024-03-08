@@ -54,12 +54,12 @@ export const TableLeaderboard = forwardRef<HTMLDivElement, Props>(
         />
         <div className="flex h-full min-h-[440px] flex-col justify-between border-b border-secondary-base">
           {isLoading ? (
-            <Skeleton loading className="min-w-[31rem]" />
+            <Skeleton loading className="min-w-[31.5rem]" />
           ) : !accounts || accounts?.length === 0 ? (
             <GenericMessage
               title="No results found"
               illustration="NoResultFound"
-              className="bg-level-1 border-b border-b-primary min-w-[31rem]"
+              className="bg-level-1 border-b border-b-primary min-w-[31.5rem]"
               imageProps={{
                 className: "w-16 self-center",
               }}

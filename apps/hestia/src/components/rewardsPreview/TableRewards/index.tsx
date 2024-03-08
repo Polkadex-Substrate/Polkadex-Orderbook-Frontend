@@ -150,14 +150,14 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                   appearance="primary"
                   className="whitespace-nowrap"
                 >
-                  Total rewards
+                  Total rewards (PDEX)
                 </Typography.Text>
                 <Skeleton
                   loading={isRewardsLoading}
                   className="h-4 w-28 flex-none"
                 >
                   <Typography.Text bold className="whitespace-nowrap">
-                    {accumulatedRewards} PDEX
+                    {accumulatedRewards}
                   </Typography.Text>
                 </Skeleton>
               </div>

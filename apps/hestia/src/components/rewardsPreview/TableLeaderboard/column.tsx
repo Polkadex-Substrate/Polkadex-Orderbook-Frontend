@@ -11,7 +11,7 @@ export const columns = () => [
   columnHelper.accessor((row) => row.rank, {
     id: "id",
     cell: (e) => {
-      return <Typography.Text size="sm">{e.getValue()}</Typography.Text>;
+      return <Typography.Text size="xs">{e.getValue()}</Typography.Text>;
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
@@ -36,7 +36,7 @@ export const columns = () => [
     id: "rewards",
     cell: (e) => {
       return (
-        <Typography.Text size="sm">
+        <Typography.Text size="xs">
           {trimFloat({
             value: e.getValue(),
             digitsAfterDecimal: 4,
@@ -55,7 +55,7 @@ export const columns = () => [
     id: "mmScore",
     cell: (e) => {
       return (
-        <Typography.Text size="sm">
+        <Typography.Text size="xs">
           {trimFloat({
             value: e.getValue(),
             digitsAfterDecimal: 4,
@@ -74,7 +74,7 @@ export const columns = () => [
     id: "tradingScore",
     cell: (e) => {
       return (
-        <Typography.Text size="sm">
+        <Typography.Text size="xs">
           {trimFloat({
             value: e.getValue(),
             digitsAfterDecimal: 6,
