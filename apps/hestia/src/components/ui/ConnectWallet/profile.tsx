@@ -1,6 +1,5 @@
 import {
   RiAddLine,
-  RiAlertLine,
   RiArrowDownSLine,
   RiArrowLeftRightLine,
   RiInformationLine,
@@ -142,105 +141,87 @@ export const Profile = ({
           Trading account
         </Typography.Text>
         {tradingWalletPresent ? (
-          <div className="flex flex-col gap-2 group">
-            <div className="flex gap-3">
-              <Button.Icon
-                onClick={onActions}
-                variant="outline"
-                className="h-auto bg-level-3"
+          <div className="flex gap-3">
+            <Button.Icon
+              onClick={onActions}
+              variant="outline"
+              className="h-auto bg-level-3"
+            >
+              <RiAddLine className="w-6 h-6" />
+            </Button.Icon>
+            <Dropdown open={enableDropdown && state} onOpenChange={setState}>
+              <Dropdown.Trigger
+                asChild
+                className="flex justify-between items-center gap-2 flex-1 py-3 [&[data-state=open]>div>svg]:rotate-180"
               >
-                <RiAddLine className="w-6 h-6" />
-              </Button.Icon>
-              <Dropdown open={enableDropdown && state} onOpenChange={setState}>
-                <Dropdown.Trigger
-                  asChild
-                  className="flex justify-between items-center gap-2 flex-1 py-3 [&[data-state=open]>div>svg]:rotate-180"
-                >
-                  <div>
-                    <AccountCard
-                      name={tradeAccount?.meta?.name}
-                      address={tradeAccount?.address as string}
-                      withIcon={false}
-                      hoverable={false}
-                    >
-                      {enableDropdown && (
-                        <RiArrowDownSLine className="h-3 w-3 transition-transform duration-300 text-primary" />
-                      )}
-                    </AccountCard>
-                  </div>
-                </Dropdown.Trigger>
-                <Dropdown.Content className="min-w-[20rem]">
-                  <div className="flex flex-col gap-0 p-2 rounded-md">
-                    <Typography.Text appearance="secondary" size="sm">
-                      Available trading account(s)
-                    </Typography.Text>
-                    <div
-                      className="flex flex-col max-h-[15rem] overflow-hidden hover:overflow-auto"
-                      style={{ scrollbarGutter: "stable" }}
-                    >
-                      {linkedBrowserAccounts?.map((v) => (
-                        <TradingAccountCard
-                          key={v.address}
-                          account={v}
-                          onExportBrowserAccount={onExportBrowserAccount}
-                          onExportBrowserAccountCallback={
-                            onExportBrowserAccountCallback
-                          }
-                          onRemoveCallback={onRemoveCallback}
-                          onSelectTradingAccount={onSelectTradingAccount}
-                          onSetState={setState}
-                          onTempBrowserAccount={onTempBrowserAccount}
-                        />
-                      ))}
-
-                      {otherBrowserAccounts?.length > 0 && (
-                        <div className="flex items-center gap-2 mr-2">
-                          <Separator.Horizontal className="bg-level-5" />
-                          <Typography.Text
-                            appearance="secondary"
-                            size="xs"
-                            className="whitespace-nowrap"
-                          >
-                            from other funding account(s)
-                          </Typography.Text>
-                        </div>
-                      )}
-
-                      {otherBrowserAccounts?.map((v) => (
-                        <TradingAccountCard
-                          key={v.address}
-                          account={v}
-                          onExportBrowserAccount={onExportBrowserAccount}
-                          onExportBrowserAccountCallback={
-                            onExportBrowserAccountCallback
-                          }
-                          onRemoveCallback={onRemoveCallback}
-                          onSelectTradingAccount={onSelectTradingAccount}
-                          onSetState={setState}
-                          onTempBrowserAccount={onTempBrowserAccount}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </Dropdown.Content>
-              </Dropdown>
-            </div>
-            <div className="invisible h-0 group-hover:visible group-hover:h-auto">
-              <div className="flex gap-4 bg-attention-base/10 p-3 rounded-md">
-                <div className="mt-1">
-                  <RiAlertLine className="text-attention-base w-4 h-4" />
+                <div>
+                  <AccountCard
+                    name={tradeAccount?.meta?.name}
+                    address={tradeAccount?.address as string}
+                    withIcon={false}
+                    hoverable={false}
+                  >
+                    {enableDropdown && (
+                      <RiArrowDownSLine className="h-3 w-3 transition-transform duration-300 text-primary" />
+                    )}
+                  </AccountCard>
                 </div>
-                <div className="flex flex-col gap-1">
-                  <Typography.Text size="sm" bold appearance="attention">
-                    Warning!
+              </Dropdown.Trigger>
+              <Dropdown.Content className="min-w-[20rem]">
+                <div className="flex flex-col gap-0 p-2 rounded-md">
+                  <Typography.Text appearance="secondary" size="sm">
+                    Available trading account(s)
                   </Typography.Text>
-                  <Typography.Paragraph size="sm">
-                    Please don&apos;t transfer tokens directly to the trading
-                    account, as this will result in the loss of your tokens.
-                  </Typography.Paragraph>
+                  <div
+                    className="flex flex-col max-h-[15rem] overflow-hidden hover:overflow-auto"
+                    style={{ scrollbarGutter: "stable" }}
+                  >
+                    {linkedBrowserAccounts?.map((v) => (
+                      <TradingAccountCard
+                        key={v.address}
+                        account={v}
+                        onExportBrowserAccount={onExportBrowserAccount}
+                        onExportBrowserAccountCallback={
+                          onExportBrowserAccountCallback
+                        }
+                        onRemoveCallback={onRemoveCallback}
+                        onSelectTradingAccount={onSelectTradingAccount}
+                        onSetState={setState}
+                        onTempBrowserAccount={onTempBrowserAccount}
+                      />
+                    ))}
+
+                    {otherBrowserAccounts?.length > 0 && (
+                      <div className="flex items-center gap-2 mr-2">
+                        <Separator.Horizontal className="bg-level-5" />
+                        <Typography.Text
+                          appearance="secondary"
+                          size="xs"
+                          className="whitespace-nowrap"
+                        >
+                          from other funding account(s)
+                        </Typography.Text>
+                      </div>
+                    )}
+
+                    {otherBrowserAccounts?.map((v) => (
+                      <TradingAccountCard
+                        key={v.address}
+                        account={v}
+                        onExportBrowserAccount={onExportBrowserAccount}
+                        onExportBrowserAccountCallback={
+                          onExportBrowserAccountCallback
+                        }
+                        onRemoveCallback={onRemoveCallback}
+                        onSelectTradingAccount={onSelectTradingAccount}
+                        onSetState={setState}
+                        onTempBrowserAccount={onTempBrowserAccount}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
+              </Dropdown.Content>
+            </Dropdown>
           </div>
         ) : (
           <div className="flex flex-col gap-8">
