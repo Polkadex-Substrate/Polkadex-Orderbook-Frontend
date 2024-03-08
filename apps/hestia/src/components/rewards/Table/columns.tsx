@@ -1,3 +1,4 @@
+import { trimFloat } from "@polkadex/numericals";
 import { LmpMarketConfig } from "@orderbook/core/index";
 import { Tokens, Typography } from "@polkadex/ux";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -45,7 +46,12 @@ export const columns = () => [
     id: "traderScore",
     cell: (e) => {
       return (
-        <Typography.Text size="sm">{e.getValue().traderScore}</Typography.Text>
+        <Typography.Text size="sm">
+          {trimFloat({
+            value: e.getValue().traderScore,
+            digitsAfterDecimal: 6,
+          })}
+        </Typography.Text>
       );
     },
     header: () => (
