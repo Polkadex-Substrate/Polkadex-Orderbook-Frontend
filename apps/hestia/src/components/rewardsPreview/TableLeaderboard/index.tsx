@@ -52,12 +52,12 @@ export const TableLeaderboard = forwardRef<HTMLDivElement, Props>(
         />
         <div className="flex h-full min-h-[440px] flex-col justify-between border-b border-secondary-base">
           {isLoading ? (
-            <Skeleton loading />
+            <Skeleton loading className="min-w-[31rem]" />
           ) : !accounts || accounts?.length === 0 ? (
             <GenericMessage
               title="No results found"
               illustration="NoResultFound"
-              className="bg-level-1 border-b border-b-primary"
+              className="bg-level-1 border-b border-b-primary min-w-[31rem]"
               imageProps={{
                 className: "w-16 self-center",
               }}
@@ -87,7 +87,7 @@ export const TableLeaderboard = forwardRef<HTMLDivElement, Props>(
                         return (
                           <PolkadexTable.Head
                             className={classNames(
-                              " text-xs",
+                              "text-xs whitespace-nowrap",
                               !isActionTab && "cursor-pointer"
                             )}
                             key={header.id}
