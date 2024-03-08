@@ -1,10 +1,12 @@
 import { Button } from "@polkadex/ux";
 import Link from "next/link";
 import { RiExternalLinkLine } from "@remixicon/react";
+import { getMarketUrl } from "@orderbook/core/helpers";
 
 import { Card } from "./card";
 
 export const HowItWorks = () => {
+  const tradingURL = getMarketUrl();
   return (
     <div className="flex gap-5 px-2 max-md: py-14 border-b border-primary max-md:flex-col">
       <Card
@@ -12,7 +14,7 @@ export const HowItWorks = () => {
         description="Begin your journey by trading on the Orderbook platform, featuring 5 active pairs for a diverse trading experience."
       >
         <Button.Underline asChild className="p-0 gap-2 justify-start text-sm">
-          <Link href="/trading">
+          <Link href={tradingURL}>
             Start trading
             <RiExternalLinkLine className="w-3 h-3" />
           </Link>
