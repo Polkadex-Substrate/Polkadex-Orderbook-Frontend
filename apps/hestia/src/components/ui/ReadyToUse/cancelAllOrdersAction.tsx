@@ -16,7 +16,7 @@ export const CancelAllOrdersAction = ({
     <Dropdown open={state} onOpenChange={setState}>
       <Dropdown.Trigger className="whitespace-nowrap gap-1">
         <Typography.Text appearance="danger" size="xs">
-          Cancell all
+          Cancel All
         </Typography.Text>
         <Dropdown.Icon className="text-danger-base w-3 h-3" />
       </Dropdown.Trigger>

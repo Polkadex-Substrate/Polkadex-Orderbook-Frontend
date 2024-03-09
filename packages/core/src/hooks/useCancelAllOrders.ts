@@ -39,7 +39,10 @@ export const useCancelAllOrders = () => {
         mainAddress,
         tradeAddress
       );
-      const payload = JSON.stringify({ CancelAll: data.payload });
+
+      const payload = JSON.stringify({
+        CancelAll: [data.payload, data.signature],
+      });
       await appsyncOrderbookService.operation.cancelAll({
         payload,
         token: tradeAddress,
