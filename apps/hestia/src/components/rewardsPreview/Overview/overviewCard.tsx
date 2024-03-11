@@ -23,9 +23,13 @@ export const OverviewCard = ({
       )}
     >
       <Skeleton loading={loading} className="flex-none w-32 h-4 max-w-32">
-        {isString ? <Typography.Text>{children}</Typography.Text> : children}
+        {isString ? (
+          <Typography.Text bold>{children}</Typography.Text>
+        ) : (
+          children
+        )}
       </Skeleton>
-      <Typography.Text appearance="primary" size="xs">
+      <Typography.Text appearance="primary" size="sm">
         {label}
       </Typography.Text>
     </div>

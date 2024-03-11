@@ -67,9 +67,7 @@ export const Overview = forwardRef<HTMLDivElement, Props>(({ market }, ref) => {
 
         <div className="flex items-center justify-between gap-8 p-4 flex-1 flex-wrap">
           <OverviewCard label="Current Epoch" loading={isLoading}>
-            <Typography.Text bold>
-              {userMetrics?.currentEpoch || 0}
-            </Typography.Text>
+            {`${userMetrics?.currentEpoch || 0}`}
           </OverviewCard>
           <OverviewCard loading={isLoading} label="Volume Generated">
             {`${trimFloat({ value: userMetrics?.volumeGeneratedByUser || 0, digitsAfterDecimal: 4 })} ${market?.quoteAsset.ticker}`}
