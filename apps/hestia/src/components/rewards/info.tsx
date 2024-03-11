@@ -28,7 +28,7 @@ export const Info = () => {
               Polkadex uses an epoch and era based system to organize staking
               rewards and other network operations. An epoch is a period of time
               that lasts for 28 days, during which validators and nomination
-              pools can initiate staking or earn rewards.. At the end of one
+              pools can initiate staking or earn rewards. At the end of one
               Epoch (or 28 days), newly staked PDEX become eligible to earn
               rewards, and rewards earned by previously eligible stakers are
               distributed to nominated validators and validator nodes.
