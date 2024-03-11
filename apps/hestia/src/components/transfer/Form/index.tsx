@@ -273,14 +273,14 @@ export const Form = ({
 
             <button
               onClick={handleChanteType}
-              className="h-full flex items-center justify-center p-2 max-sm:w-full max-sm:border-y border-primary hover:bg-level-1 duration-300 transition-colors"
+              className="h-full flex items-center justify-center p-2 max-lg:w-full max-lg:border-y border-primary hover:bg-level-1 duration-300 transition-colors"
             >
               <RiArrowRightLine
                 className={classNames(
                   "w-6 h-6 transition-all duration-300",
                   isFromFunding
-                    ? "max-sm:rotate-90"
-                    : "max-sm:rotate-[450deg] rotate-[360deg]"
+                    ? "max-lg:rotate-90"
+                    : "max-lg:rotate-[450deg] rotate-[360deg]"
                 )}
               />
             </button>
