@@ -29,6 +29,7 @@ import { MaximumTradingAccount } from "../../ConnectWallet/maximumTradingAccount
 import { InsufficientBalance } from "../../ConnectWallet/insufficientBalance";
 import { Authorization } from "../../ConnectWallet/authorization";
 import { UnlockAccount } from "../../ReadyToUse/unlockAccount";
+import { GenericHorizontalCard } from "../../ReadyToUse";
 
 export const Content = () => {
   const {
@@ -232,7 +233,15 @@ export const Content = () => {
               onImportMnemonic={() =>
                 props?.onPage("ImportTradingAccountMnemonic")
               }
-            />
+            >
+              <GenericHorizontalCard
+                title="Registered trading accounts"
+                icon="History"
+                onClick={() => props?.onPage("TradingAccountList")}
+              >
+                View
+              </GenericHorizontalCard>
+            </ConnectTradingAccount>
             <UserActions
               key="UserActions"
               onClose={() => props?.onChangeInteraction(false)}

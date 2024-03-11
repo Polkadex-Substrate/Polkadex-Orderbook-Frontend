@@ -86,10 +86,10 @@ export const Profile = ({
                 browserAccountPresent={browserAccountPresent}
                 extensionAccountPresent={extensionAccountPresent}
                 extensionAccountName={selectedWallet?.name ?? ""}
-                browserAccountAddress={selectedAccount?.address ?? ""}
+                browserAccountName={selectedAccount?.meta.name ?? ""}
               />
             </Popover.Trigger>
-            <Popover.Content>
+            <Popover.Content withArrow>
               <Content />
             </Popover.Content>
             <Popover.Overlay />

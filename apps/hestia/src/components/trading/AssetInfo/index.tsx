@@ -116,11 +116,11 @@ export const AssetInfo = ({ currentMarket }: { currentMarket?: Market }) => {
         <Card.Single label="24h High" loading={tickerLoading || loading}>
           {currentTicker?.high}
         </Card.Single>
-        <Card.Single label="24 Low" loading={tickerLoading || loading}>
+        <Card.Single label="24h Low" loading={tickerLoading || loading}>
           {currentTicker?.low}
         </Card.Single>
         <Card.WithDropdown
-          label="24 Volume"
+          label="24h Volume"
           items={[quoteTicker, baseTicker]}
           selected={state}
           onChange={(e: string) => setState(e)}
