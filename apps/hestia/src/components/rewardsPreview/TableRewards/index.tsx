@@ -79,7 +79,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                 </Typography.Text>
                 <Skeleton
                   loading={isUserMetricsLoading}
-                  className="h-4 w-28 flex-none"
+                  className="h-4 w-16 flex-none"
                 >
                   <Typography.Text bold className="whitespace-nowrap">
                     {userMetrics?.mmScore || 0}
@@ -101,7 +101,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                 </Typography.Text>
                 <Skeleton
                   loading={isUserMetricsLoading}
-                  className="h-4 w-28 flex-none"
+                  className="h-4 w-16 flex-none"
                 >
                   <Typography.Text bold className="whitespace-nowrap">
                     {trimFloat({
@@ -126,7 +126,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                 </Typography.Text>
                 <Skeleton
                   loading={isRewardsLoading}
-                  className="h-4 w-28 flex-none"
+                  className="h-4 w-16 flex-none"
                 >
                   <Typography.Text bold className="whitespace-nowrap">
                     {accumulatedRewards}
