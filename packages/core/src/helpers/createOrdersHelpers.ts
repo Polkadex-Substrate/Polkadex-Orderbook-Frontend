@@ -1,6 +1,7 @@
 import { ApiPromise } from "@polkadot/api";
 import { Codec } from "@polkadot/types/types";
 import { KeyringPair } from "@polkadot/keyring/types";
+import { getNonce } from "@orderbook/core/helpers/getNonce";
 
 import { OrderSide, OrderType, OrderTypeEnum } from "../utils/orderbookService";
 
@@ -59,4 +60,21 @@ export const createCancelOrderPayloadSigned = (
     pair: tradingPair,
     signature: signature,
   };
+};
+
+export const createCancelAllPayload = (
+  api: ApiPromise,
+  userKeyring: KeyringPair,
+  market: string,
+  mainAddress: string,
+  tradeAddress: string
+) => {
+  const signingPayload = api.createType("CancelAllPayload", {
+    main: mainAddress,
+    proxy: tradeAddress,
+    market: market,
+    timestamp: getNonce(),
+  });
+  const signature = signPayload(api, userKeyring, signingPayload);
+  return { payload: signingPayload, signature };
 };
