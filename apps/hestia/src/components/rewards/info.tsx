@@ -44,7 +44,7 @@ export const Info = () => {
           </Accordion.Trigger>
           <Accordion.Content className="mt-3">
             <Typography.Paragraph className="leading-6" size="sm">
-              An epoch is 28 days on Polkadex chain, .
+              An epoch is 28 days on Polkadex chain.
             </Typography.Paragraph>
           </Accordion.Content>
         </Accordion.Item>
