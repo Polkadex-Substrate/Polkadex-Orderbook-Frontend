@@ -88,9 +88,11 @@ export function Template() {
       >
         <Header ref={headerRef} />
         <main
-          className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
+          className="flex flex-col flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
           style={{
-            paddingBottom: mobileView ? `` : `${footerHeight}px`,
+            paddingBottom: mobileView
+              ? `${footerHeight * 3.3}px`
+              : `${footerHeight}px`,
           }}
         >
           <div className="flex flex-col flex-1">
@@ -156,11 +158,12 @@ export function Template() {
             </Tabs>
             <Help ref={helpRef} />
           </div>
+          <Footer ref={footerRef} />
         </main>
         {mobileView && (browserAccountPresent || extensionAccountPresent) && (
           <div
             ref={interactionRef}
-            className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 w-full mb-5"
+            className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full"
           >
             <ResponsiveProfile
               extensionAccountPresent={extensionAccountPresent}
@@ -168,7 +171,6 @@ export function Template() {
             />
           </div>
         )}
-        <Footer ref={footerRef} />
       </div>
     </Fragment>
   );
