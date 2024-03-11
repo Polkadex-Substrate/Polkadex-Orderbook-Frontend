@@ -187,6 +187,7 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
           imageProps={{
             className: "w-10 self-center",
           }}
+          style={{ height: maxHeight }}
         />
       );
 

@@ -158,7 +158,7 @@ export function Template() {
       {mobileView && (browserAccountPresent || extensionAccountPresent) && (
         <div
           ref={interactionRef}
-          className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full z-[20]"
+          className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full"
         >
           <ResponsiveProfile
             extensionAccountPresent={extensionAccountPresent}
