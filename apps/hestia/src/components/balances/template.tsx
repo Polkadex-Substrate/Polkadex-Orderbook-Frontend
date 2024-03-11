@@ -21,6 +21,7 @@ export function Template() {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
   const overviewRef = useRef<HTMLDivElement | null>(null);
+  const interactionRef = useRef<HTMLDivElement | null>(null);
   const { width } = useWindowSize();
 
   const { height: overviewHeight = 0 } = useResizeObserver({
@@ -43,6 +44,11 @@ export function Template() {
     box: "border-box",
   });
 
+  const { height: interactionHeight = 0 } = useResizeObserver({
+    ref: interactionRef,
+    box: "border-box",
+  });
+
   const { assets, filters, loading, onHideZeroBalance, onSearchToken } =
     useAssets();
   const { browserAccountPresent, extensionAccountPresent } =
@@ -61,9 +67,11 @@ export function Template() {
     >
       <Header ref={headerRef} />
       <main
-        className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] h-full m-auto"
+        className="flex flex-col flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] h-full m-auto"
         style={{
-          paddingBottom: mobileView ? `` : `${footerHeight}px`,
+          paddingBottom: mobileView
+            ? `${interactionHeight}px`
+            : `${footerHeight}px`,
         }}
       >
         <div className="flex-1 flex flex-col">
@@ -145,16 +153,19 @@ export function Template() {
           <Table maxHeight={maxHeight} data={assets} loading={loading} />
           <Help ref={helpRef} />
         </div>
+        <Footer marketsActive ref={footerRef} />
       </main>
       {mobileView && (browserAccountPresent || extensionAccountPresent) && (
-        <div className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 w-full mb-[45px]">
+        <div
+          ref={interactionRef}
+          className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full z-[20]"
+        >
           <ResponsiveProfile
             extensionAccountPresent={extensionAccountPresent}
             browserAccountPresent={browserAccountPresent}
           />
         </div>
       )}
-      <Footer marketsActive ref={footerRef} />
     </div>
   );
 }

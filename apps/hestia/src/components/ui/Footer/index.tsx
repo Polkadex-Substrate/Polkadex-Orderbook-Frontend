@@ -1,21 +1,29 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useMemo, useState } from "react";
 import { Dropdown, Typography } from "@polkadex/ux";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import classNames from "classnames";
 import Link from "next/link";
 import { RiLifebuoyLine, RiMessage3Line } from "@remixicon/react";
+import { useWindowSize } from "usehooks-ts";
 
 import { Markets } from "./markets";
 
 const items = ["Popular", "Favorite"];
 export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
   ({ marketsActive = false }, ref) => {
+    const { width } = useWindowSize();
     const [state, setState] = useState(items[0]);
     const { connected } = useNativeApi();
+
+    const mobileView = useMemo(() => width <= 640, [width]);
+
     return (
       <footer
         ref={ref}
-        className="md:grid md:grid-flow-col-dense md:grid-cols-2 border-y border-primary fixed bottom-0 left-0 w-full bg-level-0"
+        className={classNames(
+          "md:grid md:grid-flow-col-dense md:grid-cols-2 border-y border-primary w-full bg-level-0",
+          !mobileView && "fixed bottom-0 left-0"
+        )}
       >
         {marketsActive ? (
           <div className="col-span-4 flex flex-auto">
