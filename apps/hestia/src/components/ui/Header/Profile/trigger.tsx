@@ -1,16 +1,16 @@
 import { RiArrowDownSLine } from "@remixicon/react";
-import { Icons, Typography, truncateString } from "@polkadex/ux";
+import { HoverCard, Icons, Typography } from "@polkadex/ux";
 import classNames from "classnames";
 
 export const Trigger = ({
   browserAccountPresent,
   extensionAccountPresent,
   extensionAccountName,
-  browserAccountAddress,
+  browserAccountName,
   responsive,
 }: {
   extensionAccountName: string;
-  browserAccountAddress: string;
+  browserAccountName: string;
   browserAccountPresent: boolean;
   extensionAccountPresent: boolean;
   responsive?: boolean;
@@ -20,7 +20,7 @@ export const Trigger = ({
     : "Wallet not present";
 
   const browserAccount = browserAccountPresent
-    ? `Trading account (${truncateString(browserAccountAddress, 3)})`
+    ? `Trading account (${browserAccountName})`
     : "No trading account";
 
   return (
@@ -34,9 +34,22 @@ export const Trigger = ({
         <Icons.Avatar className="w-7 h-7" />
       </div>
       <div className="flex flex-col w-full text-left">
-        <Typography.Text size="xs" bold appearance="primary" className="p-1">
-          {extensionAccount}
-        </Typography.Text>
+        <HoverCard>
+          <HoverCard.Trigger>
+            <Typography.Text
+              size="xs"
+              bold
+              appearance="primary"
+              className="p-1"
+            >
+              {extensionAccount}
+            </Typography.Text>
+          </HoverCard.Trigger>
+          <HoverCard.Content side="right" className="text-xs p-1 font-semibold">
+            Funding account
+          </HoverCard.Content>
+        </HoverCard>
+
         <div className="flex items-center justify-between gap-2 p-1 bg-level-2 rounded-sm w-full">
           <Typography.Text size="xs" bold className="whitespace-nowrap">
             {browserAccount}

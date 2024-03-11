@@ -35,13 +35,6 @@ export const LastPrice = ({
               <RiArrowDownLine className="w-4 h-4 text-danger-base" />
             )}
           </div>
-          <Typography.Text
-            size="sm"
-            appearance="primary"
-            className="leading-none"
-          >
-            ≈ $0.0
-          </Typography.Text>
         </div>
       </Skeleton>
       <Typography.Text

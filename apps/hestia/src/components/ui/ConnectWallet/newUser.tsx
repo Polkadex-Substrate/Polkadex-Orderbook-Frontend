@@ -17,10 +17,7 @@ export const NewUser = ({
       className="gap-10 pt-2 bg-backgroundBase rounded-sm md:max-w-[24rem]"
       withAnimation={false}
     >
-      <Interaction.Title
-        className="-mb-8 [&>button>svg]:scale-125"
-        onClose={onClose}
-      />
+      <Interaction.Title className="-mb-8 mt-" onBack={onBack} />
       <Interaction.Content
         className="flex flex-col gap-1 flex-1"
         withPadding={false}
@@ -60,8 +57,10 @@ export const NewUser = ({
         </div>
       </Interaction.Content>
       <Interaction.Footer>
-        <Interaction.Action onClick={onContinue}>Continue</Interaction.Action>
-        <Interaction.Close onClick={onBack}>Back</Interaction.Close>
+        <Interaction.Action className="w-full" onClick={onContinue}>
+          Continue
+        </Interaction.Action>
+        <Interaction.Close onClick={onClose}>Skip</Interaction.Close>
       </Interaction.Footer>
     </Interaction>
   );

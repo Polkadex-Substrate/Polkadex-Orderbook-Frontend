@@ -12,13 +12,14 @@ import {
   Button,
   Dropdown,
   Typography,
-  AccountCard,
   Illustrations,
   Separator,
   PopConfirm,
 } from "@polkadex/ux";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { useState } from "react";
+
+import { AccountCard } from "../ReadyToUse";
 
 export const Profile = ({
   onCreateTradingAccount,
@@ -67,8 +68,8 @@ export const Profile = ({
 
   const enableDropdown = localTradingAccounts?.length >= 2;
   return (
-    <div className="flex flex-col flex-1 md:w-[23rem] bg-level-0 rounded-sm border border-primary max-sm:w-[90vw]">
-      <div className="flex flex-col gap-6 p-4 border-b border-primary">
+    <div className="flex flex-col flex-1 md:w-[23rem] bg-backgroundBase rounded-sm max-sm:w-[90vw]">
+      <div className="flex flex-col gap-6 p-4 border-b border-primary bg-level-0">
         <div className="flex items-center justify-between">
           <Typography.Text appearance="secondary" size="sm">
             Funding account
@@ -91,12 +92,14 @@ export const Profile = ({
         </div>
         <div className="flex flex-col gap-6">
           <div className="flex justify-between items-center">
-            <AccountCard.Inverted
+            <AccountCard
               name={fundWallet?.name ?? "Wallet not present"}
               address={fundWallet?.address ?? "0x0000000000000"}
-              withIcon={false}
+              source={fundWallet?.source}
               hoverable={false}
               present={fundWalletPresent}
+              addressLength={8}
+              largeText
             >
               <Button.Solid
                 appearance="secondary"
@@ -110,7 +113,7 @@ export const Profile = ({
                 />
                 Switch
               </Button.Solid>
-            </AccountCard.Inverted>
+            </AccountCard>
           </div>
           {!fundWalletPresent && (
             <div className="flex flex-col gap-2">
@@ -152,7 +155,7 @@ export const Profile = ({
                 className="flex justify-between items-center gap-2 flex-1 py-3 [&[data-state=open]>div>svg]:rotate-180"
               >
                 <div>
-                  <AccountCard.Inverted
+                  <AccountCard
                     name={tradeAccount?.meta?.name}
                     address={tradeAccount?.address as string}
                     withIcon={false}
@@ -161,7 +164,7 @@ export const Profile = ({
                     {enableDropdown && (
                       <RiArrowDownSLine className="h-3 w-3 transition-transform duration-300 text-primary" />
                     )}
-                  </AccountCard.Inverted>
+                  </AccountCard>
                 </div>
               </Dropdown.Trigger>
               <Dropdown.Content className="min-w-[20rem]">
@@ -241,18 +244,20 @@ export const Profile = ({
               <Button.Solid onClick={onCreateTradingAccount}>
                 Create new account
               </Button.Solid>
-              <div className="flex items-center self-center gap-1">
-                <Typography.Text appearance="primary">
-                  Already have a trading account?
-                </Typography.Text>
-                <Button.Light
-                  onClick={onImportTradingAccount}
-                  appearance="primary"
-                  className="px-2"
-                >
-                  Select / Import
-                </Button.Light>
-              </div>
+              {!!mainProxiesAccounts.length && (
+                <div className="flex items-center justify-around flex-1 gap-1">
+                  <Typography.Text appearance="primary">
+                    Already have a trading account?
+                  </Typography.Text>
+                  <Button.Light
+                    onClick={onImportTradingAccount}
+                    appearance="primary"
+                    size="sm"
+                  >
+                    Select / Import
+                  </Button.Light>
+                </div>
+              )}
             </div>
           </div>
         )}
