@@ -70,6 +70,7 @@ export function Template({ id }: { id: string }) {
   const mobileView = useMemo(() => width < 640, [width]);
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
+
   return (
     <div
       className="flex flex-1 flex-col bg-backgroundBase"
