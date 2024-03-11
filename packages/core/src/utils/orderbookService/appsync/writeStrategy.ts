@@ -5,7 +5,6 @@ import { UNIT_BN } from "@orderbook/core/constants";
 
 import {
   Cancel_allMutation,
-  Cancel_orderMutation,
   Place_orderMutation,
   WithdrawMutation,
 } from "../../../API";
@@ -33,9 +32,8 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
   }
 
   async cancelOrder(data: ExecuteArgs): Promise<void> {
-    const result = await sendQueryToAppSync<
-      GraphQLResult<Cancel_orderMutation>
-    >({
+    // INFO: Temporary fix => It's actually a backend issue
+    const result = await sendQueryToAppSync<GraphQLResult<any>>({
       query: mutation.place_order,
       variables: { input: { payload: data.payload } },
       token: data.token,
@@ -48,8 +46,8 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
       });
       throw new Error(concatError);
     }
-    if (result?.data?.cancel_order) {
-      const resp: UserActionLambdaResp = JSON.parse(result.data.cancel_order);
+    if (result?.data?.place_order) {
+      const resp: UserActionLambdaResp = JSON.parse(result.data.place_order);
       if (!resp.is_success) {
         throw new Error(resp.body);
       }
