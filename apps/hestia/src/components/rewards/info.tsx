@@ -10,9 +10,28 @@ export const Info = () => {
       </Typography.Heading>
       <Accordion
         type="multiple"
-        defaultValue={["about"]}
+        defaultValue={["participate"]}
         className="flex flex-col gap-4"
       >
+        <Accordion.Item
+          value="participate"
+          className="border-b border-primary pb-3"
+        >
+          <Accordion.Trigger>
+            <Typography.Text appearance="primary">
+              How can I participate in Rewards program?
+            </Typography.Text>
+            <Accordion.Icon />
+          </Accordion.Trigger>
+          <Accordion.Content className="mt-3">
+            <Typography.Paragraph className="leading-6" size="sm">
+              All registered main accounts are automatically part of this
+              program and will be scored for their performance and will be
+              eligible for rewards. There is no extra input required from the
+              user to participate in this program.
+            </Typography.Paragraph>
+          </Accordion.Content>
+        </Accordion.Item>
         <Accordion.Item value="about" className="border-b border-primary pb-3">
           <Accordion.Trigger>
             <Typography.Text appearance="primary">
@@ -60,25 +79,9 @@ export const Info = () => {
           </Accordion.Trigger>
           <Accordion.Content className="mt-3">
             <Typography.Paragraph className="leading-6" size="sm">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry.
-            </Typography.Paragraph>
-          </Accordion.Content>
-        </Accordion.Item>
-        <Accordion.Item
-          value="rewards"
-          className="border-b border-primary pb-3"
-        >
-          <Accordion.Trigger>
-            <Typography.Text appearance="primary">
-              How are the rewards calculated?
-            </Typography.Text>
-            <Accordion.Icon />
-          </Accordion.Trigger>
-          <Accordion.Content className="mt-3">
-            <Typography.Paragraph className="leading-6" size="sm">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry.
+              It is not always necessary for all markets to participate in an
+              epoch. Participation depends on several factors, such as market
+              performance in the previous epoch and market trading volume etc.
             </Typography.Paragraph>
           </Accordion.Content>
         </Accordion.Item>
