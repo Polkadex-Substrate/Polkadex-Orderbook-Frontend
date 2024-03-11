@@ -36,7 +36,6 @@ export function Template() {
     tableTitleRef,
     formwRef,
     interactionRef,
-    interactionHeight,
     tableMaxHeight,
   } = useSizeProvider();
   const footerRef = useRef<HTMLDivElement | null>(null);
@@ -72,7 +71,7 @@ export function Template() {
     if (readyWithdrawals?.length) setActiveTab("readyToClaim");
   }, [readyWithdrawals?.length]);
 
-  const mobileView = useMemo(() => width < 640, [width]);
+  const mobileView = useMemo(() => width <= 640, [width]);
 
   return (
     <Fragment>
@@ -91,9 +90,7 @@ export function Template() {
         <main
           className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
           style={{
-            paddingBottom: mobileView
-              ? `${interactionHeight}px`
-              : `${footerHeight}px`,
+            paddingBottom: mobileView ? `` : `${footerHeight}px`,
           }}
         >
           <div className="flex flex-col flex-1">
@@ -163,7 +160,7 @@ export function Template() {
         {mobileView && (browserAccountPresent || extensionAccountPresent) && (
           <div
             ref={interactionRef}
-            className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full"
+            className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 w-full mb-5"
           >
             <ResponsiveProfile
               extensionAccountPresent={extensionAccountPresent}

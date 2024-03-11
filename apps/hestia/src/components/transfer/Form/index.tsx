@@ -18,11 +18,7 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  RiArrowDownLine,
-  RiArrowDownSLine,
-  RiArrowRightLine,
-} from "@remixicon/react";
+import { RiArrowDownSLine, RiArrowRightLine } from "@remixicon/react";
 import classNames from "classnames";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import {
@@ -257,7 +253,7 @@ export const Form = ({
       <form
         ref={formRef}
         onSubmit={handleSubmit}
-        className="flex w-full border-b border-primary max-md:py-6 md:py-8 bg-level-0"
+        className="flex w-full border-b border-primary max-md:py-6 md:py-8 bg-level-0 px-2"
       >
         <div className="flex-1 flex flex-col gap-4 w-full max-w-[1000px] mx-auto">
           <div className="flex-1 flex max-lg:flex-col items-center w-full border-y border-primary">
