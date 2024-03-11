@@ -21,7 +21,6 @@ export function Template() {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
   const overviewRef = useRef<HTMLDivElement | null>(null);
-  const interactionRef = useRef<HTMLDivElement | null>(null);
   const { width } = useWindowSize();
 
   const { height: overviewHeight = 0 } = useResizeObserver({
@@ -44,17 +43,12 @@ export function Template() {
     box: "border-box",
   });
 
-  const { height: interactionHeight = 0 } = useResizeObserver({
-    ref: interactionRef,
-    box: "border-box",
-  });
-
   const { assets, filters, loading, onHideZeroBalance, onSearchToken } =
     useAssets();
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
-  const mobileView = useMemo(() => width < 640, [width]);
+  const mobileView = useMemo(() => width <= 640, [width]);
   const maxHeight = useMemo(
     () => `calc(100vh - ${overviewHeight + headerHeight + helpheight}px)`,
     [headerHeight, overviewHeight, helpheight]
@@ -69,9 +63,7 @@ export function Template() {
       <main
         className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] h-full m-auto"
         style={{
-          paddingBottom: mobileView
-            ? `${interactionHeight}px`
-            : `${footerHeight}px`,
+          paddingBottom: mobileView ? `` : `${footerHeight}px`,
         }}
       >
         <div className="flex-1 flex flex-col">
@@ -155,10 +147,7 @@ export function Template() {
         </div>
       </main>
       {mobileView && (browserAccountPresent || extensionAccountPresent) && (
-        <div
-          ref={interactionRef}
-          className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full"
-        >
+        <div className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 w-full mb-12">
           <ResponsiveProfile
             extensionAccountPresent={extensionAccountPresent}
             browserAccountPresent={browserAccountPresent}
