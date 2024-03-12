@@ -2,19 +2,28 @@ import styled, { css } from "styled-components";
 
 import { normalizeValue } from "@/utils/normalize";
 
+export const Main = styled.div`
+  position: sticky;
+  top: 0;
+  left: 0;
+`;
+
 export const Wrapper = styled.div<{ dark?: boolean }>`
   ${({ theme, dark }) => css`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 0;
-    left: 0;
-    flex: 1;
-    max-height: ${normalizeValue(5.5)};
+
     border-bottom: 1px solid ${theme.colors.secondaryBackgroundOpacity};
     backdrop-filter: blur(5px);
+    @media screen and (min-width: 850px) {
+      max-height: ${normalizeValue(5.5)};
+      flex: 1;
+    }
 
+    @media screen and (max-width: 850px) {
+      flex-direction: column;
+    }
     ${!dark
       ? css`
           background: ${theme.colors.primaryBackground};

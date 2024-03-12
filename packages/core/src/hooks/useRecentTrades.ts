@@ -48,6 +48,6 @@ export function useRecentTrades(market: string) {
     list: recentTradesList ?? [],
     loading: isLoading || isFetching,
     isDecreasing,
-    isPriceUp: currentTradePrice > lastTradePrice,
+    isPriceUp: currentTradePrice >= lastTradePrice,
   };
 }

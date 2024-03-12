@@ -59,7 +59,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@polkadot/api": "^10.11.2",
+    "@polkadot/api": "latest",
     "@polkadot/extension-dapp": "^0.46.6",
     "@polkadot/ui-keyring": "^3.6.4",
     "@polkadot/util-crypto": "^12.6.2",

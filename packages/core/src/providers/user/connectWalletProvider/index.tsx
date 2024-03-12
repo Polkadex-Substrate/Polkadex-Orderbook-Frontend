@@ -33,7 +33,7 @@ import {
 } from "../../../hooks";
 import { useSettingsProvider } from "../../public/settings";
 
-type GenericStatus = "error" | "idle" | "success" | "loading";
+export type GenericStatus = "error" | "idle" | "success" | "loading";
 
 export { useConnectWalletProvider } from "./useConnectWallet";
 export type ExportTradeAccountProps = {

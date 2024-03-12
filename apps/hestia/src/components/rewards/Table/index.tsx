@@ -1,202 +1,173 @@
-import { Tokens, Table as PolkadexTable } from "@polkadex/ux";
+import { Table as PolkadexTable, GenericMessage } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { Fragment, forwardRef, useEffect, useMemo, useState } from "react";
+import { LmpMarketConfig, useLmpMarkets } from "@orderbook/core/hooks";
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import classNames from "classnames";
 import { useRouter } from "next/navigation";
 
-import { MarketCard } from "./marketCard";
+import { columns } from "./columns";
 import { ResponsiveData } from "./responsiveData";
 
 import { TablePagination } from "@/components/ui";
+import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
-export type Data = (typeof fakeData)[0];
+const responsiveKeys = ["volume24h"];
+const actionKeys = ["makerScore", "traderScore", "volume24h", "totalRewards"];
 
-export const Table = forwardRef<HTMLDivElement, { maxHeight: string }>(
-  ({ maxHeight }, ref) => {
-    const [state, setState] = useState<Data | null>(null);
+type Props = { maxHeight: string; selectedEpoch: number };
+
+export const Table = forwardRef<HTMLDivElement, Props>(
+  ({ maxHeight, selectedEpoch }, ref) => {
+    const [responsiveState, setResponsiveState] = useState(false);
+    const [responsiveData, setResponsiveData] =
+      useState<LmpMarketConfig | null>(null);
     const { width } = useWindowSize();
+    const responsiveView = useMemo(() => width <= 650, [width]);
+
+    const { markets, isLoading } = useLmpMarkets(selectedEpoch);
     const router = useRouter();
-    const responsiveView = useMemo(() => width <= 1000, [width]);
+
+    const table = useReactTable({
+      data: markets as LmpMarketConfig[],
+      columns: columns(),
+      getCoreRowModel: getCoreRowModel(),
+    });
 
     useEffect(() => {
-      if (!responsiveView && !!state) setState(null);
-    }, [responsiveView, state]);
+      if (!responsiveView && !!responsiveState) {
+        setResponsiveState(false);
+        setResponsiveData(null);
+      }
+    }, [responsiveState, responsiveView]);
+
+    if (isLoading)
+      return (
+        <div className="[&_div]:flex-auto">
+          <SkeletonCollection className="h-16" rows={4} />
+        </div>
+      );
+
+    if (markets?.length === 0)
+      return (
+        <GenericMessage
+          title="No results found"
+          illustration="NoResultFound"
+          className="bg-level-1 border-b border-b-primary"
+        />
+      );
 
     return (
       <Fragment>
         <ResponsiveData
-          open={!!state}
-          onClose={() => setState(null)}
-          data={state}
+          data={responsiveData}
+          onOpenChange={setResponsiveState}
+          open={responsiveState}
         />
         <div className="flex-1 flex flex-col justify-between border-b border-secondary-base">
           <div
-            className="overflow-y-hidden hover:overflow-y-auto px-3"
+            className="overflow-y-hidden hover:overflow-y-auto mt-1 px-2"
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
-            <PolkadexTable>
-              <PolkadexTable.Header>
-                <PolkadexTable.Row>
-                  <PolkadexTable.Head>Name</PolkadexTable.Head>
-                  <PolkadexTable.Head align="right">Score</PolkadexTable.Head>
-                  {!responsiveView && (
-                    <>
-                      <PolkadexTable.Head align="right">TVL</PolkadexTable.Head>
-                      <PolkadexTable.Head align="right">APY</PolkadexTable.Head>
-                      <PolkadexTable.Head align="right">
-                        Volume 7d
-                      </PolkadexTable.Head>
-                    </>
-                  )}
-                  <PolkadexTable.Head align="right">
-                    Volume 24h
-                  </PolkadexTable.Head>
-                </PolkadexTable.Row>
+            <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
+              <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <PolkadexTable.Row key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      const getSorted = header.column.getIsSorted();
+                      const isActionTab = actionKeys.includes(header.id);
+                      const handleSort = (): void => {
+                        const isDesc = getSorted === "desc";
+                        header.column.toggleSorting(!isDesc);
+                      };
+                      if (responsiveView && responsiveKeys.includes(header.id))
+                        return null;
+
+                      return (
+                        <PolkadexTable.Head
+                          className={classNames(
+                            " text-xs",
+                            !isActionTab && "cursor-pointer"
+                          )}
+                          key={header.id}
+                          align={`${header.index ? "right" : "left"}`}
+                          {...(isActionTab && { onClick: handleSort })}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                          {isActionTab && <PolkadexTable.Icon />}
+                        </PolkadexTable.Head>
+                      );
+                    })}
+                  </PolkadexTable.Row>
+                ))}
               </PolkadexTable.Header>
               <PolkadexTable.Body>
-                {fakeData.map((value) => {
-                  const responsiveProps = responsiveView && {
-                    role: "button",
-                    onClick: () => setState(value),
-                  };
-                  const props = !responsiveView
-                    ? {
-                        role: "button",
-                        onClick: () =>
-                          router.push(`/rewards/${value.ticker}${value.pair}`),
-                      }
-                    : {};
-
+                {table.getRowModel().rows.map((row) => {
                   return (
                     <PolkadexTable.Row
-                      key={value.id}
-                      {...responsiveProps}
-                      {...props}
+                      key={row.id}
+                      className={classNames("hover:bg-level-1 cursor-pointer")}
                     >
-                      <PolkadexTable.Cell>
-                        <MarketCard
-                          marketName={`${value.ticker}/${value.pair}`}
-                          icon={value.icon as keyof typeof Tokens}
-                          pairIcon={value.pairIcon as keyof typeof Tokens}
-                        />
-                      </PolkadexTable.Cell>
-                      <PolkadexTable.Cell align="right">
-                        {value.score.toString()}
-                      </PolkadexTable.Cell>
-                      {!responsiveView && (
-                        <>
+                      {row.getVisibleCells().map((cell) => {
+                        const baseTicker =
+                          row.original.baseAsset?.ticker || "Unknown";
+                        const quoteTicker =
+                          row.original.quoteAsset?.ticker || "Unknown";
+
+                        const link = `/rewards/${baseTicker}${quoteTicker}`;
+                        if (
+                          responsiveView &&
+                          responsiveKeys.includes(cell.column.id)
+                        )
+                          return null;
+
+                        const onClickAction = responsiveView
+                          ? () => {
+                              setResponsiveState(true);
+                              setResponsiveData(row.original);
+                            }
+                          : () => router.push(link);
+
+                        return (
                           <PolkadexTable.Cell
+                            key={cell.id}
                             align="right"
-                            className="w-[10rem]"
+                            onClick={onClickAction}
                           >
-                            {value.tvl.toString()}
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
                           </PolkadexTable.Cell>
-                          <PolkadexTable.Cell
-                            align="right"
-                            className="w-[10rem]"
-                          >
-                            {value.apy.toString()}
-                          </PolkadexTable.Cell>
-                          <PolkadexTable.Cell
-                            align="right"
-                            className="w-[10rem]"
-                          >
-                            {value.vol7d.toString()}
-                          </PolkadexTable.Cell>
-                        </>
-                      )}
-                      <PolkadexTable.Cell align="right" className="w-[10rem]">
-                        {value.vol24.toString()}
-                      </PolkadexTable.Cell>
+                        );
+                      })}
                     </PolkadexTable.Row>
                   );
                 })}
               </PolkadexTable.Body>
             </PolkadexTable>
           </div>
-          <TablePagination ref={ref} />
+          <div className="[&_svg]:scale-150">
+            <TablePagination
+              ref={ref}
+              page={1}
+              nextButtonDisabled
+              prevButtonDisabled
+            />
+          </div>
         </div>
       </Fragment>
     );
   }
 );
+
 Table.displayName = "Table";
-const fakeData = [
-  {
-    id: 1,
-    ticker: "ASTR",
-    icon: "ASTR",
-    name: "Astar",
-    pair: "USDT",
-    pairIcon: "USDT",
-    tvl: 75000,
-    apy: 800,
-    vol24: 120000,
-    vol7d: 85000,
-    score: 92,
-  },
-  {
-    id: 2,
-    ticker: "PDEX",
-    icon: "PDEX",
-    name: "Polkadex",
-    pair: "USDT",
-    pairIcon: "USDT",
-    tvl: 60000,
-    apy: 750,
-    vol24: 100000,
-    vol7d: 78000,
-    score: 85,
-  },
-  {
-    id: 3,
-    ticker: "IBTC",
-    icon: "IBTC",
-    name: "InterBTC",
-    pair: "USDT",
-    pairIcon: "USDT",
-    tvl: 85000,
-    apy: 880,
-    vol24: 110000,
-    vol7d: 92000,
-    score: 88,
-  },
-  {
-    id: 4,
-    ticker: "DOT",
-    icon: "DOT",
-    name: "Polkadot",
-    pair: "USDT",
-    pairIcon: "USDT",
-    tvl: 72000,
-    apy: 820,
-    vol24: 95000,
-    vol7d: 80000,
-    score: 78,
-  },
-  {
-    id: 5,
-    ticker: "USDT",
-    icon: "USDT",
-    name: "Tether",
-    pair: "USDT",
-    pairIcon: "USDT",
-    tvl: 90000,
-    apy: 920,
-    vol24: 130000,
-    vol7d: 98000,
-    score: 95,
-  },
-  {
-    id: 6,
-    ticker: "GLMR",
-    icon: "GLMR",
-    name: "Moonbeam",
-    pair: "USDT",
-    pairIcon: "USDT",
-    tvl: 68000,
-    apy: 780,
-    vol24: 89000,
-    vol7d: 75000,
-    score: 82,
-  },
-];

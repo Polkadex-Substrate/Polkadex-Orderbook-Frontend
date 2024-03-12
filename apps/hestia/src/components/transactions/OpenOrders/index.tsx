@@ -153,7 +153,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
           illustration="NoResultFound"
           className="bg-level-1 border-b border-b-primary"
           imageProps={{
-            className: "w-10 self-center",
+            className: "w-20 self-center",
           }}
           style={{ height: maxHeight }}
         />
