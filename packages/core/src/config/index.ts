@@ -6,6 +6,7 @@ export const defaultConfig: DefaultConfig = {
   polkadexChain: [
     process.env.POLKADEX_CHAIN as string,
     // This is a backup chain
+    "wss://polkadex.public.curie.radiumblock.co/ws",
     "wss://polkadex.api.onfinality.io/public-ws",
   ],
   gaTrackerKey: process.env.GA_MEASUREMENT_ID ?? "G-PWZK8JEFLX",
