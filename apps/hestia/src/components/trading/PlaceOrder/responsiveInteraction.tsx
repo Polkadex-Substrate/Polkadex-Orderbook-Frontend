@@ -44,14 +44,14 @@ export const ResponsiveInteraction = forwardRef<
         {browserAccountPresent ? (
           <div className="flex gap-2 items-center w-full">
             <Button.Solid
-              appearance="danger"
+              appearance="success"
               className="flex-1"
               onClick={() => setBuy(true)}
             >
               Buy
             </Button.Solid>
             <Button.Solid
-              appearance="success"
+              appearance="danger"
               className="flex-1"
               onClick={() => setSell(true)}
             >
