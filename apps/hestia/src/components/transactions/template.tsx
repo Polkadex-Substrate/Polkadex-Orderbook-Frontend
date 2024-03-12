@@ -78,8 +78,6 @@ export function Template() {
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
-  console.log(interactionHeight);
-
   return (
     <>
       <ConnectTradingInteraction />
