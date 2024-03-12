@@ -88,10 +88,10 @@ export function Template() {
       >
         <Header ref={headerRef} />
         <main
-          className="flex flex-col flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
+          className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
           style={{
             paddingBottom: mobileView
-              ? `${footerHeight * 3.3}px`
+              ? `${footerHeight * 3.3 || 75}px`
               : `${footerHeight}px`,
           }}
         >
@@ -158,7 +158,6 @@ export function Template() {
             </Tabs>
             <Help ref={helpRef} />
           </div>
-          <Footer ref={footerRef} />
         </main>
         {mobileView && (browserAccountPresent || extensionAccountPresent) && (
           <div
@@ -171,6 +170,7 @@ export function Template() {
             />
           </div>
         )}
+        {!mobileView && <Footer ref={footerRef} />}
       </div>
     </Fragment>
   );

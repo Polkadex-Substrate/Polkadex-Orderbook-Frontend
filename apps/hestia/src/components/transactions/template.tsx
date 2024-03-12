@@ -20,6 +20,7 @@ import { TradeHistory } from "./TradeHistory";
 import { Footer, Header } from "@/components/ui";
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ConnectAccountWrapper } from "@/components/ui/ReadyToUse";
+import { useSizeObserver } from "@/hooks";
 
 export function Template() {
   const router = useRouter();
@@ -30,8 +31,8 @@ export function Template() {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
   const overviewRef = useRef<HTMLDivElement | null>(null);
-  const interactionRef = useRef<HTMLDivElement | null>(null);
   const tableRowsRef = useRef<HTMLDivElement | null>(null);
+  const [interactionRef, interactionHeight] = useSizeObserver();
 
   const { height: overviewHeight = 0 } = useResizeObserver({
     ref: overviewRef,
@@ -53,11 +54,6 @@ export function Template() {
     box: "border-box",
   });
 
-  const { height: interactionHeight = 0 } = useResizeObserver({
-    ref: interactionRef,
-    box: "border-box",
-  });
-
   const { height: tableRowsHeight = 0 } = useResizeObserver({
     ref: tableRowsRef,
     box: "border-box",
@@ -71,7 +67,7 @@ export function Template() {
   const maxHeight = useMemo(
     () =>
       `calc(100vh - ${
-        overviewHeight + headerHeight + helpHeight + tableRowsHeight + 1
+        overviewHeight + headerHeight + helpHeight + tableRowsHeight + 20
       }px)`,
     [headerHeight, overviewHeight, helpHeight, tableRowsHeight]
   );
@@ -81,6 +77,8 @@ export function Template() {
   const mobileView = useMemo(() => width <= 640, [width]);
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
+
+  console.log(interactionHeight);
 
   return (
     <>
@@ -95,7 +93,7 @@ export function Template() {
         >
           <Header ref={headerRef} />
           <main
-            className="flex flex-col flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
+            className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
             style={{
               paddingBottom: mobileView
                 ? `${interactionHeight}px`
@@ -196,7 +194,6 @@ export function Template() {
               </Tabs.Content>
               <Help ref={helpRef} />
             </div>
-            <Footer ref={footerRef} />
           </main>
           {mobileView && (browserAccountPresent || extensionAccountPresent) && (
             <div
@@ -209,6 +206,7 @@ export function Template() {
               />
             </div>
           )}
+          {!mobileView && <Footer marketsActive ref={footerRef} />}
         </Tabs>
       </div>
     </>

@@ -155,7 +155,6 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
           imageProps={{
             className: "w-20 self-center",
           }}
-          style={{ height: maxHeight }}
         />
       );
 

@@ -67,7 +67,7 @@ export function Template() {
     >
       <Header ref={headerRef} />
       <main
-        className="flex flex-col flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] h-full m-auto"
+        className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] h-full m-auto"
         style={{
           paddingBottom: mobileView
             ? `${interactionHeight}px`
@@ -153,7 +153,6 @@ export function Template() {
           <Table maxHeight={maxHeight} data={assets} loading={loading} />
           <Help ref={helpRef} />
         </div>
-        <Footer marketsActive ref={footerRef} />
       </main>
       {mobileView && (browserAccountPresent || extensionAccountPresent) && (
         <div
@@ -166,6 +165,7 @@ export function Template() {
           />
         </div>
       )}
+      {!mobileView && <Footer marketsActive ref={footerRef} />}
     </div>
   );
 }
