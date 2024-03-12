@@ -93,3 +93,10 @@ export const OTHER_ASSET_EXISTENTIAL = 0.00000001;
 
 export const PALLET_ADDRESS =
   "esoEt6uZ3GuFV8EzKB2EAREe3KE9WuRVfmhK1RRtwffY78ArH";
+
+export const TIME_INTERVAL = {
+  // Change it to 201600 for production
+  blocksInEpoch: 200,
+  // Change it to 28 days = 2.419000 seconds, for production
+  epochDuration: 40 * 60, // in seconds
+};

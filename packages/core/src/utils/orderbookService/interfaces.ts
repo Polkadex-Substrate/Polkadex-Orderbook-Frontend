@@ -1,6 +1,8 @@
 import { ApiPromise } from "@polkadot/api";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import { SignatureEnumSr25519 } from "@orderbook/core/helpers";
+import { LmpApi } from "@polkadex/polkadex-api";
+import { Signer } from "@polkadot/types/types";
 
 import {
   AccountUpdateEvent,
@@ -121,12 +123,22 @@ export type DepositArgs = {
   account: ExtensionAccount;
 };
 
+export type ClaimRewardArgs = {
+  api: ApiPromise;
+  lmp: LmpApi;
+  signer: Signer;
+  address: string;
+  epoch: number;
+  market: string;
+};
+
 export interface OrderbookOperationStrategy extends BaseStrategy {
   placeOrder: (args: ExecuteArgs) => Promise<void>;
   cancelOrder: (args: ExecuteArgs) => Promise<void>;
   cancelAll: (args: ExecuteArgs) => Promise<void>;
   withdraw: (args: WithdrawArgs) => Promise<void>;
   deposit: (args: DepositArgs) => Promise<void>;
+  claimReward: (args: ClaimRewardArgs) => Promise<void>;
 }
 
 export interface OrderbookService {

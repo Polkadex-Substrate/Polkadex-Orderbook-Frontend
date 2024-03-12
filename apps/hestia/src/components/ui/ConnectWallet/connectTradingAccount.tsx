@@ -6,6 +6,7 @@ import {
 } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { KeyringPair } from "@polkadot/keyring/types";
+import { PropsWithChildren } from "react";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
 
@@ -21,7 +22,8 @@ export const ConnectTradingAccount = ({
   onExportBrowserAccountCallback,
   onExportBrowserAccount,
   enabledExtensionAccount = false,
-}: {
+  children,
+}: PropsWithChildren<{
   accounts?: TradeAccount[];
   onClose: () => void;
   onImport: () => void;
@@ -33,7 +35,7 @@ export const ConnectTradingAccount = ({
   onExportBrowserAccountCallback: () => void;
   onExportBrowserAccount: (account: KeyringPair) => void;
   enabledExtensionAccount?: boolean;
-}) => {
+}>) => {
   return (
     <Interaction className="bg-backgroundBase rounded-sm md:max-w-[24rem] pb-6">
       <Interaction.Title onClose={onClose} size="lg">
@@ -132,6 +134,7 @@ export const ConnectTradingAccount = ({
               >
                 Import
               </GenericHorizontalCard>
+              {children}
             </div>
           </div>
         </div>

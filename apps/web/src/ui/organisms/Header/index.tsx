@@ -13,6 +13,10 @@ import {
 } from "@orderbook/core/providers/public/settings";
 import { Icons } from "@polkadex/orderbook-ui/atoms";
 import { useRouter } from "next/router";
+import { Tooltip, Typography, Button } from "@polkadex/ux";
+
+import { MessageBanner } from "../MessageBanner";
+import { CrowdloansBanner } from "../CrowdloansBanner";
 
 import * as S from "./styles";
 import ConnectWalletButton from "./connect";
@@ -33,58 +37,68 @@ export const Header = ({
   const { locales, locale } = router;
 
   return (
-    <S.Wrapper dark={dark}>
-      <S.Content>
-        <S.Logo borderActive={isValidChild} hideLogo>
-          <a href="/">
-            <PolkadexLogo />
-          </a>
-          <span>BETA</span>
-        </S.Logo>
-        <S.ContentFull>{children}</S.ContentFull>
-      </S.Content>
-      <S.Actions>
-        <S.ActionsWrapper>
-          <Dropdown>
-            <Dropdown.Trigger>
-              <S.Flex>
-                <span>{locale?.toUpperCase()}</span>
-                <Icon name="ArrowBottom" />
-              </S.Flex>
-            </Dropdown.Trigger>
-            <Dropdown.Menu fill="secondaryBackgroundSolid">
-              {(locales as string[])?.map((value) => {
-                const { pathname, query, asPath } = router;
-                return (
-                  <Dropdown.Item key={value}>
-                    <Link href={{ pathname, query }} as={asPath} locale={value}>
-                      {value?.toUpperCase()}
-                    </Link>
-                  </Dropdown.Item>
-                );
-              })}
-            </Dropdown.Menu>
-          </Dropdown>
-        </S.ActionsWrapper>
-        <S.ActionsWrapper>
-          <Popover>
-            <Popover.Trigger>
-              <S.NotificationsActive
-                isActive={!!notifications?.find((value) => !value.active)}
-              >
-                <Icons.Notifications />
-                <div />
-              </S.NotificationsActive>
-            </Popover.Trigger>
-            <Popover.Content>
-              <NotificationsContent notifications={allNotifications} />
-            </Popover.Content>
-          </Popover>
-        </S.ActionsWrapper>
-        <S.AccountContainer>
-          <ConnectWalletButton />
-        </S.AccountContainer>
-      </S.Actions>
-    </S.Wrapper>
+    <S.Main>
+      <MessageBanner />
+      <S.Wrapper dark={dark}>
+        <S.Content>
+          <S.Logo borderActive={isValidChild} hideLogo>
+            <a href="/">
+              <PolkadexLogo />
+            </a>
+            <span>BETA</span>
+          </S.Logo>
+          <S.ContentFull>{children}</S.ContentFull>
+        </S.Content>
+        <div className="flex items-center justify-end max-md:justify-between gap-2 w-full max-md:px-2 flex-wrap">
+          <CrowdloansBanner />
+          <S.Actions>
+            <S.ActionsWrapper>
+              <Dropdown>
+                <Dropdown.Trigger>
+                  <S.Flex>
+                    <span>{locale?.toUpperCase()}</span>
+                    <Icon name="ArrowBottom" />
+                  </S.Flex>
+                </Dropdown.Trigger>
+                <Dropdown.Menu fill="secondaryBackgroundSolid">
+                  {(locales as string[])?.map((value) => {
+                    const { pathname, query, asPath } = router;
+                    return (
+                      <Dropdown.Item key={value}>
+                        <Link
+                          href={{ pathname, query }}
+                          as={asPath}
+                          locale={value}
+                        >
+                          {value?.toUpperCase()}
+                        </Link>
+                      </Dropdown.Item>
+                    );
+                  })}
+                </Dropdown.Menu>
+              </Dropdown>
+            </S.ActionsWrapper>
+            <S.ActionsWrapper>
+              <Popover>
+                <Popover.Trigger>
+                  <S.NotificationsActive
+                    isActive={!!notifications?.find((value) => !value.active)}
+                  >
+                    <Icons.Notifications />
+                    <div />
+                  </S.NotificationsActive>
+                </Popover.Trigger>
+                <Popover.Content>
+                  <NotificationsContent notifications={allNotifications} />
+                </Popover.Content>
+              </Popover>
+            </S.ActionsWrapper>
+            <S.AccountContainer>
+              <ConnectWalletButton />
+            </S.AccountContainer>
+          </S.Actions>
+        </div>
+      </S.Wrapper>
+    </S.Main>
   );
 };

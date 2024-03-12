@@ -1,10 +1,11 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { ApiPromise } from "@polkadot/api";
 import { defaultConfig } from "@orderbook/core/config";
 import {
   createApi,
   statics,
 } from "@orderbook/core/providers/public/nativeApi/statics";
+import { LmpApi } from "@polkadex/polkadex-api";
 
 import { Provider } from "./context";
 import { nativeApiReducer, initialState } from "./reducer";
@@ -13,11 +14,16 @@ import * as A from "./actions";
 
 export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
   const [state, dispatch] = useReducer(nativeApiReducer, initialState);
+  const [lmp, setLmp] = useState<LmpApi>();
   const shouldRangerConnect =
     !state.timestamp && !state.connected && !state.api;
 
   useEffect(() => {
-    const onReady = (api: ApiPromise) => dispatch(A.nativeApiConnectData(api));
+    const onReady = (api: ApiPromise) => {
+      const lmp = new LmpApi(api);
+      setLmp(lmp);
+      dispatch(A.nativeApiConnectData(api));
+    };
     const onConnectError = () => {
       dispatch(A.nativeApiConnectError());
     };
@@ -38,6 +44,7 @@ export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
     <Provider
       value={{
         ...state,
+        lmp,
       }}
     >
       {children}

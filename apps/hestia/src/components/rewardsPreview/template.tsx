@@ -6,6 +6,8 @@ import { useMemo, useRef } from "react";
 import { RiExternalLinkLine } from "@remixicon/react";
 import { useWindowSize } from "react-use";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useMarkets } from "@orderbook/core/hooks";
+import { getCurrentMarket } from "@orderbook/core/helpers";
 
 import { Rewards } from "../ui/Icons/rewards";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
@@ -16,8 +18,10 @@ import { TableRewards } from "./TableRewards";
 
 import { Footer, Header } from "@/components/ui";
 
-export function Template() {
+export function Template({ id }: { id: string }) {
   const { width } = useWindowSize();
+  const { list } = useMarkets();
+  const currentMarket = getCurrentMarket(list, id);
 
   const footerRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
@@ -57,7 +61,7 @@ export function Template() {
 
   const maxHeight = useMemo(
     () =>
-      `calc(100vh - ${
+      `calc(90vh - ${
         overviewHeight + headerHeight + tableTitleHeight + tableRowsHeight + 1
       }px)`,
     [headerHeight, overviewHeight, tableTitleHeight, tableRowsHeight]
@@ -66,6 +70,7 @@ export function Template() {
   const mobileView = useMemo(() => width < 640, [width]);
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
+
   return (
     <div
       className="flex flex-1 flex-col bg-backgroundBase"
@@ -81,7 +86,7 @@ export function Template() {
         }}
       >
         <div className="flex-1 flex flex-col">
-          <Overview ref={overviewRef} />
+          <Overview ref={overviewRef} market={currentMarket} />
           <div className="flex flex-1 max-lg:flex-col flex-wrap">
             <div className="flex-1 flex flex-col border-b border-secondary-base">
               <div
@@ -91,21 +96,36 @@ export function Template() {
                 <Typography.Heading size="md">
                   My trading rewards
                 </Typography.Heading>
-                <Button.Underline size="sm" appearance="secondary">
+                <Button.Underline
+                  size="sm"
+                  appearance="secondary"
+                  disabled
+                  className="pointer-events-none"
+                >
                   Export to CSV
                 </Button.Underline>
               </div>
-              <TableRewards ref={tableRowsRef} maxHeight={maxHeight} />
+              <TableRewards
+                ref={tableRowsRef}
+                maxHeight={maxHeight}
+                market={currentMarket?.id as string}
+              />
             </div>
             <div className="max-lg:w-full flex flex-col border-l border-primary">
               <div
                 ref={tableTitlesRef}
                 className="border-b border-primary py-3 px-4 w-full"
               >
-                <Typography.Heading size="md">Leaderboard</Typography.Heading>
+                <Typography.Heading size="md">
+                  Leaderboard (For previous epoch)
+                </Typography.Heading>
               </div>
               <div className="h-full flex flex-col">
-                <TableLeaderboard ref={tableRowsRef} maxHeight={maxHeight} />
+                <TableLeaderboard
+                  ref={tableRowsRef}
+                  maxHeight={maxHeight}
+                  market={currentMarket?.id as string}
+                />
                 <div className="flex items-center justify-between px-5 py-8 min-w-[20rem] h-fit gap-10 first:border-r border-secondary-base">
                   <div className="flex items-center gap-2">
                     <Rewards className="w-[5rem]" />
@@ -135,7 +155,7 @@ export function Template() {
       {mobileView && (browserAccountPresent || extensionAccountPresent) && (
         <div
           ref={interactionRef}
-          className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full"
+          className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full z-[2]"
         >
           <ResponsiveProfile
             extensionAccountPresent={extensionAccountPresent}
