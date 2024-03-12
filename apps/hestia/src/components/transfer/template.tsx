@@ -1,7 +1,7 @@
 "use client";
 
 import { GenericMessage, Tabs, Typography } from "@polkadex/ux";
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { RiInformation2Line } from "@remixicon/react";
 import { useTransactions, useTransferHistory } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
@@ -19,7 +19,7 @@ import { ReadyToClaim } from "./ReadyToClaim";
 import { useSizeProvider } from "./provider";
 
 import { Footer, Header } from "@/components/ui";
-import { useResizeObserver, useTransfer } from "@/hooks";
+import { useTransfer } from "@/hooks";
 import { defaultConfig } from "@/config";
 
 const sleep = async (ms: number) =>
@@ -37,13 +37,9 @@ export function Template() {
     formwRef,
     interactionRef,
     tableMaxHeight,
+    footerRef,
+    footerHeight = 0,
   } = useSizeProvider();
-  const footerRef = useRef<HTMLDivElement | null>(null);
-
-  const { height: footerHeight = 0 } = useResizeObserver({
-    ref: footerRef,
-    box: "border-box",
-  });
 
   const {
     onChangeAsset,

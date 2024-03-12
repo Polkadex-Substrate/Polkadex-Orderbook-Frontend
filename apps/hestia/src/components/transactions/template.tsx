@@ -27,11 +27,11 @@ export function Template() {
   const searchParams = useSearchParams();
   const { width } = useWindowSize();
 
-  const footerRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
   const overviewRef = useRef<HTMLDivElement | null>(null);
   const tableRowsRef = useRef<HTMLDivElement | null>(null);
+  const [footerRef, footerHeight] = useSizeObserver();
   const [interactionRef, interactionHeight] = useSizeObserver();
 
   const { height: overviewHeight = 0 } = useResizeObserver({
@@ -46,11 +46,6 @@ export function Template() {
 
   const { height: headerHeight = 0 } = useResizeObserver({
     ref: headerRef,
-    box: "border-box",
-  });
-
-  const { height: footerHeight = 0 } = useResizeObserver({
-    ref: footerRef,
     box: "border-box",
   });
 
