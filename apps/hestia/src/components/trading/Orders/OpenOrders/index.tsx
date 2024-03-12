@@ -1,5 +1,6 @@
 "use client";
 
+import InfiniteScroll from "react-infinite-scroll-component";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import {
   flexRender,
@@ -13,7 +14,12 @@ import {
   useOpenOrders,
   CancelOrderArgs,
 } from "@orderbook/core/hooks";
-import { GenericMessage, Modal, Table as PolkadexTable } from "@polkadex/ux";
+import {
+  GenericMessage,
+  Modal,
+  Table as PolkadexTable,
+  Spinner,
+} from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { Ifilters } from "@orderbook/core/providers/types";
 import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
@@ -31,7 +37,13 @@ const responsiveKeys = ["date", "price"];
 const actionKeys = ["date", "price", "amount"];
 const widthKeys = ["15%", "15%", "20%", "25%", "100%", "fit-content"];
 
-export const OpenOrdersTable = ({ filters }: { filters: Ifilters }) => {
+export const OpenOrdersTable = ({
+  filters,
+  height,
+}: {
+  filters: Ifilters;
+  height: number;
+}) => {
   const { mutateAsync: cancelOrder } = useCancelOrder();
   const { selectedAccount } = useConnectWalletProvider();
   const { isLoading, openOrders } = useOpenOrders(filters);
@@ -105,7 +117,14 @@ export const OpenOrdersTable = ({ filters }: { filters: Ifilters }) => {
         open={responsiveState}
         onCancelOrder={onCancelOrder}
       />
-      <div className="flex-1 h-full overflow-auto scrollbar-hide">
+      <InfiniteScroll
+        className="flex-1 h-full overflow-auto scrollbar-hide"
+        dataLength={openOrders.length}
+        next={() => {}}
+        hasMore={false}
+        loader={<Spinner.Keyboard className="h-6 mx-auto my-2" />}
+        height={`${height}px`}
+      >
         <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
           <PolkadexTable.Header className="sticky top-0 bg-level-0 z-[2]">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -181,7 +200,7 @@ export const OpenOrdersTable = ({ filters }: { filters: Ifilters }) => {
             })}
           </PolkadexTable.Body>
         </PolkadexTable>
-      </div>
+      </InfiniteScroll>
     </Fragment>
   );
 };

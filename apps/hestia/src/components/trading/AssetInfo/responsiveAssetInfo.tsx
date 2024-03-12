@@ -125,19 +125,19 @@ export const ResponsiveAssetInfo = ({
             <Card.Single label="24h High" loading={tickerLoading || loading}>
               {currentTicker?.high}
             </Card.Single>
-            <Card.Single label="24 Low" loading={tickerLoading || loading}>
+            <Card.Single label="24h Low" loading={tickerLoading || loading}>
               {currentTicker?.low}
             </Card.Single>
           </div>
           <div className="flex flex-col p-1">
             <Card.Single
-              label={`24 Volume ${currentMarket?.baseAsset.ticker}`}
+              label={`24h Volume ${currentMarket?.baseAsset.ticker || ""}`}
               loading={tickerLoading || loading}
             >
               {volumeFormattedBase}
             </Card.Single>
             <Card.Single
-              label={`24 Volume ${currentMarket?.quoteAsset.ticker}`}
+              label={`24h Volume ${currentMarket?.quoteAsset.ticker || ""}`}
               loading={tickerLoading || loading}
             >
               {volumeFormattedQuote}
