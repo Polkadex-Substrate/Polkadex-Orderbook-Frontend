@@ -31,7 +31,12 @@ export const ResponsiveTable = ({
     wallets.toWalletAddress && truncateString(wallets.toWalletAddress ?? "");
 
   return (
-    <Drawer closeOnClickOutside open={open} onOpenChange={onOpenChange}>
+    <Drawer
+      closeOnClickOutside
+      shouldScaleBackground={false}
+      open={open}
+      onOpenChange={onOpenChange}
+    >
       <Drawer.Title className="px-4">
         {token.ticker}/{token.name}
       </Drawer.Title>

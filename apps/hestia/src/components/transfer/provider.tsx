@@ -11,6 +11,8 @@ import {
 } from "react";
 import { useResizeObserver } from "usehooks-ts";
 
+import { useSizeObserver } from "@/hooks";
+
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
@@ -21,9 +23,11 @@ type State = {
   tableTitleRef: GenericRef;
   formwRef: GenericRef;
   filtersRef: GenericRef;
-  interactionRef: GenericRef;
+  interactionRef: (node: HTMLDivElement | null) => void;
+  footerRef: (node: HTMLDivElement | null) => void;
   tableMaxHeight: string;
   interactionHeight: number;
+  footerHeight: number;
 };
 
 export const SizeProvider = ({ children }: { children: ReactNode }) => {
@@ -32,7 +36,8 @@ export const SizeProvider = ({ children }: { children: ReactNode }) => {
   const tableTitleRef = useRef<HTMLDivElement | null>(null);
   const formwRef = useRef<HTMLDivElement | null>(null);
   const filtersRef = useRef<HTMLDivElement | null>(null);
-  const interactionRef = useRef<HTMLDivElement | null>(null);
+  const [footerRef, footerHeight] = useSizeObserver();
+  const [interactionRef, interactionHeight] = useSizeObserver();
 
   const { height: helpHeight = 0 } = useResizeObserver({
     ref: helpRef,
@@ -56,11 +61,6 @@ export const SizeProvider = ({ children }: { children: ReactNode }) => {
 
   const { height: filtersHeight = 0 } = useResizeObserver({
     ref: filtersRef,
-    box: "border-box",
-  });
-
-  const { height: interactionHeight = 0 } = useResizeObserver({
-    ref: interactionRef,
     box: "border-box",
   });
 
@@ -88,6 +88,8 @@ export const SizeProvider = ({ children }: { children: ReactNode }) => {
         filtersRef,
         interactionRef,
         interactionHeight,
+        footerHeight,
+        footerRef,
       }}
     >
       {children}

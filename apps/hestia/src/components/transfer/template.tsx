@@ -1,7 +1,7 @@
 "use client";
 
 import { GenericMessage, Tabs, Typography } from "@polkadex/ux";
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { RiInformation2Line } from "@remixicon/react";
 import { useTransactions, useTransferHistory } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
@@ -19,7 +19,7 @@ import { ReadyToClaim } from "./ReadyToClaim";
 import { useSizeProvider } from "./provider";
 
 import { Footer, Header } from "@/components/ui";
-import { useResizeObserver, useTransfer } from "@/hooks";
+import { useTransfer } from "@/hooks";
 import { defaultConfig } from "@/config";
 
 const sleep = async (ms: number) =>
@@ -36,15 +36,10 @@ export function Template() {
     tableTitleRef,
     formwRef,
     interactionRef,
-    interactionHeight,
     tableMaxHeight,
+    footerRef,
+    footerHeight = 0,
   } = useSizeProvider();
-  const footerRef = useRef<HTMLDivElement | null>(null);
-
-  const { height: footerHeight = 0 } = useResizeObserver({
-    ref: footerRef,
-    box: "border-box",
-  });
 
   const {
     onChangeAsset,
@@ -72,7 +67,7 @@ export function Template() {
     if (readyWithdrawals?.length) setActiveTab("readyToClaim");
   }, [readyWithdrawals?.length]);
 
-  const mobileView = useMemo(() => width < 640, [width]);
+  const mobileView = useMemo(() => width <= 640, [width]);
 
   return (
     <Fragment>
@@ -92,7 +87,7 @@ export function Template() {
           className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
           style={{
             paddingBottom: mobileView
-              ? `${interactionHeight}px`
+              ? `${footerHeight * 3.3 || 75}px`
               : `${footerHeight}px`,
           }}
         >
@@ -171,7 +166,7 @@ export function Template() {
             />
           </div>
         )}
-        <Footer ref={footerRef} />
+        {!mobileView && <Footer ref={footerRef} />}
       </div>
     </Fragment>
   );

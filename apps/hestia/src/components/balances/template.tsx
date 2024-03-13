@@ -15,13 +15,14 @@ import { Table } from "./Table";
 import { Help } from "./Help";
 
 import { Footer, Header } from "@/components/ui";
+import { useSizeObserver } from "@/hooks";
 
 export function Template() {
-  const footerRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
   const overviewRef = useRef<HTMLDivElement | null>(null);
-  const interactionRef = useRef<HTMLDivElement | null>(null);
+  const [footerRef, footerHeight] = useSizeObserver();
+  const [interactionRef, interactionHeight] = useSizeObserver();
   const { width } = useWindowSize();
 
   const { height: overviewHeight = 0 } = useResizeObserver({
@@ -39,22 +40,12 @@ export function Template() {
     box: "border-box",
   });
 
-  const { height: footerHeight = 0 } = useResizeObserver({
-    ref: footerRef,
-    box: "border-box",
-  });
-
-  const { height: interactionHeight = 0 } = useResizeObserver({
-    ref: interactionRef,
-    box: "border-box",
-  });
-
   const { assets, filters, loading, onHideZeroBalance, onSearchToken } =
     useAssets();
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
-  const mobileView = useMemo(() => width < 640, [width]);
+  const mobileView = useMemo(() => width <= 640, [width]);
   const maxHeight = useMemo(
     () => `calc(100vh - ${overviewHeight + headerHeight + helpheight}px)`,
     [headerHeight, overviewHeight, helpheight]
@@ -165,7 +156,7 @@ export function Template() {
           />
         </div>
       )}
-      <Footer marketsActive ref={footerRef} />
+      {!mobileView && <Footer marketsActive ref={footerRef} />}
     </div>
   );
 }

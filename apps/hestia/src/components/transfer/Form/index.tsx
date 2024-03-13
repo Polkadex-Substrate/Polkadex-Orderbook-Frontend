@@ -18,11 +18,7 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  RiArrowDownLine,
-  RiArrowDownSLine,
-  RiArrowRightLine,
-} from "@remixicon/react";
+import { RiArrowDownSLine, RiArrowRightLine } from "@remixicon/react";
 import classNames from "classnames";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import {
@@ -257,7 +253,7 @@ export const Form = ({
       <form
         ref={formRef}
         onSubmit={handleSubmit}
-        className="flex w-full border-b border-primary max-md:py-6 md:py-8 bg-level-0"
+        className="flex w-full border-b border-primary max-md:py-6 md:py-8 bg-level-0 px-2"
       >
         <div className="flex-1 flex flex-col gap-4 w-full max-w-[1000px] mx-auto">
           <div className="flex-1 flex max-lg:flex-col items-center w-full border-y border-primary">
@@ -277,14 +273,14 @@ export const Form = ({
 
             <button
               onClick={handleChanteType}
-              className="h-full flex items-center justify-center p-2 max-sm:w-full max-sm:border-y border-primary hover:bg-level-1 duration-300 transition-colors"
+              className="h-full flex items-center justify-center p-2 max-lg:w-full max-lg:border-y border-primary hover:bg-level-1 duration-300 transition-colors"
             >
               <RiArrowRightLine
                 className={classNames(
                   "w-6 h-6 transition-all duration-300",
                   isFromFunding
-                    ? "max-sm:rotate-90"
-                    : "max-sm:rotate-[450deg] rotate-[360deg]"
+                    ? "max-lg:rotate-90"
+                    : "max-lg:rotate-[450deg] rotate-[360deg]"
                 )}
               />
             </button>
