@@ -16,7 +16,7 @@ const MigrationTemplate = dynamic(
 const Migration = () => {
   return (
     <MigrationTemplate
-      title="Orderbook v2 migration in progress"
+      title="Orderbook v2 Migration in progress"
       footerText="Join our Telegram for more updates!"
       textButton="Join Telegram"
       buttonLink="https://t.me/Polkadex"
