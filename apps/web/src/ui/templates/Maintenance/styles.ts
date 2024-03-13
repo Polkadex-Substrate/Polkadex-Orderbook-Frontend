@@ -104,3 +104,18 @@ export const Message = styled.div`
     }
   `}
 `;
+
+export const TwitterImage = styled.img`
+  border-radius: 0.5rem;
+`;
+
+export const TwitterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+`;

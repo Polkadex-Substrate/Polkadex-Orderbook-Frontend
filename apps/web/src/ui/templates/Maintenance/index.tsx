@@ -64,27 +64,27 @@ export const Maintenance = () => {
           </S.SocialIcons>
           <S.Message>
             <h3>{t("announcement")}</h3>
-            <TwitterMessage name="Polkadex" username="@polkadex • Jan 9">
-              <p>
-                <strong style={{ display: "block", marginBottom: "10px" }}>
-                  ❗ Heads up Orderbook traders! ❗
-                </strong>
-                In order to prepare for the release of upcoming features,
-                <strong>
-                  {" "}
-                  Polkadex Orderbook will undergo a scheduled downtime this
-                  upcoming Thursday, January 11th at 5:30 AM UTC
-                </strong>
-                . Trading will be halted for approximately
-                <strong> 12 hours</strong>, and existing orders will be
-                automatically cancelled.
-                <strong>
-                  {" "}
-                  Orderbook will run like normal after the break..
-                </strong>
-              </p>
+            <TwitterMessage name="Polkadex" username="@polkadex • Mar 11, 2024">
+              <strong>
+                ⚙️ A runtime upgrade is scheduled for Wednesday at 5:30am UTC
+                followed by an Orderbook downtime of ~24 hours ⛔️
+              </strong>
+              <S.TwitterContainer>
+                <p>Part of the Hestia release, the upgrade features:</p>
+                <ul>
+                  <li>🔥 New Orderbook UI</li>
+                  <li>💸 LMP Rewards component</li>
+                  <li>🪙 Trading fees</li>
+                  <li>🐛 Market-making bug fixes</li>
+                </ul>
+              </S.TwitterContainer>
+
+              <S.TwitterImage
+                src="/img/obRuntimeTwitter.webp"
+                alt="Orderbook runtime upgrade"
+              />
               <a
-                href="https://twitter.com/polkadex/status/1744767837074284991"
+                href="https://twitter.com/polkadex/status/1767347045357224325"
                 target="_blank"
                 rel="noreferrer noopener"
               >
