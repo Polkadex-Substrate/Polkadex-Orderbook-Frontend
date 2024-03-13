@@ -91,19 +91,11 @@ export function Template({ id }: { id: string }) {
             <div className="flex-1 flex flex-col border-b border-secondary-base">
               <div
                 ref={tableTitlesRef}
-                className="flex items-center justify-between gap-2 border-b border-primary py-2 px-4 w-full"
+                className="flex items-center justify-between gap-2 border-b border-primary py-3 px-4 w-full"
               >
                 <Typography.Heading size="md">
                   My trading rewards
                 </Typography.Heading>
-                <Button.Underline
-                  size="sm"
-                  appearance="secondary"
-                  disabled
-                  className="pointer-events-none"
-                >
-                  Export to CSV
-                </Button.Underline>
               </div>
               <TableRewards
                 ref={tableRowsRef}
