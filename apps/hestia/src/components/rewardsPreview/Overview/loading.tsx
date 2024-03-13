@@ -7,7 +7,7 @@ export const MarketSkeleton = () => {
         <div className="flex-none bg-level-3 w-14 h-14 rounded-full" />
         <div className="flex-none bg-level-3 w-14 h-14 rounded-full -ml-3" />
       </div>
-      <Skeleton loading className="flex-none w-40 h-5" />
+      <Skeleton loading className="flex-none w-28 h-5" />
     </div>
   );
 };
