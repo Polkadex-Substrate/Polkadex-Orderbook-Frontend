@@ -119,12 +119,6 @@ export const Transactions = ({ market }: Props) => {
               >
                 {t("showReverted")}
               </Checkbox>
-              <Checkbox
-                checked={filters.hiddenPairs}
-                onChange={() => handleChangeHidden("hiddenPairs")}
-              >
-                {t("hideOtherPairs")}
-              </Checkbox>
               <S.Flex>
                 <S.ContainerActions>
                   <Checkbox
@@ -209,7 +203,6 @@ export const Transactions = ({ market }: Props) => {
                 setTransactionDropdownVisible(v)
               }
               filters={filters}
-              market={market}
             />
           </TabContent>
           <TabContent>

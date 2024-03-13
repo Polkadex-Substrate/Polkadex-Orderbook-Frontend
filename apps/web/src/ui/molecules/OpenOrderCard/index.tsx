@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { Icon } from "@polkadex/orderbook-ui/molecules";
-import { useOrders } from "@orderbook/core/providers/user/orders";
+import { useCancelOrder } from "@orderbook/core/hooks";
 
 import * as S from "./styles";
 
@@ -16,14 +16,14 @@ export const OpenOrderCard = ({
   quoteUnit,
   data = [] as RowData[],
 }) => {
-  const ordersState = useOrders();
+  const { mutateAsync: onCancelOrder, isLoading: cancelLoading } =
+    useCancelOrder();
   const [isCancelClicked, setIsCancleClicked] = useState(false);
-  const cancelLoading = ordersState.cancel.isLoading;
 
   const handleCancelClick = () => {
     if (!isCancelClicked) {
       setIsCancleClicked(true);
-      ordersState.onCancelOrder({ orderId, base, quote });
+      onCancelOrder({ orderId, base, quote });
     }
   };
   useEffect(() => {

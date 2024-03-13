@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback, useMemo, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { Market } from "@orderbook/core/utils/orderbookService";
 import { getCurrentMarket, setToStorage } from "@orderbook/core/helpers";
@@ -100,11 +100,7 @@ export function useMarkets(market?: string) {
         );
 
         router.push(
-          `${marketToSet.baseAsset.ticker + marketToSet.quoteAsset.ticker}`,
-          undefined,
-          {
-            shallow: true,
-          }
+          `${marketToSet.baseAsset.ticker + marketToSet.quoteAsset.ticker}`
         );
 
         onClose();
@@ -118,7 +114,7 @@ export function useMarkets(market?: string) {
    *
    * @returns {InitialMarkets[]} dispatch setCurrentMarket action
    */
-  const marketTokens = (): InitialMarkets[] => {
+  const marketTokens = useMemo((): InitialMarkets[] => {
     const initialMarkets: InitialMarkets[] = [];
     const allTickets = markets.map((item) => {
       const ticker = allMarketTickers.find((val) => val.market === item.id);
@@ -154,7 +150,14 @@ export function useMarkets(market?: string) {
       }
       return pv;
     }, initialMarkets);
-  };
+  }, [
+    allMarketTickers,
+    favoriteMarkets,
+    fieldValue.marketsTabsSelected,
+    fieldValue.searchFieldValue,
+    fieldValue.showFavourite,
+    markets,
+  ]);
 
   /**
    * @description Return the market tickers

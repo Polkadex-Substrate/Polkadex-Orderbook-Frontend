@@ -11,8 +11,6 @@ export const SettingProvider: T.SettingComponent = ({
 }) => {
   const [state, dispatch] = useReducer(settingReducer, initialState);
 
-  // Actions
-
   // Global Setting Actions
   const onToogleConnectExtension = (payload?: boolean) =>
     dispatch(A.toogleConnectExtension(payload));
@@ -51,6 +49,7 @@ export const SettingProvider: T.SettingComponent = ({
     []
   );
 
+  // Notifications Actions
   const onPushNotification = useCallback(
     (payload: T.NotificationPayload) => dispatch(A.notificationPush(payload)),
     []
@@ -65,19 +64,14 @@ export const SettingProvider: T.SettingComponent = ({
     (value: T.Notification["id"]) => dispatch(A.notificationMarkAsRead(value)),
     []
   );
+  const onReadAllNotifications = useCallback(
+    () => dispatch(A.allNotificationMarkAsRead()),
+    []
+  );
 
   const onClearNotifications = useCallback(
     () => dispatch(A.notificationDeleteAll()),
     []
-  );
-
-  const onHandleNotification = useCallback(
-    (payload: T.NotificationPayload) => {
-      if (payload.type === "Error") defaultToast.onError(payload.message);
-      else defaultToast.onSuccess(payload.message);
-      dispatch(A.notificationPush(payload));
-    },
-    [defaultToast]
   );
 
   return (
@@ -94,9 +88,10 @@ export const SettingProvider: T.SettingComponent = ({
         onClearNotifications,
         onRemoveNotification,
         onReadNotification,
+        onReadAllNotifications,
         onHandleError: defaultToast.onError,
         onHandleAlert: defaultToast.onSuccess,
-        onHandleNotification,
+        onHandleInfo: defaultToast.onInfo,
         onToogleConnectExtension,
         onToogleConnectTrading,
       }}

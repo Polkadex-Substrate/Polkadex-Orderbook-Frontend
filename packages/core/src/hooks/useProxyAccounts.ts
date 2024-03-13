@@ -1,11 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { ExtensionAccount } from "@polkadex/react-providers";
 
-import {
-  UserAddressTuple,
-  getAllProxyAccounts,
-} from "../providers/user/profile";
+import { UserAddressTuple } from "../providers/user/profile";
 import { QUERY_KEYS } from "../constants";
+import { appsyncOrderbookService } from "../utils/orderbookService";
 
 export const useProxyAccounts = (extensionAccounts: ExtensionAccount[]) => {
   const {
@@ -16,11 +14,23 @@ export const useProxyAccounts = (extensionAccounts: ExtensionAccount[]) => {
     isFetching,
     status: proxiesStatus,
   } = useQuery<UserAddressTuple[]>({
-    queryKey: QUERY_KEYS.proxyAccounts(extensionAccounts),
-    queryFn: async () =>
-      await getAllProxyAccounts(
-        extensionAccounts.map(({ address }) => address)
-      ),
+
+    queryKey: QUERY_KEYS.proxyAccounts(extensionAccounts.map(({ address }) => address)),
+    queryFn: async () => {
+      const accounts: UserAddressTuple[] = [];
+      extensionAccounts.forEach(async ({ address: mainAddress }) => {
+        const proxies =
+          await appsyncOrderbookService.query.getTradingAddresses(mainAddress);
+
+        proxies.forEach((proxy) => {
+          accounts.push({
+            mainAddress,
+            tradeAddress: proxy,
+          });
+        });
+      });
+      return accounts;
+    },
     enabled: !!extensionAccounts?.length,
   });
 

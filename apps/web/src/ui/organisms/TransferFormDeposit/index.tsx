@@ -11,11 +11,11 @@ import {
   isAssetPDEX,
   trimFloat,
 } from "@orderbook/core/helpers";
-import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
 import { useTranslation } from "next-i18next";
-import { useFunds } from "@orderbook/core/index";
+import { useDeposit, useFunds } from "@orderbook/core/index";
 import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import * as S from "./styles";
 import * as T from "./types";
@@ -23,7 +23,6 @@ import * as T from "./types";
 import { Loading, Popover, TokenCard, WalletCard } from "@/ui/molecules";
 import { Icons, Tokens } from "@/ui/atoms";
 import { normalizeValue } from "@/utils/normalize";
-import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 const initialValues = { amount: 0.0 };
 
@@ -36,7 +35,7 @@ export const TransferFormDeposit = ({
   const { t } = useTranslation("transfer");
 
   const { extensionAccounts: allAccounts } = useExtensionAccounts();
-  const { loading, onFetchDeposit } = useDepositProvider();
+  const { loading, mutateAsync: onFetchDeposit } = useDeposit();
   const {
     selectedAddresses: { mainAddress },
   } = useProfile();

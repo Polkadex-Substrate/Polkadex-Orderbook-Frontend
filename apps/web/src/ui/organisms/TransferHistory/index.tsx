@@ -12,6 +12,7 @@ import { useAssets } from "@orderbook/core/hooks";
 import { useTranslation } from "next-i18next";
 import { TransferHistory as TransferHistoryProps } from "@orderbook/core/helpers";
 import { useExtensionAccounts } from "@polkadex/react-providers";
+import { useRouter } from "next/router";
 
 import { columns as getColumns } from "./columns";
 import * as S from "./styles";
@@ -36,8 +37,9 @@ export const TransferHistory = ({
   const [search, setSearch] = useState("");
 
   const { t } = useTranslation("transfer");
+  const { locale } = useRouter();
 
-  const { selectGetAsset } = useAssets();
+  const { selectGetAsset } = useAssets(locale);
   const { extensionAccounts } = useExtensionAccounts();
   const columns = useMemo(
     () => getColumns(["Date", "Token", "Amount", "From/To", "Hash"]),

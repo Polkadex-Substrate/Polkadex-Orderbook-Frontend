@@ -1,5 +1,12 @@
+import { ApiPromise } from "@polkadot/api";
+import { ExtensionAccount } from "@polkadex/react-providers";
+import { SignatureEnumSr25519 } from "@orderbook/core/helpers";
+import { LmpApi } from "@polkadex/polkadex-api";
+import { Signer } from "@polkadot/types/types";
+
 import {
   AccountUpdateEvent,
+  UserAllHistoryProps,
   Asset,
   Balance,
   Kline,
@@ -16,6 +23,7 @@ import {
   Ticker,
   Trade,
   Transaction,
+  TransactionHistoryProps,
   UserHistoryProps,
 } from "./types";
 
@@ -31,7 +39,9 @@ export interface OrderbookReadStrategy extends BaseStrategy {
   getAssets: () => Promise<Asset[]>;
   getOpenOrders: (args: OrderHistoryProps) => Promise<Order[]>;
   getOrderHistory: (args: UserHistoryProps) => Promise<MaybePaginated<Order[]>>;
+  getAllOrderHistory: (args: UserAllHistoryProps) => Promise<Order[]>;
   getTradeHistory: (args: UserHistoryProps) => Promise<MaybePaginated<Trade[]>>;
+  getAllTradeHistory: (args: UserAllHistoryProps) => Promise<Trade[]>;
   getLatestTradesForMarket: (
     args: LatestTradesPropsForMarket
   ) => Promise<PublicTrade[]>;
@@ -42,7 +52,7 @@ export interface OrderbookReadStrategy extends BaseStrategy {
   ) => Promise<string | null | undefined>;
   getCandles: (args: KlineHistoryProps) => Promise<Kline[]>;
   getTransactions: (
-    args: UserHistoryProps
+    args: TransactionHistoryProps
   ) => Promise<MaybePaginated<Transaction[]>>;
 }
 
@@ -100,10 +110,34 @@ export type ExecuteArgs = {
   payload: string;
   token?: string;
 };
+
+export type WithdrawArgs = {
+  payload: [string, string, object, SignatureEnumSr25519];
+  address: string;
+};
+
+export type DepositArgs = {
+  api: ApiPromise;
+  amount: string | number;
+  asset: Record<string, string | null>;
+  account: ExtensionAccount;
+};
+
+export type ClaimRewardArgs = {
+  api: ApiPromise;
+  lmp: LmpApi;
+  signer: Signer;
+  address: string;
+  epoch: number;
+  market: string;
+};
+
 export interface OrderbookOperationStrategy extends BaseStrategy {
   placeOrder: (args: ExecuteArgs) => Promise<void>;
   cancelOrder: (args: ExecuteArgs) => Promise<void>;
-  withdraw: (args: ExecuteArgs) => Promise<void>;
+  withdraw: (args: WithdrawArgs) => Promise<void>;
+  deposit: (args: DepositArgs) => Promise<void>;
+  claimReward: (args: ClaimRewardArgs) => Promise<void>;
 }
 
 export interface OrderbookService {

@@ -3,30 +3,16 @@ import { Ifilters } from "@orderbook/core/providers/types";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-import { decimalPlaces, getCurrentMarket } from "../helpers";
-import {
-  MIN_DIGITS_AFTER_DECIMAL,
-  QUERY_KEYS,
-  TRADE_HISTORY_PER_PAGE_LIMIT,
-} from "../constants";
+import { QUERY_KEYS, TRADE_HISTORY_PER_PAGE_LIMIT } from "../constants";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { useSessionProvider } from "../providers/user/sessionProvider";
 
-import { useMarkets } from "./useMarkets";
-
-export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
+export function useTradeHistory(rowsPerPage: number, filters?: Ifilters) {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
   const { dateFrom, dateTo } = useSessionProvider();
-  const { list: markets } = useMarkets();
-  const currentMarket = getCurrentMarket(markets, defaultMarket);
-
-  const userLoggedIn = tradeAddress !== "";
-
-  const shouldFetchTradeHistory = Boolean(
-    userLoggedIn && currentMarket && tradeAddress
-  );
+  const shouldFetchTradeHistory = tradeAddress?.length > 0;
 
   const {
     data,
@@ -34,8 +20,14 @@ export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
     isLoading: fetching,
     hasNextPage,
     error,
+    isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: QUERY_KEYS.tradeHistory(dateFrom, dateTo, tradeAddress),
+    queryKey: QUERY_KEYS.tradeHistory(
+      dateFrom,
+      dateTo,
+      tradeAddress,
+      rowsPerPage
+    ),
     enabled: shouldFetchTradeHistory,
     queryFn: async ({ pageParam = null }) => {
       return await appsyncOrderbookService.query.getTradeHistory({
@@ -44,6 +36,7 @@ export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
         to: dateTo,
         pageParams: pageParam,
         limit: TRADE_HISTORY_PER_PAGE_LIMIT,
+        batchLimit: rowsPerPage,
       });
     },
     getNextPageParam: (lastPage) => {
@@ -81,41 +74,15 @@ export function useTradeHistory(filters: Ifilters, defaultMarket: string) {
       );
     }
 
-    if (filters?.hiddenPairs) {
-      tradeHistoryList = tradeHistoryList.filter((trade) => {
-        const baseUnit = trade.market?.baseAsset?.ticker || "";
-        const quoteUnit = trade.market?.quoteAsset?.ticker || "";
-        const market = currentMarket?.name;
-        const marketForTrade = `${baseUnit}/${quoteUnit}`;
-        return market === marketForTrade && trade;
-      });
-    }
-
     return tradeHistoryList;
-  }, [
-    currentMarket?.name,
-    filters?.hiddenPairs,
-    filters?.onlyBuy,
-    filters?.onlySell,
-    filters?.showReverted,
-    list,
-  ]);
-
-  const priceFixed = currentMarket
-    ? decimalPlaces(currentMarket.price_tick_size)
-    : MIN_DIGITS_AFTER_DECIMAL;
-
-  const amountFixed = currentMarket
-    ? decimalPlaces(currentMarket.qty_step_size)
-    : MIN_DIGITS_AFTER_DECIMAL;
+  }, [filters?.onlyBuy, filters?.onlySell, filters?.showReverted, list]);
 
   return {
     trades: updatedTradeList,
-    priceFixed,
-    amountFixed,
     isLoading: fetching,
     hasNextPage,
     error: error as string,
     onFetchNextPage,
+    isFetchingNextPage,
   };
 }

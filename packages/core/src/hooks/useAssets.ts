@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { defaultConfig } from "@orderbook/core/config";
 import { BalanceFormatter } from "@orderbook/format";
@@ -15,8 +14,7 @@ export interface AssetsProps extends Asset {
   inOrdersBalance: string;
 }
 
-export function useAssets() {
-  const { locale } = useRouter();
+export function useAssets(locale = "en") {
   const [filters, setFilters] = useState({ search: "", hideZero: false });
 
   const { assets: assetsList, isReady } = useOrderbookService();
@@ -42,7 +40,7 @@ export function useAssets() {
   const assets = useMemo(
     () =>
       assetsList
-        ?.map((e: AssetsProps) => {
+        ?.map((e: Asset) => {
           const tokenBalance = balances?.find(
             (value) => value.asset.id === e.id
           );

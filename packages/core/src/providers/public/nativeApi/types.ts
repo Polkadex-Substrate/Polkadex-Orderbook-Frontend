@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren } from "react";
 import { ApiPromise } from "@polkadot/api";
+import { LmpApi } from "@polkadex/polkadex-api";
 
 export const orderbookTypes = {
   Address: "MultiAddress",
@@ -25,6 +26,12 @@ export const orderbookTypes = {
     qty: "String",
     price: "String", // Price is defined in quote asset per unit base asset
     timestamp: "i64",
+  },
+  CancelAllPayload: {
+    main: "AccountId",
+    proxy: "AccountId",
+    market: "String",
+    timestamp: "u64",
   },
   order_id: "H256",
   TradingPair: {
@@ -58,6 +65,7 @@ export interface NativeApiState {
   timestamp?: number;
   hasExtension?: boolean;
   api?: ApiPromise;
+  lmp?: LmpApi;
 }
 
 export type NativeApiProps = {

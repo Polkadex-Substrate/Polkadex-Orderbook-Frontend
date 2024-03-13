@@ -43,7 +43,8 @@ const CheckboxColumn = forwardRef(
         {isSingleSelectionMode && (
           <VisuallyHidden>{checkboxProps["aria-label"]}</VisuallyHidden>
         )}
-
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
         <Checkbox {...checkboxProps} />
       </S.Column>
     );

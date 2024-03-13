@@ -8,9 +8,12 @@
 
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { filterBlockedAssets } from "@orderbook/core/helpers";
-import { useAssets, useFunds } from "@orderbook/core/hooks";
-import { useDepositProvider } from "@orderbook/core/providers/user/depositProvider";
-import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
+import {
+  useAssets,
+  useDeposit,
+  useFunds,
+  useWithdraw,
+} from "@orderbook/core/hooks";
 import { useRouter } from "next/router";
 import { BalanceFormatter } from "@orderbook/format";
 
@@ -22,11 +25,11 @@ const onChangeState = (onCallback: Dispatch<SetStateAction<boolean>>) => {
 
 export function useTransfer() {
   const toHuman = BalanceFormatter.toHuman;
-  const { assets: list } = useAssets();
-  const { balances } = useFunds();
-  const { loading: depositLoading } = useDepositProvider();
-  const { loading: withdrawLoading } = useWithdrawsProvider();
   const { query, locale, push } = useRouter();
+  const { assets: list } = useAssets(locale);
+  const { balances } = useFunds();
+  const { loading: depositLoading } = useDeposit();
+  const { loading: withdrawLoading } = useWithdraw();
 
   const [assetsInteraction, setAssetsInteraction] = useState(false);
   const [switchEnable, setSwitchEnable] = useState(false);

@@ -17,11 +17,11 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useUserAccounts } from "@polkadex/react-providers";
 import { buySellValidation } from "@orderbook/core/validations";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import * as S from "./styles";
 
 import { normalizeValue } from "@/utils/normalize";
-import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 type FormValues = {
   priceSell: string;

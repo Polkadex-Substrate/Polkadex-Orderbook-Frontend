@@ -2,15 +2,15 @@ import * as C from "./constants";
 import * as T from "./types";
 
 export interface ToggleChartRebuildAction {
-  type: string;
+  type: typeof C.TOGGLE_CHART_REBUILD;
 }
 
 export interface ToggleMarketSelectorAction {
-  type: string;
+  type: typeof C.TOGGLE_MARKET_SELECTOR;
 }
 
 export interface ToggleOpenOrdersPairsSwitcher {
-  type: string;
+  type: typeof C.TOGGLE_ORDERS_PAIRS_SWITCHER;
   payload: boolean;
 }
 
@@ -56,6 +56,9 @@ export interface NotificationMarkAsRead {
   type: typeof C.NOTIFICATION_MARK_AS_READ;
   payload: number | string;
 }
+export interface AllNotificationMarkAsRead {
+  type: typeof C.ALL_NOTIFICATION_MARK_AS_READ;
+}
 
 export interface CheckHasExtension {
   type: typeof C.CHECK_HAS_EXTENSION;
@@ -72,6 +75,7 @@ export type SettingActions =
   | NotificationDeleteAll
   | NotificationDeleteById
   | NotificationMarkAsRead
+  | AllNotificationMarkAsRead
   | CheckHasExtension
   | ToogleConnectExtension
   | ToogleConnectTrading;
@@ -149,6 +153,10 @@ export const notificationMarkAsRead = (
 ): NotificationMarkAsRead => ({
   type: C.NOTIFICATION_MARK_AS_READ,
   payload,
+});
+
+export const allNotificationMarkAsRead = (): AllNotificationMarkAsRead => ({
+  type: C.ALL_NOTIFICATION_MARK_AS_READ,
 });
 
 export const checkHasExtension = (): CheckHasExtension => ({

@@ -4,15 +4,18 @@ import {
   useUserAccounts,
   useExtensionAccounts,
 } from "@polkadex/react-providers";
-import { getMainAccountLinkedToProxy } from "@orderbook/core/providers/user/profile/helpers";
 import { useProxyAccounts } from "@orderbook/core/hooks";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
+import { appsyncOrderbookService } from "@orderbook/core/utils/orderbookService";
 
 import * as LOCAL_STORE from "./localstore";
 import { Provider } from "./context";
 import * as T from "./types";
 
 export const ProfileProvider: T.ProfileComponent = ({ children }) => {
+  const [price, setPrice] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+  const [total, setTotal] = useState<string>("");
   const [activeAccount, setActiveAccount] = useState<T.UserAddressTuple>({
     mainAddress: "",
     tradeAddress: "",
@@ -50,7 +53,8 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     // TODO: Temp solution, backend issue
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
-        const mainAddress = await getMainAccountLinkedToProxy(tradeAddress);
+        const mainAddress =
+          await appsyncOrderbookService.query.getFundingAddress(tradeAddress);
         if (!mainAddress)
           // TODO: move error to translation
           throw new Error("No main account linked to this trade address");
@@ -59,15 +63,21 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
         setActiveAccount({ mainAddress, tradeAddress });
         break;
       } catch (error) {
-        console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
+        console.error(`Attempt ${attempt + 1} failed: ${error}`);
       }
       if (attempt < maxAttempts)
         await new Promise((resolve) => setTimeout(resolve, 10000));
     }
   };
 
-  const onUserSelectMainAddress = async ({ mainAddress: string }) => {
-    const mainAccount = extensionAccounts.find((acc) => acc.address === string);
+  const onUserSelectMainAddress = async ({
+    mainAddress,
+  }: {
+    mainAddress: string;
+  }) => {
+    const mainAccount = extensionAccounts.find(
+      (acc) => acc.address === mainAddress
+    );
     if (!mainAccount) {
       onHandleError("Invalid main Address");
       return;
@@ -156,9 +166,37 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     [extensionAccounts]
   );
 
+  const onSetPrice = (payload: string) => {
+    setPrice(payload);
+    setTimeout(() => {
+      setPrice("");
+    }, 200);
+  };
+
+  const onSetAmount = (payload: string) => {
+    setAmount(payload);
+    setTimeout(() => {
+      setAmount("");
+    }, 200);
+  };
+
+  const onSetTotal = (payload: string) => {
+    setTotal(payload);
+    setTimeout(() => {
+      setTotal("");
+    }, 200);
+  };
+
   return (
     <Provider
       value={{
+        price,
+        amount,
+        total,
+        onSetPrice,
+        onSetAmount,
+        onSetTotal,
+
         onUserSelectTradingAddress,
         selectedAddresses: activeAccount,
         onUserSelectMainAddress,

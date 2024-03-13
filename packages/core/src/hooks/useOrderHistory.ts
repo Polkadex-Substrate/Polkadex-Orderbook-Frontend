@@ -2,27 +2,18 @@ import { useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { Ifilters } from "../providers/types";
-import { getCurrentMarket, sortOrdersDescendingTime } from "../helpers";
+import { sortOrdersDescendingTime } from "../helpers";
 import { QUERY_KEYS } from "../constants";
 import { useProfile } from "../providers/user/profile";
 import { useSessionProvider } from "../providers/user/sessionProvider";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 
-import { useMarkets } from "./useMarkets";
-
-export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
+export const useOrderHistory = (rowsPerPage: number, filters?: Ifilters) => {
   const {
     selectedAddresses: { tradeAddress },
   } = useProfile();
   const { dateFrom, dateTo } = useSessionProvider();
-  const { list: markets } = useMarkets();
-  const currentMarket = getCurrentMarket(markets, defaultMarket);
-
-  const userLoggedIn = tradeAddress !== "";
-
-  const shouldFetchOrderHistory = Boolean(
-    userLoggedIn && currentMarket && tradeAddress
-  );
+  const shouldFetchOrderHistory = tradeAddress?.length > 0;
 
   const {
     data: orderHistoryList,
@@ -30,16 +21,23 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
     isLoading: isOrderHistoryLoading,
     hasNextPage: hasNextOrderHistoryPage,
     error: orderHistoryError,
+    isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: QUERY_KEYS.orderHistory(dateFrom, dateTo, tradeAddress),
+    queryKey: QUERY_KEYS.orderHistory(
+      dateFrom,
+      dateTo,
+      tradeAddress,
+      rowsPerPage
+    ),
     enabled: shouldFetchOrderHistory,
     queryFn: async ({ pageParam = null }) => {
       return await appsyncOrderbookService.query.getOrderHistory({
         address: tradeAddress,
         from: dateFrom,
         to: dateTo,
-        limit: 30,
+        limit: 25,
         pageParams: pageParam,
+        batchLimit: rowsPerPage,
       });
     },
     getNextPageParam: (lastPage) => {
@@ -60,16 +58,12 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
   );
 
   const filteredOrderHistory = useMemo(() => {
-    let orderHistoryList = orderHistory.filter((item) => !item.isReverted);
+    let orderHistoryList = orderHistory.filter(
+      (item) => !item.isReverted && item.status !== "OPEN"
+    );
 
     if (filters?.showReverted) {
       orderHistoryList = orderHistory.filter((item) => item.isReverted);
-    }
-
-    if (filters?.hiddenPairs) {
-      orderHistoryList = orderHistoryList.filter((order) => {
-        return order.orderId === currentMarket?.id;
-      });
     }
 
     if (filters?.onlyBuy && filters.onlySell) {
@@ -91,9 +85,10 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
     };
 
     const status = filters?.status?.toLowerCase();
-    const filterStatus = acceptedStatus[status] ?? status;
+    const filterStatus =
+      acceptedStatus[status as keyof typeof acceptedStatus] ?? status;
 
-    if (filterStatus !== Object.values(acceptedStatus)[0]) {
+    if (filterStatus && filterStatus !== Object.values(acceptedStatus)[0]) {
       orderHistoryList = orderHistoryList.filter((item) => {
         return item.status.toLowerCase() === filterStatus;
       });
@@ -101,12 +96,10 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
 
     return orderHistoryList;
   }, [
-    filters?.hiddenPairs,
     filters?.onlyBuy,
     filters?.onlySell,
     filters?.showReverted,
     filters?.status,
-    currentMarket?.id,
     orderHistory,
   ]);
 
@@ -116,5 +109,6 @@ export const useOrderHistory = (filters: Ifilters, defaultMarket: string) => {
     hasNextPage: hasNextOrderHistoryPage,
     onFetchNextPage: fetchNextOrderHistoryPage,
     error: orderHistoryError as string,
+    isFetchingNextPage,
   };
 };

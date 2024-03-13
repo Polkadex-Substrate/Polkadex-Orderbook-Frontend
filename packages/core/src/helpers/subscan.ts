@@ -1,11 +1,11 @@
 import { SubscanResult, TransferHistory } from "@orderbook/core/helpers/types";
-import { SUBSCAN_PER_PAGE_LIMIT } from "@orderbook/core/constants";
 
 export const SUBSCAN_GETTERS = {
   fetchTransfers: async (
     apiKey: string,
     address: string,
-    page: number
+    page: number,
+    limit: number
   ): Promise<SubscanResult<TransferHistory, "transfers">> => {
     return await fetch(
       "https://polkadex.webapi.subscan.io/api/v2/scan/transfers",
@@ -16,7 +16,7 @@ export const SUBSCAN_GETTERS = {
         },
         method: "POST",
         body: JSON.stringify({
-          row: SUBSCAN_PER_PAGE_LIMIT,
+          row: limit,
           page,
           address,
         }),

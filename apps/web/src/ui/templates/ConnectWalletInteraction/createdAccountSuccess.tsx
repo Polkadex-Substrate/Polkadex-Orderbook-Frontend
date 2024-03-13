@@ -1,10 +1,9 @@
 import { Multistep } from "@polkadex/ux";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { TradingAccountSuccessfull } from "../ConnectWallet/tradingAccountSuccessfull";
 import { TradingAccountMnemonic } from "../ConnectWallet/tradingAccountMnemonic";
 import { UnlockBrowserAccount } from "../ConnectWallet/unlockBrowserAccount";
-
-import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export const CreatedAccountSuccess = ({ onClose }: { onClose: () => void }) => {
   const {

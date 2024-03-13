@@ -1,10 +1,9 @@
 import { Multistep } from "@polkadex/ux";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { NewUser } from "../ConnectWallet/newUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
-
-import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export const ConnectNewUser = ({
   onNext,

@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useTranslation } from "next-i18next";
 import { useAssets } from "@orderbook/core/hooks";
+import { useRouter } from "next/router";
 
 import { AssetsTable } from "../AssetsTable";
 
@@ -25,8 +26,9 @@ export const AssetsInteraction = ({
 }) => {
   const { t } = useTranslation("transfer");
 
+  const { locale } = useRouter();
   const { assets, filters, loading, onHideZeroBalance, onSearchToken } =
-    useAssets();
+    useAssets(locale);
 
   return (
     <Transition appear show={open} as={Fragment}>

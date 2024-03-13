@@ -1,5 +1,6 @@
 import BigNumber from "bignumber.js";
 export * from "./queryKeys";
+export * from "./notifications";
 export const UNIT = BigInt(1000_000_000_000);
 export const UNIT_BN = new BigNumber(UNIT.toString());
 export const DEFAULT_TRADING_VIEW_INTERVAL = "5";
@@ -84,7 +85,18 @@ export const TradingView = {
 };
 
 export const SUBSCAN_PER_PAGE_LIMIT = 10;
-export const TRADE_HISTORY_PER_PAGE_LIMIT = 100;
+export const TRADE_HISTORY_PER_PAGE_LIMIT = 25;
 export const RECENT_TRADES_LIMIT = 30;
+export const DEFAULT_BATCH_LIMIT = 15;
 
 export const OTHER_ASSET_EXISTENTIAL = 0.00000001;
+
+export const PALLET_ADDRESS =
+  "esoEt6uZ3GuFV8EzKB2EAREe3KE9WuRVfmhK1RRtwffY78ArH";
+
+export const TIME_INTERVAL = {
+  // Change it to 201600 for production
+  blocksInEpoch: 200,
+  // Change it to 28 days = 2.419000 seconds, for production
+  epochDuration: 40 * 60, // in seconds
+};

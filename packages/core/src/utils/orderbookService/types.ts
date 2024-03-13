@@ -12,9 +12,7 @@ export interface MarketBase {
 
 export interface Market extends MarketBase {
   minPrice: number;
-  maxPrice: number;
   minQty: number;
-  maxQty: number;
   maxVolume: number;
   minVolume: number;
   basePrecision: number;
@@ -35,6 +33,11 @@ export type Orderbook = {
   bids: BookLevel[];
   asks: BookLevel[];
 };
+
+export enum OrderTypeEnum {
+  LIMIT = "LIMIT",
+  MARKET = "MARKET",
+}
 
 export type OrderType = "LIMIT" | "MARKET";
 export type OrderStatus = "OPEN" | "CLOSED" | "CANCELLED";
@@ -67,7 +70,7 @@ export interface Trade {
   fee: number;
   timestamp: Date;
   side: OrderSide;
-  quantity: string;
+  quote_qty: string;
 }
 
 export interface PublicTrade {
@@ -141,7 +144,23 @@ export interface UserHistoryProps<T = null> {
   limit: number;
   pageParams: T;
   market?: string;
+  batchLimit: number;
 }
+export interface UserAllHistoryProps {
+  address: string;
+  from: Date;
+  to: Date;
+}
+
+export interface TransactionHistoryProps<T = null> {
+  address: string;
+  from: Date;
+  to: Date;
+  limit: number;
+  pageParams: T;
+  transaction_type: "DEPOSIT" | "WITHDRAW";
+}
+
 export interface OrderHistoryProps {
   address: string;
   limit: number;

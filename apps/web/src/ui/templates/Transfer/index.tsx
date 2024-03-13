@@ -12,14 +12,13 @@ import { useTranslation } from "next-i18next";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMemo } from "react";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ConnectWalletInteraction } from "../ConnectWalletInteraction";
 import { ConnectTradingInteraction } from "../ConnectTradingInteraction";
 
 import * as S from "./styles";
 import { useTransfer } from "./useTransfer";
-
-import { useConnectWalletProvider } from "@/providers/connectWalletProvider/useConnectWallet";
 
 export const TransferTemplate = () => {
   const { t } = useTranslation("transfer");

@@ -1,10 +1,7 @@
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useUserAccounts } from "@polkadex/react-providers";
-import {
-  getProxiesLinkedToMain,
-  useProfile,
-} from "@orderbook/core/providers/user/profile";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   removeFromStorage,
@@ -13,7 +10,8 @@ import {
 import { ACTIVE_ACCOUNT_KEY } from "@orderbook/core/providers/user/profile/constants";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
-import { QUERY_KEYS } from "../constants";
+import { NOTIFICATIONS, QUERY_KEYS } from "../constants";
+import { useSettingsProvider } from "../providers/public/settings";
 
 export type RemoveProxyAccountArgs = {
   proxy: string;
@@ -25,6 +23,7 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
   const { getSigner, selectedAddresses, onUserLogout } = useProfile();
+  const { onPushNotification } = useSettingsProvider();
 
   const { mutateAsync, status, error } = useMutation({
     mutationFn: async ({ proxy, main }: RemoveProxyAccountArgs) => {
@@ -37,7 +36,7 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
       appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
         queryClient.setQueryData(
           QUERY_KEYS.singleProxyAccounts(main),
-          (proxies: string[]) => {
+          (proxies?: string[]) => {
             return proxies?.filter((value) => value !== proxy);
           }
         );
@@ -58,8 +57,10 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
       props?.onError?.(error as Error);
       console.log(error);
     },
-    onSuccess: () =>
-      props?.onSuccess?.("Trading account removed from blockchain"),
+    onSuccess: () => {
+      props?.onSuccess?.("Trading account removed from blockchain");
+      onPushNotification(NOTIFICATIONS.removeTradingAccount());
+    },
   });
 
   return {
@@ -78,14 +79,16 @@ const isTradingAccountRemovedFromDb = async (
   // TODO: Temp solution, backend issue
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
-      const { proxies }: { proxies: string[] } =
-        await getProxiesLinkedToMain(mainAddress);
+      const proxies =
+        await appsyncOrderbookService.query.getTradingAddresses(mainAddress);
       if (!proxies.includes(tradeAddress)) {
         break;
       }
       throw new Error("Proxy not removed yet from database");
-    } catch (error) {
-      console.error(`Attempt ${attempt + 1} failed: ${error.message}`);
+    } catch (error: unknown) {
+      console.error(
+        `Attempt ${attempt + 1} failed: ${(error as Error).message}`
+      );
     }
     if (attempt < maxAttempts)
       await new Promise((resolve) => setTimeout(resolve, 10000));

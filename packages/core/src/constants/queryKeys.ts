@@ -2,10 +2,11 @@ import { Maybe } from "@orderbook/core/helpers";
 
 const PREFIX = "@orderbook";
 export const QUERY_KEYS = {
-  blockchainTransfers: (id: Maybe<string>) => [
+  blockchainTransfers: (id: Maybe<string>, PER_PAGE_LIMIT: number) => [
     PREFIX,
     "blockchainTransfers",
     id,
+    PER_PAGE_LIMIT,
   ],
   assets: () => [PREFIX, "assets"],
   markets: () => [PREFIX, "markets"],
@@ -13,20 +14,18 @@ export const QUERY_KEYS = {
   recentTrades: (market: string) => [PREFIX, "recentTrades", market],
   orderBook: (market: string) => [PREFIX, "orderbook", market],
   miniGraph: (market: string) => [PREFIX, `mini-graph-${market}`],
-  tradeHistory: (dateFrom: Date, dateTo: Date, tradeAddress: string) => [
-    PREFIX,
-    "tradeHistory",
-    dateFrom,
-    dateTo,
-    tradeAddress,
-  ],
-  orderHistory: (dateFrom: Date, dateTo: Date, tradeAddress: string) => [
-    PREFIX,
-    "orderHistory",
-    dateFrom,
-    dateTo,
-    tradeAddress,
-  ],
+  tradeHistory: (
+    dateFrom: Date,
+    dateTo: Date,
+    tradeAddress: string,
+    rowsPerPage: number
+  ) => [PREFIX, "tradeHistory", dateFrom, dateTo, tradeAddress, rowsPerPage],
+  orderHistory: (
+    dateFrom: Date,
+    dateTo: Date,
+    tradeAddress: string,
+    rowsPerPage: number
+  ) => [PREFIX, "orderHistory", dateFrom, dateTo, tradeAddress, rowsPerPage],
   openOrders: (tradeAddress: string) => [PREFIX, "openOrders", tradeAddress],
   tradingBalances: (mainAddress: string) => [
     PREFIX,
@@ -38,8 +37,17 @@ export const QUERY_KEYS = {
     "onChainBalances",
     accountId,
   ],
-  transactions: (mainAddress: string) => [PREFIX, "transactions", mainAddress],
-  proxyAccounts: (extensions) => [PREFIX, "proxyAccounts", extensions],
+  transactions: (mainAddress: string, tx_type: string) => [
+    PREFIX,
+    "transactions",
+    mainAddress,
+    tx_type,
+  ],
+  proxyAccounts: (mainAddresses: string[]) => [
+    PREFIX,
+    "proxyAccounts",
+    ...mainAddresses,
+  ],
   singleProxyAccounts: (mainAddress: string) => [
     PREFIX,
     "proxyAccount",
@@ -53,6 +61,20 @@ export const QUERY_KEYS = {
   transactionFee: (mainAddress: string) => [
     PREFIX,
     "transactionFee",
+    mainAddress,
+  ],
+  epochs: () => [PREFIX, "epochs"],
+  lmpMarkets: (epoch: number) => [PREFIX, "lmpMarkets", epoch],
+  lmpLeaderboard: (market: string) => [PREFIX, "lmpLeaderboard", market],
+  lmpRewards: (market: string, mainAddress: string) => [
+    PREFIX,
+    "lmpRewards",
+    market,
+    mainAddress,
+  ],
+  traderMetrics: (mainAddress: string) => [
+    PREFIX,
+    "traderMetrics",
     mainAddress,
   ],
 };

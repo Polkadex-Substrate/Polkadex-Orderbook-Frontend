@@ -48,6 +48,15 @@ const border = {
 export const themeConfig = {
   theme: {
     extend: {
+      screens: {
+        "1xl": "1380px",
+      },
+      minHeight: {
+        webKit: "-webkit-fill-available",
+      },
+      height: {
+        webKit: "-webkit-fill-available",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

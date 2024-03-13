@@ -12,6 +12,7 @@ import {
   sendQueryToAppSync,
   signPayload,
   getFundingAccountDetail,
+  SignatureEnumSr25519,
 } from "@orderbook/core/helpers";
 import { useFunds } from "@orderbook/core/hooks";
 import {
@@ -40,7 +41,10 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     is_success: boolean;
     body: string;
   };
-  const onFetchWithdraws = async ({ asset, amount }) => {
+  const onFetchWithdraws = async ({
+    asset,
+    amount,
+  }: A.WithdrawsFetch["payload"]) => {
     dispatch(A.withdrawsFetch({ asset, amount }));
     try {
       const keyringPair = wallet.getPair(tradeAddress);
@@ -70,19 +74,21 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
           }
         }
         dispatch(A.withdrawsData());
-        settingsState.onHandleNotification({
-          type: "Success",
-          message:
-            "Your withdrawal is being processed and will be available for you to claim in a few minutes",
-        });
+        settingsState.onHandleAlert(
+          "Your withdrawal is being processed and will be available for you to claim in a few minutes"
+        );
       }
     } catch (error) {
+      const errorText = (error as Error).message || (error as string);
       dispatch(A.withdrawsData());
-      settingsState.onHandleError(error?.message ?? error);
+      settingsState.onHandleError(errorText);
     }
   };
 
-  const executeWithdraw = async (withdrawPayload, address) => {
+  const executeWithdraw = async (
+    withdrawPayload: [string, string, object, SignatureEnumSr25519],
+    address: string
+  ) => {
     const payload = JSON.stringify({ Withdraw: withdrawPayload });
     return await sendQueryToAppSync({
       query: mutations.withdraw,
@@ -113,11 +119,9 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
       if (!signer) throw new Error("Signer is not defined");
 
       // TODO: Move this toast as callback to signAndSendExtrinsic,
-      settingsState.onHandleNotification({
-        type: "Information",
-        message:
-          "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins.",
-      });
+      settingsState.onHandleAlert(
+        "Processing Claim Withdraw, please wait while the withdraw is processed and the block is finalized. This may take a few mins."
+      );
       dispatch(A.withdrawsClaimFetch({ sid, assetIds }));
 
       const res = await claimWithdrawal(
@@ -131,11 +135,9 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
         // TODO?: Check delay
         // for ux
         setTimeout(() => {
-          settingsState.onHandleNotification({
-            type: "Success",
-            message:
-              "Congratulations! You have successfully withdrawn your assets to your funding account.",
-          });
+          settingsState.onHandleAlert(
+            "Congratulations! You have successfully withdrawn your assets to your funding account."
+          );
 
           dispatch(A.withdrawClaimReset());
         }, 3000);
@@ -144,8 +146,8 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
       }
     } catch (error) {
       dispatch(A.withdrawClaimCancel(sid));
-      settingsState.onHandleError(error?.message ?? error);
-      dispatch(A.withdrawsError(error));
+      settingsState.onHandleError((error as Error)?.message ?? error);
+      dispatch(A.withdrawsError((error as Error)?.message ?? error));
     } finally {
       for (const assetId of assetIds) {
         await onChangeChainBalance(assetId);
