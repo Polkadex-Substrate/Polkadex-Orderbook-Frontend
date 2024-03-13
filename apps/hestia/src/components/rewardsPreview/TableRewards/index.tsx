@@ -141,7 +141,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
           <RewardsSkeleton />
         ) : (
           <div
-            className="overflow-y-hidden hover:overflow-y-auto p-3"
+            className="overflow-y-hidden hover:overflow-y-auto p-3 scrollbar-hide"
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
             <div className="flex flex-col gap-4">

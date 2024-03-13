@@ -87,8 +87,8 @@ export function Template({ id }: { id: string }) {
       >
         <div className="flex-1 flex flex-col">
           <Overview ref={overviewRef} market={currentMarket} />
-          <div className="flex flex-1 max-lg:flex-col flex-wrap">
-            <div className="flex-1 flex flex-col border-b border-secondary-base">
+          <div className="flex flex-1 max-lg:flex-col">
+            <div className="flex-1 basis-2/3 flex flex-col border-b border-secondary-base">
               <div
                 ref={tableTitlesRef}
                 className="flex items-center justify-between gap-2 border-b border-primary py-3 px-4 w-full"
@@ -103,7 +103,7 @@ export function Template({ id }: { id: string }) {
                 market={currentMarket?.id as string}
               />
             </div>
-            <div className="max-lg:w-full flex flex-col border-l border-primary">
+            <div className="basis-1/3 max-lg:w-full flex flex-col border-l border-primary">
               <div
                 ref={tableTitlesRef}
                 className="border-b border-primary py-3 px-4 w-full"
