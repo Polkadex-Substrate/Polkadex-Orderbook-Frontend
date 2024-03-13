@@ -61,13 +61,13 @@ export function Template({ id }: { id: string }) {
 
   const maxHeight = useMemo(
     () =>
-      `calc(90vh - ${
-        overviewHeight + headerHeight + tableTitleHeight + tableRowsHeight + 1
+      `calc(100vh - ${
+        overviewHeight + headerHeight + tableTitleHeight + tableRowsHeight + 25
       }px)`,
     [headerHeight, overviewHeight, tableTitleHeight, tableRowsHeight]
   );
 
-  const mobileView = useMemo(() => width < 640, [width]);
+  const mobileView = useMemo(() => width <= 640, [width]);
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
