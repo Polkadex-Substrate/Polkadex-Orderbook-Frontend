@@ -10,14 +10,16 @@ import { GenericAction } from "./columns";
 
 export const Table = ({
   isSell = false,
-  precision,
+  pricePrecision,
+  qtyPrecision,
   active,
   orders,
   asks,
   bids,
 }: {
   isSell?: boolean;
-  precision: number;
+  pricePrecision: number;
+  qtyPrecision: number;
   active?: boolean;
   orders: string[][];
   bids: string[][];
@@ -110,7 +112,7 @@ export const Table = ({
               }}
             >
               <Decimal
-                fixed={precision}
+                fixed={pricePrecision}
                 thousSep=","
                 // prevValue={orders[i + 1] ? orders[i + 1][0] : 0}
               >
@@ -127,7 +129,7 @@ export const Table = ({
               }}
               className="justify-self-end"
             >
-              <Decimal fixed={precision} thousSep=",">
+              <Decimal fixed={qtyPrecision} thousSep=",">
                 {amount}
               </Decimal>
             </Typography.Text>
@@ -141,7 +143,7 @@ export const Table = ({
               }}
               className="justify-self-end pr-2"
             >
-              <Decimal fixed={precision} thousSep=",">
+              <Decimal fixed={pricePrecision} thousSep=",">
                 {total[i]}
               </Decimal>
             </Typography.Text>

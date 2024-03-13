@@ -65,7 +65,8 @@ export const Orderbook = ({ id }: { id: string }) => {
         </div>
         <Skeleton loading={!!loading}>
           <Table
-            precision={sizeState.length}
+            pricePrecision={sizeState.length}
+            qtyPrecision={qtyPrecision}
             isSell
             active={filterState !== "OrderDesc"}
             asks={asks}
@@ -81,7 +82,8 @@ export const Orderbook = ({ id }: { id: string }) => {
         />
         <Skeleton loading={!!loading}>
           <Table
-            precision={sizeState.length}
+            pricePrecision={sizeState.length}
+            qtyPrecision={qtyPrecision}
             active={filterState !== "OrderAsc"}
             asks={asks}
             bids={bids}

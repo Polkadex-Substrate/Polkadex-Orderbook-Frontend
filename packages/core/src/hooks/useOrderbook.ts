@@ -28,11 +28,12 @@ export function useOrderbook(defaultMarket: string) {
   const { onHandleError } = useSettingsProvider();
   const {
     currentTicker: { currentPrice },
+    tickerLoading,
   } = useTickers(defaultMarket);
 
   const { isPriceUp } = useRecentTrades(defaultMarket);
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isRefetching } = useQuery({
     queryKey: QUERY_KEYS.orderBook(defaultMarket),
     queryFn: async () => {
       const orderbook =
@@ -56,6 +57,7 @@ export function useOrderbook(defaultMarket: string) {
       onHandleError(errorMessage);
     },
     refetchOnMount: false,
+    refetchInterval: 30 * 1000, // 30s
   });
 
   const [asks, bids] = [
@@ -91,7 +93,7 @@ export function useOrderbook(defaultMarket: string) {
     qtyPrecision,
     lastPriceValue: currentPrice,
     hasMarket: !!currentMarket,
-    loading: isLoading || isFetching,
+    loading: isRefetching ? false : isLoading || tickerLoading,
     asks,
     bids,
     initialState,
