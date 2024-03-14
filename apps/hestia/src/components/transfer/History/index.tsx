@@ -35,10 +35,12 @@ export const filters = {
 };
 
 export const History = ({
+  showSubscanData,
   subscanData,
   subscanLoading,
   tableMaxHeight,
 }: {
+  showSubscanData?: boolean;
   subscanData?: TransferHistory[];
   subscanLoading?: boolean;
   tableMaxHeight?: string;
@@ -143,12 +145,17 @@ export const History = ({
 
   const data = useMemo(
     () =>
-      [
-        ...depositsTransactions,
-        ...withdrawalsTransactions,
-        ...(transferSubscanTransactions ?? []),
-      ]?.sort((a, b) => (a.timestamp > b.timestamp ? -1 : 1)),
-    [depositsTransactions, withdrawalsTransactions, transferSubscanTransactions]
+      showSubscanData
+        ? transferSubscanTransactions || []
+        : [...depositsTransactions, ...withdrawalsTransactions]?.sort((a, b) =>
+            a.timestamp > b.timestamp ? -1 : 1
+          ),
+    [
+      depositsTransactions,
+      withdrawalsTransactions,
+      showSubscanData,
+      transferSubscanTransactions,
+    ]
   );
 
   const table = useReactTable({

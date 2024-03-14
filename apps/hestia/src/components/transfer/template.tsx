@@ -131,6 +131,7 @@ export function Template() {
                   <Fragment>
                     <Tabs.Content value="history" className="flex flex-col">
                       <History
+                        showSubscanData={type === "transfer"}
                         subscanData={data?.pages?.[0]?.transfers}
                         subscanLoading={isLoading}
                         tableMaxHeight={tableMaxHeight}
