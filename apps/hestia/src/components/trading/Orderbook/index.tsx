@@ -41,7 +41,10 @@ export const Orderbook = ({ id }: { id: string }) => {
       />
       <div
         className={classNames(
-          "grid flex-1 grid-rows-[auto_1fr_auto_1fr] border-t border-t-primary bg-level-0 overflow-auto h-full"
+          "flex-1  border-t border-t-primary bg-level-0 overflow-auto h-full",
+          filterState === "Order"
+            ? "grid grid-rows-[auto_1fr_auto_1fr]"
+            : "flex flex-col"
         )}
       >
         <div className="grid grid-cols-[30%_35%_35%] p-2 sticky top-0 left-0">
