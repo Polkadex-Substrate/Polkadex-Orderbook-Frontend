@@ -1,5 +1,4 @@
 import { Typography, Separator, HoverCard } from "@polkadex/ux";
-import Link from "next/link";
 import { RiArrowDownSLine } from "@remixicon/react";
 import { useState } from "react";
 
@@ -11,7 +10,6 @@ export const TradingFee = ({
   takerFee = "0.1",
   makerFee = "0.1",
   ticker = "PDEX",
-  readMoreLink = "#",
 }: {
   takerFee?: string;
   makerFee?: string;
@@ -44,19 +42,15 @@ export const TradingFee = ({
           <ResponsiveCard label="Taker fee">{takerFee}&#37;</ResponsiveCard>
           <ResponsiveCard label="Maker fee">{makerFee}&#37;</ResponsiveCard>
         </div>
-        <Separator.Horizontal className="my-3 hidden" />
-        <div className="hidden">
+        <Separator.Horizontal className="my-3" />
+        <div>
           <Typography.Paragraph
             size="xs"
             appearance="primary"
             className="leading-5"
           >
-            Trading fees are vital for Orderbook growth, charged by the network
-            based on your trading volume. They&apos;re distributed to validators
-            and Polkadex stakers.{" "}
-            <Link href={readMoreLink} className="text-primary-base">
-              Read more
-            </Link>
+            Trading fees are vital for Orderbook&apos;s growth. They are charged
+            by the Polkadex network as a percentage of trading volume.
           </Typography.Paragraph>
         </div>
       </HoverCard.Content>
