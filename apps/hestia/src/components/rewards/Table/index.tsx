@@ -5,6 +5,7 @@ import { LmpMarketConfig, useLmpMarkets } from "@orderbook/core/hooks";
 import {
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
@@ -36,6 +37,7 @@ export const Table = forwardRef<HTMLDivElement, Props>(
       data: markets as LmpMarketConfig[],
       columns: columns(),
       getCoreRowModel: getCoreRowModel(),
+      getSortedRowModel: getSortedRowModel(),
     });
 
     useEffect(() => {
