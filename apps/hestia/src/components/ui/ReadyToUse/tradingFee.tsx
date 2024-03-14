@@ -44,8 +44,8 @@ export const TradingFee = ({
           <ResponsiveCard label="Taker fee">{takerFee}&#37;</ResponsiveCard>
           <ResponsiveCard label="Maker fee">{makerFee}&#37;</ResponsiveCard>
         </div>
-        <Separator.Horizontal className="my-3" />
-        <div>
+        <Separator.Horizontal className="my-3 hidden" />
+        <div className="hidden">
           <Typography.Paragraph
             size="xs"
             appearance="primary"
