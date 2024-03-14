@@ -1,4 +1,4 @@
-import { Skeleton, Typography } from "@polkadex/ux";
+import { Skeleton, Token, Typography, tokenAppearance } from "@polkadex/ux";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { Decimal } from "@orderbook/core/utils";
 import { hasOnlyZeros, isNegative } from "@orderbook/core/helpers";
@@ -69,6 +69,9 @@ export const ResponsiveAssetInfo = ({
     if (width >= 954 && open) setOpen(false);
   }, [width, open]);
 
+  const baseTicker = currentMarket?.baseAsset?.ticker ?? "";
+  const quoteTicker = currentMarket?.quoteAsset?.ticker ?? "";
+
   return (
     <Fragment>
       <ResponsiveMarket open={open} onOpenChange={setOpen} />
@@ -79,14 +82,32 @@ export const ResponsiveAssetInfo = ({
             onClick={() => setOpen(true)}
             className="flex gap-2 p-1 rounded-md duration-200 transition-colors hover:bg-level-1 w-fit"
           >
-            <div className="flex flex-col">
-              <Typography.Text size="lg" bold>
-                PDEX
-              </Typography.Text>
-              <Typography.Text size="xs" appearance="primary">
-                /USDT
-              </Typography.Text>
+            <div className="flex items-center justify-center gap-1">
+              <Token
+                appearance={baseTicker as keyof typeof tokenAppearance}
+                name={baseTicker}
+                size="sm"
+                className="rounded-full border border-primary"
+              />
+              <div
+                className={classNames(
+                  "flex flex-col",
+                  !currentMarket && "gap-1"
+                )}
+              >
+                <Skeleton loading={!currentMarket} className="h-4 w-20">
+                  <Typography.Text size="lg" bold>
+                    {baseTicker}
+                  </Typography.Text>
+                </Skeleton>
+                <Skeleton loading={!currentMarket} className="h-4 w-10">
+                  <Typography.Text size="xs" appearance="primary">
+                    /{quoteTicker}
+                  </Typography.Text>
+                </Skeleton>
+              </div>
             </div>
+
             <RiArrowDownSLine className="w-5 h-5 mt-1 text-primary" />
           </div>
           <div
