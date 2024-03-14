@@ -1,4 +1,11 @@
-import { forwardRef, useMemo, useState } from "react";
+import {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  forwardRef,
+  useMemo,
+  useState,
+} from "react";
 import { Dropdown, Typography } from "@polkadex/ux";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import classNames from "classnames";
@@ -9,15 +16,22 @@ import { useWindowSize } from "usehooks-ts";
 import { Markets } from "./markets";
 
 const items = ["Popular", "Favorite"];
-export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
-  ({ marketsActive = false }, ref) => {
-    const { width } = useWindowSize();
-    const [state, setState] = useState(items[0]);
-    const { connected } = useNativeApi();
+export const Footer = forwardRef<
+  HTMLDivElement,
+  {
+    marketsActive?: boolean;
+    onOpenChange: Dispatch<SetStateAction<boolean>>;
+  }
+>(({ marketsActive = false, onOpenChange }, ref) => {
+  const [state, setState] = useState(items[0]);
 
-    const mobileView = useMemo(() => width <= 640, [width]);
+  const { width } = useWindowSize();
+  const { connected } = useNativeApi();
 
-    return (
+  const mobileView = useMemo(() => width <= 640, [width]);
+
+  return (
+    <Fragment>
       <footer
         ref={ref}
         className={classNames(
@@ -61,10 +75,15 @@ export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
               {connected ? "Connected" : "Connecting"}
             </Typography.Text>
           </div>
-          <Typography.Text appearance="primary">
+          <Typography.Text
+            className="cursor-pointer"
+            appearance="primary"
+            onClick={() => onOpenChange(true)}
+          >
             <RiMessage3Line className="h-3 w-3 inline-block mr-1" />
             Quick Start
           </Typography.Text>
+
           <Typography.Text appearance="primary">
             <Link href="https://discord.com/invite/Uvua83QAzk" target="_blank">
               <RiLifebuoyLine className="h-3 w-3 inline-block mr-1" />
@@ -73,8 +92,8 @@ export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
           </Typography.Text>
         </div>
       </footer>
-    );
-  }
-);
+    </Fragment>
+  );
+});
 
 Footer.displayName = "Footer";

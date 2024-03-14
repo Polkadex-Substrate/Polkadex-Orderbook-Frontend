@@ -7,6 +7,8 @@ import { useWindowSize } from "react-use";
 import classNames from "classnames";
 import { Resizable, ImperativePanelHandle } from "@polkadex/ux";
 
+import { QuickStart } from "../ui/Footer/QuickStart";
+
 import { AssetInfo } from "./AssetInfo";
 import { Orderbook } from "./Orderbook";
 import { Trades } from "./Trades";
@@ -19,7 +21,7 @@ import { ResponsiveAssetInfo } from "./AssetInfo/responsiveAssetInfo";
 
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { Footer, Header } from "@/components/ui";
-import { useSizeObserver } from "@/hooks";
+import { useSizeObserver, useTour } from "@/hooks";
 
 export function Template({ id }: { id: string }) {
   const [footerRef, footerHeight] = useSizeObserver();
@@ -29,7 +31,7 @@ export function Template({ id }: { id: string }) {
   const orderbookPanelRef = useRef<ImperativePanelHandle>(null);
 
   const { width } = useWindowSize();
-
+  const { open, onOpenChange, onClose } = useTour();
   const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, id);
 
@@ -39,6 +41,7 @@ export function Template({ id }: { id: string }) {
 
   return (
     <Fragment>
+      <QuickStart open={open} onOpenChange={onClose} />
       <ConnectTradingInteraction />
       <Header />
       {mobileView ? (
@@ -105,7 +108,7 @@ export function Template({ id }: { id: string }) {
           <Resizable.Handle />
           <Resizable.Panel
             className={classNames(
-              tabletView && "min-h-[700px]",
+              tabletView && "min-h-[710px]",
               desktopView && "min-h-[310px]"
             )}
           >
@@ -164,7 +167,11 @@ export function Template({ id }: { id: string }) {
           market={currentMarket}
         />
       ) : (
-        <Footer marketsActive ref={footerRef} />
+        <Footer
+          onOpenChange={() => onOpenChange(true)}
+          marketsActive
+          ref={footerRef}
+        />
       )}
     </Fragment>
   );
