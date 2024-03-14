@@ -2,6 +2,7 @@ import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { ComponentProps, PropsWithChildren } from "react";
 import { Accordion, Dropdown, Typography } from "@polkadex/ux";
+import classNames from "classnames";
 
 interface DropdownProps {
   items: {
@@ -37,10 +38,12 @@ const AccordionMenu = ({
 
 interface SingleProps extends ComponentProps<"a"> {
   size?: "lg" | "sm";
+  disabled?: boolean;
 }
 const Single = ({
   href,
   size = "sm",
+  disabled = false,
   children,
 }: PropsWithChildren<SingleProps>) => {
   const largeText = size === "lg";
@@ -50,9 +53,13 @@ const Single = ({
       size={size}
       bold={largeText}
       appearance={largeText ? "base" : "primary"}
-      className="transition-colors ease-out duration-300 hover:text-primary-base"
+      className={classNames(
+        !disabled &&
+          "transition-colors ease-out duration-300 hover:text-primary-base",
+        disabled && "cursor-not-allowed opacity-50"
+      )}
     >
-      <Link href={href as Url}>{children}</Link>
+      <Link href={disabled ? "#" : (href as Url)}>{children}</Link>
     </Typography.Text>
   );
 };

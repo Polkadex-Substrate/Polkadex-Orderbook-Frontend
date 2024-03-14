@@ -52,12 +52,15 @@ export const Table = forwardRef<HTMLDivElement, Props>(
         </div>
       );
 
-    if (markets?.length === 0)
+    if (!markets?.length)
       return (
         <GenericMessage
           title="No results found"
           illustration="NoResultFound"
-          className="bg-level-1 border-b border-b-primary"
+          className="bg-level-0 border-b border-b-primary"
+          imageProps={{
+            className: "w-16 self-center",
+          }}
         />
       );
 
