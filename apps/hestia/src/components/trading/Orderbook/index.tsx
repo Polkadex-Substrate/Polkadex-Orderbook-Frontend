@@ -63,7 +63,7 @@ export const Orderbook = ({ id }: { id: string }) => {
             appearance="primary"
             className="justify-self-end"
           >
-            Total {!loading && `(${baseUnit})`}
+            Total {!loading && `(${quoteUnit})`}
           </Typography.Text>
         </div>
         <Skeleton loading={!!loading}>

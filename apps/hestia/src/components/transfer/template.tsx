@@ -10,6 +10,7 @@ import { useWindowSize } from "react-use";
 
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
+import { QuickStart } from "../ui/Footer/QuickStart";
 
 import { Help } from "./Help";
 import { SelectAsset } from "./SelectAsset";
@@ -19,7 +20,7 @@ import { ReadyToClaim } from "./ReadyToClaim";
 import { useSizeProvider } from "./provider";
 
 import { Footer, Header } from "@/components/ui";
-import { useTransfer } from "@/hooks";
+import { useTour, useTransfer } from "@/hooks";
 import { defaultConfig } from "@/config";
 
 const sleep = async (ms: number) =>
@@ -29,6 +30,7 @@ export function Template() {
   const router = useRouter();
   const pathname = usePathname();
   const { width } = useWindowSize();
+  const { onOpenChange, open, onClose } = useTour();
 
   const {
     headerRef,
@@ -71,6 +73,7 @@ export function Template() {
 
   return (
     <Fragment>
+      <QuickStart open={open} onOpenChange={onClose} />
       <ConnectTradingInteraction />
       <SelectAsset
         open={assetsInteraction}
@@ -167,7 +170,7 @@ export function Template() {
             />
           </div>
         )}
-        {!mobileView && <Footer ref={footerRef} />}
+        {!mobileView && <Footer onOpenChange={onOpenChange} ref={footerRef} />}
       </div>
     </Fragment>
   );
