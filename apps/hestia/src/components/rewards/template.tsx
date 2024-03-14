@@ -64,7 +64,7 @@ export function Template() {
       }px)`,
     [headerHeight, footerHeight, overviewHeight, helpHeight, tableRowsHeight]
   );
-  const mobileView = useMemo(() => width < 640, [width]);
+  const mobileView = useMemo(() => width <= 640, [width]);
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
@@ -114,14 +114,11 @@ export function Template() {
                 </HoverCard>
                 <Tabs.List className="w-full max-md:border-t border-primary">
                   {isLoading ? (
-                    <Skeleton
-                      loading
-                      className="h-[5.2rem] w-[28%] max-md:w-full flex-none"
-                    />
+                    <Skeleton loading className="h-20" />
                   ) : (
                     <Carousel
                       options={{ align: "start", startIndex: 10 }}
-                      className="mx-8 max-md:w-full md:w-fit"
+                      className="mx-8"
                     >
                       <Carousel.Content className="gap-2">
                         {epochs?.map((value) => {
@@ -129,7 +126,7 @@ export function Template() {
                           return (
                             <Carousel.Item
                               key={value.epoch}
-                              className="max-md:px-3 max-md:py-4 md:p-5 basis-1/2 md:basis-1/3 max-md:!w-2 w-10"
+                              className="max-md:px-3 max-md:py-4 md:p-5 max-w-fit whitespace-nowrap"
                             >
                               <Tabs.Trigger
                                 value={value.epoch.toString()}
