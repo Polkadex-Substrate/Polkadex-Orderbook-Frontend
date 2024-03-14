@@ -10,6 +10,7 @@ import {
 } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { useEpochs } from "@orderbook/core/hooks";
+import classNames from "classnames";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
@@ -118,7 +119,12 @@ export function Template() {
                   ) : (
                     <Carousel
                       options={{ align: "start", startIndex: 10 }}
-                      className="mx-8"
+                      className={classNames(
+                        "mx-8 w-full",
+                        epochs?.length && epochs?.length >= 3
+                          ? "md:max-w-[500px]"
+                          : "md:max-w-[300px]"
+                      )}
                     >
                       <Carousel.Content className="gap-2">
                         {epochs?.map((value) => {
@@ -126,7 +132,10 @@ export function Template() {
                           return (
                             <Carousel.Item
                               key={value.epoch}
-                              className="max-md:px-3 max-md:py-4 md:p-5 max-w-fit whitespace-nowrap"
+                              className={classNames(
+                                "max-md:px-3 max-md:py-4 md:p-5 basis-1/2 max-md:!w-2 w-10",
+                                epochs.length >= 3 && "md:basis-1/3"
+                              )}
                             >
                               <Tabs.Trigger
                                 value={value.epoch.toString()}
