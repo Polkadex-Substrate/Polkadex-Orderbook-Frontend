@@ -64,7 +64,6 @@ export const ResponsiveMenuModal = ({
                     size="lg"
                     href="/rewards"
                     className="text-lg"
-                    disabled
                   >
                     Rewards
                   </HeaderLink.Single>
