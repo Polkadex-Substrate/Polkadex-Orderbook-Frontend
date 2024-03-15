@@ -60,6 +60,7 @@ const nextConfig = {
     MAINTENACE_MODE: process.env.MAINTENACE_MODE,
     SHOW_SHUTDOWN_POPUP: process.env.SHOW_SHUTDOWN_POPUP,
     UNDER_MAINTENACE: process.env.UNDER_MAINTENACE,
+    ENABLE_LMP: process.env.ENABLE_LMP,
     MAIN_URL: process.env.MAIN_URL,
     BLOCKED_ASSETS: process.env.BLOCKED_ASSETS,
     DEFAULT_TRANSFER_TOKEN: process.env.DEFAULT_TRANSFER_TOKEN,

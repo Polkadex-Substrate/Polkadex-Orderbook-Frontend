@@ -14,6 +14,7 @@ export type DefaultConfig = {
   alertDisplayTime: number;
   msPricesUpdates: number;
   maintenanceMode: boolean;
+  enableLmp: boolean;
   signUpDisabled: boolean;
   reconnectRangerTime: number;
   showShutdownPopup: boolean;
