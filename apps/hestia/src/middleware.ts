@@ -3,12 +3,10 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const { enableLmp: isRewardsActive, landingPageMarket } = defaultConfig;
+  const { enableLmp: isRewardsActive } = defaultConfig;
 
   if (!isRewardsActive) {
-    return NextResponse.redirect(
-      new URL(`/trading/${landingPageMarket}`, req.url)
-    );
+    return NextResponse.redirect(new URL("/", req.url));
   }
 }
 
