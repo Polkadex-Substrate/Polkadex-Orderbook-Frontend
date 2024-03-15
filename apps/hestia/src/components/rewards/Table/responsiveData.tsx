@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { Button, Drawer, Tokens } from "@polkadex/ux";
 import { useRouter } from "next/navigation";
-import { LmpMarketConfig } from "@orderbook/core/index";
+import { LmpMarketConfig, millify } from "@orderbook/core/index";
 
 import { MarketCard } from "./marketCard";
 
@@ -33,9 +33,11 @@ export const ResponsiveData = ({
         />
       </Drawer.Title>
       <Drawer.Content className="flex flex-col gap-2 p-4">
-        <ResponsiveCard label="Maker Score">{data?.makerScore}</ResponsiveCard>
-        <ResponsiveCard label="Trader Score">
-          {data?.traderScore}
+        <ResponsiveCard label="Market Making Score">
+          {millify(data?.makerScore)}
+        </ResponsiveCard>
+        <ResponsiveCard label="Trading Score">
+          {millify(data?.traderScore)}
         </ResponsiveCard>
         <ResponsiveCard label="Volume 24h">
           {data?.quoteVolume24h.toFixed(4)} {data?.quoteAsset?.ticker}
