@@ -27,7 +27,7 @@ import { TablePagination } from "@/components/ui";
 
 type Props = { maxHeight: string; searchTerm: string };
 
-const responsiveKeys = ["fees", "wallets"];
+const responsiveKeys = ["fees", "wallets", "hash"];
 
 export const TransferHistory = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight, searchTerm }, ref) => {
@@ -199,12 +199,12 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
         />
         <div className="flex-1 flex flex-col pt-1">
           <Filters table={table} availableTokens={availableTokens} />
-          <div
-            className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150"
-            style={{ maxHeight, scrollbarGutter: "stable" }}
-          >
+          <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
-              <div className="overflow-y-hidden hover:overflow-y-auto px-3">
+              <div
+                className="overflow-y-hidden hover:overflow-y-auto px-3"
+                style={{ maxHeight, scrollbarGutter: "stable" }}
+              >
                 <Table
                   className={classNames(
                     "w-full",
