@@ -17,12 +17,13 @@ import { GenericMessage, Loading, Table } from "@polkadex/ux";
 import classNames from "classnames";
 import { useWindowSize } from "usehooks-ts";
 
+import { SkeletonLoading } from "../loading";
+
 import { TransferHistoryData, columns } from "./columns";
 import ResponsiveTable from "./responsiveTable";
 import { Filters } from "./filters";
 
 import { defaultConfig } from "@/config";
-import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
 
 type Props = { maxHeight: string; searchTerm: string };
@@ -176,7 +177,7 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
       }
     }, [responsiveState, responsiveView]);
 
-    if (isLoading) return <SkeletonCollection rows={8} />;
+    if (isLoading) return <SkeletonLoading />;
 
     if (transactionsPerPage?.length === 0)
       return (

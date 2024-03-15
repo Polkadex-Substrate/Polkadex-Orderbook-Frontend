@@ -15,11 +15,12 @@ import classNames from "classnames";
 import { useWindowSize } from "usehooks-ts";
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 
+import { SkeletonLoading } from "../loading";
+
 import { columns } from "./columns";
 import { ResponsiveTable } from "./responsiveTable";
 import { Filters } from "./filters";
 
-import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
 
 type Props = {
@@ -130,7 +131,7 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
       }
     }, [responsiveState, responsiveView]);
 
-    if (isLoading) return <SkeletonCollection rows={8} />;
+    if (isLoading) return <SkeletonLoading />;
 
     if (orderHistoryPerPage?.length === 0)
       return (
