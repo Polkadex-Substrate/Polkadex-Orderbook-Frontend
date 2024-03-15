@@ -51,7 +51,7 @@ export const RecentTrades = ({ id }: { id: string }) => {
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <Skeleton loading={loading && marketsLoading} className="h-full w-full">
+    <Skeleton loading={loading || marketsLoading} className="h-full w-full">
       <div className="flex-1 flex flex-col h-full scrollbar-hide overflow-auto">
         {list?.length ? (
           <table className="w-full">
