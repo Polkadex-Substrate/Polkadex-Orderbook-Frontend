@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
 import { Button, Drawer, Tokens } from "@polkadex/ux";
 import { useRouter } from "next/navigation";
-import { LmpMarketConfig, millify } from "@orderbook/core/index";
+import { LmpMarketConfig } from "@orderbook/core/index";
+import { millify } from "@polkadex/numericals";
 
 import { MarketCard } from "./marketCard";
 

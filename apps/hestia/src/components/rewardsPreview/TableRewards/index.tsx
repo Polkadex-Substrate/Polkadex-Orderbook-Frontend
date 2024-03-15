@@ -10,8 +10,7 @@ import {
   useClaimableRewards,
   useTraderMetrics,
 } from "@orderbook/core/hooks";
-import { trimFloat } from "@polkadex/numericals";
-import { millify } from "@orderbook/core/helpers";
+import { trimFloat, millify } from "@polkadex/numericals";
 
 import { RewardsSkeleton } from "./loading";
 import { ClaimReward } from "./claimReward";

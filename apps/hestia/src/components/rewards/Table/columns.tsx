@@ -1,5 +1,6 @@
-import { LmpMarketConfig, millify } from "@orderbook/core/index";
+import { LmpMarketConfig } from "@orderbook/core/index";
 import { Tokens, Typography } from "@polkadex/ux";
+import { millify } from "@polkadex/numericals";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { MarketCard } from "./marketCard";
