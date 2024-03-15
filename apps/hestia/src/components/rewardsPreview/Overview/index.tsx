@@ -1,9 +1,9 @@
 "use client";
 
-import { Button, Token, Typography, tokenAppearance } from "@polkadex/ux";
+import { Token, Typography, tokenAppearance } from "@polkadex/ux";
 import Link from "next/link";
 import { forwardRef } from "react";
-import { RiArrowLeftLine, RiShareLine, RiStarLine } from "@remixicon/react";
+import { RiArrowLeftLine } from "@remixicon/react";
 import { Market } from "@orderbook/core/utils/orderbookService";
 import { useTraderMetrics } from "@orderbook/core/hooks";
 import { trimFloat } from "@polkadex/numericals";
@@ -25,14 +25,6 @@ export const Overview = forwardRef<HTMLDivElement, Props>(({ market }, ref) => {
           <RiArrowLeftLine className="w-5 h-5" />
           <Typography.Text size="md">All markets</Typography.Text>
         </Link>
-        <div className="flex items-center gap-2">
-          <Button.Icon appearance="tertiary" variant="light">
-            <RiStarLine className="w-full h-full" />
-          </Button.Icon>
-          <Button.Icon appearance="tertiary" variant="light">
-            <RiShareLine className="w-full h-full" />
-          </Button.Icon>
-        </div>
       </div>
       <div className="flex justify-between items-center gap-4 border-b border-secondary-base flex-wrap">
         <div className="flex flex-col gap-2 border-r border-secondary-base py-4 px-4 md:min-w-[18rem]">

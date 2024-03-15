@@ -25,6 +25,7 @@ export const Markets = () => {
     id,
     list,
     loading: loadingMarkets,
+    tickerLoading,
   } = useMarkets();
 
   const hasMarkets = !!list?.length;
@@ -42,8 +43,8 @@ export const Markets = () => {
     : { title: "No result found", illustration: "NoResultFound" };
 
   const loading = useMemo(
-    () => loadingMarkets || !hasMarkets,
-    [loadingMarkets, hasMarkets]
+    () => loadingMarkets || tickerLoading || !hasMarkets,
+    [loadingMarkets, hasMarkets, tickerLoading]
   );
 
   return (

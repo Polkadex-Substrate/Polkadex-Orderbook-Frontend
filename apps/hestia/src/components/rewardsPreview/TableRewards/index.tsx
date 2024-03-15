@@ -2,7 +2,8 @@
 
 import { RiFileCopyLine, RiHandCoinLine, RiSortAsc } from "@remixicon/react";
 import { Copy, Icon, Skeleton, Typography, truncateString } from "@polkadex/ux";
-import { forwardRef, useMemo } from "react";
+import { forwardRef, useMemo, useRef } from "react";
+import { useResizeObserver } from "usehooks-ts";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import {
@@ -22,6 +23,13 @@ type Props = { maxHeight: string; market: string };
 
 export const TableRewards = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight, market }) => {
+    const titleRef = useRef(null);
+
+    const { height: titleHeight = 0 } = useResizeObserver({
+      ref: titleRef,
+      box: "border-box",
+    });
+
     const { selectedWallet } = useConnectWalletProvider();
     const {
       selectedAddresses: { mainAddress },
@@ -45,9 +53,17 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
       return rewards?.reduce((a, b) => a + b).toFixed(4);
     }, [claimableRewards]);
 
+    const tableMaxHeight = useMemo(
+      () => `${maxHeight.slice(0, -1)} - ${titleHeight}px)`,
+      [maxHeight, titleHeight]
+    );
+
     return (
       <div className="flex-1 flex flex-col border-b border-secondary-base">
-        <div className="flex sm:!flex-row flex-col items-center justify-between gap-4 bg-level-1 border-b border-primary px-4 py-6 flex-wrap">
+        <div
+          ref={titleRef}
+          className="flex sm:!flex-row flex-col items-center justify-between gap-4 bg-level-1 border-b border-primary px-4 py-6 flex-wrap"
+        >
           <div className="flex items-center gap-3 self-start">
             <Icon name="Avatar" className="w-10 h-10" />
             <div className="flex flex-col">
@@ -141,8 +157,8 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
           <RewardsSkeleton />
         ) : (
           <div
-            className="overflow-y-hidden hover:overflow-y-auto p-3"
-            style={{ maxHeight, scrollbarGutter: "stable" }}
+            className="overflow-y-hidden hover:overflow-y-auto p-3 scrollbar-hide min-h-[450px]"
+            style={{ maxHeight: tableMaxHeight, scrollbarGutter: "stable" }}
           >
             <div className="flex flex-col gap-4">
               <ProgressEpoch

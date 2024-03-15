@@ -64,9 +64,14 @@ export function Template() {
   const maxHeight = useMemo(
     () =>
       `calc(100vh - ${
-        overviewHeight + headerHeight + helpHeight + tableRowsHeight + 20
+        overviewHeight +
+        headerHeight +
+        helpHeight +
+        tableRowsHeight +
+        footerHeight +
+        50
       }px)`,
-    [headerHeight, overviewHeight, helpHeight, tableRowsHeight]
+    [headerHeight, overviewHeight, helpHeight, tableRowsHeight, footerHeight]
   );
   const {
     selectedAddresses: { mainAddress, tradeAddress },

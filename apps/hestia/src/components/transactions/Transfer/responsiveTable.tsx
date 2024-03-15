@@ -33,7 +33,12 @@ const ResponsiveTable = ({
   const toAddress = truncateString(wallets.toAddress);
   const shortLink = truncateString(hash, 10);
   return (
-    <Drawer closeOnClickOutside open={open} onOpenChange={onOpenChange}>
+    <Drawer
+      closeOnClickOutside
+      shouldScaleBackground={false}
+      open={open}
+      onOpenChange={onOpenChange}
+    >
       <Drawer.Title className="px-4">
         <Typography.Heading size="base">Transfer</Typography.Heading>
       </Drawer.Title>
