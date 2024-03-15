@@ -17,11 +17,13 @@ import { Overview } from "./Overview";
 import { TableRewards } from "./TableRewards";
 
 import { Footer, Header } from "@/components/ui";
+import { useTour } from "@/hooks";
 
 export function Template({ id }: { id: string }) {
   const { width } = useWindowSize();
   const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, id);
+  const { onOpenChange } = useTour();
 
   const footerRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
@@ -155,7 +157,7 @@ export function Template({ id }: { id: string }) {
           />
         </div>
       )}
-      <Footer ref={footerRef} />
+      <Footer onOpenChange={onOpenChange} ref={footerRef} />
     </div>
   );
 }
