@@ -132,14 +132,16 @@ export function Template() {
                         )}
                       >
                         <Carousel.Content className="gap-2">
-                          {epochs?.map((value) => {
+                          {epochs?.map((value, index) => {
                             const active = value.epoch.toString() === tab;
+                            const isLast = index === epochs?.length - 1;
                             return (
                               <Carousel.Item
                                 key={value.epoch}
                                 className={classNames(
                                   "max-md:px-3 max-md:py-4 md:p-5 basis-1/2 max-md:!w-2 w-10",
-                                  epochs.length >= 3 && "md:basis-1/3"
+                                  epochs.length >= 3 && "md:basis-1/3",
+                                  isLast && "pointer-events-none"
                                 )}
                               >
                                 <Tabs.Trigger

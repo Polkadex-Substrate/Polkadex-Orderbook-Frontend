@@ -86,3 +86,21 @@ export const secondsToHm = (seconds: number) => {
   if (dhm.trim().length === 0) return sDisplay;
   return dhm;
 };
+
+// TODO: Move it in @polkadex/numericals and replace it with millify function there
+export const millify = (value: number, precision?: number) => {
+  const actualPrecision = precision || 2;
+
+  if (value < 1000)
+    return trimFloat({
+      value,
+      digitsAfterDecimal: actualPrecision,
+    });
+
+  const formatter = Intl.NumberFormat("en", {
+    notation: "compact",
+    maximumFractionDigits: actualPrecision,
+    useGrouping: false,
+  });
+  return formatter.format(value);
+};

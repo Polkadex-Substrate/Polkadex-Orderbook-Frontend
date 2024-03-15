@@ -1,5 +1,4 @@
-import { trimFloat } from "@polkadex/numericals";
-import { LmpMarketConfig } from "@orderbook/core/index";
+import { LmpMarketConfig, millify } from "@orderbook/core/index";
 import { Tokens, Typography } from "@polkadex/ux";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -32,7 +31,9 @@ export const columns = () => [
     id: "makerScore",
     cell: (e) => {
       return (
-        <Typography.Text size="sm">{e.getValue().makerScore}</Typography.Text>
+        <Typography.Text size="sm">
+          {millify(e.getValue().makerScore)}
+        </Typography.Text>
       );
     },
     header: () => (
@@ -47,10 +48,7 @@ export const columns = () => [
     cell: (e) => {
       return (
         <Typography.Text size="sm">
-          {trimFloat({
-            value: e.getValue().traderScore,
-            digitsAfterDecimal: 6,
-          })}
+          {millify(e.getValue().traderScore)}
         </Typography.Text>
       );
     },
