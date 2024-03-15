@@ -67,20 +67,6 @@ const nextConfig = {
     SENTRY_DSN: process.env.SENTRY_DSN,
     SENTRY_AUTH: process.env.SENTRY_AUTH,
   },
-  async redirects() {
-    return [
-      {
-        source: "/rewards",
-        destination: "/trading/PDEXUSDT",
-        permanent: false,
-      },
-      {
-        source: "/rewards/:slug",
-        destination: "/trading/PDEXUSDT",
-        permanent: false,
-      },
-    ];
-  },
 };
 
 const sentryWebpackPluginOptions = {
