@@ -11,6 +11,7 @@ import {
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { useEpochs } from "@orderbook/core/hooks";
 import classNames from "classnames";
+import { START_EPOCH } from "@orderbook/core/constants";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 import { QuickStart } from "../ui/Footer/QuickStart";
@@ -75,7 +76,7 @@ export function Template() {
     const epochsLength = epochs?.length || 0;
     if (epochs && epochs?.length > 2) {
       setTab(epochs[epochsLength - 2].epoch.toString());
-    }
+    } else setTab(String(START_EPOCH));
   }, [epochs]);
 
   return (
@@ -119,7 +120,7 @@ export function Template() {
                   </HoverCard>
                   <Tabs.List className="w-full max-md:border-t border-primary">
                     {isLoading ? (
-                      <Skeleton loading className="h-20" />
+                      <Skeleton loading className="h-20 max-w-[500px]" />
                     ) : (
                       <Carousel
                         options={{ align: "start", startIndex: 10 }}
@@ -131,14 +132,16 @@ export function Template() {
                         )}
                       >
                         <Carousel.Content className="gap-2">
-                          {epochs?.map((value) => {
+                          {epochs?.map((value, index) => {
                             const active = value.epoch.toString() === tab;
+                            const isLast = index === epochs?.length - 1;
                             return (
                               <Carousel.Item
                                 key={value.epoch}
                                 className={classNames(
                                   "max-md:px-3 max-md:py-4 md:p-5 basis-1/2 max-md:!w-2 w-10",
-                                  epochs.length >= 3 && "md:basis-1/3"
+                                  epochs.length >= 3 && "md:basis-1/3",
+                                  isLast && "pointer-events-none"
                                 )}
                               >
                                 <Tabs.Trigger

@@ -10,7 +10,7 @@ import {
   useClaimableRewards,
   useTraderMetrics,
 } from "@orderbook/core/hooks";
-import { trimFloat } from "@polkadex/numericals";
+import { trimFloat, millify } from "@polkadex/numericals";
 
 import { RewardsSkeleton } from "./loading";
 import { ClaimReward } from "./claimReward";
@@ -82,7 +82,7 @@ export const TableRewards = forwardRef<HTMLDivElement, Props>(
                   className="h-4 w-16 flex-none"
                 >
                   <Typography.Text bold className="whitespace-nowrap">
-                    {userMetrics?.mmScore || 0}
+                    {millify(userMetrics?.mmScore || 0)}
                   </Typography.Text>
                 </Skeleton>
               </div>

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
-import { QUERY_KEYS } from "../..";
+import { QUERY_KEYS, START_EPOCH } from "../..";
 
 const STATUS = ["Ended", "Ongoing", "Upcoming"] as const;
 
@@ -18,7 +18,7 @@ export const useEpochs = () => {
       const nextEpoch = currentEpoch + 1;
 
       const prevEpochs: number[] = [];
-      for (let i = currentEpoch - 1; i >= 0; i--) {
+      for (let i = currentEpoch - 1; i >= START_EPOCH; i--) {
         prevEpochs.push(i);
         if (prevEpochs.length === 8) break;
       }
