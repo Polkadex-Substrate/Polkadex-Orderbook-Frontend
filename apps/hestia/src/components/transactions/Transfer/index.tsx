@@ -17,17 +17,18 @@ import { GenericMessage, Loading, Table } from "@polkadex/ux";
 import classNames from "classnames";
 import { useWindowSize } from "usehooks-ts";
 
+import { SkeletonLoading } from "../loading";
+
 import { TransferHistoryData, columns } from "./columns";
 import ResponsiveTable from "./responsiveTable";
 import { Filters } from "./filters";
 
 import { defaultConfig } from "@/config";
-import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
 
 type Props = { maxHeight: string; searchTerm: string };
 
-const responsiveKeys = ["fees", "wallets"];
+const responsiveKeys = ["fees", "wallets", "hash"];
 
 export const TransferHistory = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight, searchTerm }, ref) => {
@@ -176,7 +177,7 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
       }
     }, [responsiveState, responsiveView]);
 
-    if (isLoading) return <SkeletonCollection rows={8} />;
+    if (isLoading) return <SkeletonLoading />;
 
     if (transactionsPerPage?.length === 0)
       return (
@@ -199,12 +200,12 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
         />
         <div className="flex-1 flex flex-col pt-1">
           <Filters table={table} availableTokens={availableTokens} />
-          <div
-            className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150"
-            style={{ maxHeight, scrollbarGutter: "stable" }}
-          >
+          <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
-              <div className="overflow-y-hidden hover:overflow-y-auto px-3">
+              <div
+                className="overflow-y-hidden hover:overflow-y-auto px-3"
+                style={{ maxHeight, scrollbarGutter: "stable" }}
+              >
                 <Table
                   className={classNames(
                     "w-full",

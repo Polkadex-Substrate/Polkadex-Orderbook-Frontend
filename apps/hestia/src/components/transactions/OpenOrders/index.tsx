@@ -22,11 +22,12 @@ import {
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
 
+import { SkeletonLoading } from "../loading";
+
 import { columns } from "./columns";
 import { ResponsiveTable } from "./responsiveTable";
 import { Filters } from "./filters";
 
-import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
 import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
 
@@ -147,7 +148,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
       }
     }, [responsiveState, responsiveView]);
 
-    if (isLoading) return <SkeletonCollection rows={8} />;
+    if (isLoading) return <SkeletonLoading />;
 
     if (openOrdersPerPage?.length === 0)
       return (

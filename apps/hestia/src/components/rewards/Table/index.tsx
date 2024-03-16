@@ -5,6 +5,7 @@ import { LmpMarketConfig, useLmpMarkets } from "@orderbook/core/hooks";
 import {
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
@@ -16,7 +17,7 @@ import { ResponsiveData } from "./responsiveData";
 import { TablePagination } from "@/components/ui";
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
-const responsiveKeys = ["volume24h"];
+const responsiveKeys = ["volume24h", "makerScore"];
 const actionKeys = ["makerScore", "traderScore", "volume24h", "totalRewards"];
 
 type Props = { maxHeight: string; selectedEpoch: number };
@@ -36,6 +37,7 @@ export const Table = forwardRef<HTMLDivElement, Props>(
       data: markets as LmpMarketConfig[],
       columns: columns(),
       getCoreRowModel: getCoreRowModel(),
+      getSortedRowModel: getSortedRowModel(),
     });
 
     useEffect(() => {

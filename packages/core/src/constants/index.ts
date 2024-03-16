@@ -100,3 +100,5 @@ export const TIME_INTERVAL = {
   // Change it to 28 days = 28 * 86400 seconds, for production
   epochDuration: 28 * 86400, // in seconds
 };
+
+export const START_EPOCH = 1;

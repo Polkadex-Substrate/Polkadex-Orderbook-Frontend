@@ -22,6 +22,7 @@ export const defaultConfig: DefaultConfig = {
   alertDisplayTime: 5000,
   msPricesUpdates: 1000,
   maintenanceMode: process.env.MAINTENACE_MODE === "true",
+  enableLmp: process.env.ENABLE_LMP === "true",
   signUpDisabled: process.env.SIGNUP_DISABLED === "true",
   reconnectRangerTime: 30000,
   showShutdownPopup: process.env.SHOW_SHUTDOWN_POPUP === "true",

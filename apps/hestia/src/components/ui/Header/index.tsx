@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { Logo } from "@polkadex/ux";
 import { getMarketUrl } from "@orderbook/core/helpers";
+import { defaultConfig } from "@orderbook/core/config";
 
 import { ConnectWalletInteraction } from "../ConnectWalletInteraction";
 
@@ -13,6 +14,7 @@ import { Profile } from "./Profile";
 import { ResponsiveMenuModal } from "./responsiveMenuModal";
 import { NotificationsModal } from "./NotificationsModal";
 import { FundWalletModal } from "./FundWalletModal";
+
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const [menu, setMenu] = useState(false);
   const [notifications, setNotifications] = useState(false);
@@ -23,6 +25,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
     notifications: allNotifications,
   } = useSettingsProvider();
   const lastUsedMarketUrl = getMarketUrl();
+  const isRewardDisabled = !defaultConfig.enableLmp;
 
   const unreadNotifications = useMemo(() => {
     return allNotifications.filter((e) => e.active).length;
@@ -52,7 +55,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <HeaderLink.Single href={lastUsedMarketUrl}>
               Trade
             </HeaderLink.Single>
-            <HeaderLink.Single disabled href="/rewards">
+            <HeaderLink.Single disabled={isRewardDisabled} href="/rewards">
               Rewards
             </HeaderLink.Single>
             <HeaderLink.Dropdown

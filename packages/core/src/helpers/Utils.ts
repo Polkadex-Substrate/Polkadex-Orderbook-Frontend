@@ -79,9 +79,9 @@ export const secondsToHm = (seconds: number) => {
   const s = Math.floor(seconds % 60);
 
   const dDisplay = d > 0 ? d + "d " : "";
-  const hDisplay = h > 0 ? h + (h === 1 ? "hr " : " hrs ") : "";
-  const mDisplay = m > 0 ? m + (m === 1 ? "min " : " mins ") : "";
-  const sDisplay = s > 0 ? s + (s === 1 ? "sec" : " secs") : "";
+  const hDisplay = h > 0 ? h + (h === 1 ? "hr " : "hrs ") : "";
+  const mDisplay = m > 0 ? m + (m === 1 ? "min " : "mins ") : "";
+  const sDisplay = s > 0 ? s + (s === 1 ? "sec" : "secs") : "";
   const dhm = dDisplay + hDisplay + mDisplay;
   if (dhm.trim().length === 0) return sDisplay;
   return dhm;

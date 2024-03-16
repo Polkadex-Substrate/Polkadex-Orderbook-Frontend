@@ -60,26 +60,13 @@ const nextConfig = {
     MAINTENACE_MODE: process.env.MAINTENACE_MODE,
     SHOW_SHUTDOWN_POPUP: process.env.SHOW_SHUTDOWN_POPUP,
     UNDER_MAINTENACE: process.env.UNDER_MAINTENACE,
+    ENABLE_LMP: process.env.ENABLE_LMP,
     MAIN_URL: process.env.MAIN_URL,
     BLOCKED_ASSETS: process.env.BLOCKED_ASSETS,
     DEFAULT_TRANSFER_TOKEN: process.env.DEFAULT_TRANSFER_TOKEN,
     SUBSCAN_API: process.env.SUBSCAN_API,
     SENTRY_DSN: process.env.SENTRY_DSN,
     SENTRY_AUTH: process.env.SENTRY_AUTH,
-  },
-  async redirects() {
-    return [
-      {
-        source: "/rewards",
-        destination: "/trading/PDEXUSDT",
-        permanent: false,
-      },
-      {
-        source: "/rewards/:slug",
-        destination: "/trading/PDEXUSDT",
-        permanent: false,
-      },
-    ];
   },
 };
 
