@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-
 const NAME = "tourInitial";
-const initialValue =
-  typeof window !== "undefined" && localStorage.getItem(NAME) !== "true";
 
 export function useTour() {
+  const initialValue =
+    typeof window !== "undefined" && localStorage.getItem(NAME) !== "true";
+
   const [state, setState] = useState(initialValue);
 
   const handleAccept = () => {

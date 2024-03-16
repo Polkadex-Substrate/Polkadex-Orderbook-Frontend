@@ -15,11 +15,12 @@ import {
 } from "@tanstack/react-table";
 import { Trade } from "@orderbook/core/utils/orderbookService/types";
 
+import { SkeletonLoading } from "../loading";
+
 import { columns } from "./columns";
 import { ResponsiveTable } from "./responsiveTable";
 import { Filters } from "./filters";
 
-import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
 
 type Props = {
@@ -122,7 +123,7 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
       }
     }, [responsiveState, responsiveView]);
 
-    if (isLoading) return <SkeletonCollection rows={8} />;
+    if (isLoading) return <SkeletonLoading />;
 
     if (tradeHistoryPerPage?.length === 0)
       return (
@@ -145,12 +146,12 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
         />
         <div className="flex-1 flex flex-col pt-1">
           <Filters table={table} availablePairs={availablePairs} />
-          <div
-            className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150"
-            style={{ maxHeight, scrollbarGutter: "stable" }}
-          >
+          <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
             <Loading.Spinner active={isFetchingNextPage}>
-              <div className="overflow-y-hidden hover:overflow-y-auto px-3">
+              <div
+                className="overflow-y-hidden hover:overflow-y-auto px-3"
+                style={{ maxHeight, scrollbarGutter: "stable" }}
+              >
                 <Table
                   className={classNames(
                     "w-full",
