@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 const NAME = "tourInitial";
 
 export function useTour() {
