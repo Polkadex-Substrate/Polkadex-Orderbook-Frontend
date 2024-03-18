@@ -58,7 +58,7 @@ export const OpenOrdersTable = ({
   const [responsiveState, setResponsiveState] = useState(false);
   const [responsiveData, setResponsiveData] = useState<Order | null>(null);
   const responsiveView = useMemo(() => width < 500 || width <= 715, [width]);
-
+  const markets = useMemo(() => openOrders.map((e) => e.market), [openOrders]);
   const onCancelOrder = async (payload: CancelOrderArgs | null) => {
     if (!payload) return;
     if (selectedAccount?.isLocked) {
@@ -75,6 +75,7 @@ export const OpenOrdersTable = ({
     columns: columns({
       onCancelOrder,
       onCancelAllOrders,
+      markets,
     }),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

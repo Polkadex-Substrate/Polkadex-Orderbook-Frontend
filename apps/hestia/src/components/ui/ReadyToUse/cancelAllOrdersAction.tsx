@@ -1,7 +1,7 @@
 // TODO: Refactor unlock - Remove unnecesary states
 import { MarketBase } from "@orderbook/core/utils/orderbookService";
 import { Dropdown, Modal, PopConfirm, Typography } from "@polkadex/ux";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { UnlockAccount } from "./unlockAccount";
@@ -9,12 +9,13 @@ import { UnlockAccount } from "./unlockAccount";
 export const CancelAllOrdersAction = ({
   onCancel,
   markets,
-  orders,
 }: {
   onCancel: (id: string) => Promise<void>;
   markets: MarketBase[];
-  orders: number;
 }) => {
+  const orders = useMemo(() => Array.from(new Set(markets)), [markets]);
+
+  const ordersLen = markets.length;
   const [state, setState] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [orderPayload, setOrderPayload] = useState<string>("");
@@ -52,7 +53,7 @@ export const CancelAllOrdersAction = ({
           <Dropdown.Icon className="text-danger-base w-3 h-3" />
         </Dropdown.Trigger>
         <Dropdown.Content>
-          {markets?.map((e) => (
+          {orders?.map((e) => (
             <Dropdown.Item asChild key={e.id}>
               <PopConfirm>
                 <PopConfirm.Trigger className="p-2 duration-200 transition-colors hover:bg-level-2 w-full">
@@ -63,7 +64,7 @@ export const CancelAllOrdersAction = ({
                   <PopConfirm.Description>
                     <Typography.Paragraph size="sm" appearance="primary">
                       Are you sure you want to cancel all orders
-                      <Typography.Text> ({orders}) </Typography.Text> in the
+                      <Typography.Text> ({ordersLen}) </Typography.Text> in the
                       <Typography.Text> {e.name} </Typography.Text>market?
                     </Typography.Paragraph>
                   </PopConfirm.Description>

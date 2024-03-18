@@ -1,4 +1,7 @@
-import { Order } from "@orderbook/core/utils/orderbookService/types";
+import {
+  MarketBase,
+  Order,
+} from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Tooltip, Typography } from "@polkadex/ux";
 import { CancelOrderArgs } from "@orderbook/core/hooks";
@@ -15,9 +18,11 @@ const openOrderColumnHelper = createColumnHelper<Order>();
 export const columns = ({
   onCancelOrder,
   onCancelAllOrders,
+  markets,
 }: {
   onCancelOrder: (value: CancelOrderArgs) => Promise<void>;
   onCancelAllOrders: (props: { market: string }) => Promise<void>;
+  markets: MarketBase[];
 }) => [
   openOrderColumnHelper.accessor((row) => row, {
     id: "date",
@@ -145,19 +150,12 @@ export const columns = ({
         />
       );
     },
-    header: (e) => {
-      const marketMap = e.table
-        .getRowModel()
-        .rows.map((e) => e.original.market);
-      const markets = new Set(marketMap);
-      return (
-        <CancelAllOrdersAction
-          markets={Array.from(markets)}
-          orders={marketMap.length}
-          onCancel={async (market) => await onCancelAllOrders({ market })}
-        />
-      );
-    },
+    header: () => (
+      <CancelAllOrdersAction
+        markets={markets}
+        onCancel={async (market) => await onCancelAllOrders({ market })}
+      />
+    ),
     footer: (e) => e.column.id,
   }),
 ];

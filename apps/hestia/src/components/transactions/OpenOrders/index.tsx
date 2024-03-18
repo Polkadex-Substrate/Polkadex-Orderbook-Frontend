@@ -70,6 +70,10 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     };
 
     const responsiveView = useMemo(() => width <= 850, [width]);
+    const markets = useMemo(
+      () => allOpenOrders.map((e) => e.market),
+      [allOpenOrders]
+    );
 
     const openOrdersPerPage = useMemo(
       () =>
@@ -109,7 +113,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
       getFilteredRowModel: getFilteredRowModel(),
       getFacetedRowModel: getFacetedRowModel(),
       getFacetedUniqueValues: getFacetedUniqueValues(),
-      columns: columns({ onCancelOrder, onCancelAllOrders }),
+      columns: columns({ onCancelOrder, onCancelAllOrders, markets }),
       getCoreRowModel: getCoreRowModel(),
     });
 
