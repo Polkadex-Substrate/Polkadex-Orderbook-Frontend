@@ -13,9 +13,16 @@ export const CancelAllOrdersAction = ({
   onCancel: (id: string) => Promise<void>;
   markets: MarketBase[];
 }) => {
-  const orders = useMemo(() => Array.from(new Set(markets)), [markets]);
+  const orders = useMemo(() => {
+    const uniqueMarkets = new Set(
+      markets.map((market) => JSON.stringify(market))
+    );
+    return Array.from(
+      uniqueMarkets,
+      (market) => JSON.parse(market) as MarketBase
+    );
+  }, [markets]);
 
-  const ordersLen = markets.length;
   const [state, setState] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [orderPayload, setOrderPayload] = useState<string>("");
@@ -53,35 +60,40 @@ export const CancelAllOrdersAction = ({
           <Dropdown.Icon className="text-danger-base w-3 h-3" />
         </Dropdown.Trigger>
         <Dropdown.Content>
-          {orders?.map((e) => (
-            <Dropdown.Item asChild key={e.id}>
-              <PopConfirm>
-                <PopConfirm.Trigger className="p-2 duration-200 transition-colors hover:bg-level-2 w-full">
-                  {e.name}
-                </PopConfirm.Trigger>
-                <PopConfirm.Content className="max-w-[350px]">
-                  <PopConfirm.Title>Cancel all orders</PopConfirm.Title>
-                  <PopConfirm.Description>
-                    <Typography.Paragraph size="sm" appearance="primary">
-                      Are you sure you want to cancel all orders
-                      <Typography.Text> ({ordersLen}) </Typography.Text> in the
-                      <Typography.Text> {e.name} </Typography.Text>market?
-                    </Typography.Paragraph>
-                  </PopConfirm.Description>
-                  <PopConfirm.Close>No</PopConfirm.Close>
-                  <PopConfirm.Button
-                    appearance="danger"
-                    onClick={async () => {
-                      await onCancelAllOrders(e.id);
-                      setState(false);
-                    }}
-                  >
-                    Yes cancel
-                  </PopConfirm.Button>
-                </PopConfirm.Content>
-              </PopConfirm>
-            </Dropdown.Item>
-          ))}
+          {orders?.map((e) => {
+            const ordersLen = markets.filter((val) => val.id === e.id).length;
+            console.log("ordersLen", ordersLen);
+            return (
+              <Dropdown.Item asChild key={e.id}>
+                <PopConfirm>
+                  <PopConfirm.Trigger className="p-2 duration-200 transition-colors hover:bg-level-2 w-full">
+                    {e.name}
+                  </PopConfirm.Trigger>
+                  <PopConfirm.Content className="max-w-[350px]">
+                    <PopConfirm.Title>Cancel all orders</PopConfirm.Title>
+                    <PopConfirm.Description>
+                      <Typography.Paragraph size="sm" appearance="primary">
+                        Are you sure you want to cancel all orders
+                        <Typography.Text> ({ordersLen}) </Typography.Text> in
+                        the
+                        <Typography.Text> {e.name} </Typography.Text>market?
+                      </Typography.Paragraph>
+                    </PopConfirm.Description>
+                    <PopConfirm.Close>No</PopConfirm.Close>
+                    <PopConfirm.Button
+                      appearance="danger"
+                      onClick={async () => {
+                        await onCancelAllOrders(e.id);
+                        setState(false);
+                      }}
+                    >
+                      Yes cancel
+                    </PopConfirm.Button>
+                  </PopConfirm.Content>
+                </PopConfirm>
+              </Dropdown.Item>
+            );
+          })}
         </Dropdown.Content>
       </Dropdown>
     </Fragment>
