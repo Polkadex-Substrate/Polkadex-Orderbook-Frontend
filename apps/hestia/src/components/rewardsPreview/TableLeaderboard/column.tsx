@@ -1,7 +1,7 @@
 import { LmpLeaderboard } from "@orderbook/core/index";
 import { Typography } from "@polkadex/ux";
 import { createColumnHelper } from "@tanstack/react-table";
-import { trimFloat } from "@polkadex/numericals";
+import { trimFloat, millify } from "@polkadex/numericals";
 
 import { AccountCard } from "./accountCard";
 
@@ -55,12 +55,7 @@ export const columns = () => [
     id: "mmScore",
     cell: (e) => {
       return (
-        <Typography.Text size="xs">
-          {trimFloat({
-            value: e.getValue(),
-            digitsAfterDecimal: 4,
-          })}
-        </Typography.Text>
+        <Typography.Text size="xs">{millify(e.getValue())}</Typography.Text>
       );
     },
     header: () => (
@@ -69,17 +64,17 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as LmpLeaderboard).mmScore;
+      const numB = (rowB.getValue(columnId) as LmpLeaderboard).mmScore;
+      return numA > numB ? 1 : -1;
+    },
   }),
   columnHelper.accessor((row) => row.tradingScore, {
     id: "tradingScore",
     cell: (e) => {
       return (
-        <Typography.Text size="xs">
-          {trimFloat({
-            value: e.getValue(),
-            digitsAfterDecimal: 6,
-          })}
-        </Typography.Text>
+        <Typography.Text size="xs">{millify(e.getValue())}</Typography.Text>
       );
     },
     header: () => (
@@ -88,5 +83,10 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as LmpLeaderboard).tradingScore;
+      const numB = (rowB.getValue(columnId) as LmpLeaderboard).tradingScore;
+      return numA > numB ? 1 : -1;
+    },
   }),
 ];
