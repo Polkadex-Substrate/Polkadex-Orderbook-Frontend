@@ -1,6 +1,7 @@
 import { Skeleton, Typography } from "@polkadex/ux";
 import { RiArrowDownLine, RiArrowUpLine } from "@remixicon/react";
 import classNames from "classnames";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 export const LastPrice = ({
   lastPrice,
@@ -13,12 +14,16 @@ export const LastPrice = ({
   loading: boolean;
   inverted: boolean;
 }) => {
+  const { onSetPrice } = useProfile();
+
   return (
     <div
+      role="button"
       className={classNames(
         inverted && "order-1",
-        "flex items-center justify-between gap-2 p-2 border-y border-primary"
+        "flex items-center justify-between gap-2 p-2 border-y border-primary cursor-pointer"
       )}
+      onClick={() => onSetPrice(lastPrice.toString())}
     >
       <Skeleton loading={loading} className="h-4 max-w-20">
         <div className="flex items-center gap-1">
