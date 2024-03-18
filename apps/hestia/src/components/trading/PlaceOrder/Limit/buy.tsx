@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { Button, Input, Tooltip, Spinner } from "@polkadex/ux";
 import classNames from "classnames";
 import { useFormik } from "formik";
@@ -31,6 +31,8 @@ export const BuyOrder = ({
   market?: Market;
   availableQuoteAmount: number;
 }) => {
+  const [validateSubmit, setValidateSubmit] = useState(false);
+
   const { onToogleConnectTrading } = useSettingsProvider();
 
   const {
@@ -51,7 +53,7 @@ export const BuyOrder = ({
       maxVolume: market?.maxVolume || 0,
       availableBalance: availableQuoteAmount,
     }),
-    validateOnChange: true,
+    validateOnChange: validateSubmit,
     onSubmit: async (e) => {
       try {
         await onExecuteOrder(e.price, e.amount);
@@ -92,7 +94,14 @@ export const BuyOrder = ({
   };
 
   return (
-    <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-auto flex-col gap-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        setValidateSubmit(true);
+        handleSubmit();
+      }}
+    >
       <Tooltip open={!!errors.price && !!values.price && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
@@ -118,7 +127,7 @@ export const BuyOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="left" className="bg-level-5 z-[1]">
+        <Tooltip.Content side="left" className="bg-level-5 z-[2]">
           {errors.price}
         </Tooltip.Content>
       </Tooltip>

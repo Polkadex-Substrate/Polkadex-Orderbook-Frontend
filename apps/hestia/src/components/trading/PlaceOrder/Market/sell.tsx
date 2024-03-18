@@ -7,6 +7,7 @@ import { Market } from "@orderbook/core/utils/orderbookService/types";
 import { useMarketOrder } from "@orderbook/core/hooks";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { marketOrderValidations } from "@orderbook/core/validations";
+import { useState } from "react";
 
 import { Balance } from "../balance";
 
@@ -26,6 +27,8 @@ export const SellOrder = ({
   market?: Market;
   availableBaseAmount: number;
 }) => {
+  const [validateSubmit, setValidateSubmit] = useState(false);
+
   const { onToogleConnectTrading } = useSettingsProvider();
   const {
     handleSubmit,
@@ -42,7 +45,7 @@ export const SellOrder = ({
       minQuantity: market?.minQty || 0,
       availableBalance: availableBaseAmount,
     }),
-    validateOnChange: true,
+    validateOnChange: validateSubmit,
     onSubmit: async (e) => {
       try {
         await onExecuteOrder(e.amount);
@@ -68,7 +71,14 @@ export const SellOrder = ({
   });
 
   return (
-    <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-auto flex-col gap-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        setValidateSubmit(true);
+        handleSubmit();
+      }}
+    >
       <Button.Solid
         appearance="secondary"
         className="pointer-events-none opacity-50 border border-dashed py-5"
@@ -137,6 +147,7 @@ export const SellOrder = ({
       {isSignedIn ? (
         <Button.Solid
           type="submit"
+          appearance="danger"
           disabled={!(isValid && dirty) || isSubmitting}
         >
           {isSubmitting ? (
