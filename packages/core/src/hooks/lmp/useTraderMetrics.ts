@@ -13,7 +13,7 @@ export const useTraderMetrics = (market: string) => {
   const enabled = !!api && api?.isConnected && !!lmp && market?.length > 0;
 
   const { data, status } = useQuery({
-    queryKey: QUERY_KEYS.traderMetrics(mainAddress),
+    queryKey: QUERY_KEYS.traderMetrics(market, mainAddress),
     queryFn: async () => {
       if (!api?.isConnected || !lmp) return;
 

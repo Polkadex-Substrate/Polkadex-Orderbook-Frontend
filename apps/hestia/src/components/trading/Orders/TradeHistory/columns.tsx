@@ -86,6 +86,11 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as Trade).price;
+      const numB = (rowB.getValue(columnId) as Trade).price;
+      return numA > numB ? 1 : -1;
+    },
   }),
   tradeHistoryColumnHelper.accessor((row) => row, {
     id: "amount",
@@ -102,5 +107,10 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as Trade).qty;
+      const numB = (rowB.getValue(columnId) as Trade).qty;
+      return numA > numB ? 1 : -1;
+    },
   }),
 ];

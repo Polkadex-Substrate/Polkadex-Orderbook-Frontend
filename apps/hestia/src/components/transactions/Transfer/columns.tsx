@@ -15,6 +15,7 @@ import {
   TokenCard,
   CustomTransactionDirection,
 } from "@/components/ui/ReadyToUse";
+import { formatedDate } from "@/helpers";
 
 export type TransferHistoryData = {
   hash: string;
@@ -41,13 +42,7 @@ export const columns = () => [
   columnHelper.accessor((row) => row.time, {
     id: "date",
     cell: (e) => {
-      const formattedDate = new Intl.DateTimeFormat("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
-        .format(new Date(e.getValue()))
-        .replace(",", "");
+      const formattedDate = formatedDate(e.getValue());
 
       return (
         <Tooltip>
@@ -78,7 +73,7 @@ export const columns = () => [
       return (
         <div className="[&_svg]:scale-[1.05]">
           <TokenCard
-            tokenName={e.getValue().token.name ?? "UNKNOWN"}
+            tokenName={""}
             ticker={tokenTicker ?? "UNKNOWN"}
             icon={tokenTicker as keyof typeof Tokens}
           />
