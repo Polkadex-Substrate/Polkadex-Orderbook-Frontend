@@ -79,7 +79,7 @@ export const Table = forwardRef<HTMLDivElement, Props>(
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
             <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
-              <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
+              <PolkadexTable.Header className="sticky top-0 bg-backgroundBase z-[2]">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <PolkadexTable.Row key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {

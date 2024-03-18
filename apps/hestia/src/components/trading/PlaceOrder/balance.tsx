@@ -57,14 +57,7 @@ export const Balance = ({
           </Dropdown.Item>
           <Dropdown.Item>
             <Typography.Text asChild size="sm">
-              <Link
-                href={{
-                  pathname: "/transfer",
-                  query: { token: baseTicker },
-                }}
-              >
-                Transfer
-              </Link>
+              <Link href={`/transfer/${baseTicker}`}>Transfer</Link>
             </Typography.Text>
           </Dropdown.Item>
         </Dropdown.Content>

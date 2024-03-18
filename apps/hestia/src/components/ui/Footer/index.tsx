@@ -1,13 +1,10 @@
-import {
-  Dispatch,
-  Fragment,
-  SetStateAction,
-  forwardRef,
-  useMemo,
-  useState,
-} from "react";
+import { Dispatch, Fragment, SetStateAction, forwardRef, useMemo } from "react";
 import { Dropdown, Typography } from "@polkadex/ux";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
+import {
+  useSettingsProvider,
+  marketCarouselValues,
+} from "@orderbook/core/providers/public/settings";
 import classNames from "classnames";
 import Link from "next/link";
 import { RiLifebuoyLine, RiMessage3Line } from "@remixicon/react";
@@ -15,7 +12,6 @@ import { useWindowSize } from "usehooks-ts";
 
 import { Markets } from "./markets";
 
-const items = ["Popular", "Favorite"];
 export const Footer = forwardRef<
   HTMLDivElement,
   {
@@ -23,7 +19,7 @@ export const Footer = forwardRef<
     onOpenChange: Dispatch<SetStateAction<boolean>>;
   }
 >(({ marketsActive = false, onOpenChange }, ref) => {
-  const [state, setState] = useState(items[0]);
+  const { marketCarousel, onChangeMarketCarousel } = useSettingsProvider();
 
   const { width } = useWindowSize();
   const { connected } = useNativeApi();
@@ -44,12 +40,15 @@ export const Footer = forwardRef<
             <div className="border-r bg-level-2 px-2 border-secondary">
               <Dropdown>
                 <Dropdown.Trigger className="items-center inline-flex opacity-50 transition-opacity ease-out duration-300 hover:opacity-100 w-full">
-                  <Typography.Text>{state}</Typography.Text>
+                  <Typography.Text>{marketCarousel}</Typography.Text>
                   <Dropdown.Icon />
                 </Dropdown.Trigger>
                 <Dropdown.Content>
-                  {items.map((value, i) => (
-                    <Dropdown.Item onClick={() => setState(value)} key={i}>
+                  {marketCarouselValues.map((value, i) => (
+                    <Dropdown.Item
+                      onClick={() => onChangeMarketCarousel(value)}
+                      key={i}
+                    >
                       <Typography.Text className="text-left block w-full">
                         {value}
                       </Typography.Text>
@@ -58,7 +57,7 @@ export const Footer = forwardRef<
                 </Dropdown.Content>
               </Dropdown>
             </div>
-            <Markets favorite={state === "Favorite"} />
+            <Markets favorite={marketCarousel === "Favourite"} />
           </div>
         ) : (
           <div />

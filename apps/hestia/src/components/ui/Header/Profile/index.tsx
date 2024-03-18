@@ -50,21 +50,21 @@ export const Profile = ({
           </Button.Solid>
           <Tooltip>
             <Tooltip.Trigger asChild>
-              <Button.Icon className="max-sm:p-0">
-                <Link href="/balances">
+              <Link href="/balances">
+                <Button.Icon className="max-sm:p-0">
                   <RiWalletLine className="h-full w-full" />
-                </Link>
-              </Button.Icon>
+                </Button.Icon>
+              </Link>
             </Tooltip.Trigger>
             <Tooltip.Content>Balances</Tooltip.Content>
           </Tooltip>
           <Tooltip>
             <Tooltip.Trigger asChild>
-              <Button.Icon asChild>
-                <Link href="/history">
+              <Link href="/history">
+                <Button.Icon className="max-sm:p-0">
                   <RiBookReadLine className="h-full w-full" />
-                </Link>
-              </Button.Icon>
+                </Button.Icon>
+              </Link>
             </Tooltip.Trigger>
             <Tooltip.Content>History</Tooltip.Content>
           </Tooltip>
