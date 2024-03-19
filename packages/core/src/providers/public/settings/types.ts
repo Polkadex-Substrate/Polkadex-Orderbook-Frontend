@@ -1,6 +1,9 @@
 import { FC, PropsWithChildren } from "react";
 
 import * as N from "./notifications";
+import { marketCarouselValues } from "./constants";
+
+export type MarketCarousel = (typeof marketCarouselValues)[number];
 
 export type NotificationCategory = (typeof N.notificationCategories)[number];
 
@@ -21,6 +24,7 @@ export interface SettingState {
   chartRebuild: boolean;
   ordersHideOtherPairs: boolean;
   marketSelectorActive: boolean;
+  marketCarousel: MarketCarousel;
   theme: "light" | "dark";
   language: "en";
   currency: "USD" | "EUR" | "CNY" | "INR";
@@ -57,6 +61,7 @@ export type SettingContextProps = SettingState & {
   onHandleInfo: ToastActions["onInfo"];
   onToogleConnectExtension: (value?: boolean) => void;
   onToogleConnectTrading: (value?: boolean) => void;
+  onChangeMarketCarousel: (value: MarketCarousel) => void;
 };
 
 export type SettingsProps = {

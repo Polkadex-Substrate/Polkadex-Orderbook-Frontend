@@ -18,7 +18,7 @@ export const ResponsiveTable = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
   data: Order | null;
-  onCancelOrder: (payload: CancelOrderArgs) => void;
+  onCancelOrder: (payload: CancelOrderArgs) => Promise<void>;
 }) => {
   if (!data) return null;
   const {
@@ -104,8 +104,8 @@ export const ResponsiveTable = ({
         <Drawer.Footer>
           <CancelOrderAction
             responsive
-            onCancel={() =>
-              onCancelOrder({
+            onCancel={async () =>
+              await onCancelOrder({
                 orderId: orderId,
                 base: market.baseAsset.id,
                 quote: market.quoteAsset.id,

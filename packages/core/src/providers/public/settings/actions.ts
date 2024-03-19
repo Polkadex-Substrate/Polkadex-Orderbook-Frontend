@@ -64,6 +64,15 @@ export interface CheckHasExtension {
   type: typeof C.CHECK_HAS_EXTENSION;
 }
 
+export interface SetMarketCarousel {
+  type: typeof C.SET_MARKET_CAROUSEL;
+  payload: T.MarketCarousel;
+}
+
+export interface GetMarketCarousel {
+  type: typeof C.GET_MARKET_CAROUSEL;
+}
+
 export type SettingActions =
   | ToggleChartRebuildAction
   | ToggleMarketSelectorAction
@@ -78,7 +87,9 @@ export type SettingActions =
   | AllNotificationMarkAsRead
   | CheckHasExtension
   | ToogleConnectExtension
-  | ToogleConnectTrading;
+  | ToogleConnectTrading
+  | SetMarketCarousel
+  | GetMarketCarousel;
 
 export const toggleChartRebuild = (): ToggleChartRebuildAction => ({
   type: C.TOGGLE_CHART_REBUILD,
@@ -161,4 +172,15 @@ export const allNotificationMarkAsRead = (): AllNotificationMarkAsRead => ({
 
 export const checkHasExtension = (): CheckHasExtension => ({
   type: C.CHECK_HAS_EXTENSION,
+});
+
+export const setMarketCarousel = (
+  payload: T.MarketCarousel
+): SetMarketCarousel => ({
+  type: C.SET_MARKET_CAROUSEL,
+  payload,
+});
+
+export const getMarketCarousel = (): GetMarketCarousel => ({
+  type: C.GET_MARKET_CAROUSEL,
 });

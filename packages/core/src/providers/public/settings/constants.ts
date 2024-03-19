@@ -14,6 +14,7 @@ export const DEFAULTLANGUAGENAME = "language";
 export const DEFAULTCURRENCYNAME = "currency";
 export const DEFAULTTHEMENAME = "theme";
 export const DEFAULTNOTIFICATIONNAME = "localnotifications";
+export const DEFAULTMARKETCAROUSEL = "marketCarouselSelector";
 
 export const NOTIFICATION_DELETE_ALL =
   "Settings Provider/NOTIFICATION_DELETE_ALL";
@@ -31,3 +32,8 @@ export const TOOGLE_CONNECT_EXTENSION =
   "Settings Provider/TOOGLE_CONNECT_EXTENSION";
 export const TOOGLE_CONNECT_TRADING =
   "Settings Provider/TOOGLE_CONNECT_TRADING";
+
+export const SET_MARKET_CAROUSEL = "Settings Provider/SET_MARKET_CAROUSEL";
+export const GET_MARKET_CAROUSEL = "Settings Provider/GET_MARKET_CAROUSEL";
+
+export const marketCarouselValues = ["Popular", "Favourite"] as const;

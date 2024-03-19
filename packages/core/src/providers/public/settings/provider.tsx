@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 
 import { Provider } from "./context";
 import { settingReducer, initialState } from "./reducer";
@@ -49,6 +49,9 @@ export const SettingProvider: T.SettingComponent = ({
     []
   );
 
+  const onChangeMarketCarousel = (value: T.MarketCarousel) =>
+    dispatch(A.setMarketCarousel(value));
+
   // Notifications Actions
   const onPushNotification = useCallback(
     (payload: T.NotificationPayload) => dispatch(A.notificationPush(payload)),
@@ -74,6 +77,10 @@ export const SettingProvider: T.SettingComponent = ({
     []
   );
 
+  useEffect(() => {
+    dispatch(A.getMarketCarousel());
+  }, []);
+
   return (
     <Provider
       value={{
@@ -94,6 +101,7 @@ export const SettingProvider: T.SettingComponent = ({
         onHandleInfo: defaultToast.onInfo,
         onToogleConnectExtension,
         onToogleConnectTrading,
+        onChangeMarketCarousel,
       }}
     >
       {children}
