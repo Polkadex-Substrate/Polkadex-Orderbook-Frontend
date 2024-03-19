@@ -62,7 +62,6 @@ export const CancelAllOrdersAction = ({
         <Dropdown.Content>
           {orders?.map((e) => {
             const ordersLen = markets.filter((val) => val.id === e.id).length;
-            console.log("ordersLen", ordersLen);
             return (
               <Dropdown.Item asChild key={e.id}>
                 <PopConfirm>
