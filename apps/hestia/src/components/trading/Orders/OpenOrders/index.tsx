@@ -13,6 +13,7 @@ import {
   useCancelOrder,
   useOpenOrders,
   CancelOrderArgs,
+  useCancelAllOrders,
 } from "@orderbook/core/hooks";
 import {
   GenericMessage,
@@ -47,6 +48,7 @@ export const OpenOrdersTable = ({
   const { mutateAsync: cancelOrder } = useCancelOrder();
   const { selectedAccount } = useConnectWalletProvider();
   const { isLoading, openOrders } = useOpenOrders(filters);
+  const { mutateAsync: onCancelAllOrders } = useCancelAllOrders();
   const { width } = useWindowSize();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -56,7 +58,7 @@ export const OpenOrdersTable = ({
   const [responsiveState, setResponsiveState] = useState(false);
   const [responsiveData, setResponsiveData] = useState<Order | null>(null);
   const responsiveView = useMemo(() => width < 500 || width <= 715, [width]);
-
+  const markets = useMemo(() => openOrders.map((e) => e.market), [openOrders]);
   const onCancelOrder = async (payload: CancelOrderArgs | null) => {
     if (!payload) return;
     if (selectedAccount?.isLocked) {
@@ -70,7 +72,11 @@ export const OpenOrdersTable = ({
 
   const table = useReactTable({
     data: openOrders,
-    columns: columns({ onCancelOrder }),
+    columns: columns({
+      onCancelOrder,
+      onCancelAllOrders,
+      markets,
+    }),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });

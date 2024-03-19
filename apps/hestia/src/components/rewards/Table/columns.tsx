@@ -43,6 +43,11 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as LmpMarketConfig).makerScore;
+      const numB = (rowB.getValue(columnId) as LmpMarketConfig).makerScore;
+      return numA > numB ? 1 : -1;
+    },
   }),
   columnHelper.accessor((row) => row, {
     id: "traderScore",
@@ -59,6 +64,11 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as LmpMarketConfig).traderScore;
+      const numB = (rowB.getValue(columnId) as LmpMarketConfig).traderScore;
+      return numA > numB ? 1 : -1;
+    },
   }),
   columnHelper.accessor((row) => row, {
     id: "volume24h",
@@ -76,5 +86,10 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as LmpMarketConfig).quoteVolume24h;
+      const numB = (rowB.getValue(columnId) as LmpMarketConfig).quoteVolume24h;
+      return numA > numB ? 1 : -1;
+    },
   }),
 ];

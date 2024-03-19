@@ -1,4 +1,5 @@
 import { SettingActions } from "@orderbook/core/providers/public/settings/actions";
+import { getFromStorage, setToStorage } from "@orderbook/core/helpers";
 
 import * as T from "./types";
 import * as C from "./constants";
@@ -25,6 +26,7 @@ const currency = ((isBrowser && localStorage.getItem(C.DEFAULTCURRENCYNAME)) ??
 const notifications = getNotifications();
 
 export const initialState: T.SettingState = {
+  marketCarousel: "Popular",
   theme,
   currency,
   language,
@@ -180,6 +182,20 @@ export const settingReducer = (
         ...state,
         hasExtension: true,
       };
+    }
+
+    case C.SET_MARKET_CAROUSEL: {
+      setToStorage(C.DEFAULTMARKETCAROUSEL, action.payload);
+      return { ...state, marketCarousel: action.payload };
+    }
+
+    case C.GET_MARKET_CAROUSEL: {
+      const value = getFromStorage(C.DEFAULTMARKETCAROUSEL) as T.MarketCarousel;
+
+      if (C.marketCarouselValues.includes(value))
+        return { ...state, marketCarousel: value };
+
+      return state;
     }
 
     default:

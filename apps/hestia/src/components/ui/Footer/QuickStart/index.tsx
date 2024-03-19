@@ -1,7 +1,8 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useMemo } from "react";
 import { Button, Modal, Separator, Typography } from "@polkadex/ux";
 import { RiCheckLine, RiCloseLine } from "@remixicon/react";
 import Image from "next/image";
+import { useWindowSize } from "react-use";
 
 import IntroImage from "../../../../../public/img/introHero.webp";
 
@@ -12,11 +13,14 @@ export const QuickStart = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const { width } = useWindowSize();
+  const responsiveView = useMemo(() => width <= 640, [width]);
+
   return (
     <Modal
       open={open}
       onOpenChange={onOpenChange}
-      placement="center"
+      placement={responsiveView ? "top center" : "center"}
       closeOnClickOutside
       className="flex flex-col border-primary bg-level-0 border w-full max-md:w-screen md:max-w-[800px] overflow-auto scrollbar-hide"
     >

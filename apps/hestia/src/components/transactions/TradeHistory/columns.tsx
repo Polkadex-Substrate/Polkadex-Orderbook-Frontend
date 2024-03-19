@@ -16,7 +16,7 @@ export const columns = () => [
       return (
         <Copy value={e.getValue().tradeId}>
           <div className="flex items-center gap-2">
-            <RiFileCopyLine className="w-4 h-4 text-actionInput" />
+            <RiFileCopyLine className="w-2.5 h-2.5 text-actionInput" />
             <Typography.Text size="xs">
               {truncateString(e.getValue().tradeId, 4)}
             </Typography.Text>

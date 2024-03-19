@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { Button, Input, Tooltip, Spinner } from "@polkadex/ux";
 import classNames from "classnames";
 import { useFormik } from "formik";
@@ -14,9 +14,9 @@ import { Balance } from "../balance";
 import { Range } from "@/components/ui/Temp/range";
 import { TradingFee } from "@/components/ui/ReadyToUse";
 
-const PRICE = "Price";
-const AMOUNT = "Amount";
-const TOTAL = "Total";
+const PRICE = "price";
+const AMOUNT = "amount";
+const TOTAL = "total";
 
 const initialValues = {
   price: "",
@@ -31,6 +31,7 @@ export const SellOrder = ({
   market?: Market;
   availableBaseAmount: number;
 }) => {
+  const [validateSubmit, setValidateSubmit] = useState(false);
   const { onToogleConnectTrading } = useSettingsProvider();
 
   const {
@@ -42,6 +43,9 @@ export const SellOrder = ({
     setValues,
     resetForm,
     isSubmitting,
+    touched,
+    handleBlur,
+    setFieldTouched,
   } = useFormik({
     initialValues,
     validationSchema: limitOrderValidations({
@@ -52,6 +56,8 @@ export const SellOrder = ({
       maxVolume: market?.maxVolume || 0,
       availableBalance: availableBaseAmount,
     }),
+    validateOnChange: validateSubmit,
+    validateOnBlur: true,
     onSubmit: async (e) => {
       try {
         await onExecuteOrder(e.price, e.amount);
@@ -91,15 +97,22 @@ export const SellOrder = ({
   };
 
   return (
-    <form className="flex flex-auto flex-col gap-2" onSubmit={handleSubmit}>
-      <Tooltip open={!!errors.price && !!values.price && isSignedIn}>
+    <form
+      className="flex flex-auto flex-col gap-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (!validateSubmit) setValidateSubmit(true);
+        handleSubmit();
+      }}
+    >
+      <Tooltip open={!!errors.price && !!touched.price && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.price &&
-                !!values.price &&
-                isSignedIn &&
-                "border-danger-base border"
+              "border",
+              !!errors.price && isSignedIn
+                ? "border-danger-base"
+                : "border-transparent"
             )}
           >
             <Input.Primary
@@ -109,6 +122,11 @@ export const SellOrder = ({
               autoComplete="off"
               value={values.price}
               onChange={onChange}
+              onFocus={(e) => {
+                if (!validateSubmit) setValidateSubmit(true);
+                handleBlur(e);
+              }}
+              onBlur={() => setFieldTouched(PRICE, false)}
             >
               <Input.Label className="w-[50px]">Price</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>
@@ -117,19 +135,19 @@ export const SellOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="left" className="bg-level-5 z-[1]">
+        <Tooltip.Content side="left" className="bg-level-5 z-[2] p-1">
           {errors.price}
         </Tooltip.Content>
       </Tooltip>
 
-      <Tooltip open={!!errors.amount && !!values.amount && isSignedIn}>
+      <Tooltip open={!!errors.amount && !!touched.amount && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.amount &&
-                !!values.amount &&
-                isSignedIn &&
-                "border-danger-base border"
+              "border",
+              !!errors.amount && isSignedIn
+                ? "border-danger-base"
+                : "border-transparent"
             )}
           >
             <Input.Primary
@@ -139,6 +157,11 @@ export const SellOrder = ({
               autoComplete="off"
               value={values.amount}
               onChange={onChange}
+              onFocus={(e) => {
+                if (!validateSubmit) setValidateSubmit(true);
+                handleBlur(e);
+              }}
+              onBlur={() => setFieldTouched(AMOUNT, false)}
             >
               <Input.Label className="w-[50px]">Amount</Input.Label>
               <Input.Ticker>{market?.baseAsset?.ticker}</Input.Ticker>
@@ -147,7 +170,7 @@ export const SellOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="left" className="bg-level-5 z-[1]">
+        <Tooltip.Content side="left" className="bg-level-5 z-[2] p-1">
           {errors.amount}
         </Tooltip.Content>
       </Tooltip>
@@ -178,14 +201,14 @@ export const SellOrder = ({
           },
         ]}
       />
-      <Tooltip open={!!errors.total && !!values.total && isSignedIn}>
+      <Tooltip open={!!errors.total && !!touched.total && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.total &&
-                !!values.total &&
-                isSignedIn &&
-                "border-danger-base border"
+              "border",
+              !!errors.total && isSignedIn
+                ? "border-danger-base"
+                : "border-transparent"
             )}
           >
             <Input.Primary
@@ -195,6 +218,11 @@ export const SellOrder = ({
               autoComplete="off"
               value={values.total}
               onChange={onChange}
+              onFocus={(e) => {
+                if (!validateSubmit) setValidateSubmit(true);
+                handleBlur(e);
+              }}
+              onBlur={() => setFieldTouched(TOTAL, false)}
             >
               <Input.Label className="w-[50px]">Total</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>
@@ -203,13 +231,14 @@ export const SellOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="right" className="bg-level-5 z-[1]">
+        <Tooltip.Content side="left" className="bg-level-5 z-[2] p-1">
           {errors.total}
         </Tooltip.Content>
       </Tooltip>
       {isSignedIn ? (
         <Button.Solid
           type="submit"
+          appearance="danger"
           disabled={!(isValid && dirty) || isSubmitting}
         >
           {isSubmitting ? (
