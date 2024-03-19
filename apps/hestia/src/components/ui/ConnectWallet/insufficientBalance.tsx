@@ -17,7 +17,7 @@ export const InsufficientBalance = ({
   onClose: () => void;
 }) => {
   return (
-    <Interaction className="bg-backgroundBase rounded-sm">
+    <Interaction className="w-full">
       <Interaction.Content className="flex flex-col gap-4 flex-1">
         <div className="flex flex-col gap-2 border-b border-primary">
           <div className="py-6 flex flex-col gap-5 items-center text-center">

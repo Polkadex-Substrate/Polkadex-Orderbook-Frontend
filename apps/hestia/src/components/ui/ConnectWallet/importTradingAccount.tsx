@@ -4,6 +4,7 @@ import {
   Input,
   Interaction,
   Loading,
+  Passcode,
   Typography,
   truncateString,
 } from "@polkadex/ux";
@@ -156,8 +157,8 @@ export const ImportTradingAccount = ({
   return (
     <Loading.Spinner active={loading}>
       <form onSubmit={handleSubmit}>
-        <Interaction className="gap-10 bg-backgroundBase rounded-sm">
-          <Interaction.Title onClose={onClose} size="lg">
+        <Interaction className="gap-10 w-full">
+          <Interaction.Title onClose={{ onClick: onClose }}>
             Import Account
           </Interaction.Title>
           <Interaction.Content className="flex-1">
@@ -200,7 +201,7 @@ export const ImportTradingAccount = ({
                 {isValidFile && !isError && (
                   <OptionalField label="Protected by password?">
                     <div className="flex items-center justify-between">
-                      <Input.Passcode
+                      <Passcode.Outline
                         focusOnInit
                         type={show ? "password" : "text"}
                         value={state}

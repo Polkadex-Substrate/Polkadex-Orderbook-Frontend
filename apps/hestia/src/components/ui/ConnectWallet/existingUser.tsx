@@ -46,9 +46,9 @@ export const ExistingUser = ({
   const hasTradingAccounts = !!accounts?.length;
 
   return (
-    <Interaction className="gap-10 overflow-hidden bg-backgroundBase rounded-sm md:max-w-[24rem] md:min-w-[24rem]">
+    <Interaction className="w-full md:min-w-[24rem] md:max-w-[24rem]">
       {hasTradingAccounts && (
-        <Interaction.Title className="px-7" size="lg" onClose={onClose}>
+        <Interaction.Title onClose={{ onClick: onClose }}>
           Select a trading account
         </Interaction.Title>
       )}

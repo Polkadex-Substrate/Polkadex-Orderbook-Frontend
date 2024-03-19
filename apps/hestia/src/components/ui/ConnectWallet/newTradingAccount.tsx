@@ -8,6 +8,7 @@ import {
   Loading,
   Typography,
   Skeleton,
+  Passcode,
 } from "@polkadex/ux";
 import { useFormik } from "formik";
 import { generateUsername } from "friendly-username-generator";
@@ -95,8 +96,8 @@ export const NewTradingAccount = ({
   return (
     <Loading.Spinner active={!!loading}>
       <form onSubmit={handleSubmit}>
-        <Interaction className="bg-backgroundBase rounded-sm">
-          <Interaction.Title onClose={onClose} size="lg">
+        <Interaction className="w-full">
+          <Interaction.Title onClose={{ onClick: onClose }}>
             New trading account
           </Interaction.Title>
           <Interaction.Content className="flex flex-col gap-3 flex-1">
@@ -124,7 +125,7 @@ export const NewTradingAccount = ({
               </div>
               <OptionalField label="Protected by password">
                 <div className="flex items-center justify-between">
-                  <Input.Passcode
+                  <Passcode.Outline
                     focusOnInit
                     type={show ? "password" : "text"}
                     value={state}

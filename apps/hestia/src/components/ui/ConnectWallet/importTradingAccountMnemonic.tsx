@@ -1,6 +1,13 @@
 // TODO: Create a component (Input.Mnemonic) in @polkadex/ux.
 import { useState } from "react";
-import { Interaction, Loading, Input, Button, Typography } from "@polkadex/ux";
+import {
+  Interaction,
+  Loading,
+  Input,
+  Button,
+  Typography,
+  Passcode,
+} from "@polkadex/ux";
 import { useFormik } from "formik";
 import { generateUsername } from "friendly-username-generator";
 import { importAccountValidations } from "@orderbook/core/validations";
@@ -58,8 +65,8 @@ export const ImportTradingAccountMnemonic = ({
   return (
     <Loading.Spinner active={loading || isSubmitting}>
       <form onSubmit={handleSubmit}>
-        <Interaction className="bg-backgroundBase rounded-sm">
-          <Interaction.Title onClose={onCancel} size="lg">
+        <Interaction className="w-full">
+          <Interaction.Title onClose={{ onClick: onCancel }}>
             Import Account
           </Interaction.Title>
           <Interaction.Content className="flex flex-col gap-1 flex-1">
@@ -109,7 +116,7 @@ export const ImportTradingAccountMnemonic = ({
               )}
               <OptionalField label="Protected by password">
                 <div className="flex items-center justify-between">
-                  <Input.Passcode
+                  <Passcode.Outline
                     focusOnInit
                     type={show ? "password" : "text"}
                     value={state}

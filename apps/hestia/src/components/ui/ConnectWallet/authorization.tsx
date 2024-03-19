@@ -56,9 +56,7 @@ export const Authorization = ({
   const errorMessage = `Please authorize your ${extensionName} wallet extension to connect to Orderbook App`;
   return (
     <Interaction
-      className={twMerge(
-        classNames("gap-10 bg-backgroundBase rounded-sm", className)
-      )}
+      className={twMerge(classNames("gap-10 w-full", className))}
       {...props}
     >
       <Interaction.Content className="flex flex-col gap-5 items-center text-center">

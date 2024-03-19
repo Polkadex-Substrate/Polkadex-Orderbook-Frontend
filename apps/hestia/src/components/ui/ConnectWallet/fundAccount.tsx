@@ -24,7 +24,7 @@ export const FundAccount = ({
   selectedExtension?: (typeof ExtensionsArray)[0];
 }) => {
   return (
-    <Interaction className="gap-10">
+    <Interaction className="gap-10 w-full">
       <Interaction.Content className="flex flex-col gap-6 flex-1">
         {isPresent ? (
           <>

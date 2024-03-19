@@ -40,13 +40,9 @@ export const ExtensionAccounts = ({
 
   return (
     <Loading.Spinner active={loading}>
-      <Interaction
-        withAnimation={!loading}
-        className="bg-backgroundBase rounded-sm"
-        {...props}
-      >
+      <Interaction className="w-full" {...props}>
         {hasExtensionAccounts && (
-          <Interaction.Title onClose={onClose} size="lg">
+          <Interaction.Title onClose={{ onClick: onClose }}>
             Select funding account
           </Interaction.Title>
         )}
