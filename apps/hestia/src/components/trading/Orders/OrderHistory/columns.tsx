@@ -96,6 +96,11 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as Order).price;
+      const numB = (rowB.getValue(columnId) as Order).price;
+      return numA > numB ? 1 : -1;
+    },
   }),
   orderHistoryColumnHelper.accessor((row) => row, {
     id: "amount",
@@ -110,6 +115,11 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = +(rowA.getValue(columnId) as Order).quantity;
+      const numB = +(rowB.getValue(columnId) as Order).quantity;
+      return numA > numB ? 1 : -1;
+    },
   }),
   orderHistoryColumnHelper.accessor((row) => row, {
     id: "filled",
@@ -168,5 +178,10 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as Order).fee;
+      const numB = (rowB.getValue(columnId) as Order).fee;
+      return numA > numB ? 1 : -1;
+    },
   }),
 ];

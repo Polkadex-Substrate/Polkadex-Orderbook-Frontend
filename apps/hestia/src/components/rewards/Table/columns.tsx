@@ -1,6 +1,6 @@
-import { trimFloat } from "@polkadex/numericals";
 import { LmpMarketConfig } from "@orderbook/core/index";
 import { Tokens, Typography } from "@polkadex/ux";
+import { millify } from "@polkadex/numericals";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { MarketCard } from "./marketCard";
@@ -32,7 +32,9 @@ export const columns = () => [
     id: "makerScore",
     cell: (e) => {
       return (
-        <Typography.Text size="sm">{e.getValue().makerScore}</Typography.Text>
+        <Typography.Text size="sm">
+          {millify(e.getValue().makerScore)}
+        </Typography.Text>
       );
     },
     header: () => (
@@ -41,16 +43,18 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as LmpMarketConfig).makerScore;
+      const numB = (rowB.getValue(columnId) as LmpMarketConfig).makerScore;
+      return numA > numB ? 1 : -1;
+    },
   }),
   columnHelper.accessor((row) => row, {
     id: "traderScore",
     cell: (e) => {
       return (
         <Typography.Text size="sm">
-          {trimFloat({
-            value: e.getValue().traderScore,
-            digitsAfterDecimal: 6,
-          })}
+          {millify(e.getValue().traderScore)}
         </Typography.Text>
       );
     },
@@ -60,6 +64,11 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as LmpMarketConfig).traderScore;
+      const numB = (rowB.getValue(columnId) as LmpMarketConfig).traderScore;
+      return numA > numB ? 1 : -1;
+    },
   }),
   columnHelper.accessor((row) => row, {
     id: "volume24h",
@@ -77,5 +86,10 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as LmpMarketConfig).quoteVolume24h;
+      const numB = (rowB.getValue(columnId) as LmpMarketConfig).quoteVolume24h;
+      return numA > numB ? 1 : -1;
+    },
   }),
 ];

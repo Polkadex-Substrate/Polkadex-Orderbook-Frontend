@@ -109,12 +109,11 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
     }
   }
 
-  async cancelAll(data: ExecuteArgs): Promise<void> {
-    const payload = JSON.stringify({ CancelAll: data.payload });
+  async cancelAll({ payload, token }: ExecuteArgs): Promise<void> {
     const result = await sendQueryToAppSync<GraphQLResult<Cancel_allMutation>>({
       query: mutation.cancel_all,
       variables: { input: { payload } },
-      token: data.token,
+      token,
     });
     if (result.errors && result.errors.length > 0) {
       let concatError = "";

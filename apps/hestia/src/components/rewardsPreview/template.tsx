@@ -17,11 +17,13 @@ import { Overview } from "./Overview";
 import { TableRewards } from "./TableRewards";
 
 import { Footer, Header } from "@/components/ui";
+import { useTour } from "@/hooks";
 
 export function Template({ id }: { id: string }) {
   const { width } = useWindowSize();
   const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, id);
+  const { onOpenChange } = useTour();
 
   const footerRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
@@ -61,13 +63,13 @@ export function Template({ id }: { id: string }) {
 
   const maxHeight = useMemo(
     () =>
-      `calc(90vh - ${
-        overviewHeight + headerHeight + tableTitleHeight + tableRowsHeight + 1
+      `calc(100vh - ${
+        overviewHeight + headerHeight + tableTitleHeight + tableRowsHeight + 25
       }px)`,
     [headerHeight, overviewHeight, tableTitleHeight, tableRowsHeight]
   );
 
-  const mobileView = useMemo(() => width < 640, [width]);
+  const mobileView = useMemo(() => width <= 640, [width]);
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
@@ -87,23 +89,15 @@ export function Template({ id }: { id: string }) {
       >
         <div className="flex-1 flex flex-col">
           <Overview ref={overviewRef} market={currentMarket} />
-          <div className="flex flex-1 max-lg:flex-col flex-wrap">
-            <div className="flex-1 flex flex-col border-b border-secondary-base">
+          <div className="flex flex-1 max-lg:flex-col">
+            <div className="flex-1 basis-2/3 flex flex-col border-b border-secondary-base">
               <div
                 ref={tableTitlesRef}
-                className="flex items-center justify-between gap-2 border-b border-primary py-2 px-4 w-full"
+                className="flex items-center justify-between gap-2 border-b border-primary py-3 px-4 w-full"
               >
                 <Typography.Heading size="md">
                   My trading rewards
                 </Typography.Heading>
-                <Button.Underline
-                  size="sm"
-                  appearance="secondary"
-                  disabled
-                  className="pointer-events-none"
-                >
-                  Export to CSV
-                </Button.Underline>
               </div>
               <TableRewards
                 ref={tableRowsRef}
@@ -111,7 +105,7 @@ export function Template({ id }: { id: string }) {
                 market={currentMarket?.id as string}
               />
             </div>
-            <div className="max-lg:w-full flex flex-col border-l border-primary">
+            <div className="basis-1/3 max-lg:w-full flex flex-col border-l border-primary">
               <div
                 ref={tableTitlesRef}
                 className="border-b border-primary py-3 px-4 w-full"
@@ -163,7 +157,7 @@ export function Template({ id }: { id: string }) {
           />
         </div>
       )}
-      <Footer ref={footerRef} />
+      <Footer onOpenChange={onOpenChange} ref={footerRef} />
     </div>
   );
 }

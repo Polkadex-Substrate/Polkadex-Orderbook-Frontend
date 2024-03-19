@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import BigNumber from "bignumber.js";
 import { FormikHelpers } from "formik";
 import { useProfile } from "@orderbook/core/providers/user/profile";
@@ -28,6 +28,8 @@ type Props = {
 };
 
 export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
+  const [mount, setMount] = useState(false);
+
   const { pricePrecision, qtyPrecision, totalPrecision } = useMemo(() => {
     const pricePrecision = decimalPlaces(market?.price_tick_size || 0);
     const qtyPrecision = decimalPlaces(market?.qty_step_size || 0);
@@ -252,6 +254,13 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
   useEffect(() => {
     if (+currentTotal) onChangeTotal(currentTotal);
   }, [onChangeTotal, currentTotal]);
+
+  useEffect(() => {
+    if (!mount && !!lastPriceValue) {
+      onChangePrice(lastPriceValue.toString());
+      setMount(true);
+    }
+  }, [lastPriceValue, onChangePrice, mount]);
 
   return {
     isSignedIn: tradeAddress?.length > 0,

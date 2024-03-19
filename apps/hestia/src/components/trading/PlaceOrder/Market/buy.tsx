@@ -13,7 +13,7 @@ import { Balance } from "../balance";
 import { Range } from "@/components/ui/Temp/range";
 import { TradingFee } from "@/components/ui/ReadyToUse";
 
-const AMOUNT = "Amount";
+const AMOUNT = "amount";
 
 const initialValues = {
   amount: "",
@@ -36,13 +36,16 @@ export const BuyOrder = ({
     setValues,
     resetForm,
     isSubmitting,
+    touched,
+    handleBlur,
+    setFieldTouched,
   } = useFormik({
     initialValues,
     validationSchema: marketOrderValidations({
       minQuantity: market?.minQty || 0,
       availableBalance: availableQuoteAmount,
     }),
-    validateOnChange: true,
+    validateOnBlur: true,
     onSubmit: async (e) => {
       try {
         await onExecuteOrder(e.amount);
@@ -77,14 +80,14 @@ export const BuyOrder = ({
         Best Market Price
       </Button.Solid>
 
-      <Tooltip open={!!errors.amount && !!values.amount && isSignedIn}>
+      <Tooltip open={!!errors.amount && !!touched.amount && isSignedIn}>
         <Tooltip.Trigger asChild>
           <div
             className={classNames(
-              !!errors.amount &&
-                !!values.amount &&
-                isSignedIn &&
-                "border-danger-base border"
+              "border",
+              !!errors.amount && isSignedIn
+                ? "border-danger-base"
+                : "border-transparent"
             )}
           >
             <Input.Primary
@@ -94,6 +97,8 @@ export const BuyOrder = ({
               name={AMOUNT}
               value={values.amount}
               onChange={(e) => onChangeAmount(e.target.value)}
+              onFocus={handleBlur}
+              onBlur={() => setFieldTouched(AMOUNT, false)}
             >
               <Input.Label className="w-[50px]">Amount</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>
@@ -102,7 +107,7 @@ export const BuyOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="left" className="bg-level-5 z-[1]">
+        <Tooltip.Content side="left" className="bg-level-5 z-[2] p-1">
           {errors.amount}
         </Tooltip.Content>
       </Tooltip>

@@ -47,7 +47,7 @@ export const Overview = () => {
         <OverviewCard
           icon="RiSkipDownLine"
           target="_blank"
-          href="https://thea.polkadex.trade/deposit"
+          href="https://thea.polkadex.trade/"
         >
           Deposit
         </OverviewCard>

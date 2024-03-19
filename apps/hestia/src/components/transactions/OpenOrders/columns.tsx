@@ -1,4 +1,7 @@
-import { Order } from "@orderbook/core/utils/orderbookService/types";
+import {
+  MarketBase,
+  Order,
+} from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
 import { CancelOrderArgs } from "@orderbook/core/hooks";
@@ -9,20 +12,25 @@ import { CancelOrderAction } from "./cancelOrderAction";
 
 import { FilledCard } from "@/components/ui/ReadyToUse";
 import { formatedDate } from "@/helpers";
+import { CancelAllOrdersAction } from "@/components/ui/ReadyToUse/cancelAllOrdersAction";
 
 const columnHelper = createColumnHelper<Order>();
 
 export const columns = ({
   onCancelOrder,
+  onCancelAllOrders,
+  markets,
 }: {
-  onCancelOrder: (value: CancelOrderArgs) => void;
+  onCancelOrder: (value: CancelOrderArgs) => Promise<void>;
+  onCancelAllOrders: (props: { market: string }) => Promise<void>;
+  markets: MarketBase[];
 }) => [
   columnHelper.accessor((row) => row, {
     id: "id",
     cell: (e) => (
       <Copy value={e.getValue().orderId}>
         <div className="flex items-center gap-2">
-          <RiFileCopyLine className="w-4 h-4 text-actionInput" />
+          <RiFileCopyLine className="w-2.5 h-2.5 text-actionInput" />
           <Typography.Text size="xs">
             {truncateString(e.getValue().orderId, 4)}
           </Typography.Text>
@@ -174,8 +182,8 @@ export const columns = ({
     cell: (e) => {
       return (
         <CancelOrderAction
-          onCancel={() =>
-            onCancelOrder({
+          onCancel={async () =>
+            await onCancelOrder({
               orderId: e.getValue().orderId,
               base: e.getValue().market.baseAsset.id,
               quote: e.getValue().market.quoteAsset.id,
@@ -184,7 +192,12 @@ export const columns = ({
         />
       );
     },
-    header: () => null,
+    header: () => (
+      <CancelAllOrdersAction
+        markets={markets}
+        onCancel={async (market) => await onCancelAllOrders({ market })}
+      />
+    ),
     footer: (e) => e.column.id,
   }),
 ];

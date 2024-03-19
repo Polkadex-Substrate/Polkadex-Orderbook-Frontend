@@ -96,7 +96,9 @@ export const PALLET_ADDRESS =
 
 export const TIME_INTERVAL = {
   // Change it to 201600 for production
-  blocksInEpoch: 200,
-  // Change it to 28 days = 2.419000 seconds, for production
-  epochDuration: 40 * 60, // in seconds
+  blocksInEpoch: 201600,
+  // Change it to 28 days = 28 * 86400 seconds, for production
+  epochDuration: 28 * 86400, // in seconds
 };
+
+export const START_EPOCH = 1;
