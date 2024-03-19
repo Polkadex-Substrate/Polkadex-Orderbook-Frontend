@@ -119,7 +119,7 @@ export function Template({ id }: { id: string }) {
             <Resizable
               direction={desktopView ? "horizontal" : "vertical"}
               autoSaveId="persistence"
-              className="!h-webKit"
+              className={classNames(!desktopView && "min-h-webKit")}
             >
               {tabletView && (
                 <Resizable
@@ -147,7 +147,13 @@ export function Template({ id }: { id: string }) {
                   </Resizable.Panel>
                 </Resizable>
               )}
-              <Resizable.Panel defaultSize={58} minSize={58}>
+              <Resizable.Panel
+                defaultSize={58}
+                minSize={58}
+                className={classNames(
+                  !desktopView && "flex flex-col max-h-[400px]"
+                )}
+              >
                 <Orders />
               </Resizable.Panel>
               {desktopView && (
