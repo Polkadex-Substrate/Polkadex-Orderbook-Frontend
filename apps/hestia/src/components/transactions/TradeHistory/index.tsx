@@ -5,6 +5,7 @@ import { useWindowSize } from "usehooks-ts";
 import classNames from "classnames";
 import {
   ColumnFiltersState,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -29,6 +30,7 @@ type Props = {
 };
 
 const responsiveKeys = ["id", "date"];
+const actionKeys = ["price", "date", "amount"];
 
 export const TradeHistory = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight, searchTerm }, ref) => {
@@ -39,6 +41,7 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
     const responsiveView = useMemo(() => width <= 600, [width]);
     const [responsiveState, setResponsiveState] = useState(false);
     const [responsiveData, setResponsiveData] = useState<Trade | null>(null);
+    const [sorting, setSorting] = useState<SortingState>([]);
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -106,7 +109,8 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
 
     const table = useReactTable({
       data: tradeHistoryPerPage,
-      state: { columnFilters },
+      state: { columnFilters, sorting },
+      onSortingChange: setSorting,
       onColumnFiltersChange: setColumnFilters,
       getSortedRowModel: getSortedRowModel(),
       getFilteredRowModel: getFilteredRowModel(),
@@ -146,7 +150,7 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
         />
         <div className="flex-1 flex flex-col pt-1">
           <Filters table={table} availablePairs={availablePairs} />
-          <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
+          <div className="flex-1 flex flex-col justify-between border-b border-secondary-base">
             <Loading.Spinner active={isFetchingNextPage}>
               <div
                 className="overflow-y-hidden hover:overflow-y-auto px-3"
@@ -163,6 +167,13 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
                     {table.getHeaderGroups().map((headerGroup) => (
                       <Table.Row key={headerGroup.id}>
                         {headerGroup.headers.map((header) => {
+                          const getSorted = header.column.getIsSorted();
+                          const isActionTab = actionKeys.includes(header.id);
+                          const handleSort = (): void => {
+                            const isDesc = getSorted === "desc";
+                            header.column.toggleSorting(!isDesc);
+                          };
+
                           if (
                             responsiveView &&
                             responsiveKeys.includes(header.id)
@@ -172,8 +183,10 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
                           return (
                             <Table.Head
                               className={classNames(
-                                "px-2 text-primary text-xs"
+                                "text-xs",
+                                !isActionTab && "cursor-pointer"
                               )}
+                              {...(isActionTab && { onClick: handleSort })}
                               key={header.id}
                             >
                               {header.isPlaceholder
@@ -182,6 +195,7 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
                                     header.column.columnDef.header,
                                     header.getContext()
                                   )}
+                              {isActionTab && <Table.Icon />}
                             </Table.Head>
                           );
                         })}
@@ -234,16 +248,18 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
                 </Table>
               </div>
             </Loading.Spinner>
-            <TablePagination
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onSetRowsPerPage={onSetRowsPerPage}
-              onNextPage={onNextPage}
-              onPrevPage={onPrevPage}
-              prevButtonDisabled={prevButtonDisabled}
-              nextButtonDisabled={nextButtonDisabled}
-              ref={ref}
-            />
+            <div className="[&_svg]:scale-150">
+              <TablePagination
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onSetRowsPerPage={onSetRowsPerPage}
+                onNextPage={onNextPage}
+                onPrevPage={onPrevPage}
+                prevButtonDisabled={prevButtonDisabled}
+                nextButtonDisabled={nextButtonDisabled}
+                ref={ref}
+              />
+            </div>
           </div>
         </div>
       </>
