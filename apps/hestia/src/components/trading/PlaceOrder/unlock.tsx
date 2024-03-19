@@ -1,4 +1,4 @@
-import { Interaction, Typography, Input } from "@polkadex/ux";
+import { Interaction, Typography, Passcode } from "@polkadex/ux";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { unLockAccountValidations } from "@orderbook/core/validations";
@@ -47,10 +47,7 @@ export const Unlock = ({
   }, [dirty, handleSubmit, isValid, isValidating]);
 
   return (
-    <Interaction
-      className="bg-level-0 rounded-none border-none h-full flex-1"
-      withAnimation={false}
-    >
+    <Interaction className="bg-level-0 rounded-none border-none h-full flex-1">
       <Interaction.Content className="flex flex-col gap-1 flex-1 justify-center">
         <div className="flex flex-col gap-4 items-center">
           <div className="flex flex-col text-center items-center gap-5">
@@ -67,7 +64,8 @@ export const Unlock = ({
             </div>
           </div>
           <div className="flex flex-col gap-2 w-full px-6 items-center">
-            <Input.Passcode
+            <Passcode.Outline
+              focusOnInit
               value={values.password}
               onValuesChange={(e) => {
                 if (error) setError("");
