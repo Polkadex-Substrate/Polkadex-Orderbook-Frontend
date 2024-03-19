@@ -1,7 +1,12 @@
-import { Order } from "@orderbook/core/utils/orderbookService/types";
+import {
+  MarketBase,
+  Order,
+} from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Tooltip, Typography } from "@polkadex/ux";
 import { CancelOrderArgs } from "@orderbook/core/hooks";
+
+import { CancelAllOrdersAction } from "../../../ui/ReadyToUse/cancelAllOrdersAction";
 
 import { CancelOrderAction } from "./cancelOrderAction";
 
@@ -12,8 +17,12 @@ const openOrderColumnHelper = createColumnHelper<Order>();
 
 export const columns = ({
   onCancelOrder,
+  onCancelAllOrders,
+  markets,
 }: {
-  onCancelOrder: (value: CancelOrderArgs) => void;
+  onCancelOrder: (value: CancelOrderArgs) => Promise<void>;
+  onCancelAllOrders: (props: { market: string }) => Promise<void>;
+  markets: MarketBase[];
 }) => [
   openOrderColumnHelper.accessor((row) => row, {
     id: "date",
@@ -87,6 +96,11 @@ export const columns = ({
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as Order).price;
+      const numB = (rowB.getValue(columnId) as Order).price;
+      return numA > numB ? 1 : -1;
+    },
   }),
   openOrderColumnHelper.accessor((row) => row, {
     id: "amount",
@@ -103,6 +117,11 @@ export const columns = ({
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = +(rowA.getValue(columnId) as Order).quantity;
+      const numB = +(rowB.getValue(columnId) as Order).quantity;
+      return numA > numB ? 1 : -1;
+    },
   }),
   openOrderColumnHelper.accessor((row) => row, {
     id: "filled",
@@ -131,8 +150,8 @@ export const columns = ({
     cell: (e) => {
       return (
         <CancelOrderAction
-          onCancel={() =>
-            onCancelOrder({
+          onCancel={async () =>
+            await onCancelOrder({
               orderId: e.getValue().orderId,
               base: e.getValue().market.baseAsset.id,
               quote: e.getValue().market.quoteAsset.id,
@@ -141,7 +160,12 @@ export const columns = ({
         />
       );
     },
-    header: () => null,
+    header: () => (
+      <CancelAllOrdersAction
+        markets={markets}
+        onCancel={async (market) => await onCancelAllOrders({ market })}
+      />
+    ),
     footer: (e) => e.column.id,
   }),
 ];

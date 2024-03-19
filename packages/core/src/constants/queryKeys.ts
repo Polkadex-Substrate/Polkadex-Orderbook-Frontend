@@ -72,9 +72,10 @@ export const QUERY_KEYS = {
     market,
     mainAddress,
   ],
-  traderMetrics: (mainAddress: string) => [
+  traderMetrics: (market: string, mainAddress: string) => [
     PREFIX,
     "traderMetrics",
+    market,
     mainAddress,
   ],
 };

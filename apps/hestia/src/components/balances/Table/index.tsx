@@ -1,6 +1,6 @@
 // TODO: Add generic empty assets
 
-import { Table as PolkadexTable, Skeleton, GenericMessage } from "@polkadex/ux";
+import { Table as PolkadexTable, GenericMessage } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { Fragment, forwardRef, useEffect, useMemo, useState } from "react";
 import { AssetsProps } from "@orderbook/core/hooks";
@@ -16,6 +16,7 @@ import classNames from "classnames";
 
 // import { ResponsiveData } from "./responsiveData";
 import { columns } from "./columns";
+import { Loading } from "./loading";
 const responsiveKeys = ["inOrders", "fundingAccount"];
 
 export const Table = forwardRef<
@@ -43,14 +44,8 @@ export const Table = forwardRef<
     if (!responsiveView && !!state) setState(null);
   }, [responsiveView, state]);
 
-  if (loading)
-    return (
-      <div className="flex-1 flex flex-col gap-3 p-3">
-        {new Array(8).fill("").map((_, i) => (
-          <Skeleton key={i} loading className="flex-1 w-full h-5" />
-        ))}
-      </div>
-    );
+  if (loading) return <Loading />;
+
   return (
     <Fragment>
       {/* <ResponsiveData

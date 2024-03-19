@@ -6,7 +6,7 @@ export const CancelOrderAction = ({
   onCancel,
   responsive,
 }: {
-  onCancel: () => void;
+  onCancel: () => Promise<void>;
   responsive?: boolean;
 }) => {
   return (
