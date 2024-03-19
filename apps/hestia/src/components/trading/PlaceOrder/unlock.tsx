@@ -71,11 +71,10 @@ export const Unlock = ({
                 if (error) setError("");
                 setFieldValue("password", e);
               }}
-              className="flex-1 py-5"
+              className="max-sm:focus:text-[16px]"
               name="password"
               error={!!error}
             />
-
             {!!error.length && <ErrorMessage>{error}</ErrorMessage>}
           </div>
         </div>
