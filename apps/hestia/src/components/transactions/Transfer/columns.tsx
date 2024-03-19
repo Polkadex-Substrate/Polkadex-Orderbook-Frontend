@@ -95,16 +95,31 @@ export const columns = () => [
         val.toLowerCase().includes(actualTicker.toLowerCase())
       );
     },
+    sortingFn: (rowA, rowB, columnId) => {
+      const valA = (rowA.getValue(columnId) as TransferHistoryData).token
+        .ticker;
+      const valB = (rowB.getValue(columnId) as TransferHistoryData).token
+        .ticker;
+      return valA > valB ? 1 : -1;
+    },
   }),
-  columnHelper.accessor((row) => row.amount, {
+  columnHelper.accessor((row) => row, {
     id: "amount",
-    cell: (e) => <Typography.Text size="xs">{e.getValue()}</Typography.Text>,
+    cell: (e) => (
+      <Typography.Text size="xs">{e.getValue().amount}</Typography.Text>
+    ),
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Amount
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const valA = +(rowA.getValue(columnId) as TransferHistoryData).amount;
+      const valB = +(rowB.getValue(columnId) as TransferHistoryData).amount;
+      console.log(valA);
+      return valA > valB ? 1 : -1;
+    },
   }),
   columnHelper.accessor((row) => row.wallets, {
     id: "wallets",
