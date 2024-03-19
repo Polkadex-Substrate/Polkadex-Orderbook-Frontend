@@ -162,7 +162,7 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
             <Loading.Spinner active={isFetchingNextPage}>
               <div
                 className="overflow-y-hidden hover:overflow-y-auto px-3"
-                style={{ maxHeight, scrollbarGutter: "stable" }}
+                style={{ height: maxHeight, scrollbarGutter: "stable" }}
               >
                 <Table
                   className={classNames(
@@ -255,19 +255,19 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
                   </Table.Body>
                 </Table>
               </div>
+              <div className="[&_svg]:scale-150">
+                <TablePagination
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onSetRowsPerPage={onSetRowsPerPage}
+                  onNextPage={onNextPage}
+                  onPrevPage={onPrevPage}
+                  prevButtonDisabled={prevButtonDisabled}
+                  nextButtonDisabled={nextButtonDisabled}
+                  ref={ref}
+                />
+              </div>
             </Loading.Spinner>
-            <div className="[&_svg]:scale-150">
-              <TablePagination
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onSetRowsPerPage={onSetRowsPerPage}
-                onNextPage={onNextPage}
-                onPrevPage={onPrevPage}
-                prevButtonDisabled={prevButtonDisabled}
-                nextButtonDisabled={nextButtonDisabled}
-                ref={ref}
-              />
-            </div>
           </div>
         </div>
       </>
