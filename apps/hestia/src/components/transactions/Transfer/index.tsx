@@ -301,20 +301,20 @@ export const TransferHistory = forwardRef<HTMLDivElement, Props>(
                   </Table.Body>
                 </Table>
               </div>
+              <div className="[&_svg]:scale-150">
+                <TablePagination
+                  totalResultCount={totalResultsCount}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onSetRowsPerPage={onSetRowsPerPage}
+                  onNextPage={onNextPage}
+                  onPrevPage={onPrevPage}
+                  prevButtonDisabled={prevButtonDisabled}
+                  nextButtonDisabled={nextButtonDisabled}
+                  ref={ref}
+                />
+              </div>
             </Loading.Spinner>
-            <div className="[&_svg]:scale-150">
-              <TablePagination
-                totalResultCount={totalResultsCount}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onSetRowsPerPage={onSetRowsPerPage}
-                onNextPage={onNextPage}
-                onPrevPage={onPrevPage}
-                prevButtonDisabled={prevButtonDisabled}
-                nextButtonDisabled={nextButtonDisabled}
-                ref={ref}
-              />
-            </div>
           </div>
         </div>
       </>

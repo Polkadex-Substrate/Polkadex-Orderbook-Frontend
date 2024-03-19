@@ -166,7 +166,7 @@ export const columns = () => [
     ),
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Fees
+        Fee
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
