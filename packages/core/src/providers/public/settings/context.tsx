@@ -21,6 +21,7 @@ export const Context = createContext<SettingContextProps>({
   onClearNotifications: () => {},
   onToogleConnectExtension: () => {},
   onToogleConnectTrading: () => {},
+  onChangeMarketCarousel: () => {},
 });
 
 export const Provider = ({ value, children }: SettingProviderProps) => (

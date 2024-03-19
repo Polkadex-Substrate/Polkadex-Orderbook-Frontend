@@ -1,6 +1,10 @@
-import { forwardRef, useMemo, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, forwardRef, useMemo } from "react";
 import { Dropdown, Typography } from "@polkadex/ux";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
+import {
+  useSettingsProvider,
+  marketCarouselValues,
+} from "@orderbook/core/providers/public/settings";
 import classNames from "classnames";
 import Link from "next/link";
 import { RiLifebuoyLine, RiMessage3Line } from "@remixicon/react";
@@ -8,16 +12,22 @@ import { useWindowSize } from "usehooks-ts";
 
 import { Markets } from "./markets";
 
-const items = ["Popular", "Favorite"];
-export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
-  ({ marketsActive = false }, ref) => {
-    const { width } = useWindowSize();
-    const [state, setState] = useState(items[0]);
-    const { connected } = useNativeApi();
+export const Footer = forwardRef<
+  HTMLDivElement,
+  {
+    marketsActive?: boolean;
+    onOpenChange: Dispatch<SetStateAction<boolean>>;
+  }
+>(({ marketsActive = false, onOpenChange }, ref) => {
+  const { marketCarousel, onChangeMarketCarousel } = useSettingsProvider();
 
-    const mobileView = useMemo(() => width <= 640, [width]);
+  const { width } = useWindowSize();
+  const { connected } = useNativeApi();
 
-    return (
+  const mobileView = useMemo(() => width <= 640, [width]);
+
+  return (
+    <Fragment>
       <footer
         ref={ref}
         className={classNames(
@@ -30,12 +40,15 @@ export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
             <div className="border-r bg-level-2 px-2 border-secondary">
               <Dropdown>
                 <Dropdown.Trigger className="items-center inline-flex opacity-50 transition-opacity ease-out duration-300 hover:opacity-100 w-full">
-                  <Typography.Text>{state}</Typography.Text>
+                  <Typography.Text>{marketCarousel}</Typography.Text>
                   <Dropdown.Icon />
                 </Dropdown.Trigger>
                 <Dropdown.Content>
-                  {items.map((value, i) => (
-                    <Dropdown.Item onClick={() => setState(value)} key={i}>
+                  {marketCarouselValues.map((value, i) => (
+                    <Dropdown.Item
+                      onClick={() => onChangeMarketCarousel(value)}
+                      key={i}
+                    >
                       <Typography.Text className="text-left block w-full">
                         {value}
                       </Typography.Text>
@@ -44,7 +57,7 @@ export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
                 </Dropdown.Content>
               </Dropdown>
             </div>
-            <Markets favorite={state === "Favorite"} />
+            <Markets favorite={marketCarousel === "Favourite"} />
           </div>
         ) : (
           <div />
@@ -61,10 +74,15 @@ export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
               {connected ? "Connected" : "Connecting"}
             </Typography.Text>
           </div>
-          <Typography.Text appearance="primary">
+          <Typography.Text
+            className="cursor-pointer"
+            appearance="primary"
+            onClick={() => onOpenChange(true)}
+          >
             <RiMessage3Line className="h-3 w-3 inline-block mr-1" />
             Quick Start
           </Typography.Text>
+
           <Typography.Text appearance="primary">
             <Link href="https://discord.com/invite/Uvua83QAzk" target="_blank">
               <RiLifebuoyLine className="h-3 w-3 inline-block mr-1" />
@@ -73,8 +91,8 @@ export const Footer = forwardRef<HTMLDivElement, { marketsActive?: boolean }>(
           </Typography.Text>
         </div>
       </footer>
-    );
-  }
-);
+    </Fragment>
+  );
+});
 
 Footer.displayName = "Footer";

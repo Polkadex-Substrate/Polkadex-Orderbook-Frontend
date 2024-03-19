@@ -6,6 +6,7 @@ import {
   useCancelOrder,
   useOpenOrders,
   CancelOrderArgs,
+  useCancelAllOrders,
 } from "@orderbook/core/hooks";
 import { GenericMessage, Loading, Modal, Table } from "@polkadex/ux";
 import {
@@ -21,11 +22,12 @@ import {
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
 
+import { SkeletonLoading } from "../loading";
+
 import { columns } from "./columns";
 import { ResponsiveTable } from "./responsiveTable";
 import { Filters } from "./filters";
 
-import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 import { TablePagination } from "@/components/ui";
 import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
 
@@ -41,6 +43,8 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     const { width } = useWindowSize();
     const { selectedAccount } = useConnectWalletProvider();
     const { mutateAsync: cancelOrder } = useCancelOrder();
+    const { mutateAsync: onCancelAllOrders } = useCancelAllOrders();
+
     const { isLoading, openOrders: allOpenOrders } = useOpenOrders();
     const [showPassword, setShowPassword] = useState(false);
     const [orderPayload, setOrderPayload] = useState<CancelOrderArgs | null>(
@@ -66,6 +70,10 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     };
 
     const responsiveView = useMemo(() => width <= 850, [width]);
+    const markets = useMemo(
+      () => allOpenOrders.map((e) => e.market),
+      [allOpenOrders]
+    );
 
     const openOrdersPerPage = useMemo(
       () =>
@@ -105,7 +113,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
       getFilteredRowModel: getFilteredRowModel(),
       getFacetedRowModel: getFacetedRowModel(),
       getFacetedUniqueValues: getFacetedUniqueValues(),
-      columns: columns({ onCancelOrder }),
+      columns: columns({ onCancelOrder, onCancelAllOrders, markets }),
       getCoreRowModel: getCoreRowModel(),
     });
 
@@ -144,7 +152,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
       }
     }, [responsiveState, responsiveView]);
 
-    if (isLoading) return <SkeletonCollection rows={8} />;
+    if (isLoading) return <SkeletonLoading />;
 
     if (openOrdersPerPage?.length === 0)
       return (

@@ -236,6 +236,7 @@ type LimitOrderValidations = {
   availableBalance: number;
 };
 export const limitOrderValidations = ({
+  isSell,
   minMarketPrice,
   minQuantity,
   minVolume,
@@ -263,10 +264,8 @@ export const limitOrderValidations = ({
         `Minimum amount: ${minQuantity}`,
         (value) => Number(value || 0) >= minQuantity
       )
-      .test(
-        "Balance check",
-        `You don't have enough balance`,
-        (value) => +(Number(value) || 0) <= availableBalance
+      .test("Balance check", `You don't have enough balance`, (value) =>
+        isSell ? +(Number(value) || 0) <= availableBalance : true
       ),
     total: Yup.string()
       .test("Valid number", "Must be a number", (value) =>
@@ -281,6 +280,9 @@ export const limitOrderValidations = ({
         "Max Volume",
         `Maximum volume: ${maxVolume}`,
         (value) => Number(value || 0) <= maxVolume
+      )
+      .test("Balance check", `You don't have enough balance`, (value) =>
+        isSell ? true : +(Number(value) || 0) <= availableBalance
       ),
   });
 

@@ -5,6 +5,7 @@ import { LmpMarketConfig, useLmpMarkets } from "@orderbook/core/hooks";
 import {
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
@@ -16,7 +17,7 @@ import { ResponsiveData } from "./responsiveData";
 import { TablePagination } from "@/components/ui";
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
-const responsiveKeys = ["volume24h"];
+const responsiveKeys = ["volume24h", "makerScore"];
 const actionKeys = ["makerScore", "traderScore", "volume24h", "totalRewards"];
 
 type Props = { maxHeight: string; selectedEpoch: number };
@@ -36,6 +37,7 @@ export const Table = forwardRef<HTMLDivElement, Props>(
       data: markets as LmpMarketConfig[],
       columns: columns(),
       getCoreRowModel: getCoreRowModel(),
+      getSortedRowModel: getSortedRowModel(),
     });
 
     useEffect(() => {
@@ -52,12 +54,15 @@ export const Table = forwardRef<HTMLDivElement, Props>(
         </div>
       );
 
-    if (markets?.length === 0)
+    if (!markets?.length)
       return (
         <GenericMessage
           title="No results found"
           illustration="NoResultFound"
-          className="bg-level-1 border-b border-b-primary"
+          className="bg-level-0 border-b border-b-primary"
+          imageProps={{
+            className: "w-16 self-center",
+          }}
         />
       );
 
@@ -74,7 +79,7 @@ export const Table = forwardRef<HTMLDivElement, Props>(
             style={{ maxHeight, scrollbarGutter: "stable" }}
           >
             <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary">
-              <PolkadexTable.Header className="sticky top-0 bg-backgroundBase">
+              <PolkadexTable.Header className="sticky top-0 bg-backgroundBase z-[2]">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <PolkadexTable.Row key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {

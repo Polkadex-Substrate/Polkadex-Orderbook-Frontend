@@ -28,7 +28,7 @@ export function useMarkets(market?: string) {
   const router = useRouter();
   const { markets: data, isReady } = useOrderbookService();
   const { favoriteMarkets, onUserFavoriteMarketPush } = useProfile();
-  const { tickers: allMarketTickers } = useTickers(market);
+  const { tickers: allMarketTickers, tickerLoading } = useTickers(market);
 
   const markets = useMemo(() => {
     return data?.filter(
@@ -191,5 +191,6 @@ export function useMarkets(market?: string) {
 
     list: markets,
     loading: !isReady,
+    tickerLoading,
   };
 }

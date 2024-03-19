@@ -9,6 +9,7 @@ import {
   RiMoonLine,
   RiPaletteLine,
 } from "@remixicon/react";
+import { defaultConfig } from "@orderbook/core/config";
 
 import QrCode from "../../../../public/img/qrCode.png";
 
@@ -20,6 +21,7 @@ export const ResponsiveMenuModal = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const isRewardDisabled = !defaultConfig.enableLmp;
   const lastUsedMarketUrl = getMarketUrl();
   const { width } = useWindowSize();
   return (
@@ -64,6 +66,7 @@ export const ResponsiveMenuModal = ({
                     size="lg"
                     href="/rewards"
                     className="text-lg"
+                    disabled={isRewardDisabled}
                   >
                     Rewards
                   </HeaderLink.Single>
