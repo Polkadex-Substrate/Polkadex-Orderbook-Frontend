@@ -1,11 +1,5 @@
 import Link from "next/link";
-import {
-  Button,
-  Tokens,
-  Tooltip,
-  Typography,
-  truncateString,
-} from "@polkadex/ux";
+import { Tokens, Tooltip, Typography, truncateString } from "@polkadex/ux";
 import { createColumnHelper } from "@tanstack/react-table";
 import { RiExternalLinkLine } from "@remixicon/react";
 
@@ -189,12 +183,10 @@ export const columns = () => [
           <Typography.Text
             size="xs"
             appearance="primary"
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 hover:underline"
           >
+            <RiExternalLinkLine className="w-3 h-3" />
             {shortLink}
-            <Button.Icon variant="outline" size="xs">
-              <RiExternalLinkLine className="w-full h-full" />
-            </Button.Icon>
           </Typography.Text>
         </Link>
       );
