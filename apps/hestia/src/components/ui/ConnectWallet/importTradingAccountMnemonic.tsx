@@ -121,7 +121,6 @@ export const ImportTradingAccountMnemonic = ({
                     type={show ? "password" : "text"}
                     value={state}
                     onValuesChange={(e) => setState(e)}
-                    className="bg-level-4"
                   />
                   <Button.Icon
                     variant="ghost"
