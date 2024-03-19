@@ -127,6 +127,7 @@ export const SellOrder = ({
                 handleBlur(e);
               }}
               onBlur={() => setFieldTouched(PRICE, false)}
+              className="max-sm:focus:text-[16px]"
             >
               <Input.Label className="w-[50px]">Price</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>
@@ -162,6 +163,7 @@ export const SellOrder = ({
                 handleBlur(e);
               }}
               onBlur={() => setFieldTouched(AMOUNT, false)}
+              className="max-sm:focus:text-[16px]"
             >
               <Input.Label className="w-[50px]">Amount</Input.Label>
               <Input.Ticker>{market?.baseAsset?.ticker}</Input.Ticker>
@@ -223,6 +225,7 @@ export const SellOrder = ({
                 handleBlur(e);
               }}
               onBlur={() => setFieldTouched(TOTAL, false)}
+              className="max-sm:focus:text-[16px]"
             >
               <Input.Label className="w-[50px]">Total</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>

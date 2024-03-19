@@ -20,6 +20,7 @@ export const Filters = ({
         placeholder="Search market.."
         value={searchField}
         onChange={onSearch}
+        className="max-sm:focus:text-[16px]"
       />
       <button onClick={onChangeFavorite}>
         <RiStarLine

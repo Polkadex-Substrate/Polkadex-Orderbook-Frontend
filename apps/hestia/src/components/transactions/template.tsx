@@ -142,7 +142,7 @@ export function Template() {
                   </ScrollArea>
                   <div>
                     <Input.Search
-                      className="py-2 text-sm"
+                      className="py-2 max-sm:focus:text-[16px]"
                       placeholder="Search transactions.."
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />

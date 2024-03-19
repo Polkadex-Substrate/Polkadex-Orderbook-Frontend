@@ -168,7 +168,7 @@ export const ImportTradingAccount = ({
                   defaultValue={values?.file?.meta?.name}
                   placeholder="Account name"
                   disabled
-                  className="text-sm flex-1"
+                  className="text-sm flex-1 max-sm:focus:text-[16px]"
                 >
                   <Input.Label>Account name</Input.Label>
                 </Input.Vertical>
@@ -177,7 +177,7 @@ export const ImportTradingAccount = ({
                     defaultValue={browserAccountAddress}
                     placeholder="Account address"
                     disabled
-                    className="text-sm flex-1"
+                    className="text-sm flex-1 max-sm:focus:text-[16px]"
                   >
                     <Input.Label>Account address</Input.Label>
                   </Input.Vertical>
@@ -187,7 +187,7 @@ export const ImportTradingAccount = ({
                     defaultValue={extensionAccountInput ?? ""}
                     placeholder="Funding account"
                     disabled
-                    className="text-sm flex-1"
+                    className="text-sm flex-1 max-sm:focus:text-[16px]"
                   >
                     <Input.Label>Funding account</Input.Label>
                   </Input.Vertical>
@@ -206,6 +206,7 @@ export const ImportTradingAccount = ({
                         type={show ? "password" : "text"}
                         value={state}
                         onValuesChange={(e) => setState(e)}
+                        className="max-sm:focus:text-[16px]"
                       />
                       <Button.Icon
                         variant="ghost"

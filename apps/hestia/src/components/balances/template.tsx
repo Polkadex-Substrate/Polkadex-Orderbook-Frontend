@@ -83,6 +83,7 @@ export function Template() {
                   placeholder="Search.."
                   value={filters.search}
                   onChange={onSearchToken}
+                  className="max-sm:focus:text-[16px]"
                 />
                 {width >= 680 ? (
                   <div className="flex items-center gap-4">

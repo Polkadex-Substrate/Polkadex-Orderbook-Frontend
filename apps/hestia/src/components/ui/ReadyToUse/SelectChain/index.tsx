@@ -20,7 +20,10 @@ const SelectChain = ({
       <Dropdown.Trigger className="w-full">{children}</Dropdown.Trigger>
       <Dropdown.Content className="flex flex-col">
         <div className="p-4 border-b border-primary">
-          <Input.Search placeholder="Search token or chain..." />
+          <Input.Search
+            placeholder="Search token or chain..."
+            className="max-sm:focus:text-[16px]"
+          />
         </div>
         {chains?.map((value) => (
           <Dropdown.Item

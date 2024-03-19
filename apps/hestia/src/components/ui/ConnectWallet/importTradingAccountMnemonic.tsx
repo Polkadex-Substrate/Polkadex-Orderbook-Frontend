@@ -75,6 +75,7 @@ export const ImportTradingAccountMnemonic = ({
                 {...getFieldProps("mnemonic")}
                 placeholder="Enter a mnemonic here..."
                 autoComplete="off"
+                className="max-sm:focus:text-[16px]"
               >
                 <Input.Label>12-word mnemonic seed</Input.Label>
               </Input.Vertical>
@@ -91,6 +92,7 @@ export const ImportTradingAccountMnemonic = ({
                 {...getFieldProps("name")}
                 placeholder="Enter a name"
                 autoComplete="off"
+                className="max-sm:focus:text-[16px]"
               >
                 <Input.Label>Account name</Input.Label>
                 <Input.Action
@@ -121,6 +123,7 @@ export const ImportTradingAccountMnemonic = ({
                     type={show ? "password" : "text"}
                     value={state}
                     onValuesChange={(e) => setState(e)}
+                    className="max-sm:focus:text-[16px]"
                   />
                   <Button.Icon
                     variant="ghost"

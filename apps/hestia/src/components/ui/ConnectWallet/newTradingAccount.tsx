@@ -106,6 +106,7 @@ export const NewTradingAccount = ({
                 <Input.Vertical
                   {...getFieldProps("name")}
                   placeholder="Enter a name"
+                  className="max-sm:focus:text-[16px]"
                 >
                   <Input.Label>Account name</Input.Label>
                   <Interaction.Action
