@@ -70,7 +70,7 @@ export const PlaceOrder = ({ market, isBuy, isResponsive }: Props) => {
             <Tabs.Content
               value="limit"
               id="placeOrderContent"
-              className="flex flex-1 flex-col gap-1 bg-level-0 p-2 "
+              className="flex flex-1 flex-col gap-1 bg-level-0 p-2"
             >
               <LimitOrder
                 market={market}

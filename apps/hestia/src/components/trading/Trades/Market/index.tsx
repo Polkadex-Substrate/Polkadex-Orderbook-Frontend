@@ -56,7 +56,7 @@ export const Markets = () => {
         activeFavorite={fieldValue.showFavourite}
       />
       <Skeleton loading={loading} className="h-full">
-        <div className="flex flex-col flex-1 border-t border-t-primary overflow-y-hidden scrollbar-hide">
+        <div className="flex flex-col flex-1 border-t border-t-primary overflow-auto scrollbar-hide max-[955px]:max-h-max max-xl:max-h-[200px] lg:pb-4">
           {!hasMarkets || !marketTokens.length ? (
             <GenericMessage {...messageProps} />
           ) : (

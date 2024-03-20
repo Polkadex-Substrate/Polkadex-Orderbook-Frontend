@@ -71,7 +71,11 @@ export function Template({ id }: { id: string }) {
             minSize={50}
             className="flex min-h-[400px]"
           >
-            <Resizable direction="horizontal" autoSaveId="persistence">
+            <Resizable
+              direction="horizontal"
+              autoSaveId="persistence"
+              className="!h-auto"
+            >
               <Resizable.Panel minSize={40}>
                 <div className="flex flex-col flex-grow h-full w-full">
                   <AssetInfo currentMarket={currentMarket} />
@@ -115,9 +119,13 @@ export function Template({ id }: { id: string }) {
             <Resizable
               direction={desktopView ? "horizontal" : "vertical"}
               autoSaveId="persistence"
+              className={classNames(!desktopView && "min-h-webKit")}
             >
               {tabletView && (
-                <Resizable direction="horizontal" className="max-h-[320px]">
+                <Resizable
+                  direction="horizontal"
+                  className="max-h-[320px] border-b border-primary !h-webKit"
+                >
                   <Resizable.Panel
                     className="min-h-[310px] min-w-[615px]"
                     collapsible
@@ -139,7 +147,13 @@ export function Template({ id }: { id: string }) {
                   </Resizable.Panel>
                 </Resizable>
               )}
-              <Resizable.Panel defaultSize={58} minSize={58}>
+              <Resizable.Panel
+                defaultSize={58}
+                minSize={58}
+                className={classNames(
+                  !desktopView && "flex flex-col max-h-[400px]"
+                )}
+              >
                 <Orders />
               </Resizable.Panel>
               {desktopView && (
