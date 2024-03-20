@@ -19,7 +19,7 @@ const responsiveKeys = ["inOrders", "fundingAccount"];
 const widthKeys = ["10%", "25%", "25%", "25%", "fit-content"];
 const responsiveWidthKeys = ["30%", "auto", "65%"];
 
-export const BalancesTable = () => {
+export const BalancesTable = ({ height }: { height: number }) => {
   const [responsiveState, setResponsiveState] = useState(false);
   const [responsiveData, setResponsiveData] = useState<AssetsProps | null>(
     null
@@ -67,7 +67,10 @@ export const BalancesTable = () => {
         onOpenChange={setResponsiveState}
         open={responsiveState}
       />
-      <div className="flex-1 h-full overflow-auto scrollbar-hide">
+      <div
+        className="flex-1 h-full overflow-auto scrollbar-hide"
+        style={{ maxHeight: height }}
+      >
         <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary mb-10">
           <PolkadexTable.Header className="sticky top-0 bg-level-0">
             {table.getHeaderGroups().map((headerGroup) => (
