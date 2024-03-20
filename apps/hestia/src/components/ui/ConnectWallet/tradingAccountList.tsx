@@ -17,8 +17,8 @@ export const TradingAccountList = ({
   onRemoveCallback: () => void;
 }) => {
   return (
-    <Interaction className="bg-backgroundBase rounded-sm">
-      <Interaction.Title onClose={onClose} size="lg">
+    <Interaction className="w-full">
+      <Interaction.Title onClose={{ onClick: onClose }}>
         Registered trading accounts
       </Interaction.Title>
       <Interaction.Content className="flex flex-col gap-6 flex-1">

@@ -33,9 +33,7 @@ export const ProcessingTransaction = ({
   return (
     <Interaction
       className={twMerge(
-        classNames(
-          "gap-10 min-h-[30rem] h-full justify-center bg-backgroundBase rounded-s"
-        ),
+        classNames("gap-10 min-h-[30rem] h-full justify-center w-full"),
         className
       )}
       {...props}

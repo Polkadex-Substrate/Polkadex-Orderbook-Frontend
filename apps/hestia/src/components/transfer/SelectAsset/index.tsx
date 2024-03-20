@@ -52,6 +52,7 @@ export const SelectAsset = ({
             placeholder="Search.."
             value={filters.search}
             onChange={onSearchToken}
+            className="max-sm:focus:text-[16px]"
           />
           <div className="flex items-center gap-4">
             <Checkbox.Solid
