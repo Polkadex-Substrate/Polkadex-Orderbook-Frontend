@@ -91,6 +91,7 @@ export const Orders = () => {
     () => (scrollAreaView ? `${width - 40}px` : "auto"),
     [width, scrollAreaView]
   );
+
   return (
     <Tabs defaultValue="openOrders" className="flex-1 h-full">
       <div className="flex items-center justify-between border-b border-primary">
@@ -218,7 +219,7 @@ export const Orders = () => {
           className="flex-1 flex flex-col bg-level-0 max-sm:max-h-[400px] max-sm:min-h-[290px]"
         >
           {mainAddress?.length > 0 ? (
-            <BalancesTable />
+            <BalancesTable height={height} />
           ) : (
             <ConnectAccountWrapper funding />
           )}
