@@ -18,7 +18,7 @@ export const CancelOrderAction = ({
           </Button.Solid>
         ) : (
           <Button.Icon
-            size="xs"
+            size="sm"
             appearance="danger"
             className="p-1"
             variant="ghost"
