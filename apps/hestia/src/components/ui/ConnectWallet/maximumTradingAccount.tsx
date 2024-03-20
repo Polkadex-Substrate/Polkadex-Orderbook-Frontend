@@ -22,7 +22,7 @@ export const MaximumTradingAccount = ({
   onRemoveCallback: () => void;
 }) => {
   return (
-    <Interaction className="gap-10 bg-backgroundBase rounded-sm">
+    <Interaction className="gap-10 w-full">
       <Interaction.Content className="flex flex-col gap-6 flex-1">
         <div className="py-6 flex flex-col gap-5 items-center text-center border-b border-primary pb-8">
           <div className="max-w-[8rem]">

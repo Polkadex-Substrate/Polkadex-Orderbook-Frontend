@@ -1,11 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import {
-  Button,
-  Drawer,
-  Token,
-  Typography,
-  truncateString,
-} from "@polkadex/ux";
+import { Drawer, Token, Typography, truncateString } from "@polkadex/ux";
 import { intlFormat } from "date-fns";
 import Link from "next/link";
 import { RiExternalLinkLine } from "@remixicon/react";
@@ -91,12 +85,10 @@ const ResponsiveTable = ({
             <Typography.Text
               size="sm"
               appearance="primary"
-              className="flex items-center gap-1"
+              className="flex items-center gap-1 hover:underline"
             >
+              <RiExternalLinkLine className="w-3 h-3" />
               {shortLink}
-              <Button.Icon variant="outline" size="xs">
-                <RiExternalLinkLine className="w-full h-full" />
-              </Button.Icon>
             </Typography.Text>
           </Link>
         </ResponsiveCard>

@@ -1,4 +1,4 @@
-import { Interaction, Typography, Input } from "@polkadex/ux";
+import { Interaction, Typography, Passcode } from "@polkadex/ux";
 import { useFormik } from "formik";
 import { useEffect, useMemo, useState } from "react";
 import { unLockAccountValidations } from "@orderbook/core/validations";
@@ -81,7 +81,8 @@ export const UnlockAccount = ({
               </div>
             </div>
             <div className="flex flex-col gap-2 w-full px-6">
-              <Input.Passcode
+              <Passcode.Outline
+                focusOnInit
                 value={values.password}
                 onValuesChange={(e) => setFieldValue("password", e)}
                 className="flex-1 py-7"

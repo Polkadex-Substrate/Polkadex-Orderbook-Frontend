@@ -101,6 +101,7 @@ export const BuyOrder = ({
               onChange={(e) => onChangeAmount(e.target.value)}
               onFocus={handleBlur}
               onBlur={() => setFieldTouched(AMOUNT, false)}
+              className="max-sm:focus:text-[16px]"
             >
               <Input.Label className="w-[50px]">Amount</Input.Label>
               <Input.Ticker>{market?.quoteAsset?.ticker}</Input.Ticker>

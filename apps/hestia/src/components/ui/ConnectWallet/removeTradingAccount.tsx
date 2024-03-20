@@ -55,7 +55,7 @@ export const RemoveTradingAccount = ({
 
   return (
     <Loading.Spinner active={!!loading}>
-      <Interaction className="bg-backgroundBase rounded-sm">
+      <Interaction className="w-full">
         <Interaction.Content className="flex flex-col gap-1 flex-1">
           <div className="flex flex-col gap-8">
             <div className="flex flex-col text-center items-center gap-1">

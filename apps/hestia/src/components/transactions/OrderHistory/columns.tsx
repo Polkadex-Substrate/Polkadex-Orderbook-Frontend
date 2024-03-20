@@ -16,7 +16,7 @@ export const columns = () => [
     cell: (e) => (
       <Copy value={e.getValue().orderId}>
         <div className="flex items-center gap-2">
-          <RiFileCopyLine className="w-2.5 h-2.5 text-actionInput" />
+          <RiFileCopyLine className="w-3.5 h-3.5 text-actionInput" />
           <Typography.Text size="xs">
             {truncateString(e.getValue().orderId, 4)}
           </Typography.Text>
@@ -144,6 +144,11 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as Order).price;
+      const numB = (rowB.getValue(columnId) as Order).price;
+      return numA > numB ? 1 : -1;
+    },
   }),
   columnHelper.accessor((row) => row, {
     id: "amount",
@@ -160,6 +165,11 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = +(rowA.getValue(columnId) as Order).quantity;
+      const numB = +(rowB.getValue(columnId) as Order).quantity;
+      return numA > numB ? 1 : -1;
+    },
   }),
   columnHelper.accessor((row) => row, {
     id: "filled",
@@ -216,5 +226,10 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as Order).fee;
+      const numB = (rowB.getValue(columnId) as Order).fee;
+      return numA > numB ? 1 : -1;
+    },
   }),
 ];
