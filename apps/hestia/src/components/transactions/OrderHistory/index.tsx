@@ -1,5 +1,6 @@
 import {
   ColumnFiltersState,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -36,6 +37,7 @@ const responsiveKeys = [
   "fee",
   "averageFilledPrice",
 ];
+const actionKeys = ["date", "price", "amount", "fee"];
 
 export const OrderHistory = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight, searchTerm }, ref) => {
@@ -46,6 +48,7 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
     const responsiveView = useMemo(() => width <= 850, [width]);
     const [responsiveState, setResponsiveState] = useState(false);
     const [responsiveData, setResponsiveData] = useState<Order | null>(null);
+    const [sorting, setSorting] = useState<SortingState>([]);
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -114,7 +117,8 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
 
     const table = useReactTable({
       data: orderHistoryPerPage,
-      state: { columnFilters },
+      state: { columnFilters, sorting },
+      onSortingChange: setSorting,
       onColumnFiltersChange: setColumnFilters,
       getSortedRowModel: getSortedRowModel(),
       getFilteredRowModel: getFilteredRowModel(),
@@ -154,11 +158,11 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
         />
         <div className="flex-1 flex flex-col pt-1">
           <Filters table={table} availablePairs={availablePairs} />
-          <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
+          <div className="flex-1 flex flex-col justify-between border-b border-secondary-base">
             <Loading.Spinner active={isFetchingNextPage}>
               <div
                 className="overflow-y-hidden hover:overflow-y-auto px-3"
-                style={{ maxHeight, scrollbarGutter: "stable" }}
+                style={{ height: maxHeight, scrollbarGutter: "stable" }}
               >
                 <Table
                   className={classNames(
@@ -171,6 +175,13 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
                     {table.getHeaderGroups().map((headerGroup) => (
                       <Table.Row key={headerGroup.id}>
                         {headerGroup.headers.map((header) => {
+                          const getSorted = header.column.getIsSorted();
+                          const isActionTab = actionKeys.includes(header.id);
+                          const handleSort = (): void => {
+                            const isDesc = getSorted === "desc";
+                            header.column.toggleSorting(!isDesc);
+                          };
+
                           if (
                             responsiveView &&
                             responsiveKeys.includes(header.id)
@@ -180,8 +191,10 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
                           return (
                             <Table.Head
                               className={classNames(
-                                "px-2 text-primary text-xs"
+                                "text-xs",
+                                !isActionTab && "cursor-pointer"
                               )}
+                              {...(isActionTab && { onClick: handleSort })}
                               key={header.id}
                             >
                               {header.isPlaceholder
@@ -190,6 +203,7 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
                                     header.column.columnDef.header,
                                     header.getContext()
                                   )}
+                              {isActionTab && <Table.Icon />}
                             </Table.Head>
                           );
                         })}
@@ -241,17 +255,19 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
                   </Table.Body>
                 </Table>
               </div>
+              <div className="[&_svg]:scale-150">
+                <TablePagination
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onSetRowsPerPage={onSetRowsPerPage}
+                  onNextPage={onNextPage}
+                  onPrevPage={onPrevPage}
+                  prevButtonDisabled={prevButtonDisabled}
+                  nextButtonDisabled={nextButtonDisabled}
+                  ref={ref}
+                />
+              </div>
             </Loading.Spinner>
-            <TablePagination
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onSetRowsPerPage={onSetRowsPerPage}
-              onNextPage={onNextPage}
-              onPrevPage={onPrevPage}
-              prevButtonDisabled={prevButtonDisabled}
-              nextButtonDisabled={nextButtonDisabled}
-              ref={ref}
-            />
           </div>
         </div>
       </>

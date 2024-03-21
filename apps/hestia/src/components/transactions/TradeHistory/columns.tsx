@@ -16,7 +16,7 @@ export const columns = () => [
       return (
         <Copy value={e.getValue().tradeId}>
           <div className="flex items-center gap-2">
-            <RiFileCopyLine className="w-2.5 h-2.5 text-actionInput" />
+            <RiFileCopyLine className="w-3.5 h-3.5 text-actionInput" />
             <Typography.Text size="xs">
               {truncateString(e.getValue().tradeId, 4)}
             </Typography.Text>
@@ -124,6 +124,11 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as Trade).price;
+      const numB = (rowB.getValue(columnId) as Trade).price;
+      return numA > numB ? 1 : -1;
+    },
   }),
   columnHelper.accessor((row) => row, {
     id: "amount",
@@ -140,5 +145,10 @@ export const columns = () => [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = (rowA.getValue(columnId) as Trade).qty;
+      const numB = (rowB.getValue(columnId) as Trade).qty;
+      return numA > numB ? 1 : -1;
+    },
   }),
 ];

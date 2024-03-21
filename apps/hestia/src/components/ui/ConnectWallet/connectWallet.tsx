@@ -28,12 +28,8 @@ export const ConnectWallet = ({
     chains[0]
   );
   return (
-    <Interaction
-      withAnimation={false}
-      className="bg-backgroundBase rounded-sm md:max-w-[24rem]"
-      {...props}
-    >
-      <Interaction.Title onClose={onBack} size="lg">
+    <Interaction className="w-full md:max-w-[24rem]" {...props}>
+      <Interaction.Title onClose={{ onClick: onBack }}>
         Connect your wallet
       </Interaction.Title>
       <Interaction.Content withPadding={false}>

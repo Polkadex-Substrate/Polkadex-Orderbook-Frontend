@@ -20,9 +20,17 @@ export const MarketOrder = ({
 }) => {
   if (isResponsive)
     return isBuy ? (
-      <BuyOrder market={market} availableQuoteAmount={availableQuoteAmount} />
+      <BuyOrder
+        market={market}
+        availableQuoteAmount={availableQuoteAmount}
+        isResponsive={isResponsive}
+      />
     ) : (
-      <SellOrder market={market} availableBaseAmount={availableBaseAmount} />
+      <SellOrder
+        market={market}
+        availableBaseAmount={availableBaseAmount}
+        isResponsive={isResponsive}
+      />
     );
 
   return (

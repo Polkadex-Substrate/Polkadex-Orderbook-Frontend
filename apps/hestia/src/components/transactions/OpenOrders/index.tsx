@@ -11,6 +11,7 @@ import {
 import { GenericMessage, Loading, Modal, Table } from "@polkadex/ux";
 import {
   ColumnFiltersState,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -37,6 +38,7 @@ type Props = {
 };
 
 const responsiveKeys = ["id", "filled", "date", "actions"];
+const actionKeys = ["date", "price", "amount"];
 
 export const OpenOrders = forwardRef<HTMLDivElement, Props>(
   ({ maxHeight, searchTerm }, ref) => {
@@ -53,6 +55,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     const [responsiveState, setResponsiveState] = useState(false);
     const [responsiveData, setResponsiveData] = useState<Order | null>(null);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [sorting, setSorting] = useState<SortingState>([]);
 
     const [isFetchingNextPage, setIsfetchingNext] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -107,7 +110,8 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
 
     const table = useReactTable({
       data: openOrdersPerPage,
-      state: { columnFilters },
+      state: { columnFilters, sorting },
+      onSortingChange: setSorting,
       onColumnFiltersChange: setColumnFilters,
       getSortedRowModel: getSortedRowModel(),
       getFilteredRowModel: getFilteredRowModel(),
@@ -189,7 +193,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
             availablePairs={availablePairs}
             allOpenOrders={allOpenOrders}
           />
-          <div className="flex-1 flex flex-col justify-between border-b border-secondary-base [&_svg]:scale-150">
+          <div className="flex-1 flex flex-col justify-between border-b border-secondary-base">
             <Loading.Spinner active={isFetchingNextPage}>
               <div
                 className="overflow-y-hidden hover:overflow-y-auto px-3"
@@ -206,6 +210,13 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
                     {table.getHeaderGroups().map((headerGroup) => (
                       <Table.Row key={headerGroup.id}>
                         {headerGroup.headers.map((header) => {
+                          const getSorted = header.column.getIsSorted();
+                          const isActionTab = actionKeys.includes(header.id);
+                          const handleSort = (): void => {
+                            const isDesc = getSorted === "desc";
+                            header.column.toggleSorting(!isDesc);
+                          };
+
                           if (
                             responsiveView &&
                             responsiveKeys.includes(header.id)
@@ -215,8 +226,10 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
                           return (
                             <Table.Head
                               className={classNames(
-                                "px-2 text-primary text-xs"
+                                "text-xs",
+                                !isActionTab && "cursor-pointer"
                               )}
+                              {...(isActionTab && { onClick: handleSort })}
                               key={header.id}
                             >
                               {header.isPlaceholder
@@ -225,6 +238,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
                                     header.column.columnDef.header,
                                     header.getContext()
                                   )}
+                              {isActionTab && <Table.Icon />}
                             </Table.Head>
                           );
                         })}
@@ -277,17 +291,19 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
                 </Table>
               </div>
             </Loading.Spinner>
-            <TablePagination
-              totalResultCount={allOpenOrders.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onSetRowsPerPage={onSetRowsPerPage}
-              onNextPage={onNextPage}
-              onPrevPage={onPrevPage}
-              prevButtonDisabled={prevButtonDisabled}
-              nextButtonDisabled={nextButtonDisabled}
-              ref={ref}
-            />
+            <div className="[&_svg]:scale-150">
+              <TablePagination
+                totalResultCount={allOpenOrders.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onSetRowsPerPage={onSetRowsPerPage}
+                onNextPage={onNextPage}
+                onPrevPage={onPrevPage}
+                prevButtonDisabled={prevButtonDisabled}
+                nextButtonDisabled={nextButtonDisabled}
+                ref={ref}
+              />
+            </div>
           </div>
         </div>
       </>

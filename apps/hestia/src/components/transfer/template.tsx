@@ -1,12 +1,12 @@
 "use client";
 
 import { GenericMessage, Tabs, Typography } from "@polkadex/ux";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { RiInformation2Line } from "@remixicon/react";
 import { useTransactions, useTransferHistory } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { usePathname, useRouter } from "next/navigation";
-import { useWindowSize } from "react-use";
+import { useResizeObserver, useWindowSize } from "usehooks-ts";
 
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
@@ -17,7 +17,6 @@ import { SelectAsset } from "./SelectAsset";
 import { Form } from "./Form";
 import { History } from "./History";
 import { ReadyToClaim } from "./ReadyToClaim";
-import { useSizeProvider } from "./provider";
 
 import { Footer, Header } from "@/components/ui";
 import { useTour, useTransfer } from "@/hooks";
@@ -32,16 +31,50 @@ export function Template() {
   const { width } = useWindowSize();
   const { onOpenChange, open, onClose } = useTour();
 
-  const {
-    headerRef,
-    helpRef,
-    tableTitleRef,
-    formwRef,
-    interactionRef,
-    tableMaxHeight,
-    footerRef,
-    footerHeight = 0,
-  } = useSizeProvider();
+  const headerRef = useRef<HTMLDivElement | null>(null);
+  const helpRef = useRef<HTMLDivElement | null>(null);
+  const tableTitleRef = useRef<HTMLDivElement | null>(null);
+  const formwRef = useRef<HTMLDivElement | null>(null);
+  const footerRef = useRef<HTMLDivElement | null>(null);
+  const interactionRef = useRef<HTMLDivElement | null>(null);
+
+  const { height: helpHeight = 0 } = useResizeObserver({
+    ref: helpRef,
+    box: "border-box",
+  });
+
+  const { height: headerHeight = 0 } = useResizeObserver({
+    ref: headerRef,
+    box: "border-box",
+  });
+
+  const { height: tableTitleHeight = 0 } = useResizeObserver({
+    ref: tableTitleRef,
+    box: "border-box",
+  });
+
+  const { height: formHeight = 0 } = useResizeObserver({
+    ref: formwRef,
+    box: "border-box",
+  });
+
+  const { height: footerHeight = 0 } = useResizeObserver({
+    ref: footerRef,
+    box: "border-box",
+  });
+
+  const { height: interactionHeight = 0 } = useResizeObserver({
+    ref: interactionRef,
+    box: "border-box",
+  });
+
+  const tableMaxHeight = useMemo(
+    () =>
+      `calc(100vh - ${
+        formHeight + headerHeight + helpHeight + tableTitleHeight + 30
+      }px)`,
+    [headerHeight, formHeight, helpHeight, tableTitleHeight]
+  );
 
   const {
     onChangeAsset,
@@ -90,7 +123,7 @@ export function Template() {
           className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] m-auto"
           style={{
             paddingBottom: mobileView
-              ? `${footerHeight * 3.3 || 75}px`
+              ? `${interactionHeight}px`
               : `${footerHeight}px`,
           }}
         >

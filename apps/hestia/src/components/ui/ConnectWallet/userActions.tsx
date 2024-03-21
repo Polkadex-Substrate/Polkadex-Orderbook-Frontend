@@ -18,8 +18,8 @@ export const UserActions = ({
   registeredProxies: string[];
 }) => {
   return (
-    <Interaction className="bg-backgroundBase rounded-sm">
-      <Interaction.Title onClose={onClose} size="lg">
+    <Interaction className="w-full">
+      <Interaction.Title onClose={{ onClick: onClose }}>
         Options
       </Interaction.Title>
       <Interaction.Content className="flex flex-col gap-2 flex-1">

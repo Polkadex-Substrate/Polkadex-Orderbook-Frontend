@@ -83,24 +83,32 @@ export const ResponsiveAssetInfo = ({
             className="flex gap-2 p-1 rounded-md duration-200 transition-colors hover:bg-level-1 w-fit"
           >
             <div className="flex items-center justify-center gap-1">
-              <Token
-                appearance={baseTicker as keyof typeof tokenAppearance}
-                name={baseTicker}
-                size="sm"
-                className="rounded-full border border-primary"
-              />
+              <Skeleton loading={!baseTicker} className="rounded-full h-8 w-8">
+                <Token
+                  appearance={baseTicker as keyof typeof tokenAppearance}
+                  name={baseTicker}
+                  size="sm"
+                  className="rounded-full border border-primary"
+                />
+              </Skeleton>
               <div
                 className={classNames(
                   "flex flex-col",
                   !currentMarket && "gap-1"
                 )}
               >
-                <Skeleton loading={!currentMarket} className="h-4 w-20">
+                <Skeleton
+                  loading={!currentMarket}
+                  className="flex-none h-4 w-16"
+                >
                   <Typography.Text size="lg" bold>
                     {baseTicker}
                   </Typography.Text>
                 </Skeleton>
-                <Skeleton loading={!currentMarket} className="h-4 w-10">
+                <Skeleton
+                  loading={!currentMarket}
+                  className=" flex-none h-4 w-10"
+                >
                   <Typography.Text size="xs" appearance="primary">
                     /{quoteTicker}
                   </Typography.Text>

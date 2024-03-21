@@ -28,7 +28,7 @@ export const TradingAccountMnemonic = ({
   const onMouseOut = () => state && setState(false);
 
   return (
-    <Interaction>
+    <Interaction className="w-full">
       <Interaction.Content className="flex flex-col gap-6 flex-1 mb-3">
         <div className="flex flex-col items-center text-center gap-5">
           <div className="max-w-[7rem]">
