@@ -73,6 +73,11 @@ export const columns = [
           .includes(row.getValue<DepositData>(id)?.token?.ticker.toLowerCase())
       );
     },
+    sortingFn: (rowA, rowB, columnId) => {
+      const valA = (rowA.getValue(columnId) as DepositData).token.ticker;
+      const valB = (rowB.getValue(columnId) as DepositData).token.ticker;
+      return valA > valB ? -1 : 1;
+    },
   }),
   columnHelper.accessor((row) => row.status, {
     id: "status",

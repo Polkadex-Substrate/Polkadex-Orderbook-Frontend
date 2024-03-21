@@ -7,7 +7,6 @@ import { useWindowSize } from "usehooks-ts";
 import classNames from "classnames";
 import { RiMore2Line, RiCloseLine } from "@remixicon/react";
 
-import { useSizeProvider } from "../../provider";
 import { filters } from "..";
 
 import { FacetedFilter } from "./facetedFilter";
@@ -21,18 +20,13 @@ export const Filters = <TData,>({
   availableTokens,
   table,
 }: FiltersProps<TData>) => {
-  const { filtersRef } = useSizeProvider();
-
   const { width } = useWindowSize();
   const responsiveFilter = useMemo(() => width <= 800, [width]);
 
   const hasFilters = table.getState().columnFilters.length > 0;
 
   return (
-    <div
-      ref={filtersRef}
-      className="flex items-center gap-5 justify-between px-4 py-1.5"
-    >
+    <div className="flex items-center gap-5 justify-between px-4 py-1.5">
       <div
         className={classNames(
           "flex items-center gap-4 flex-1",

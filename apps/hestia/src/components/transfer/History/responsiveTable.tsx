@@ -72,7 +72,7 @@ export const ResponsiveTable = ({
                   href={`https://polkadex.subscan.io/extrinsic/${data.stid}`}
                   target="_blank"
                 >
-                  {data.stid}
+                  {truncateString(String(data.stid))}
                 </Link>
               </Typography.Text>
             </div>

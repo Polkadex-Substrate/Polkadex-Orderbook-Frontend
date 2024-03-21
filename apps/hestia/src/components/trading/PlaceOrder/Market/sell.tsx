@@ -22,9 +22,11 @@ const initialValues = {
 export const SellOrder = ({
   market,
   availableBaseAmount,
+  isResponsive = false,
 }: {
   market?: Market;
   availableBaseAmount: number;
+  isResponsive?: boolean;
 }) => {
   const { onToogleConnectTrading } = useSettingsProvider();
   const {
@@ -108,7 +110,16 @@ export const SellOrder = ({
             </Input.Primary>
           </div>
         </Tooltip.Trigger>
-        <Tooltip.Content side="left" className="bg-level-5 z-[2] p-1">
+        <Tooltip.Content
+          side={isResponsive ? "top" : "left"}
+          align={isResponsive ? "start" : "center"}
+          sideOffset={isResponsive ? 6 : 12}
+          alignOffset={isResponsive ? 50 : 0}
+          className={classNames(
+            "bg-level-5 z-[2] p-1",
+            isResponsive && "text-sm z-[51]"
+          )}
+        >
           {errors.amount}
         </Tooltip.Content>
       </Tooltip>
