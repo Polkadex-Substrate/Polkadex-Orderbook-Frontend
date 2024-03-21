@@ -86,7 +86,7 @@ export function useFunds() {
       (balance) => balance?.asset?.id?.toString() === assetId
     );
     if (!balance?.asset.id) return "0";
-    return balance.free;
+    return balance.free.toFixed(20);
   };
 
   const onChangeChainBalance = async (assetId: string) => {
