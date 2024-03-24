@@ -10,8 +10,8 @@ export const Overview = () => {
 
   const IconComponent: typeof RiEyeLine = view ? RiEyeLine : RiEyeOffLine;
 
-  const fiatAmount = view ? `$0.00` : "********";
-  const amount = view ? (0.0).toFixed(8) : "********";
+  const fiatAmount = view ? `$0.00` : "*******";
+  const amount = view ? (0.0).toFixed(8) : "*******";
 
   return (
     <div className="flex justify-between items-center gap-4 border-b border-secondary-base p-4 flex-wrap">
