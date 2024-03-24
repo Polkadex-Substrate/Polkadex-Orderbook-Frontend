@@ -4169,10 +4169,10 @@
     usehooks-ts "^2.9.1"
     vaul "^0.8.0"
 
-"@polkadex/ux@^6.15.0":
-  version "6.15.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.15.0.tgz#206e28abaa5bf740679225d96a3e5a28e9aab808"
-  integrity sha512-7jusGMTU2UDp5YpzGBhV7C1N7Msq/NOT6Hy037QK/xQE1OZsAhh8n9L8HQUnEZYvg1XvJGWW1mP3f02SiUKzYg==
+"@polkadex/ux@^6.10.0":
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.10.0.tgz#913da21207fc6b640d3b4b6a019ba14934ca9ec9"
+  integrity sha512-lp0ZNL7hOMHFV3ghVdZsChCJLtXbo/v1SwGGWS8FMf25IkNz2hSpX/FvM4/J9iewwKIezNeOr6yb3srkukmR5w==
   dependencies:
     "@floating-ui/react" "^0.26.4"
     "@headlessui/react" "^1.7.18"
@@ -4194,8 +4194,6 @@
     "@remixicon/react" "^4.2.0"
     cmdk "^0.2.1"
     embla-carousel-react "^8.0.0"
-    framer-motion "^11.0.8"
-    react-day-picker "^8.10.0"
     react-resizable-panels "^2.0.9"
     react-use "^17.4.0"
     sonner "^1.4.0"
@@ -10780,13 +10778,6 @@ fraction.js@^4.3.6, fraction.js@^4.3.7:
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.3.7.tgz#06ca0085157e42fda7f9e726e79fefc4068840f7"
   integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
 
-framer-motion@^11.0.8:
-  version "11.0.20"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.0.20.tgz#6bb72bd0b8020fc417a40453b9247d596acbea78"
-  integrity sha512-YSDmWznt3hpdERosbE0UAPYWoYhTnmQ0J1qWPsgpCia9NgY8Xsz5IpOiUEGGj/nzCAW29fSrWugeLRkdp5de7g==
-  dependencies:
-    tslib "^2.4.0"
-
 friendly-username-generator@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/friendly-username-generator/-/friendly-username-generator-2.0.4.tgz#67778be83a9879b935be224f948ac933d5ad7b94"
@@ -13793,11 +13784,6 @@ react-date-range@^1.4.0:
     prop-types "^15.7.2"
     react-list "^0.8.13"
     shallow-equal "^1.2.1"
-
-react-day-picker@^8.10.0:
-  version "8.10.0"
-  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-8.10.0.tgz#729c5b9564967a924213978fb9c0751884a60595"
-  integrity sha512-mz+qeyrOM7++1NCb1ARXmkjMkzWVh2GL9YiPbRjKe0zHccvekk4HE+0MPOZOrosn8r8zTHIIeOUXTmXRqmkRmg==
 
 react-dom@^18.2.0:
   version "18.2.0"
