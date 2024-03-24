@@ -16,6 +16,14 @@ export const getChainFromTicker = (ticker: string): string => {
       return "Moonbeam Network";
     case "PDEX":
       return "Polkadex";
+    case "DED":
+      return "DOTisDED";
+    case "UNQ":
+      return "Unique Network";
+    case "USDC":
+      return "USD Circle";
+    case "PINK":
+      return "DOTisPINK";
     default:
       return "Unknown";
   }
