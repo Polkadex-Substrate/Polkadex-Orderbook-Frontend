@@ -46,6 +46,7 @@ export const SellOrder = ({
     validationSchema: marketOrderValidations({
       minQuantity: market?.minQty || 0,
       availableBalance: availableBaseAmount,
+      qtyStepSize: market?.qty_step_size || 0,
     }),
     validateOnBlur: true,
     onSubmit: async (e) => {
