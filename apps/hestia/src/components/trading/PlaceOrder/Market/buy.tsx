@@ -44,7 +44,7 @@ export const BuyOrder = ({
   } = useFormik({
     initialValues,
     validationSchema: marketOrderValidations({
-      minQuantity: market?.minQty || 0,
+      minVolume: market?.minVolume || 0,
       availableBalance: availableQuoteAmount,
       qtyStepSize: market?.qty_step_size || 0,
     }),

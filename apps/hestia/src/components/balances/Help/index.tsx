@@ -26,7 +26,7 @@ export const Help = forwardRef<HTMLDivElement>((_, ref) => {
       >
         <Button.Outline
           appearance="secondary"
-          onClick={() => window.alert("Testing")}
+          disabled
           className="w-fit"
           size="sm"
         >
