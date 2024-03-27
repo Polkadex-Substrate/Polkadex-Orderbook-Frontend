@@ -74,6 +74,7 @@ export const themeConfig = {
       },
       colors: {
         ...commom,
+        ...commomBg,
         textBase: "#FFFFFF",
         primary: "#8B909A",
         secondary: "#575A60",
