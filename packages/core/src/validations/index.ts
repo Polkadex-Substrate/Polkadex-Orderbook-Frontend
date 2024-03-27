@@ -297,12 +297,16 @@ export const limitOrderValidations = ({
   });
 
 type MarketOrderValidations = {
+  isSell?: boolean;
+  minQty: number;
   minVolume: number;
   availableBalance: number;
   qtyStepSize: number;
 };
 
 export const marketOrderValidations = ({
+  isSell,
+  minQty,
   minVolume,
   availableBalance,
   qtyStepSize,
@@ -314,8 +318,11 @@ export const marketOrderValidations = ({
       )
       .test(
         "Min Quantity",
-        `Minimum amount: ${minVolume}`,
-        (value) => Number(value || 0) >= minVolume
+        `Minimum amount: ${isSell ? minVolume : minQty}`,
+        (value) => {
+          const minParam = isSell ? minVolume : minQty;
+          return Number(value || 0) >= minParam;
+        }
       )
       .test(
         "Balance check",
