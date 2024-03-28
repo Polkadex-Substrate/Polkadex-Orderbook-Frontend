@@ -234,6 +234,7 @@ type LimitOrderValidations = {
   maxVolume: number;
   minVolume: number;
   availableBalance: number;
+  qtyStepSize: number;
 };
 export const limitOrderValidations = ({
   isSell,
@@ -242,6 +243,7 @@ export const limitOrderValidations = ({
   minVolume,
   maxVolume,
   availableBalance,
+  qtyStepSize,
 }: LimitOrderValidations) =>
   Yup.object().shape({
     price: Yup.string()
@@ -266,6 +268,14 @@ export const limitOrderValidations = ({
       )
       .test("Balance check", `You don't have enough balance`, (value) =>
         isSell ? +(Number(value) || 0) <= availableBalance : true
+      )
+      .test(
+        "Step Size check",
+        `Quantity must be in multiple of ${qtyStepSize}`,
+        (value) => {
+          const rem = +(Number(value || 0) % qtyStepSize).toFixed();
+          return rem === 0;
+        }
       ),
     total: Yup.string()
       .test("Valid number", "Must be a number", (value) =>
@@ -287,13 +297,19 @@ export const limitOrderValidations = ({
   });
 
 type MarketOrderValidations = {
-  minQuantity: number;
+  isSell?: boolean;
+  minQty: number;
+  minVolume: number;
   availableBalance: number;
+  qtyStepSize: number;
 };
 
 export const marketOrderValidations = ({
-  minQuantity,
+  isSell,
+  minQty,
+  minVolume,
   availableBalance,
+  qtyStepSize,
 }: MarketOrderValidations) =>
   Yup.object().shape({
     amount: Yup.string()
@@ -302,12 +318,23 @@ export const marketOrderValidations = ({
       )
       .test(
         "Min Quantity",
-        `Minimum amount: ${minQuantity}`,
-        (value) => Number(value || 0) >= minQuantity
+        `Minimum amount: ${isSell ? minVolume : minQty}`,
+        (value) => {
+          const minParam = isSell ? minVolume : minQty;
+          return Number(value || 0) >= minParam;
+        }
       )
       .test(
         "Balance check",
         `You don't have enough balance`,
         (value) => +(value || 0) <= availableBalance
+      )
+      .test(
+        "Step Size check",
+        `Quantity must be in multiple of ${qtyStepSize}`,
+        (value) => {
+          const rem = +(Number(value || 0) % qtyStepSize).toFixed();
+          return rem === 0;
+        }
       ),
   });

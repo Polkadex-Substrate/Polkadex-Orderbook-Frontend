@@ -71,7 +71,7 @@ export const BalancesTable = ({ height }: { height: number }) => {
         className="flex-1 h-full overflow-auto scrollbar-hide"
         style={{ maxHeight: height }}
       >
-        <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary mb-10">
+        <PolkadexTable className="w-full [&_th]:border-b [&_th]:border-primary mb-1">
           <PolkadexTable.Header className="sticky top-0 bg-level-0">
             {table.getHeaderGroups().map((headerGroup) => (
               <PolkadexTable.Row key={headerGroup.id}>
