@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import { Button, Dropdown, Modal, Typography } from "@polkadex/ux";
 import { RiCloseLine, RiArrowDownSLine } from "@remixicon/react";
 import Link from "next/link";
+import { getChainFromTicker, usePool } from "@orderbook/core/index";
 
 import { Card } from "./card";
 
@@ -12,6 +13,8 @@ export const FundWalletModal = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const { poolReserves } = usePool();
+
   return (
     <Modal
       open={open}
@@ -38,7 +41,7 @@ export const FundWalletModal = ({
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 px-4">
             <Typography.Text appearance="secondary">
-              I have crypto asset in another chain
+              I have crypto asset on another network
             </Typography.Text>
             <span className="bg-primary-base px-1 py-0.5 rounded-sm text-xs font-medium">
               Step 1
@@ -48,7 +51,7 @@ export const FundWalletModal = ({
             <Card
               icon="Bridge"
               title="Decentralized bridge"
-              description="Bridge your crypto from Polkadot, Kusama & Parachains to Polkadex chain and vice versa."
+              description="Bridge your crypto to Polkadex network and vice versa."
             >
               <div className="flex justify-between gap-2 sm:items-center max-sm:flex-col">
                 <Dropdown>
@@ -58,65 +61,51 @@ export const FundWalletModal = ({
                   </Dropdown.Trigger>
                   <Dropdown.Content>
                     <Dropdown.Label>Token/Chain</Dropdown.Label>
-                    <Dropdown.Item
-                      onClick={() =>
-                        window.open(
-                          "https://thea.polkadex.trade/?chain=Asset%2520Hub"
+                    {poolReserves?.map((pool) => {
+                      const chainName = getChainFromTicker(pool.ticker);
+                      return (
+                        !pool.isEvm && (
+                          <Dropdown.Item
+                            disabled={!pool.hasReserve}
+                            key={pool.assetId}
+                            onClick={() =>
+                              window.open(
+                                `https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`
+                              )
+                            }
+                          >
+                            {pool.ticker} ({chainName})
+                          </Dropdown.Item>
                         )
-                      }
-                    >
-                      USDT (Asset Hub chain)
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() => window.open("https://thea.polkadex.trade")}
-                    >
-                      DOT (Polkadot chain)
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() =>
-                        window.open(
-                          "https://thea.polkadex.trade/?chain=Phala%2520Network"
-                        )
-                      }
-                    >
-                      PHA (Phala chain)
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() =>
-                        window.open(
-                          "https://thea.polkadex.trade/?chain=Astar%2520Network"
-                        )
-                      }
-                    >
-                      ASTR (Astar chain)
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() =>
-                        window.open(
-                          "https://thea.polkadex.trade/?chain=Interlay"
-                        )
-                      }
-                    >
-                      IBTC (Interlay chain)
-                    </Dropdown.Item>
+                      );
+                    })}
                   </Dropdown.Content>
                 </Dropdown>
                 <Dropdown>
                   <Dropdown.Trigger className="flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1">
-                    Ethereum-based
+                    EVM-based
                     <RiArrowDownSLine className="w-3 h-3" />
                   </Dropdown.Trigger>
                   <Dropdown.Content>
                     <Dropdown.Label>Token/Chain</Dropdown.Label>
-                    <Dropdown.Item
-                      onClick={() =>
-                        window.open(
-                          "https://thea.polkadex.trade/?chain=Moonbeam%2520Network"
+                    {poolReserves?.map((pool) => {
+                      const chainName = getChainFromTicker(pool.ticker);
+                      return (
+                        pool.isEvm && (
+                          <Dropdown.Item
+                            disabled={!pool.hasReserve}
+                            key={pool.assetId}
+                            onClick={() =>
+                              window.open(
+                                `https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`
+                              )
+                            }
+                          >
+                            {pool.ticker} ({chainName})
+                          </Dropdown.Item>
                         )
-                      }
-                    >
-                      GLMR (Moonbeam chain)
-                    </Dropdown.Item>
+                      );
+                    })}
                   </Dropdown.Content>
                 </Dropdown>
               </div>
@@ -126,7 +115,7 @@ export const FundWalletModal = ({
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 px-4">
             <Typography.Text appearance="secondary">
-              I have crypto asset in Polkadex chain
+              I have crypto asset on Polkadex network
             </Typography.Text>
             <span className="bg-primary-base px-1 py-0.5 rounded-sm text-xs font-medium">
               Step 2
@@ -138,12 +127,6 @@ export const FundWalletModal = ({
               title="Transfer to trading account"
               description="Move funds from your funding account to your trading account."
               href="/transfer/USDT?type=deposit"
-            />
-            <Card
-              icon="TransferToFunding"
-              title="Transfer to funding account"
-              description="Move funds from your trading account to your funding account."
-              href="/transfer/USDT?type=withdraw"
             />
           </div>
         </div>
@@ -158,7 +141,7 @@ export const FundWalletModal = ({
               disabled
               icon="FreeCoin"
               title="Get 1 PDEX for free"
-              description="Complete some tasks and get 1 free PDEX!"
+              description="Complete some tasks and get 1 free PDEX"
               href="/"
             />
             <Card

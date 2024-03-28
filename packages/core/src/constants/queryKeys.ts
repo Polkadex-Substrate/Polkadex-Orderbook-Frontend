@@ -78,4 +78,9 @@ export const QUERY_KEYS = {
     market,
     mainAddress,
   ],
+  poolReserves: (swapConnection: string) => [
+    PREFIX,
+    "poolReserves",
+    swapConnection,
+  ],
 };
