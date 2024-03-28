@@ -1,51 +1,89 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { SwapApi } from "@polkadex/polkadex-api";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import { useAssets } from "@orderbook/core/index";
 
-export const MINIMUM_PDEX_REQUIRED = 1.5;
-export const usePool = ({ assetId }: { assetId: string }) => {
+export type FeeAssetReserve = {
+  poolReserve: number | undefined;
+  name: string;
+  id: string;
+};
+
+export const usePool = ({
+  asset,
+  amount,
+}: {
+  asset: FeeAssetReserve | null;
+  amount: number;
+}) => {
   const { api } = useNativeApi();
+  const { assets } = useAssets();
 
   const swapConnection = useMemo(() => (api ? new SwapApi(api) : null), [api]);
   const enableQuery = useMemo(
-    () => !!assetId && !!swapConnection,
-    [assetId, swapConnection]
+    () => !!assets && !!swapConnection,
+    [assets, swapConnection]
   );
 
-  const {
-    data: poolReserves,
-    isLoading: poolReservesLoading,
-    isSuccess: poolReservesSuccess,
-  } = useQuery({
-    queryKey: ["poolReserves", !!swapConnection, assetId],
+  const handleSwapReserve = useCallback(
+    async (assetId: string) =>
+      await swapConnection?.getReserves("PDEX", assetId),
+    [swapConnection]
+  );
+
+  const { data: poolReserves, isSuccess: poolReservesSuccess } = useQuery({
+    queryKey: ["poolReserves", !!swapConnection, assets.length],
     enabled: enableQuery,
     queryFn: async () => {
-      if (swapConnection)
-        return await swapConnection?.getReserves("PDEX", assetId);
+      if (swapConnection) {
+        const results = await Promise.all(
+          assets.map(async (e) => {
+            if (e.id === "PDEX")
+              return {
+                name: e.ticker,
+                id: e.id,
+                poolReserve: 1,
+              };
+            else {
+              const reserve = await handleSwapReserve(e.id);
+              return {
+                name: e.ticker,
+                id: e.id,
+                poolReserve: reserve?.base,
+              };
+            }
+          })
+        );
+
+        return results.sort(
+          (a, b) => Number(b.poolReserve) - Number(a.poolReserve)
+        );
+      }
     },
     onError: (e) => console.log("Error", e),
   });
 
-  const hasReserve = useMemo(
-    () => (poolReserves?.base ?? 0) >= MINIMUM_PDEX_REQUIRED,
-    [poolReserves?.base]
-  );
-
   const enableQuotePrice = useMemo(
-    () => poolReservesSuccess && !!enableQuery && hasReserve,
-    [poolReservesSuccess, enableQuery, hasReserve]
+    () => poolReservesSuccess && !!enableQuery && !!asset,
+    [poolReservesSuccess, enableQuery, asset]
   );
 
   const { data: swapPrice, isLoading: swapLoading } = useQuery({
-    queryKey: ["quotePrice", !!swapConnection, enableQuotePrice, assetId],
+    queryKey: [
+      "quotePrice",
+      !!swapConnection,
+      enableQuotePrice,
+      asset?.id,
+      amount,
+    ],
     enabled: enableQuotePrice,
     queryFn: async () => {
-      if (swapConnection) {
+      if (swapConnection && asset) {
         const res = await swapConnection?.quotePriceTokensForExactTokens(
-          assetId,
+          asset.id,
           "PDEX",
-          MINIMUM_PDEX_REQUIRED
+          amount
         );
         return res.toFixed(4);
       }
@@ -54,9 +92,9 @@ export const usePool = ({ assetId }: { assetId: string }) => {
   });
 
   return {
+    poolReserves,
+    poolReservesSuccess,
     swapPrice,
     swapLoading,
-    hasReserve,
-    poolReservesLoading,
   };
 };

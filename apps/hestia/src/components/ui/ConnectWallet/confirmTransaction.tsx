@@ -2,29 +2,27 @@
 
 import {
   Accordion,
+  Button,
   Copy,
   Dropdown,
   Interaction,
+  Skeleton,
   Typography,
 } from "@polkadex/ux";
 import { RiAddLine, RiFileCopyLine, RiGasStationLine } from "@remixicon/react";
-import { useMemo, useRef, useState } from "react";
+import { Fragment, useMemo, useRef, useState } from "react";
 import { useResizeObserver } from "usehooks-ts";
-import { useAssets } from "@orderbook/core/index";
-import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import Link from "next/link";
+import { useFunds } from "@orderbook/core/index";
 
-import { AutoSwap } from "../ReadyToUse/autoSwap";
+import { GenericHorizontalItem } from "../ReadyToUse";
 
-import { MINIMUM_PDEX_REQUIRED, usePool } from "@/hooks";
-
-interface Asset {
-  name: string;
-  id: string;
-}
+import { FeeAssetReserve, usePool } from "@/hooks";
 
 export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
-  const { assets } = useAssets();
-  const [state, setState] = useState<Asset | null>(null);
+  const [fee, setFee] = useState(2);
+
+  const [state, setState] = useState<FeeAssetReserve | null>(null);
 
   const ref = useRef<HTMLButtonElement>(null);
 
@@ -33,21 +31,16 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
     box: "border-box",
   });
 
-  const assetsList = useMemo(
-    () => assets?.map((e) => ({ name: e.ticker, id: e.id })),
-    [assets]
+  const { swapPrice, swapLoading, poolReserves, poolReservesSuccess } = usePool(
+    {
+      asset: state,
+      amount: fee,
+    }
   );
 
-  const {
-    swapPrice = 0,
-    swapLoading,
-    hasReserve,
-    poolReservesLoading,
-  } = usePool({
-    assetId: state?.id ?? "",
-  });
+  const { balances, loading: balancesLoading } = useFunds();
 
-  const { walletBalance = 0 } = useConnectWalletProvider();
+  const isPDEX = useMemo(() => state?.id === "PDEX", [state]);
   return (
     <Interaction className="w-full gap-2 md:min-w-[24rem] md:max-w-[24rem]">
       <Interaction.Title onClose={{ onClick: onClose }}>
@@ -65,38 +58,65 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
                 </Accordion.Icon>
               </Accordion.Trigger>
               <Accordion.Content>
-                <Typography.Text appearance="primary">
-                  [Pallet::add_proxy_account]
-                </Typography.Text>
+                <div className="flex flex-col mt-4 border-t border-primary">
+                  <Typography.Text appearance="primary" className="py-3">
+                    [Pallet::add_proxy_account]
+                  </Typography.Text>
+                  <GenericHorizontalItem label="Call hash" className="px-0">
+                    <Copy value="0xD3…6Ae">
+                      <div className="flex items-center gap-1">
+                        <RiFileCopyLine className="w-3 h-3 text-secondary" />
+                        <Typography.Text>0x706ef84f...48985697</Typography.Text>
+                      </div>
+                    </Copy>
+                  </GenericHorizontalItem>
+                </div>
               </Accordion.Content>
             </Accordion.Item>
           </Accordion>
         </div>
         <div className="flex flex-col border-b border-primary">
-          <div className="flex items-cneter justify-between gap-2 px-3 py-3">
-            <Typography.Text appearance="primary">Sending from</Typography.Text>
+          <GenericHorizontalItem label="Sending from">
             <Copy value="0xD3…6Ae">
               <div className="flex items-center gap-1">
                 <RiFileCopyLine className="w-3 h-3 text-secondary" />
                 <Typography.Text>Orderbook • 0xD3…6Ae</Typography.Text>
               </div>
             </Copy>
-          </div>
-          <div className="flex items-cneter justify-between gap-2 px-3 py-3">
-            <Typography.Text appearance="primary">Call hash</Typography.Text>
-            <Copy value="0xD3…6Ae">
+          </GenericHorizontalItem>
+          {isPDEX ? (
+            <GenericHorizontalItem label="Estimated fee">
+              <Copy value="0xD3…6Ae">
+                <div className="flex items-center gap-1">
+                  <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
+                  <Typography.Text>{fee} PDEX</Typography.Text>
+                </div>
+              </Copy>
+            </GenericHorizontalItem>
+          ) : (
+            <GenericHorizontalItem
+              label="Estimated fee"
+              tooltip="Swap using Polkapool"
+            >
               <div className="flex items-center gap-1">
-                <RiFileCopyLine className="w-3 h-3 text-secondary" />
-                <Typography.Text>0x706ef84f...48985697</Typography.Text>
+                <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
+                <Skeleton loading={swapLoading} className="min-h-4 max-w-10">
+                  <div className="flex items-center gap-1">
+                    <Typography.Text>{`${swapPrice} ${state?.name}`}</Typography.Text>
+                    <Typography.Text appearance="primary">≈</Typography.Text>
+                    <Typography.Text>{`${fee} PDEX`}</Typography.Text>
+                  </div>
+                </Skeleton>
               </div>
-            </Copy>
-          </div>
+            </GenericHorizontalItem>
+          )}
+
           <Dropdown>
             <Dropdown.Trigger
               ref={ref}
               className=" px-3 py-3 bg-level-1 border border-primary"
             >
-              <div className="flex-1  w-full flex items-cneter justify-between gap-2">
+              <div className="flex-1 w-full flex items-cneter justify-between gap-2">
                 <Typography.Text appearance="primary">
                   Pay fee with
                 </Typography.Text>
@@ -106,32 +126,73 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
               </div>
               <Dropdown.Icon />
             </Dropdown.Trigger>
-            <Dropdown.Content style={{ width }}>
-              {assetsList.map((e) => (
-                <Dropdown.Item key={e.id} onSelect={() => setState(e)}>
-                  {e.name}
-                </Dropdown.Item>
-              ))}
+            <Dropdown.Content
+              style={{ width, maxHeight: 250, overflow: "auto" }}
+              className="scrollbar-hide"
+            >
+              {!poolReservesSuccess ? (
+                <div className="flex flex-col gap-2 p-4">
+                  {new Array(3).fill("").map((_, i) => (
+                    <Skeleton key={i} className="min-h-10" loading />
+                  ))}
+                </div>
+              ) : (
+                <Fragment>
+                  {poolReserves?.map((e) => {
+                    const balance = balances?.find(
+                      (bal) => bal.asset.id === e.id
+                    );
+                    return (
+                      <Dropdown.Item
+                        key={e.id}
+                        onSelect={() => setState(e)}
+                        className="flex justify-between items-center gap-2"
+                        disabled={!e.poolReserve}
+                      >
+                        {e.poolReserve ? (
+                          <div className="flex items-center justify-between gap-1 w-full">
+                            <Typography.Text>{e.name}</Typography.Text>
+                            <div className="flex items-center gap-1">
+                              <Typography.Text appearance="primary">
+                                Balance:
+                              </Typography.Text>
+                              <Skeleton
+                                loading={balancesLoading}
+                                className="min-h-5"
+                              >
+                                <Typography.Text appearance="primary">
+                                  {balance?.free.toFixed(4)}
+                                </Typography.Text>
+                              </Skeleton>
+                            </div>
+                          </div>
+                        ) : (
+                          <Fragment>
+                            <div className="flex items-center gap-1">
+                              <Typography.Text appearance="primary">
+                                {e.name}
+                              </Typography.Text>
+                              <Typography.Text appearance="primary">
+                                (Insufficient liquidity)
+                              </Typography.Text>
+                            </div>
+                            <Button.Solid size="xs" appearance="secondary">
+                              <Link
+                                target="_blank"
+                                href="https://polkapool-test.netlify.app/pools"
+                              >
+                                Add liquidity
+                              </Link>
+                            </Button.Solid>
+                          </Fragment>
+                        )}
+                      </Dropdown.Item>
+                    );
+                  })}
+                </Fragment>
+              )}
             </Dropdown.Content>
           </Dropdown>
-          {state && state.id !== "PDEX" && (
-            <AutoSwap
-              balance={walletBalance?.toFixed(2)}
-              payValue={`${swapPrice} ${state?.name} `}
-              receiveValue={`${MINIMUM_PDEX_REQUIRED} PDEX`}
-              loading={!!swapPrice}
-            />
-          )}
-
-          <div className="flex items-cneter justify-between gap-2 px-3 py-3">
-            <Typography.Text appearance="primary">
-              Estimated fee
-            </Typography.Text>
-            <div className="flex items-center gap-1">
-              <RiGasStationLine className="w-3 h-3 text-secondary" />
-              <Typography.Text>1.0182 PDEX</Typography.Text>
-            </div>
-          </div>
         </div>
         <div className="flex flex-col gap-3 px-3 pt-4">
           <Typography.Text appearance="secondary" bold>
