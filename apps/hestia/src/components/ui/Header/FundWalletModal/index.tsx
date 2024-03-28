@@ -1,5 +1,12 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { Button, Dropdown, Modal, Typography } from "@polkadex/ux";
+import {
+  Button,
+  Dropdown,
+  Modal,
+  Token,
+  Typography,
+  tokenAppearance,
+} from "@polkadex/ux";
 import { RiCloseLine, RiArrowDownSLine } from "@remixicon/react";
 import Link from "next/link";
 import { getChainFromTicker, usePool } from "@orderbook/core/index";
@@ -60,7 +67,9 @@ export const FundWalletModal = ({
                     <RiArrowDownSLine className="w-3 h-3" />
                   </Dropdown.Trigger>
                   <Dropdown.Content>
-                    <Dropdown.Label>Token/Chain</Dropdown.Label>
+                    <Dropdown.Label className="[&>span]:text-sm">
+                      Token/Chain
+                    </Dropdown.Label>
                     {poolReserves?.map((pool) => {
                       const chainName = getChainFromTicker(pool.ticker);
                       return (
@@ -74,7 +83,19 @@ export const FundWalletModal = ({
                               )
                             }
                           >
-                            {pool.ticker} ({chainName})
+                            <div className="flex items-center justify-center gap-2">
+                              <Token
+                                name={pool.ticker}
+                                size="xs"
+                                className="rounded-full border border-primary max-sm:w-5 max-sm:h-5"
+                                appearance={
+                                  pool.ticker as keyof typeof tokenAppearance
+                                }
+                              />
+                              <Typography.Text size="sm">
+                                {pool.ticker} ({chainName})
+                              </Typography.Text>
+                            </div>
                           </Dropdown.Item>
                         )
                       );
@@ -87,7 +108,9 @@ export const FundWalletModal = ({
                     <RiArrowDownSLine className="w-3 h-3" />
                   </Dropdown.Trigger>
                   <Dropdown.Content>
-                    <Dropdown.Label>Token/Chain</Dropdown.Label>
+                    <Dropdown.Label className="[&>span]:text-sm">
+                      Token/Chain
+                    </Dropdown.Label>
                     {poolReserves?.map((pool) => {
                       const chainName = getChainFromTicker(pool.ticker);
                       return (
@@ -101,7 +124,19 @@ export const FundWalletModal = ({
                               )
                             }
                           >
-                            {pool.ticker} ({chainName})
+                            <div className="flex items-center justify-center gap-2">
+                              <Token
+                                name={pool.ticker}
+                                size="xs"
+                                className="rounded-full border border-primary max-sm:w-5 max-sm:h-5"
+                                appearance={
+                                  pool.ticker as keyof typeof tokenAppearance
+                                }
+                              />
+                              <Typography.Text size="sm">
+                                {pool.ticker} ({chainName})
+                              </Typography.Text>
+                            </div>
                           </Dropdown.Item>
                         )
                       );
