@@ -22,6 +22,7 @@ export const commom = {
   "info-base": "#077EED",
   "info-hover": "#4DA6F9",
   "info-pressed": "#065FB2",
+  backgroundBase: "#06070A",
 };
 
 const commomBg = {
@@ -86,7 +87,6 @@ export const themeConfig = {
         ...commom,
         ...commomBg,
         ...overlay,
-        backgroundBase: "#06070A",
       },
       outlineColor: {
         ...commom,

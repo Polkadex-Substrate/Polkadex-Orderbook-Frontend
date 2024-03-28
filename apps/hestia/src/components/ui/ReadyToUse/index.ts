@@ -24,3 +24,4 @@ export * from "./connectAccountWrapper";
 export * from "./customTransactionDirection";
 export * from "./filledCard";
 export * from "./genericHorizontalItem";
+export * from "./terms";

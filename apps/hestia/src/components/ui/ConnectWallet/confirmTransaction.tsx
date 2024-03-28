@@ -8,20 +8,39 @@ import {
   Interaction,
   Skeleton,
   Typography,
+  truncateString,
 } from "@polkadex/ux";
-import { RiAddLine, RiFileCopyLine, RiGasStationLine } from "@remixicon/react";
+import {
+  RiAddLine,
+  RiExternalLinkLine,
+  RiFileCopyLine,
+  RiGasStationLine,
+} from "@remixicon/react";
 import { Fragment, useMemo, useRef, useState } from "react";
 import { useResizeObserver } from "usehooks-ts";
 import Link from "next/link";
 import { useFunds } from "@orderbook/core/index";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
-import { ErrorMessage, GenericHorizontalItem } from "../ReadyToUse";
+import { ErrorMessage, GenericHorizontalItem, Terms } from "../ReadyToUse";
 
 import { FeeAssetReserve, usePool } from "@/hooks";
 
-export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
-  const [fee, setFee] = useState(1);
+export const ConfirmTransaction = ({
+  onClose,
+  fee,
+  extrinsicName,
+  palletName,
+  hash,
+  action,
+}: {
+  onClose: () => void;
+  fee: number;
+  extrinsicName: string;
+  palletName: string;
+  hash: string;
+  action: () => Promise<void>;
+}) => {
   const [state, setState] = useState<FeeAssetReserve | null>(null);
 
   const ref = useRef<HTMLButtonElement>(null);
@@ -65,6 +84,9 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
       walletBalance,
     ]
   );
+
+  const shortHash = useMemo(() => truncateString(hash), [hash]);
+
   return (
     <Interaction className="w-full gap-2 md:min-w-[24rem] md:max-w-[24rem]">
       <Interaction.Title onClose={{ onClick: onClose }}>
@@ -76,24 +98,35 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
           <Accordion type="multiple">
             <Accordion.Item value="extrinsic">
               <Accordion.Trigger>
-                <Typography.Text>ocex.addProxyAccount</Typography.Text>
+                <Typography.Text>{extrinsicName}t</Typography.Text>
                 <Accordion.Icon>
                   <RiAddLine className="w-4 h-4 text-primary" />
                 </Accordion.Icon>
               </Accordion.Trigger>
               <Accordion.Content>
                 <div className="flex flex-col mt-4 border-t border-primary">
-                  <Typography.Text appearance="primary" className="py-3">
-                    [Pallet::add_proxy_account]
-                  </Typography.Text>
-                  <GenericHorizontalItem label="Call hash" className="px-0">
-                    <Copy value="0xD3…6Ae">
-                      <div className="flex items-center gap-1">
-                        <RiFileCopyLine className="w-3 h-3 text-secondary" />
-                        <Typography.Text>0x706ef84f...48985697</Typography.Text>
-                      </div>
-                    </Copy>
-                  </GenericHorizontalItem>
+                  {palletName && (
+                    <GenericHorizontalItem
+                      label="Substrate Pallet"
+                      className="px-0"
+                    >
+                      <Copy value={hash}>
+                        <Typography.Text>
+                          {`[Pallet::${palletName}]`}
+                        </Typography.Text>
+                      </Copy>
+                    </GenericHorizontalItem>
+                  )}
+                  {hash && (
+                    <GenericHorizontalItem label="Call hash" className="px-0">
+                      <Copy value={hash}>
+                        <div className="flex items-center gap-1">
+                          <RiFileCopyLine className="w-3 h-3 text-secondary" />
+                          <Typography.Text>{shortHash}</Typography.Text>
+                        </div>
+                      </Copy>
+                    </GenericHorizontalItem>
+                  )}
                 </div>
               </Accordion.Content>
             </Accordion.Item>
@@ -119,7 +152,7 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
                   <div className="flex items-center gap-1">
                     <Typography.Text>{`${swapPrice.toFixed(4)} ${state?.name}`}</Typography.Text>
                     <Typography.Text appearance="primary">≈</Typography.Text>
-                    <Typography.Text>{`${fee} PDEX`}</Typography.Text>
+                    <Typography.Text appearance="primary">{`${fee} PDEX`}</Typography.Text>
                   </div>
                 </Skeleton>
               </div>
@@ -223,29 +256,20 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
           )}
         </div>
         <div className="flex flex-col gap-3 px-3 pt-4">
-          <Typography.Text appearance="secondary" bold>
-            Terms and conditions
-          </Typography.Text>
+          <Link
+            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
+            className="flex items-center gap-2"
+            target="_blank"
+          >
+            <Typography.Text appearance="secondary" bold>
+              Terms and conditions
+            </Typography.Text>
+            <RiExternalLinkLine className="w-3 h-3 text-secondary" />
+          </Link>
           <div className="overflow-hidden relative">
             <div className=" max-h-24 overflow-auto pb-6">
-              <Typography.Paragraph size="sm" appearance="primary">
-                By accessing this website we assume you accept these terms and
-                conditions. Do not continue to use Orderbook if you do not agree
-                to take all of the terms and conditions stated on this page. The
-                following terminology applies to these Terms and Conditions,
-                Privacy Statement and Disclaimer Notice and all Agreements:
-                Client, You and Your refers to you, the person log on this
-                website and compliant to the Companys terms and conditions. By
-                accessing this website we assume you accept these terms and
-                conditions. Do not continue to use Orderbook if you do not agree
-                to take all of the terms and conditions stated on this page. The
-                following terminology applies to these Terms and Conditions,
-                Privacy Statement and Disclaimer Notice and all Agreements:
-                Client, You and Your refers to you, the person log on this
-                website and compliant to the Companys terms and conditions.
-              </Typography.Paragraph>
+              <Terms />
             </div>
-
             <div className="absolute bottom-0 left-0 w-full h-[45px] bg-gradient-to-t from-level-0 to-transparent" />
           </div>
         </div>
@@ -254,7 +278,7 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
         <Interaction.Action
           disabled={!!error || !state}
           appearance="secondary"
-          onClick={() => window.alert("testing...")}
+          onClick={action}
         >
           Sign and Submit
         </Interaction.Action>
