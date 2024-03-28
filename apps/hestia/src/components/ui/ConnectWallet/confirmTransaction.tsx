@@ -106,14 +106,9 @@ export const ConfirmTransaction = ({
               <Accordion.Content>
                 <div className="flex flex-col mt-4 border-t border-primary">
                   {palletName && (
-                    <GenericHorizontalItem
-                      label="Substrate Pallet"
-                      className="px-0"
-                    >
+                    <GenericHorizontalItem label="Name" className="px-0">
                       <Copy value={hash}>
-                        <Typography.Text>
-                          {`[Pallet::${palletName}]`}
-                        </Typography.Text>
+                        <Typography.Text>{palletName}</Typography.Text>
                       </Copy>
                     </GenericHorizontalItem>
                   )}

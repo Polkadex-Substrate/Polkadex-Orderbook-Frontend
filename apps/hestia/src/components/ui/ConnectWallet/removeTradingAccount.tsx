@@ -24,7 +24,7 @@ export const RemoveTradingAccount = ({
   tradingAccount: TradeAccount;
   fundWallet?: ExtensionAccount;
   onRemoveFromDevice: () => void;
-  onRemoveFromChain?: () => Promise<void>;
+  onRemoveFromChain?: () => void;
   onCancel: () => void;
   loading?: boolean;
   selectedExtension?: (typeof ExtensionsArray)[0];
@@ -43,10 +43,10 @@ export const RemoveTradingAccount = ({
     [state]
   );
 
-  const handleRemoveBlockchain = useCallback(async () => {
-    await onRemoveFromChain?.();
-    onCancel();
-  }, [onCancel, onRemoveFromChain]);
+  const handleRemoveBlockchain = useCallback(
+    () => onRemoveFromChain?.(),
+    [onRemoveFromChain]
+  );
 
   const handleRemoveDevice = useCallback(() => {
     onRemoveFromDevice?.();

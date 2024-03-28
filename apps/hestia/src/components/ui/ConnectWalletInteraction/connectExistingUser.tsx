@@ -1,9 +1,14 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { Multistep } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import {
+  TransactionExtrensic,
+  useTransactionFee,
+  Keys,
+} from "@orderbook/core/index";
 
 import { ExistingUser } from "../ConnectWallet/existingUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
@@ -15,6 +20,7 @@ import { MaximumTradingAccount } from "../ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
 import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAccountMnemonic";
 import { UnlockAccount } from "../ReadyToUse/unlockAccount";
+import { ConfirmTransaction } from "../ConnectWallet/confirmTransaction";
 
 export const ConnectExistingUser = ({
   onClose,
@@ -23,6 +29,11 @@ export const ConnectExistingUser = ({
   onClose: () => void;
   onNext: (v: "Connect" | "TradingAccountSuccessfull") => void;
 }) => {
+  const [extrinsic, setExtrinsic] = useState<TransactionExtrensic<keyof Keys>>({
+    extrinsic: "removeProxyAccount",
+    customProps: [],
+  });
+
   const {
     localTradingAccounts,
     onSelectTradingAccount,
@@ -82,6 +93,11 @@ export const ConnectExistingUser = ({
       filteredAccounts?.some((value) => value.address === tempTrading?.address),
     [tempTrading?.address, filteredAccounts]
   );
+
+  const { txFee } = useTransactionFee({
+    extrinsic: extrinsic.extrinsic,
+    customProps: tempTrading?.address ? [tempTrading?.address] : [],
+  });
 
   return (
     <Multistep.Interactive resetOnUnmount>
@@ -195,17 +211,23 @@ export const ConnectExistingUser = ({
                   tempTrading?.address as string
                 )
               }
-              onRemoveFromChain={async () =>
-                await onRemoveTradingAccountFromChain?.({
-                  main: selectedWallet?.address as string,
-                  proxy: tempTrading?.address as string,
-                })
-              }
+              onRemoveFromChain={() => {
+                setExtrinsic({
+                  extrinsic: "removeProxyAccount",
+                  customProps: tempTrading?.address
+                    ? [tempTrading?.address]
+                    : [],
+                });
+                props?.onPage("ConfirmTransaction");
+              }}
               loading={removingStatus === "loading"}
               errorTitle="Error"
               errorMessage={(removingError as Error)?.message ?? removingError}
               selectedExtension={selectedExtension}
-              onCancel={() => props?.onChangeInteraction(false)} // onBack not working, rerendering Multistep, prev reseting..
+              onCancel={() => {
+                props?.onChangeInteraction(false);
+                onResetTempTrading();
+              }}
             />
             <ImportTradingAccount
               key="ImportTradingAccount"
@@ -243,6 +265,23 @@ export const ConnectExistingUser = ({
               key="InsufficientBalance"
               balance={walletBalance}
               onClose={() => props?.onChangeInteraction(false)}
+            />
+            <ConfirmTransaction
+              key="ConfirmTransaction"
+              fee={txFee?.fee ?? 0}
+              hash={txFee?.hash ?? ""}
+              palletName={txFee?.palletName}
+              extrinsicName={txFee?.extrinsicName ?? ""}
+              onClose={() => {
+                onResetTempTrading();
+                props?.onChangeInteraction(false);
+              }}
+              action={async () =>
+                await onRemoveTradingAccountFromChain?.({
+                  main: selectedWallet?.address as string,
+                  proxy: tempTrading?.address as string,
+                })
+              }
             />
           </Multistep.Content>
         </>
