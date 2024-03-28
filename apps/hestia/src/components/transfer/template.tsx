@@ -1,6 +1,6 @@
 "use client";
 
-import { GenericMessage, Modal, Tabs, Typography } from "@polkadex/ux";
+import { GenericMessage, Tabs, Typography } from "@polkadex/ux";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { RiInformation2Line } from "@remixicon/react";
 import { useTransactions, useTransferHistory } from "@orderbook/core/hooks";
@@ -11,7 +11,6 @@ import { useResizeObserver, useWindowSize } from "usehooks-ts";
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 import { QuickStart } from "../ui/Footer/QuickStart";
-import { ConfirmTransaction } from "../ui/ConnectWallet/confirmTransaction";
 
 import { Help } from "./Help";
 import { SelectAsset } from "./SelectAsset";
@@ -107,11 +106,6 @@ export function Template() {
 
   return (
     <Fragment>
-      <Modal open={true}>
-        <Modal.Content>
-          <ConfirmTransaction onClose={() => window.alert("...")} />
-        </Modal.Content>
-      </Modal>
       <QuickStart open={open} onOpenChange={onClose} />
       <ConnectTradingInteraction />
       <SelectAsset
