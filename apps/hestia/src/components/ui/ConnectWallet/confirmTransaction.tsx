@@ -258,7 +258,7 @@ export const ConfirmTransaction = ({
         <div className="flex flex-col gap-3 px-3 pt-4">
           <Link
             href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
-            className="flex items-center gap-2"
+            className="flex items-center gap-1"
             target="_blank"
           >
             <Typography.Text appearance="secondary" bold>

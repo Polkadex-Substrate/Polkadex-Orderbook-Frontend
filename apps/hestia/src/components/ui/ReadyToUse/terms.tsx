@@ -5,7 +5,7 @@ import { PropsWithChildren } from "react";
 
 export const Terms = () => {
   return (
-    <div className="flex flex-col gap-5 overflow-hidden">
+    <div className="flex flex-col gap-3 overflow-hidden">
       {terms?.map((e, i) => (
         <Page key={i} index={i + 1} title={e.title}>
           {e.items.map((e, ind) => (
@@ -24,14 +24,14 @@ const Page = ({
   index,
   children,
 }: PropsWithChildren<{ title: string; index: number }>) => (
-  <ol className="flex flex-col gap-4">
+  <ol className="flex flex-col gap-2">
     <li>
       <Typography.Text appearance="primary" size="xs">
         {index}. {title}
       </Typography.Text>
     </li>
     <li>
-      <ol className="flex flex-col gap-3">{children}</ol>
+      <ol className="flex flex-col gap-2">{children}</ol>
     </li>
   </ol>
 );
@@ -40,7 +40,7 @@ const Paragraph = ({
   index,
   children,
 }: PropsWithChildren<{ index: string }>) => (
-  <li>
+  <li className="ml-3">
     <Typography.Paragraph appearance="primary" size="xs">
       {index}.{children}
     </Typography.Paragraph>
