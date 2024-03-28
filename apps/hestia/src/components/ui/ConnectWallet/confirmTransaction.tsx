@@ -159,12 +159,10 @@ export const ConfirmTransaction = ({
             </GenericHorizontalItem>
           ) : (
             <GenericHorizontalItem label="Estimated fee">
-              <Copy value="0xD3…6Ae">
-                <div className="flex items-center gap-1">
-                  <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
-                  <Typography.Text>{fee} PDEX</Typography.Text>
-                </div>
-              </Copy>
+              <div className="flex items-center gap-1">
+                <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
+                <Typography.Text>{fee} PDEX</Typography.Text>
+              </div>
             </GenericHorizontalItem>
           )}
           <Dropdown>
