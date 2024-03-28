@@ -8,10 +8,24 @@ import {
   Typography,
 } from "@polkadex/ux";
 import { RiAddLine, RiFileCopyLine, RiGasStationLine } from "@remixicon/react";
-import { useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useResizeObserver } from "usehooks-ts";
+import { useAssets } from "@orderbook/core/index";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+
+import { AutoSwap } from "../ReadyToUse/autoSwap";
+
+import { MINIMUM_PDEX_REQUIRED, usePool } from "@/hooks";
+
+interface Asset {
+  name: string;
+  id: string;
+}
 
 export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
+  const { assets } = useAssets();
+  const [state, setState] = useState<Asset | null>(null);
+
   const ref = useRef<HTMLButtonElement>(null);
 
   const { width = 0 } = useResizeObserver({
@@ -19,8 +33,23 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
     box: "border-box",
   });
 
+  const assetsList = useMemo(
+    () => assets?.map((e) => ({ name: e.ticker, id: e.id })),
+    [assets]
+  );
+
+  const {
+    swapPrice = 0,
+    swapLoading,
+    hasReserve,
+    poolReservesLoading,
+  } = usePool({
+    assetId: state?.id ?? "",
+  });
+
+  const { walletBalance = 0 } = useConnectWalletProvider();
   return (
-    <Interaction className="w-full md:min-w-[24rem] md:max-w-[24rem]">
+    <Interaction className="w-full gap-2 md:min-w-[24rem] md:max-w-[24rem]">
       <Interaction.Title onClose={{ onClick: onClose }}>
         Confirm Transaction
       </Interaction.Title>
@@ -63,20 +92,37 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
             </Copy>
           </div>
           <Dropdown>
-            <Dropdown.Trigger ref={ref} className=" px-3 py-3 bg-level-1">
+            <Dropdown.Trigger
+              ref={ref}
+              className=" px-3 py-3 bg-level-1 border border-primary"
+            >
               <div className="flex-1  w-full flex items-cneter justify-between gap-2">
                 <Typography.Text appearance="primary">
                   Pay fee with
                 </Typography.Text>
-                <Typography.Text>PDEX</Typography.Text>
+                <Typography.Text>
+                  {state ? state.name : "Select token"}
+                </Typography.Text>
               </div>
               <Dropdown.Icon />
             </Dropdown.Trigger>
             <Dropdown.Content style={{ width }}>
-              <Dropdown.Item>PDEX</Dropdown.Item>
-              <Dropdown.Item>DOT</Dropdown.Item>
+              {assetsList.map((e) => (
+                <Dropdown.Item key={e.id} onSelect={() => setState(e)}>
+                  {e.name}
+                </Dropdown.Item>
+              ))}
             </Dropdown.Content>
           </Dropdown>
+          {state && state.id !== "PDEX" && (
+            <AutoSwap
+              balance={walletBalance?.toFixed(2)}
+              payValue={`${swapPrice} ${state?.name} `}
+              receiveValue={`${MINIMUM_PDEX_REQUIRED} PDEX`}
+              loading={!!swapPrice}
+            />
+          )}
+
           <div className="flex items-cneter justify-between gap-2 px-3 py-3">
             <Typography.Text appearance="primary">
               Estimated fee
