@@ -343,7 +343,7 @@ export const Form = ({
                     <Typography.Text
                       appearance="primary"
                       size="sm"
-                      className="whitespace-nowrap first-letter:uppercase lowercase"
+                      className="whitespace-nowrap"
                     >
                       {chainName}
                     </Typography.Text>
