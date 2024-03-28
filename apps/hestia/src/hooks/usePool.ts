@@ -85,7 +85,7 @@ export const usePool = ({
           "PDEX",
           amount
         );
-        return res.toFixed(4);
+        return res;
       }
     },
     onError: (e) => console.log("Error", e),

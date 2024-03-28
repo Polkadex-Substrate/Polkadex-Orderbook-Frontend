@@ -14,14 +14,14 @@ import { Fragment, useMemo, useRef, useState } from "react";
 import { useResizeObserver } from "usehooks-ts";
 import Link from "next/link";
 import { useFunds } from "@orderbook/core/index";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
-import { GenericHorizontalItem } from "../ReadyToUse";
+import { ErrorMessage, GenericHorizontalItem } from "../ReadyToUse";
 
 import { FeeAssetReserve, usePool } from "@/hooks";
 
 export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
-  const [fee, setFee] = useState(2);
-
+  const [fee, setFee] = useState(1);
   const [state, setState] = useState<FeeAssetReserve | null>(null);
 
   const ref = useRef<HTMLButtonElement>(null);
@@ -31,16 +31,40 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
     box: "border-box",
   });
 
-  const { swapPrice, swapLoading, poolReserves, poolReservesSuccess } = usePool(
-    {
-      asset: state,
-      amount: fee,
-    }
-  );
+  const {
+    swapPrice = 0,
+    swapLoading,
+    poolReserves,
+    poolReservesSuccess,
+  } = usePool({
+    asset: state,
+    amount: fee,
+  });
 
+  const { walletBalance = 0 } = useConnectWalletProvider();
   const { balances, loading: balancesLoading } = useFunds();
 
   const isPDEX = useMemo(() => state?.id === "PDEX", [state]);
+
+  const selectedAssetBalance = useMemo(
+    () => balances.find((e) => e.asset.id === state?.id),
+    [state?.id, balances]
+  );
+
+  const error = useMemo(
+    () =>
+      state && isPDEX
+        ? walletBalance < fee
+        : Number(selectedAssetBalance?.onChainBalance) < swapPrice,
+    [
+      state,
+      fee,
+      selectedAssetBalance?.onChainBalance,
+      swapPrice,
+      isPDEX,
+      walletBalance,
+    ]
+  );
   return (
     <Interaction className="w-full gap-2 md:min-w-[24rem] md:max-w-[24rem]">
       <Interaction.Title onClose={{ onClick: onClose }}>
@@ -84,16 +108,7 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
               </div>
             </Copy>
           </GenericHorizontalItem>
-          {isPDEX ? (
-            <GenericHorizontalItem label="Estimated fee">
-              <Copy value="0xD3…6Ae">
-                <div className="flex items-center gap-1">
-                  <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
-                  <Typography.Text>{fee} PDEX</Typography.Text>
-                </div>
-              </Copy>
-            </GenericHorizontalItem>
-          ) : (
+          {state && !isPDEX ? (
             <GenericHorizontalItem
               label="Estimated fee"
               tooltip="Swap using Polkapool"
@@ -102,15 +117,23 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
                 <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
                 <Skeleton loading={swapLoading} className="min-h-4 max-w-10">
                   <div className="flex items-center gap-1">
-                    <Typography.Text>{`${swapPrice} ${state?.name}`}</Typography.Text>
+                    <Typography.Text>{`${swapPrice.toFixed(4)} ${state?.name}`}</Typography.Text>
                     <Typography.Text appearance="primary">≈</Typography.Text>
                     <Typography.Text>{`${fee} PDEX`}</Typography.Text>
                   </div>
                 </Skeleton>
               </div>
             </GenericHorizontalItem>
+          ) : (
+            <GenericHorizontalItem label="Estimated fee">
+              <Copy value="0xD3…6Ae">
+                <div className="flex items-center gap-1">
+                  <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
+                  <Typography.Text>{fee} PDEX</Typography.Text>
+                </div>
+              </Copy>
+            </GenericHorizontalItem>
           )}
-
           <Dropdown>
             <Dropdown.Trigger
               ref={ref}
@@ -161,7 +184,7 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
                                 className="min-h-5"
                               >
                                 <Typography.Text appearance="primary">
-                                  {balance?.free.toFixed(4)}
+                                  {Number(balance?.onChainBalance).toFixed(4)}
                                 </Typography.Text>
                               </Skeleton>
                             </div>
@@ -193,6 +216,11 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
               )}
             </Dropdown.Content>
           </Dropdown>
+          {error && (
+            <ErrorMessage className="p-3">
+              Your balance is not enough to pay the fee.
+            </ErrorMessage>
+          )}
         </div>
         <div className="flex flex-col gap-3 px-3 pt-4">
           <Typography.Text appearance="secondary" bold>
@@ -224,6 +252,7 @@ export const ConfirmTransaction = ({ onClose }: { onClose: () => void }) => {
       </Interaction.Content>
       <Interaction.Footer>
         <Interaction.Action
+          disabled={!!error || !state}
           appearance="secondary"
           onClick={() => window.alert("testing...")}
         >
