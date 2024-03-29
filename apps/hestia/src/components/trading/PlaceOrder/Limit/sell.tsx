@@ -57,6 +57,7 @@ export const SellOrder = ({
       minVolume: market?.minVolume || 0,
       maxVolume: market?.maxVolume || 0,
       availableBalance: availableBaseAmount,
+      qtyStepSize: market?.qty_step_size || 0,
     }),
     validateOnChange: validateSubmit,
     validateOnBlur: true,

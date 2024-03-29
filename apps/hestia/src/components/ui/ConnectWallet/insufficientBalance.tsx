@@ -4,13 +4,14 @@ import {
   Illustrations,
   Interaction,
 } from "@polkadex/ux";
+import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
 
 import { GenericInfoCard, GenericExternalCard } from "../ReadyToUse";
 
 export const InsufficientBalance = ({
   onClose,
   balance,
-  fee = 2,
+  fee = MINIMUM_PDEX_REQUIRED,
 }: {
   balance?: number;
   fee?: number;

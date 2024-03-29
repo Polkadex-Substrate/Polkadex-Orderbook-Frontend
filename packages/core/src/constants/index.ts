@@ -70,13 +70,13 @@ export const ErrorMessages = {
     "You need atleast 1 PDEX in your funding account to keep it alive",
   REMAINING_BALANCE_IF_NOT_PDEX:
     "You need atleast 0.00001 units of an asset in your funding account to keep it alive.",
-  MAX_DIGIT_AFTER_DECIMAL: "Maximum 6 digits are allowed after decimal",
+  MAX_DIGIT_AFTER_DECIMAL: "Maximum 8 digits are allowed after decimal",
   WHITESPACE_NOT_ALLOWED: "Whitespace not allowed",
   MUST_BE_A_NUMBER: "Must be a number",
   TOO_SMALL: "Too Small!",
 };
 
-export const MAX_DIGITS_AFTER_DECIMAL = 6;
+export const MAX_DIGITS_AFTER_DECIMAL = 8;
 export const MIN_DIGITS_AFTER_DECIMAL = 2;
 export const ORDERBOOK_PRECISION = 8;
 
@@ -102,3 +102,7 @@ export const TIME_INTERVAL = {
 };
 
 export const START_EPOCH = 1;
+
+export const EVM_TOKENS = ["GLMR"];
+
+export const MINIMUM_PDEX_REQUIRED = 1;
