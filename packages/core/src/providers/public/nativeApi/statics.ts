@@ -18,5 +18,14 @@ export async function createApi(apiUrl: string[]): Promise<void> {
     runtime: { ...runtime, ...apiTypes.runtime },
     types: { ...types, ...apiTypes.types },
     rpc: { ...rpc, ...apiTypes.rpc },
+    signedExtensions: {
+      ChargeAssetTxPayment: {
+        extrinsic: {
+          tip: "Compact<Balance>",
+          assetId: "Option<u128>",
+        },
+        payload: {},
+      },
+    },
   });
 }

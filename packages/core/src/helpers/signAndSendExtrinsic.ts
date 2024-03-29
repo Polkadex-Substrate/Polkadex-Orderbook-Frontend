@@ -23,7 +23,7 @@ export const signAndSendExtrinsic = async (
     extrinsic
       .signAndSend(
         address,
-        { signer: injector?.signer, assetId: assetId },
+        { signer: injector?.signer, assetId },
         ({ status, events, dispatchError }: ISubmittableResult) => {
           // status would still be set, but in the case of error we can shortcut
           // to just check it (so an error would indicate InBlock or Finalized)
