@@ -6,12 +6,11 @@ import { TradeAccount } from "@orderbook/core/providers/types";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useCall } from "@orderbook/core/index";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { GenericSelectCard, TradingAccountCard } from "../ReadyToUse";
 
 import { ConfirmTransaction } from "./confirmTransaction";
-
-import { FeeAssetReserve } from "@/hooks";
 
 type RemoveProps = { main: string; proxy: string; assetId?: string };
 export const RemoveTradingAccount = ({
@@ -39,14 +38,11 @@ export const RemoveTradingAccount = ({
   availableOnDevice?: boolean;
   enabledExtensionAccount?: boolean;
 }) => {
-  const [open, setOpen] = useState(false);
-  const [feeToken, setFeeToken] = useState<FeeAssetReserve | null>(null);
-
+  const { onOpenFeeModal, tokenFee } = useConnectWalletProvider();
   const [state, setState] = useState({
     removeDevice: false,
     removeBlockchain: false,
   });
-  const onOpenModal = () => setOpen(true);
 
   const disableButton = useMemo(
     () => !Object.values(state).some((item) => item),
@@ -57,12 +53,11 @@ export const RemoveTradingAccount = ({
     async (e: RemoveProps) => {
       await onRemoveFromChain?.({
         ...e,
-        assetId: feeToken?.id,
+        assetId: tokenFee?.id,
       });
-      setOpen(false);
       onCancel();
     },
-    [onCancel, onRemoveFromChain, feeToken?.id]
+    [onCancel, onRemoveFromChain, tokenFee?.id]
   );
 
   const handleRemoveDevice = useCallback(() => {
@@ -82,12 +77,8 @@ export const RemoveTradingAccount = ({
   return (
     <Fragment>
       <ConfirmTransaction
-        open={open}
-        onOpenChange={setOpen}
         action={async () => await handleRemoveBlockchain(removeProps)}
         actionLoading={!!loading}
-        feeToken={feeToken}
-        onSetFeeToken={setFeeToken}
         extrinsicFn={() =>
           onRemoveProxyAccountOcex([tradingAccount.address ?? ""])
         }
@@ -148,7 +139,9 @@ export const RemoveTradingAccount = ({
         </Interaction.Content>
         <Interaction.Footer>
           <Interaction.Action
-            onClick={state.removeBlockchain ? onOpenModal : handleRemoveDevice}
+            onClick={
+              state.removeBlockchain ? onOpenFeeModal : handleRemoveDevice
+            }
             disabled={disableButton}
           >
             Yes, remove account

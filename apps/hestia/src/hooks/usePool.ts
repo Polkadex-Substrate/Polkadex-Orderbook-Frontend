@@ -4,12 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import { useAssets } from "@orderbook/core/index";
 
-export type FeeAssetReserve = {
-  poolReserve: number | undefined;
-  name: string;
-  id: string;
-};
-
 export const usePool = ({
   asset,
   amount,

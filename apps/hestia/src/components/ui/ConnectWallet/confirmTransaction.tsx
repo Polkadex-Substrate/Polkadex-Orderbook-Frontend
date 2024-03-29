@@ -18,7 +18,7 @@ import {
   RiFileCopyLine,
   RiGasStationLine,
 } from "@remixicon/react";
-import { Dispatch, Fragment, SetStateAction, useMemo, useRef } from "react";
+import { Fragment, useMemo, useRef } from "react";
 import { useResizeObserver } from "usehooks-ts";
 import Link from "next/link";
 import {
@@ -30,26 +30,21 @@ import { useConnectWalletProvider } from "@orderbook/core/providers/user/connect
 
 import { ErrorMessage, GenericHorizontalItem, Terms } from "../ReadyToUse";
 
-import { FeeAssetReserve, usePool } from "@/hooks";
+import { usePool } from "@/hooks";
 
 interface Props extends TransactionFeeProps {
   action: () => Promise<void>;
   actionLoading: boolean;
-  open: boolean;
-  onOpenChange: Dispatch<SetStateAction<boolean>>;
-  feeToken: FeeAssetReserve | null;
-  onSetFeeToken: Dispatch<SetStateAction<FeeAssetReserve | null>>;
 }
 export const ConfirmTransaction = ({
   action,
   extrinsicFn,
   sender,
   actionLoading,
-  open,
-  onOpenChange,
-  feeToken,
-  onSetFeeToken,
 }: Props) => {
+  const { tokenFee, openFeeModal, setOpenFeeModal, setTokenFee } =
+    useConnectWalletProvider();
+
   const { fee, hash, palletName, extrinsicName, loading, success } =
     useTransactionFee({
       extrinsicFn,
@@ -71,27 +66,27 @@ export const ConfirmTransaction = ({
     poolReserves,
     poolReservesSuccess,
   } = usePool({
-    asset: feeToken?.name ?? "",
+    asset: tokenFee?.id ?? "",
     amount: fee,
   });
 
   const { walletBalance = 0, selectedWallet } = useConnectWalletProvider();
   const { balances, loading: balancesLoading } = useFunds();
 
-  const isPDEX = useMemo(() => feeToken?.id === "PDEX", [feeToken?.id]);
+  const isPDEX = useMemo(() => tokenFee?.id === "PDEX", [tokenFee?.id]);
 
   const selectedAssetBalance = useMemo(
-    () => balances.find((e) => e.asset.id === feeToken?.id),
-    [feeToken?.id, balances]
+    () => balances.find((e) => e.asset.id === tokenFee?.id),
+    [tokenFee?.id, balances]
   );
 
   const error = useMemo(
     () =>
-      feeToken?.id && isPDEX
+      tokenFee?.id && isPDEX
         ? walletBalance < fee + 1
         : Number(selectedAssetBalance?.onChainBalance) < swapPrice,
     [
-      feeToken?.id,
+      tokenFee?.id,
       fee,
       selectedAssetBalance?.onChainBalance,
       swapPrice,
@@ -108,8 +103,8 @@ export const ConfirmTransaction = ({
 
   return (
     <Modal
-      open={open}
-      onOpenChange={onOpenChange}
+      open={openFeeModal}
+      onOpenChange={setOpenFeeModal}
       closeOnClickOutside
       placement="center left"
       className="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -117,7 +112,9 @@ export const ConfirmTransaction = ({
       <Modal.Content>
         <Loading.Spinner active={actionLoading}>
           <Interaction className="w-full gap-2 md:min-w-[24rem] md:max-w-[24rem]">
-            <Interaction.Title onClose={{ onClick: () => onOpenChange(false) }}>
+            <Interaction.Title
+              onClose={{ onClick: () => setOpenFeeModal(false) }}
+            >
               Confirm Transaction
             </Interaction.Title>
             <Interaction.Content className="flex flex-col p-3">
@@ -187,7 +184,7 @@ export const ConfirmTransaction = ({
                     </Copy>
                   </Skeleton>
                 </GenericHorizontalItem>
-                {!!feeToken && !isPDEX && !isLoading ? (
+                {!!tokenFee && !isPDEX && !isLoading ? (
                   <GenericHorizontalItem
                     label="Estimated fee"
                     tooltip="Swap using Polkapool"
@@ -196,7 +193,7 @@ export const ConfirmTransaction = ({
                       <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
                       <Skeleton loading={swapLoading} className="min-h-4 w-10">
                         <div className="flex items-center gap-1">
-                          <Typography.Text>{`${swapPrice.toFixed(4)} ${feeToken?.name}`}</Typography.Text>
+                          <Typography.Text>{`${swapPrice.toFixed(4)} ${tokenFee?.name}`}</Typography.Text>
                           <Typography.Text appearance="primary">
                             ≈
                           </Typography.Text>
@@ -228,7 +225,7 @@ export const ConfirmTransaction = ({
                         Pay fee with
                       </Typography.Text>
                       <Typography.Text>
-                        {feeToken ? feeToken.name : "Select token"}
+                        {tokenFee ? tokenFee.name : "Select token"}
                       </Typography.Text>
                     </div>
                     <Dropdown.Icon />
@@ -256,7 +253,7 @@ export const ConfirmTransaction = ({
                           return (
                             <Dropdown.Item
                               key={e.id}
-                              onSelect={() => onSetFeeToken(e)}
+                              onSelect={() => setTokenFee(e)}
                               className="flex justify-between items-center gap-2"
                               disabled={!e.poolReserve}
                             >
@@ -336,13 +333,13 @@ export const ConfirmTransaction = ({
             </Interaction.Content>
             <Interaction.Footer>
               <Interaction.Action
-                disabled={!!error || !feeToken}
+                disabled={!!error || !tokenFee}
                 appearance="secondary"
                 onClick={action}
               >
                 Sign and Submit
               </Interaction.Action>
-              <Interaction.Close onClick={() => onOpenChange(false)}>
+              <Interaction.Close onClick={() => setOpenFeeModal(false)}>
                 Close
               </Interaction.Close>
             </Interaction.Footer>
