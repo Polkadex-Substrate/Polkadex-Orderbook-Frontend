@@ -19,11 +19,11 @@ export const signAndSendExtrinsic = async (
   asset?: string
 ) => {
   return new Promise<ExtrinsicResult>((resolve, reject) => {
-    const assetId = asset ?? {};
+    const assetId = asset && asset !== "PDEX" ? { assetId: asset } : {};
     extrinsic
       .signAndSend(
         address,
-        { signer: injector?.signer, assetId },
+        { signer: injector?.signer, ...assetId },
         ({ status, events, dispatchError }: ISubmittableResult) => {
           // status would still be set, but in the case of error we can shortcut
           // to just check it (so an error would indicate InBlock or Finalized)

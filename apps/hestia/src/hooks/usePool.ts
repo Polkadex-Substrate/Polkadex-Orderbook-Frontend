@@ -14,7 +14,7 @@ export const usePool = ({
   asset,
   amount,
 }: {
-  asset: FeeAssetReserve | null;
+  asset: string;
   amount: number;
 }) => {
   const { api } = useNativeApi();
@@ -70,18 +70,12 @@ export const usePool = ({
   );
 
   const { data: swapPrice, isLoading: swapLoading } = useQuery({
-    queryKey: [
-      "quotePrice",
-      !!swapConnection,
-      enableQuotePrice,
-      asset?.id,
-      amount,
-    ],
+    queryKey: ["quotePrice", !!swapConnection, enableQuotePrice, asset, amount],
     enabled: enableQuotePrice,
     queryFn: async () => {
       if (swapConnection && asset) {
         const res = await swapConnection?.quotePriceTokensForExactTokens(
-          asset.id,
+          asset,
           "PDEX",
           amount
         );

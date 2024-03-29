@@ -198,11 +198,8 @@ export const ConnectExistingUser = ({
                   tempTrading?.address as string
                 )
               }
-              onRemoveFromChain={async () =>
-                await onRemoveTradingAccountFromChain?.({
-                  main: selectedWallet?.address as string,
-                  proxy: tempTrading?.address as string,
-                })
+              onRemoveFromChain={async (e) =>
+                await onRemoveTradingAccountFromChain?.(e)
               }
               loading={removingStatus === "loading"}
               errorTitle="Error"
