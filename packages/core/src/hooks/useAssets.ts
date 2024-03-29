@@ -4,7 +4,7 @@ import { BalanceFormatter } from "@orderbook/format";
 import { Asset } from "@orderbook/core/utils/orderbookService";
 
 import { isAssetPDEX } from "../helpers";
-import { POLKADEX_ASSET } from "../constants";
+import { EVM_TOKENS, POLKADEX_ASSET } from "../constants";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 
 import { useFunds } from "./useFunds";
@@ -64,6 +64,7 @@ export function useAssets(locale = "en") {
             free_balance: toHuman(Number(free_balance), 8, locale),
             onChainBalance: toHuman(Number(onChainBalance), 8, locale),
             inOrdersBalance: toHuman(Number(inOrdersBalance), 8, locale),
+            isEvm: EVM_TOKENS.includes(e.ticker),
           };
         })
         ?.filter((e: AssetsProps) => {
