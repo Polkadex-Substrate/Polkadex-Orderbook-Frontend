@@ -40,7 +40,6 @@ export function useTransactionFee<Name extends keyof Keys>({
       const extrinsicFn: SubmittableExtrinsic<"promise", ISubmittableResult> =
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         api.tx.ocex[extrinsic as any](...customProps);
-      console.log("extrinsic", extrinsic);
       const res = await extrinsicFn.paymentInfo(selectedWallet?.address ?? "");
       const fee = formatBalance(res.partialFee.toNumber(), {
         decimals: 12,
