@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 
-import { EVM_TOKENS, QUERY_KEYS } from "../constants";
+import { EVM_TOKENS, MINIMUM_PDEX_REQUIRED, QUERY_KEYS } from "../constants";
 
 import { useAssets } from "./useAssets";
 
-export const MINIMUM_PDEX_REQUIRED = 1.5;
 export const usePool = () => {
   const { assets } = useAssets();
   const { api, swapApi } = useNativeApi();

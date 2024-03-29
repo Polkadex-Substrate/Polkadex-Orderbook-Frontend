@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { Multistep } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
 
 import { ExistingUser } from "../ConnectWallet/existingUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
@@ -75,7 +76,9 @@ export const ConnectExistingUser = ({
       : "NewTradingAccount";
 
   const redirectEnoughBalance =
-    (walletBalance ?? 0) >= 2 ? redirectMaximumAccounts : "InsufficientBalance";
+    (walletBalance ?? 0) >= MINIMUM_PDEX_REQUIRED
+      ? redirectMaximumAccounts
+      : "InsufficientBalance";
 
   const availableOnDevice = useMemo(
     () =>
