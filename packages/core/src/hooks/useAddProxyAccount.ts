@@ -18,6 +18,7 @@ export type AddProxyAccountArgs = {
   main: string;
   name: string;
   password?: string;
+  assetId?: string;
 };
 
 interface UseAddProxyAccount extends MutateHookProps {
@@ -40,6 +41,7 @@ export function useAddProxyAccount({
       main,
       name,
       password,
+      assetId,
     }: AddProxyAccountArgs) => {
       if (!api || !wallet)
         throw new Error("You are not connected to blockchain ");
@@ -64,7 +66,7 @@ export function useAddProxyAccount({
       if (registeredProxies.length === 0) {
         await registerMainAccount(api, proxy, signer, main);
       } else {
-        await addProxyToAccount(api, proxy, signer, main);
+        await addProxyToAccount(api, proxy, signer, main, assetId);
       }
 
       const { pair } = wallet.addFromMnemonic(mnemonic, name, password);

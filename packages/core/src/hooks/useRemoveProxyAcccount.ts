@@ -16,6 +16,7 @@ import { useSettingsProvider } from "../providers/public/settings";
 export type RemoveProxyAccountArgs = {
   proxy: string;
   main: string;
+  assetId?: string;
 };
 
 export function useRemoveProxyAccount(props: MutateHookProps) {
@@ -26,7 +27,7 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
   const { onPushNotification } = useSettingsProvider();
 
   const { mutateAsync, status, error } = useMutation({
-    mutationFn: async ({ proxy, main }: RemoveProxyAccountArgs) => {
+    mutationFn: async ({ proxy, main, assetId }: RemoveProxyAccountArgs) => {
       if (!api || !wallet)
         throw new Error("You are not connected to blockchain ");
 
@@ -42,7 +43,7 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
         );
       });
 
-      await removeProxyFromAccount(api, proxy, signer, main);
+      await removeProxyFromAccount(api, proxy, signer, main, assetId);
 
       // TODO: Temp solution, backend issue. Remove it when it resolved in backend
       await isTradingAccountRemovedFromDb(proxy, main);

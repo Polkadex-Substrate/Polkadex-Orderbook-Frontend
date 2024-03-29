@@ -18,7 +18,7 @@
     "@orderbook/tsconfig": "*",
     "@polkadex/blockchain-api": "^1.1.61",
     "@polkadex/numericals": "^0.3.0",
-    "@polkadex/polkadex-api": "^3.1.2",
+    "@polkadex/polkadex-api": "^3.2.0",
     "@polkadex/react-providers": "^1.2.0",
     "@polkadex/types": "^1.2.2",
     "@polkadex/ux": "^6.14.0",

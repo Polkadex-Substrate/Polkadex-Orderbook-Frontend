@@ -33,7 +33,7 @@ import { FeeAssetReserve, usePool } from "@/hooks";
 
 interface Props extends TransactionFeeProps {
   onClose: () => void;
-  action: () => Promise<void>;
+  action: (id?: string) => Promise<void>;
   actionLoading: boolean;
 }
 export const ConfirmTransaction = ({
@@ -300,7 +300,7 @@ export const ConfirmTransaction = ({
           <Interaction.Action
             disabled={!!error || !state}
             appearance="secondary"
-            onClick={action}
+            onClick={() => action(state?.id)}
           >
             Sign and Submit
           </Interaction.Action>

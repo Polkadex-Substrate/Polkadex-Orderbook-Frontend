@@ -118,15 +118,17 @@ export const ConnectExistingUser = ({
 
   const actionFn = useMemo(
     () => ({
-      removeProxyAccount: async () =>
+      removeProxyAccount: async (assetId?: string) =>
         await onRemoveTradingAccountFromChain?.({
           main: selectedWallet?.address as string,
           proxy: tempTrading?.address as string,
+          assetId,
         }),
-      addProxyAccount: async () => {
+      addProxyAccount: async (assetId?: string) => {
         await onRegisterTradeAccount?.({
           ...tempNewTrading,
           main: selectedWallet?.address as string,
+          assetId,
         });
         onNext("TradingAccountSuccessfull");
         onResetTempNewTrading();
