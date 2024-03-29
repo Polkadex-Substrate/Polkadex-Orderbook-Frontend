@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { Multistep } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
-import { useCall, Ocex } from "@orderbook/core/index";
+import { useCall, Ocex, getAddressFromMnemonic } from "@orderbook/core/index";
 
 import { ExistingUser } from "../ConnectWallet/existingUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
@@ -18,7 +18,7 @@ import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAcco
 import { UnlockAccount } from "../ReadyToUse/unlockAccount";
 import { ConfirmTransaction } from "../ConnectWallet/confirmTransaction";
 
-type RxtrinsicProps = Pick<Ocex, "removeProxyAccount">;
+type RxtrinsicProps = Pick<Ocex, "removeProxyAccount" | "addProxyAccount">;
 
 export const ConnectExistingUser = ({
   onClose,
@@ -27,8 +27,7 @@ export const ConnectExistingUser = ({
   onClose: () => void;
   onNext: (v: "Connect" | "TradingAccountSuccessfull") => void;
 }) => {
-  const [extrinsic, setExtrinsic] =
-    useState<keyof RxtrinsicProps>("removeProxyAccount");
+  const [extrinsic, setExtrinsic] = useState<keyof RxtrinsicProps | null>(null);
 
   const {
     localTradingAccounts,
@@ -38,15 +37,12 @@ export const ConnectExistingUser = ({
     selectedWallet,
     onRegisterTradeAccount,
     registerStatus,
-    registerError,
-    removingError,
     onSetTempTrading,
     mainProxiesAccounts,
     removingStatus,
     tempTrading,
     onRemoveTradingAccountFromDevice,
     onRemoveTradingAccountFromChain,
-    selectedExtension,
     onImportFromFile,
     importFromFileStatus,
     walletBalance,
@@ -55,6 +51,9 @@ export const ConnectExistingUser = ({
     importFromMnemonicError,
     importFromMnemonicStatus,
     onImportFromMnemonic,
+    tempNewTrading,
+    onResetTempNewTrading,
+    onSetTempNewTrading,
   } = useConnectWalletProvider();
 
   const filteredAccounts = useMemo(
@@ -90,16 +89,31 @@ export const ConnectExistingUser = ({
     [tempTrading?.address, filteredAccounts]
   );
 
-  const { onRemoveProxyAccountOcex } = useCall();
+  const { onRemoveProxyAccountOcex, onAddProxyAccountOcex } = useCall();
 
   const extrinsicFn = useMemo(
     () => ({
       removeProxyAccount: () =>
         onRemoveProxyAccountOcex([tempTrading?.address ?? ""]),
-      // registerMainAccoun: ()=>
-      // addProxyAccount
+      addProxyAccount: () =>
+        onAddProxyAccountOcex([
+          getAddressFromMnemonic(tempNewTrading.mnemonic) ?? "",
+        ]),
     }),
-    [tempTrading?.address, onRemoveProxyAccountOcex]
+    [
+      tempTrading?.address,
+      onRemoveProxyAccountOcex,
+      onAddProxyAccountOcex,
+      tempNewTrading.mnemonic,
+    ]
+  );
+
+  const closeFn = useMemo(
+    () => ({
+      removeProxyAccount: () => onResetTempTrading(),
+      addProxyAccount: () => onResetTempNewTrading(),
+    }),
+    [onResetTempTrading, onResetTempNewTrading]
   );
 
   const actionFn = useMemo(
@@ -109,8 +123,31 @@ export const ConnectExistingUser = ({
           main: selectedWallet?.address as string,
           proxy: tempTrading?.address as string,
         }),
+      addProxyAccount: async () => {
+        await onRegisterTradeAccount?.({
+          ...tempNewTrading,
+          main: selectedWallet?.address as string,
+        });
+        onNext("TradingAccountSuccessfull");
+        onResetTempNewTrading();
+      },
     }),
-    [selectedWallet?.address, tempTrading, onRemoveTradingAccountFromChain]
+    [
+      selectedWallet?.address,
+      tempTrading,
+      onRemoveTradingAccountFromChain,
+      tempNewTrading,
+      onRegisterTradeAccount,
+      onNext,
+      onResetTempNewTrading,
+    ]
+  );
+  const actionLoading = useMemo(
+    () => ({
+      removeProxyAccount: removingStatus === "loading",
+      addProxyAccount: registerStatus === "loading",
+    }),
+    [removingStatus, registerStatus]
   );
 
   return (
@@ -192,19 +229,13 @@ export const ConnectExistingUser = ({
             />
             <NewTradingAccount
               key="NewTradingAccount"
-              onCreateAccount={async (e) =>
-                await onRegisterTradeAccount?.({
-                  ...e,
-                  main: selectedWallet?.address as string,
-                })
-              }
-              loading={registerStatus === "loading"}
+              onCreateAccount={(e) => {
+                onSetTempNewTrading(e);
+                setExtrinsic("addProxyAccount");
+                setTimeout(() => props?.onPage("ConfirmTransaction"), 100);
+              }}
               fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
-              errorTitle="Error"
-              errorMessage={(registerError as Error)?.message ?? registerError}
-              selectedExtension={selectedExtension}
               balance={walletBalance}
-              onCreateCallback={() => onNext("TradingAccountSuccessfull")}
               onClose={() => props?.onChangeInteraction(false)}
             />
             <TradingAccountList
@@ -227,12 +258,8 @@ export const ConnectExistingUser = ({
               }
               onRemoveFromChain={() => {
                 setExtrinsic("removeProxyAccount");
-                props?.onPage("ConfirmTransaction");
+                setTimeout(() => props?.onPage("ConfirmTransaction"), 100);
               }}
-              loading={removingStatus === "loading"}
-              errorTitle="Error"
-              errorMessage={(removingError as Error)?.message ?? removingError}
-              selectedExtension={selectedExtension}
               onCancel={() => {
                 props?.onChangeInteraction(false);
                 onResetTempTrading();
@@ -277,13 +304,15 @@ export const ConnectExistingUser = ({
             />
             <ConfirmTransaction
               key="ConfirmTransaction"
-              extrinsicFn={extrinsicFn[extrinsic]}
+              extrinsicFn={extrinsicFn[extrinsic as keyof RxtrinsicProps]}
               sender={selectedWallet?.address ?? ""}
               onClose={() => {
-                onResetTempTrading();
+                closeFn[extrinsic as keyof RxtrinsicProps]();
                 props?.onChangeInteraction(false);
+                setExtrinsic(null);
               }}
-              action={actionFn[extrinsic]}
+              action={actionFn[extrinsic as keyof RxtrinsicProps]}
+              actionLoading={actionLoading[extrinsic as keyof RxtrinsicProps]}
             />
           </Multistep.Content>
         </>

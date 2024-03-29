@@ -73,10 +73,13 @@ type ConnectWalletState = {
   // TODO: all the below must be moved into local state of ConnectWalletInteraction
   onExportTradeAccount: (value: ExportTradeAccountProps) => void;
   onSetTempTrading: (value: KeyringPair) => void;
+  onSetTempNewTrading: (value: RegisterTradeAccountData) => void;
   onResetTempMnemonic: () => void;
   onResetTempTrading: () => void;
+  onResetTempNewTrading: () => void;
   tempMnemonic?: string;
   tempTrading?: KeyringPair;
+  tempNewTrading: RegisterTradeAccountData;
   proxiesAccounts?: string[];
   proxiesStatus: GenericStatus;
   registerStatus: GenericStatus;
@@ -103,6 +106,14 @@ type ConnectWalletState = {
   extensionAccountPresent: boolean;
 };
 
+export const initialTempNewTrading = {
+  name: "",
+  password: "",
+  mnemonic: "",
+};
+
+export type RegisterTradeAccountData = typeof initialTempNewTrading;
+
 export const ConnectWalletProvider = ({
   children,
 }: {
@@ -110,6 +121,9 @@ export const ConnectWalletProvider = ({
 }) => {
   const [tempMnemonic, setTempMnemonic] = useState<string>("");
   const [tempTrading, setTempTrading] = useState<KeyringPair>();
+  const [tempNewTrading, setTempNewTrading] =
+    useState<RegisterTradeAccountData>(initialTempNewTrading);
+
   const {
     selectedAddresses,
     onUserSelectMainAddress,
@@ -240,6 +254,10 @@ export const ConnectWalletProvider = ({
     setTempTrading(value);
   };
 
+  const onSetTempNewTrading = (value: RegisterTradeAccountData) => {
+    setTempNewTrading(value);
+  };
+
   const onResetExtension = () => {
     onResetSelectedExtension();
   };
@@ -255,6 +273,11 @@ export const ConnectWalletProvider = ({
   const onResetTempTrading = () => {
     setTempTrading(undefined);
   };
+
+  const onResetTempNewTrading = () => {
+    setTempNewTrading(initialTempNewTrading);
+  };
+
   const onLogout = () => {
     onUserLogout();
   };
@@ -312,10 +335,12 @@ export const ConnectWalletProvider = ({
         onRemoveTradingAccountFromDevice,
         onSelectWallet: onSelectExtensionAccount,
         onSetTempTrading,
+        onSetTempNewTrading,
         onResetExtension,
         onResetWallet,
         onResetTempMnemonic,
         onResetTempTrading,
+        onResetTempNewTrading,
         onLogout,
 
         onRegisterTradeAccount,
@@ -328,6 +353,7 @@ export const ConnectWalletProvider = ({
 
         tempMnemonic,
         tempTrading,
+        tempNewTrading,
 
         walletBalance: onChainBalances?.get(POLKADEX_ASSET.id) || 0,
         walletHasError: isOnChainBalanceError,
@@ -374,8 +400,10 @@ export const Context = createContext<ConnectWalletState>({
   onRemoveTradingAccountFromChain: async () => {},
   onExportTradeAccount: () => {},
   onSetTempTrading: () => {},
+  onSetTempNewTrading: () => {},
   onResetTempMnemonic: () => {},
   onResetTempTrading: () => {},
+  onResetTempNewTrading: () => {},
   proxiesAccounts: [],
   proxiesStatus: "idle",
   registerStatus: "idle",
@@ -399,6 +427,7 @@ export const Context = createContext<ConnectWalletState>({
   mainProxiesSuccess: false,
   extensionAccountPresent: false,
   browserAccountPresent: false,
+  tempNewTrading: initialTempNewTrading,
 });
 
 const Provider = ({
