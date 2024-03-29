@@ -72,7 +72,8 @@ export const Markets = ({ favorite }: { favorite: boolean }) => {
       <div
         className={classNames(
           "inline-flex gap-4",
-          isCarouselActive && "animate-infiniteHorizontalScroll"
+          isCarouselActive && "animate-infiniteHorizontalScroll",
+          "hover:paused"
         )}
       >
         <AllMarkets data={data} />

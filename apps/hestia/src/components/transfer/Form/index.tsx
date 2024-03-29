@@ -104,14 +104,14 @@ export const Form = ({
     const onChainBalance = Number(selectedAsset?.onChainBalance);
     if (onChainBalance > existentialBalance) {
       const balance = onChainBalance - existentialBalance;
-      const trimmedBalance = trimFloat({ value: balance });
+      const trimmedBalance = +trimFloat({ value: balance });
       setFieldValue("amount", trimmedBalance);
     }
   };
 
   const onChangeTradingMax = () => {
     const availableAmount = Number(selectedAsset?.free_balance);
-    const trimmedBalance = trimFloat({ value: availableAmount });
+    const trimmedBalance = +trimFloat({ value: availableAmount });
     setFieldValue("amount", trimmedBalance);
   };
 
@@ -343,7 +343,7 @@ export const Form = ({
                     <Typography.Text
                       appearance="primary"
                       size="sm"
-                      className="whitespace-nowrap first-letter:uppercase lowercase"
+                      className="whitespace-nowrap"
                     >
                       {chainName}
                     </Typography.Text>
