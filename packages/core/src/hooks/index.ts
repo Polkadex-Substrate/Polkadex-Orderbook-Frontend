@@ -32,5 +32,4 @@ export * from "./useWithdrawClaim";
 export * from "./useCreateOrder";
 export * from "./useCancelOrder";
 export * from "./useCancelAllOrders";
-export * from "./usePool";
 export * from "./lmp";

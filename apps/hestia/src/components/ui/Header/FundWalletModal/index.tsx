@@ -9,7 +9,7 @@ import {
 } from "@polkadex/ux";
 import { RiCloseLine, RiArrowDownSLine } from "@remixicon/react";
 import Link from "next/link";
-import { getChainFromTicker, usePool } from "@orderbook/core/index";
+import { getChainFromTicker, useAssets } from "@orderbook/core/index";
 
 import { Card } from "./card";
 
@@ -20,7 +20,7 @@ export const FundWalletModal = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { poolReserves } = usePool();
+  const { assets } = useAssets();
 
   return (
     <Modal
@@ -70,13 +70,12 @@ export const FundWalletModal = ({
                     <Dropdown.Label className="[&>span]:text-sm">
                       Token/Chain
                     </Dropdown.Label>
-                    {poolReserves?.map((pool) => {
-                      const chainName = getChainFromTicker(pool.ticker);
+                    {assets?.map((asset) => {
+                      const chainName = getChainFromTicker(asset.ticker);
                       return (
-                        !pool.isEvm && (
+                        !asset.isEvm && (
                           <Dropdown.Item
-                            disabled={!pool.hasReserve}
-                            key={pool.assetId}
+                            key={asset.id}
                             onClick={() =>
                               window.open(
                                 `https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`
@@ -85,15 +84,15 @@ export const FundWalletModal = ({
                           >
                             <div className="flex items-center justify-center gap-2">
                               <Token
-                                name={pool.ticker}
+                                name={asset.ticker}
                                 size="xs"
                                 className="rounded-full border border-primary max-sm:w-5 max-sm:h-5"
                                 appearance={
-                                  pool.ticker as keyof typeof tokenAppearance
+                                  asset.ticker as keyof typeof tokenAppearance
                                 }
                               />
                               <Typography.Text size="sm">
-                                {pool.ticker} ({chainName})
+                                {asset.ticker} ({chainName})
                               </Typography.Text>
                             </div>
                           </Dropdown.Item>
@@ -111,13 +110,12 @@ export const FundWalletModal = ({
                     <Dropdown.Label className="[&>span]:text-sm">
                       Token/Chain
                     </Dropdown.Label>
-                    {poolReserves?.map((pool) => {
-                      const chainName = getChainFromTicker(pool.ticker);
+                    {assets?.map((asset) => {
+                      const chainName = getChainFromTicker(asset.ticker);
                       return (
-                        pool.isEvm && (
+                        asset.isEvm && (
                           <Dropdown.Item
-                            disabled={!pool.hasReserve}
-                            key={pool.assetId}
+                            key={asset.id}
                             onClick={() =>
                               window.open(
                                 `https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`
@@ -126,15 +124,15 @@ export const FundWalletModal = ({
                           >
                             <div className="flex items-center justify-center gap-2">
                               <Token
-                                name={pool.ticker}
+                                name={asset.ticker}
                                 size="xs"
                                 className="rounded-full border border-primary max-sm:w-5 max-sm:h-5"
                                 appearance={
-                                  pool.ticker as keyof typeof tokenAppearance
+                                  asset.ticker as keyof typeof tokenAppearance
                                 }
                               />
                               <Typography.Text size="sm">
-                                {pool.ticker} ({chainName})
+                                {asset.ticker} ({chainName})
                               </Typography.Text>
                             </div>
                           </Dropdown.Item>
