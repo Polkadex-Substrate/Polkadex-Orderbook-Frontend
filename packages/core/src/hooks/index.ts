@@ -34,3 +34,4 @@ export * from "./useCancelOrder";
 export * from "./useCancelAllOrders";
 export * from "./lmp";
 export * from "./useTransactionFee";
+export * from "./useCall";

@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { ApiPromise } from "@polkadot/api";
 import { formatBalance } from "@polkadot/util";
 import { SubmittableExtrinsic } from "@polkadot/api/types";
 import { ISubmittableResult } from "@polkadot/types/types";
@@ -9,46 +8,55 @@ import { useNativeApi } from "../providers/public/nativeApi";
 import { QUERY_KEYS } from "../constants";
 import { useConnectWalletProvider } from "../providers/user/connectWalletProvider";
 
-export type Keys = ApiPromise["tx"]["ocex"];
-
-export interface TransactionExtrensic<T extends keyof Keys> {
-  extrinsic: keyof Keys;
-  customProps: Parameters<Keys[T]>;
+export interface TransactionFeeProps {
+  extrinsicFn: () => SubmittableExtrinsic<"promise", ISubmittableResult>;
+  sender: string;
 }
-export function useTransactionFee<Name extends keyof Keys>({
-  extrinsic,
-  customProps,
-}: TransactionExtrensic<Name>) {
+
+const intiialData = {
+  fee: 0,
+  hash: "",
+  extrinsicName: "",
+  palletName: "",
+};
+export function useTransactionFee({
+  extrinsicFn,
+  sender,
+}: TransactionFeeProps) {
   const { connected, api } = useNativeApi();
 
   const { selectedWallet } = useConnectWalletProvider();
+
   const enabled = useMemo(
     () =>
       !!connected &&
-      !!extrinsic &&
-      !!customProps.length &&
+      !!extrinsicFn &&
+      typeof extrinsicFn === "function" &&
       !!selectedWallet?.address,
-    [extrinsic, connected, customProps, selectedWallet?.address]
+    [connected, selectedWallet?.address, extrinsicFn]
   );
 
+  console.log("Enabled", enabled);
   const { data, isLoading, isFetching, isSuccess } = useQuery({
     enabled,
-    refetchOnMount: false,
-    queryKey: [QUERY_KEYS.transactionFee(selectedWallet?.address ?? "")],
+    queryKey: [
+      QUERY_KEYS.transactionFee(selectedWallet?.address ?? ""),
+      !!extrinsicFn,
+    ],
     queryFn: async () => {
-      if (!api) throw new Error("You are not connected to blockchain ");
-      const extrinsicFn: SubmittableExtrinsic<"promise", ISubmittableResult> =
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        api.tx.ocex[extrinsic as any](...customProps);
-      const res = await extrinsicFn.paymentInfo(selectedWallet?.address ?? "");
+      console.log("starting...", sender);
+      if (!extrinsicFn) throw new Error("No Extrinsic");
+      if (!api) throw new Error("You are not connected to blockchain");
+      const extrinsic = extrinsicFn();
+      const res = await extrinsic.paymentInfo(sender);
       const fee = formatBalance(res.partialFee.toNumber(), {
         decimals: 12,
         withSi: false,
         forceUnit: "-",
       });
-      const data = extrinsicFn.meta.toHuman();
 
-      const hash = extrinsicFn.hash.toString();
+      const data = extrinsic.meta.toHuman();
+      const hash = extrinsic.hash.toString();
       const extrinsicName = data.name?.toString();
       const palletName = data.docs?.[0].toString();
 
@@ -62,8 +70,8 @@ export function useTransactionFee<Name extends keyof Keys>({
   });
 
   return {
-    txFee: data,
-    txSuccess: isSuccess,
-    txFeeLoading: isLoading || isFetching,
+    ...(data ?? intiialData),
+    success: isSuccess,
+    loading: isLoading || isFetching,
   };
 }
