@@ -108,6 +108,8 @@ type ConnectWalletState = {
   importFromMnemonicError: unknown;
   browserAccountPresent: boolean;
   extensionAccountPresent: boolean;
+  hasAccount: boolean;
+  hasTokenFee: boolean;
 };
 export type FeeAssetReserve = {
   poolReserve: number | undefined;
@@ -313,9 +315,20 @@ export const ConnectWalletProvider = ({
     [selectedWallet]
   );
 
+  const hasAccount = useMemo(
+    () => !!mainProxiesAccounts?.length,
+    [mainProxiesAccounts?.length]
+  );
+  const hasTokenFee = useMemo(
+    () => !!Object.keys(tokenFee ?? {}).length,
+    [tokenFee]
+  );
+
   return (
     <Provider
       value={{
+        hasTokenFee,
+        hasAccount,
         browserAccountPresent,
         extensionAccountPresent,
         selectedWallet,
@@ -424,6 +437,8 @@ export const Context = createContext<ConnectWalletState>({
   setOpenFeeModal: () => {},
   setTokenFee: () => {},
   onOpenFeeModal: () => {},
+  hasAccount: false,
+  hasTokenFee: false,
 });
 
 const Provider = ({

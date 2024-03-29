@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useMemo, useRef, useState } from "react";
 import {
   Button,
   Input,
   Interaction,
   Loading,
   Typography,
-  Skeleton,
   Passcode,
 } from "@polkadex/ux";
 import { useFormik } from "formik";
@@ -15,23 +14,28 @@ import { generateUsername } from "friendly-username-generator";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { createAccountValidations } from "@orderbook/core/validations";
-import { useTradingAccountFee } from "@orderbook/core/hooks";
+import { useCall } from "@orderbook/core/hooks";
 import { RiEyeOffLine, RiEyeLine } from "@remixicon/react";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { getAddressFromMnemonic } from "@orderbook/core/helpers";
 
 import {
   ErrorMessage,
-  GenericInfoCard,
   OptionalField,
   GenericVerticalCard,
 } from "../ReadyToUse";
+
+import { ConfirmTransaction } from "./confirmTransaction";
 export interface RegisterTradeAccountData {
   password: string;
   name: string;
   mnemonic: string;
+  assetId?: string;
 }
 
 const initialValues = {
   name: generateUsername({ useRandomNumber: false }),
+  mnemonic: mnemonicGenerate(),
 };
 const initialState = "";
 
@@ -41,7 +45,6 @@ export const NewTradingAccount = ({
   onCreateCallback,
   fundWalletPresent,
   loading,
-  balance = 0,
   selectedExtension,
   errorMessage,
   errorTitle,
@@ -56,13 +59,16 @@ export const NewTradingAccount = ({
   errorMessage?: string;
   selectedExtension?: (typeof ExtensionsArray)[0];
 }) => {
+  const formRef = useRef<HTMLFormElement | null>(null);
+
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(1);
-  const { txFee, txFeeLoading } = useTradingAccountFee();
 
   const isLoading = false;
   const error = false;
   const [state, setState] = useState(initialState);
+  const { hasAccount, tokenFee, onOpenFeeModal, openFeeModal, hasTokenFee } =
+    useConnectWalletProvider();
 
   const {
     values,
@@ -76,26 +82,50 @@ export const NewTradingAccount = ({
     initialValues,
     validationSchema: createAccountValidations,
     validateOnChange: true,
-    onSubmit: async ({ name }) => {
-      try {
-        const mnemonic = mnemonicGenerate();
-        const password = state?.replace(/\s+/g, "");
-        await onCreateAccount({
-          name,
-          password: password.length === 5 ? password : "",
-          mnemonic,
-        });
-        onCreateCallback();
-      } catch (error) {
-        resetForm();
-        setState(initialState);
+    onSubmit: async ({ name, mnemonic }) => {
+      if (!hasTokenFee || (hasTokenFee && !openFeeModal)) onOpenFeeModal();
+      else {
+        try {
+          const password = state?.replace(/\s+/g, "");
+          await onCreateAccount({
+            name,
+            password: password.length === 5 ? password : "",
+            mnemonic,
+            assetId: tokenFee?.id,
+          });
+          onCreateCallback();
+        } catch (error) {
+          resetForm();
+          setState(initialState);
+        }
       }
     },
   });
 
+  const { onAddProxyAccountOcex, onRegisterMainAccountOcex } = useCall();
+
+  const proxyAccount = useMemo(
+    () => getAddressFromMnemonic(values?.mnemonic),
+    [values?.mnemonic]
+  );
+
   return (
-    <Loading.Spinner active={!!loading}>
-      <form onSubmit={handleSubmit}>
+    <Fragment>
+      <ConfirmTransaction
+        action={() =>
+          formRef?.current?.dispatchEvent(
+            new Event("submit", { cancelable: true, bubbles: true })
+          )
+        }
+        actionLoading={!!loading}
+        extrinsicFn={() =>
+          hasAccount
+            ? onAddProxyAccountOcex([proxyAccount])
+            : onRegisterMainAccountOcex([proxyAccount])
+        }
+        sender={proxyAccount}
+      />
+      <form onSubmit={handleSubmit} ref={formRef}>
         <Interaction className="w-full">
           <Interaction.Title onClose={{ onClick: onClose }}>
             New trading account
@@ -187,19 +217,6 @@ export const NewTradingAccount = ({
                 </Loading.Spinner>
               </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <GenericInfoCard label="Your balance">
-                {balance} PDEX
-              </GenericInfoCard>
-              <GenericInfoCard label="Transaction fee">
-                <Skeleton
-                  loading={txFeeLoading}
-                  className="bg-level-5 w-24 h-4"
-                >
-                  {txFee}
-                </Skeleton>
-              </GenericInfoCard>
-            </div>
           </Interaction.Content>
           <Interaction.Footer>
             <Interaction.Action
@@ -212,6 +229,6 @@ export const NewTradingAccount = ({
           </Interaction.Footer>
         </Interaction>
       </form>
-    </Loading.Spinner>
+    </Fragment>
   );
 };

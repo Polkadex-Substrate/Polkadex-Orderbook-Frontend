@@ -260,7 +260,6 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                       (registerError as Error)?.message ?? registerError
                     }
                     selectedExtension={selectedExtension}
-                    balance={walletBalance}
                     onCreateCallback={() =>
                       props?.onPage("TradingAccountSuccessfull", true)
                     }

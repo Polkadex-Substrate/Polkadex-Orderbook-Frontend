@@ -46,7 +46,6 @@ export const Connect = ({
     onRemoveTradingAccountFromDevice,
     onSetTempTrading,
     tempTrading,
-    mainProxiesAccounts,
     mainProxiesLoading,
     mainProxiesSuccess,
     onExportTradeAccount,
@@ -54,13 +53,10 @@ export const Connect = ({
     importFromMnemonicError,
     importFromMnemonicStatus,
     onImportFromMnemonic,
+    hasAccount,
   } = useConnectWalletProvider();
 
   const sourceId = selectedExtension?.id;
-  const hasAccount = useMemo(
-    () => !!mainProxiesAccounts?.length,
-    [mainProxiesAccounts?.length]
-  );
 
   const { extensionsStatus } = useExtensions();
   const { connectExtensionAccounts, extensionAccounts } =

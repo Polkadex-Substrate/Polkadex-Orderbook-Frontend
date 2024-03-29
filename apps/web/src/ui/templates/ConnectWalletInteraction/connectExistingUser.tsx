@@ -50,8 +50,8 @@ export const ConnectExistingUser = ({
 
   const filteredAccounts = useMemo(
     () =>
-      localTradingAccounts?.filter(
-        (item) => mainProxiesAccounts?.includes(item.address)
+      localTradingAccounts?.filter((item) =>
+        mainProxiesAccounts?.includes(item.address)
       ),
     [localTradingAccounts, mainProxiesAccounts]
   );
@@ -171,7 +171,6 @@ export const ConnectExistingUser = ({
               errorTitle="Error"
               errorMessage={(registerError as Error)?.message ?? registerError}
               selectedExtension={selectedExtension}
-              balance={walletBalance}
               onCreateCallback={() => onNext("TradingAccountSuccessfull")}
               onClose={() => props?.onChangeInteraction(false)}
             />

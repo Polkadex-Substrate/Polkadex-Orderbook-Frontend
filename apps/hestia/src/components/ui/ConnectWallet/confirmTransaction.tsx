@@ -33,7 +33,7 @@ import { ErrorMessage, GenericHorizontalItem, Terms } from "../ReadyToUse";
 import { usePool } from "@/hooks";
 
 interface Props extends TransactionFeeProps {
-  action: () => Promise<void>;
+  action: (() => Promise<void>) | (() => void);
   actionLoading: boolean;
 }
 export const ConfirmTransaction = ({
@@ -105,7 +105,6 @@ export const ConfirmTransaction = ({
     <Modal
       open={openFeeModal}
       onOpenChange={setOpenFeeModal}
-      closeOnClickOutside
       placement="center left"
       className="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
     >
