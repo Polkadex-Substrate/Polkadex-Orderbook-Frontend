@@ -113,7 +113,7 @@ export function Template({ id }: { id: string }) {
           <Resizable.Panel
             className={classNames(
               tabletView && "min-h-[710px]",
-              desktopView && "min-h-[310px]"
+              desktopView && "min-h-[300px]"
             )}
           >
             <Resizable

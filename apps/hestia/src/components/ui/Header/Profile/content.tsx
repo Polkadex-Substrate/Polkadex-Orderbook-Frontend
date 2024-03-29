@@ -12,6 +12,7 @@ import {
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
 
 import { Profile } from "../../ConnectWallet/profile";
 import { NewTradingAccount } from "../../ConnectWallet/newTradingAccount";
@@ -114,7 +115,9 @@ export const Content = () => {
       : "NewTradingAccount";
 
   const redirectEnoughBalance =
-    (walletBalance ?? 0) >= 2 ? redirectMaximumAccounts : "InsufficientBalance";
+    (walletBalance ?? 0) >= MINIMUM_PDEX_REQUIRED
+      ? redirectMaximumAccounts
+      : "InsufficientBalance";
 
   const availableOnDevice = useMemo(
     () =>

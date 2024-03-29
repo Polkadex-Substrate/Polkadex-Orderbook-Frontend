@@ -17,13 +17,13 @@ export const getChainFromTicker = (ticker: string): string => {
     case "PDEX":
       return "Polkadex";
     case "DED":
-      return "DOTisDED";
+      return "Asset Hub";
     case "UNQ":
       return "Unique Network";
     case "USDC":
-      return "USD Circle";
+      return "Asset Hub";
     case "PINK":
-      return "DOTisPINK";
+      return "Asset Hub";
     default:
       return "Unknown";
   }

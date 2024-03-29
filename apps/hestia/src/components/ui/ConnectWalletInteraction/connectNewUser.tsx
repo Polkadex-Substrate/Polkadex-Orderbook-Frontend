@@ -2,6 +2,7 @@
 
 import { Multistep } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
 
 import { NewUser } from "../ConnectWallet/newUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
@@ -39,7 +40,9 @@ export const ConnectNewUser = ({
             <NewUser
               onContinue={() =>
                 props?.onPage(
-                  walletBalance ? "NewTradingAccount" : "InsufficientBalance",
+                  (walletBalance ?? 0) >= MINIMUM_PDEX_REQUIRED
+                    ? "NewTradingAccount"
+                    : "InsufficientBalance",
                   true
                 )
               }

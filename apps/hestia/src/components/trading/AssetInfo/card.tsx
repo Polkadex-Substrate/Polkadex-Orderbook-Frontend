@@ -19,7 +19,7 @@ const Single = ({
   };
   return (
     <div className="flex flex-col gap-1 place-content-center flex-1 py-2">
-      <Skeleton loading={!!loading} className="min-h-[1rem]">
+      <Skeleton loading={!!loading} className="min-h-[1rem] mb-1">
         <Typography.Text
           size="sm"
           bold

@@ -56,6 +56,7 @@ export const BuyOrder = ({
       minVolume: market?.minVolume || 0,
       maxVolume: market?.maxVolume || 0,
       availableBalance: availableQuoteAmount,
+      qtyStepSize: market?.qty_step_size || 0,
     }),
     validateOnChange: validateSubmit,
     validateOnBlur: true,
