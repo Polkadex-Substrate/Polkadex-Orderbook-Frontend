@@ -36,7 +36,6 @@ export function useTransactionFee({
     [connected, selectedWallet?.address, extrinsicFn]
   );
 
-  console.log("Enabled", enabled);
   const { data, isLoading, isFetching, isSuccess } = useQuery({
     enabled,
     queryKey: [
@@ -44,7 +43,6 @@ export function useTransactionFee({
       !!extrinsicFn,
     ],
     queryFn: async () => {
-      console.log("starting...", sender);
       if (!extrinsicFn) throw new Error("No Extrinsic");
       if (!api) throw new Error("You are not connected to blockchain");
       const extrinsic = extrinsicFn();
