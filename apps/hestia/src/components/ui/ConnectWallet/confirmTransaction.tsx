@@ -73,7 +73,7 @@ export const ConfirmTransaction = ({
   const error = useMemo(
     () =>
       state && isPDEX
-        ? walletBalance + 1 < fee
+        ? walletBalance < fee + 1
         : Number(selectedAssetBalance?.onChainBalance) < swapPrice,
     [
       state,
