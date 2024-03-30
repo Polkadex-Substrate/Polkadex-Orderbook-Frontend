@@ -39,7 +39,10 @@ export function useTransactionFee({
   const { data, isLoading, isFetching, isSuccess } = useQuery({
     enabled,
     queryKey: [
-      QUERY_KEYS.transactionFee(selectedWallet?.address ?? ""),
+      QUERY_KEYS.transactionFees(
+        selectedWallet?.address ?? "",
+        extrinsicFn.toString()
+      ),
       !!extrinsicFn,
     ],
     queryFn: async () => {

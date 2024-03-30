@@ -63,6 +63,12 @@ export const QUERY_KEYS = {
     "transactionFee",
     mainAddress,
   ],
+  transactionFees: (address: string, extrinsicName: string) => [
+    PREFIX,
+    "transactionFees",
+    address,
+    extrinsicName,
+  ],
   epochs: () => [PREFIX, "epochs"],
   lmpMarkets: (epoch: number) => [PREFIX, "lmpMarkets", epoch],
   lmpLeaderboard: (market: string) => [PREFIX, "lmpLeaderboard", market],
