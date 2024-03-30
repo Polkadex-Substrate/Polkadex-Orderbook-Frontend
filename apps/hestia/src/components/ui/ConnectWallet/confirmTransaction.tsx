@@ -1,6 +1,5 @@
 "use client";
 
-// TODO: Move open/setOpen from connectWallet
 import {
   Accordion,
   Button,
