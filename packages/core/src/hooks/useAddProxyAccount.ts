@@ -64,7 +64,7 @@ export function useAddProxyAccount({
         await appsyncOrderbookService.query.getTradingAddresses(main);
 
       if (registeredProxies.length === 0) {
-        await registerMainAccount(api, proxy, signer, main);
+        await registerMainAccount(api, proxy, signer, main, assetId);
       } else {
         await addProxyToAccount(api, proxy, signer, main, assetId);
       }

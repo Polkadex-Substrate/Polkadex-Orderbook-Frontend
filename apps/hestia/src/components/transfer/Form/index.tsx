@@ -36,6 +36,7 @@ import {
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import {
   useAssetTransfer,
+  useCall,
   useDeposit,
   useFunds,
   useWithdraw,
@@ -47,6 +48,7 @@ import { FromTrading } from "./FromTrading";
 
 import { FilteredAssetProps, SwitchType } from "@/hooks";
 import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
+import { ConfirmTransaction } from "@/components/ui/ConnectWallet/confirmTransaction";
 const initialValues = { amount: 0.0 };
 export const Form = ({
   refetch,
@@ -74,7 +76,27 @@ export const Form = ({
   const isFundingToFunding = type === "transfer";
   const isFromFunding = isTransferFromFunding || isFundingToFunding;
 
-  const { selectedAccount, selectedWallet } = useConnectWalletProvider();
+  const isPolkadexToken = useMemo(
+    () => isAssetPDEX(selectedAsset?.id),
+    [selectedAsset?.id]
+  );
+
+  const asset = useMemo(
+    (): Record<string, string | null> =>
+      isPolkadexToken
+        ? { polkadex: null }
+        : { asset: selectedAsset?.id || null },
+    [isPolkadexToken, selectedAsset?.id]
+  );
+
+  const {
+    selectedAccount,
+    selectedWallet,
+    tokenFee,
+    onOpenFeeModal,
+    openFeeModal,
+    hasTokenFee,
+  } = useConnectWalletProvider();
   const { loading: depositLoading, mutateAsync: onFetchDeposit } = useDeposit();
   const { mutateAsync: onFetchWithdraws, loading: withdrawLoading } =
     useWithdraw();
@@ -88,11 +110,6 @@ export const Form = ({
   const chainName = useMemo(
     () => getChainFromTicker(selectedAsset?.ticker) || selectedAsset?.name,
     [selectedAsset?.ticker, selectedAsset?.name]
-  );
-
-  const isPolkadexToken = useMemo(
-    () => isAssetPDEX(selectedAsset?.id),
-    [selectedAsset?.id]
   );
 
   const existentialBalance = useMemo(
@@ -160,19 +177,19 @@ export const Form = ({
   };
 
   const onSubmitDeposit = async ({ amount }: { amount: number }) => {
-    if (!selectedWallet) return;
-    try {
-      const asset: Record<string, string | null> = isPolkadexToken
-        ? { polkadex: null }
-        : { asset: selectedAsset?.id || null };
-
-      await onFetchDeposit({
-        asset,
-        amount,
-        account: selectedWallet,
-      });
-    } finally {
-      resetForm({ values: initialValues });
+    if (!hasTokenFee || (hasTokenFee && !openFeeModal)) onOpenFeeModal();
+    else {
+      if (!selectedWallet) return;
+      try {
+        await onFetchDeposit({
+          asset,
+          amount,
+          account: selectedWallet,
+          assetId: tokenFee?.id,
+        });
+      } finally {
+        resetForm({ values: initialValues });
+      }
     }
   };
 
@@ -203,6 +220,7 @@ export const Form = ({
     ? onSubmitDeposit
     : onSubmitWithdraw;
   const {
+    values,
     handleSubmit,
     resetForm,
     errors,
@@ -235,8 +253,22 @@ export const Form = ({
   useEffect(() => {
     if (!isTransferFromFunding) tryUnlockTradeAccount(selectedAccount);
   }, [selectedAccount, isTransferFromFunding]);
+
+  const { onDepositOcex } = useCall();
   return (
     <Fragment>
+      <ConfirmTransaction
+        action={() =>
+          formRef?.current?.dispatchEvent(
+            new Event("submit", { cancelable: true, bubbles: true })
+          )
+        }
+        actionLoading={!!loading}
+        extrinsicFn={
+          () => onDepositOcex([asset as unknown as string, values.amount]) // TODO: Fix types
+        }
+        sender={selectedWallet?.address ?? ""}
+      />
       <Modal open={showPassword} onOpenChange={setShowPassword}>
         <Modal.Content>
           <UnlockAccount

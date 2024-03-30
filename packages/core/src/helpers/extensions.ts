@@ -16,7 +16,8 @@ export const registerMainAccount = async (
   api: ApiPromise,
   proxyAddress: string,
   signer: Signer,
-  mainAddress: string
+  mainAddress: string,
+  assetId?: string
 ): Promise<ExtrinsicResult> => {
   const ext = api.tx.ocex.registerMainAccount(proxyAddress);
   const res = await signAndSendExtrinsic(
@@ -24,7 +25,8 @@ export const registerMainAccount = async (
     ext,
     { signer },
     mainAddress,
-    true
+    true,
+    assetId
   );
   return res;
 };

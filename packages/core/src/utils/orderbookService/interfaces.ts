@@ -121,6 +121,7 @@ export type DepositArgs = {
   amount: string | number;
   asset: Record<string, string | null>;
   account: ExtensionAccount;
+  assetId?: string;
 };
 
 export type ClaimRewardArgs = {

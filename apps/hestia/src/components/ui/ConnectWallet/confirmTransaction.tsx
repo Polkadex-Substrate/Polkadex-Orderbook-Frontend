@@ -1,5 +1,6 @@
 "use client";
 
+// TODO: Move open/setOpen from connectWallet
 import {
   Accordion,
   Button,
@@ -42,8 +43,15 @@ export const ConfirmTransaction = ({
   sender,
   actionLoading,
 }: Props) => {
-  const { tokenFee, openFeeModal, setOpenFeeModal, setTokenFee } =
-    useConnectWalletProvider();
+  const {
+    hasTokenFee,
+    tokenFee,
+    openFeeModal,
+    setOpenFeeModal,
+    walletBalance = 0,
+    selectedWallet,
+    setTokenFee,
+  } = useConnectWalletProvider();
 
   const { fee, hash, palletName, extrinsicName, loading, success } =
     useTransactionFee({
@@ -70,7 +78,6 @@ export const ConfirmTransaction = ({
     amount: fee,
   });
 
-  const { walletBalance = 0, selectedWallet } = useConnectWalletProvider();
   const { balances, loading: balancesLoading } = useFunds();
 
   const isPDEX = useMemo(() => tokenFee?.id === "PDEX", [tokenFee?.id]);
