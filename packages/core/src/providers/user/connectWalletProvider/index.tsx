@@ -9,10 +9,8 @@ import FileSaver from "file-saver";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import {
-  Dispatch,
   PropsWithChildren,
   ReactNode,
-  SetStateAction,
   createContext,
   useMemo,
   useState,
@@ -79,11 +77,6 @@ type ConnectWalletState = {
   onResetTempTrading: () => void;
   tempMnemonic?: string;
   tempTrading?: KeyringPair;
-  openFeeModal: boolean;
-  tokenFee: FeeAssetReserve | null;
-  setOpenFeeModal: Dispatch<SetStateAction<boolean>>;
-  onOpenFeeModal: () => void;
-  setTokenFee: Dispatch<SetStateAction<FeeAssetReserve | null>>;
   proxiesAccounts?: string[];
   proxiesStatus: GenericStatus;
   registerStatus: GenericStatus;
@@ -109,12 +102,6 @@ type ConnectWalletState = {
   browserAccountPresent: boolean;
   extensionAccountPresent: boolean;
   hasAccount: boolean;
-  hasTokenFee: boolean;
-};
-export type FeeAssetReserve = {
-  poolReserve: number | undefined;
-  name: string;
-  id: string;
 };
 
 export const ConnectWalletProvider = ({
@@ -124,9 +111,6 @@ export const ConnectWalletProvider = ({
 }) => {
   const [tempMnemonic, setTempMnemonic] = useState<string>("");
   const [tempTrading, setTempTrading] = useState<KeyringPair>();
-  const [openFeeModal, setOpenFeeModal] = useState(false);
-  const [tokenFee, setTokenFee] = useState<FeeAssetReserve | null>(null);
-
   const {
     selectedAddresses,
     onUserSelectMainAddress,
@@ -276,7 +260,6 @@ export const ConnectWalletProvider = ({
     onUserLogout();
   };
 
-  const onOpenFeeModal = () => setOpenFeeModal(true);
   const onRemoveTradingAccountFromDevice = (value: string) => {
     if (selectedAddresses.tradeAddress === value) {
       onUserResetTradingAddress();
@@ -319,15 +302,10 @@ export const ConnectWalletProvider = ({
     () => !!mainProxiesAccounts?.length,
     [mainProxiesAccounts?.length]
   );
-  const hasTokenFee = useMemo(
-    () => !!Object.keys(tokenFee ?? {}).length,
-    [tokenFee]
-  );
 
   return (
     <Provider
       value={{
-        hasTokenFee,
         hasAccount,
         browserAccountPresent,
         extensionAccountPresent,
@@ -346,9 +324,7 @@ export const ConnectWalletProvider = ({
         onResetTempMnemonic,
         onResetTempTrading,
         onLogout,
-        onOpenFeeModal,
-        setOpenFeeModal,
-        setTokenFee,
+
         onRegisterTradeAccount,
         registerError,
         registerStatus,
@@ -359,8 +335,6 @@ export const ConnectWalletProvider = ({
 
         tempMnemonic,
         tempTrading,
-        openFeeModal,
-        tokenFee,
 
         walletBalance: onChainBalances?.get(POLKADEX_ASSET.id) || 0,
         walletHasError: isOnChainBalanceError,
@@ -432,13 +406,7 @@ export const Context = createContext<ConnectWalletState>({
   mainProxiesSuccess: false,
   extensionAccountPresent: false,
   browserAccountPresent: false,
-  openFeeModal: false,
-  tokenFee: null,
-  setOpenFeeModal: () => {},
-  setTokenFee: () => {},
-  onOpenFeeModal: () => {},
   hasAccount: false,
-  hasTokenFee: false,
 });
 
 const Provider = ({

@@ -19,10 +19,11 @@ import {
   RiFileCopyLine,
   RiGasStationLine,
 } from "@remixicon/react";
-import { Fragment, useMemo, useRef } from "react";
+import { Dispatch, Fragment, SetStateAction, useMemo, useRef } from "react";
 import { useResizeObserver } from "usehooks-ts";
 import Link from "next/link";
 import {
+  FeeAssetReserve,
   TransactionFeeProps,
   useFunds,
   useTransactionFee,
@@ -36,22 +37,22 @@ import { usePool } from "@/hooks";
 interface Props extends TransactionFeeProps {
   action: (() => Promise<void>) | (() => void);
   actionLoading: boolean;
+  tokenFee: FeeAssetReserve | null;
+  setTokenFee: Dispatch<SetStateAction<FeeAssetReserve | null>>;
+  openFeeModal: boolean;
+  setOpenFeeModal: Dispatch<SetStateAction<boolean>>;
 }
 export const ConfirmTransaction = ({
   action,
   extrinsicFn,
   sender,
   actionLoading,
+  tokenFee,
+  setTokenFee,
+  openFeeModal,
+  setOpenFeeModal,
 }: Props) => {
-  const {
-    hasTokenFee,
-    tokenFee,
-    openFeeModal,
-    setOpenFeeModal,
-    walletBalance = 0,
-    selectedWallet,
-    setTokenFee,
-  } = useConnectWalletProvider();
+  const { walletBalance = 0, selectedWallet } = useConnectWalletProvider();
 
   const { fee, hash, palletName, extrinsicName, loading, success } =
     useTransactionFee({

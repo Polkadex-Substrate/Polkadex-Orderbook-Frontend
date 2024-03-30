@@ -5,8 +5,7 @@ import { Interaction, Typography } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
-import { useCall } from "@orderbook/core/index";
-import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useCall, useTransactionFeeModal } from "@orderbook/core/index";
 
 import { GenericSelectCard, TradingAccountCard } from "../ReadyToUse";
 
@@ -38,7 +37,14 @@ export const RemoveTradingAccount = ({
   availableOnDevice?: boolean;
   enabledExtensionAccount?: boolean;
 }) => {
-  const { onOpenFeeModal, tokenFee } = useConnectWalletProvider();
+  const {
+    openFeeModal,
+    onOpenFeeModal,
+    setOpenFeeModal,
+    tokenFee,
+    setTokenFee,
+  } = useTransactionFeeModal();
+
   const [state, setState] = useState({
     removeDevice: false,
     removeBlockchain: false,
@@ -77,12 +83,19 @@ export const RemoveTradingAccount = ({
   return (
     <Fragment>
       <ConfirmTransaction
-        action={async () => await handleRemoveBlockchain(removeProps)}
+        action={async () => {
+          await handleRemoveBlockchain(removeProps);
+          setOpenFeeModal(false);
+        }}
         actionLoading={!!loading}
         extrinsicFn={() =>
           onRemoveProxyAccountOcex([tradingAccount.address ?? ""])
         }
         sender={tradingAccount.address}
+        tokenFee={tokenFee}
+        setTokenFee={setTokenFee}
+        openFeeModal={openFeeModal}
+        setOpenFeeModal={setOpenFeeModal}
       />
       <Interaction className="w-full">
         <Interaction.Content className="flex flex-col gap-1 flex-1">

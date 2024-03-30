@@ -14,7 +14,7 @@ import { generateUsername } from "friendly-username-generator";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { createAccountValidations } from "@orderbook/core/validations";
-import { useCall } from "@orderbook/core/hooks";
+import { useCall, useTransactionFeeModal } from "@orderbook/core/hooks";
 import { RiEyeOffLine, RiEyeLine } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { getAddressFromMnemonic } from "@orderbook/core/helpers";
@@ -67,8 +67,16 @@ export const NewTradingAccount = ({
   const isLoading = false;
   const error = false;
   const [state, setState] = useState(initialState);
-  const { hasAccount, tokenFee, onOpenFeeModal, openFeeModal, hasTokenFee } =
-    useConnectWalletProvider();
+  const { hasAccount } = useConnectWalletProvider();
+
+  const {
+    hasTokenFee,
+    openFeeModal,
+    onOpenFeeModal,
+    setOpenFeeModal,
+    tokenFee,
+    setTokenFee,
+  } = useTransactionFeeModal();
 
   const {
     values,
@@ -97,6 +105,8 @@ export const NewTradingAccount = ({
         } catch (error) {
           resetForm();
           setState(initialState);
+        } finally {
+          setOpenFeeModal(false);
         }
       }
     },
@@ -124,6 +134,10 @@ export const NewTradingAccount = ({
             : onRegisterMainAccountOcex([proxyAccount])
         }
         sender={proxyAccount}
+        tokenFee={tokenFee}
+        setTokenFee={setTokenFee}
+        openFeeModal={openFeeModal}
+        setOpenFeeModal={setOpenFeeModal}
       />
       <form onSubmit={handleSubmit} ref={formRef}>
         <Interaction className="w-full">

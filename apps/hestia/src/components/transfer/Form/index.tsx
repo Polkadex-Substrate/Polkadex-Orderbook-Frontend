@@ -39,6 +39,7 @@ import {
   useCall,
   useDeposit,
   useFunds,
+  useTransactionFeeModal,
   useWithdraw,
 } from "@orderbook/core/hooks";
 import { ExtensionAccount } from "@polkadex/react-providers";
@@ -89,14 +90,7 @@ export const Form = ({
     [isPolkadexToken, selectedAsset?.id]
   );
 
-  const {
-    selectedAccount,
-    selectedWallet,
-    tokenFee,
-    onOpenFeeModal,
-    openFeeModal,
-    hasTokenFee,
-  } = useConnectWalletProvider();
+  const { selectedAccount, selectedWallet } = useConnectWalletProvider();
   const { loading: depositLoading, mutateAsync: onFetchDeposit } = useDeposit();
   const { mutateAsync: onFetchWithdraws, loading: withdrawLoading } =
     useWithdraw();
@@ -189,6 +183,7 @@ export const Form = ({
         });
       } finally {
         resetForm({ values: initialValues });
+        setOpenFeeModal(false);
       }
     }
   };
@@ -255,6 +250,14 @@ export const Form = ({
   }, [selectedAccount, isTransferFromFunding]);
 
   const { onDepositOcex } = useCall();
+  const {
+    hasTokenFee,
+    openFeeModal,
+    onOpenFeeModal,
+    setOpenFeeModal,
+    tokenFee,
+    setTokenFee,
+  } = useTransactionFeeModal();
   return (
     <Fragment>
       <ConfirmTransaction
@@ -268,6 +271,10 @@ export const Form = ({
           () => onDepositOcex([asset as unknown as string, values.amount]) // TODO: Fix types
         }
         sender={selectedWallet?.address ?? ""}
+        tokenFee={tokenFee}
+        setTokenFee={setTokenFee}
+        openFeeModal={openFeeModal}
+        setOpenFeeModal={setOpenFeeModal}
       />
       <Modal open={showPassword} onOpenChange={setShowPassword}>
         <Modal.Content>
