@@ -135,7 +135,7 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
 
   async deposit({ account, amount, api, asset }: DepositArgs): Promise<void> {
     const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
-    const ext = api.tx.ocex.deposit(asset, amountStr);
+    const ext = api.tx.ocex.deposit(asset as unknown as string, amountStr);
     const res = await signAndSendExtrinsic(
       api,
       ext,

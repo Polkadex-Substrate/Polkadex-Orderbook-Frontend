@@ -66,6 +66,7 @@ export const ConnectNewUser = ({
               errorTitle="Error"
               errorMessage={(registerError as Error)?.message ?? registerError}
               selectedExtension={selectedExtension}
+              balance={walletBalance}
               onCreateCallback={() => onNext("TradingAccountSuccessfull")}
               onClose={() => props?.onChangeInteraction(false)}
             />

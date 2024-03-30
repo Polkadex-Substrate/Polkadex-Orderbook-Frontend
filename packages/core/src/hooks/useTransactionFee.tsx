@@ -58,8 +58,9 @@ export function useTransactionFee({
 
       const data = extrinsic.meta.toHuman();
       const hash = extrinsic.hash.toString();
-      const extrinsicName = data.name?.toString();
-      const palletName = data.docs?.[0].toString();
+      const extrinsicName = data?.name?.toString();
+      const docs = data.docs as string[];
+      const palletName = docs?.[0] ?? "";
 
       return {
         fee: Number(fee),

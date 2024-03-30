@@ -26,7 +26,8 @@
         "SHOW_SHUTDOWN_POPUP",
         "UNDER_MAINTENACE",
         "MAIN_URL",
-        "BLOCKED_ASSETS"
+        "BLOCKED_ASSETS",
+        "DISABLED_FEATURES"
       ]
     }
   }
