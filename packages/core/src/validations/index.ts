@@ -49,7 +49,7 @@ export const depositValidations = (
       .test(
         ErrorMessages().TOO_SMALL,
         ErrorMessages().TOO_SMALL,
-        (value) => Number(value) >= 0.00001 // "Existential?"
+        (value) => Number(value) >= 0.00001
       )
       .test(
         ErrorMessages().CHECK_BALANCE,
