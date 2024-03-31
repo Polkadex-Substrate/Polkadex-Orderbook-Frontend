@@ -87,7 +87,7 @@ export const depositValidations = (
           const balanceAfterDeposit = parseFloat(
             (balance - valueNum).toFixed(12)
           );
-          const isValid = balanceAfterDeposit > existentialBalance;
+          const isValid = balanceAfterDeposit < existentialBalance;
           return !(!isPolkadexToken && valueNum && isValid);
         }
       ),
