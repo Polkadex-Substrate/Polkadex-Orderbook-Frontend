@@ -1,5 +1,8 @@
 import * as Yup from "yup";
-import { getDigitsAfterDecimal } from "@orderbook/core/helpers";
+import {
+  getDigitsAfterDecimal,
+  parseScientific,
+} from "@orderbook/core/helpers";
 import {
   ErrorMessages,
   MAX_DIGITS_AFTER_DECIMAL,
@@ -29,61 +32,63 @@ export const depositValidations = (
   isPolkadexToken: boolean,
   existentialBalance: number
 ) => {
+  const parseScientificValue = parseScientific(existentialBalance.toString());
   return Yup.object().shape({
     amount: Yup.string()
       .required("Required")
       .test(
-        ErrorMessages.WHITESPACE_NOT_ALLOWED,
-        ErrorMessages.WHITESPACE_NOT_ALLOWED,
+        ErrorMessages().WHITESPACE_NOT_ALLOWED,
+        ErrorMessages().WHITESPACE_NOT_ALLOWED,
         (value) => !/\s/.test(value || "")
       )
       .test(
-        ErrorMessages.MUST_BE_A_NUMBER,
-        ErrorMessages.MUST_BE_A_NUMBER,
+        ErrorMessages().MUST_BE_A_NUMBER,
+        ErrorMessages().MUST_BE_A_NUMBER,
         (value) => /^\d+(\.\d+)?$/.test(value || "")
       )
       .test(
-        ErrorMessages.TOO_SMALL,
-        ErrorMessages.TOO_SMALL,
+        ErrorMessages().TOO_SMALL,
+        ErrorMessages().TOO_SMALL,
         (value) => Number(value) >= 0.00001
       )
       .test(
-        ErrorMessages.CHECK_BALANCE,
-        ErrorMessages.CHECK_BALANCE,
+        ErrorMessages().CHECK_BALANCE,
+        ErrorMessages().CHECK_BALANCE,
         (value) => Number(value) <= Number(chainBalance)
       )
       .test(
-        ErrorMessages.CHECK_VALID_AMOUNT,
-        ErrorMessages.CHECK_VALID_AMOUNT,
+        ErrorMessages().CHECK_VALID_AMOUNT,
+        ErrorMessages().CHECK_VALID_AMOUNT,
         (value) =>
           !(value?.toString().includes("e") || value?.toString().includes("o"))
       )
       .test(
-        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
-        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
+        ErrorMessages().MAX_DIGIT_AFTER_DECIMAL,
+        ErrorMessages().MAX_DIGIT_AFTER_DECIMAL,
         (value) =>
           value
             ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
             : false
       )
       .test(
-        ErrorMessages.REMAINING_BALANCE,
-        ErrorMessages.REMAINING_BALANCE,
+        ErrorMessages().REMAINING_BALANCE,
+        ErrorMessages().REMAINING_BALANCE,
         (value) => {
           const balanceAfterDeposit = chainBalance - Number(value);
           return !(isPolkadexToken && balanceAfterDeposit < 1);
         }
       )
       .test(
-        ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
-        ErrorMessages.REMAINING_BALANCE_IF_NOT_PDEX,
+        ErrorMessages(parseScientificValue).REMAINING_BALANCE_IF_NOT_PDEX,
+        ErrorMessages(parseScientificValue).REMAINING_BALANCE_IF_NOT_PDEX,
         (value) => {
-          const balanceAfterDeposit = Number(chainBalance) - Number(value);
-          return !(
-            !isPolkadexToken &&
-            Number(value) &&
-            balanceAfterDeposit < existentialBalance
+          const balance = Number(chainBalance);
+          const valueNum = Number(value);
+          const balanceAfterDeposit = parseFloat(
+            (balance - valueNum).toFixed(12)
           );
+          const isValid = balanceAfterDeposit < existentialBalance;
+          return !(!isPolkadexToken && valueNum && isValid);
         }
       ),
   });
@@ -130,28 +135,28 @@ export const withdrawValidations = (balance: string) => {
     amount: Yup.string()
       .required("Required")
       .test(
-        ErrorMessages.WHITESPACE_NOT_ALLOWED,
-        ErrorMessages.WHITESPACE_NOT_ALLOWED,
+        ErrorMessages().WHITESPACE_NOT_ALLOWED,
+        ErrorMessages().WHITESPACE_NOT_ALLOWED,
         (value) => (value ? !/\s/.test(value) : false)
       )
       .test(
-        ErrorMessages.MUST_BE_A_NUMBER,
-        ErrorMessages.MUST_BE_A_NUMBER,
+        ErrorMessages().MUST_BE_A_NUMBER,
+        ErrorMessages().MUST_BE_A_NUMBER,
         (value) => (value ? /^\d+(\.\d+)?$/.test(value) : false)
       )
       .test(
-        ErrorMessages.TOO_SMALL,
-        ErrorMessages.TOO_SMALL,
+        ErrorMessages().TOO_SMALL,
+        ErrorMessages().TOO_SMALL,
         (value) => Number(value) >= 0.00001
       )
       .test(
-        ErrorMessages.CHECK_BALANCE,
-        ErrorMessages.CHECK_BALANCE,
+        ErrorMessages().CHECK_BALANCE,
+        ErrorMessages().CHECK_BALANCE,
         (value) => Number(value) <= Number(balance)
       )
       .test(
-        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
-        ErrorMessages.MAX_DIGIT_AFTER_DECIMAL,
+        ErrorMessages().MAX_DIGIT_AFTER_DECIMAL,
+        ErrorMessages().MAX_DIGIT_AFTER_DECIMAL,
         (value) =>
           value
             ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL

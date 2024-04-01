@@ -24,6 +24,7 @@ import { useConnectWalletProvider } from "@orderbook/core/providers/user/connect
 import {
   getChainFromTicker,
   isAssetPDEX,
+  parseScientific,
   trimFloat,
   tryUnlockTradeAccount,
 } from "@orderbook/core/helpers";
@@ -116,8 +117,9 @@ export const Form = ({
     if (onChainBalance > existentialBalance) {
       const balance = onChainBalance - existentialBalance;
       const trimmedBalance = +trimFloat({ value: balance });
-      setFieldValue("amount", trimmedBalance);
-    }
+      const formattedBalance = parseScientific(trimmedBalance.toString());
+      setFieldValue("amount", formattedBalance);
+    } else setFieldValue("amount", 0);
   };
 
   const onChangeTradingMax = () => {

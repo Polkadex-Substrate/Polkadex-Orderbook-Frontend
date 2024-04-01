@@ -7,6 +7,7 @@ import {
 } from "@polkadex/ux";
 import { useState } from "react";
 import classNames from "classnames";
+import Link from "next/link";
 
 import { TokenInfo } from "./tokenInfo";
 export const Asset = ({
@@ -24,11 +25,12 @@ export const Asset = ({
 }) => {
   const [state, setState] = useState(false);
   return (
-    <div
+    <Link
       className={classNames(
         "flex items-center gap-2 px-4  min-w-[10rem]",
         inlineView ? "py-1" : "md:border-r border-primary"
       )}
+      href={`/trading/${baseTicker}${quoteTicker}`}
     >
       <Skeleton loading={!baseTicker} className="w-full h-8 max-w-8">
         <Token
@@ -69,6 +71,6 @@ export const Asset = ({
           <TokenInfo baseTicker={baseTicker} tokenName={tokenName} />
         </HoverCard.Content>
       </HoverCard>
-    </div>
+    </Link>
   );
 };
