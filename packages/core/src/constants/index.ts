@@ -61,20 +61,19 @@ export const USER_EVENTS = {
 
 export type UserEvents = keyof typeof USER_EVENTS;
 
-export const ErrorMessages = {
+export const ErrorMessages = (existential = "0") => ({
   OCEX_ALREADY_REGISTERED: "ocex.MainAccountAlreadyRegistered: ",
 
   CHECK_VALID_AMOUNT: "Use a valid amount instead",
   CHECK_BALANCE: "The amount you entered exceeds your balance",
   REMAINING_BALANCE:
     "You need atleast 1 PDEX in your funding account to keep it alive",
-  REMAINING_BALANCE_IF_NOT_PDEX:
-    "You need atleast 0.00001 units of an asset in your funding account to keep it alive.",
+  REMAINING_BALANCE_IF_NOT_PDEX: `You need atleast units of ${existential} an asset in your funding account to keep it alive.`,
   MAX_DIGIT_AFTER_DECIMAL: "Maximum 8 digits are allowed after decimal",
   WHITESPACE_NOT_ALLOWED: "Whitespace not allowed",
   MUST_BE_A_NUMBER: "Must be a number",
   TOO_SMALL: "Too Small!",
-};
+});
 
 export const MAX_DIGITS_AFTER_DECIMAL = 8;
 export const MIN_DIGITS_AFTER_DECIMAL = 2;
