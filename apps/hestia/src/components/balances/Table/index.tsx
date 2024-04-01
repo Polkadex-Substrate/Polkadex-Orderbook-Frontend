@@ -1,5 +1,3 @@
-// TODO: Add generic empty assets
-
 import { Table as PolkadexTable, GenericMessage } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { Fragment, forwardRef, useEffect, useMemo, useState } from "react";
@@ -11,21 +9,25 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Asset } from "@orderbook/core/API";
 import classNames from "classnames";
 
-// import { ResponsiveData } from "./responsiveData";
 import { columns } from "./columns";
 import { Loading } from "./loading";
+import { ResponsiveTable } from "./responsiveTable";
 const responsiveKeys = ["inOrders", "fundingAccount"];
 
 export const Table = forwardRef<
   HTMLDivElement,
   { maxHeight: string; data: AssetsProps[]; loading: boolean }
->(({ maxHeight, data, loading }, ref) => {
-  const [state, setState] = useState<Asset | null>(null);
+>(({ maxHeight, data, loading }) => {
+  const [responsiveState, setResponsiveState] = useState(false);
+  const [responsiveData, setResponsiveData] = useState<AssetsProps | null>(
+    null
+  );
 
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    { desc: true, id: "fundingAccount" },
+  ]);
 
   const { width } = useWindowSize();
 
@@ -41,18 +43,21 @@ export const Table = forwardRef<
   const responsiveView = useMemo(() => width <= 800, [width]);
 
   useEffect(() => {
-    if (!responsiveView && !!state) setState(null);
-  }, [responsiveView, state]);
+    if (!responsiveView && !!responsiveState) {
+      setResponsiveState(false);
+      setResponsiveData(null);
+    }
+  }, [responsiveState, responsiveView]);
 
   if (loading) return <Loading />;
 
   return (
     <Fragment>
-      {/* <ResponsiveData
-        open={!!state}
-        onClose={() => setState(null)}
-        data={state}
-      /> */}
+      <ResponsiveTable
+        data={responsiveData}
+        onOpenChange={setResponsiveState}
+        open={responsiveState}
+      />
       {data?.length ? (
         <div className="flex-1 flex flex-col justify-between border-b border-secondary-base bg-level-0">
           <div
@@ -108,10 +113,21 @@ export const Table = forwardRef<
                         )
                           return null;
 
+                        const responsiveProps = responsiveView
+                          ? {
+                              className: "cursor-pointer",
+                              onClick: () => {
+                                setResponsiveState(true);
+                                setResponsiveData(row.original);
+                              },
+                            }
+                          : {};
+
                         return (
                           <PolkadexTable.Cell
                             key={cell.id}
                             align={i === 0 ? "left" : "right"}
+                            {...responsiveProps}
                           >
                             {flexRender(
                               cell.column.columnDef.cell,
