@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useWindowSize } from "usehooks-ts";
 import {
+  SortingState,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
@@ -25,11 +26,17 @@ export const BalancesTable = ({ height }: { height: number }) => {
     null
   );
 
+  const [sorting, setSorting] = useState<SortingState>([
+    { desc: true, id: "fundingAccount" },
+  ]);
+
   const { assets, loading } = useAssets();
   const { width } = useWindowSize();
   const table = useReactTable({
     data: assets,
     columns,
+    state: { sorting },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
