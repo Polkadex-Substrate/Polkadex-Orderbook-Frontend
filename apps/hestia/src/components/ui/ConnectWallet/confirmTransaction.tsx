@@ -23,6 +23,7 @@ import { useResizeObserver } from "usehooks-ts";
 import Link from "next/link";
 import {
   FeeAssetReserve,
+  OTHER_ASSET_EXISTENTIAL,
   TransactionFeeProps,
   useFunds,
   useTransactionFee,
@@ -84,6 +85,10 @@ export const ConfirmTransaction = ({
 
   const isPDEX = useMemo(() => tokenFee?.id === "PDEX", [tokenFee?.id]);
 
+  const existential = useMemo(
+    () => (isPDEX ? 1 : OTHER_ASSET_EXISTENTIAL),
+    [isPDEX]
+  );
   const selectedAssetBalance = useMemo(
     () => balances.find((e) => e.asset.id === tokenFee?.id),
     [tokenFee?.id, balances]
@@ -92,7 +97,7 @@ export const ConfirmTransaction = ({
   const error = useMemo(
     () =>
       tokenFee?.id && isPDEX
-        ? walletBalance < fee + 1
+        ? walletBalance < fee + existential
         : Number(selectedAssetBalance?.onChainBalance) < swapPrice,
     [
       tokenFee?.id,
@@ -101,12 +106,13 @@ export const ConfirmTransaction = ({
       swapPrice,
       isPDEX,
       walletBalance,
+      existential,
     ]
   );
 
   const shortHash = useMemo(() => truncateString(hash), [hash]);
   const shortAddress = useMemo(
-    () => truncateString(selectedWallet?.address ?? ""),
+    () => truncateString(selectedWallet?.address ?? "", 4),
     [selectedWallet?.address]
   );
 

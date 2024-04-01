@@ -43,7 +43,6 @@ export function useTransactionFee({
         selectedWallet?.address ?? "",
         extrinsicFn.toString()
       ),
-      !!extrinsicFn,
     ],
     queryFn: async () => {
       if (!extrinsicFn) throw new Error("No Extrinsic");
