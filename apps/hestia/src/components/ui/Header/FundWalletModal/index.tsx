@@ -48,7 +48,7 @@ export const FundWalletModal = ({
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 px-4">
             <Typography.Text appearance="secondary">
-              I have crypto asset on another network
+              I have crypto assets on another network
             </Typography.Text>
             <span className="bg-primary-base px-1 py-0.5 rounded-sm text-xs font-medium">
               Step 1
@@ -58,7 +58,7 @@ export const FundWalletModal = ({
             <Card
               icon="Bridge"
               title="Decentralized bridge"
-              description="Bridge your crypto to Polkadex network and vice versa."
+              description="Bridge your crypto to Polkadex and vice versa."
             >
               <div className="flex justify-between gap-2 sm:items-center max-sm:flex-col">
                 <Dropdown>
@@ -148,7 +148,7 @@ export const FundWalletModal = ({
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 px-4">
             <Typography.Text appearance="secondary">
-              I have crypto asset on Polkadex network
+              I have crypto assets on Polkadex
             </Typography.Text>
             <span className="bg-primary-base px-1 py-0.5 rounded-sm text-xs font-medium">
               Step 2
@@ -166,7 +166,7 @@ export const FundWalletModal = ({
         <div className="flex flex-col gap-3">
           <div className="px-4">
             <Typography.Text appearance="secondary">
-              I don&apos;t have crypto assets
+              I don&apos;t have crypto assets yet
             </Typography.Text>
           </div>
           <div className="flex flex-col gap-2">
@@ -180,7 +180,7 @@ export const FundWalletModal = ({
             <Card
               icon="CreditCard"
               title="Credit card"
-              description="Buy PDEX with one of our partners like Simplex."
+              description="Buy PDEX with our credit card partner Simplex"
               href="https://buy.simplex.com"
               target="_blank"
             />
