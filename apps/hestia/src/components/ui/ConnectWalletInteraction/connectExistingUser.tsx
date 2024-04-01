@@ -176,7 +176,6 @@ export const ConnectExistingUser = ({
               errorTitle="Error"
               errorMessage={(registerError as Error)?.message ?? registerError}
               selectedExtension={selectedExtension}
-              balance={walletBalance}
               onCreateCallback={() => onNext("TradingAccountSuccessfull")}
               onClose={() => props?.onChangeInteraction(false)}
             />
@@ -198,11 +197,8 @@ export const ConnectExistingUser = ({
                   tempTrading?.address as string
                 )
               }
-              onRemoveFromChain={async () =>
-                await onRemoveTradingAccountFromChain?.({
-                  main: selectedWallet?.address as string,
-                  proxy: tempTrading?.address as string,
-                })
+              onRemoveFromChain={async (e) =>
+                await onRemoveTradingAccountFromChain?.(e)
               }
               loading={removingStatus === "loading"}
               errorTitle="Error"

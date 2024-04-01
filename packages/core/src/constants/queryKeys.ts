@@ -63,6 +63,12 @@ export const QUERY_KEYS = {
     "transactionFee",
     mainAddress,
   ],
+  transactionFees: (address: string, extrinsicName: string) => [
+    PREFIX,
+    "transactionFees",
+    address,
+    extrinsicName,
+  ],
   epochs: () => [PREFIX, "epochs"],
   lmpMarkets: (epoch: number) => [PREFIX, "lmpMarkets", epoch],
   lmpLeaderboard: (market: string) => [PREFIX, "lmpLeaderboard", market],
@@ -78,9 +84,16 @@ export const QUERY_KEYS = {
     market,
     mainAddress,
   ],
-  poolReserves: (swapConnection: string) => [
+  poolReserves: (swapConnection: boolean, assetsLength: number) => [
     PREFIX,
     "poolReserves",
     swapConnection,
+    assetsLength,
+  ],
+  quotePrice: (assetName: string, assetsAmount: number) => [
+    PREFIX,
+    "quotePrice",
+    assetName,
+    assetsAmount,
   ],
 };

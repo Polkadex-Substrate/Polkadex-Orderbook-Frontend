@@ -100,6 +100,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const onFetchClaimWithdraw = async ({
     sid,
     assetIds = [],
+    assetId,
   }: A.WithdrawsClaimFetch["payload"]) => {
     try {
       const api = nativeApiState.api;
@@ -128,7 +129,8 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
         api,
         signer,
         extensionAccount?.address,
-        sid
+        sid,
+        assetId
       );
       if (res.isSuccess) {
         dispatch(A.withdrawsClaimData({ sid }));
@@ -159,10 +161,18 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     api: ApiPromise,
     signer: Signer,
     account: string,
-    sid: number
+    sid: number,
+    assetId?: string
   ): Promise<ExtrinsicResult> {
     const ext = api.tx.ocex.claimWithdraw(sid, account);
-    return await signAndSendExtrinsic(api, ext, { signer }, account, true);
+    return await signAndSendExtrinsic(
+      api,
+      ext,
+      { signer },
+      account,
+      true,
+      assetId
+    );
   }
 
   return (

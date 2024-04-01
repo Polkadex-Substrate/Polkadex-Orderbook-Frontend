@@ -201,7 +201,6 @@ export const Content = () => {
               errorTitle="Error"
               errorMessage={(registerError as Error)?.message ?? registerError}
               selectedExtension={selectedExtension}
-              balance={walletBalance}
               onCreateCallback={() =>
                 props?.onPage("TradingAccountSuccessfull", true)
               }

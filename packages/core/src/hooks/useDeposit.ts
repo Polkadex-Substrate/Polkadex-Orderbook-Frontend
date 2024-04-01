@@ -10,6 +10,7 @@ type DepositArgs = {
   amount: string | number;
   asset: Record<string, string | null>;
   account: ExtensionAccount;
+  assetId?: string;
 };
 
 export const useDeposit = () => {
@@ -18,7 +19,7 @@ export const useDeposit = () => {
   const { isReady } = useOrderbookService();
 
   const { mutateAsync, status } = useMutation({
-    mutationFn: async ({ asset, amount, account }: DepositArgs) => {
+    mutationFn: async ({ asset, amount, account, assetId }: DepositArgs) => {
       if (!isReady) throw new Error("Orderbook service not initialized");
 
       if (!api || !api?.isConnected)
@@ -34,6 +35,7 @@ export const useDeposit = () => {
         account,
         asset,
         amount,
+        assetId,
       });
     },
     onError: (error) => {

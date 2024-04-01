@@ -1,19 +1,11 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import {
-  Button,
-  Input,
-  Interaction,
-  Loading,
-  Typography,
-  Skeleton,
-} from "@polkadex/ux";
+import { Button, Input, Interaction, Loading, Typography } from "@polkadex/ux";
 import { useFormik } from "formik";
 import { generateUsername } from "friendly-username-generator";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { createAccountValidations } from "@orderbook/core/validations";
-import { useTradingAccountFee } from "@orderbook/core/hooks";
 
 import {
   ErrorMessage,
@@ -55,7 +47,6 @@ export const NewTradingAccount = ({
 }) => {
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(1);
-  const { txFee, txFeeLoading } = useTradingAccountFee();
 
   const isLoading = false;
   const error = false;
@@ -183,14 +174,6 @@ export const NewTradingAccount = ({
             <div className="flex flex-col gap-2">
               <GenericInfoCard label="Your balance">
                 {balance} PDEX
-              </GenericInfoCard>
-              <GenericInfoCard label="Transaction fee">
-                <Skeleton
-                  loading={txFeeLoading}
-                  className="bg-level-5 w-24 h-4"
-                >
-                  {txFee}
-                </Skeleton>
               </GenericInfoCard>
             </div>
           </Interaction.Content>
