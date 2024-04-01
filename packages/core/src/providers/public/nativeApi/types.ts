@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from "react";
 import { ApiPromise } from "@polkadot/api";
-import { LmpApi } from "@polkadex/polkadex-api";
+import { LmpApi, SwapApi } from "@polkadex/polkadex-api";
 
 export const orderbookTypes = {
   Address: "MultiAddress",
@@ -66,6 +66,7 @@ export interface NativeApiState {
   hasExtension?: boolean;
   api?: ApiPromise;
   lmp?: LmpApi;
+  swap?: SwapApi;
 }
 
 export type NativeApiProps = {

@@ -1,8 +1,7 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import { SwapApi } from "@polkadex/polkadex-api";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
-import { useAssets } from "@orderbook/core/index";
+import { QUERY_KEYS, useAssets } from "@orderbook/core/index";
 
 export const usePool = ({
   asset,
@@ -11,49 +10,42 @@ export const usePool = ({
   asset: string;
   amount: number;
 }) => {
-  const { api } = useNativeApi();
+  const { swap } = useNativeApi();
   const { assets } = useAssets();
 
-  const swapConnection = useMemo(() => (api ? new SwapApi(api) : null), [api]);
-  const enableQuery = useMemo(
-    () => !!assets && !!swapConnection,
-    [assets, swapConnection]
-  );
+  const enableQuery = useMemo(() => !!assets && !!swap, [assets, swap]);
 
   const handleSwapReserve = useCallback(
-    async (assetId: string) =>
-      await swapConnection?.getReserves("PDEX", assetId),
-    [swapConnection]
+    async (assetId: string) => await swap?.getReserves("PDEX", assetId),
+    [swap]
   );
 
   const { data: poolReserves, isSuccess: poolReservesSuccess } = useQuery({
-    queryKey: ["poolReserves", !!swapConnection, assets.length],
+    queryKey: [QUERY_KEYS.poolReserves(!!swap, assets.length)],
     enabled: enableQuery,
     queryFn: async () => {
-      if (swapConnection) {
-        const results = await Promise.all(
-          assets.map(async (e) => {
-            if (e.id === "PDEX")
-              return {
-                name: e.ticker,
-                id: e.id,
-                poolReserve: 1,
-              };
-            else {
-              const reserve = await handleSwapReserve(e.id);
-              return {
-                name: e.ticker,
-                id: e.id,
-                poolReserve: reserve?.base,
-              };
-            }
-          })
-        );
+      const results = await Promise.all(
+        assets.map(async (e) => {
+          if (e.id === "PDEX")
+            return {
+              name: e.ticker,
+              id: e.id,
+              poolReserve: 1,
+            };
+          else {
+            const reserve = await handleSwapReserve(e.id);
+            return {
+              name: e.ticker,
+              id: e.id,
+              poolReserve: reserve?.base,
+            };
+          }
+        })
+      );
 
-        return results.sort(
-          (a, b) => Number(b.poolReserve) - Number(a.poolReserve)
-        );
-      }
+      return results.sort(
+        (a, b) => Number(b.poolReserve) - Number(a.poolReserve)
+      );
     },
     onError: (e) => console.log("Error", e),
   });
@@ -64,17 +56,10 @@ export const usePool = ({
   );
 
   const { data: swapPrice, isLoading: swapLoading } = useQuery({
-    queryKey: ["quotePrice", !!swapConnection, enableQuotePrice, asset, amount],
+    queryKey: [QUERY_KEYS.quotePrice(asset, amount)],
     enabled: enableQuotePrice,
     queryFn: async () => {
-      if (swapConnection && asset) {
-        const res = await swapConnection?.quotePriceTokensForExactTokens(
-          asset,
-          "PDEX",
-          amount
-        );
-        return res;
-      }
+      return await swap?.quotePriceTokensForExactTokens(asset, "PDEX", amount);
     },
     onError: (e) => console.log("Error", e),
   });
