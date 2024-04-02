@@ -167,7 +167,7 @@ export const Profile = ({
                   </AccountCard>
                 </div>
               </Dropdown.Trigger>
-              <Dropdown.Content className="min-w-[20rem]">
+              <Dropdown.Content className="min-w-[20rem] bg-backgroundBase">
                 <div className="flex flex-col gap-0 p-2 rounded-md">
                   <Typography.Text appearance="secondary" size="sm">
                     Available trading account(s)
@@ -292,7 +292,7 @@ const TradingAccountCard = ({
       onSetState(false);
     }}
   >
-    <AccountCard.Inverted
+    <AccountCard
       name={account.meta.name}
       address={account.address}
       withIcon={false}
@@ -335,6 +335,6 @@ const TradingAccountCard = ({
           </Dropdown.Content>
         </Dropdown>
       </div>
-    </AccountCard.Inverted>
+    </AccountCard>
   </div>
 );

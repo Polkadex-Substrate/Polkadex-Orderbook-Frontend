@@ -237,7 +237,7 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
       orderType: "LIMIT",
       symbol: [market?.baseAsset?.id, market?.quoteAsset?.id],
       side: isSell ? "Ask" : "Bid",
-      price: Number(price),
+      price,
       amount: Number(amount),
       market,
     });
