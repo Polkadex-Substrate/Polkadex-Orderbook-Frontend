@@ -23,6 +23,8 @@ export const ConnectWalletInteraction = () => {
       open={!!connectExtension}
       onOpenChange={onToogleConnectExtension}
       closeOnClickOutside
+      placement="center left"
+      className="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
     >
       <Modal.Content>
         <Multistep.Switch>

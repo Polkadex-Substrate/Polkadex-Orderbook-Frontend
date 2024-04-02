@@ -8,7 +8,11 @@ import {
   Spinner,
 } from "@polkadex/ux";
 import { forwardRef, useMemo } from "react";
-import { useTransactions } from "@orderbook/core/hooks";
+import {
+  useCall,
+  useTransactionFeeModal,
+  useTransactions,
+} from "@orderbook/core/hooks";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
   WithdrawGroup,
@@ -22,6 +26,7 @@ import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsPr
 import { Table } from "./table";
 
 import { BatchCard, SkeletonCollection } from "@/components/ui/ReadyToUse";
+import { ConfirmTransaction } from "@/components/ui/ConnectWallet/confirmTransaction";
 export interface ReadyToClaimProps extends WithdrawGroupItem {
   token: {
     name: string;
@@ -46,7 +51,6 @@ export const ReadyToClaim = forwardRef<HTMLDivElement, { maxHeight: string }>(
     const { extensionAccounts } = useExtensionAccounts();
     const { loading, readyWithdrawals } = useTransactions();
     const { onFetchClaimWithdraw, claimsInLoading } = useWithdrawsProvider();
-
     const { mainAddress } = selectedAddresses;
     const fundingWallet = useMemo(
       () => getFundingAccountDetail(mainAddress, extensionAccounts),
@@ -92,6 +96,14 @@ export const ReadyToClaim = forwardRef<HTMLDivElement, { maxHeight: string }>(
       [readyWithdrawals, fundingWallet?.name, fundingWallet?.address]
     );
 
+    const {
+      openFeeModal,
+      onOpenFeeModal,
+      setOpenFeeModal,
+      tokenFee,
+      setTokenFee,
+    } = useTransactionFeeModal();
+    const { onClaimWithdrawOcex } = useCall();
     if (loading) return <SkeletonCollection />;
 
     return (
@@ -123,10 +135,33 @@ export const ReadyToClaim = forwardRef<HTMLDivElement, { maxHeight: string }>(
                     ? `(${totalAmountSum} ${icons[0]})`
                     : "";
 
+                  const assetIds = value.items.map((e) => e.token.assetId);
+
                   return (
                     <Accordion.Item value={value.id.toString()} key={value.id}>
                       <Accordion.Trigger className=" items-center py-4 border-b border-primary bg-level-0">
                         <div className="flex items-center justify-between flex-1">
+                          <ConfirmTransaction
+                            action={() => {
+                              onFetchClaimWithdraw({
+                                sid: value.sid,
+                                assetIds,
+                                assetId: tokenFee?.id,
+                              });
+                            }}
+                            actionLoading={!!transactionLoading}
+                            extrinsicFn={() =>
+                              onClaimWithdrawOcex([
+                                value.sid as unknown as number,
+                                assetIds as unknown as Uint8Array,
+                              ])
+                            }
+                            sender={fundingWallet?.address ?? ""}
+                            tokenFee={tokenFee}
+                            setTokenFee={setTokenFee}
+                            openFeeModal={openFeeModal}
+                            setOpenFeeModal={setOpenFeeModal}
+                          />
                           <BatchCard
                             icons={icons as (keyof typeof Tokens)[]}
                             title={`Batch ${value.sid}`}
@@ -138,12 +173,7 @@ export const ReadyToClaim = forwardRef<HTMLDivElement, { maxHeight: string }>(
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              onFetchClaimWithdraw({
-                                sid: value.sid,
-                                assetIds: value.items.map(
-                                  (e) => e.token.assetId
-                                ),
-                              });
+                              onOpenFeeModal();
                             }}
                           >
                             {transactionLoading ? (

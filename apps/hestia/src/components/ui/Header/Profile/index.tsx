@@ -89,10 +89,10 @@ export const Profile = ({
                 browserAccountName={selectedAccount?.meta.name ?? ""}
               />
             </Popover.Trigger>
-            <Popover.Content withArrow>
+            <Popover.Content withArrow className="z-[15]">
               <Content />
             </Popover.Content>
-            <Popover.Overlay />
+            <Popover.Overlay className="z-[14]" />
           </Popover>
         )}
 

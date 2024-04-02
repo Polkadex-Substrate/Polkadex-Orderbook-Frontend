@@ -67,6 +67,7 @@ const nextConfig = {
     SUBSCAN_API: process.env.SUBSCAN_API,
     SENTRY_DSN: process.env.SENTRY_DSN,
     SENTRY_AUTH: process.env.SENTRY_AUTH,
+    DISABLED_FEATURES: process.env.DISABLED_FEATURES,
   },
 };
 

@@ -5,7 +5,7 @@ import {
   createApi,
   statics,
 } from "@orderbook/core/providers/public/nativeApi/statics";
-import { LmpApi } from "@polkadex/polkadex-api";
+import { LmpApi, SwapApi } from "@polkadex/polkadex-api";
 
 import { Provider } from "./context";
 import { nativeApiReducer, initialState } from "./reducer";
@@ -15,13 +15,17 @@ import * as A from "./actions";
 export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
   const [state, dispatch] = useReducer(nativeApiReducer, initialState);
   const [lmp, setLmp] = useState<LmpApi>();
+  const [swap, setSwap] = useState<SwapApi>();
+
   const shouldRangerConnect =
     !state.timestamp && !state.connected && !state.api;
 
   useEffect(() => {
     const onReady = (api: ApiPromise) => {
       const lmp = new LmpApi(api);
+      const swap = new SwapApi(api);
       setLmp(lmp);
+      setSwap(swap);
       dispatch(A.nativeApiConnectData(api));
     };
     const onConnectError = () => {
@@ -45,6 +49,7 @@ export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
       value={{
         ...state,
         lmp,
+        swap,
       }}
     >
       {children}

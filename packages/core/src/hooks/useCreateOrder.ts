@@ -22,7 +22,7 @@ import { NOTIFICATIONS } from "../constants";
 type CreateOrderArgs = {
   symbol: string[];
   side: OrderSide;
-  price: number;
+  price: string;
   orderType: OrderType;
   amount: number;
   market: Market;

@@ -34,108 +34,127 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
   }
 
   async cancelOrder(data: ExecuteArgs): Promise<void> {
-    // INFO: Temporary fix => It's actually a backend issue
-    const result = await sendQueryToAppSync<GraphQLResult<any>>({
-      query: mutation.place_order,
-      variables: { input: { payload: data.payload } },
-      token: data.token,
-    });
-    if (result.errors && result.errors.length > 0) {
-      let concatError = "";
-      result.errors.forEach((error) => {
-        concatError += error.message;
-        concatError += ":";
+    try {
+      // INFO: Temporary fix => It's actually a backend issue
+      const result = await sendQueryToAppSync<GraphQLResult<any>>({
+        query: mutation.place_order,
+        variables: { input: { payload: data.payload } },
+        token: data.token,
       });
-      throw new Error(concatError);
-    }
-    if (result?.data?.place_order) {
-      const resp: UserActionLambdaResp = JSON.parse(result.data.place_order);
-      if (!resp.is_success) {
-        throw new Error(resp.body);
+      if (result?.data?.place_order) {
+        const resp: UserActionLambdaResp = JSON.parse(result.data.place_order);
+        if (!resp.is_success) {
+          throw new Error(resp.body);
+        }
+      } else {
+        throw new Error("Cancel order failed: No valid response from server");
       }
-    } else {
-      throw new Error("Cancel order failed: No valid response from server");
+    } catch (error) {
+      const errors = (error as GraphQLResult).errors;
+      if (errors && errors.length > 0) {
+        let concatError = "";
+        errors.forEach((error) => {
+          concatError += error.message;
+          concatError += ":";
+        });
+        throw new Error(concatError);
+      }
     }
   }
 
   async placeOrder(data: ExecuteArgs): Promise<void> {
-    const result = await sendQueryToAppSync<GraphQLResult<Place_orderMutation>>(
-      {
+    try {
+      const result = await sendQueryToAppSync<
+        GraphQLResult<Place_orderMutation>
+      >({
         query: mutation.place_order,
         variables: { input: { payload: data.payload } },
         token: data.token,
-      }
-    );
-    if (result.errors && result.errors.length > 0) {
-      let concatError = "";
-      result.errors.forEach((error) => {
-        concatError += error.message;
-        concatError += ":";
       });
-      throw new Error(concatError);
-    }
-    if (result?.data?.place_order) {
-      const resp: UserActionLambdaResp = JSON.parse(result.data.place_order);
-      if (!resp.is_success) {
-        throw new Error(resp.body);
+
+      if (result?.data?.place_order) {
+        const resp: UserActionLambdaResp = JSON.parse(result.data.place_order);
+        if (!resp.is_success) {
+          throw new Error(resp.body);
+        }
+      } else {
+        throw new Error("Place order failed: No valid response from server");
       }
-    } else {
-      throw new Error("Place order failed: No valid response from server");
+    } catch (error) {
+      const errors = (error as GraphQLResult).errors;
+      if (errors && errors.length > 0) {
+        let concatError = "";
+        errors.forEach((error) => {
+          concatError += error.message;
+          concatError += ":";
+        });
+        throw new Error(concatError);
+      }
     }
   }
 
   async withdraw(data: WithdrawArgs): Promise<void> {
-    const payload = JSON.stringify({ Withdraw: data.payload });
-    const result = await sendQueryToAppSync<GraphQLResult<WithdrawMutation>>({
-      query: mutation.withdraw,
-      variables: { input: { payload } },
-      token: data.address,
-    });
-    if (result.errors && result.errors.length > 0) {
-      let concatError = "";
-      result.errors.forEach((error) => {
-        concatError += error.message;
-        concatError += ":";
+    try {
+      const payload = JSON.stringify({ Withdraw: data.payload });
+      const result = await sendQueryToAppSync<GraphQLResult<WithdrawMutation>>({
+        query: mutation.withdraw,
+        variables: { input: { payload } },
+        token: data.address,
       });
-      throw new Error(concatError);
-    }
-    if (result?.data?.withdraw) {
-      const resp: UserActionLambdaResp = JSON.parse(result.data.withdraw);
-      if (!resp.is_success) {
-        throw new Error(resp.body);
+      if (result?.data?.withdraw) {
+        const resp: UserActionLambdaResp = JSON.parse(result.data.withdraw);
+        if (!resp.is_success) {
+          throw new Error(resp.body);
+        }
+      } else {
+        throw new Error("withdraw failed: No valid response from server");
       }
-    } else {
-      throw new Error("withdraw failed: No valid response from server");
+    } catch (error) {
+      const errors = (error as GraphQLResult).errors;
+      if (errors && errors.length > 0) {
+        let concatError = "";
+        errors.forEach((error) => {
+          concatError += error.message;
+          concatError += ":";
+        });
+        throw new Error(concatError);
+      }
     }
   }
 
   async cancelAll({ payload, token }: ExecuteArgs): Promise<void> {
-    const result = await sendQueryToAppSync<GraphQLResult<Cancel_allMutation>>({
-      query: mutation.cancel_all,
-      variables: { input: { payload } },
-      token,
-    });
-    if (result.errors && result.errors.length > 0) {
-      let concatError = "";
-      result.errors.forEach((error) => {
-        concatError += error.message;
-        concatError += ":";
+    try {
+      const result = await sendQueryToAppSync<
+        GraphQLResult<Cancel_allMutation>
+      >({
+        query: mutation.cancel_all,
+        variables: { input: { payload } },
+        token,
       });
-      throw new Error(concatError);
-    }
-    if (result?.data?.cancel_all) {
-      const resp: UserActionLambdaResp = JSON.parse(result.data.cancel_all);
-      if (!resp.is_success) {
-        throw new Error(resp.body);
+      if (result?.data?.cancel_all) {
+        const resp: UserActionLambdaResp = JSON.parse(result.data.cancel_all);
+        if (!resp.is_success) {
+          throw new Error(resp.body);
+        }
+      } else {
+        throw new Error("cancelAll failed: No valid response from server");
       }
-    } else {
-      throw new Error("cancelAll failed: No valid response from server");
+    } catch (error) {
+      const errors = (error as GraphQLResult).errors;
+      if (errors && errors.length > 0) {
+        let concatError = "";
+        errors.forEach((error) => {
+          concatError += error.message;
+          concatError += ":";
+        });
+        throw new Error(concatError);
+      }
     }
   }
 
   async deposit({ account, amount, api, asset }: DepositArgs): Promise<void> {
     const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
-    const ext = api.tx.ocex.deposit(asset, amountStr);
+    const ext = api.tx.ocex.deposit(asset as unknown as string, amountStr);
     const res = await signAndSendExtrinsic(
       api,
       ext,

@@ -57,7 +57,6 @@ export const InsufficientBalance = ({
                 <GenericExternalCard
                   href="https://thea.polkadex.trade/"
                   icon="DecentralizedBridge"
-                  disabled
                 >
                   Decentralized bridge
                 </GenericExternalCard>

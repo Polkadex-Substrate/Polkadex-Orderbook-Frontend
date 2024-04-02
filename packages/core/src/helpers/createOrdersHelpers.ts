@@ -16,7 +16,7 @@ export const createOrderPayload = (
   baseAsset: string | null,
   quoteAsset: string | null,
   quantity: number,
-  price: number,
+  price: number | string,
   timestamp = 0,
   clientOrderId: Uint8Array,
   mainAddress: string
