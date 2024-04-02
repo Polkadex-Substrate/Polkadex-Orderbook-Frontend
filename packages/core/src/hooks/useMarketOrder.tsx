@@ -92,7 +92,7 @@ export const useMarketOrder = ({
       orderType: "MARKET",
       symbol: [market?.baseAsset?.id, market?.quoteAsset?.id],
       side: isSell ? "Ask" : "Bid",
-      price: 0,
+      price: "0",
       amount: Number(amount),
       market,
     });

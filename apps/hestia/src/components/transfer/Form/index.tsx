@@ -124,8 +124,9 @@ export const Form = ({
 
   const onChangeTradingMax = () => {
     const availableAmount = Number(selectedAsset?.free_balance);
-    const trimmedBalance = +trimFloat({ value: availableAmount });
-    setFieldValue("amount", trimmedBalance);
+    const trimmedBalance = trimFloat({ value: availableAmount });
+    const formattedBalance = parseScientific(trimmedBalance);
+    setFieldValue("amount", formattedBalance);
   };
 
   const handleMax = (e: MouseEvent<HTMLElement>) => {
