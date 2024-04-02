@@ -50,9 +50,10 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
         throw new Error("Cancel order failed: No valid response from server");
       }
     } catch (error) {
-      if (error.errors && error.errors.length > 0) {
+      const errors = (error as GraphQLResult).errors;
+      if (errors && errors.length > 0) {
         let concatError = "";
-        error.errors.forEach((error) => {
+        errors.forEach((error) => {
           concatError += error.message;
           concatError += ":";
         });
@@ -80,9 +81,10 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
         throw new Error("Place order failed: No valid response from server");
       }
     } catch (error) {
-      if (error.errors && error.errors.length > 0) {
+      const errors = (error as GraphQLResult).errors;
+      if (errors && errors.length > 0) {
         let concatError = "";
-        error.errors.forEach((error) => {
+        errors.forEach((error) => {
           concatError += error.message;
           concatError += ":";
         });
@@ -108,9 +110,10 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
         throw new Error("withdraw failed: No valid response from server");
       }
     } catch (error) {
-      if (error.errors && error.errors.length > 0) {
+      const errors = (error as GraphQLResult).errors;
+      if (errors && errors.length > 0) {
         let concatError = "";
-        error.errors.forEach((error) => {
+        errors.forEach((error) => {
           concatError += error.message;
           concatError += ":";
         });
@@ -137,9 +140,10 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
         throw new Error("cancelAll failed: No valid response from server");
       }
     } catch (error) {
-      if (error.errors && error.errors.length > 0) {
+      const errors = (error as GraphQLResult).errors;
+      if (errors && errors.length > 0) {
         let concatError = "";
-        error.errors.forEach((error) => {
+        errors.forEach((error) => {
           concatError += error.message;
           concatError += ":";
         });
