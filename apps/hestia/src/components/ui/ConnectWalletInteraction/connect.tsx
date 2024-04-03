@@ -1,9 +1,9 @@
 "use client";
 
 import { useExtensionAccounts, useExtensions } from "@polkadex/react-providers";
-import { useCallback, useMemo } from "react";
+import { Fragment, useCallback, useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
-import { Multistep } from "@polkadex/ux";
+import { Interactable, useInteractableProvider } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
@@ -16,24 +16,43 @@ import { Authorization } from "../ConnectWallet/authorization";
 import { ConnectWallet } from "../ConnectWallet/connectWallet";
 import { UnlockAccount } from "../ReadyToUse/unlockAccount";
 
-import { SwitchKeys } from ".";
+import { InteractableProps } from ".";
 
-export type ConnectKeys =
-  | "ConnectAuthorization"
-  | "ConnectWalletOrderbook"
-  | "ConnectFundingWallets"
-  | "ConnectTradingAccount"
-  | "RemoveTradingAccount"
-  | "ImportTradingAccount"
-  | "ImportTradingAccountMnemonic";
+export const Connect = ({ onClose, onNext }: InteractableProps) => {
+  return (
+    <Interactable>
+      <Interactable.Trigger>
+        <TriggerCompontent onClose={onClose} />
+      </Interactable.Trigger>
+      <Interactable.Content>
+        <CardsCompontent onClose={onClose} onNext={onNext} />
+      </Interactable.Content>
+    </Interactable>
+  );
+};
 
-export const Connect = ({
-  onClose,
-  onNext,
-}: {
-  onClose: () => void;
-  onNext: (v: SwitchKeys) => void;
-}) => {
+const TriggerCompontent = ({ onClose }: { onClose: () => void }) => {
+  const { setPage } = useInteractableProvider();
+  const { onSelectExtension, localTradingAccounts } =
+    useConnectWalletProvider();
+  const { extensionsStatus } = useExtensions();
+
+  return (
+    <ConnectWallet
+      installedExtensions={extensionsStatus}
+      onConnectProvider={(e) => onSelectExtension?.(e)}
+      onBack={onClose}
+      onConnectCallback={() => setPage("Authorization")}
+    >
+      <ConnectTradingAccountCard
+        tradingAccountLentgh={localTradingAccounts?.length ?? 0}
+        onOpenInteraction={() => setPage("ConnectTradingAccount")}
+      />
+    </ConnectWallet>
+  );
+};
+
+const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
   const {
     selectedExtension,
     selectedWallet,
@@ -56,9 +75,9 @@ export const Connect = ({
     hasAccount,
   } = useConnectWalletProvider();
 
+  const { setPage, onReset } = useInteractableProvider();
   const sourceId = selectedExtension?.id;
 
-  const { extensionsStatus } = useExtensions();
   const { connectExtensionAccounts, extensionAccounts } =
     useExtensionAccounts();
 
@@ -82,123 +101,102 @@ export const Connect = ({
   );
 
   return (
-    <Multistep.Interactive resetOnUnmount closeOnClickOutside>
-      {(props) => (
-        <>
-          <Multistep.Trigger>
-            <ConnectWallet
-              key="ConnectWalletOrderbook"
-              installedExtensions={extensionsStatus}
-              onConnectProvider={(e) => onSelectExtension?.(e)}
-              onBack={onClose}
-              onConnectCallback={() => props?.onPage("Authorization", true)}
-            >
-              <ConnectTradingAccountCard
-                tradingAccountLentgh={localTradingAccounts?.length ?? 0}
-                onOpenInteraction={() =>
-                  props?.onPage("ConnectTradingAccount", true)
-                }
-              />
-            </ConnectWallet>
-          </Multistep.Trigger>
-          <Multistep.Content>
-            <Authorization
-              key="ConnectAuthorization"
-              onAction={async () =>
-                await connectExtensionAccounts(selectedExtension?.id as string)
-              }
-              extensionIcon={selectedExtension?.id as string}
-              extensionName={selectedExtension?.title}
-              onActionCallback={() => props?.onPage("ConnectFundingWallets")}
-              onClose={props?.onReset}
-            />
-            <ExtensionAccounts
-              key="ConnectFundingWallets"
-              extensionAccounts={walletsFiltered}
-              loading={!!mainProxiesLoading}
-              success={!!mainProxiesSuccess}
-              onSelectExtensionAccount={(e) => onSelectWallet?.(e)}
-              onTryAgain={() =>
-                selectedExtension && onSelectExtension?.(selectedExtension)
-              }
-              onRefresh={async () =>
-                await connectExtensionAccounts(
-                  selectedExtension?.title as string
-                )
-              }
-              onClose={props?.onReset}
-              onRedirect={onRedirect}
-            />
-            <UnlockAccount
-              key="UnlockBrowserAccount"
-              tempBrowserAccount={tempTrading}
-              onClose={() => props?.onPage("ConnectTradingAccount")}
-              onAction={(account, password) =>
-                onExportTradeAccount({ account, password })
-              }
-              onResetTempBrowserAccount={onResetTempTrading}
-            />
-            <ConnectTradingAccount
-              key="ConnectTradingAccount"
-              accounts={localTradingAccounts}
-              onSelect={(e) =>
-                onSelectTradingAccount?.({ tradeAddress: e.address })
-              }
-              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
-              onClose={() => props?.onReset()}
-              onImport={() => props?.onPage("ImportTradingAccount")}
-              onSelectCallback={onClose}
-              onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}
-              onExportBrowserAccount={(account) =>
-                onExportTradeAccount({ account })
-              }
-              onExportBrowserAccountCallback={() =>
-                props?.onPage("UnlockBrowserAccount")
-              }
-              onImportMnemonic={() =>
-                props?.onPage("ImportTradingAccountMnemonic")
-              }
-              enabledExtensionAccount
-            />
-            <ImportTradingAccount
-              key="ImportTradingAccount"
-              onImport={async (e) => {
-                await onImportFromFile?.(e);
-                onClose();
-              }}
-              onRedirect={() => props?.onPage("ConnectTradingAccount")}
-              onClose={() => props?.onPage("ConnectTradingAccount")}
-              loading={importFromFileStatus === "loading"}
-            />
-            <ImportTradingAccountMnemonic
-              key="ImportTradingAccountMnemonic"
-              onImport={async (e) => {
-                await onImportFromMnemonic?.(e);
-                onClose();
-              }}
-              onCancel={() => props?.onPage("ConnectTradingAccount")}
-              loading={importFromMnemonicStatus === "loading"}
-              errorMessage={
-                (importFromMnemonicError as Error)?.message ??
-                importFromMnemonicError
-              }
-            />
-            <RemoveTradingAccount
-              key="RemoveTradingAccount"
-              tradingAccount={tempTrading as TradeAccount}
-              onRemoveFromDevice={() =>
-                onRemoveTradingAccountFromDevice?.(
-                  tempTrading?.address as string
-                )
-              }
-              selectedExtension={selectedExtension}
-              availableOnDevice={availableOnDevice}
-              onCancel={() => props?.onPage("ConnectTradingAccount")}
-              enabledExtensionAccount
-            />
-          </Multistep.Content>
-        </>
-      )}
-    </Multistep.Interactive>
+    <Fragment>
+      <Interactable.Card pageName="Authorization">
+        <Authorization
+          onAction={async () =>
+            await connectExtensionAccounts(selectedExtension?.id as string)
+          }
+          extensionIcon={selectedExtension?.id as string}
+          extensionName={selectedExtension?.title}
+          onActionCallback={() => setPage("ConnectFundingWallets")}
+          onClose={onReset}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="ConnectFundingWallets">
+        <ExtensionAccounts
+          extensionAccounts={walletsFiltered}
+          loading={!!mainProxiesLoading}
+          success={!!mainProxiesSuccess}
+          onSelectExtensionAccount={(e) => onSelectWallet?.(e)}
+          onTryAgain={() =>
+            selectedExtension && onSelectExtension?.(selectedExtension)
+          }
+          onRefresh={async () =>
+            await connectExtensionAccounts(selectedExtension?.title as string)
+          }
+          onClose={onReset}
+          onRedirect={onRedirect}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="UnlockBrowserAccount">
+        <UnlockAccount
+          tempBrowserAccount={tempTrading}
+          onClose={() => setPage("ConnectTradingAccount")}
+          onAction={(account, password) =>
+            onExportTradeAccount({ account, password })
+          }
+          onResetTempBrowserAccount={onResetTempTrading}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="ConnectTradingAccount">
+        <ConnectTradingAccount
+          accounts={localTradingAccounts}
+          onSelect={(e) =>
+            onSelectTradingAccount?.({ tradeAddress: e.address })
+          }
+          onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
+          onClose={onReset}
+          onImport={() => setPage("ImportTradingAccount")}
+          onSelectCallback={onClose}
+          onRemoveCallback={() => setPage("RemoveTradingAccount")}
+          onExportBrowserAccount={(account) =>
+            onExportTradeAccount({ account })
+          }
+          onExportBrowserAccountCallback={() => setPage("UnlockBrowserAccount")}
+          onImportMnemonic={() => setPage("ImportTradingAccountMnemonic")}
+          enabledExtensionAccount
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="ImportTradingAccount">
+        <ImportTradingAccount
+          onImport={async (e) => {
+            await onImportFromFile?.(e);
+            onClose();
+          }}
+          onRedirect={() => setPage("ConnectTradingAccount")}
+          onClose={() => setPage("ConnectTradingAccount")}
+          loading={importFromFileStatus === "loading"}
+        />
+      </Interactable.Card>
+
+      <Interactable.Card pageName="ImportTradingAccountMnemonic">
+        <ImportTradingAccountMnemonic
+          onImport={async (e) => {
+            await onImportFromMnemonic?.(e);
+            onClose();
+          }}
+          onCancel={() => setPage("ConnectTradingAccount")}
+          loading={importFromMnemonicStatus === "loading"}
+          errorMessage={
+            (importFromMnemonicError as Error)?.message ??
+            importFromMnemonicError
+          }
+        />
+      </Interactable.Card>
+
+      <Interactable.Card pageName="RemoveTradingAccount">
+        <RemoveTradingAccount
+          tradingAccount={tempTrading as TradeAccount}
+          onRemoveFromDevice={() =>
+            onRemoveTradingAccountFromDevice?.(tempTrading?.address as string)
+          }
+          selectedExtension={selectedExtension}
+          availableOnDevice={availableOnDevice}
+          onCancel={() => setPage("ConnectTradingAccount")}
+          enabledExtensionAccount
+        />
+      </Interactable.Card>
+    </Fragment>
   );
 };
