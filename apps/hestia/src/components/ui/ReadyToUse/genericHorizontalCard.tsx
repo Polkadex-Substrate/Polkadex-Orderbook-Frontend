@@ -1,15 +1,10 @@
-import {
-  ComponentProps,
-  ComponentPropsWithoutRef,
-  PropsWithChildren,
-} from "react";
-import { Button, Icon, Loading, Typography } from "@polkadex/ux";
+import { ComponentPropsWithoutRef, PropsWithChildren } from "react";
+import { Icon, Loading, Typography } from "@polkadex/ux";
 import type { IconsProps } from "@polkadex/ux";
 
 import { ErrorMessage } from ".";
 
-interface GenericHorizontalCardProps
-  extends ComponentPropsWithoutRef<"button"> {
+interface GenericHorizontalCardProps extends ComponentPropsWithoutRef<"div"> {
   title: string;
   icon: IconsProps;
   loading?: boolean;
@@ -26,18 +21,17 @@ export const GenericHorizontalCard = ({
   ...props
 }: PropsWithChildren<GenericHorizontalCardProps>) => {
   const isStringType = typeof children === "string";
-  const elementProps =
-    !children && ({ role: "button", ...props } as ComponentProps<"div">);
 
   return (
     <Loading.Spinner active={!!loading}>
       <div
-        {...elementProps}
-        className={`flex flex-col gap-3 group ${
+        {...props}
+        role="button"
+        className={`flex flex-col gap-3 group cursor-pointer ${
           disabled && "opacity-40 pointer-events-none"
         }`}
       >
-        <div className="flex items-center justify-between px-4 py-3 rounded-md border border-secondary group-hover:bg-level-1 duration-300 transition-colors">
+        <div className="flex items-center justify-between p-2 rounded-md border border-primary group-hover:bg-level-1 duration-300 transition-colors">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4">
               <Icon
@@ -53,9 +47,9 @@ export const GenericHorizontalCard = ({
             </Typography.Text>
           </div>
           {isStringType ? (
-            <Button.Solid appearance="secondary" size="sm" {...props}>
+            <div className="bg-secondary-base text-sm px-2 py-1 rounded-sm">
               {children}
-            </Button.Solid>
+            </div>
           ) : (
             children
           )}
