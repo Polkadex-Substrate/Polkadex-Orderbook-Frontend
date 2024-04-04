@@ -125,6 +125,8 @@ export const ConfirmTransaction = ({
     [selectedWallet?.address]
   );
 
+  const disabled = useMemo(() => !!error || !tokenFee, [error, tokenFee]);
+
   return (
     <Modal
       open={openFeeModal}
@@ -360,8 +362,8 @@ export const ConfirmTransaction = ({
             </Interaction.Content>
             <Interaction.Footer>
               <Interaction.Action
-                disabled={!!error || !tokenFee}
-                appearance="secondary"
+                disabled={disabled}
+                appearance={disabled ? "secondary" : "primary"}
                 onClick={action}
               >
                 Sign and Submit

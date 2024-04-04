@@ -24,12 +24,12 @@ export type StatusProps = "queued" | "ongoing" | "completed" | "error";
 const Status = ({ children }: { children: ReactNode }) => {
   return (
     <div className="relative overflow-hidden w-full py-4">
-      <div className="flex-1 flex items-center justify-evenly gap-2 relative">
+      <div className="flex-1 flex items-center justify-evenly gap-2 relative z-[1]">
         {children}
       </div>
-      {/* <div className="flex items-center absolute top-0 my-auto w-full h-full bottom-6">
+      <div className="flex items-center absolute top-0 my-auto w-full h-full bottom-6">
         <Separator.Horizontal />
-      </div> */}
+      </div>
     </div>
   );
 };
