@@ -9,8 +9,10 @@ export interface ExtrinsicResult {
   eventMessages?: EventRecord[];
   hash: string;
 }
+export type AddToTxQueue = (value: SubmittableExtrinsic<"promise">) => void;
 
 export const signAndSendExtrinsic = async (
+  addToTxQueue: AddToTxQueue,
   api: ApiPromise,
   extrinsic: SubmittableExtrinsic<"promise">,
   injector: { signer?: Signer },
@@ -27,6 +29,7 @@ export const signAndSendExtrinsic = async (
         ({ status, events, dispatchError }: ISubmittableResult) => {
           // status would still be set, but in the case of error we can shortcut
           // to just check it (so an error would indicate InBlock or Finalized)
+          addToTxQueue(extrinsic);
           if (dispatchError) {
             if (dispatchError.isModule) {
               // for module errors, we have the section indexed, lookup

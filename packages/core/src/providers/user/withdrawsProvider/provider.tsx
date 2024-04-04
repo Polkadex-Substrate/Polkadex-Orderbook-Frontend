@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
 import * as mutations from "@orderbook/core/graphql/mutations";
@@ -18,11 +18,13 @@ import { useFunds } from "@orderbook/core/hooks";
 import {
   useUserAccounts,
   useExtensionAccounts,
+  useTransactionManager,
 } from "@polkadex/react-providers";
 
 import { useProfile } from "../profile";
 
 import * as A from "./actions";
+import type { WithdrawsClaimFetch } from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
 import { initialState, withdrawsReducer } from "./reducer";
@@ -36,72 +38,83 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const { extensionAccounts } = useExtensionAccounts();
   const { mainAddress, tradeAddress } = selectedAddresses;
   const { wallet } = useUserAccounts();
-
+  const { addToTxQueue } = useTransactionManager();
   type UserActionLambdaResp = {
     is_success: boolean;
     body: string;
   };
-  const onFetchWithdraws = async ({
-    asset,
-    amount,
-  }: A.WithdrawsFetch["payload"]) => {
-    dispatch(A.withdrawsFetch({ asset, amount }));
-    try {
-      const keyringPair = wallet.getPair(tradeAddress);
-      const nonce = getNonce();
-      const api = nativeApiState.api;
 
-      // TODO: Handle error or fix types
-      if (tradeAddress !== "" && keyringPair && api) {
-        const payload = { asset_id: { asset }, amount, timestamp: nonce };
-        const signingPayload = createWithdrawSigningPayload(
-          api,
-          asset,
-          amount,
-          nonce
-        );
-        const signature = signPayload(api, keyringPair, signingPayload);
-        const res = await executeWithdraw(
-          [mainAddress, tradeAddress, payload, signature],
-          tradeAddress
-        );
-        if (res.data.withdraw) {
-          const resp: UserActionLambdaResp = JSON.parse(res.data.withdraw);
-          if (!resp.is_success) {
-            dispatch(A.withdrawsData());
-            settingsState.onHandleError(resp.body);
-            return;
+  const executeWithdraw = useCallback(
+    async (
+      withdrawPayload: [string, string, object, SignatureEnumSr25519],
+      address: string
+    ) => {
+      const payload = JSON.stringify({ Withdraw: withdrawPayload });
+      return await sendQueryToAppSync({
+        query: mutations.withdraw,
+        variables: { input: { payload } },
+        token: address,
+      });
+    },
+    []
+  );
+
+  const onFetchWithdraws = useCallback(
+    async ({ asset, amount }: A.WithdrawsFetch["payload"]) => {
+      dispatch(A.withdrawsFetch({ asset, amount }));
+      try {
+        const keyringPair = wallet.getPair(tradeAddress);
+        const nonce = getNonce();
+        const api = nativeApiState.api;
+
+        // TODO: Handle error or fix types
+        if (tradeAddress !== "" && keyringPair && api) {
+          const payload = { asset_id: { asset }, amount, timestamp: nonce };
+          const signingPayload = createWithdrawSigningPayload(
+            api,
+            asset,
+            amount,
+            nonce
+          );
+          const signature = signPayload(api, keyringPair, signingPayload);
+          const res = await executeWithdraw(
+            [mainAddress, tradeAddress, payload, signature],
+            tradeAddress
+          );
+          if (res.data.withdraw) {
+            const resp: UserActionLambdaResp = JSON.parse(res.data.withdraw);
+            if (!resp.is_success) {
+              dispatch(A.withdrawsData());
+              settingsState.onHandleError(resp.body);
+              return;
+            }
           }
+          dispatch(A.withdrawsData());
+          settingsState.onHandleAlert(
+            "Your withdrawal is being processed and will be available for you to claim in a few minutes"
+          );
         }
+      } catch (error) {
+        const errorText = (error as Error).message || (error as string);
         dispatch(A.withdrawsData());
-        settingsState.onHandleAlert(
-          "Your withdrawal is being processed and will be available for you to claim in a few minutes"
-        );
+        settingsState.onHandleError(errorText);
       }
-    } catch (error) {
-      const errorText = (error as Error).message || (error as string);
-      dispatch(A.withdrawsData());
-      settingsState.onHandleError(errorText);
-    }
-  };
-
-  const executeWithdraw = async (
-    withdrawPayload: [string, string, object, SignatureEnumSr25519],
-    address: string
-  ) => {
-    const payload = JSON.stringify({ Withdraw: withdrawPayload });
-    return await sendQueryToAppSync({
-      query: mutations.withdraw,
-      variables: { input: { payload } },
-      token: address,
-    });
-  };
+    },
+    [
+      executeWithdraw,
+      mainAddress,
+      nativeApiState?.api,
+      settingsState,
+      tradeAddress,
+      wallet,
+    ]
+  );
 
   const onFetchClaimWithdraw = async ({
     sid,
     assetIds = [],
     assetId,
-  }: A.WithdrawsClaimFetch["payload"]) => {
+  }: WithdrawsClaimFetch["payload"]) => {
     try {
       const api = nativeApiState.api;
       const extensionAccount = getFundingAccountDetail(
@@ -157,23 +170,27 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     }
   };
 
-  async function claimWithdrawal(
-    api: ApiPromise,
-    signer: Signer,
-    account: string,
-    sid: number,
-    assetId?: string
-  ): Promise<ExtrinsicResult> {
-    const ext = api.tx.ocex.claimWithdraw(sid, account);
-    return await signAndSendExtrinsic(
-      api,
-      ext,
-      { signer },
-      account,
-      true,
-      assetId
-    );
-  }
+  const claimWithdrawal = useCallback(
+    async (
+      api: ApiPromise,
+      signer: Signer,
+      account: string,
+      sid: number,
+      assetId?: string
+    ): Promise<ExtrinsicResult> => {
+      const ext = api.tx.ocex.claimWithdraw(sid, account);
+      return await signAndSendExtrinsic(
+        addToTxQueue,
+        api,
+        ext,
+        { signer },
+        account,
+        true,
+        assetId
+      );
+    },
+    [addToTxQueue]
+  );
 
   return (
     <Provider

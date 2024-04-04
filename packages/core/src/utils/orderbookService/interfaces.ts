@@ -1,6 +1,6 @@
 import { ApiPromise } from "@polkadot/api";
 import { ExtensionAccount } from "@polkadex/react-providers";
-import { SignatureEnumSr25519 } from "@orderbook/core/helpers";
+import { AddToTxQueue, SignatureEnumSr25519 } from "@orderbook/core/helpers";
 import { LmpApi } from "@polkadex/polkadex-api";
 import { Signer } from "@polkadot/types/types";
 
@@ -114,6 +114,7 @@ export type ExecuteArgs = {
 export type WithdrawArgs = {
   payload: [string, string, object, SignatureEnumSr25519];
   address: string;
+  addToTxQueue: AddToTxQueue;
 };
 
 export type DepositArgs = {
@@ -122,6 +123,7 @@ export type DepositArgs = {
   asset: Record<string, string | null>;
   account: ExtensionAccount;
   assetId?: string;
+  addToTxQueue: AddToTxQueue;
 };
 
 export type ClaimRewardArgs = {
@@ -131,6 +133,7 @@ export type ClaimRewardArgs = {
   address: string;
   epoch: number;
   market: string;
+  addToTxQueue: AddToTxQueue;
 };
 
 export interface OrderbookOperationStrategy extends BaseStrategy {

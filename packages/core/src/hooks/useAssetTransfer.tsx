@@ -3,7 +3,10 @@ import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { signAndSendExtrinsic } from "@orderbook/core/helpers";
 import BigNumber from "bignumber.js";
 import { NOTIFICATIONS, UNIT_BN } from "@orderbook/core/constants";
-import { ExtensionAccount } from "@polkadex/react-providers";
+import {
+  ExtensionAccount,
+  useTransactionManager,
+} from "@polkadex/react-providers";
 
 import { useSettingsProvider } from "../providers/public/settings";
 
@@ -19,6 +22,7 @@ export const useAssetTransfer = (onRefetch: () => Promise<void>) => {
   const { onHandleError, onHandleAlert, onPushNotification } =
     useSettingsProvider();
 
+  const { addToTxQueue } = useTransactionManager();
   return useMutation({
     mutationFn: async ({
       asset,
@@ -37,7 +41,14 @@ export const useAssetTransfer = (onRefetch: () => Promise<void>) => {
         ? api.tx.assets.transfer(asset.asset, dest, amountFormatted)
         : api.tx.balances.transfer(dest, amountFormatted);
 
-      await signAndSendExtrinsic(api, tx, account, account.address, true);
+      await signAndSendExtrinsic(
+        addToTxQueue,
+        api,
+        tx,
+        account,
+        account.address,
+        true
+      );
       return { asset: ticker, amount };
     },
     onError: (error: { message: string }) =>

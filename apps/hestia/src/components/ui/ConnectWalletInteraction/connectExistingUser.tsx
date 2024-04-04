@@ -26,7 +26,7 @@ export const ConnectExistingUser = ({ onClose, onNext }: InteractableProps) => {
         <TriggerComponent onClose={onClose} onNext={onNext} />
       </Interactable.Trigger>
       <Interactable.Content>
-        <CardsComponent onClose={onClose} />
+        <CardsComponent onClose={onClose} onNext={onNext} />
       </Interactable.Content>
     </Interactable>
   );
@@ -100,7 +100,7 @@ const TriggerComponent = ({ onClose, onNext }: InteractableProps) => {
   );
 };
 
-const CardsComponent = ({ onClose }: { onClose: () => void }) => {
+const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
   const {
     localTradingAccounts,
     onSelectTradingAccount,
@@ -208,7 +208,7 @@ const CardsComponent = ({ onClose }: { onClose: () => void }) => {
           errorTitle="Error"
           errorMessage={(registerError as Error)?.message ?? registerError}
           selectedExtension={selectedExtension}
-          onCreateCallback={() => setPage("TradingAccountSuccessfull")}
+          onCreateCallback={() => onNext("TradingAccountSuccessfull")}
           onClose={handleClose}
         />
       </Interactable.Card>

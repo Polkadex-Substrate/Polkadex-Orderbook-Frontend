@@ -1,3 +1,5 @@
+import { AddToTxQueue } from "@orderbook/core/helpers";
+
 import {
   WITHDRAWS_DATA,
   WITHDRAWS_FETCH,

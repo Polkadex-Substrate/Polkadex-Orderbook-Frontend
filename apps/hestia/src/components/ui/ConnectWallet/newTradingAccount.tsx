@@ -119,7 +119,6 @@ export const NewTradingAccount = ({
     [values?.mnemonic]
   );
 
-  console.log(".....", openFeeModal);
   return (
     <Fragment>
       <ConfirmTransaction

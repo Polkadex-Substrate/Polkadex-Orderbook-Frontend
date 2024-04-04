@@ -2,7 +2,10 @@ import { useMutation } from "@tanstack/react-query";
 import { useNativeApi } from "@orderbook/core/providers/public//nativeApi";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useExtensionAccounts } from "@polkadex/react-providers";
+import {
+  useExtensionAccounts,
+  useTransactionManager,
+} from "@polkadex/react-providers";
 import {
   getFundingAccountDetail,
   signAndSendExtrinsic,
@@ -27,6 +30,7 @@ export const useWithdrawClaim = () => {
   const { isReady } = useOrderbookService();
   const { extensionAccounts } = useExtensionAccounts();
 
+  const { addToTxQueue } = useTransactionManager();
   const { mutateAsync, status } = useMutation({
     mutationFn: async ({ sid, assetIds = [] }: WithdrawClaimArgs) => {
       if (!isReady) throw new Error("Orderbook service not initialized");
@@ -50,6 +54,7 @@ export const useWithdrawClaim = () => {
 
       const ext = api.tx.ocex.claimWithdraw(sid, extensionAccount?.address);
       const res = await signAndSendExtrinsic(
+        addToTxQueue,
         api,
         ext,
         { signer },

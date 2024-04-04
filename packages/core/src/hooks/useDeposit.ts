@@ -1,5 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { ExtensionAccount } from "@polkadex/react-providers";
+import {
+  ExtensionAccount,
+  useTransactionManager,
+} from "@polkadex/react-providers";
 
 import { useSettingsProvider } from "../providers/public/settings";
 import { useNativeApi } from "../providers/public/nativeApi";
@@ -17,6 +20,7 @@ export const useDeposit = () => {
   const { onHandleError, onHandleInfo, onHandleAlert } = useSettingsProvider();
   const { api } = useNativeApi();
   const { isReady } = useOrderbookService();
+  const { addToTxQueue } = useTransactionManager();
 
   const { mutateAsync, status } = useMutation({
     mutationFn: async ({ asset, amount, account, assetId }: DepositArgs) => {
@@ -31,6 +35,7 @@ export const useDeposit = () => {
       onHandleInfo?.("Processing Deposit...");
 
       await appsyncOrderbookService.operation.deposit({
+        addToTxQueue,
         api,
         account,
         asset,

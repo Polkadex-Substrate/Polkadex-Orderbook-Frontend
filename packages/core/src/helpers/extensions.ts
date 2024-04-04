@@ -1,7 +1,11 @@
 import { ExtensionAccount } from "@polkadex/react-providers";
 import { Signer } from "@polkadot/types/types";
 import { ApiPromise } from "@polkadot/api";
-import { ExtrinsicResult, signAndSendExtrinsic } from "@orderbook/core/helpers";
+import {
+  AddToTxQueue,
+  ExtrinsicResult,
+  signAndSendExtrinsic,
+} from "@orderbook/core/helpers";
 
 export const getFundingAccountDetail = (
   userMainAccount: string,
@@ -13,6 +17,7 @@ export const getFundingAccountDetail = (
   );
 
 export const registerMainAccount = async (
+  addToTxQueue: AddToTxQueue,
   api: ApiPromise,
   proxyAddress: string,
   signer: Signer,
@@ -21,6 +26,7 @@ export const registerMainAccount = async (
 ): Promise<ExtrinsicResult> => {
   const ext = api.tx.ocex.registerMainAccount(proxyAddress);
   const res = await signAndSendExtrinsic(
+    addToTxQueue,
     api,
     ext,
     { signer },

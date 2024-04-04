@@ -29,7 +29,6 @@ export const InsufficientBalance = ({
   const [open, setOpen] = useState(false);
   const { assets } = useAssets();
 
-  console.log("assets", assets);
   return (
     <Interaction className="w-full">
       <Interaction.Content className="flex flex-col gap-4 flex-1">
@@ -157,7 +156,7 @@ export const InsufficientBalance = ({
 const exchanges = [
   {
     name: "Kucoin",
-    href: "https://www.kucoin.com/trade/PDEX-USDT?rcode=rPH7VCS",
+    href: "https://www.kucoin.com/trade/PDEX-USDT",
   },
   {
     name: "Gate.io",

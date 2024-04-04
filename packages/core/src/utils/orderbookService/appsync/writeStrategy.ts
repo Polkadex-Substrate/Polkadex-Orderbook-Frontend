@@ -133,10 +133,17 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
     }
   }
 
-  async deposit({ account, amount, api, asset }: DepositArgs): Promise<void> {
+  async deposit({
+    addToTxQueue,
+    account,
+    amount,
+    api,
+    asset,
+  }: DepositArgs): Promise<void> {
     const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
     const ext = api.tx.ocex.deposit(asset as unknown as string, amountStr);
     const res = await signAndSendExtrinsic(
+      addToTxQueue,
       api,
       ext,
       { signer: account.signer },
@@ -149,6 +156,7 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
   }
 
   async claimReward({
+    addToTxQueue,
     signer,
     api,
     lmp,
@@ -160,7 +168,14 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
       epoch,
       market
     )) as SubmittableExtrinsic<"promise">;
-    const res = await signAndSendExtrinsic(api, ext, { signer }, address, true);
+    const res = await signAndSendExtrinsic(
+      addToTxQueue,
+      api,
+      ext,
+      { signer },
+      address,
+      true
+    );
     if (!res.isSuccess) {
       throw new Error("Claim reward failed");
     }

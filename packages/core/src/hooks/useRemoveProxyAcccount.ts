@@ -1,6 +1,9 @@
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import { useUserAccounts } from "@polkadex/react-providers";
+import {
+  useTransactionManager,
+  useUserAccounts,
+} from "@polkadex/react-providers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -25,6 +28,7 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
   const { wallet } = useUserAccounts();
   const { getSigner, selectedAddresses, onUserLogout } = useProfile();
   const { onPushNotification } = useSettingsProvider();
+  const { addToTxQueue } = useTransactionManager();
 
   const { mutateAsync, status, error } = useMutation({
     mutationFn: async ({ proxy, main, assetId }: RemoveProxyAccountArgs) => {
@@ -43,7 +47,14 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
         );
       });
 
-      await removeProxyFromAccount(api, proxy, signer, main, assetId);
+      await removeProxyFromAccount(
+        addToTxQueue,
+        api,
+        proxy,
+        signer,
+        main,
+        assetId
+      );
 
       // TODO: Temp solution, backend issue. Remove it when it resolved in backend
       await isTradingAccountRemovedFromDb(proxy, main);

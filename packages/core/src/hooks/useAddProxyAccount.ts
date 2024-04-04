@@ -1,6 +1,9 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useUserAccounts } from "@polkadex/react-providers";
+import {
+  useTransactionManager,
+  useUserAccounts,
+} from "@polkadex/react-providers";
 import {
   addProxyToAccount,
   getAddressFromMnemonic,
@@ -35,6 +38,7 @@ export function useAddProxyAccount({
   const { getSigner, onUserSelectTradingAddress } = useProfile();
   const { onPushNotification } = useSettingsProvider();
 
+  const { addToTxQueue } = useTransactionManager();
   const { mutateAsync, status, error } = useMutation({
     mutationFn: async ({
       mnemonic,
@@ -64,9 +68,23 @@ export function useAddProxyAccount({
         await appsyncOrderbookService.query.getTradingAddresses(main);
 
       if (registeredProxies.length === 0) {
-        await registerMainAccount(api, proxy, signer, main, assetId);
+        await registerMainAccount(
+          addToTxQueue,
+          api,
+          proxy,
+          signer,
+          main,
+          assetId
+        );
       } else {
-        await addProxyToAccount(api, proxy, signer, main, assetId);
+        await addProxyToAccount(
+          addToTxQueue,
+          api,
+          proxy,
+          signer,
+          main,
+          assetId
+        );
       }
 
       const { pair } = wallet.addFromMnemonic(mnemonic, name, password);
