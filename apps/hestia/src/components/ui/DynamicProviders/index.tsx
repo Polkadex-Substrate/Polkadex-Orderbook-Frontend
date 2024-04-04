@@ -6,10 +6,21 @@ import { Amplify } from "aws-amplify";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import { useParams } from "next/navigation";
-import { TransactionManagerProvider } from "@polkadex/react-providers";
 
 import awsconfig from "../../../../aws-exports";
-import { Progress } from "../Temp/progressBar";
+
+const Progress = dynamic(
+  () => import("../Temp/progressBar").then((mod) => mod.Progress),
+  { ssr: false }
+);
+
+const TransactionManagerProvider = dynamic(
+  () =>
+    import("@polkadex/react-providers").then(
+      (mod) => mod.TransactionManagerProvider
+    ),
+  { ssr: false }
+);
 const UserAccountsProvider = dynamic(
   () =>
     import("@polkadex/react-providers").then((mod) => mod.UserAccountsProvider),
@@ -81,9 +92,9 @@ Amplify.configure(awsconfig);
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
+      refetchOnWindowFocus: false
+    }
+  }
 });
 
 export const DynamicProviders = ({ children }: { children: ReactNode }) => {
@@ -99,12 +110,12 @@ export const DynamicProviders = ({ children }: { children: ReactNode }) => {
             },
             onSuccess: (title, description) => {
               toast.success(title.toString(), {
-                description,
+                description
               });
             },
             onInfo: (title, description) => {
               toast.info(title.toString(), { description });
-            },
+            }
           }}
         >
           <ExtensionsProvider>
