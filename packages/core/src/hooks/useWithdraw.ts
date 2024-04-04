@@ -7,7 +7,10 @@ import {
   getNonce,
   signPayload,
 } from "@orderbook/core/helpers";
-import { useUserAccounts } from "@polkadex/react-providers";
+import {
+  useTransactionManager,
+  useUserAccounts,
+} from "@polkadex/react-providers";
 
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 import { appsyncOrderbookService } from "../utils/orderbookService";
@@ -25,6 +28,7 @@ export const useWithdraw = () => {
   const { onHandleAlert, onHandleError } = useSettingsProvider();
   const { wallet } = useUserAccounts();
   const { isReady } = useOrderbookService();
+  const { addToTxQueue } = useTransactionManager();
 
   const { mutateAsync, status } = useMutation({
     mutationFn: async ({ asset, amount }: WithdrawArgs) => {
@@ -48,6 +52,7 @@ export const useWithdraw = () => {
       const signature = signPayload(api, keyringPair, signingPayload);
 
       await appsyncOrderbookService.operation.withdraw({
+        addToTxQueue,
         address: tradeAddress,
         payload: [mainAddress, tradeAddress, payload, signature],
       });
