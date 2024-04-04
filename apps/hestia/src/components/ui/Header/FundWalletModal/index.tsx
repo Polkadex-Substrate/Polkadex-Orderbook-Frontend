@@ -193,7 +193,7 @@ export const FundWalletModal = ({
                   asChild
                 >
                   <Link
-                    href="https://www.kucoin.com/trade/PDEX-USDT?rcode=rPH7VCS"
+                    href="https://www.kucoin.com/trade/PDEX-USDT"
                     target="_blank"
                   >
                     Kucoin
