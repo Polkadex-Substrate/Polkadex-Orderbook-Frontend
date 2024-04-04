@@ -18,7 +18,14 @@ import {
   RiFileCopyLine,
   RiGasStationLine,
 } from "@remixicon/react";
-import { Dispatch, Fragment, SetStateAction, useMemo, useRef } from "react";
+import {
+  Dispatch,
+  Fragment,
+  MouseEvent,
+  SetStateAction,
+  useMemo,
+  useRef,
+} from "react";
 import { useResizeObserver } from "usehooks-ts";
 import Link from "next/link";
 import {
@@ -36,7 +43,9 @@ import { usePool } from "@/hooks";
 import { isDisabledFeature } from "@/helpers";
 
 interface Props extends TransactionFeeProps {
-  action: (() => Promise<void>) | (() => void);
+  action:
+    | ((event: MouseEvent<HTMLButtonElement>) => Promise<void>)
+    | ((event: MouseEvent<HTMLButtonElement>) => void);
   actionLoading: boolean;
   tokenFee: FeeAssetReserve | null;
   setTokenFee: Dispatch<SetStateAction<FeeAssetReserve | null>>;

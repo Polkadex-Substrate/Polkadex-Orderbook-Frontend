@@ -31,14 +31,12 @@ export const GenericHorizontalCard = ({
           disabled && "opacity-40 pointer-events-none"
         }`}
       >
-        <div className="flex items-center justify-between p-2 rounded-md border border-primary group-hover:bg-level-1 duration-300 transition-colors">
+        <div className="flex items-center justify-between p-2.5 rounded-md border border-primary group-hover:bg-level-1 duration-300 transition-colors">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4">
-              <Icon
-                name={icon}
-                className="text-primary group-hover:text-current transition-colors duration-300"
-              />
-            </div>
+            <Icon
+              name={icon}
+              className="text-primary group-hover:text-current transition-colors duration-300 w-3.5 h-3.5"
+            />
             <Typography.Text
               appearance="primary"
               className="group-hover:text-current transition-colors duration-300"

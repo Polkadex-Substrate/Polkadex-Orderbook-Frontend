@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useRef, useState } from "react";
+import { Fragment, MouseEvent, useMemo, useRef, useState } from "react";
 import {
   Button,
   Input,
@@ -49,7 +49,7 @@ export const NewTradingAccount = ({
   errorMessage,
   errorTitle,
 }: {
-  onClose: () => void;
+  onClose: (e: MouseEvent<HTMLButtonElement>) => void;
   onCreateAccount: (value: RegisterTradeAccountData) => Promise<void>;
   onCreateCallback: () => void;
   loading?: boolean;
@@ -119,6 +119,7 @@ export const NewTradingAccount = ({
     [values?.mnemonic]
   );
 
+  console.log(".....", openFeeModal);
   return (
     <Fragment>
       <ConfirmTransaction

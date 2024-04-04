@@ -47,7 +47,7 @@ const ContentCompontent = ({ onClose }: { onClose: () => void }) => {
       <Interactable.Card pageName="NewUser">
         <ConnectNewUser onClose={onClose} onNext={setPage} />
       </Interactable.Card>
-      <Interactable.Card pageName="ExistingUser">
+      <Interactable.Card pageName="TradingAccountSuccessfull">
         <CreatedAccountSuccess onClose={onClose} />
       </Interactable.Card>
       <Interactable.Card pageName="ExistingUser">

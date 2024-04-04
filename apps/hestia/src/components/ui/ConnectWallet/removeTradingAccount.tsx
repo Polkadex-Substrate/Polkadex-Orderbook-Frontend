@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useMemo, useState } from "react";
+import { Fragment, MouseEvent, useCallback, useMemo, useState } from "react";
 import { Interaction, Typography } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { ExtensionAccount } from "@polkadex/react-providers";
@@ -29,7 +29,7 @@ export const RemoveTradingAccount = ({
   fundWallet?: ExtensionAccount;
   onRemoveFromDevice: () => void;
   onRemoveFromChain?: (props: RemoveProps) => Promise<void>;
-  onCancel: () => void;
+  onCancel: (e: MouseEvent<HTMLButtonElement>) => void;
   loading?: boolean;
   selectedExtension?: (typeof ExtensionsArray)[0];
   errorTitle?: string;
@@ -56,20 +56,23 @@ export const RemoveTradingAccount = ({
   );
 
   const handleRemoveBlockchain = useCallback(
-    async (e: RemoveProps) => {
+    async (e: RemoveProps, event: MouseEvent<HTMLButtonElement>) => {
       await onRemoveFromChain?.({
         ...e,
         assetId: tokenFee?.id,
       });
-      onCancel();
+      onCancel(event);
     },
     [onCancel, onRemoveFromChain, tokenFee?.id]
   );
 
-  const handleRemoveDevice = useCallback(() => {
-    onRemoveFromDevice?.();
-    onCancel();
-  }, [onCancel, onRemoveFromDevice]);
+  const handleRemoveDevice = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      onRemoveFromDevice?.();
+      onCancel(event);
+    },
+    [onCancel, onRemoveFromDevice]
+  );
 
   const removeProps = useMemo(
     () => ({
@@ -83,8 +86,8 @@ export const RemoveTradingAccount = ({
   return (
     <Fragment>
       <ConfirmTransaction
-        action={async () => {
-          await handleRemoveBlockchain(removeProps);
+        action={async (e) => {
+          await handleRemoveBlockchain(removeProps, e);
           setOpenFeeModal(false);
         }}
         actionLoading={!!loading}

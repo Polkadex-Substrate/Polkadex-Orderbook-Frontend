@@ -1,5 +1,5 @@
 // TODO: Create a component (Input.Mnemonic) in @polkadex/ux.
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import {
   Interaction,
   Loading,
@@ -36,7 +36,7 @@ export const ImportTradingAccountMnemonic = ({
 }: {
   loading: boolean;
   onImport: (value: ImportFromMnemonic) => void;
-  onCancel: () => void;
+  onCancel: (event: MouseEvent<HTMLButtonElement>) => void;
   errorMessage: string;
 }) => {
   const [show, setShow] = useState(false);

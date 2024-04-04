@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo } from "react";
+import { Fragment, MouseEvent, useCallback, useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { Interactable, useInteractableProvider } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
@@ -69,6 +69,7 @@ const TriggerComponent = ({ onClose, onNext }: InteractableProps) => {
       : "InsufficientBalance";
 
   const { setPage } = useInteractableProvider();
+
   return (
     <ExistingUser
       onClose={onClose}
@@ -152,6 +153,16 @@ const CardsComponent = ({ onClose }: { onClose: () => void }) => {
       filteredAccounts?.some((value) => value.address === tempTrading?.address),
     [tempTrading?.address, filteredAccounts]
   );
+
+  const handleClose = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      e.preventDefault();
+      onReset();
+    },
+    [onReset]
+  );
+
   return (
     <Fragment>
       <Interactable.Card pageName="ConnectTradingAccount">
@@ -198,7 +209,7 @@ const CardsComponent = ({ onClose }: { onClose: () => void }) => {
           errorMessage={(registerError as Error)?.message ?? registerError}
           selectedExtension={selectedExtension}
           onCreateCallback={() => setPage("TradingAccountSuccessfull")}
-          onClose={onReset}
+          onClose={handleClose}
         />
       </Interactable.Card>
       <Interactable.Card pageName="TradingAccountList">
@@ -206,7 +217,7 @@ const CardsComponent = ({ onClose }: { onClose: () => void }) => {
           tradingAccounts={mainProxiesAccounts}
           browserAccounts={localTradingAccounts}
           onRemove={(e) => onSetTempTrading?.(e)}
-          onClose={onReset}
+          onClose={handleClose}
           onRemoveCallback={() => setPage("RemoveTradingAccount")}
         />
       </Interactable.Card>
@@ -225,7 +236,7 @@ const CardsComponent = ({ onClose }: { onClose: () => void }) => {
           errorTitle="Error"
           errorMessage={(removingError as Error)?.message ?? removingError}
           selectedExtension={selectedExtension}
-          onCancel={onReset} // onBack not working, rerendering Multistep, prev reseting..
+          onCancel={handleClose}
         />
       </Interactable.Card>
       <Interactable.Card pageName="ImportTradingAccount">
@@ -235,7 +246,11 @@ const CardsComponent = ({ onClose }: { onClose: () => void }) => {
             onClose();
           }}
           onRedirect={() => setPage("ConnectTradingAccount")}
-          onClose={() => setPage("ConnectTradingAccount")}
+          onClose={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setPage("ConnectTradingAccount");
+          }}
           loading={importFromFileStatus === "loading"}
           whitelistBrowserAccounts={mainProxiesAccounts}
         />
@@ -259,7 +274,7 @@ const CardsComponent = ({ onClose }: { onClose: () => void }) => {
           tradingAccounts={mainProxiesAccounts}
           browserAccounts={localTradingAccounts}
           onRemove={(e) => onSetTempTrading?.(e)}
-          onClose={onReset}
+          onClose={handleClose}
           onRemoveCallback={() => setPage("RemoveTradingAccount")}
         />
       </Interactable.Card>

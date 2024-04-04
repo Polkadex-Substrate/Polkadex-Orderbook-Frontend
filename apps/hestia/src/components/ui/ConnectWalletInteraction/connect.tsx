@@ -165,7 +165,11 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
             onClose();
           }}
           onRedirect={() => setPage("ConnectTradingAccount")}
-          onClose={() => setPage("ConnectTradingAccount")}
+          onClose={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setPage("ConnectTradingAccount");
+          }}
           loading={importFromFileStatus === "loading"}
         />
       </Interactable.Card>
@@ -176,7 +180,11 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
             await onImportFromMnemonic?.(e);
             onClose();
           }}
-          onCancel={() => setPage("ConnectTradingAccount")}
+          onCancel={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setPage("ConnectTradingAccount");
+          }}
           loading={importFromMnemonicStatus === "loading"}
           errorMessage={
             (importFromMnemonicError as Error)?.message ??

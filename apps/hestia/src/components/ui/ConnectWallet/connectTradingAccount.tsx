@@ -59,7 +59,6 @@ export const ConnectTradingAccount = ({
                   accounts?.length > 1 &&
                     "border-b border-primary overflow-hidden hover:overflow-auto pb-7 scrollbar-hide"
                 )}
-                style={{ scrollbarGutter: "stable" }}
               >
                 {accounts.map((value, i) => (
                   <TradingAccountCard

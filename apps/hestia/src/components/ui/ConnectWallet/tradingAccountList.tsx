@@ -1,5 +1,6 @@
 import { Accordion, Interaction, Typography } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { MouseEvent } from "react";
 
 import { RemoveWalletCard } from "../ReadyToUse";
 
@@ -13,7 +14,7 @@ export const TradingAccountList = ({
   tradingAccounts?: string[];
   browserAccounts: TradeAccount[];
   onRemove: (e: TradeAccount) => void;
-  onClose: () => void;
+  onClose: (e: MouseEvent<HTMLButtonElement>) => void;
   onRemoveCallback: () => void;
 }) => {
   return (
