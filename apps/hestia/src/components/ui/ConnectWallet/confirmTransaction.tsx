@@ -244,6 +244,7 @@ export const ConfirmTransaction = ({
                   <Dropdown.Trigger
                     ref={ref}
                     className=" px-3 py-3 bg-level-1 border border-primary"
+                    disabled={tokenSelectionDisabled}
                   >
                     <div className="flex-1 w-full flex items-cneter justify-between gap-2">
                       <Typography.Text appearance="primary">
