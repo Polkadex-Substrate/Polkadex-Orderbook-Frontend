@@ -20,7 +20,7 @@ export const useDeposit = () => {
   const { onHandleError, onHandleInfo, onHandleAlert } = useSettingsProvider();
   const { api } = useNativeApi();
   const { isReady } = useOrderbookService();
-  const { addToTxQueue } = useTransactionManager();
+  const { addToTxQueue, txStatus } = useTransactionManager();
 
   const { mutateAsync, status } = useMutation({
     mutationFn: async ({ asset, amount, account, assetId }: DepositArgs) => {
@@ -34,14 +34,15 @@ export const useDeposit = () => {
 
       onHandleInfo?.("Processing Deposit...");
 
-      await appsyncOrderbookService.operation.deposit({
-        addToTxQueue,
+      const signedExtrinsic = await appsyncOrderbookService.operation.deposit({
         api,
         account,
         asset,
         amount,
         assetId,
       });
+
+      addToTxQueue(signedExtrinsic);
     },
     onError: (error) => {
       const errorMessage = (error as Error).message ?? (error as string);
@@ -52,6 +53,8 @@ export const useDeposit = () => {
         "Congratulations! You have successfully deposited assets to your trading account."
       ),
   });
+
+  console.log(txStatus);
 
   return { mutateAsync, loading: status === "loading" };
 };

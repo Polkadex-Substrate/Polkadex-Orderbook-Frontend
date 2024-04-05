@@ -3,6 +3,7 @@ import { ExtensionAccount } from "@polkadex/react-providers";
 import { AddToTxQueue, SignatureEnumSr25519 } from "@orderbook/core/helpers";
 import { LmpApi } from "@polkadex/polkadex-api";
 import { Signer } from "@polkadot/types/types";
+import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
 
 import {
   AccountUpdateEvent,
@@ -123,7 +124,6 @@ export type DepositArgs = {
   asset: Record<string, string | null>;
   account: ExtensionAccount;
   assetId?: string;
-  addToTxQueue: AddToTxQueue;
 };
 
 export type ClaimRewardArgs = {
@@ -141,7 +141,7 @@ export interface OrderbookOperationStrategy extends BaseStrategy {
   cancelOrder: (args: ExecuteArgs) => Promise<void>;
   cancelAll: (args: ExecuteArgs) => Promise<void>;
   withdraw: (args: WithdrawArgs) => Promise<void>;
-  deposit: (args: DepositArgs) => Promise<void>;
+  deposit: (args: DepositArgs) => Promise<SubmittableExtrinsic>;
   claimReward: (args: ClaimRewardArgs) => Promise<void>;
 }
 

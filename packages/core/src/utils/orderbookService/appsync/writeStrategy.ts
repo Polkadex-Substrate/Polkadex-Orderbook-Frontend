@@ -2,7 +2,7 @@ import { GraphQLResult } from "@aws-amplify/api";
 import BigNumber from "bignumber.js";
 import { signAndSendExtrinsic } from "@orderbook/core/helpers";
 import { UNIT_BN } from "@orderbook/core/constants";
-import { SubmittableExtrinsic } from "@polkadot/api/types";
+import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
 
 import {
   Cancel_allMutation,
@@ -153,25 +153,19 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
   }
 
   async deposit({
-    addToTxQueue,
     account,
     amount,
     api,
     asset,
-  }: DepositArgs): Promise<void> {
+  }: DepositArgs): Promise<SubmittableExtrinsic> {
     const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
     const ext = api.tx.ocex.deposit(asset as unknown as string, amountStr);
-    const res = await signAndSendExtrinsic(
-      addToTxQueue,
-      api,
-      ext,
-      { signer: account.signer },
-      account?.address,
-      true
-    );
-    if (!res.isSuccess) {
-      throw new Error("Deposit failed");
-    }
+
+    const signedExt = (await ext.signAsync(account.address, {
+      signer: account.signer,
+    })) as SubmittableExtrinsic;
+
+    return signedExt;
   }
 
   async claimReward({
@@ -186,7 +180,7 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
     const ext = (await lmp.claimRewardsTx(
       epoch,
       market
-    )) as SubmittableExtrinsic<"promise">;
+    )) as SubmittableExtrinsic;
     const res = await signAndSendExtrinsic(
       addToTxQueue,
       api,
