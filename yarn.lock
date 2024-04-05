@@ -4148,7 +4148,7 @@
     "@polkadex/utils" "*"
     typescript latest
 
-"@polkadex/react-providers@*":
+"@polkadex/react-providers@*", "@polkadex/react-providers@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@polkadex/react-providers/-/react-providers-2.0.0.tgz#ba7d7eda2a37d8a914abb01a2897a21c0240259e"
   integrity sha512-c8rA9bZ4NXVx++ySrYsWmIjwgqGT6M5UJyFP+4ekGsuIvXQa0F2oLbB2kbBttLwlvXMSgXF6A0UuSo5OqqlVHg==
@@ -4161,7 +4161,7 @@
     "@polkadot/keyring" latest
     typescript latest
 
-"@polkadex/react-providers@^1.1.0", "@polkadex/react-providers@^1.2.0":
+"@polkadex/react-providers@^1.1.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@polkadex/react-providers/-/react-providers-1.2.0.tgz#ee2b66435cedd8bcc250583c800f4836b19444ae"
   integrity sha512-ML5rj0ESq9dbrRWoY+5XLxr2dlwoCo6KidtnnLaUtqqtuLq64sw+yM1l3pUUL7V4uGfWLGkkeYhvmaKDgXqO8w==
@@ -5420,7 +5420,7 @@
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-primitive" "1.0.0"
 
-"@radix-ui/react-portal@1.0.4":
+"@radix-ui/react-portal@1.0.4", "@radix-ui/react-portal@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-portal/-/react-portal-1.0.4.tgz#df4bfd353db3b1e84e639e9c63a5f2565fb00e15"
   integrity sha512-Qki+C/EuGUVCQTOTD5vzJzJuMUlewbzuKyUy+/iHM2uwGiru9gZeBJtHAPKAEkB5KWGi9mP/CHKcY0wt1aW45Q==
@@ -10913,6 +10913,13 @@ fraction.js@^4.3.6, fraction.js@^4.3.7:
   version "4.3.7"
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.3.7.tgz#06ca0085157e42fda7f9e726e79fefc4068840f7"
   integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
+
+framer-motion@^11.0.24:
+  version "11.0.24"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.0.24.tgz#d6ac88cd7d627e2ce57eb9bac05c60469fca6223"
+  integrity sha512-l2iM8NR53qtcujgAqYvGPJJGModPNWEVUaATRDLfnaLvUoFpImovBm0AHalSSsY8tW6knP8mfJTW4WYGbnAe4w==
+  dependencies:
+    tslib "^2.4.0"
 
 framer-motion@^11.0.8:
   version "11.0.22"
