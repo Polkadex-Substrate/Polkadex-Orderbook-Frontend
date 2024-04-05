@@ -14,7 +14,11 @@ import { generateUsername } from "friendly-username-generator";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import { createAccountValidations } from "@orderbook/core/validations";
-import { useCall, useTransactionFeeModal } from "@orderbook/core/hooks";
+import {
+  AddProxyAccountArgs,
+  useCall,
+  useTransactionFeeModal,
+} from "@orderbook/core/hooks";
 import { RiEyeOffLine, RiEyeLine } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { getAddressFromMnemonic } from "@orderbook/core/helpers";
@@ -26,12 +30,6 @@ import {
 } from "../ReadyToUse";
 
 import { ConfirmTransaction } from "./confirmTransaction";
-export interface RegisterTradeAccountData {
-  password: string;
-  name: string;
-  mnemonic: string;
-  assetId?: string;
-}
 
 const initialValues = {
   name: generateUsername({ useRandomNumber: false }),
@@ -45,12 +43,9 @@ export const NewTradingAccount = ({
   onCreateCallback,
   fundWalletPresent,
   loading,
-  selectedExtension,
-  errorMessage,
-  errorTitle,
 }: {
   onClose: (e: MouseEvent<HTMLButtonElement>) => void;
-  onCreateAccount: (value: RegisterTradeAccountData) => Promise<void>;
+  onCreateAccount: (value: AddProxyAccountArgs) => Promise<void>;
   onCreateCallback: () => void;
   loading?: boolean;
   balance?: number;
@@ -67,7 +62,7 @@ export const NewTradingAccount = ({
   const isLoading = false;
   const error = false;
   const [state, setState] = useState(initialState);
-  const { hasAccount } = useConnectWalletProvider();
+  const { hasAccount, selectedWallet } = useConnectWalletProvider();
 
   const {
     hasTokenFee,
@@ -99,7 +94,8 @@ export const NewTradingAccount = ({
             name,
             password: password.length === 5 ? password : "",
             mnemonic,
-            assetId: tokenFee?.id,
+            tokenFeeId: tokenFee?.id,
+            selectedWallet,
           });
           onCreateCallback();
         } catch (error) {

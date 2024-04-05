@@ -1,15 +1,13 @@
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import {
+  ExtensionAccount,
   useTransactionManager,
   useUserAccounts,
 } from "@polkadex/react-providers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  removeFromStorage,
-  removeProxyFromAccount,
-} from "@orderbook/core/helpers";
+import { removeFromStorage } from "@orderbook/core/helpers";
 import { ACTIVE_ACCOUNT_KEY } from "@orderbook/core/providers/user/profile/constants";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
@@ -18,46 +16,52 @@ import { useSettingsProvider } from "../providers/public/settings";
 
 export type RemoveProxyAccountArgs = {
   proxy: string;
-  main: string;
-  assetId?: string;
+  tokenFeeId?: string;
+  selectedWallet?: ExtensionAccount;
 };
 
 export function useRemoveProxyAccount(props: MutateHookProps) {
   const queryClient = useQueryClient();
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
-  const { getSigner, selectedAddresses, onUserLogout } = useProfile();
+  const { selectedAddresses, onUserLogout } = useProfile();
   const { onPushNotification } = useSettingsProvider();
   const { addToTxQueue } = useTransactionManager();
 
   const { mutateAsync, status, error } = useMutation({
-    mutationFn: async ({ proxy, main, assetId }: RemoveProxyAccountArgs) => {
+    mutationFn: async ({
+      proxy,
+      tokenFeeId,
+      selectedWallet,
+    }: RemoveProxyAccountArgs) => {
       if (!api || !wallet)
         throw new Error("You are not connected to blockchain ");
 
-      const signer = getSigner(main);
-      if (!signer) throw new Error("signer is not defined");
+      if (!selectedWallet) throw new Error("seletedWallet is not defined");
 
-      appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
-        queryClient.setQueryData(
-          QUERY_KEYS.singleProxyAccounts(main),
-          (proxies?: string[]) => {
-            return proxies?.filter((value) => value !== proxy);
-          }
-        );
-      });
-
-      await removeProxyFromAccount(
-        addToTxQueue,
-        api,
-        proxy,
-        signer,
-        main,
-        assetId
+      appsyncOrderbookService.subscriber.subscribeAccountUpdate(
+        selectedWallet.address,
+        () => {
+          queryClient.setQueryData(
+            QUERY_KEYS.singleProxyAccounts(selectedAddresses.mainAddress),
+            (proxies?: string[]) => {
+              return proxies?.filter((value) => value !== proxy);
+            }
+          );
+        }
       );
 
+      const signedExtrinsic =
+        await appsyncOrderbookService.operation.removeAccount({
+          api,
+          account: selectedWallet,
+          proxyAddress: proxy,
+          tokenFeeId,
+        });
+      addToTxQueue(signedExtrinsic);
+
       // TODO: Temp solution, backend issue. Remove it when it resolved in backend
-      await isTradingAccountRemovedFromDb(proxy, main);
+      await isTradingAccountRemovedFromDb(proxy, selectedWallet.address);
 
       if (proxy === selectedAddresses.tradeAddress) {
         onUserLogout();

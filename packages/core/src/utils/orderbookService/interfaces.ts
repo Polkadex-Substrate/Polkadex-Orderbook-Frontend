@@ -1,8 +1,9 @@
 import { ApiPromise } from "@polkadot/api";
 import { ExtensionAccount } from "@polkadex/react-providers";
-import { AddToTxQueue, SignatureEnumSr25519 } from "@orderbook/core/helpers";
+import { SignatureEnumSr25519 } from "@orderbook/core/helpers";
 import { LmpApi } from "@polkadex/polkadex-api";
 import { Signer } from "@polkadot/types/types";
+import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
 
 import {
   AccountUpdateEvent,
@@ -114,7 +115,6 @@ export type ExecuteArgs = {
 export type WithdrawArgs = {
   payload: [string, string, object, SignatureEnumSr25519];
   address: string;
-  addToTxQueue: AddToTxQueue;
 };
 
 export type DepositArgs = {
@@ -122,18 +122,37 @@ export type DepositArgs = {
   amount: string | number;
   asset: Record<string, string | null>;
   account: ExtensionAccount;
-  assetId?: string;
-  addToTxQueue: AddToTxQueue;
+  tokenFeeId?: string;
+};
+
+export type RemoveAccountArgs = {
+  api: ApiPromise;
+  account: ExtensionAccount;
+  proxyAddress: string;
+  tokenFeeId?: string;
+};
+
+export type AddAccountArgs = {
+  api: ApiPromise;
+  account: ExtensionAccount;
+  tokenFeeId?: string;
+  proxyAddress: string;
+};
+
+export type RegisterMainAccountArgs = {
+  api: ApiPromise;
+  account: ExtensionAccount;
+  tokenFeeId?: string;
+  proxyAddress: string;
 };
 
 export type ClaimRewardArgs = {
-  api: ApiPromise;
   lmp: LmpApi;
   signer: Signer;
   address: string;
   epoch: number;
   market: string;
-  addToTxQueue: AddToTxQueue;
+  tokenFeeId?: string;
 };
 
 export interface OrderbookOperationStrategy extends BaseStrategy {
@@ -141,8 +160,13 @@ export interface OrderbookOperationStrategy extends BaseStrategy {
   cancelOrder: (args: ExecuteArgs) => Promise<void>;
   cancelAll: (args: ExecuteArgs) => Promise<void>;
   withdraw: (args: WithdrawArgs) => Promise<void>;
-  deposit: (args: DepositArgs) => Promise<void>;
-  claimReward: (args: ClaimRewardArgs) => Promise<void>;
+  removeAccount: (args: RemoveAccountArgs) => Promise<SubmittableExtrinsic>;
+  addAccount: (args: RemoveAccountArgs) => Promise<SubmittableExtrinsic>;
+  registerMainAccount: (
+    args: RegisterMainAccountArgs
+  ) => Promise<SubmittableExtrinsic>;
+  deposit: (args: DepositArgs) => Promise<SubmittableExtrinsic>;
+  claimReward: (args: ClaimRewardArgs) => Promise<SubmittableExtrinsic>;
 }
 
 export interface OrderbookService {

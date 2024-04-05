@@ -197,12 +197,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
       </Interactable.Card>
       <Interactable.Card pageName="NewTradingAccount">
         <NewTradingAccount
-          onCreateAccount={async (e) =>
-            await onRegisterTradeAccount?.({
-              ...e,
-              main: selectedWallet?.address as string,
-            })
-          }
+          onCreateAccount={onRegisterTradeAccount}
           loading={registerStatus === "loading"}
           fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
           errorTitle="Error"
@@ -230,7 +225,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
             onRemoveTradingAccountFromDevice?.(tempTrading?.address as string)
           }
           onRemoveFromChain={async (e) =>
-            await onRemoveTradingAccountFromChain?.(e)
+            await onRemoveTradingAccountFromChain?.({ ...e, selectedWallet })
           }
           loading={removingStatus === "loading"}
           errorTitle="Error"

@@ -92,9 +92,9 @@ Amplify.configure(awsconfig);
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false
-    }
-  }
+      refetchOnWindowFocus: false,
+    },
+  },
 });
 
 export const DynamicProviders = ({ children }: { children: ReactNode }) => {
@@ -110,12 +110,12 @@ export const DynamicProviders = ({ children }: { children: ReactNode }) => {
             },
             onSuccess: (title, description) => {
               toast.success(title.toString(), {
-                description
+                description,
               });
             },
             onInfo: (title, description) => {
               toast.info(title.toString(), { description });
-            }
+            },
           }}
         >
           <ExtensionsProvider>

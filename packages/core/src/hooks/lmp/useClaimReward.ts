@@ -35,16 +35,15 @@ export const useClaimReward = () => {
       const signer = getSigner(mainAddress);
       if (!signer) throw new Error("Signer not defined");
 
-      await appsyncOrderbookService.operation.claimReward({
-        addToTxQueue,
-        address: mainAddress,
-        api,
-        epoch,
-        lmp,
-        market,
-        signer,
-      });
-
+      const signedExtrinsic =
+        await appsyncOrderbookService.operation.claimReward({
+          address: mainAddress,
+          epoch,
+          lmp,
+          market,
+          signer,
+        });
+      addToTxQueue(signedExtrinsic);
       return { reward, epoch, market };
     },
     onError: (error: Error, args) => {

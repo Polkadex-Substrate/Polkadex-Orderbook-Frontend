@@ -36,7 +36,7 @@ export const GenericExternalCard = ({
   return (
     <Comp
       className={classNames(
-        "group flex items-center justify-between gap-2 rounded-md px-3 py-2 border border-primary hover:bg-level-1 duration-300 transition-colors cursor-pointer",
+        "group flex items-center justify-between gap-2 rounded-md px-3 py-1.5 border border-primary hover:bg-level-1 duration-300 transition-colors cursor-pointer",
         disabled && "opacity-50 pointer-events-none"
       )}
       {...otherProps}

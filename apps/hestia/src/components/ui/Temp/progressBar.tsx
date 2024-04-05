@@ -296,7 +296,7 @@ export const Progress = () => {
   );
 
   useEffect(() => {
-    if (txStatus?.length >= 3) setTimeout(() => setTxStatus([]), 5000);
+    if (txStatus?.length >= 3) setTimeout(() => setTxStatus([]), 3000);
   }, [txStatus.length]);
 
   const message = {

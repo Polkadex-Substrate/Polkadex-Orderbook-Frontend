@@ -50,8 +50,8 @@ export const ConnectExistingUser = ({
 
   const filteredAccounts = useMemo(
     () =>
-      localTradingAccounts?.filter(
-        (item) => mainProxiesAccounts?.includes(item.address)
+      localTradingAccounts?.filter((item) =>
+        mainProxiesAccounts?.includes(item.address)
       ),
     [localTradingAccounts, mainProxiesAccounts]
   );
@@ -160,12 +160,7 @@ export const ConnectExistingUser = ({
             />
             <NewTradingAccount
               key="NewTradingAccount"
-              onCreateAccount={async (e) =>
-                await onRegisterTradeAccount?.({
-                  ...e,
-                  main: selectedWallet?.address as string,
-                })
-              }
+              onCreateAccount={onRegisterTradeAccount}
               loading={registerStatus === "loading"}
               fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
               errorTitle="Error"
@@ -195,7 +190,6 @@ export const ConnectExistingUser = ({
               }
               onRemoveFromChain={async () =>
                 await onRemoveTradingAccountFromChain?.({
-                  main: selectedWallet?.address as string,
                   proxy: tempTrading?.address as string,
                 })
               }

@@ -1,8 +1,7 @@
 import { GraphQLResult } from "@aws-amplify/api";
 import BigNumber from "bignumber.js";
-import { signAndSendExtrinsic } from "@orderbook/core/helpers";
 import { UNIT_BN } from "@orderbook/core/constants";
-import { SubmittableExtrinsic } from "@polkadot/api/types";
+import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
 
 import {
   Cancel_allMutation,
@@ -17,6 +16,7 @@ import {
   DepositArgs,
   ExecuteArgs,
   OrderbookOperationStrategy,
+  RemoveAccountArgs,
   WithdrawArgs,
 } from "./../interfaces";
 
@@ -153,51 +153,96 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
   }
 
   async deposit({
-    addToTxQueue,
     account,
     amount,
     api,
     asset,
-  }: DepositArgs): Promise<void> {
+    tokenFeeId,
+  }: DepositArgs): Promise<SubmittableExtrinsic> {
+    const assetId =
+      tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
     const amountStr = new BigNumber(amount).multipliedBy(UNIT_BN).toString();
     const ext = api.tx.ocex.deposit(asset as unknown as string, amountStr);
-    const res = await signAndSendExtrinsic(
-      addToTxQueue,
-      api,
-      ext,
-      { signer: account.signer },
-      account?.address,
-      true
-    );
-    if (!res.isSuccess) {
-      throw new Error("Deposit failed");
-    }
+    const signedExt = await ext.signAsync(account.address, {
+      signer: account.signer,
+      // assetId,
+    });
+
+    return signedExt;
+  }
+
+  async removeAccount({
+    account,
+    proxyAddress,
+    api,
+    tokenFeeId,
+  }: RemoveAccountArgs): Promise<SubmittableExtrinsic> {
+    const assetId =
+      tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
+    const ext = api.tx.ocex.removeProxyAccount(proxyAddress);
+    const signedExt = await ext.signAsync(account.address, {
+      signer: account.signer,
+      // assetId,
+    });
+
+    return signedExt;
+  }
+
+  async addAccount({
+    account,
+    proxyAddress,
+    api,
+    tokenFeeId,
+  }: RemoveAccountArgs): Promise<SubmittableExtrinsic> {
+    const assetId =
+      tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
+    const ext = api.tx.ocex.addProxyAccount(proxyAddress);
+    const signedExt = await ext.signAsync(account.address, {
+      signer: account.signer,
+      // assetId,
+    });
+
+    return signedExt;
+  }
+
+  async registerMainAccount({
+    account,
+    proxyAddress,
+    api,
+    tokenFeeId,
+  }: RemoveAccountArgs): Promise<SubmittableExtrinsic> {
+    const assetId =
+      tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
+
+    const ext = api.tx.ocex.registerMainAccount(proxyAddress);
+    const signedExt = await ext.signAsync(account.address, {
+      signer: account.signer,
+      // assetId,
+    });
+
+    return signedExt;
   }
 
   async claimReward({
-    addToTxQueue,
     signer,
-    api,
     lmp,
     epoch,
     market,
     address,
-  }: ClaimRewardArgs): Promise<void> {
+    tokenFeeId,
+  }: ClaimRewardArgs): Promise<SubmittableExtrinsic> {
+    const assetId =
+      tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
     const ext = (await lmp.claimRewardsTx(
       epoch,
       market
-    )) as SubmittableExtrinsic<"promise">;
-    const res = await signAndSendExtrinsic(
-      addToTxQueue,
-      api,
-      ext,
-      { signer },
-      address,
-      true
-    );
-    if (!res.isSuccess) {
-      throw new Error("Claim reward failed");
-    }
+    )) as SubmittableExtrinsic;
+    const signedExt = await ext.signAsync(address, {
+      signer,
+      // assetId,
+    });
+
+    return signedExt;
   }
 }
 export const appsyncOperations = new AppsyncV1Operations();

@@ -11,7 +11,7 @@ import { GenericSelectCard, TradingAccountCard } from "../ReadyToUse";
 
 import { ConfirmTransaction } from "./confirmTransaction";
 
-type RemoveProps = { main: string; proxy: string; assetId?: string };
+type RemoveProps = { proxy: string; assetId?: string };
 export const RemoveTradingAccount = ({
   tradingAccount,
   fundWallet,
@@ -19,9 +19,6 @@ export const RemoveTradingAccount = ({
   onRemoveFromChain,
   onCancel,
   loading,
-  selectedExtension,
-  errorMessage,
-  errorTitle,
   availableOnDevice,
   enabledExtensionAccount = false,
 }: {
@@ -76,10 +73,9 @@ export const RemoveTradingAccount = ({
 
   const removeProps = useMemo(
     () => ({
-      main: fundWallet?.address ?? "",
       proxy: tradingAccount.address ?? "",
     }),
-    [fundWallet?.address, tradingAccount.address]
+    [tradingAccount.address]
   );
 
   const { onRemoveProxyAccountOcex } = useCall();

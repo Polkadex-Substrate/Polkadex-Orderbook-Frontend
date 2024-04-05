@@ -72,12 +72,7 @@ const CardsComponent = () => {
     <Fragment>
       <Interactable.Card pageName="NewTradingAccount">
         <NewTradingAccount
-          onCreateAccount={async (e) =>
-            await onRegisterTradeAccount?.({
-              ...e,
-              main: selectedWallet?.address as string,
-            })
-          }
+          onCreateAccount={onRegisterTradeAccount}
           loading={registerStatus === "loading"}
           fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
           errorTitle="Error"

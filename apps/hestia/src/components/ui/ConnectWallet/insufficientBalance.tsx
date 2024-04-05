@@ -30,17 +30,17 @@ export const InsufficientBalance = ({
   const { assets } = useAssets();
 
   return (
-    <Interaction className="w-full">
+    <Interaction className="w-full gap-3">
       <Interaction.Content className="flex flex-col gap-4 flex-1">
         <div className="flex flex-col gap-5 border-b border-primary">
-          <div className="flex flex-col gap-3 items-center text-center">
-            <Illustrations.Error className="max-w-[5rem] w-full" />
+          <div className="flex flex-col gap-2 items-center text-center">
+            <Illustrations.Error className="max-w-[4rem] w-full" />
             <Typography.Text appearance="primary">
               You need some PDEX to cover the existential deposit and the small
               transaction fee to create your trading account.
             </Typography.Text>
           </div>
-          <div className="flex flex-col gap-2 pb-4">
+          <div className="flex flex-col gap-1 pb-3">
             <GenericInfoCard label="Your balance">
               {balance} PDEX
             </GenericInfoCard>
@@ -58,8 +58,8 @@ export const InsufficientBalance = ({
             </Accordion.Trigger>
             <Accordion.Content>
               <div className="flex flex-col gap-2">
-                <div className="group flex flex-col gap-1 rounded-md px-3 py-2 border border-primary hover:bg-level-1 duration-300 transition-colors cursor-pointer">
-                  <div className="flex items-center gap-3">
+                <div className="group flex flex-col gap-1 rounded-md py-2 border border-primary hover:bg-level-1 duration-300 transition-colors cursor-pointer">
+                  <div className="flex items-center gap-3 px-3">
                     <div className="grid place-content-center w-7 h-7 rounded-md bg-level-1">
                       <Icons.Bridge className="w-4 h-4 text-primary" />
                     </div>
@@ -68,7 +68,7 @@ export const InsufficientBalance = ({
                     </Typography.Text>
                   </div>
                   <Separator.Horizontal />
-                  <div className="flex flex-col gap-1 pt-2">
+                  <div className="flex flex-col">
                     <Typography.Text
                       appearance="primary"
                       size="xs"
@@ -76,7 +76,7 @@ export const InsufficientBalance = ({
                     >
                       Activate your account using:
                     </Typography.Text>
-                    <div className="flex flex-items gap-1.5 overflow-hidden hover:overflow-auto hover:pb-2">
+                    <div className="flex flex-items gap-1 overflow-hidden hover:overflow-auto hover:pb-2">
                       {assets?.map((asset) => {
                         const chainName = getChainFromTicker(asset.ticker);
                         if (asset.isEvm || asset.id === "PDEX") return null;

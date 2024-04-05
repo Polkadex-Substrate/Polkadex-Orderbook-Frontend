@@ -13,7 +13,7 @@ type DepositArgs = {
   amount: string | number;
   asset: Record<string, string | null>;
   account: ExtensionAccount;
-  assetId?: string;
+  tokenFeeId?: string;
 };
 
 export const useDeposit = () => {
@@ -23,7 +23,7 @@ export const useDeposit = () => {
   const { addToTxQueue } = useTransactionManager();
 
   const { mutateAsync, status } = useMutation({
-    mutationFn: async ({ asset, amount, account, assetId }: DepositArgs) => {
+    mutationFn: async ({ asset, amount, account, tokenFeeId }: DepositArgs) => {
       if (!isReady) throw new Error("Orderbook service not initialized");
 
       if (!api || !api?.isConnected)
@@ -34,15 +34,16 @@ export const useDeposit = () => {
 
       onHandleInfo?.("Processing Deposit...");
 
-      await appsyncOrderbookService.operation.deposit({
-        addToTxQueue,
+      const signedExtrinsic = await appsyncOrderbookService.operation.deposit({
         api,
         account,
         asset,
         amount,
-        assetId,
+        tokenFeeId,
       });
+      addToTxQueue(signedExtrinsic);
     },
+
     onError: (error) => {
       const errorMessage = (error as Error).message ?? (error as string);
       onHandleError(errorMessage);
