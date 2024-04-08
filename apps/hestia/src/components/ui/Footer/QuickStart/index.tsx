@@ -26,8 +26,8 @@ export const QuickStart = ({
       className="flex flex-col border-primary bg-level-0 border w-full max-md:w-screen md:max-w-[800px] overflow-auto scrollbar-hide"
     >
       <Modal.Content className="relative flex max-md:flex-col">
-        <div className="flex flex-col gap-4 p-7">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3 p-7">
+          <div className="flex flex-col">
             <Typography.Heading size="3xl">
               Polkadex is Swapping Parachain Slots
             </Typography.Heading>
