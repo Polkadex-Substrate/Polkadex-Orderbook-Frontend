@@ -14,8 +14,8 @@ const messages = {
 export const Progress = () => {
   const { txStatus } = useTransactionManager();
 
-  return (
-    <ProgressBar data={txStatus}>
+  return txStatus.map((e) => (
+    <ProgressBar key={e.hash} data={e} closeDelay={5000}>
       <Fragment>
         <ProgressBar.Maximized>
           <ProgressBar.Title messages={messages} />
@@ -38,5 +38,5 @@ export const Progress = () => {
         </ProgressBar.Minimized>
       </Fragment>
     </ProgressBar>
-  );
+  ));
 };
