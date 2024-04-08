@@ -10,7 +10,7 @@ import { useParams } from "next/navigation";
 import awsconfig from "../../../../aws-exports";
 
 const Progress = dynamic(
-  () => import("../Temp/progressBar").then((mod) => mod.Progress),
+  () => import("../Progress").then((mod) => mod.Progress),
   { ssr: false }
 );
 

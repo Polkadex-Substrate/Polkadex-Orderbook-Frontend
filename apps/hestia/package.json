@@ -21,7 +21,7 @@
     "@polkadex/polkadex-api": "^3.2.0",
     "@polkadex/react-providers": "^2.0.0",
     "@polkadex/types": "^1.2.2",
-    "@polkadex/ux": "^6.15.0",
+    "@polkadex/ux": "^6.16.0",
     "@polkadot-cloud/assets": "^0.3.4",
     "@radix-ui/react-portal": "^1.0.4",
     "@remixicon/react": "^4.2.0",
