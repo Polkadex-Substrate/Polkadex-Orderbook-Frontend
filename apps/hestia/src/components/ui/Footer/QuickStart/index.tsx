@@ -104,8 +104,8 @@ export const QuickStart = ({
             </Typography.Paragraph>
           </div>
           <Separator.Horizontal />
-          <div className="flex items-center gap-1">
-            <Typography.Text>For more details, </Typography.Text>
+          <Typography.Text>
+            For more details,{" "}
             <Typography.Text asChild appearance="info">
               <Link
                 target="_blank"
@@ -113,8 +113,8 @@ export const QuickStart = ({
               >
                 check the full announcement here.
               </Link>
-            </Typography.Text>
-          </div>
+            </Typography.Text>{" "}
+          </Typography.Text>
         </div>
         <div className="md:flex justify-end min-h-full max-md:hidden min-w-[320px] border-l border-primary">
           <Image
