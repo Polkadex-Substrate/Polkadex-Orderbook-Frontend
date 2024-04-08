@@ -24,18 +24,13 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const valA = (rowA.getValue(columnId) as AssetsProps).ticker;
+      const valB = (rowB.getValue(columnId) as AssetsProps).ticker;
+      return valA > valB ? 1 : -1;
+    },
   }),
   columnHelper.accessor((row) => row.onChainBalance, {
-    id: "tradingAccount",
-    cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Trading account
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row.free_balance, {
     id: "fundingAccount",
     cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
     header: () => (
@@ -44,5 +39,26 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const valA = Number(rowA.getValue(columnId));
+      const valB = Number(rowB.getValue(columnId));
+      return valA > valB ? 1 : -1;
+    },
+  }),
+
+  columnHelper.accessor((row) => row.free_balance, {
+    id: "tradingAccount",
+    cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Trading account
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const valA = Number(rowA.getValue(columnId));
+      const valB = Number(rowB.getValue(columnId));
+      return valA > valB ? 1 : -1;
+    },
   }),
 ];

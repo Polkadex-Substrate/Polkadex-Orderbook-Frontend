@@ -179,7 +179,7 @@ export const SelectFundingDropdown = ({
                 <Searchable.Empty className="flex-1 flex items-center justify-center">
                   No result found
                 </Searchable.Empty>
-                <ScrollArea className="max-h-[400px]">
+                <ScrollArea className="max-h-[280px]">
                   <Searchable.Group heading="Accounts">
                     {walletsFiltered.map((curr) => {
                       const selected =
