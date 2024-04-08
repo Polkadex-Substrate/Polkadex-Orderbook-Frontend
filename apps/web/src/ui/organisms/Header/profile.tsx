@@ -245,7 +245,12 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                 <Multistep.Content>
                   <NewTradingAccount
                     key="NewTradingAccount"
-                    onCreateAccount={onRegisterTradeAccount}
+                    onCreateAccount={async (e) =>
+                      await onRegisterTradeAccount?.({
+                        ...e,
+                        main: selectedWallet?.address as string,
+                      })
+                    }
                     loading={registerStatus === "loading"}
                     fundWalletPresent={
                       !!Object.keys(selectedWallet ?? {})?.length
@@ -331,7 +336,7 @@ export const Profile = ({ onClick }: { onClick: () => void }) => {
                     onRemoveFromChain={async () =>
                       await onRemoveTradingAccountFromChain?.({
                         proxy: tempTrading?.address as string,
-                        selectedWallet,
+                        main: tempExtensionAccount?.address as string,
                       })
                     }
                     loading={removingStatus === "loading"}

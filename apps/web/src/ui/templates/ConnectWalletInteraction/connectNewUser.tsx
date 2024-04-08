@@ -55,7 +55,12 @@ export const ConnectNewUser = ({
           <Multistep.Content>
             <NewTradingAccount
               key="NewTradingAccount"
-              onCreateAccount={onRegisterTradeAccount}
+              onCreateAccount={async (e) =>
+                await onRegisterTradeAccount?.({
+                  ...e,
+                  main: selectedWallet?.address as string,
+                })
+              }
               loading={registerStatus === "loading"}
               fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
               errorTitle="Error"
