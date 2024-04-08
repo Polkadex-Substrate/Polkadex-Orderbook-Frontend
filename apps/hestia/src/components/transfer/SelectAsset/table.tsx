@@ -1,5 +1,3 @@
-// TODO: Add generic empty assets
-
 import { GenericMessage, Table as PolkadexTable, Skeleton } from "@polkadex/ux";
 import { Fragment, forwardRef, useState } from "react";
 import { AssetsProps } from "@orderbook/core/hooks";
@@ -25,8 +23,10 @@ export const Table = forwardRef<
     selectedAssetId: string;
     onChangeAsset: (e: FilteredAssetProps) => void;
   }
->(({ maxHeight, data, loading, selectedAssetId, onChangeAsset }, ref) => {
-  const [sorting, setSorting] = useState<SortingState>([]);
+>(({ maxHeight, data, loading, selectedAssetId, onChangeAsset }) => {
+  const [sorting, setSorting] = useState<SortingState>([
+    { desc: true, id: "fundingAccount" },
+  ]);
 
   const table = useReactTable({
     data,
@@ -134,10 +134,11 @@ export const Table = forwardRef<
         </div>
       ) : (
         <GenericMessage
-          title="No data"
+          title="No assets found"
           illustration="NoData"
+          className="bg-level-0"
           imageProps={{
-            className: "w-10 self-center",
+            className: "w-16 self-center",
           }}
         />
       )}
