@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "yarn generate:tradingViewFiles && next dev",
-    "build": "next build",
+    "build": "yarn generate:tradingViewFiles && next build",
     "dev:build": "export __NEXT_TEST_MODE=1 && next build",
     "generate:tradingViewFiles": "chmod +x copy_charting_library_files.sh && ./copy_charting_library_files.sh",
     "start": "next start",

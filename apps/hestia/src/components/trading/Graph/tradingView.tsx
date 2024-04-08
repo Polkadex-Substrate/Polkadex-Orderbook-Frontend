@@ -57,10 +57,9 @@ export const TVChartContainer = ({
         const localTime = Intl.DateTimeFormat().resolvedOptions()
           .timeZone as Timezone;
 
-        tvWidget.current?.activeChart().setTimezone(localTime);
-
+        tvWidget.current?.activeChart().getTimezoneApi().setTimezone(localTime);
         tvWidget?.current
-          ?.changeTheme(isDarkTheme ? "Dark" : "Light")
+          ?.changeTheme(isDarkTheme ? "dark" : "light")
           .then(() => {
             tvWidget?.current?.applyOverrides({
               ...options.overrides,
