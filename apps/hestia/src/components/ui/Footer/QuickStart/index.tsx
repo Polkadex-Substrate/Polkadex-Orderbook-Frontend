@@ -26,8 +26,8 @@ export const QuickStart = ({
       className="flex flex-col border-primary bg-level-0 border w-full max-md:w-screen md:max-w-[800px] overflow-auto scrollbar-hide"
     >
       <Modal.Content className="relative flex max-md:flex-col">
-        <div className="flex flex-col gap-4 p-7">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3 p-7">
+          <div className="flex flex-col">
             <Typography.Heading size="3xl">
               Polkadex is Swapping Parachain Slots
             </Typography.Heading>
@@ -69,36 +69,52 @@ export const QuickStart = ({
               seamlessly, there’s a small chance this specific untested workflow
               in Polkadot causes an issue with the Polkadex parachain and
               temporarily disrupts the connection between Polkadex and Polkadot.
-              While trading on Polkadex Orderbook will remain unaffected and you
-              will still be in full control of your funds on the Polkadex Main
-              Network, your funds could remain on the Polkadex Main Network
-              until a connection with Polkadot is re-established. Should you
-              choose to do so, you may transfer funds from Polkadex back to
-              their networks of origin using
-              <Link
-                href="https://thea.polkadex.trade/"
-                target="_blank"
-                rel="noreferrer noopener"
-                className="text-info-base underline"
-              >
+              <Typography.Text size="sm" appearance="base">
                 {" "}
-                THEA{" "}
-              </Link>
-              before the swap is executed on April 9th.
+                While trading on Polkadex Orderbook will remain unaffected and
+                you will still be in full control of your funds on the Polkadex
+                Main Network{" "}
+              </Typography.Text>
+              , your funds could remain on the Polkadex Main Network until a
+              connection with Polkadot is re-established. Should you choose to
+              do so,
+              <Typography.Text size="sm" appearance="base">
+                {" "}
+                you may transfer funds from Polkadex back to their networks of
+                origin{" "}
+              </Typography.Text>
+              <Typography.Text
+                size="sm"
+                appearance="info"
+                className="underline"
+                asChild
+              >
+                <Link
+                  href="https://thea.polkadex.trade/"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  using THEA
+                </Link>
+              </Typography.Text>
+              <Typography.Text size="sm" appearance="base">
+                {" "}
+                before the swap is executed on April 9th.
+              </Typography.Text>
             </Typography.Paragraph>
           </div>
           <Separator.Horizontal />
-          <div className="flex items-center gap-2">
-            <Typography.Text>For more details.</Typography.Text>
+          <Typography.Text>
+            For more details,{" "}
             <Typography.Text asChild appearance="info">
               <Link
                 target="_blank"
                 href="https://polkadex.medium.com/polkadex-is-swapping-parachain-slots-6cacde09aafe"
               >
-                Check the full announcement here.
+                check the full announcement here.
               </Link>
-            </Typography.Text>
-          </div>
+            </Typography.Text>{" "}
+          </Typography.Text>
         </div>
         <div className="md:flex justify-end min-h-full max-md:hidden min-w-[320px] border-l border-primary">
           <Image
