@@ -135,7 +135,7 @@ export const ReadyToClaim = forwardRef<HTMLDivElement, { maxHeight: string }>(
                               onFetchClaimWithdraw({
                                 sid: value.sid,
                                 assetIds,
-                                assetId: tokenFee?.id,
+                                tokenFeeId: tokenFee?.id,
                                 selectedWallet,
                               });
                             }}

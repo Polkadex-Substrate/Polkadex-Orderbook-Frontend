@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import { signAndSendExtrinsic } from "@orderbook/core/helpers";
 import BigNumber from "bignumber.js";
 import { NOTIFICATIONS, UNIT_BN } from "@orderbook/core/constants";
 import {
@@ -9,6 +8,7 @@ import {
 } from "@polkadex/react-providers";
 
 import { useSettingsProvider } from "../providers/public/settings";
+import { appsyncOrderbookService } from "../utils/orderbookService";
 
 interface AssetTransferParams {
   asset: Record<string, string | null>;
@@ -16,7 +16,9 @@ interface AssetTransferParams {
   dest: string;
   amount: string;
   account: ExtensionAccount;
+  tokenFeeId?: string;
 }
+
 export const useAssetTransfer = (onRefetch: () => Promise<void>) => {
   const { api } = useNativeApi();
   const { onHandleError, onHandleAlert, onPushNotification } =
@@ -30,6 +32,7 @@ export const useAssetTransfer = (onRefetch: () => Promise<void>) => {
       amount,
       account,
       ticker,
+      tokenFeeId,
     }: AssetTransferParams) => {
       if (!api?.isConnected)
         throw new Error("You are not connected to blockchain");
@@ -37,18 +40,17 @@ export const useAssetTransfer = (onRefetch: () => Promise<void>) => {
       const amountFormatted = new BigNumber(amount)
         .multipliedBy(UNIT_BN)
         .toString();
-      const tx = asset?.asset
-        ? api.tx.assets.transfer(asset.asset, dest, amountFormatted)
-        : api.tx.balances.transfer(dest, amountFormatted);
 
-      await signAndSendExtrinsic(
-        addToTxQueue,
+      const signedExtrinsic = await appsyncOrderbookService.operation.transfer({
         api,
-        tx,
         account,
-        account.address,
-        true
-      );
+        asset,
+        amount: amountFormatted,
+        dest,
+        tokenFeeId,
+      });
+      addToTxQueue(signedExtrinsic);
+
       return { asset: ticker, amount };
     },
     onError: (error: { message: string }) =>

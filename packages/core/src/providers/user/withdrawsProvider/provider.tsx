@@ -110,7 +110,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     selectedWallet,
     sid,
     assetIds = [],
-    assetId,
+    tokenFeeId,
   }: T.OnFetchClaimWithdraw) => {
     try {
       const api = nativeApiState.api;
@@ -134,7 +134,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
         selectedWallet.signer,
         selectedWallet.address,
         sid,
-        assetId
+        tokenFeeId
       );
       if (res.isSuccess) {
         dispatch(A.withdrawsClaimData({ sid }));

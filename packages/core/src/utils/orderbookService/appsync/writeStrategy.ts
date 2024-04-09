@@ -15,11 +15,13 @@ import * as mutation from "../../../graphql/mutations";
 import { sendQueryToAppSync } from "./helpers";
 import {
   ClaimRewardArgs,
+  ClaimWithdrawArgs,
   CreateProxyAcccountArgs,
   DepositArgs,
   ExecuteArgs,
   OrderbookOperationStrategy,
   RemoveAccountArgs,
+  TransferArgs,
   WithdrawArgs,
 } from "./../interfaces";
 
@@ -233,5 +235,48 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
 
     return signedExt;
   }
+
+  async transfer({
+    api,
+    account,
+    asset,
+    amount,
+    dest,
+    tokenFeeId,
+  }: TransferArgs): Promise<SubmittableExtrinsic> {
+    const assetId =
+      tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
+
+    const ext = asset?.asset
+      ? api.tx.assets.transfer(asset?.asset, dest, amount)
+      : api.tx.balances.transfer(dest, amount);
+
+    const signedExt = await ext.signAsync(account.address, {
+      signer: account.signer,
+      // assetId,
+    });
+
+    return signedExt;
+  }
+
+  async claimWithdrawal({
+    api,
+    account,
+    sid,
+    tokenFeeId,
+  }: ClaimWithdrawArgs): Promise<SubmittableExtrinsic> {
+    const assetId =
+      tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
+
+    const ext = api.tx.ocex.claimWithdraw(sid, account.address);
+
+    const signedExt = await ext.signAsync(account.address, {
+      signer: account.signer,
+      // assetId,
+    });
+
+    return signedExt;
+  }
 }
+
 export const appsyncOperations = new AppsyncV1Operations();

@@ -149,6 +149,22 @@ export type ClaimRewardArgs = {
   tokenFeeId?: string;
 };
 
+export type TransferArgs = {
+  api: ApiPromise;
+  account: ExtensionAccount;
+  asset: Record<string, string | null>;
+  amount: string;
+  dest: string;
+  tokenFeeId?: string;
+};
+
+export type ClaimWithdrawArgs = {
+  api: ApiPromise;
+  account: ExtensionAccount;
+  sid: number;
+  tokenFeeId?: string;
+};
+
 export interface OrderbookOperationStrategy extends BaseStrategy {
   placeOrder: (args: ExecuteArgs) => Promise<void>;
   cancelOrder: (args: ExecuteArgs) => Promise<void>;
@@ -161,6 +177,8 @@ export interface OrderbookOperationStrategy extends BaseStrategy {
 
   deposit: (args: DepositArgs) => Promise<SubmittableExtrinsic>;
   claimReward: (args: ClaimRewardArgs) => Promise<SubmittableExtrinsic>;
+  transfer: (args: TransferArgs) => Promise<SubmittableExtrinsic>;
+  claimWithdrawal: (args: ClaimWithdrawArgs) => Promise<SubmittableExtrinsic>;
 }
 
 export interface OrderbookService {
