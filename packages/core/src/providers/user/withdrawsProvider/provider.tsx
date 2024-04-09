@@ -11,20 +11,17 @@ import {
   getNonce,
   sendQueryToAppSync,
   signPayload,
-  getFundingAccountDetail,
   SignatureEnumSr25519,
 } from "@orderbook/core/helpers";
 import { useFunds } from "@orderbook/core/hooks";
 import {
   useUserAccounts,
-  useExtensionAccounts,
   useTransactionManager,
 } from "@polkadex/react-providers";
 
 import { useProfile } from "../profile";
 
 import * as A from "./actions";
-import type { WithdrawsClaimFetch } from "./actions";
 import * as T from "./types";
 import { Provider } from "./context";
 import { initialState, withdrawsReducer } from "./reducer";
@@ -32,10 +29,9 @@ import { initialState, withdrawsReducer } from "./reducer";
 export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(withdrawsReducer, initialState);
   const { onChangeChainBalance } = useFunds();
-  const { selectedAddresses, getSigner } = useProfile();
+  const { selectedAddresses } = useProfile();
   const nativeApiState = useNativeApi();
   const settingsState = useSettingsProvider();
-  const { extensionAccounts } = useExtensionAccounts();
   const { mainAddress, tradeAddress } = selectedAddresses;
   const { wallet } = useUserAccounts();
   const { addToTxQueue } = useTransactionManager();
@@ -111,26 +107,21 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   );
 
   const onFetchClaimWithdraw = async ({
+    selectedWallet,
     sid,
     assetIds = [],
     assetId,
-  }: WithdrawsClaimFetch["payload"]) => {
+  }: T.OnFetchClaimWithdraw) => {
     try {
       const api = nativeApiState.api;
-      const extensionAccount = getFundingAccountDetail(
-        selectedAddresses.mainAddress,
-        extensionAccounts
-      );
+
       const isApiReady = nativeApiState.connected;
-      const signer = getSigner(selectedAddresses.mainAddress);
 
       if (!api || !isApiReady)
         throw new Error("You are not connected to blockchain");
 
-      if (!extensionAccount?.address)
+      if (!selectedWallet?.address)
         throw new Error("Funding account doesn't exists");
-
-      if (!signer) throw new Error("Signer is not defined");
 
       // TODO: Move this toast as callback to signAndSendExtrinsic,
       settingsState.onHandleAlert(
@@ -140,8 +131,8 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
 
       const res = await claimWithdrawal(
         api,
-        signer,
-        extensionAccount?.address,
+        selectedWallet.signer,
+        selectedWallet.address,
         sid,
         assetId
       );

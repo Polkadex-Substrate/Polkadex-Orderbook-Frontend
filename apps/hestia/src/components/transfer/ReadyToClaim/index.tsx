@@ -136,6 +136,7 @@ export const ReadyToClaim = forwardRef<HTMLDivElement, { maxHeight: string }>(
                                 sid: value.sid,
                                 assetIds,
                                 assetId: tokenFee?.id,
+                                selectedWallet,
                               });
                             }}
                             actionLoading={!!transactionLoading}
