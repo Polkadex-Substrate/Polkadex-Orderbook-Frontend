@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-const NAME = "tourInitial";
+const NAME = "swapInitial";
 
 export function useTour() {
   const initialValue =
