@@ -4,7 +4,6 @@ import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { appsyncOrderbookService } from "@orderbook/core/utils/orderbookService";
-import { useTransactionManager } from "@polkadex/react-providers";
 
 import { ClaimRewardArgs, NOTIFICATIONS, QUERY_KEYS } from "../..";
 
@@ -18,7 +17,6 @@ export const useClaimReward = () => {
   } = useProfile();
   const { onHandleError, onHandleAlert, onPushNotification } =
     useSettingsProvider();
-  const { addToTxQueue } = useTransactionManager();
 
   const { mutateAsync, status } = useMutation({
     mutationFn: async (args: ClaimRewardArgs) => {
@@ -35,15 +33,13 @@ export const useClaimReward = () => {
       const signer = getSigner(mainAddress);
       if (!signer) throw new Error("Signer not defined");
 
-      const signedExtrinsic =
-        await appsyncOrderbookService.operation.claimReward({
-          address: mainAddress,
-          epoch,
-          lmp,
-          market,
-          signer,
-        });
-      addToTxQueue(signedExtrinsic);
+      await appsyncOrderbookService.operation.claimReward({
+        address: mainAddress,
+        epoch,
+        lmp,
+        market,
+        signer,
+      });
       return { reward, epoch, market };
     },
     onError: (error: Error, args) => {
