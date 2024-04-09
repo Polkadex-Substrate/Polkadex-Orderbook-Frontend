@@ -68,25 +68,15 @@ export function useAddProxyAccount({
           selectedWallet.address
         );
 
-      if (registeredProxies.length === 0) {
-        const signedExtrinsic =
-          await appsyncOrderbookService.operation.registerMainAccount({
-            api,
-            account: selectedWallet,
-            proxyAddress: proxy,
-            tokenFeeId,
-          });
-        addToTxQueue(signedExtrinsic);
-      } else {
-        const signedExtrinsic =
-          await appsyncOrderbookService.operation.addAccount({
-            api,
-            account: selectedWallet,
-            proxyAddress: proxy,
-            tokenFeeId,
-          });
-        addToTxQueue(signedExtrinsic);
-      }
+      const signedExtrinsic =
+        await appsyncOrderbookService.operation.createProxyAcccount({
+          api,
+          account: selectedWallet,
+          proxyAddress: proxy,
+          tokenFeeId,
+          firstAccount: !registeredProxies.length,
+        });
+      addToTxQueue(signedExtrinsic);
 
       const { pair } = wallet.addFromMnemonic(mnemonic, name, password);
       await onUserSelectTradingAddress({

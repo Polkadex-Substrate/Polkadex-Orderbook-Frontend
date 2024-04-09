@@ -132,18 +132,12 @@ export type RemoveAccountArgs = {
   tokenFeeId?: string;
 };
 
-export type AddAccountArgs = {
+export type CreateProxyAcccountArgs = {
   api: ApiPromise;
   account: ExtensionAccount;
   tokenFeeId?: string;
   proxyAddress: string;
-};
-
-export type RegisterMainAccountArgs = {
-  api: ApiPromise;
-  account: ExtensionAccount;
-  tokenFeeId?: string;
-  proxyAddress: string;
+  firstAccount?: boolean;
 };
 
 export type ClaimRewardArgs = {
@@ -161,10 +155,10 @@ export interface OrderbookOperationStrategy extends BaseStrategy {
   cancelAll: (args: ExecuteArgs) => Promise<void>;
   withdraw: (args: WithdrawArgs) => Promise<void>;
   removeAccount: (args: RemoveAccountArgs) => Promise<SubmittableExtrinsic>;
-  addAccount: (args: RemoveAccountArgs) => Promise<SubmittableExtrinsic>;
-  registerMainAccount: (
-    args: RegisterMainAccountArgs
+  createProxyAcccount: (
+    args: CreateProxyAcccountArgs
   ) => Promise<SubmittableExtrinsic>;
+
   deposit: (args: DepositArgs) => Promise<SubmittableExtrinsic>;
   claimReward: (args: ClaimRewardArgs) => Promise<SubmittableExtrinsic>;
 }

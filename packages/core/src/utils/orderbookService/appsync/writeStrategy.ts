@@ -2,6 +2,8 @@ import { GraphQLResult } from "@aws-amplify/api";
 import BigNumber from "bignumber.js";
 import { UNIT_BN } from "@orderbook/core/constants";
 import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
+import { ISubmittableResult } from "@polkadot/types/types";
+import { SubmittableExtrinsic as SubmittableExtrinsicType } from "@polkadot/api/types";
 
 import {
   Cancel_allMutation,
@@ -13,6 +15,7 @@ import * as mutation from "../../../graphql/mutations";
 import { sendQueryToAppSync } from "./helpers";
 import {
   ClaimRewardArgs,
+  CreateProxyAcccountArgs,
   DepositArgs,
   ExecuteArgs,
   OrderbookOperationStrategy,
@@ -188,33 +191,19 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
     return signedExt;
   }
 
-  async addAccount({
+  async createProxyAcccount({
     account,
     proxyAddress,
     api,
     tokenFeeId,
-  }: RemoveAccountArgs): Promise<SubmittableExtrinsic> {
+    firstAccount,
+  }: CreateProxyAcccountArgs): Promise<SubmittableExtrinsic> {
     const assetId =
       tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
-    const ext = api.tx.ocex.addProxyAccount(proxyAddress);
-    const signedExt = await ext.signAsync(account.address, {
-      signer: account.signer,
-      // assetId,
-    });
+    let ext: SubmittableExtrinsicType<"promise", ISubmittableResult>;
+    if (firstAccount) ext = api.tx.ocex.addProxyAccount(proxyAddress);
+    else ext = api.tx.ocex.registerMainAccount(proxyAddress);
 
-    return signedExt;
-  }
-
-  async registerMainAccount({
-    account,
-    proxyAddress,
-    api,
-    tokenFeeId,
-  }: RemoveAccountArgs): Promise<SubmittableExtrinsic> {
-    const assetId =
-      tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
-
-    const ext = api.tx.ocex.registerMainAccount(proxyAddress);
     const signedExt = await ext.signAsync(account.address, {
       signer: account.signer,
       // assetId,
