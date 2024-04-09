@@ -21,20 +21,20 @@ export const Progress = () => {
           <ProgressBar.Title messages={messages} />
           <ProgressBar.Status>
             <ProgressBar.Card vertical status="queued">
-              Dispatched
+              Broadcasted
             </ProgressBar.Card>
             <ProgressBar.Card vertical status="ongoing">
-              InBlock
+              In block
             </ProgressBar.Card>
             <ProgressBar.Card vertical status="completed">
-              Completed
+              Finalized
             </ProgressBar.Card>
           </ProgressBar.Status>
         </ProgressBar.Maximized>
         <ProgressBar.Minimized>
-          <ProgressBar.Card status="queued">Dispatched</ProgressBar.Card>
-          <ProgressBar.Card status="ongoing">InBlock</ProgressBar.Card>
-          <ProgressBar.Card status="completed">Completed</ProgressBar.Card>
+          <ProgressBar.Card status="queued">Broadcasted</ProgressBar.Card>
+          <ProgressBar.Card status="ongoing">In block</ProgressBar.Card>
+          <ProgressBar.Card status="completed">Finalized</ProgressBar.Card>
         </ProgressBar.Minimized>
       </Fragment>
     </ProgressBar>
