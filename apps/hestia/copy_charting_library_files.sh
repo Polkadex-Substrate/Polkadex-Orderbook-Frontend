@@ -14,11 +14,12 @@ BRANCH="master";
 
 REPOSITORY='https://github.com/tradingview/charting_library/'
 SSHCOMMAND='git@github.com:tradingview/charting_library.git'
+
 LATEST_HASH=$(git ls-remote $REPOSITORY $BRANCH | grep -Eo '^[[:alnum:]]+')
 
 remove_if_directory_exists "$LATEST_HASH"
 
-git clone -q --depth 1 -b "$BRANCH" $REPOSITORY "$LATEST_HASH"
+git clone -q --depth 1 -b "$BRANCH" $SSHCOMMAND "$LATEST_HASH"
 
 create_if_directory_does_not_exists 'public'
 create_if_directory_does_not_exists 'public/static'
