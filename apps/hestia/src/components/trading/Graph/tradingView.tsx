@@ -7,8 +7,10 @@ import { Spinner } from "@polkadex/ux";
 
 import {
   ChartingLibraryWidgetOptions,
+  CustomTimezones,
   IChartingLibraryWidget,
   Timezone,
+  TimezoneId,
   widget as Widget,
 } from "../../../../public/static/charting_library";
 
@@ -54,10 +56,19 @@ export const TVChartContainer = ({
       tvWidget?.current?.onChartReady &&
       tvWidget?.current?.onChartReady(() => {
         // Set time zone specific to user
-        const localTime = Intl.DateTimeFormat().resolvedOptions()
-          .timeZone as Timezone;
 
-        tvWidget.current?.activeChart().getTimezoneApi().setTimezone(localTime);
+        const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const timezoneApi = tvWidget.current?.activeChart().getTimezoneApi();
+
+        const availableTimezones = timezoneApi?.availableTimezones();
+        const isValidTimezone = !!availableTimezones?.find(
+          (e) => e.id.toLowerCase() === localTimezone.toLowerCase()
+        );
+        const timezone = (
+          isValidTimezone ? localTimezone : "America/Chicago"
+        ) as TimezoneId;
+
+        timezoneApi?.setTimezone(timezone);
         tvWidget?.current
           ?.changeTheme(isDarkTheme ? "dark" : "light")
           .then(() => {
