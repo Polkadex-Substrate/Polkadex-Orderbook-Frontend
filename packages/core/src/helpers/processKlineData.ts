@@ -1,3 +1,5 @@
+// TODO: Check this type and try to add as Generic
+
 import { Bar } from "../utils/charting_library";
 import { Kline } from "../utils/orderbookService";
 
