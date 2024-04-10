@@ -14,10 +14,7 @@ import {
   SignatureEnumSr25519,
 } from "@orderbook/core/helpers";
 import { useFunds } from "@orderbook/core/hooks";
-import {
-  useUserAccounts,
-  useTransactionManager,
-} from "@polkadex/react-providers";
+import { useUserAccounts } from "@polkadex/react-providers";
 
 import { useProfile } from "../profile";
 
@@ -34,7 +31,6 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const settingsState = useSettingsProvider();
   const { mainAddress, tradeAddress } = selectedAddresses;
   const { wallet } = useUserAccounts();
-  const { addToTxQueue } = useTransactionManager();
   type UserActionLambdaResp = {
     is_success: boolean;
     body: string;
@@ -171,7 +167,6 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     ): Promise<ExtrinsicResult> => {
       const ext = api.tx.ocex.claimWithdraw(sid, account);
       return await signAndSendExtrinsic(
-        addToTxQueue,
         api,
         ext,
         { signer },
@@ -180,7 +175,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
         assetId
       );
     },
-    [addToTxQueue]
+    []
   );
 
   return (

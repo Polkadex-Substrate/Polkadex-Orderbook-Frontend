@@ -141,6 +141,7 @@ export type CreateProxyAcccountArgs = {
 };
 
 export type ClaimRewardArgs = {
+  api: ApiPromise;
   lmp: LmpApi;
   signer: Signer;
   address: string;
@@ -176,7 +177,7 @@ export interface OrderbookOperationStrategy extends BaseStrategy {
   ) => Promise<SubmittableExtrinsic>;
 
   deposit: (args: DepositArgs) => Promise<SubmittableExtrinsic>;
-  claimReward: (args: ClaimRewardArgs) => Promise<SubmittableExtrinsic>;
+  claimReward: (args: ClaimRewardArgs) => Promise<void>;
   transfer: (args: TransferArgs) => Promise<SubmittableExtrinsic>;
   claimWithdrawal: (args: ClaimWithdrawArgs) => Promise<SubmittableExtrinsic>;
 }

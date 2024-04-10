@@ -4,6 +4,7 @@ import { UNIT_BN } from "@orderbook/core/constants";
 import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
 import { ISubmittableResult } from "@polkadot/types/types";
 import { SubmittableExtrinsic as SubmittableExtrinsicType } from "@polkadot/api/types";
+import { signAndSendExtrinsic } from "@orderbook/core/helpers";
 
 import {
   Cancel_allMutation,
@@ -203,8 +204,8 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
     const assetId =
       tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
     let ext: SubmittableExtrinsicType<"promise", ISubmittableResult>;
-    if (firstAccount) ext = api.tx.ocex.addProxyAccount(proxyAddress);
-    else ext = api.tx.ocex.registerMainAccount(proxyAddress);
+    if (firstAccount) ext = api.tx.ocex.registerMainAccount(proxyAddress);
+    else ext = api.tx.ocex.addProxyAccount(proxyAddress);
 
     const signedExt = await ext.signAsync(account.address, {
       signer: account.signer,
@@ -215,25 +216,25 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
   }
 
   async claimReward({
+    api,
     signer,
     lmp,
     epoch,
     market,
     address,
     tokenFeeId,
-  }: ClaimRewardArgs): Promise<SubmittableExtrinsic> {
+  }: ClaimRewardArgs): Promise<void> {
     const assetId =
       tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
     const ext = (await lmp.claimRewardsTx(
       epoch,
       market
-    )) as SubmittableExtrinsic;
-    const signedExt = await ext.signAsync(address, {
-      signer,
-      // assetId,
-    });
+    )) as SubmittableExtrinsicType<"promise">;
 
-    return signedExt;
+    const res = await signAndSendExtrinsic(api, ext, { signer }, address, true);
+    if (!res.isSuccess) {
+      throw new Error("Claim reward failed");
+    }
   }
 
   async transfer({
