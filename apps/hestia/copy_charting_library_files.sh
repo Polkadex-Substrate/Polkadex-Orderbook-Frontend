@@ -13,7 +13,7 @@ create_if_directory_does_not_exists() {
 BRANCH="master";
 
 REPOSITORY='https://github.com/tradingview/charting_library/'
-
+SSHCOMMAND='git@github.com:tradingview/charting_library.git'
 LATEST_HASH=$(git ls-remote $REPOSITORY $BRANCH | grep -Eo '^[[:alnum:]]+')
 
 remove_if_directory_exists "$LATEST_HASH"
