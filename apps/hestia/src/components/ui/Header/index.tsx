@@ -102,6 +102,28 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             >
               More
             </HeaderLink.Dropdown>
+            <HeaderLink.Dropdown
+              items={[
+                {
+                  href: "https://t.me/Polkadex",
+                  label: "Telegram",
+                },
+                {
+                  href: "https://discord.com/invite/Uvua83QAzk/",
+                  label: "Discord",
+                },
+                {
+                  href: "https://twitter.com/polkadex",
+                  label: "Twitter",
+                },
+                {
+                  href: "https://www.reddit.com/r/polkadex/",
+                  label: "Reddit",
+                },
+              ]}
+            >
+              Connect with us
+            </HeaderLink.Dropdown>
           </div>
         </div>
         <Profile

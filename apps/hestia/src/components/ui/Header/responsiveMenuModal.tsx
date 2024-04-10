@@ -115,6 +115,28 @@ export const ResponsiveMenuModal = ({
                   >
                     More
                   </HeaderLink.Accordion>
+                  <HeaderLink.Accordion
+                    items={[
+                      {
+                        href: "https://t.me/Polkadex",
+                        label: "Telegram",
+                      },
+                      {
+                        href: "https://discord.com/invite/Uvua83QAzk/",
+                        label: "Discord",
+                      },
+                      {
+                        href: "https://twitter.com/polkadex",
+                        label: "Twitter",
+                      },
+                      {
+                        href: "https://www.reddit.com/r/polkadex/",
+                        label: "Reddit",
+                      },
+                    ]}
+                  >
+                    Connect with us
+                  </HeaderLink.Accordion>
                 </div>
               </div>
             )}
