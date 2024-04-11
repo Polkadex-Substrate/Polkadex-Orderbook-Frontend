@@ -1,6 +1,3 @@
-// TODO: Check this type and try to add as Generic
-
-import { Bar } from "../utils/charting_library";
 import { Kline } from "../utils/orderbookService";
 
 // This function aims to provide a timestamp that represents the same point in time as the input ISO date string
@@ -16,7 +13,7 @@ export const getCorrectTimestamp = (ISOdate: string) => {
   return timestampWithoutOffset;
 };
 
-export const processKlineData = (data: Kline[]): Bar[] => {
+export const processKlineData = (data: Kline[]) => {
   const klinesData = data.map((x) => ({
     time: getCorrectTimestamp(x.timestamp.toISOString()),
     open: Number(x.open),
