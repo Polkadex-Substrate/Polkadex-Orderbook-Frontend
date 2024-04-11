@@ -70,7 +70,7 @@ const DropdownMenu = ({
 }: PropsWithChildren<DropdownProps>) => (
   <Dropdown>
     <Dropdown.Trigger className="gap-2 items-center inline-flex opacity-50 transition-opacity ease-out duration-300 hover:opacity-100 w-full">
-      <Typography.Text className="text-sm">
+      <Typography.Text className="text-sm whitespace-nowrap">
         {children as string}
       </Typography.Text>
       <Dropdown.Icon />
