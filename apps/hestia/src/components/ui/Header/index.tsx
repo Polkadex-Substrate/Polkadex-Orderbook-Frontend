@@ -131,16 +131,16 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
                   svg: <RiTwitterXFill className="rounded-full w-5 h-5" />,
                 },
                 {
+                  href: "https://github.com/Polkadex-Substrate",
+                  label: "Github",
+                  svg: <RiGithubFill className="rounded-full w-5 h-5" />,
+                },
+                {
                   href: "https://www.reddit.com/r/polkadex/",
                   label: "Reddit",
                   svg: (
                     <RiRedditFill className="bg-red-500 rounded-full w-5 h-5" />
                   ),
-                },
-                {
-                  href: "https://github.com/Polkadex-Substrate",
-                  label: "Github",
-                  svg: <RiGithubFill className="rounded-full w-5 h-5" />,
                 },
               ]}
             >
