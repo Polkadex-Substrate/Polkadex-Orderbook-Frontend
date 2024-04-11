@@ -1,1 +1,9 @@
-export * from "./charting_library";
+export type SubscribeBarsCallback = (bar: Bar) => void;
+export interface Bar {
+  time: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume?: number;
+}

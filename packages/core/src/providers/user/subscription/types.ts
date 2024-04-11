@@ -1,3 +1,5 @@
+// TODO: Check this type and try to add as Generic
+
 import { SubscribeBarsCallback } from "@orderbook/core/utils/charting_library";
 import { FC, PropsWithChildren } from "react";
 

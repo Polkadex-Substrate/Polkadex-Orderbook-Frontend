@@ -15,6 +15,7 @@ import {
   Balance,
   Kline,
 } from "@orderbook/core/utils/orderbookService";
+// TODO: Check this type and try to add as Generic
 import { Bar } from "@orderbook/core/utils/charting_library";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import {

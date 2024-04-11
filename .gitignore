@@ -66,3 +66,5 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+/apps/hestia/public/static/charting_library
+/apps/hestia/public/static/datafeeds
