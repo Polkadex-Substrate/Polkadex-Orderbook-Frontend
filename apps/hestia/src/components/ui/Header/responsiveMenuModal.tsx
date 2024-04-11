@@ -139,7 +139,7 @@ export const ResponsiveMenuModal = ({
                       },
                     ]}
                   >
-                    Connect with us
+                    Community
                   </HeaderLink.Accordion>
                 </div>
               </div>
