@@ -4,6 +4,7 @@ export const defaultConfig = {
   gaTrackerKey: process.env.GA_MEASUREMENT_ID ?? "G-PWZK8JEFLX",
   landingPageMarket: process.env.LANDING_PAGE || "PDEXCUSDT",
   defaultTransferToken: process.env.DEFAULT_TRANSFER_TOKEN || "USDT",
+  withCredentials: false,
   incrementalOrderBook: false,
   orderBookSideLimit: 25,
   defaultStorageLimit: 100,
@@ -14,6 +15,9 @@ export const defaultConfig = {
   alertDisplayTime: 5000,
   msPricesUpdates: 1000,
   maintenanceMode: process.env.MAINTENACE_MODE === "true",
+  signUpDisabled: process.env.SIGNUP_DISABLED === "true",
+  reconnectRangerTime: 30000,
+  showShutdownPopup: process.env.SHOW_SHUTDOWN_POPUP === "true",
   availableRoutes: [
     "/trading",
     "/balances",
