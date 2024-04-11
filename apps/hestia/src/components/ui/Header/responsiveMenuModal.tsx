@@ -133,6 +133,10 @@ export const ResponsiveMenuModal = ({
                         href: "https://www.reddit.com/r/polkadex/",
                         label: "Reddit",
                       },
+                      {
+                        href: "https://github.com/Polkadex-Substrate",
+                        label: "Github",
+                      },
                     ]}
                   >
                     Connect with us

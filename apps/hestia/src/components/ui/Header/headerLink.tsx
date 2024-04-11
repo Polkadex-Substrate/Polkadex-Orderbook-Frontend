@@ -1,6 +1,6 @@
 import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
-import { ComponentProps, PropsWithChildren } from "react";
+import { ComponentProps, PropsWithChildren, ReactNode } from "react";
 import { Accordion, Dropdown, Typography } from "@polkadex/ux";
 import classNames from "classnames";
 
@@ -8,6 +8,7 @@ interface DropdownProps {
   items: {
     href: string;
     label: string;
+    svg?: ReactNode;
   }[];
 }
 
@@ -76,13 +77,14 @@ const DropdownMenu = ({
       <Dropdown.Icon />
     </Dropdown.Trigger>
     <Dropdown.Content>
-      {items.map(({ href, label }, i) => (
+      {items.map(({ href, label, svg }, i) => (
         <Dropdown.Item key={i}>
           <Link
             href={href}
             target="_blank"
-            className="text-left block text-sm w-full"
+            className="text-left flex items-center gap-2 text-sm w-full"
           >
+            {svg}
             {label}
           </Link>
         </Dropdown.Item>

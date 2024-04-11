@@ -6,6 +6,13 @@ import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { Logo } from "@polkadex/ux";
 import { getMarketUrl } from "@orderbook/core/helpers";
 import { defaultConfig } from "@orderbook/core/config";
+import {
+  RiRedditFill,
+  RiTelegramFill,
+  RiGithubFill,
+  RiTwitterXFill,
+  RiDiscordFill,
+} from "@remixicon/react";
 
 import { ConnectWalletInteraction } from "../ConnectWalletInteraction";
 
@@ -107,22 +114,37 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
                 {
                   href: "https://t.me/Polkadex",
                   label: "Telegram",
+                  svg: (
+                    <RiTelegramFill className="bg-sky-500 rounded-full w-5 h-5" />
+                  ),
                 },
                 {
                   href: "https://discord.com/invite/Uvua83QAzk/",
                   label: "Discord",
+                  svg: (
+                    <RiDiscordFill className="bg-blue-700 rounded-full w-5 h-5 p-0.5" />
+                  ),
                 },
                 {
                   href: "https://twitter.com/polkadex",
                   label: "Twitter",
+                  svg: <RiTwitterXFill className="rounded-full w-5 h-5" />,
                 },
                 {
                   href: "https://www.reddit.com/r/polkadex/",
                   label: "Reddit",
+                  svg: (
+                    <RiRedditFill className="bg-red-500 rounded-full w-5 h-5" />
+                  ),
+                },
+                {
+                  href: "https://github.com/Polkadex-Substrate",
+                  label: "Github",
+                  svg: <RiGithubFill className="rounded-full w-5 h-5" />,
                 },
               ]}
             >
-              Connect with us
+              Community
             </HeaderLink.Dropdown>
           </div>
         </div>
