@@ -8,6 +8,7 @@
     },
     "lint": {},
     "dev": {
+      "dependsOn": ["generate"],
       "cache": false,
       "persistent": true,
       "env": [
@@ -29,6 +30,9 @@
         "BLOCKED_ASSETS",
         "DISABLED_FEATURES"
       ]
+    },
+    "generate": {
+      "cache": false
     }
   }
 }
