@@ -25,9 +25,19 @@ const AccordionMenu = ({
         <Accordion.Icon />
       </Accordion.Trigger>
       <Accordion.Content className="flex flex-col gap-3">
-        {items.map(({ href, label }, i) => (
-          <Typography.Text key={i} size="md" asChild>
-            <Link href={href} target="_blank" className="w-full">
+        {items.map(({ href, label, svg }, i) => (
+          <Typography.Text
+            key={i}
+            size="md"
+            asChild
+            className={classNames(i === 0 && "mt-2")}
+          >
+            <Link
+              href={href}
+              target="_blank"
+              className="w-full flex items-center gap-2"
+            >
+              {svg}
               {label}
             </Link>
           </Typography.Text>
