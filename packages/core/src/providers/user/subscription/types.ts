@@ -1,12 +1,16 @@
-// TODO: Check this type and try to add as Generic
-
-import { SubscribeBarsCallback } from "@orderbook/core/utils/charting_library";
 import { FC, PropsWithChildren } from "react";
 
 export type CandleSubscriptionProps = {
   market: string;
   interval: string;
-  onUpdateTradingViewRealTime: SubscribeBarsCallback;
+  onUpdateTradingViewRealTime: (bar: {
+    time: number;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+    volume?: number;
+  }) => void;
 };
 
 export type SubscriptionContextProps = {

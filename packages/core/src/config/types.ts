@@ -3,7 +3,6 @@ export type DefaultConfig = {
   polkadexChain: string[];
   gaTrackerKey: string;
   landingPageMarket: string;
-  withCredentials: boolean;
   incrementalOrderBook: boolean;
   orderBookSideLimit: number;
   defaultStorageLimit: number;
@@ -15,9 +14,6 @@ export type DefaultConfig = {
   msPricesUpdates: number;
   maintenanceMode: boolean;
   enableLmp: boolean;
-  signUpDisabled: boolean;
-  reconnectRangerTime: number;
-  showShutdownPopup: boolean;
   availableRoutes: string[];
   underMaintenance: string[];
   mainUrl: string;
