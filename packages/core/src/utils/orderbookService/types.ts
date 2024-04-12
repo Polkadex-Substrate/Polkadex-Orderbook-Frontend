@@ -161,9 +161,9 @@ export interface TransactionHistoryProps<T = null> {
   transaction_type: "DEPOSIT" | "WITHDRAW";
 }
 
-export interface OrderHistoryProps {
+export interface OpenOrdersProps {
   address: string;
-  limit: number;
+  basedOnFundingAccount?: boolean;
 }
 export interface MarketHistoryProps<T = null> {
   market: string;

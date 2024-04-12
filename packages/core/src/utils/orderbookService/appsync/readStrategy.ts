@@ -37,13 +37,13 @@ import {
   KlineHistoryProps,
   OrderStatus,
   OrderType,
-  OrderHistoryProps,
   BookLevel,
   MaybePaginated,
   LatestTradesPropsForMarket,
   OrderSide,
   TransactionHistoryProps,
   UserAllHistoryProps,
+  OpenOrdersProps,
 } from "./../types";
 import {
   fetchBatchFromAppSync,
@@ -193,18 +193,28 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     return markets || [];
   }
 
-  async getOpenOrders(args: OrderHistoryProps): Promise<Order[]> {
+  async getOpenOrders(args: OpenOrdersProps): Promise<Order[]> {
     if (!this.isReady()) {
       await this.init();
     }
-    const openOrderQueryResult = await fetchFullListFromAppSync<APIOrder>(
-      QUERIES.listOpenOrdersByTradeAccount,
-      {
-        trade_account: args.address,
-        limit: args.limit,
-      },
-      "listOpenOrdersByTradeAccount"
-    );
+    let openOrderQueryResult: APIOrder[] = [];
+    if (args.basedOnFundingAccount) {
+      openOrderQueryResult = await fetchFullListFromAppSync<APIOrder>(
+        QUERIES.listOpenOrdersByMainAccount,
+        {
+          main_account: args.address,
+        },
+        "listOpenOrdersByMainAccount"
+      );
+    } else {
+      openOrderQueryResult = await fetchFullListFromAppSync<APIOrder>(
+        QUERIES.listOpenOrdersByTradeAccount,
+        {
+          trade_account: args.address,
+        },
+        "listOpenOrdersByTradeAccount"
+      );
+    }
     const openOrders = openOrderQueryResult?.map((item): Order => {
       return this.mapApiOrderToOrder(item, this._marketList);
     });

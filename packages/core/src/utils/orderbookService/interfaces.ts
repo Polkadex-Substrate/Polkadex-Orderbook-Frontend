@@ -16,7 +16,6 @@ import {
   MaybePaginated,
   Order,
   Orderbook,
-  OrderHistoryProps,
   PriceLevel,
   PublicTrade,
   Subscription,
@@ -25,6 +24,7 @@ import {
   Transaction,
   TransactionHistoryProps,
   UserHistoryProps,
+  OpenOrdersProps,
 } from "./types";
 
 export interface BaseStrategy {
@@ -37,7 +37,7 @@ export interface OrderbookReadStrategy extends BaseStrategy {
   getMarkets: () => Promise<Market[]>;
   getTicker: (market: string) => Promise<Ticker>;
   getAssets: () => Promise<Asset[]>;
-  getOpenOrders: (args: OrderHistoryProps) => Promise<Order[]>;
+  getOpenOrders: (args: OpenOrdersProps) => Promise<Order[]>;
   getOrderHistory: (args: UserHistoryProps) => Promise<MaybePaginated<Order[]>>;
   getAllOrderHistory: (args: UserAllHistoryProps) => Promise<Order[]>;
   getTradeHistory: (args: UserHistoryProps) => Promise<MaybePaginated<Trade[]>>;
