@@ -4,7 +4,6 @@ import {
   DEFAULT_BATCH_LIMIT,
   RECENT_TRADES_LIMIT,
 } from "@orderbook/core/constants";
-import { Maybe } from "@orderbook/core/helpers";
 
 import {
   FindUserByMainAccountQuery,
@@ -323,16 +322,24 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     if (!this.isReady()) {
       await this.init();
     }
+
+    const queryKey = args.basedOnFundingAccount
+      ? "listTradesByMainAccount"
+      : "listTradesByTradeAccount";
+
+    const variables = {
+      [args.basedOnFundingAccount ? "main_account" : "trade_account"]:
+        args.address,
+      limit: args.limit,
+      from: args.from.toISOString(),
+      to: args.to.toISOString(),
+      nextToken: args.pageParams,
+    };
+
     const queryResult = await fetchBatchFromAppSync<UserTrade>(
-      QUERIES.listTradesByTradeAccount,
-      {
-        trade_account: args.address,
-        limit: args.limit,
-        from: args.from.toISOString(),
-        to: args.to.toISOString(),
-        nextToken: args.pageParams,
-      },
-      "listTradesByTradeAccount",
+      QUERIES[queryKey],
+      variables,
+      queryKey,
       args.batchLimit
     );
     if (!queryResult) {

@@ -17,9 +17,18 @@ export const QUERY_KEYS = {
   tradeHistory: (
     dateFrom: Date,
     dateTo: Date,
-    tradeAddress: string,
-    rowsPerPage: number
-  ) => [PREFIX, "tradeHistory", dateFrom, dateTo, tradeAddress, rowsPerPage],
+    address: string,
+    rowsPerPage: number,
+    basedOnFundingAccount?: boolean
+  ) => [
+    PREFIX,
+    "tradeHistory",
+    dateFrom,
+    dateTo,
+    address,
+    rowsPerPage,
+    String(basedOnFundingAccount),
+  ],
   orderHistory: (
     dateFrom: Date,
     dateTo: Date,

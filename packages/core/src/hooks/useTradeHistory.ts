@@ -7,12 +7,22 @@ import { QUERY_KEYS, TRADE_HISTORY_PER_PAGE_LIMIT } from "../constants";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { useSessionProvider } from "../providers/user/sessionProvider";
 
-export function useTradeHistory(rowsPerPage: number, filters?: Ifilters) {
+export function useTradeHistory(
+  rowsPerPage: number,
+  filters?: Ifilters,
+  basedOnFundingAccount?: boolean
+) {
   const {
-    selectedAddresses: { tradeAddress },
+    selectedAddresses: { tradeAddress, mainAddress },
   } = useProfile();
   const { dateFrom, dateTo } = useSessionProvider();
-  const shouldFetchTradeHistory = tradeAddress?.length > 0;
+
+  const address = useMemo(
+    () => (basedOnFundingAccount ? mainAddress : tradeAddress),
+    [basedOnFundingAccount, mainAddress, tradeAddress]
+  );
+
+  const shouldFetchTradeHistory = address?.length > 0;
 
   const {
     data,
@@ -25,18 +35,20 @@ export function useTradeHistory(rowsPerPage: number, filters?: Ifilters) {
     queryKey: QUERY_KEYS.tradeHistory(
       dateFrom,
       dateTo,
-      tradeAddress,
-      rowsPerPage
+      address,
+      rowsPerPage,
+      basedOnFundingAccount
     ),
     enabled: shouldFetchTradeHistory,
     queryFn: async ({ pageParam = null }) => {
       return await appsyncOrderbookService.query.getTradeHistory({
-        address: tradeAddress,
+        address,
         from: dateFrom,
         to: dateTo,
         pageParams: pageParam,
         limit: TRADE_HISTORY_PER_PAGE_LIMIT,
         batchLimit: rowsPerPage,
+        basedOnFundingAccount,
       });
     },
     getNextPageParam: (lastPage) => {
