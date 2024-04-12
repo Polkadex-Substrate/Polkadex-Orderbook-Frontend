@@ -126,33 +126,35 @@ export const ResponsiveMenuModal = ({
                         href: "https://t.me/Polkadex",
                         label: "Telegram",
                         svg: (
-                          <RiTelegramFill className="bg-sky-500 rounded-full w-5 h-5" />
+                          <RiTelegramFill className="bg-sky-500 text-textBase rounded-full w-5 h-5" />
                         ),
                       },
                       {
                         href: "https://discord.com/invite/Uvua83QAzk/",
                         label: "Discord",
                         svg: (
-                          <RiDiscordFill className="bg-blue-700 rounded-full w-5 h-5 p-0.5" />
+                          <RiDiscordFill className="bg-blue-700  text-textBase rounded-full w-5 h-5 p-0.5" />
                         ),
                       },
                       {
                         href: "https://twitter.com/polkadex",
                         label: "Twitter",
                         svg: (
-                          <RiTwitterXFill className="rounded-full w-5 h-5" />
+                          <RiTwitterXFill className="rounded-full text-textBase w-5 h-5" />
                         ),
                       },
                       {
                         href: "https://github.com/Polkadex-Substrate",
                         label: "Github",
-                        svg: <RiGithubFill className="rounded-full w-5 h-5" />,
+                        svg: (
+                          <RiGithubFill className="rounded-full text-textBase w-5 h-5" />
+                        ),
                       },
                       {
                         href: "https://www.reddit.com/r/polkadex/",
                         label: "Reddit",
                         svg: (
-                          <RiRedditFill className="bg-red-500 rounded-full w-5 h-5" />
+                          <RiRedditFill className="bg-red-500 text-textBase rounded-full w-5 h-5" />
                         ),
                       },
                     ]}

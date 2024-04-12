@@ -24,24 +24,30 @@ const AccordionMenu = ({
         </Typography.Text>
         <Accordion.Icon />
       </Accordion.Trigger>
-      <Accordion.Content className="flex flex-col gap-3">
-        {items.map(({ href, label, svg }, i) => (
-          <Typography.Text
-            key={i}
-            size="md"
-            asChild
-            className={classNames(i === 0 && "mt-2")}
-          >
-            <Link
-              href={href}
-              target="_blank"
-              className="w-full flex items-center gap-2"
+      <Accordion.Content>
+        <div className="flex flex-col gap-3 mt-1">
+          {items.map(({ href, label, svg }, i) => (
+            <Typography.Text
+              key={i}
+              appearance="primary"
+              size="md"
+              asChild
+              className={classNames(
+                "py-0.5 duration-200 transition-colors hover:text-textBase",
+                i === 0 && "mt-2"
+              )}
             >
-              {svg}
-              {label}
-            </Link>
-          </Typography.Text>
-        ))}
+              <Link
+                href={href}
+                target="_blank"
+                className="w-full flex items-center gap-2"
+              >
+                {svg}
+                {label}
+              </Link>
+            </Typography.Text>
+          ))}
+        </div>
       </Accordion.Content>
     </Accordion.Item>
   </Accordion>
