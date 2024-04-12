@@ -469,13 +469,13 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       await this.init();
     }
     const queryResult = await fetchFullListFromAppSync<UserTrade>(
-      QUERIES.listTradesByTradeAccount,
+      QUERIES.listTradesByMainAccount,
       {
-        trade_account: args.address,
+        main_account: args.address,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
       },
-      "listTradesByTradeAccount"
+      "listTradesByMainAccount"
     );
     if (!queryResult) {
       return [];

@@ -14,12 +14,12 @@ export const exportOrderHistory = async (
 };
 
 export const exportTradeHistory = async (
-  tradeAddress: string,
+  mainAddress: string,
   from: Date,
   to: Date
 ) => {
   const data = await appsyncOrderbookService.query.getAllTradeHistory({
-    address: tradeAddress,
+    address: mainAddress,
     from,
     to,
   });
