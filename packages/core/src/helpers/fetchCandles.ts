@@ -1,6 +1,3 @@
-// TODO: Check this type and try to add as Generic
-
-import { Bar } from "../utils/charting_library";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 
 import {
@@ -21,7 +18,7 @@ export const fetchCandles = async ({
   from,
   to,
   resolution: r,
-}: GetCandleProps): Promise<Bar[]> => {
+}: GetCandleProps) => {
   const resolution = getAbsoluteResolution(r);
   const resolutioninMs = getResolutionInMilliSeconds(resolution);
   const data = await appsyncOrderbookService.query.getCandles({
