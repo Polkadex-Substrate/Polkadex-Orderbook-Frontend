@@ -24,9 +24,23 @@ export const QUERY_KEYS = {
     dateFrom: Date,
     dateTo: Date,
     address: string,
-    rowsPerPage: number
-  ) => [PREFIX, "orderHistory", dateFrom, dateTo, address, rowsPerPage],
-  openOrders: (address: string) => [PREFIX, "openOrders", address],
+    rowsPerPage: number,
+    basedOnFundingAccount?: boolean
+  ) => [
+    PREFIX,
+    "orderHistory",
+    dateFrom,
+    dateTo,
+    address,
+    rowsPerPage,
+    String(basedOnFundingAccount),
+  ],
+  openOrders: (address: string, basedOnFundingAccount?: boolean) => [
+    PREFIX,
+    "openOrders",
+    address,
+    String(basedOnFundingAccount),
+  ],
   tradingBalances: (mainAddress: string) => [
     PREFIX,
     "tradingBalances",

@@ -33,7 +33,13 @@ export const useOrderHistory = (
     error: orderHistoryError,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: QUERY_KEYS.orderHistory(dateFrom, dateTo, address, rowsPerPage),
+    queryKey: QUERY_KEYS.orderHistory(
+      dateFrom,
+      dateTo,
+      address,
+      rowsPerPage,
+      basedOnFundingAccount
+    ),
     enabled: shouldFetchOrderHistory,
     queryFn: async ({ pageParam = null }) => {
       return await appsyncOrderbookService.query.getOrderHistory({

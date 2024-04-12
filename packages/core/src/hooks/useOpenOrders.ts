@@ -29,7 +29,7 @@ export const useOpenOrders = (
     isLoading,
     isFetching,
   } = useQuery({
-    queryKey: QUERY_KEYS.openOrders(address),
+    queryKey: QUERY_KEYS.openOrders(address, basedOnFundingAccount),
     enabled: shouldFetchOpenOrders,
     queryFn: async () => {
       return await appsyncOrderbookService.query.getOpenOrders({
