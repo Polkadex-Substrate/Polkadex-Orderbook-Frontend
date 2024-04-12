@@ -8,12 +8,22 @@ import { useProfile } from "../providers/user/profile";
 import { useSessionProvider } from "../providers/user/sessionProvider";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 
-export const useOrderHistory = (rowsPerPage: number, filters?: Ifilters) => {
+export const useOrderHistory = (
+  rowsPerPage: number,
+  filters?: Ifilters,
+  basedOnFundingAccount?: boolean
+) => {
   const {
-    selectedAddresses: { tradeAddress },
+    selectedAddresses: { tradeAddress, mainAddress },
   } = useProfile();
   const { dateFrom, dateTo } = useSessionProvider();
-  const shouldFetchOrderHistory = tradeAddress?.length > 0;
+
+  const address = useMemo(
+    () => (basedOnFundingAccount ? mainAddress : tradeAddress),
+    [basedOnFundingAccount, mainAddress, tradeAddress]
+  );
+
+  const shouldFetchOrderHistory = address?.length > 0;
 
   const {
     data: orderHistoryList,
@@ -23,21 +33,17 @@ export const useOrderHistory = (rowsPerPage: number, filters?: Ifilters) => {
     error: orderHistoryError,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: QUERY_KEYS.orderHistory(
-      dateFrom,
-      dateTo,
-      tradeAddress,
-      rowsPerPage
-    ),
+    queryKey: QUERY_KEYS.orderHistory(dateFrom, dateTo, address, rowsPerPage),
     enabled: shouldFetchOrderHistory,
     queryFn: async ({ pageParam = null }) => {
       return await appsyncOrderbookService.query.getOrderHistory({
-        address: tradeAddress,
+        address,
         from: dateFrom,
         to: dateTo,
         limit: 25,
         pageParams: pageParam,
         batchLimit: rowsPerPage,
+        basedOnFundingAccount,
       });
     },
     getNextPageParam: (lastPage) => {

@@ -58,7 +58,7 @@ export const OrderHistory = forwardRef<HTMLDivElement, Props>(
       isFetchingNextPage,
       hasNextPage,
       onFetchNextPage,
-    } = useOrderHistory(rowsPerPage);
+    } = useOrderHistory(rowsPerPage, undefined, true);
 
     const orderHistoryPerPage = useMemo(
       () =>

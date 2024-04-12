@@ -4,6 +4,7 @@ import {
   DEFAULT_BATCH_LIMIT,
   RECENT_TRADES_LIMIT,
 } from "@orderbook/core/constants";
+import { Maybe } from "@orderbook/core/helpers";
 
 import {
   FindUserByMainAccountQuery,
@@ -227,18 +228,39 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     if (!this.isReady()) {
       await this.init();
     }
-    const orderHistoryQueryResult = await fetchBatchFromAppSync<APIOrder>(
-      QUERIES.listOrderHistoryByTradeAccount,
-      {
-        trade_account: args.address,
-        limit: args.limit,
-        from: args.from.toISOString(),
-        to: args.to.toISOString(),
-        nextToken: args.pageParams,
-      },
-      "listOrderHistoryByTradeAccount",
-      args.batchLimit
-    );
+
+    let orderHistoryQueryResult: {
+      response: any[];
+      nextToken: Maybe<string>;
+    };
+
+    if (args.basedOnFundingAccount) {
+      orderHistoryQueryResult = await fetchBatchFromAppSync<APIOrder>(
+        QUERIES.listOrderHistoryByMainAccount,
+        {
+          main_account: args.address,
+          limit: args.limit,
+          from: args.from.toISOString(),
+          to: args.to.toISOString(),
+          nextToken: args.pageParams,
+        },
+        "listOrderHistoryByMainAccount",
+        args.batchLimit
+      );
+    } else {
+      orderHistoryQueryResult = await fetchBatchFromAppSync<APIOrder>(
+        QUERIES.listOrderHistoryByTradeAccount,
+        {
+          trade_account: args.address,
+          limit: args.limit,
+          from: args.from.toISOString(),
+          to: args.to.toISOString(),
+          nextToken: args.pageParams,
+        },
+        "listOrderHistoryByTradeAccount",
+        args.batchLimit
+      );
+    }
     if (!orderHistoryQueryResult) {
       return { data: [], nextToken: null };
     }

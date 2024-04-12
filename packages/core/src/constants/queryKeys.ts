@@ -23,9 +23,9 @@ export const QUERY_KEYS = {
   orderHistory: (
     dateFrom: Date,
     dateTo: Date,
-    tradeAddress: string,
+    address: string,
     rowsPerPage: number
-  ) => [PREFIX, "orderHistory", dateFrom, dateTo, tradeAddress, rowsPerPage],
+  ) => [PREFIX, "orderHistory", dateFrom, dateTo, address, rowsPerPage],
   openOrders: (address: string) => [PREFIX, "openOrders", address],
   tradingBalances: (mainAddress: string) => [
     PREFIX,

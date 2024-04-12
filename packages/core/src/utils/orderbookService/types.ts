@@ -145,6 +145,7 @@ export interface UserHistoryProps<T = null> {
   pageParams: T;
   market?: string;
   batchLimit: number;
+  basedOnFundingAccount?: boolean;
 }
 export interface UserAllHistoryProps {
   address: string;
