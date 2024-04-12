@@ -444,13 +444,13 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       await this.init();
     }
     const orderHistoryQueryResult = await fetchFullListFromAppSync<APIOrder>(
-      QUERIES.listOrderHistoryByTradeAccount,
+      QUERIES.listOrderHistoryByMainAccount,
       {
-        trade_account: args.address,
+        main_account: args.address,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
       },
-      "listOrderHistoryByTradeAccount"
+      "listOrderHistoryByMainAccount"
     );
     if (!orderHistoryQueryResult) {
       return [];
