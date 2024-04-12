@@ -198,24 +198,22 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     if (!this.isReady()) {
       await this.init();
     }
-    let openOrderQueryResult: APIOrder[] = [];
-    if (args.basedOnFundingAccount) {
-      openOrderQueryResult = await fetchFullListFromAppSync<APIOrder>(
-        QUERIES.listOpenOrdersByMainAccount,
-        {
-          main_account: args.address,
-        },
-        "listOpenOrdersByMainAccount"
-      );
-    } else {
-      openOrderQueryResult = await fetchFullListFromAppSync<APIOrder>(
-        QUERIES.listOpenOrdersByTradeAccount,
-        {
-          trade_account: args.address,
-        },
-        "listOpenOrdersByTradeAccount"
-      );
-    }
+
+    const queryKey = args.basedOnFundingAccount
+      ? "listOpenOrdersByMainAccount"
+      : "listOpenOrdersByTradeAccount";
+
+    const variables = {
+      [args.basedOnFundingAccount ? "main_account" : "trade_account"]:
+        args.address,
+    };
+
+    const openOrderQueryResult = await fetchFullListFromAppSync<APIOrder>(
+      QUERIES[queryKey],
+      variables,
+      queryKey
+    );
+
     const openOrders = openOrderQueryResult?.map((item): Order => {
       return this.mapApiOrderToOrder(item, this._marketList);
     });
@@ -229,41 +227,30 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       await this.init();
     }
 
-    let orderHistoryQueryResult: {
-      response: any[];
-      nextToken: Maybe<string>;
+    const queryKey = args.basedOnFundingAccount
+      ? "listOrderHistoryByMainAccount"
+      : "listOrderHistoryByTradeAccount";
+
+    const variables = {
+      [args.basedOnFundingAccount ? "main_account" : "trade_account"]:
+        args.address,
+      limit: args.limit,
+      from: args.from.toISOString(),
+      to: args.to.toISOString(),
+      nextToken: args.pageParams,
     };
 
-    if (args.basedOnFundingAccount) {
-      orderHistoryQueryResult = await fetchBatchFromAppSync<APIOrder>(
-        QUERIES.listOrderHistoryByMainAccount,
-        {
-          main_account: args.address,
-          limit: args.limit,
-          from: args.from.toISOString(),
-          to: args.to.toISOString(),
-          nextToken: args.pageParams,
-        },
-        "listOrderHistoryByMainAccount",
-        args.batchLimit
-      );
-    } else {
-      orderHistoryQueryResult = await fetchBatchFromAppSync<APIOrder>(
-        QUERIES.listOrderHistoryByTradeAccount,
-        {
-          trade_account: args.address,
-          limit: args.limit,
-          from: args.from.toISOString(),
-          to: args.to.toISOString(),
-          nextToken: args.pageParams,
-        },
-        "listOrderHistoryByTradeAccount",
-        args.batchLimit
-      );
-    }
+    const orderHistoryQueryResult = await fetchBatchFromAppSync<APIOrder>(
+      QUERIES[queryKey],
+      variables,
+      queryKey,
+      args.batchLimit
+    );
+
     if (!orderHistoryQueryResult) {
       return { data: [], nextToken: null };
     }
+
     const orderHistory = orderHistoryQueryResult?.response?.map(
       (item): Order => {
         return this.mapApiOrderToOrder(item, this._marketList);
