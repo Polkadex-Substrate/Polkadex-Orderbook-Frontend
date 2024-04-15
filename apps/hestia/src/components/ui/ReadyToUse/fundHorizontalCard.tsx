@@ -2,45 +2,60 @@ import { Typography } from "@polkadex/ux";
 import classNames from "classnames";
 import { ComponentPropsWithoutRef, Fragment, PropsWithChildren } from "react";
 import Link from "next/link";
+import { twMerge } from "tailwind-merge";
 
-import { Icons } from "../..";
+import { Icons } from "..";
 
 type Props = {
   title: string;
   description?: string;
   icon?: keyof typeof Icons;
   disabled?: boolean;
+  bold?: boolean;
 };
 type CardProps = ComponentPropsWithoutRef<"a"> & Props;
 
-export const Card = ({
+export const FundHorizontalCard = ({
   disabled,
   title,
   description,
   children,
   href,
   icon,
+  bold = true,
+  className,
   ...props
 }: PropsWithChildren<CardProps>) => {
   if (href)
     return (
       <Link
         href={href}
-        className={classNames(
-          "flex items-center gap-4 p-4 hover:bg-level-1 transition-colors duration-200",
-          disabled && "pointer-events-none opacity-40"
+        className={twMerge(
+          classNames(
+            "flex items-center gap-4 p-4 hover:bg-level-1 transition-colors duration-200",
+            disabled && "pointer-events-none opacity-40"
+          ),
+          className
         )}
         {...props}
       >
-        <Content title={title} description={description} icon={icon}>
+        <Content
+          bold={bold}
+          title={title}
+          description={description}
+          icon={icon}
+        >
           {children}
         </Content>
       </Link>
     );
   return (
     <div
-      className={classNames(
-        "flex items-center gap-4 p-4 hover:bg-level-1 transition-colors duration-200"
+      className={twMerge(
+        classNames(
+          "flex items-center gap-4 p-4 hover:bg-level-1 transition-colors duration-200"
+        ),
+        className
       )}
     >
       <Content title={title} description={description} icon={icon}>
@@ -54,6 +69,7 @@ const Content = ({
   title,
   description,
   icon,
+  bold,
   children,
 }: PropsWithChildren<Props>) => {
   const IconComponent = Icons[icon ?? "Bridge"];
@@ -64,7 +80,7 @@ const Content = ({
         <IconComponent className="w-4 h-4 text-primary" />
       </div>
       <div className="flex flex-col gap-1">
-        <Typography.Text bold>{title}</Typography.Text>
+        <Typography.Text bold={bold}>{title}</Typography.Text>
         <div className="flex flex-col gap-2">
           {description && (
             <Typography.Text appearance="primary">

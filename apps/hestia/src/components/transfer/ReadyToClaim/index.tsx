@@ -13,15 +13,10 @@ import {
   useTransactionFeeModal,
   useTransactions,
 } from "@orderbook/core/hooks";
-import { useProfile } from "@orderbook/core/providers/user/profile";
-import {
-  WithdrawGroup,
-  WithdrawGroupItem,
-  getFundingAccountDetail,
-} from "@orderbook/core/helpers";
-import { useExtensionAccounts } from "@polkadex/react-providers";
+import { WithdrawGroup, WithdrawGroupItem } from "@orderbook/core/helpers";
 import { intlFormat } from "date-fns";
 import { useWithdrawsProvider } from "@orderbook/core/providers/user/withdrawsProvider";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { Table } from "./table";
 
@@ -47,16 +42,10 @@ export interface ReadyToClaimDataProps extends Omit<WithdrawGroup, "items"> {
 
 export const ReadyToClaim = forwardRef<HTMLDivElement, { maxHeight: string }>(
   ({ maxHeight }) => {
-    const { selectedAddresses } = useProfile();
-    const { extensionAccounts } = useExtensionAccounts();
     const { loading, readyWithdrawals } = useTransactions();
     const { onFetchClaimWithdraw, claimsInLoading } = useWithdrawsProvider();
-    const { mainAddress } = selectedAddresses;
-    const fundingWallet = useMemo(
-      () => getFundingAccountDetail(mainAddress, extensionAccounts),
-      [extensionAccounts, mainAddress]
-    );
 
+    const { selectedWallet } = useConnectWalletProvider();
     const readyWithdrawalsData = useMemo(
       () =>
         readyWithdrawals.map((e) => {
@@ -82,8 +71,8 @@ export const ReadyToClaim = forwardRef<HTMLDivElement, { maxHeight: string }>(
               },
               wallets: {
                 fromWalletType: "Trading Account",
-                fromWalletName: fundingWallet?.name ?? "",
-                fromWalletAddress: fundingWallet?.address ?? "",
+                fromWalletName: selectedWallet?.name ?? "",
+                fromWalletAddress: selectedWallet?.address ?? "",
                 toWalletType: "Funding Account",
               },
             };
@@ -93,7 +82,7 @@ export const ReadyToClaim = forwardRef<HTMLDivElement, { maxHeight: string }>(
             items,
           } as ReadyToClaimDataProps;
         }),
-      [readyWithdrawals, fundingWallet?.name, fundingWallet?.address]
+      [readyWithdrawals, selectedWallet?.name, selectedWallet?.address]
     );
 
     const {
@@ -146,7 +135,8 @@ export const ReadyToClaim = forwardRef<HTMLDivElement, { maxHeight: string }>(
                               onFetchClaimWithdraw({
                                 sid: value.sid,
                                 assetIds,
-                                assetId: tokenFee?.id,
+                                tokenFeeId: tokenFee?.id,
+                                selectedWallet,
                               });
                             }}
                             actionLoading={!!transactionLoading}
@@ -156,7 +146,7 @@ export const ReadyToClaim = forwardRef<HTMLDivElement, { maxHeight: string }>(
                                 assetIds as unknown as Uint8Array,
                               ])
                             }
-                            sender={fundingWallet?.address ?? ""}
+                            sender={selectedWallet?.address ?? ""}
                             tokenFee={tokenFee}
                             setTokenFee={setTokenFee}
                             openFeeModal={openFeeModal}

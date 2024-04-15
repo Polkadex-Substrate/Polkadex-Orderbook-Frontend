@@ -34,14 +34,13 @@ export const useClaimReward = () => {
       if (!signer) throw new Error("Signer not defined");
 
       await appsyncOrderbookService.operation.claimReward({
-        address: mainAddress,
         api,
+        address: mainAddress,
         epoch,
         lmp,
         market,
         signer,
       });
-
       return { reward, epoch, market };
     },
     onError: (error: Error, args) => {

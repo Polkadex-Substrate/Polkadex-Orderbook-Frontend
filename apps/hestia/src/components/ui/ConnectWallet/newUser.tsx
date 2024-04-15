@@ -13,7 +13,7 @@ export const NewUser = ({
   onClose: () => void;
 }) => {
   return (
-    <Interaction className="gap-10 pt-2 w-full md:max-w-[24rem]">
+    <Interaction className="gap-10 pt-2 w-full md:min-w-[24rem] md:max-w-[24rem]">
       <Interaction.Title className="-mb-8 mt-" onBack={{ onClick: onBack }} />
       <Interaction.Content
         className="flex flex-col gap-1 flex-1"

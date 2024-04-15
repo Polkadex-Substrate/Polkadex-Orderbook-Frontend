@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren } from "react";
+import { ExtensionAccount } from "@polkadex/react-providers";
 
 import { WithdrawsClaimFetch, WithdrawsFetch } from "./actions";
 
@@ -13,9 +14,7 @@ export interface WithdrawsState {
 
 export type WithdrawsContextProps = WithdrawsState & {
   onFetchWithdraws: (value: WithdrawsFetch["payload"]) => Promise<void>;
-  onFetchClaimWithdraw: (
-    value: WithdrawsClaimFetch["payload"]
-  ) => Promise<void>;
+  onFetchClaimWithdraw: (value: OnFetchClaimWithdraw) => Promise<void>;
 };
 
 export type WithdrawsProviderProps = PropsWithChildren<{
@@ -27,4 +26,7 @@ export interface WithdrawsProps {
   onNotification?: (value: string) => void;
 }
 
+export type OnFetchClaimWithdraw = WithdrawsClaimFetch["payload"] & {
+  selectedWallet?: ExtensionAccount;
+};
 export type WithdrawsComponent = FC<PropsWithChildren<WithdrawsProps>>;

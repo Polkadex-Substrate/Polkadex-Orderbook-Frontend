@@ -7,6 +7,7 @@ import {
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { PropsWithChildren } from "react";
+import classNames from "classnames";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
 
@@ -37,20 +38,27 @@ export const ConnectTradingAccount = ({
   enabledExtensionAccount?: boolean;
 }>) => {
   return (
-    <Interaction className="w-full md:min-w-[24rem]">
+    <Interaction className="w-full md:min-w-[24rem] md:max-w-[24rem]">
       <Interaction.Title onClose={{ onClick: onClose }}>
         Select / Import Trading Account
       </Interaction.Title>
-      <Interaction.Content>
+      <Interaction.Content withPadding={false}>
         <div className="flex flex-col gap-6">
           {accounts.length ? (
             <div className="flex flex-col gap-3">
-              <Typography.Text appearance="secondary" size="sm">
+              <Typography.Text
+                appearance="secondary"
+                size="sm"
+                className="px-7"
+              >
                 Available trading account(s)
               </Typography.Text>
               <div
-                className="flex flex-col gap-3 max-h-[15rem] overflow-hidden hover:overflow-auto"
-                style={{ scrollbarGutter: "stable" }}
+                className={classNames(
+                  "flex flex-col gap-3 max-h-[10rem] px-7",
+                  accounts?.length > 1 &&
+                    "border-b border-primary overflow-hidden hover:overflow-auto pb-7 scrollbar-hide"
+                )}
               >
                 {accounts.map((value, i) => (
                   <TradingAccountCard
@@ -87,7 +95,7 @@ export const ConnectTradingAccount = ({
               </div>
             </div>
           ) : (
-            <div className="border-2 border-dashed rounded-md border-primary px-4 py-6 flex flex-col gap-5 items-center">
+            <div className="border-2 border-dashed rounded-md border-primary px-7 py-6 flex flex-col gap-5 items-center">
               <div className="max-w-[13rem]">
                 <Illustrations.WalletNotFound className="max-w-[10rem] w-full text-disabled" />
               </div>
@@ -101,9 +109,9 @@ export const ConnectTradingAccount = ({
               </div>
             </div>
           )}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 px-7">
             <div className="flex items-center gap-2">
-              <Separator.Horizontal className="bg-level-5" />
+              <Separator.Horizontal className="bg-level-3" />
               <Typography.Text
                 appearance="secondary"
                 size="xs"
