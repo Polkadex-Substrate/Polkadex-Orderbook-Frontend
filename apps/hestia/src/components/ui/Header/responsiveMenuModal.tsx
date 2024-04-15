@@ -8,6 +8,11 @@ import {
   RiEarthLine,
   RiMoonLine,
   RiPaletteLine,
+  RiRedditFill,
+  RiTelegramFill,
+  RiGithubFill,
+  RiTwitterXFill,
+  RiDiscordFill,
 } from "@remixicon/react";
 import { defaultConfig } from "@orderbook/core/config";
 
@@ -114,6 +119,47 @@ export const ResponsiveMenuModal = ({
                     ]}
                   >
                     More
+                  </HeaderLink.Accordion>
+                  <HeaderLink.Accordion
+                    items={[
+                      {
+                        href: "https://t.me/Polkadex",
+                        label: "Telegram",
+                        svg: (
+                          <RiTelegramFill className="bg-sky-500 text-textBase rounded-full w-5 h-5" />
+                        ),
+                      },
+                      {
+                        href: "https://discord.com/invite/Uvua83QAzk/",
+                        label: "Discord",
+                        svg: (
+                          <RiDiscordFill className="bg-blue-700  text-textBase rounded-full w-5 h-5 p-0.5" />
+                        ),
+                      },
+                      {
+                        href: "https://twitter.com/polkadex",
+                        label: "Twitter",
+                        svg: (
+                          <RiTwitterXFill className="rounded-full text-textBase w-5 h-5" />
+                        ),
+                      },
+                      {
+                        href: "https://github.com/Polkadex-Substrate",
+                        label: "Github",
+                        svg: (
+                          <RiGithubFill className="rounded-full text-textBase w-5 h-5" />
+                        ),
+                      },
+                      {
+                        href: "https://www.reddit.com/r/polkadex/",
+                        label: "Reddit",
+                        svg: (
+                          <RiRedditFill className="bg-red-500 text-textBase rounded-full w-5 h-5" />
+                        ),
+                      },
+                    ]}
+                  >
+                    Community
                   </HeaderLink.Accordion>
                 </div>
               </div>
