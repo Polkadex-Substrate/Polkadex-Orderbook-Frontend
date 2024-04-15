@@ -13,6 +13,8 @@ import { appsyncOrderbookService } from "../utils/orderbookService";
 import { NOTIFICATIONS, QUERY_KEYS } from "../constants";
 import { useSettingsProvider } from "../providers/public/settings";
 
+import { handleTransaction } from "./../helpers/signAndSendExtrinsic";
+
 export type AddProxyAccountArgs = {
   mnemonic: string;
   name: string;
@@ -77,7 +79,7 @@ export function useAddProxyAccount({
           firstAccount: !registeredProxies.length,
         });
       addToTxQueue(signedExtrinsic);
-
+      await handleTransaction(signedExtrinsic);
       const { pair } = wallet.addFromMnemonic(mnemonic, name, password);
       await onUserSelectTradingAddress({
         tradeAddress: pair.address,

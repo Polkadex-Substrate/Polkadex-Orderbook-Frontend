@@ -9,6 +9,7 @@ import {
 
 import { useSettingsProvider } from "../providers/public/settings";
 import { appsyncOrderbookService } from "../utils/orderbookService";
+import { handleTransaction } from "../helpers";
 
 interface AssetTransferParams {
   asset: Record<string, string | null>;
@@ -50,6 +51,7 @@ export const useAssetTransfer = (onRefetch: () => Promise<void>) => {
         tokenFeeId,
       });
       addToTxQueue(signedExtrinsic);
+      await handleTransaction(signedExtrinsic);
 
       return { asset: ticker, amount };
     },

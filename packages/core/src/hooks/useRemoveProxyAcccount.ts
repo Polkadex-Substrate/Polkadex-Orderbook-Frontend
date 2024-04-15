@@ -7,7 +7,7 @@ import {
 } from "@polkadex/react-providers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { removeFromStorage } from "@orderbook/core/helpers";
+import { handleTransaction, removeFromStorage } from "@orderbook/core/helpers";
 import { ACTIVE_ACCOUNT_KEY } from "@orderbook/core/providers/user/profile/constants";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
@@ -59,6 +59,7 @@ export function useRemoveProxyAccount(props: MutateHookProps) {
           tokenFeeId,
         });
       addToTxQueue(signedExtrinsic);
+      await handleTransaction(signedExtrinsic);
 
       // TODO: Temp solution, backend issue. Remove it when it resolved in backend
       await isTradingAccountRemovedFromDb(proxy, selectedWallet.address);

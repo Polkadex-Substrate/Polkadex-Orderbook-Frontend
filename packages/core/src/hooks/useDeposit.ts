@@ -8,6 +8,7 @@ import { useSettingsProvider } from "../providers/public/settings";
 import { useNativeApi } from "../providers/public/nativeApi";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
+import { handleTransaction } from "../helpers";
 
 type DepositArgs = {
   amount: string | number;
@@ -42,6 +43,7 @@ export const useDeposit = () => {
         tokenFeeId,
       });
       addToTxQueue(signedExtrinsic);
+      await handleTransaction(signedExtrinsic);
     },
 
     onError: (error) => {
