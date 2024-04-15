@@ -1,16 +1,5 @@
 import { MAX_DIGITS_AFTER_DECIMAL } from "@orderbook/core/constants";
 
-export const Utils = {
-  date: {
-    formatDateToISO(date: Date | string | number): string {
-      if (date instanceof Date) {
-        return date.toISOString();
-      }
-      return new Date(date).toISOString();
-    },
-  },
-};
-
 export function decimalPlaces(num: number | string) {
   const match = ("" + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
   if (!match) {
