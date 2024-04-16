@@ -57,7 +57,7 @@ export const useCreateOrder = () => {
         side,
         symbol[0],
         symbol[1],
-        amount,
+        formatNumber(String(amount)),
         formatNumber(price),
         timestamp,
         clientOrderId,

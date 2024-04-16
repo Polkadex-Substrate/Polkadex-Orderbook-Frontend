@@ -15,7 +15,7 @@ export const createOrderPayload = (
   side: OrderSide,
   baseAsset: string | null,
   quoteAsset: string | null,
-  quantity: number,
+  quantity: number | string,
   price: number | string,
   timestamp = 0,
   clientOrderId: Uint8Array,
