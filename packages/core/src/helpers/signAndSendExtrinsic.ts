@@ -114,8 +114,7 @@ export const handleTransaction = async (
             const errMsg = dispatchError.toString();
             reject(new Error(errMsg));
           }
-        } else if (status.isInBlock || status.isFinalized) {
-          handleExtrinsicError(events, signedExtrinsic);
+        } else if (status.isFinalized) {
           resolve({
             isSuccess: true,
             eventMessages: events,
@@ -125,28 +124,3 @@ export const handleTransaction = async (
       })
       .catch((error) => reject(error));
   });
-
-export const handleExtrinsicError = (
-  events: EventRecord[],
-  api: SubmittableExtrinsicPromise
-) => {
-  events
-    // find/filter for failed events
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    .filter(({ event }) => api.events.system.ExtrinsicFailed.is(event))
-    // we know that data for system.ExtrinsicFailed is
-    // (DispatchError, DispatchInfo)
-    .forEach(
-      ({
-        event: {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          data: [error],
-        },
-      }) => {
-        // Other, CannotLookup, BadOrigin, no extra info
-        throw Error(`Error: ${error.toHuman()}`);
-      }
-    );
-};
