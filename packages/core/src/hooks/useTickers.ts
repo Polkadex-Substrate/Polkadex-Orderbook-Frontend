@@ -8,9 +8,12 @@ import { useOrderbookService } from "../providers/public/orderbookServiceProvide
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { decimalPlaces } from "../helpers";
 
+import { useRecentTrades } from "./useRecentTrades";
+
 export function useTickers(defaultMarket?: string) {
   const { markets } = useOrderbookService();
   const { onHandleError } = useSettingsProvider();
+  const { list: recentTrades } = useRecentTrades(defaultMarket as string);
 
   const shouldFetchTickers = Boolean(markets && markets?.length > 0);
 
@@ -56,14 +59,19 @@ export function useTickers(defaultMarket?: string) {
     const currentTickerSelected = tickers?.find(
       (x) => x.market === defaultMarket
     );
-    return (
-      currentTickerSelected ?? {
+    if (!currentTickerSelected) {
+      return {
         ...defaultTicker,
         priceChange24Hr: 0,
         priceChangePercent24Hr: 0,
-      }
-    );
-  }, [defaultMarket, tickers]);
+      };
+    }
+    return {
+      ...currentTickerSelected,
+      currentPrice:
+        currentTickerSelected.currentPrice || recentTrades.at(0)?.price || 0,
+    };
+  }, [defaultMarket, recentTrades, tickers]);
 
   return {
     tickers: tickers ?? [],

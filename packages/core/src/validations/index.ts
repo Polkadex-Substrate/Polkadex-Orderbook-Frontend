@@ -203,12 +203,12 @@ export const limitOrderValidations = ({
       )
       .test(
         "Min Volume",
-        `Minimum volume: ${minVolume}`,
+        `Minimum volume required: ${minVolume}`,
         (value) => Number(value || 0) >= minVolume
       )
       .test(
         "Max Volume",
-        `Maximum volume: ${maxVolume}`,
+        `Maximum volume allowed: ${maxVolume}`,
         (value) => Number(value || 0) <= maxVolume
       )
       .test("Balance check", `You don't have enough balance`, (value) =>
@@ -218,32 +218,36 @@ export const limitOrderValidations = ({
 
 type MarketOrderValidations = {
   isSell?: boolean;
-  minQty: number;
   minVolume: number;
+  maxVolume: number;
   availableBalance: number;
   qtyStepSize: number;
+  currentMarketPrice: number;
 };
 
 export const marketOrderValidations = ({
   isSell,
-  minQty,
   minVolume,
+  maxVolume,
   availableBalance,
   qtyStepSize,
+  currentMarketPrice,
 }: MarketOrderValidations) =>
   Yup.object().shape({
     amount: Yup.string()
       .test("Valid number", "Must be a number", (value) =>
         value ? /^\d+(\.\d+)?$/.test(value) : false
       )
-      .test(
-        "Min Quantity",
-        `Minimum amount: ${isSell ? minVolume : minQty}`,
-        (value) => {
-          const minParam = isSell ? minVolume : minQty;
-          return Number(value || 0) >= minParam;
-        }
-      )
+      .test("Min volume", `Minimum volume required: ${minVolume}`, (value) => {
+        return isSell
+          ? Number(value || 0) * currentMarketPrice >= minVolume
+          : Number(value || 0) >= minVolume;
+      })
+      .test("Max volume", `Maximum volume allowed: ${maxVolume}`, (value) => {
+        return isSell
+          ? Number(value || 0) * currentMarketPrice <= maxVolume
+          : Number(value || 0) <= maxVolume;
+      })
       .test(
         "Balance check",
         `You don't have enough balance`,

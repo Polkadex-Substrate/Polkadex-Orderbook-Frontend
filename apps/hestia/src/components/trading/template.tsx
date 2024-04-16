@@ -121,6 +121,7 @@ export function Template({ id }: { id: string }) {
               {tabletView && (
                 <Resizable
                   direction="horizontal"
+                  autoSaveId="persistence"
                   className="max-h-[320px] border-b border-primary !h-webKit"
                 >
                   <Resizable.Panel

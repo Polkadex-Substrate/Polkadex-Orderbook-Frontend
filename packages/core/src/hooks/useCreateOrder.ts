@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useUserAccounts } from "@polkadex/react-providers";
 import {
   createOrderPayload,
+  formatNumber,
   getNewClientId,
   getNonce,
   isValidAddress,
@@ -56,8 +57,8 @@ export const useCreateOrder = () => {
         side,
         symbol[0],
         symbol[1],
-        amount,
-        price,
+        formatNumber(String(amount)),
+        formatNumber(price),
         timestamp,
         clientOrderId,
         mainAddress
