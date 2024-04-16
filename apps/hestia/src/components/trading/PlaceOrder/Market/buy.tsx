@@ -3,7 +3,7 @@
 import classNames from "classnames";
 import { useFormik } from "formik";
 import { Button, Input, Spinner, Tooltip } from "@polkadex/ux";
-import { Market } from "@orderbook/core/utils/orderbookService/types";
+import { Market, Ticker } from "@orderbook/core/utils/orderbookService/types";
 import { useMarketOrder } from "@orderbook/core/hooks";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { marketOrderValidations } from "@orderbook/core/validations";
@@ -21,10 +21,12 @@ const initialValues = {
 
 export const BuyOrder = ({
   market,
+  ticker,
   availableQuoteAmount,
   isResponsive = false,
 }: {
   market?: Market;
+  ticker: Ticker;
   availableQuoteAmount: number;
   isResponsive?: boolean;
 }) => {
@@ -45,9 +47,10 @@ export const BuyOrder = ({
     initialValues,
     validationSchema: marketOrderValidations({
       minVolume: market?.minVolume || 0,
-      minQty: market?.minQty || 0,
+      maxVolume: market?.maxVolume || 0,
       availableBalance: availableQuoteAmount,
       qtyStepSize: market?.qty_step_size || 0,
+      currentMarketPrice: ticker.currentPrice,
     }),
     validateOnBlur: true,
     onSubmit: async (e) => {
