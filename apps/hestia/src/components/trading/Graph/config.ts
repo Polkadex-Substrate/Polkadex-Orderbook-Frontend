@@ -1,13 +1,14 @@
-import { ResolutionString } from "@orderbook/core/utils/charting_library";
-
-import { ChartPropertiesOverrides } from "../../../../public/static/charting_library/charting_library";
+import {
+  ChartPropertiesOverrides,
+  ResolutionString,
+} from "../../../../public/static/charting_library/charting_library";
 import { themeConfig, commom } from "../../../../../../themeConfig";
 
 type Options = {
   studies_overrides: object;
   overrides: Partial<ChartPropertiesOverrides>;
 };
-const extend: any = themeConfig.theme.extend;
+const extend = themeConfig.theme.extend;
 
 export const options: Options = {
   studies_overrides: {

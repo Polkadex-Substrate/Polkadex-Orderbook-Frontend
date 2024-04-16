@@ -9,7 +9,7 @@ import {
   trimFloat,
 } from "@orderbook/core/helpers";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
-import { useFunds } from "@orderbook/core/hooks";
+import { useFunds, useTickers } from "@orderbook/core/hooks";
 
 import { LimitOrder } from "./Limit";
 import { MarketOrder } from "./Market";
@@ -21,6 +21,7 @@ export const PlaceOrder = ({ market, isBuy, isResponsive }: Props) => {
   const [isPasswordProtected, setIsPasswordProtected] = useState(false);
   const { selectedAccount } = useConnectWalletProvider();
   const { getFreeProxyBalance } = useFunds();
+  const { currentTicker } = useTickers(market?.id);
 
   const pricePrecision = (market && decimalPlaces(market.price_tick_size)) || 0;
   const qtyPrecision = (market && decimalPlaces(market.qty_step_size)) || 0;
@@ -87,6 +88,7 @@ export const PlaceOrder = ({ market, isBuy, isResponsive }: Props) => {
             >
               <MarketOrder
                 market={market}
+                ticker={currentTicker}
                 availableBaseAmount={availableBaseAmount}
                 availableQuoteAmount={availableQuoteAmount}
                 isBuy={isBuy}

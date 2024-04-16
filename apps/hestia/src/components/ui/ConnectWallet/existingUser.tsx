@@ -52,11 +52,8 @@ export const ExistingUser = ({
           Select a trading account
         </Interaction.Title>
       )}
-      <Interaction.Content
-        className="flex flex-col gap-1 flex-1"
-        withPadding={false}
-      >
-        <div className="flex flex-col gap-8">
+      <Interaction.Content withPadding={false}>
+        <div className="flex flex-col gap-6">
           {hasTradingAccounts ? (
             <div className="flex flex-col gap-3">
               <Typography.Text
@@ -68,11 +65,10 @@ export const ExistingUser = ({
               </Typography.Text>
               <div
                 className={classNames(
+                  "flex flex-col gap-3 max-h-[10rem] px-7",
                   accounts?.length > 1 &&
-                    "border-b border-secondary overflow-hidden hover:overflow-auto",
-                  "flex flex-col gap-3 max-h-[11rem] px-7"
+                    "border-b border-primary overflow-hidden hover:overflow-auto pb-7 scrollbar-hide"
                 )}
-                style={{ scrollbarGutter: "stable" }}
               >
                 {accounts.map((value, i) => (
                   <TradingAccountCard
@@ -138,7 +134,7 @@ export const ExistingUser = ({
           <div className="flex flex-col gap-2 px-7">
             {hasTradingAccounts && (
               <div className="flex items-center gap-2">
-                <Separator.Horizontal className="bg-level-5" />
+                <Separator.Horizontal className="bg-level-3" />
                 <Typography.Text
                   appearance="secondary"
                   size="xs"

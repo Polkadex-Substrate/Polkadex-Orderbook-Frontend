@@ -1,5 +1,5 @@
 export const isAssetPDEX = (
-  assetId: string | null | undefined | number,
+  assetId: string | null | undefined | number
 ): boolean =>
   assetId === "-1" ||
   assetId === null ||

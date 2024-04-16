@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { MouseEvent, useMemo, useState } from "react";
 import {
   Button,
   Input,
@@ -75,7 +75,7 @@ export const ImportTradingAccount = ({
   onRedirect,
   whitelistBrowserAccounts,
 }: {
-  onClose: () => void;
+  onClose: (event: MouseEvent<HTMLButtonElement>) => void;
   onImport: (values: { password: string; file: DecodedFile }) => Promise<void>;
   onRedirect: () => void;
   loading: boolean;

@@ -11,7 +11,7 @@ export const ConnectTradingAccountCard = ({
     <div className="px-3">
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2 px-4">
-          <Separator.Horizontal className=" bg-level-5" />
+          <Separator.Horizontal className=" bg-level-2" />
           <Typography.Text
             appearance="secondary"
             size="xs"

@@ -8,6 +8,19 @@ import { toast } from "sonner";
 import { useParams } from "next/navigation";
 
 import awsconfig from "../../../../aws-exports";
+
+const Progress = dynamic(
+  () => import("../Progress").then((mod) => mod.Progress),
+  { ssr: false }
+);
+
+const TransactionManagerProvider = dynamic(
+  () =>
+    import("@polkadex/react-providers").then(
+      (mod) => mod.TransactionManagerProvider
+    ),
+  { ssr: false }
+);
 const UserAccountsProvider = dynamic(
   () =>
     import("@polkadex/react-providers").then((mod) => mod.UserAccountsProvider),
@@ -119,9 +132,14 @@ export const DynamicProviders = ({ children }: { children: ReactNode }) => {
                         <SubscriptionProvider
                           marketId={(params.id as string) ?? "DOTUSDT"}
                         >
-                          <ConnectWalletProvider>
-                            {children}
-                          </ConnectWalletProvider>
+                          <TransactionManagerProvider>
+                            <ConnectWalletProvider>
+                              <Fragment>
+                                <Progress />
+                                {children}
+                              </Fragment>
+                            </ConnectWalletProvider>
+                          </TransactionManagerProvider>
                         </SubscriptionProvider>
                       </SessionProvider>
                     </OrderbookServiceProvider>

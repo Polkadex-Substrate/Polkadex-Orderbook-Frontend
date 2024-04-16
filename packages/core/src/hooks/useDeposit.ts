@@ -1,25 +1,30 @@
 import { useMutation } from "@tanstack/react-query";
-import { ExtensionAccount } from "@polkadex/react-providers";
+import {
+  ExtensionAccount,
+  useTransactionManager,
+} from "@polkadex/react-providers";
 
 import { useSettingsProvider } from "../providers/public/settings";
 import { useNativeApi } from "../providers/public/nativeApi";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
+import { handleTransaction } from "../helpers";
 
 type DepositArgs = {
   amount: string | number;
   asset: Record<string, string | null>;
   account: ExtensionAccount;
-  assetId?: string;
+  tokenFeeId?: string;
 };
 
 export const useDeposit = () => {
   const { onHandleError, onHandleInfo, onHandleAlert } = useSettingsProvider();
   const { api } = useNativeApi();
   const { isReady } = useOrderbookService();
+  const { addToTxQueue } = useTransactionManager();
 
   const { mutateAsync, status } = useMutation({
-    mutationFn: async ({ asset, amount, account, assetId }: DepositArgs) => {
+    mutationFn: async ({ asset, amount, account, tokenFeeId }: DepositArgs) => {
       if (!isReady) throw new Error("Orderbook service not initialized");
 
       if (!api || !api?.isConnected)
@@ -30,14 +35,17 @@ export const useDeposit = () => {
 
       onHandleInfo?.("Processing Deposit...");
 
-      await appsyncOrderbookService.operation.deposit({
+      const signedExtrinsic = await appsyncOrderbookService.operation.deposit({
         api,
         account,
         asset,
         amount,
-        assetId,
+        tokenFeeId,
       });
+      addToTxQueue(signedExtrinsic);
+      await handleTransaction(signedExtrinsic);
     },
+
     onError: (error) => {
       const errorMessage = (error as Error).message ?? (error as string);
       onHandleError(errorMessage);

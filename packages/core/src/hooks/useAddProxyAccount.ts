@@ -1,11 +1,11 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useUserAccounts } from "@polkadex/react-providers";
 import {
-  addProxyToAccount,
-  getAddressFromMnemonic,
-  registerMainAccount,
-} from "@orderbook/core/helpers";
+  ExtensionAccount,
+  useTransactionManager,
+  useUserAccounts,
+} from "@polkadex/react-providers";
+import { getAddressFromMnemonic } from "@orderbook/core/helpers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 
@@ -13,12 +13,14 @@ import { appsyncOrderbookService } from "../utils/orderbookService";
 import { NOTIFICATIONS, QUERY_KEYS } from "../constants";
 import { useSettingsProvider } from "../providers/public/settings";
 
+import { handleTransaction } from "./../helpers/signAndSendExtrinsic";
+
 export type AddProxyAccountArgs = {
   mnemonic: string;
-  main: string;
   name: string;
   password?: string;
-  assetId?: string;
+  tokenFeeId?: string;
+  selectedWallet?: ExtensionAccount;
 };
 
 interface UseAddProxyAccount extends MutateHookProps {
@@ -32,43 +34,52 @@ export function useAddProxyAccount({
   const queryClient = useQueryClient();
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
-  const { getSigner, onUserSelectTradingAddress } = useProfile();
+  const { onUserSelectTradingAddress } = useProfile();
   const { onPushNotification } = useSettingsProvider();
+  const { addToTxQueue } = useTransactionManager();
 
   const { mutateAsync, status, error } = useMutation({
     mutationFn: async ({
       mnemonic,
-      main,
       name,
       password,
-      assetId,
+      tokenFeeId,
+      selectedWallet,
     }: AddProxyAccountArgs) => {
       if (!api || !wallet)
         throw new Error("You are not connected to blockchain ");
 
-      const signer = getSigner(main);
-      if (!signer) throw new Error("signer is not defined");
+      if (!selectedWallet) throw new Error("selectedWallet is not defined");
 
-      appsyncOrderbookService.subscriber.subscribeAccountUpdate(main, () => {
-        queryClient.setQueryData(
-          QUERY_KEYS.singleProxyAccounts(main),
-          (proxies?: string[]): string[] => {
-            return proxies ? [...proxies, pair.address] : [pair.address];
-          }
-        );
-      });
+      appsyncOrderbookService.subscriber.subscribeAccountUpdate(
+        selectedWallet.address,
+        () => {
+          queryClient.setQueryData(
+            QUERY_KEYS.singleProxyAccounts(selectedWallet.address),
+            (proxies?: string[]): string[] => {
+              return proxies ? [...proxies, pair.address] : [pair.address];
+            }
+          );
+        }
+      );
 
       const proxy = getAddressFromMnemonic(mnemonic);
 
       const registeredProxies =
-        await appsyncOrderbookService.query.getTradingAddresses(main);
+        await appsyncOrderbookService.query.getTradingAddresses(
+          selectedWallet.address
+        );
 
-      if (registeredProxies.length === 0) {
-        await registerMainAccount(api, proxy, signer, main, assetId);
-      } else {
-        await addProxyToAccount(api, proxy, signer, main, assetId);
-      }
-
+      const signedExtrinsic =
+        await appsyncOrderbookService.operation.createProxyAcccount({
+          api,
+          account: selectedWallet,
+          proxyAddress: proxy,
+          tokenFeeId,
+          firstAccount: !registeredProxies.length,
+        });
+      addToTxQueue(signedExtrinsic);
+      await handleTransaction(signedExtrinsic);
       const { pair } = wallet.addFromMnemonic(mnemonic, name, password);
       await onUserSelectTradingAddress({
         tradeAddress: pair.address,

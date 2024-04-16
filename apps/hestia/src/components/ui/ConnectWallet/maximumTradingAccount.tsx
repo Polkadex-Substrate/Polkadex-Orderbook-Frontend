@@ -5,6 +5,7 @@ import {
   Interaction,
 } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { MouseEvent } from "react";
 
 import { RemoveWalletCard } from "../ReadyToUse";
 
@@ -18,7 +19,7 @@ export const MaximumTradingAccount = ({
   browserAccounts: TradeAccount[];
   tradingAccounts?: string[];
   onRemove: (e: TradeAccount) => void;
-  onClose: () => void;
+  onClose: (event: MouseEvent<HTMLButtonElement>) => void;
   onRemoveCallback: () => void;
 }) => {
   return (

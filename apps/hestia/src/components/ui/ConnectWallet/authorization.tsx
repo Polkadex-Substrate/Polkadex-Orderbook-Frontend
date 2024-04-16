@@ -51,7 +51,7 @@ export const Authorization = ({
 
   useEffect(() => {
     if (!error) callbackFn();
-  }, [onActionCallback, callbackFn, error]);
+  }, [callbackFn, error]);
 
   const errorMessage = `Please authorize your ${extensionName} wallet extension to connect to Orderbook App`;
   return (

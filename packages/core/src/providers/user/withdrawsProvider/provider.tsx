@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { ApiPromise } from "@polkadot/api";
 import { Signer } from "@polkadot/types/types";
 import * as mutations from "@orderbook/core/graphql/mutations";
@@ -11,14 +11,10 @@ import {
   getNonce,
   sendQueryToAppSync,
   signPayload,
-  getFundingAccountDetail,
   SignatureEnumSr25519,
 } from "@orderbook/core/helpers";
 import { useFunds } from "@orderbook/core/hooks";
-import {
-  useUserAccounts,
-  useExtensionAccounts,
-} from "@polkadex/react-providers";
+import { useUserAccounts } from "@polkadex/react-providers";
 
 import { useProfile } from "../profile";
 
@@ -30,94 +26,98 @@ import { initialState, withdrawsReducer } from "./reducer";
 export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
   const [state, dispatch] = useReducer(withdrawsReducer, initialState);
   const { onChangeChainBalance } = useFunds();
-  const { selectedAddresses, getSigner } = useProfile();
+  const { selectedAddresses } = useProfile();
   const nativeApiState = useNativeApi();
   const settingsState = useSettingsProvider();
-  const { extensionAccounts } = useExtensionAccounts();
   const { mainAddress, tradeAddress } = selectedAddresses;
   const { wallet } = useUserAccounts();
-
   type UserActionLambdaResp = {
     is_success: boolean;
     body: string;
   };
-  const onFetchWithdraws = async ({
-    asset,
-    amount,
-  }: A.WithdrawsFetch["payload"]) => {
-    dispatch(A.withdrawsFetch({ asset, amount }));
-    try {
-      const keyringPair = wallet.getPair(tradeAddress);
-      const nonce = getNonce();
-      const api = nativeApiState.api;
 
-      // TODO: Handle error or fix types
-      if (tradeAddress !== "" && keyringPair && api) {
-        const payload = { asset_id: { asset }, amount, timestamp: nonce };
-        const signingPayload = createWithdrawSigningPayload(
-          api,
-          asset,
-          amount,
-          nonce
-        );
-        const signature = signPayload(api, keyringPair, signingPayload);
-        const res = await executeWithdraw(
-          [mainAddress, tradeAddress, payload, signature],
-          tradeAddress
-        );
-        if (res.data.withdraw) {
-          const resp: UserActionLambdaResp = JSON.parse(res.data.withdraw);
-          if (!resp.is_success) {
-            dispatch(A.withdrawsData());
-            settingsState.onHandleError(resp.body);
-            return;
+  const executeWithdraw = useCallback(
+    async (
+      withdrawPayload: [string, string, object, SignatureEnumSr25519],
+      address: string
+    ) => {
+      const payload = JSON.stringify({ Withdraw: withdrawPayload });
+      return await sendQueryToAppSync({
+        query: mutations.withdraw,
+        variables: { input: { payload } },
+        token: address,
+      });
+    },
+    []
+  );
+
+  const onFetchWithdraws = useCallback(
+    async ({ asset, amount }: A.WithdrawsFetch["payload"]) => {
+      dispatch(A.withdrawsFetch({ asset, amount }));
+      try {
+        const keyringPair = wallet.getPair(tradeAddress);
+        const nonce = getNonce();
+        const api = nativeApiState.api;
+
+        // TODO: Handle error or fix types
+        if (tradeAddress !== "" && keyringPair && api) {
+          const payload = { asset_id: { asset }, amount, timestamp: nonce };
+          const signingPayload = createWithdrawSigningPayload(
+            api,
+            asset,
+            amount,
+            nonce
+          );
+          const signature = signPayload(api, keyringPair, signingPayload);
+          const res = await executeWithdraw(
+            [mainAddress, tradeAddress, payload, signature],
+            tradeAddress
+          );
+          if (res.data.withdraw) {
+            const resp: UserActionLambdaResp = JSON.parse(res.data.withdraw);
+            if (!resp.is_success) {
+              dispatch(A.withdrawsData());
+              settingsState.onHandleError(resp.body);
+              return;
+            }
           }
+          dispatch(A.withdrawsData());
+          settingsState.onHandleAlert(
+            "Your withdrawal is being processed and will be available for you to claim in a few minutes"
+          );
         }
+      } catch (error) {
+        const errorText = (error as Error).message || (error as string);
         dispatch(A.withdrawsData());
-        settingsState.onHandleAlert(
-          "Your withdrawal is being processed and will be available for you to claim in a few minutes"
-        );
+        settingsState.onHandleError(errorText);
       }
-    } catch (error) {
-      const errorText = (error as Error).message || (error as string);
-      dispatch(A.withdrawsData());
-      settingsState.onHandleError(errorText);
-    }
-  };
-
-  const executeWithdraw = async (
-    withdrawPayload: [string, string, object, SignatureEnumSr25519],
-    address: string
-  ) => {
-    const payload = JSON.stringify({ Withdraw: withdrawPayload });
-    return await sendQueryToAppSync({
-      query: mutations.withdraw,
-      variables: { input: { payload } },
-      token: address,
-    });
-  };
+    },
+    [
+      executeWithdraw,
+      mainAddress,
+      nativeApiState?.api,
+      settingsState,
+      tradeAddress,
+      wallet,
+    ]
+  );
 
   const onFetchClaimWithdraw = async ({
+    selectedWallet,
     sid,
     assetIds = [],
-    assetId,
-  }: A.WithdrawsClaimFetch["payload"]) => {
+    tokenFeeId,
+  }: T.OnFetchClaimWithdraw) => {
     try {
       const api = nativeApiState.api;
-      const extensionAccount = getFundingAccountDetail(
-        selectedAddresses.mainAddress,
-        extensionAccounts
-      );
+
       const isApiReady = nativeApiState.connected;
-      const signer = getSigner(selectedAddresses.mainAddress);
 
       if (!api || !isApiReady)
         throw new Error("You are not connected to blockchain");
 
-      if (!extensionAccount?.address)
+      if (!selectedWallet?.address)
         throw new Error("Funding account doesn't exists");
-
-      if (!signer) throw new Error("Signer is not defined");
 
       // TODO: Move this toast as callback to signAndSendExtrinsic,
       settingsState.onHandleAlert(
@@ -127,10 +127,10 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
 
       const res = await claimWithdrawal(
         api,
-        signer,
-        extensionAccount?.address,
+        selectedWallet.signer,
+        selectedWallet.address,
         sid,
-        assetId
+        tokenFeeId
       );
       if (res.isSuccess) {
         dispatch(A.withdrawsClaimData({ sid }));
@@ -157,23 +157,26 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
     }
   };
 
-  async function claimWithdrawal(
-    api: ApiPromise,
-    signer: Signer,
-    account: string,
-    sid: number,
-    assetId?: string
-  ): Promise<ExtrinsicResult> {
-    const ext = api.tx.ocex.claimWithdraw(sid, account);
-    return await signAndSendExtrinsic(
-      api,
-      ext,
-      { signer },
-      account,
-      true,
-      assetId
-    );
-  }
+  const claimWithdrawal = useCallback(
+    async (
+      api: ApiPromise,
+      signer: Signer,
+      account: string,
+      sid: number,
+      assetId?: string
+    ): Promise<ExtrinsicResult> => {
+      const ext = api.tx.ocex.claimWithdraw(sid, account);
+      return await signAndSendExtrinsic(
+        api,
+        ext,
+        { signer },
+        account,
+        true,
+        assetId
+      );
+    },
+    []
+  );
 
   return (
     <Provider

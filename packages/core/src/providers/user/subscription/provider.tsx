@@ -15,7 +15,6 @@ import {
   Balance,
   Kline,
 } from "@orderbook/core/utils/orderbookService";
-import { Bar } from "@orderbook/core/utils/charting_library";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import {
   DEFAULT_BATCH_LIMIT,
@@ -412,7 +411,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
     [mainAddress, onHandleError, queryClient, updateBalanceFromEvent]
   );
 
-  const processKline = (data: Kline, interval: string): Bar => {
+  const processKline = (data: Kline, interval: string) => {
     const kline = {
       open: Number(data.open),
       close: Number(data.close),
