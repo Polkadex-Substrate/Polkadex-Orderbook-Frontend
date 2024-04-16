@@ -18,7 +18,8 @@ export const Tickers = ({
       <ul className=" list-none flex items-center gap-2">
         {tickers.map((marketTicker) => {
           const active = marketTicker === activeTicker;
-          if (loading) return <Skeleton loading className="w-10 h-5" />;
+          if (loading)
+            return <Skeleton key={marketTicker} loading className="w-10 h-5" />;
           return (
             <li
               key={marketTicker}
