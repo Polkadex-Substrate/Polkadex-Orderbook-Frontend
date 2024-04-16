@@ -1,6 +1,8 @@
-import {PublicTrade} from "@orderbook/core/utils/orderbookService";
+import { PublicTrade } from "@orderbook/core/utils/orderbookService";
 
-export const getIsDecreasingArray = (recentTrades: PublicTrade[]): [boolean] => {
+export const getIsDecreasingArray = (
+  recentTrades: PublicTrade[]
+): [boolean] => {
   const res: [boolean] = new Array(recentTrades.length) as [boolean];
 
   for (let i = recentTrades.length - 1; i >= 0; i--) {

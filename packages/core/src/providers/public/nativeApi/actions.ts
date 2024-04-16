@@ -46,7 +46,7 @@ export const nativeApiConnectFetch = (): NativeApiConnectFetch => ({
 });
 
 export const nativeApiConnectData = (
-  payload: ApiPromise,
+  payload: ApiPromise
 ): NativeApiConnectData => ({
   type: NATIVEAPI_CONNECT_DATA,
   payload,

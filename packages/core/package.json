@@ -59,6 +59,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@polkadex/react-providers": "^2.0.0",
+    "@polkadot-cloud/assets": "^0.3.0",
     "@polkadot/api": "latest",
     "@polkadot/extension-dapp": "^0.46.6",
     "@polkadot/ui-keyring": "^3.6.4",
@@ -73,20 +75,19 @@
     "formik": "^2.2.9",
     "i18next": "^23.2.8",
     "i18next-browser-languagedetector": "^7.1.0",
-    "@polkadot-cloud/assets": "^0.3.0",
     "i18next-http-backend": "^2.2.1",
     "react": "^18.2.0",
     "react-i18next": "^13.0.1",
     "styled-components": "^5.3.1",
     "styled-system": "^5.1.5",
     "yarn": "^1.22.19",
-    "yup": "^0.32.9",
-    "@polkadex/react-providers": "^2.0.0"
+    "yup": "^0.32.9"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^14.2.1",
     "@orderbook/eslint-config": "*",
-    "@polkadot/types": "^10.11.2",
     "@orderbook/tsconfig": "*",
+    "@polkadot/types": "^10.11.2",
     "@types/d3-array": "^3.0.7",
     "@types/file-saver": "^2.0.5",
     "@types/jest": "^29.5.5",
