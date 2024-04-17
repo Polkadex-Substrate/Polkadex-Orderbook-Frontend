@@ -20,7 +20,7 @@ import { HeaderLink } from "./headerLink";
 import { Profile } from "./Profile";
 import { ResponsiveMenuModal } from "./responsiveMenuModal";
 import { NotificationsModal } from "./NotificationsModal";
-import { FundWalletModal } from "./FundWalletModal";
+import { FundWalletModal } from "./fundWalletModal";
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const [menu, setMenu] = useState(false);

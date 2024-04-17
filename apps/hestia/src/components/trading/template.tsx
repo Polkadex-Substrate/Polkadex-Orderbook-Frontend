@@ -7,8 +7,6 @@ import { useWindowSize } from "react-use";
 import classNames from "classnames";
 import { Resizable, ImperativePanelHandle } from "@polkadex/ux";
 
-import { QuickStart } from "../ui/Footer/QuickStart";
-
 import { AssetInfo } from "./AssetInfo";
 import { Orderbook } from "./Orderbook";
 import { Trades } from "./Trades";
@@ -31,7 +29,7 @@ export function Template({ id }: { id: string }) {
   const orderbookPanelRef = useRef<ImperativePanelHandle>(null);
 
   const { width } = useWindowSize();
-  const { open, onOpenChange, onClose } = useTour();
+  const { onOpenChange } = useTour();
   const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, id);
 
@@ -41,7 +39,6 @@ export function Template({ id }: { id: string }) {
 
   return (
     <Fragment>
-      <QuickStart open={open} onOpenChange={onClose} />
       <ConnectTradingInteraction />
       <Header />
       {mobileView ? (
@@ -124,6 +121,7 @@ export function Template({ id }: { id: string }) {
               {tabletView && (
                 <Resizable
                   direction="horizontal"
+                  autoSaveId="persistence"
                   className="max-h-[320px] border-b border-primary !h-webKit"
                 >
                   <Resizable.Panel

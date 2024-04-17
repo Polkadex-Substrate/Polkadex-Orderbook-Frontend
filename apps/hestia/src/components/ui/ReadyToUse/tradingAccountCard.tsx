@@ -56,11 +56,11 @@ export const TradingAccountCard = ({
     <div
       {...customProps}
       className={classNames(
-        "w-full flex flex-col rounded-md border border-level-5 duration-300 transition-colors",
-        hasSelect && "hover:bg-level-4"
+        "w-full flex flex-col rounded-md border border-primary duration-300 transition-colors",
+        hasSelect && "hover:bg-level-1"
       )}
     >
-      <div className="flex flex-1 justify-between gap-2 items-center p-4">
+      <div className="flex flex-1 justify-between items-start gap-2 pt-4 pb-3 pl-4 pr-3">
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <Copy value={address} />
@@ -76,37 +76,41 @@ export const TradingAccountCard = ({
         </div>
 
         {(hasRemove || onExport) && (
-          <div className="flex gap-1">
-            <Dropdown open={open} onOpenChange={setOpen}>
-              <Dropdown.Trigger>
-                <Button.Icon asChild size="sm" variant="ghost">
-                  <RiMore2Line className="text-primary group-hover:text-current duration-300 transition-colors" />
-                </Button.Icon>
-              </Dropdown.Trigger>
-              <Dropdown.Content>
-                {hasRemove && (
-                  <Dropdown.Item
-                    onClick={(e) => {
-                      onRemove(e);
-                      setOpen(false);
-                    }}
-                  >
-                    Remove
-                  </Dropdown.Item>
-                )}
-                {onExport && (
-                  <Dropdown.Item
-                    onClick={(e) => {
-                      onExport(e);
-                      setOpen(false);
-                    }}
-                  >
-                    Export as JSON
-                  </Dropdown.Item>
-                )}
-              </Dropdown.Content>
-            </Dropdown>
-          </div>
+          <Dropdown open={open} onOpenChange={setOpen}>
+            <Dropdown.Trigger>
+              <Button.Icon
+                asChild
+                size="sm"
+                variant="ghost"
+                className="p-1"
+                rounded
+              >
+                <RiMore2Line className="text-primary group-hover:text-current duration-300 transition-colors" />
+              </Button.Icon>
+            </Dropdown.Trigger>
+            <Dropdown.Content>
+              {hasRemove && (
+                <Dropdown.Item
+                  onClick={(e) => {
+                    onRemove(e);
+                    setOpen(false);
+                  }}
+                >
+                  Remove
+                </Dropdown.Item>
+              )}
+              {onExport && (
+                <Dropdown.Item
+                  onClick={(e) => {
+                    onExport(e);
+                    setOpen(false);
+                  }}
+                >
+                  Export as JSON
+                </Dropdown.Item>
+              )}
+            </Dropdown.Content>
+          </Dropdown>
         )}
       </div>
       <div className="flex items-center justify-between px-4 py-2 bg-grayscale">

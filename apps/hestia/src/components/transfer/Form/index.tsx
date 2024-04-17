@@ -182,7 +182,7 @@ export const Form = ({
           asset,
           amount,
           account: selectedWallet,
-          assetId: tokenFee?.id,
+          tokenFeeId: tokenFee?.id,
         });
       } finally {
         resetForm({ values: initialValues });

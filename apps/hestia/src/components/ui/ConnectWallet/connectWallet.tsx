@@ -28,7 +28,10 @@ export const ConnectWallet = ({
     chains[0]
   );
   return (
-    <Interaction className="w-full md:max-w-[24rem]" {...props}>
+    <Interaction
+      className="w-full md:min-w-[24rem] md:max-w-[24rem]"
+      {...props}
+    >
       <Interaction.Title onClose={{ onClick: onBack }}>
         Connect your wallet
       </Interaction.Title>

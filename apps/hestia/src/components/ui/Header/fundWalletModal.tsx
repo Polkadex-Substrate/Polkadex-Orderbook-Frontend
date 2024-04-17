@@ -11,7 +11,7 @@ import { RiCloseLine, RiArrowDownSLine } from "@remixicon/react";
 import Link from "next/link";
 import { getChainFromTicker, useAssets } from "@orderbook/core/index";
 
-import { Card } from "./card";
+import { FundHorizontalCard } from "../ReadyToUse/fundHorizontalCard";
 
 export const FundWalletModal = ({
   open,
@@ -55,7 +55,7 @@ export const FundWalletModal = ({
             </span>
           </div>
           <div className="flex flex-col gap-2">
-            <Card
+            <FundHorizontalCard
               icon="Bridge"
               title="Decentralized bridge"
               description="Bridge your crypto to Polkadex and vice versa."
@@ -142,7 +142,7 @@ export const FundWalletModal = ({
                   </Dropdown.Content>
                 </Dropdown>
               </div>
-            </Card>
+            </FundHorizontalCard>
           </div>
         </div>
         <div className="flex flex-col gap-3">
@@ -155,7 +155,7 @@ export const FundWalletModal = ({
             </span>
           </div>
           <div className="flex flex-col gap-2">
-            <Card
+            <FundHorizontalCard
               icon="TransferToTrading"
               title="Transfer to trading account"
               description="Move funds from your funding account to your trading account."
@@ -170,21 +170,24 @@ export const FundWalletModal = ({
             </Typography.Text>
           </div>
           <div className="flex flex-col gap-2">
-            <Card
+            <FundHorizontalCard
               disabled
               icon="FreeCoin"
               title="Get 1 PDEX for free"
               description="Complete some tasks and get 1 free PDEX"
               href="/"
             />
-            <Card
+            <FundHorizontalCard
               icon="CreditCard"
               title="Credit card"
               description="Buy PDEX with our credit card partner Simplex"
               href="https://buy.simplex.com"
               target="_blank"
             />
-            <Card icon="CentralizedExchange" title="Centralized exchanges">
+            <FundHorizontalCard
+              icon="CentralizedExchange"
+              title="Centralized exchanges"
+            >
               <div className="flex items-center gap-2 flex-wrap">
                 <Button.Solid
                   appearance="secondary"
@@ -239,7 +242,7 @@ export const FundWalletModal = ({
                   </Link>
                 </Button.Solid>
               </div>
-            </Card>
+            </FundHorizontalCard>
           </div>
         </div>
       </Modal.Content>

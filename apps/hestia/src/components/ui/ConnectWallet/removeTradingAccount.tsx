@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useMemo, useState } from "react";
+import { Fragment, MouseEvent, useCallback, useMemo, useState } from "react";
 import { Interaction, Typography } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { ExtensionAccount } from "@polkadex/react-providers";
@@ -11,7 +11,7 @@ import { GenericSelectCard, TradingAccountCard } from "../ReadyToUse";
 
 import { ConfirmTransaction } from "./confirmTransaction";
 
-type RemoveProps = { main: string; proxy: string; assetId?: string };
+type RemoveProps = { proxy: string; assetId?: string };
 export const RemoveTradingAccount = ({
   tradingAccount,
   fundWallet,
@@ -19,9 +19,6 @@ export const RemoveTradingAccount = ({
   onRemoveFromChain,
   onCancel,
   loading,
-  selectedExtension,
-  errorMessage,
-  errorTitle,
   availableOnDevice,
   enabledExtensionAccount = false,
 }: {
@@ -29,7 +26,7 @@ export const RemoveTradingAccount = ({
   fundWallet?: ExtensionAccount;
   onRemoveFromDevice: () => void;
   onRemoveFromChain?: (props: RemoveProps) => Promise<void>;
-  onCancel: () => void;
+  onCancel: (e: MouseEvent<HTMLButtonElement>) => void;
   loading?: boolean;
   selectedExtension?: (typeof ExtensionsArray)[0];
   errorTitle?: string;
@@ -56,35 +53,37 @@ export const RemoveTradingAccount = ({
   );
 
   const handleRemoveBlockchain = useCallback(
-    async (e: RemoveProps) => {
+    async (e: RemoveProps, event: MouseEvent<HTMLButtonElement>) => {
       await onRemoveFromChain?.({
         ...e,
         assetId: tokenFee?.id,
       });
-      onCancel();
+      onCancel(event);
     },
     [onCancel, onRemoveFromChain, tokenFee?.id]
   );
 
-  const handleRemoveDevice = useCallback(() => {
-    onRemoveFromDevice?.();
-    onCancel();
-  }, [onCancel, onRemoveFromDevice]);
+  const handleRemoveDevice = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      onRemoveFromDevice?.();
+      onCancel(event);
+    },
+    [onCancel, onRemoveFromDevice]
+  );
 
   const removeProps = useMemo(
     () => ({
-      main: fundWallet?.address ?? "",
       proxy: tradingAccount.address ?? "",
     }),
-    [fundWallet?.address, tradingAccount.address]
+    [tradingAccount.address]
   );
 
   const { onRemoveProxyAccountOcex } = useCall();
   return (
     <Fragment>
       <ConfirmTransaction
-        action={async () => {
-          await handleRemoveBlockchain(removeProps);
+        action={async (e) => {
+          await handleRemoveBlockchain(removeProps, e);
           setOpenFeeModal(false);
         }}
         actionLoading={!!loading}

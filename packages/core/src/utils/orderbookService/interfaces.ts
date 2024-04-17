@@ -3,6 +3,7 @@ import { ExtensionAccount } from "@polkadex/react-providers";
 import { SignatureEnumSr25519 } from "@orderbook/core/helpers";
 import { LmpApi } from "@polkadex/polkadex-api";
 import { Signer } from "@polkadot/types/types";
+import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
 
 import {
   AccountUpdateEvent,
@@ -121,7 +122,22 @@ export type DepositArgs = {
   amount: string | number;
   asset: Record<string, string | null>;
   account: ExtensionAccount;
-  assetId?: string;
+  tokenFeeId?: string;
+};
+
+export type RemoveAccountArgs = {
+  api: ApiPromise;
+  account: ExtensionAccount;
+  proxyAddress: string;
+  tokenFeeId?: string;
+};
+
+export type CreateProxyAcccountArgs = {
+  api: ApiPromise;
+  account: ExtensionAccount;
+  tokenFeeId?: string;
+  proxyAddress: string;
+  firstAccount?: boolean;
 };
 
 export type ClaimRewardArgs = {
@@ -131,6 +147,23 @@ export type ClaimRewardArgs = {
   address: string;
   epoch: number;
   market: string;
+  tokenFeeId?: string;
+};
+
+export type TransferArgs = {
+  api: ApiPromise;
+  account: ExtensionAccount;
+  asset: Record<string, string | null>;
+  amount: string;
+  dest: string;
+  tokenFeeId?: string;
+};
+
+export type ClaimWithdrawArgs = {
+  api: ApiPromise;
+  account: ExtensionAccount;
+  sid: number;
+  tokenFeeId?: string;
 };
 
 export interface OrderbookOperationStrategy extends BaseStrategy {
@@ -138,8 +171,15 @@ export interface OrderbookOperationStrategy extends BaseStrategy {
   cancelOrder: (args: ExecuteArgs) => Promise<void>;
   cancelAll: (args: ExecuteArgs) => Promise<void>;
   withdraw: (args: WithdrawArgs) => Promise<void>;
-  deposit: (args: DepositArgs) => Promise<void>;
+  removeAccount: (args: RemoveAccountArgs) => Promise<SubmittableExtrinsic>;
+  createProxyAcccount: (
+    args: CreateProxyAcccountArgs
+  ) => Promise<SubmittableExtrinsic>;
+
+  deposit: (args: DepositArgs) => Promise<SubmittableExtrinsic>;
   claimReward: (args: ClaimRewardArgs) => Promise<void>;
+  transfer: (args: TransferArgs) => Promise<SubmittableExtrinsic>;
+  claimWithdrawal: (args: ClaimWithdrawArgs) => Promise<SubmittableExtrinsic>;
 }
 
 export interface OrderbookService {

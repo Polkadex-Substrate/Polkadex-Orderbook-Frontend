@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { Fragment, MouseEvent, useCallback, useMemo } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
-import { Multistep } from "@polkadex/ux";
+import { Interactable, useInteractableProvider } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
 
@@ -17,13 +17,90 @@ import { InsufficientBalance } from "../ConnectWallet/insufficientBalance";
 import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAccountMnemonic";
 import { UnlockAccount } from "../ReadyToUse/unlockAccount";
 
-export const ConnectExistingUser = ({
-  onClose,
-  onNext,
-}: {
-  onClose: () => void;
-  onNext: (v: "Connect" | "TradingAccountSuccessfull") => void;
-}) => {
+import { InteractableProps } from ".";
+
+export const ConnectExistingUser = ({ onClose, onNext }: InteractableProps) => {
+  return (
+    <Interactable>
+      <Interactable.Trigger>
+        <TriggerComponent onClose={onClose} onNext={onNext} />
+      </Interactable.Trigger>
+      <Interactable.Content>
+        <CardsComponent onClose={onClose} onNext={onNext} />
+      </Interactable.Content>
+    </Interactable>
+  );
+};
+
+const TriggerComponent = ({ onClose, onNext }: InteractableProps) => {
+  const {
+    localTradingAccounts,
+    onSelectTradingAccount,
+    onResetWallet,
+    onResetExtension,
+    onSetTempTrading,
+    mainProxiesAccounts,
+    walletBalance,
+    onExportTradeAccount,
+  } = useConnectWalletProvider();
+
+  const filteredAccounts = useMemo(
+    () =>
+      localTradingAccounts?.filter((item) =>
+        mainProxiesAccounts?.includes(item.address)
+      ),
+    [localTradingAccounts, mainProxiesAccounts]
+  );
+
+  const handleCloseInteraction = () => {
+    onResetWallet?.();
+    onResetExtension?.();
+    onNext("Connect");
+  };
+
+  const redirectMaximumAccounts =
+    (mainProxiesAccounts?.length ?? 0) >= 3
+      ? "MaximumTradingAccount"
+      : "NewTradingAccount";
+
+  const redirectEnoughBalance =
+    (walletBalance ?? 0) >= MINIMUM_PDEX_REQUIRED
+      ? redirectMaximumAccounts
+      : "InsufficientBalance";
+
+  const { setPage } = useInteractableProvider();
+
+  return (
+    <ExistingUser
+      onClose={onClose}
+      onReadMore={() =>
+        window.open(
+          "https://docs.polkadex.trade/orderbookPolkadexFAQHowToTradeStep3",
+          "_blank",
+          "noopener, noreferrer"
+        )
+      }
+      onBack={handleCloseInteraction}
+      onCreate={() => setPage(redirectEnoughBalance)}
+      onRecover={() => setPage("ConnectTradingAccount")}
+      onTradingAccountList={() => setPage("TradingAccountList")}
+      accounts={filteredAccounts as TradeAccount[]}
+      registeredProxies={mainProxiesAccounts}
+      onSelect={(e) =>
+        onSelectTradingAccount?.({
+          tradeAddress: e.address,
+        })
+      }
+      onSelectCallback={onClose}
+      onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
+      onRemoveCallback={() => setPage("RemoveTradingAccount")}
+      onExportBrowserAccount={(account) => onExportTradeAccount({ account })}
+      onExportBrowserAccountCallback={() => setPage("UnlockBrowserAccount")}
+    />
+  );
+};
+
+const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
   const {
     localTradingAccounts,
     onSelectTradingAccount,
@@ -50,6 +127,7 @@ export const ConnectExistingUser = ({
     importFromMnemonicStatus,
     onImportFromMnemonic,
   } = useConnectWalletProvider();
+  const { setPage, onReset } = useInteractableProvider();
 
   const filteredAccounts = useMemo(
     () =>
@@ -67,18 +145,8 @@ export const ConnectExistingUser = ({
   const handleCloseInteraction = () => {
     onResetWallet?.();
     onResetExtension?.();
-    onNext("Connect");
+    setPage("Connect");
   };
-
-  const redirectMaximumAccounts =
-    (mainProxiesAccounts?.length ?? 0) >= 3
-      ? "MaximumTradingAccount"
-      : "NewTradingAccount";
-
-  const redirectEnoughBalance =
-    (walletBalance ?? 0) >= MINIMUM_PDEX_REQUIRED
-      ? redirectMaximumAccounts
-      : "InsufficientBalance";
 
   const availableOnDevice = useMemo(
     () =>
@@ -86,166 +154,128 @@ export const ConnectExistingUser = ({
     [tempTrading?.address, filteredAccounts]
   );
 
+  const handleClose = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      e.preventDefault();
+      onReset();
+    },
+    [onReset]
+  );
+
   return (
-    <Multistep.Interactive resetOnUnmount>
-      {(props) => (
-        <>
-          <Multistep.Trigger>
-            <ExistingUser
-              onClose={onClose}
-              onReadMore={() =>
-                window.open(
-                  "https://docs.polkadex.trade/orderbookPolkadexFAQHowToTradeStep3",
-                  "_blank",
-                  "noopener, noreferrer"
-                )
-              }
-              onBack={handleCloseInteraction}
-              onCreate={() => props?.onPage(redirectEnoughBalance, true)}
-              onRecover={() => props?.onPage("ConnectTradingAccount", true)}
-              onTradingAccountList={() =>
-                props?.onPage("TradingAccountList", true)
-              }
-              accounts={filteredAccounts as TradeAccount[]}
-              registeredProxies={mainProxiesAccounts}
-              onSelect={(e) =>
-                onSelectTradingAccount?.({
-                  tradeAddress: e.address,
-                })
-              }
-              onSelectCallback={onClose}
-              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
-              onRemoveCallback={() =>
-                props?.onPage("RemoveTradingAccount", true)
-              }
-              onExportBrowserAccount={(account) =>
-                onExportTradeAccount({ account })
-              }
-              onExportBrowserAccountCallback={() =>
-                props?.onPage("UnlockBrowserAccount", true)
-              }
-            />
-          </Multistep.Trigger>
-          <Multistep.Content>
-            <ConnectTradingAccount
-              key="ConnectTradingAccount"
-              accounts={filteredAccounts as TradeAccount[]}
-              onSelect={(e) =>
-                onSelectTradingAccount?.({ tradeAddress: e.address })
-              }
-              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
-              onClose={
-                hasAccounts
-                  ? () => props?.onChangeInteraction(false)
-                  : handleCloseInteraction
-              }
-              onImport={() => props?.onPage("ImportTradingAccount", true)}
-              onSelectCallback={onClose}
-              onRemoveCallback={() =>
-                props?.onPage("RemoveTradingAccount", true)
-              }
-              onExportBrowserAccount={(account) =>
-                onExportTradeAccount({ account })
-              }
-              onExportBrowserAccountCallback={() =>
-                props?.onPage("UnlockBrowserAccount")
-              }
-              onImportMnemonic={() => {
-                props?.onPage("ImportTradingAccountMnemonic", true);
-              }}
-            />
-            <UnlockAccount
-              key="UnlockBrowserAccount"
-              tempBrowserAccount={tempTrading}
-              onClose={() => props?.onPage("ConnectTradingAccount")}
-              onAction={(account, password) =>
-                onExportTradeAccount({ account, password })
-              }
-              onResetTempBrowserAccount={onResetTempTrading}
-            />
-            <NewTradingAccount
-              key="NewTradingAccount"
-              onCreateAccount={async (e) =>
-                await onRegisterTradeAccount?.({
-                  ...e,
-                  main: selectedWallet?.address as string,
-                })
-              }
-              loading={registerStatus === "loading"}
-              fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
-              errorTitle="Error"
-              errorMessage={(registerError as Error)?.message ?? registerError}
-              selectedExtension={selectedExtension}
-              onCreateCallback={() => onNext("TradingAccountSuccessfull")}
-              onClose={() => props?.onChangeInteraction(false)}
-            />
-            <TradingAccountList
-              key="TradingAccountList"
-              tradingAccounts={mainProxiesAccounts}
-              browserAccounts={localTradingAccounts}
-              onRemove={(e) => onSetTempTrading?.(e)}
-              onClose={() => props?.onChangeInteraction(false)}
-              onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}
-            />
-            <RemoveTradingAccount
-              key="RemoveTradingAccount"
-              tradingAccount={tempTrading as TradeAccount}
-              fundWallet={selectedWallet}
-              availableOnDevice={availableOnDevice}
-              onRemoveFromDevice={() =>
-                onRemoveTradingAccountFromDevice?.(
-                  tempTrading?.address as string
-                )
-              }
-              onRemoveFromChain={async (e) =>
-                await onRemoveTradingAccountFromChain?.(e)
-              }
-              loading={removingStatus === "loading"}
-              errorTitle="Error"
-              errorMessage={(removingError as Error)?.message ?? removingError}
-              selectedExtension={selectedExtension}
-              onCancel={() => props?.onChangeInteraction(false)} // onBack not working, rerendering Multistep, prev reseting..
-            />
-            <ImportTradingAccount
-              key="ImportTradingAccount"
-              onImport={async (e) => {
-                await onImportFromFile?.(e);
-                onClose();
-              }}
-              onRedirect={() => props?.onPage("ConnectTradingAccount")}
-              onClose={() => props?.onPage("ConnectTradingAccount")}
-              loading={importFromFileStatus === "loading"}
-              whitelistBrowserAccounts={mainProxiesAccounts}
-            />
-            <ImportTradingAccountMnemonic
-              key="ImportTradingAccountMnemonic"
-              onImport={async (e) => {
-                await onImportFromMnemonic?.(e);
-                onClose();
-              }}
-              onCancel={() => props?.onPage("ConnectTradingAccount")}
-              loading={importFromMnemonicStatus === "loading"}
-              errorMessage={
-                (importFromMnemonicError as Error)?.message ??
-                importFromMnemonicError
-              }
-            />
-            <MaximumTradingAccount
-              key="MaximumTradingAccount"
-              tradingAccounts={mainProxiesAccounts}
-              browserAccounts={localTradingAccounts}
-              onRemove={(e) => onSetTempTrading?.(e)}
-              onClose={() => props?.onChangeInteraction(false)}
-              onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}
-            />
-            <InsufficientBalance
-              key="InsufficientBalance"
-              balance={walletBalance}
-              onClose={() => props?.onChangeInteraction(false)}
-            />
-          </Multistep.Content>
-        </>
-      )}
-    </Multistep.Interactive>
+    <Fragment>
+      <Interactable.Card pageName="ConnectTradingAccount">
+        <ConnectTradingAccount
+          accounts={filteredAccounts as TradeAccount[]}
+          onSelect={(e) =>
+            onSelectTradingAccount?.({ tradeAddress: e.address })
+          }
+          onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
+          onClose={hasAccounts ? onReset : handleCloseInteraction}
+          onImport={() => setPage("ImportTradingAccount")}
+          onSelectCallback={onClose}
+          onRemoveCallback={() => setPage("RemoveTradingAccount")}
+          onExportBrowserAccount={(account) =>
+            onExportTradeAccount({ account })
+          }
+          onExportBrowserAccountCallback={() => setPage("UnlockBrowserAccount")}
+          onImportMnemonic={() => {
+            setPage("ImportTradingAccountMnemonic");
+          }}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="UnlockBrowserAccount">
+        <UnlockAccount
+          tempBrowserAccount={tempTrading}
+          onClose={() => setPage("ConnectTradingAccount")}
+          onAction={(account, password) =>
+            onExportTradeAccount({ account, password })
+          }
+          onResetTempBrowserAccount={onResetTempTrading}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="NewTradingAccount">
+        <NewTradingAccount
+          onCreateAccount={onRegisterTradeAccount}
+          loading={registerStatus === "loading"}
+          fundWalletPresent={!!Object.keys(selectedWallet ?? {})?.length}
+          errorTitle="Error"
+          errorMessage={(registerError as Error)?.message ?? registerError}
+          selectedExtension={selectedExtension}
+          onCreateCallback={() => onNext("TradingAccountSuccessfull")}
+          onClose={handleClose}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="TradingAccountList">
+        <TradingAccountList
+          tradingAccounts={mainProxiesAccounts}
+          browserAccounts={localTradingAccounts}
+          onRemove={(e) => onSetTempTrading?.(e)}
+          onClose={handleClose}
+          onRemoveCallback={() => setPage("RemoveTradingAccount")}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="RemoveTradingAccount">
+        <RemoveTradingAccount
+          tradingAccount={tempTrading as TradeAccount}
+          fundWallet={selectedWallet}
+          availableOnDevice={availableOnDevice}
+          onRemoveFromDevice={() =>
+            onRemoveTradingAccountFromDevice?.(tempTrading?.address as string)
+          }
+          onRemoveFromChain={async (e) =>
+            await onRemoveTradingAccountFromChain?.({ ...e, selectedWallet })
+          }
+          loading={removingStatus === "loading"}
+          errorTitle="Error"
+          errorMessage={(removingError as Error)?.message ?? removingError}
+          selectedExtension={selectedExtension}
+          onCancel={handleClose}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="ImportTradingAccount">
+        <ImportTradingAccount
+          onImport={async (e) => {
+            await onImportFromFile?.(e);
+            onClose();
+          }}
+          onRedirect={() => setPage("ConnectTradingAccount")}
+          onClose={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setPage("ConnectTradingAccount");
+          }}
+          loading={importFromFileStatus === "loading"}
+          whitelistBrowserAccounts={mainProxiesAccounts}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="ImportTradingAccountMnemonic">
+        <ImportTradingAccountMnemonic
+          onImport={async (e) => {
+            await onImportFromMnemonic?.(e);
+            onClose();
+          }}
+          onCancel={() => setPage("ConnectTradingAccount")}
+          loading={importFromMnemonicStatus === "loading"}
+          errorMessage={
+            (importFromMnemonicError as Error)?.message ??
+            importFromMnemonicError
+          }
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="MaximumTradingAccount">
+        <MaximumTradingAccount
+          tradingAccounts={mainProxiesAccounts}
+          browserAccounts={localTradingAccounts}
+          onRemove={(e) => onSetTempTrading?.(e)}
+          onClose={handleClose}
+          onRemoveCallback={() => setPage("RemoveTradingAccount")}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="InsufficientBalance">
+        <InsufficientBalance balance={walletBalance} onClose={onReset} />
+      </Interactable.Card>
+    </Fragment>
   );
 };

@@ -4,7 +4,7 @@ export const createWithdrawSigningPayload = (
   api: ApiPromise,
   asset: string | "PDEX",
   amount: string | number,
-  timestamp: number,
+  timestamp: number
 ) => {
   return api.createType("WithdrawPayload", {
     asset_id: asset === "PDEX" ? { polkadex: null } : { asset },

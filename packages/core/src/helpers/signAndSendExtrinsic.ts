@@ -2,6 +2,7 @@ import { ApiPromise } from "@polkadot/api";
 import { SubmittableExtrinsic } from "@polkadot/api/types";
 import { ISubmittableResult, Signer } from "@polkadot/types/types";
 import { EventRecord } from "@polkadot/types/interfaces";
+import { SubmittableExtrinsic as SubmittableExtrinsicPromise } from "@polkadot/api/promise/types";
 
 export interface ExtrinsicResult {
   isSuccess: boolean;
@@ -9,6 +10,7 @@ export interface ExtrinsicResult {
   eventMessages?: EventRecord[];
   hash: string;
 }
+export type AddToTxQueue = (value: SubmittableExtrinsic<"promise">) => void;
 
 export const signAndSendExtrinsic = async (
   api: ApiPromise,
@@ -27,6 +29,7 @@ export const signAndSendExtrinsic = async (
         ({ status, events, dispatchError }: ISubmittableResult) => {
           // status would still be set, but in the case of error we can shortcut
           // to just check it (so an error would indicate InBlock or Finalized)
+
           if (dispatchError) {
             if (dispatchError.isModule) {
               // for module errors, we have the section indexed, lookup
@@ -88,3 +91,36 @@ export const handleExtrinsicErrors = (
       }
     );
 };
+
+export const handleTransaction = async (
+  signedExtrinsic: SubmittableExtrinsicPromise
+) =>
+  await new Promise<ExtrinsicResult>((resolve, reject) => {
+    signedExtrinsic
+      .send((result) => {
+        const { status, events, dispatchError } = result ?? {};
+        if (dispatchError) {
+          if (dispatchError.isModule) {
+            // for module errors, we have the section indexed, lookup
+            const decoded = signedExtrinsic.registry.findMetaError(
+              dispatchError.asModule
+            );
+            const { docs, name, section } = decoded;
+
+            const errMsg = `${section}.${name}: ${docs.join(" ")}`;
+            reject(new Error(errMsg));
+          } else {
+            // Other, CannotLookup, BadOrigin, no extra info
+            const errMsg = dispatchError.toString();
+            reject(new Error(errMsg));
+          }
+        } else if (status.isFinalized) {
+          resolve({
+            isSuccess: true,
+            eventMessages: events,
+            hash: signedExtrinsic.hash.toHex(),
+          });
+        }
+      })
+      .catch((error) => reject(error));
+  });
