@@ -58,7 +58,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           >
             <Logo.Orderbook className="max-md:pointer-events-none max-md:h-8 max-md:[&_g]:hidden" />
           </Link>
-          <div className="gap-5 hidden items-center lg:flex">
+          <div className="gap-5 hidden items-center lg:!flex">
             <HeaderLink.Single href={lastUsedMarketUrl}>
               Trade
             </HeaderLink.Single>
