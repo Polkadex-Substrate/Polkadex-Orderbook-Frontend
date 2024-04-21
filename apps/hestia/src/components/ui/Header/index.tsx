@@ -53,7 +53,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       >
         <div className="flex-1 flex items-center gap-5 py-2 overflow-auto">
           <Link
-            href={"/"}
+            href="/"
             className="md:flex-1 md:max-w-[140px] max-md:w-8 max-md:h-8 max-md:overflow-hidden"
           >
             <Logo.Orderbook className="max-md:pointer-events-none max-md:h-8 max-md:[&_g]:hidden" />
