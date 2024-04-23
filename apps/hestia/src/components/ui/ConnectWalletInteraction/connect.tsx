@@ -205,7 +205,7 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
         <RemoveTradingAccount
           tradingAccount={tempTrading}
           onRemoveFromDevice={(e) => onRemoveTradingAccountFromDevice(e)}
-          onRemoveGoogleDrive={(e) => onRemoveGoogleDrive(e)}
+          onRemoveGoogleDrive={async (e) => await onRemoveGoogleDrive(e)}
           selectedExtension={selectedExtension}
           availableOnDevice={availableOnDevice}
           onCancel={() => setPage("ConnectTradingAccount")}

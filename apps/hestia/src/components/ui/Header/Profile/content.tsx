@@ -279,7 +279,7 @@ export const Content = () => {
               fundWallet={tempExtensionAccount}
               availableOnDevice={availableOnDevice}
               onRemoveFromDevice={(e) => onRemoveTradingAccountFromDevice(e)}
-              onRemoveGoogleDrive={(e) => onRemoveGoogleDrive(e)}
+              onRemoveGoogleDrive={async (e) => await onRemoveGoogleDrive(e)}
               onRemoveFromChain={async () =>
                 await onRemoveTradingAccountFromChain?.({
                   proxy: tempTrading?.data.address as string,

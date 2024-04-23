@@ -42,6 +42,9 @@ import {
 } from "../../../hooks";
 import { useSettingsProvider } from "../../public/settings";
 
+const sleep = async (ms: number) =>
+  await new Promise((resolve) => setTimeout(resolve, ms));
+
 export type GenericStatus = "error" | "idle" | "success" | "loading";
 
 export { useConnectWalletProvider } from "./useConnectWallet";
@@ -330,6 +333,8 @@ export const ConnectWalletProvider = ({
         setGDriveReady(true);
       }
       await GoogleDrive.addFromJson(jsonAccount);
+      wallet.remove(tradeAccount.address);
+      await onRefetchGoogleDriveAccounts();
     },
     onError: (error: { message: string }) =>
       onHandleError(error?.message ?? error),
@@ -388,6 +393,7 @@ export const ConnectWalletProvider = ({
       }
 
       await GoogleDrive.remove(value);
+      await sleep(2000);
       await onRefetchGoogleDriveAccounts();
     },
     onError: (error: { message: string }) =>

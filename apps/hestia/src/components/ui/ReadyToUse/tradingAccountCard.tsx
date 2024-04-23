@@ -68,12 +68,14 @@ export const TradingAccountCard = ({
             <Copy value={address} />
             <Skeleton loading={!address}>
               <Typography.Text bold size="md">
-                {shortAddress}
+                {name}
               </Typography.Text>
             </Skeleton>
           </div>
           <Skeleton loading={!address}>
-            <Typography.Text appearance="primary">{name}</Typography.Text>
+            <Typography.Text appearance="primary">
+              {shortAddress}
+            </Typography.Text>
           </Skeleton>
         </div>
 

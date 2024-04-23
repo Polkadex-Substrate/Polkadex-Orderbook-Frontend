@@ -3,6 +3,7 @@ import {
   Interaction,
   Loading,
   Separator,
+  Skeleton,
   Typography,
 } from "@polkadex/ux";
 import { KeyringPair } from "@polkadot/keyring/types";
@@ -72,6 +73,9 @@ export const ConnectTradingAccount = ({
                       "border-b border-primary overflow-hidden hover:overflow-auto pb-7 scrollbar-hide"
                   )}
                 >
+                  {connectGDriveLoading && (
+                    <Skeleton loading className="min-h-14 rounded-sm" />
+                  )}
                   {accounts.map((value, i) => {
                     const { data, type } = value;
                     return (
@@ -114,6 +118,11 @@ export const ConnectTradingAccount = ({
                   })}
                 </div>
               </div>
+            ) : connectGDriveLoading ? (
+              <div className="flex flex-col gap-3 px-6">
+                <Skeleton loading className="min-h-10" />
+                <Skeleton loading className="min-h-10" />
+              </div>
             ) : (
               <div className="border-2 border-dashed rounded-md border-primary mx-7 p-5 flex flex-col gap-5 items-center">
                 <div className="max-w-[13rem]">
@@ -129,6 +138,7 @@ export const ConnectTradingAccount = ({
                 </div>
               </div>
             )}
+
             <div className="flex flex-col gap-2 px-7">
               <div className="flex items-center gap-2">
                 <Separator.Horizontal className="bg-level-3" />

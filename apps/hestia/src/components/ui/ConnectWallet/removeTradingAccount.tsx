@@ -75,7 +75,7 @@ export const RemoveTradingAccount = ({
 
   const handleRemoveFromGoogle = useCallback(
     async (event: MouseEvent<HTMLButtonElement>) => {
-      await onRemoveGoogleDrive?.(tradingAccount?.data.address ?? "");
+      await onRemoveGoogleDrive(tradingAccount?.data.address ?? "");
       onCancel(event);
     },
     [onCancel, onRemoveGoogleDrive, tradingAccount?.data.address]

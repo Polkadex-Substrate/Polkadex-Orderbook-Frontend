@@ -230,7 +230,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
           fundWallet={selectedWallet}
           availableOnDevice={availableOnDevice}
           onRemoveFromDevice={(e) => onRemoveTradingAccountFromDevice(e)}
-          onRemoveGoogleDrive={(e) => onRemoveGoogleDrive(e)}
+          onRemoveGoogleDrive={async (e) => await onRemoveGoogleDrive(e)}
           onRemoveFromChain={async (e) =>
             await onRemoveTradingAccountFromChain?.({ ...e, selectedWallet })
           }

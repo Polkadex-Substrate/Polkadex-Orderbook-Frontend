@@ -142,7 +142,7 @@ const CardsCompontent = ({ onClose }: { onClose: () => void }) => {
         <RemoveTradingAccount
           tradingAccount={tempTrading}
           onRemoveFromDevice={(e) => onRemoveTradingAccountFromDevice(e)}
-          onRemoveGoogleDrive={(e) => onRemoveGoogleDrive(e)}
+          onRemoveGoogleDrive={async (e) => await onRemoveGoogleDrive(e)}
           selectedExtension={selectedExtension}
           onCancel={onReset}
           availableOnDevice={availableOnDevice}
