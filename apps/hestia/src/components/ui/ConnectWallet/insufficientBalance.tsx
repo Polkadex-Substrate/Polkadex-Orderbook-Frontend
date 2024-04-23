@@ -70,7 +70,7 @@ export const InsufficientBalance = ({
             </Accordion.Trigger>
             <Accordion.Content>
               <div className="flex flex-col gap-2">
-                <div className="group flex flex-col gap-1 rounded-md py-2 border border-primary-base hover:bg-level-1 duration-300 transition-colors cursor-pointer">
+                <div className="group flex flex-col gap-1 rounded-md py-2 border border-white hover:bg-level-1 duration-300 transition-colors cursor-pointer">
                   <div className="flex items-center gap-3 px-3">
                     <div className="grid place-content-center w-7 h-7 rounded-md bg-level-1">
                       <Icons.Bridge className="w-4 h-4 text-primary" />
@@ -91,11 +91,12 @@ export const InsufficientBalance = ({
                     <div className="flex flex-items gap-1">
                       {assets
                         ?.filter((e) => filteredAssets.includes(e.id))
-                        .sort(
+                        ?.sort(
                           (a, b) =>
-                            (activeAssets.includes(a.id) ? 0 : -1) -
-                            (activeAssets.includes(b.id) ? 0 : -1)
+                            activeAssets.indexOf(a.id) -
+                            activeAssets.indexOf(b.id)
                         )
+
                         .map((asset) => {
                           const chainName = getChainFromTicker(asset.ticker);
                           const active = activeAssets.includes(asset.id);
