@@ -10,7 +10,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
-import { QuickStart } from "../ui/Footer/QuickStart";
 
 import { Help } from "./Help";
 import { TransferHistory } from "./Transfer";
@@ -27,7 +26,7 @@ export function Template() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { width } = useWindowSize();
-  const { onOpenChange, open, onClose } = useTour();
+  const { onOpenChange } = useTour();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
@@ -82,7 +81,6 @@ export function Template() {
 
   return (
     <Fragment>
-      <QuickStart open={open} onOpenChange={onClose} />
       <ConnectTradingInteraction />
       <div
         className="flex flex-1 flex-col bg-backgroundBase h-full"
