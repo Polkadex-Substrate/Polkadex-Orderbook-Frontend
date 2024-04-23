@@ -341,8 +341,10 @@ export const ConnectWalletProvider = ({
     isSuccess: connectGoogleDriveSuccess,
   } = useMutation({
     mutationFn: async () => {
-      await GoogleDrive.init();
-      setGDriveReady(true);
+      if (!gDriveReady) {
+        await GoogleDrive.init();
+        setGDriveReady(true);
+      }
     },
     onError: (error: { message: string }) =>
       onHandleError(error?.message ?? error),
@@ -352,6 +354,7 @@ export const ConnectWalletProvider = ({
     useQuery({
       enabled: gDriveReady,
       queryKey: [!!gDriveReady],
+      initialData: [],
       queryFn: async () => {
         const accounts = await GoogleDrive.getAll();
         return accounts.map((account) => ({
@@ -403,7 +406,7 @@ export const ConnectWalletProvider = ({
   );
 
   const localTradingAccounts = useMemo(
-    () => [...(googleDriveAccounts ?? []), ...(localAccounts ?? [])],
+    () => [...googleDriveAccounts, ...localAccounts],
     [localAccounts, googleDriveAccounts]
   );
 
