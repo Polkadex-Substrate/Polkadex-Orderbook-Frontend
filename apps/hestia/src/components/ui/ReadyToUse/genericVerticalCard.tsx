@@ -28,8 +28,8 @@ export const GenericVerticalCard = ({
           className={classNames(
             disabled
               ? "opacity-50"
-              : " hover:bg-level-2 duration-300 transition-colors",
-            "relative flex-1 flex flex-col items-center gap-2 px-3 py-7 rounded-md border border-secondary"
+              : " hover:bg-level-1 duration-300 transition-colors",
+            "relative flex-1 flex flex-col items-center gap-2 px-3 py-7 rounded-md border border-primary"
           )}
         >
           <div className="flex flex-col items-center gap-2">

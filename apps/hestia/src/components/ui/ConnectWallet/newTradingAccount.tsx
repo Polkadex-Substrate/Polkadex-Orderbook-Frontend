@@ -224,8 +224,7 @@ export const NewTradingAccount = ({
                           </div>
                         ) : (
                           <Button.Solid
-                            appearance="tertiary"
-                            rounded
+                            appearance="secondary"
                             size="sm"
                             onClick={(e) => {
                               e.preventDefault();

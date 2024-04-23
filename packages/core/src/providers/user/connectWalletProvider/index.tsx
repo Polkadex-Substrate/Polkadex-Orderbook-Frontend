@@ -353,7 +353,6 @@ export const ConnectWalletProvider = ({
       enabled: gDriveReady,
       queryKey: [!!gDriveReady],
       queryFn: async () => {
-        console.log("Refetching...");
         const accounts = await GoogleDrive.getAll();
         return accounts.map((account) => ({
           type: "Google Drive",
