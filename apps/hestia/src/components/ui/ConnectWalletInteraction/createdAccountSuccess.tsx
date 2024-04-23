@@ -39,10 +39,10 @@ const TriggerComponent = ({ onClose }: { onClose: () => void }) => {
     <TradingAccountSuccessfull
       tradingAccount={selectedAccount}
       onClose={handleClose}
-      onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
+      onTempBrowserAccount={(e) => onSetTempTrading(e)}
       onOpenMnemonic={() => setPage("TradingAccountMnemonic")}
-      onDownloadPdf={() => window.alert("Downloading...")}
-      onDownloadJson={(e) => onExportTradeAccount?.({ account: e })}
+      onDownloadPdf={() => {}}
+      onDownloadJson={(e) => onExportTradeAccount({ account: e })}
       onDownloadJsonCallback={() => setPage("UnlockBrowserAccount")}
     />
   );
@@ -70,7 +70,7 @@ const CardsComponent = () => {
           tempBrowserAccount={tempTrading}
           onClose={onReset}
           onAction={(account, password) =>
-            onExportTradeAccount({ account, password })
+            onExportTradeAccount({ account: account.data, password })
           }
           onResetTempBrowserAccount={onResetTempTrading}
         />

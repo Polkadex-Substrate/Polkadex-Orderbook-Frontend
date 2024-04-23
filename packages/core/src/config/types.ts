@@ -19,4 +19,6 @@ export type DefaultConfig = {
   mainUrl: string;
   blockedAssets: string[];
   subscanApi: string;
+  googleApiKey: string;
+  googleClientId: string;
 };

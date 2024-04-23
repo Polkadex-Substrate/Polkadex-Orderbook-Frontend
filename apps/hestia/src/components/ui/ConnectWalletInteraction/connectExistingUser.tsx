@@ -1,7 +1,6 @@
 "use client";
 
 import { Fragment, MouseEvent, useCallback, useMemo } from "react";
-import { TradeAccount } from "@orderbook/core/providers/types";
 import { Interactable, useInteractableProvider } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
@@ -47,7 +46,7 @@ const TriggerComponent = ({ onClose, onNext }: InteractableProps) => {
   const filteredAccounts = useMemo(
     () =>
       localTradingAccounts?.filter((item) =>
-        mainProxiesAccounts?.includes(item.address)
+        mainProxiesAccounts?.includes(item.data.address)
       ),
     [localTradingAccounts, mainProxiesAccounts]
   );
@@ -84,15 +83,11 @@ const TriggerComponent = ({ onClose, onNext }: InteractableProps) => {
       onCreate={() => setPage(redirectEnoughBalance)}
       onRecover={() => setPage("ConnectTradingAccount")}
       onTradingAccountList={() => setPage("TradingAccountList")}
-      accounts={filteredAccounts as TradeAccount[]}
+      accounts={filteredAccounts}
       registeredProxies={mainProxiesAccounts}
-      onSelect={(e) =>
-        onSelectTradingAccount?.({
-          tradeAddress: e.address,
-        })
-      }
+      onSelect={(e) => onSelectTradingAccount?.(e)}
       onSelectCallback={onClose}
-      onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
+      onTempBrowserAccount={(e) => onSetTempTrading(e)}
       onRemoveCallback={() => setPage("RemoveTradingAccount")}
       onExportBrowserAccount={(account) => onExportTradeAccount({ account })}
       onExportBrowserAccountCallback={() => setPage("UnlockBrowserAccount")}
@@ -126,13 +121,20 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
     importFromMnemonicError,
     importFromMnemonicStatus,
     onImportFromMnemonic,
+    onBackupGoogleDrive,
+    backupGoogleDriveLoading,
+    onConnectGoogleDrive,
+    connectGoogleDriveLoading,
+    gDriveReady,
+    onRemoveGoogleDrive,
+    removeGoogleDriveLoading,
   } = useConnectWalletProvider();
   const { setPage, onReset } = useInteractableProvider();
 
   const filteredAccounts = useMemo(
     () =>
       localTradingAccounts?.filter((item) =>
-        mainProxiesAccounts?.includes(item.address)
+        mainProxiesAccounts?.includes(item?.data.address)
       ),
     [localTradingAccounts, mainProxiesAccounts]
   );
@@ -150,8 +152,10 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
 
   const availableOnDevice = useMemo(
     () =>
-      filteredAccounts?.some((value) => value.address === tempTrading?.address),
-    [tempTrading?.address, filteredAccounts]
+      filteredAccounts?.some(
+        (value) => value.data.address === tempTrading?.data.address
+      ),
+    [tempTrading?.data.address, filteredAccounts]
   );
 
   const handleClose = useCallback(
@@ -167,11 +171,9 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
     <Fragment>
       <Interactable.Card pageName="ConnectTradingAccount">
         <ConnectTradingAccount
-          accounts={filteredAccounts as TradeAccount[]}
-          onSelect={(e) =>
-            onSelectTradingAccount?.({ tradeAddress: e.address })
-          }
-          onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
+          accounts={filteredAccounts}
+          onSelect={(e) => onSelectTradingAccount(e)}
+          onTempBrowserAccount={(e) => onSetTempTrading(e)}
           onClose={hasAccounts ? onReset : handleCloseInteraction}
           onImport={() => setPage("ImportTradingAccount")}
           onSelectCallback={onClose}
@@ -180,9 +182,12 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
             onExportTradeAccount({ account })
           }
           onExportBrowserAccountCallback={() => setPage("UnlockBrowserAccount")}
-          onImportMnemonic={() => {
-            setPage("ImportTradingAccountMnemonic");
-          }}
+          onImportMnemonic={() => setPage("ImportTradingAccountMnemonic")}
+          backupGDriveAccountLoading={backupGoogleDriveLoading}
+          onBackupGDriveAccount={(account) => onBackupGoogleDrive({ account })}
+          onConnectGDrive={onConnectGoogleDrive}
+          connectGDriveLoading={connectGoogleDriveLoading}
+          gDriveReady={gDriveReady}
         />
       </Interactable.Card>
       <Interactable.Card pageName="UnlockBrowserAccount">
@@ -190,7 +195,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
           tempBrowserAccount={tempTrading}
           onClose={() => setPage("ConnectTradingAccount")}
           onAction={(account, password) =>
-            onExportTradeAccount({ account, password })
+            onExportTradeAccount({ account: account.data, password })
           }
           onResetTempBrowserAccount={onResetTempTrading}
         />
@@ -205,29 +210,31 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
           selectedExtension={selectedExtension}
           onCreateCallback={() => onNext("TradingAccountSuccessfull")}
           onClose={handleClose}
+          onConnectGDrive={onConnectGoogleDrive}
+          connectGDriveLoading={connectGoogleDriveLoading}
+          gDriveReady={gDriveReady}
         />
       </Interactable.Card>
       <Interactable.Card pageName="TradingAccountList">
         <TradingAccountList
           tradingAccounts={mainProxiesAccounts}
           browserAccounts={localTradingAccounts}
-          onRemove={(e) => onSetTempTrading?.(e)}
+          onRemove={(e) => onSetTempTrading(e)}
           onClose={handleClose}
           onRemoveCallback={() => setPage("RemoveTradingAccount")}
         />
       </Interactable.Card>
       <Interactable.Card pageName="RemoveTradingAccount">
         <RemoveTradingAccount
-          tradingAccount={tempTrading as TradeAccount}
+          tradingAccount={tempTrading}
           fundWallet={selectedWallet}
           availableOnDevice={availableOnDevice}
-          onRemoveFromDevice={() =>
-            onRemoveTradingAccountFromDevice?.(tempTrading?.address as string)
-          }
+          onRemoveFromDevice={(e) => onRemoveTradingAccountFromDevice(e)}
+          onRemoveGoogleDrive={(e) => onRemoveGoogleDrive(e)}
           onRemoveFromChain={async (e) =>
             await onRemoveTradingAccountFromChain?.({ ...e, selectedWallet })
           }
-          loading={removingStatus === "loading"}
+          loading={removingStatus === "loading" || removeGoogleDriveLoading}
           errorTitle="Error"
           errorMessage={(removingError as Error)?.message ?? removingError}
           selectedExtension={selectedExtension}
@@ -268,7 +275,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
         <MaximumTradingAccount
           tradingAccounts={mainProxiesAccounts}
           browserAccounts={localTradingAccounts}
-          onRemove={(e) => onSetTempTrading?.(e)}
+          onRemove={(e) => onSetTempTrading(e)}
           onClose={handleClose}
           onRemoveCallback={() => setPage("RemoveTradingAccount")}
         />

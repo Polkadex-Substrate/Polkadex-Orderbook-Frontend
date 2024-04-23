@@ -4,8 +4,8 @@ import {
   Illustrations,
   Interaction,
 } from "@polkadex/ux";
-import { TradeAccount } from "@orderbook/core/providers/types";
 import { MouseEvent } from "react";
+import { Account } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { RemoveWalletCard } from "../ReadyToUse";
 
@@ -16,9 +16,9 @@ export const MaximumTradingAccount = ({
   onClose,
   onRemoveCallback,
 }: {
-  browserAccounts: TradeAccount[];
+  browserAccounts: Account[];
   tradingAccounts?: string[];
-  onRemove: (e: TradeAccount) => void;
+  onRemove: (e: Account) => void;
   onClose: (event: MouseEvent<HTMLButtonElement>) => void;
   onRemoveCallback: () => void;
 }) => {
@@ -51,22 +51,25 @@ export const MaximumTradingAccount = ({
               <div className="flex flex-col gap-4">
                 {tradingAccounts?.map((v) => {
                   const account = browserAccounts?.find(
-                    (acc) => acc.address === v
+                    ({ data }) => data.address === v
                   );
                   const tradingAccount = {
-                    address: v,
-                    meta: {
-                      name: "Trading Account",
+                    data: {
+                      address: v,
+                      meta: {
+                        name: "Trading Account",
+                      },
                     },
+                    type: "Browser",
                   };
                   return (
                     <RemoveWalletCard
                       key={v}
-                      name={account?.meta?.name}
+                      name={account?.data.meta.name}
                       address={v}
                       showTooltip={tradingAccounts.length === 1}
                       onClick={() => {
-                        onRemove(tradingAccount as TradeAccount);
+                        onRemove(tradingAccount as Account);
                         onRemoveCallback();
                       }}
                     />

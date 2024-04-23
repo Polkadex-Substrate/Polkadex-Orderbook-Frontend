@@ -41,7 +41,7 @@ export const ProfileProvider: T.ProfileComponent = ({ children }) => {
     tradeAddress: string;
     isNew?: boolean;
   }) => {
-    const _tradeAddress = localAddresses.find(
+    const _tradeAddress = localAddresses?.find(
       (address) => address === tradeAddress
     );
     if (!_tradeAddress && !isNew) {

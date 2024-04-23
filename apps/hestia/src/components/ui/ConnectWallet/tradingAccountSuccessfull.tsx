@@ -9,6 +9,7 @@ import {
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Account } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
 
@@ -21,9 +22,9 @@ export const TradingAccountSuccessfull = ({
   onDownloadPdf,
   onDownloadJsonCallback,
 }: {
-  tradingAccount?: TradeAccount;
+  tradingAccount?: Account;
   onClose: () => void;
-  onTempBrowserAccount: (e: TradeAccount) => void;
+  onTempBrowserAccount: (e: Account) => void;
   onOpenMnemonic: () => void;
   onDownloadJson: (e: TradeAccount) => void;
   onDownloadPdf: () => void;
@@ -54,9 +55,9 @@ export const TradingAccountSuccessfull = ({
           </Typography.Text>
           <div className="flex flex-col gap-2">
             <TradingAccountCard
-              address={tradingAccount?.address || ""}
-              name={tradingAccount?.meta?.name || ""}
-              type="Browser"
+              address={tradingAccount?.data.address || ""}
+              name={tradingAccount?.data.meta.name || ""}
+              type={tradingAccount?.type || ""}
             />
             <GenericHorizontalCard title="Download file" icon="Download">
               <Dropdown open={open} onOpenChange={setOpen}>
@@ -85,8 +86,9 @@ export const TradingAccountSuccessfull = ({
                       e.preventDefault();
                       e.stopPropagation();
                       try {
-                        if (tradingAccount.isLocked) tradingAccount.unlock("");
-                        onDownloadJson(tradingAccount);
+                        if (tradingAccount?.data.isLocked)
+                          tradingAccount?.data.unlock("");
+                        onDownloadJson(tradingAccount.data);
                       } catch (error) {
                         onTempBrowserAccount(tradingAccount);
                         onDownloadJsonCallback();

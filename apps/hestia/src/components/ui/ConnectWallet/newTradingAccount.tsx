@@ -43,6 +43,9 @@ export const NewTradingAccount = ({
   onCreateCallback,
   fundWalletPresent,
   loading,
+  onConnectGDrive,
+  connectGDriveLoading,
+  gDriveReady,
 }: {
   onClose: (e: MouseEvent<HTMLButtonElement>) => void;
   onCreateAccount: (value: AddProxyAccountArgs) => Promise<void>;
@@ -53,11 +56,15 @@ export const NewTradingAccount = ({
   errorTitle?: string;
   errorMessage?: string;
   selectedExtension?: (typeof ExtensionsArray)[0];
+  onConnectGDrive: () => Promise<void>;
+  connectGDriveLoading?: boolean;
+  gDriveReady?: boolean;
 }) => {
   const formRef = useRef<HTMLFormElement | null>(null);
 
   const [show, setShow] = useState(false);
-  const [active, setActive] = useState(1);
+  const [active, setActive] =
+    useState<AddProxyAccountArgs["importType"]>("Local");
 
   const isLoading = false;
   const error = false;
@@ -96,6 +103,7 @@ export const NewTradingAccount = ({
             mnemonic,
             tokenFeeId: tokenFee?.id,
             selectedWallet,
+            importType: active,
           });
           onCreateCallback();
         } catch (error) {
@@ -113,6 +121,11 @@ export const NewTradingAccount = ({
   const proxyAccount = useMemo(
     () => getAddressFromMnemonic(values?.mnemonic),
     [values?.mnemonic]
+  );
+
+  const disableGDrive = useMemo(
+    () => (active === "GDrive" ? !gDriveReady : false),
+    [gDriveReady, active]
   );
 
   return (
@@ -201,21 +214,34 @@ export const NewTradingAccount = ({
                       <GenericVerticalCard
                         title="Google Drive"
                         icon="GoogleDrive"
-                        onSelect={() => setActive(0)}
-                        disabled
-                        buttonAction={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          window.alert("Clicked");
-                        }}
-                        buttonTitle="Connect"
-                        checked={active === 0}
-                      />
+                        onSelect={() => setActive("GDrive")}
+                        checked={active === "GDrive"}
+                        loading={connectGDriveLoading}
+                      >
+                        {gDriveReady ? (
+                          <div className="bg-success-base/20 text-success-base text-sm px-2 py-1 rounded-sm">
+                            Connected
+                          </div>
+                        ) : (
+                          <Button.Solid
+                            appearance="tertiary"
+                            rounded
+                            size="sm"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              if (!gDriveReady) onConnectGDrive();
+                            }}
+                          >
+                            Connect
+                          </Button.Solid>
+                        )}
+                      </GenericVerticalCard>
                       <GenericVerticalCard
                         title="Browser"
                         icon="Device"
-                        onSelect={() => setActive(1)}
-                        checked={active === 1}
+                        onSelect={() => setActive("Local")}
+                        checked={active === "Local"}
                       />
                     </div>
                     {error && !isLoading && (
@@ -231,7 +257,7 @@ export const NewTradingAccount = ({
           <Interaction.Footer>
             <Interaction.Action
               type="submit"
-              disabled={!isValid || !fundWalletPresent}
+              disabled={!isValid || !fundWalletPresent || disableGDrive}
             >
               Create trading account
             </Interaction.Action>

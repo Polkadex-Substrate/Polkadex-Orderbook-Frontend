@@ -2,10 +2,10 @@
 
 import { Fragment, MouseEvent, useCallback, useMemo, useState } from "react";
 import { Interaction, Typography } from "@polkadex/ux";
-import { TradeAccount } from "@orderbook/core/providers/types";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useCall, useTransactionFeeModal } from "@orderbook/core/index";
+import { Account } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { GenericSelectCard, TradingAccountCard } from "../ReadyToUse";
 
@@ -16,15 +16,17 @@ export const RemoveTradingAccount = ({
   tradingAccount,
   fundWallet,
   onRemoveFromDevice,
+  onRemoveGoogleDrive,
   onRemoveFromChain,
   onCancel,
   loading,
   availableOnDevice,
   enabledExtensionAccount = false,
 }: {
-  tradingAccount: TradeAccount;
+  tradingAccount?: Account;
   fundWallet?: ExtensionAccount;
-  onRemoveFromDevice: () => void;
+  onRemoveFromDevice: (e: string) => void;
+  onRemoveGoogleDrive: (e: string) => Promise<void>;
   onRemoveFromChain?: (props: RemoveProps) => Promise<void>;
   onCancel: (e: MouseEvent<HTMLButtonElement>) => void;
   loading?: boolean;
@@ -63,19 +65,27 @@ export const RemoveTradingAccount = ({
     [onCancel, onRemoveFromChain, tokenFee?.id]
   );
 
-  const handleRemoveDevice = useCallback(
+  const handleRemoveFromDevice = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
-      onRemoveFromDevice?.();
+      onRemoveFromDevice?.(tradingAccount?.data.address ?? "");
       onCancel(event);
     },
-    [onCancel, onRemoveFromDevice]
+    [onCancel, onRemoveFromDevice, tradingAccount?.data.address]
+  );
+
+  const handleRemoveFromGoogle = useCallback(
+    async (event: MouseEvent<HTMLButtonElement>) => {
+      await onRemoveGoogleDrive?.(tradingAccount?.data.address ?? "");
+      onCancel(event);
+    },
+    [onCancel, onRemoveGoogleDrive, tradingAccount?.data.address]
   );
 
   const removeProps = useMemo(
     () => ({
-      proxy: tradingAccount.address ?? "",
+      proxy: tradingAccount?.data.address ?? "",
     }),
-    [tradingAccount.address]
+    [tradingAccount?.data.address]
   );
 
   const { onRemoveProxyAccountOcex } = useCall();
@@ -88,9 +98,9 @@ export const RemoveTradingAccount = ({
         }}
         actionLoading={!!loading}
         extrinsicFn={() =>
-          onRemoveProxyAccountOcex([tradingAccount.address ?? ""])
+          onRemoveProxyAccountOcex([tradingAccount?.data.address ?? ""])
         }
-        sender={tradingAccount.address}
+        sender={tradingAccount?.data.address ?? ""}
         tokenFee={tokenFee}
         setTokenFee={setTokenFee}
         openFeeModal={openFeeModal}
@@ -113,9 +123,9 @@ export const RemoveTradingAccount = ({
               </Typography.Paragraph>
             </div>
             <TradingAccountCard
-              address={tradingAccount?.address ?? ""}
-              name={tradingAccount?.meta?.name as string}
-              type="Browser"
+              address={tradingAccount?.data.address ?? ""}
+              name={tradingAccount?.data.meta.name as string}
+              type={tradingAccount?.type ?? ""}
               enabledExtensionAccount={enabledExtensionAccount}
             />
             <div className="flex flex-col gap-2">
@@ -152,7 +162,11 @@ export const RemoveTradingAccount = ({
         <Interaction.Footer>
           <Interaction.Action
             onClick={
-              state.removeBlockchain ? onOpenFeeModal : handleRemoveDevice
+              state.removeBlockchain
+                ? onOpenFeeModal
+                : tradingAccount?.type === "Google Drive"
+                  ? handleRemoveFromGoogle
+                  : handleRemoveFromDevice
             }
             disabled={disableButton}
           >

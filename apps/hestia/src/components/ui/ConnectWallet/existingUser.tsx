@@ -5,10 +5,10 @@ import {
   Interaction,
   Separator,
 } from "@polkadex/ux";
-import { TradeAccount } from "@orderbook/core/providers/types";
 import classNames from "classnames";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { RiArrowRightSLine } from "@remixicon/react";
+import { Account } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { GenericHorizontalCard, TradingAccountCard } from "../ReadyToUse";
 
@@ -34,14 +34,14 @@ export const ExistingUser = ({
   onTradingAccountList: () => void;
   onRecover: () => void;
   onBack: () => void;
-  accounts?: TradeAccount[];
+  accounts?: Account[];
   registeredProxies: string[];
-  onSelect: (e: TradeAccount) => void;
+  onSelect: (e: Account) => void;
   onSelectCallback: () => void;
   onRemoveCallback: () => void;
   onExportBrowserAccountCallback: () => void;
   onExportBrowserAccount: (account: KeyringPair) => void;
-  onTempBrowserAccount: (e: TradeAccount) => void;
+  onTempBrowserAccount: (e: Account) => void;
 }) => {
   const hasTradingAccounts = !!accounts?.length;
 
@@ -70,37 +70,40 @@ export const ExistingUser = ({
                     "border-b border-primary overflow-hidden hover:overflow-auto pb-7 scrollbar-hide"
                 )}
               >
-                {accounts.map((value, i) => (
-                  <TradingAccountCard
-                    key={i}
-                    address={value.address}
-                    name={value.meta.name as string}
-                    type="Browser"
-                    onSelect={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onSelect(value);
-                      onSelectCallback();
-                    }}
-                    onRemove={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onTempBrowserAccount(value);
-                      onRemoveCallback();
-                    }}
-                    onExport={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      try {
-                        if (value.isLocked) value.unlock("");
-                        onExportBrowserAccount(value);
-                      } catch (error) {
+                {accounts.map((value, i) => {
+                  const { data, type } = value;
+                  return (
+                    <TradingAccountCard
+                      key={i}
+                      address={data.address}
+                      name={data.meta.name as string}
+                      type={type}
+                      onSelect={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onSelect(value);
+                        onSelectCallback();
+                      }}
+                      onRemove={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         onTempBrowserAccount(value);
-                        onExportBrowserAccountCallback();
-                      }
-                    }}
-                  />
-                ))}
+                        onRemoveCallback();
+                      }}
+                      onExport={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        try {
+                          if (data.isLocked) data.unlock("");
+                          onExportBrowserAccount(data);
+                        } catch (error) {
+                          onTempBrowserAccount(value);
+                          onExportBrowserAccountCallback();
+                        }
+                      }}
+                    />
+                  );
+                })}
               </div>
             </div>
           ) : (

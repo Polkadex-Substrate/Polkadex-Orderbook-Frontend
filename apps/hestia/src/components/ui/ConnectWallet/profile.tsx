@@ -18,6 +18,7 @@ import {
 } from "@polkadex/ux";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { useState } from "react";
+import { Account } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { AccountCard } from "../ReadyToUse";
 
@@ -41,12 +42,12 @@ export const Profile = ({
   onConnectWallet,
 }: {
   onCreateTradingAccount: () => void;
-  onSelectTradingAccount: (value: string) => void;
+  onSelectTradingAccount: (value: Account) => void;
   onImportTradingAccount: () => void;
   onLogout: () => void;
   onActions: () => void;
   onSwitch: () => void;
-  onTempBrowserAccount: (e: TradeAccount) => void;
+  onTempBrowserAccount: (e: Account) => void;
   onRemoveCallback: () => void;
   onExportBrowserAccountCallback: () => void;
   onExportBrowserAccount: (account: KeyringPair) => void;
@@ -54,16 +55,16 @@ export const Profile = ({
   fundWalletPresent?: boolean;
   fundWallet?: ExtensionAccount;
   tradeAccount?: TradeAccount;
-  localTradingAccounts: TradeAccount[];
+  localTradingAccounts: Account[];
   mainProxiesAccounts: string[];
   onConnectWallet: () => void;
 }) => {
   const [state, setState] = useState(false);
-  const linkedBrowserAccounts = localTradingAccounts?.filter(({ address }) =>
-    mainProxiesAccounts.includes(address)
+  const linkedBrowserAccounts = localTradingAccounts?.filter(({ data }) =>
+    mainProxiesAccounts.includes(data.address)
   );
   const otherBrowserAccounts = localTradingAccounts?.filter(
-    ({ address }) => !mainProxiesAccounts.includes(address)
+    ({ data }) => !mainProxiesAccounts.includes(data.address)
   );
 
   const enableDropdown = localTradingAccounts?.length >= 2;
@@ -178,16 +179,16 @@ export const Profile = ({
                   >
                     {linkedBrowserAccounts?.map((v) => (
                       <TradingAccountCard
-                        key={v.address}
-                        account={v}
+                        key={v.data.address}
+                        account={v.data}
                         onExportBrowserAccount={onExportBrowserAccount}
                         onExportBrowserAccountCallback={
                           onExportBrowserAccountCallback
                         }
                         onRemoveCallback={onRemoveCallback}
-                        onSelectTradingAccount={onSelectTradingAccount}
+                        onSelectTradingAccount={() => onSelectTradingAccount(v)}
                         onSetState={setState}
-                        onTempBrowserAccount={onTempBrowserAccount}
+                        onTempBrowserAccount={() => onTempBrowserAccount(v)}
                       />
                     ))}
 
@@ -206,16 +207,16 @@ export const Profile = ({
 
                     {otherBrowserAccounts?.map((v) => (
                       <TradingAccountCard
-                        key={v.address}
-                        account={v}
+                        key={v.data.address}
+                        account={v.data}
                         onExportBrowserAccount={onExportBrowserAccount}
                         onExportBrowserAccountCallback={
                           onExportBrowserAccountCallback
                         }
                         onRemoveCallback={onRemoveCallback}
-                        onSelectTradingAccount={onSelectTradingAccount}
+                        onSelectTradingAccount={() => onSelectTradingAccount(v)}
                         onSetState={setState}
-                        onTempBrowserAccount={onTempBrowserAccount}
+                        onTempBrowserAccount={() => onTempBrowserAccount(v)}
                       />
                     ))}
                   </div>

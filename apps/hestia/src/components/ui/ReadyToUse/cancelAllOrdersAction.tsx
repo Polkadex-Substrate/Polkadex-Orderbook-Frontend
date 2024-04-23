@@ -29,7 +29,7 @@ export const CancelAllOrdersAction = ({
   const { selectedAccount } = useConnectWalletProvider();
 
   const onCancelAllOrders = async (payload: string) => {
-    if (selectedAccount?.isLocked) {
+    if (selectedAccount?.data.isLocked) {
       setShowPassword(true);
       setOrderPayload(payload);
     } else {

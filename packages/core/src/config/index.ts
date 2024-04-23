@@ -27,4 +27,6 @@ export const defaultConfig: DefaultConfig = {
   mainUrl: process.env.MAIN_URL || "/trading",
   blockedAssets: process.env.BLOCKED_ASSETS?.split(",") || [],
   subscanApi: process.env.SUBSCAN_API || "",
+  googleApiKey: process.env.GOOGLE_API_KEY ?? "",
+  googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
 };

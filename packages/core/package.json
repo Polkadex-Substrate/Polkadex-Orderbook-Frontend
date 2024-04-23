@@ -62,6 +62,7 @@
     "@polkadex/react-providers": "^2.0.0",
     "@polkadot-cloud/assets": "^0.3.0",
     "@polkadot/api": "latest",
+    "@polkadex/local-wallets": "latest",
     "@polkadot/extension-dapp": "^0.46.6",
     "@polkadot/ui-keyring": "^3.6.4",
     "@polkadot/util-crypto": "^12.6.2",

@@ -161,7 +161,7 @@ export const Form = ({
   );
 
   const onSubmitWithdraw = async ({ amount }: { amount: number }) => {
-    if (selectedAccount?.isLocked) setShowPassword(true);
+    if (selectedAccount?.data.isLocked) setShowPassword(true);
     else {
       const asset = isAssetPDEX(selectedAsset?.id) ? "PDEX" : selectedAsset?.id;
       if (!asset) return;
@@ -249,7 +249,7 @@ export const Form = ({
   const disabled = !hasAccount || loading || !(isValid && dirty);
 
   useEffect(() => {
-    if (!isTransferFromFunding) tryUnlockTradeAccount(selectedAccount);
+    if (!isTransferFromFunding) tryUnlockTradeAccount(selectedAccount?.data);
   }, [selectedAccount, isTransferFromFunding]);
 
   const { onDepositOcex } = useCall();
@@ -307,8 +307,8 @@ export const Form = ({
               extensionAccountName={selectedWallet?.name}
               extensionAccountAddress={selectedWallet?.address}
               extensionAccountBalance={selectedAsset?.onChainBalance}
-              localAccountName={selectedAccount?.meta?.name}
-              localAccountAddress={selectedAccount?.address}
+              localAccountName={selectedAccount?.data.meta.name}
+              localAccountAddress={selectedAccount?.data.address}
               localAccountBalance={selectedAsset?.free_balance}
               selectedAssetTicker={selectedAsset?.ticker}
             />

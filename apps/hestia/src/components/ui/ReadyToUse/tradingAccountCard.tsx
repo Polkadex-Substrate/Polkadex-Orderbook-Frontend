@@ -20,14 +20,16 @@ export const TradingAccountCard = ({
   onSelect,
   onRemove,
   onExport,
+  onBackupGDrive,
   enabledExtensionAccount = false,
 }: {
   name: string;
   address: string;
-  type: string;
+  type?: string;
   onSelect?: (e: MouseEvent<HTMLElement>) => void;
   onRemove?: (e: MouseEvent<HTMLDivElement>) => void;
   onExport?: (e: MouseEvent<HTMLDivElement>) => void;
+  onBackupGDrive?: (e: MouseEvent<HTMLDivElement>) => void;
   enabledExtensionAccount?: boolean;
 }) => {
   const [open, setOpen] = useState(false);
@@ -109,14 +111,26 @@ export const TradingAccountCard = ({
                   Export as JSON
                 </Dropdown.Item>
               )}
+              {onBackupGDrive && type === "Browser" && (
+                <Dropdown.Item
+                  onClick={(e) => {
+                    onBackupGDrive(e);
+                    setOpen(false);
+                  }}
+                >
+                  Backup in Google Drive
+                </Dropdown.Item>
+              )}
             </Dropdown.Content>
           </Dropdown>
         )}
       </div>
       <div className="flex items-center justify-between px-4 py-2 bg-grayscale">
-        <div className="bg-level-1 px-2 py-1 rounded-full text-xs text-secondary">
-          {type}
-        </div>
+        {type && (
+          <div className="bg-level-1 px-2 py-1 rounded-full text-xs text-secondary">
+            {type}
+          </div>
+        )}
         {enabledExtensionAccount ? (
           <Skeleton loading={isLoading} className="max-w-32 h-4">
             <HoverCard>

@@ -1,5 +1,9 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  UseQueryResult,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   ExtensionAccount,
   useTransactionManager,
@@ -12,6 +16,7 @@ import { MutateHookProps } from "@orderbook/core/hooks/types";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { NOTIFICATIONS, QUERY_KEYS } from "../constants";
 import { useSettingsProvider } from "../providers/public/settings";
+import { GoogleDrive } from "../providers/user/connectWalletProvider";
 
 import { handleTransaction } from "./../helpers/signAndSendExtrinsic";
 
@@ -21,15 +26,18 @@ export type AddProxyAccountArgs = {
   password?: string;
   tokenFeeId?: string;
   selectedWallet?: ExtensionAccount;
+  importType?: "Local" | "GDrive";
 };
 
 interface UseAddProxyAccount extends MutateHookProps {
   onSetTempMnemonic: (value: string) => void;
+  onRefetchGoogleDriveAccounts: UseQueryResult["refetch"];
 }
 export function useAddProxyAccount({
   onSetTempMnemonic,
   onSuccess,
   onError,
+  onRefetchGoogleDriveAccounts,
 }: UseAddProxyAccount) {
   const queryClient = useQueryClient();
   const { api } = useNativeApi();
@@ -45,6 +53,7 @@ export function useAddProxyAccount({
       password,
       tokenFeeId,
       selectedWallet,
+      importType,
     }: AddProxyAccountArgs) => {
       if (!api || !wallet)
         throw new Error("You are not connected to blockchain ");
@@ -81,6 +90,13 @@ export function useAddProxyAccount({
       addToTxQueue(signedExtrinsic);
       await handleTransaction(signedExtrinsic);
       const { pair } = wallet.addFromMnemonic(mnemonic, name, password);
+      if (importType === "GDrive") {
+        const jsonAccount = pair.toJson(password);
+        await GoogleDrive.addFromJson(jsonAccount);
+        await onRefetchGoogleDriveAccounts();
+        wallet.remove(pair.address);
+      }
+
       await onUserSelectTradingAddress({
         tradeAddress: pair.address,
         isNew: true,
