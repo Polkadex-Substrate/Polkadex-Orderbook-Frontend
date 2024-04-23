@@ -1,7 +1,6 @@
 import {
   Accordion,
   Typography,
-  Illustrations,
   Interaction,
   Dropdown,
   Token,
@@ -13,9 +12,19 @@ import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
 import { useState } from "react";
 import { getChainFromTicker, useAssets } from "@orderbook/core/index";
 import Link from "next/link";
+import classNames from "classnames";
 
 import { GenericInfoCard, GenericExternalCard } from "../ReadyToUse";
 import { Icons } from "..";
+
+const filteredAssets = [
+  "222121451965151777636299756141619631150",
+  "95930534000017180603917534864279132680",
+  "226557799181424065994173367616174607641",
+  "3496813586714279103986568049643838918",
+];
+
+const activeAssets = ["95930534000017180603917534864279132680"];
 
 export const InsufficientBalance = ({
   onClose,
@@ -34,7 +43,10 @@ export const InsufficientBalance = ({
       <Interaction.Content className="flex flex-col gap-4 flex-1">
         <div className="flex flex-col gap-5 border-b border-primary">
           <div className="flex flex-col gap-2 items-center text-center">
-            <Illustrations.Error className="max-w-[4rem] w-full" />
+            <Icons.PdexToken className="max-w-[4rem] w-full" />
+            <Typography.Heading size="lg">
+              The CEXier DEX runs on PDEX
+            </Typography.Heading>
             <Typography.Text appearance="primary">
               You need some PDEX to cover the existential deposit and the small
               transaction fee to create your trading account.
@@ -64,7 +76,7 @@ export const InsufficientBalance = ({
                       <Icons.Bridge className="w-4 h-4 text-primary" />
                     </div>
                     <Typography.Text className="group-hover:text-current duration-300 transition-colors">
-                      Decentralized bridge
+                      THEA - Decentralized bridge
                     </Typography.Text>
                   </div>
                   <Separator.Horizontal />
@@ -74,37 +86,52 @@ export const InsufficientBalance = ({
                       size="xs"
                       className="self-center"
                     >
-                      Activate your account using:
+                      Activate your account with a transfer of:
                     </Typography.Text>
-                    <div className="flex flex-items gap-1 overflow-hidden hover:overflow-auto hover:pb-2">
-                      {assets?.map((asset) => {
-                        const chainName = getChainFromTicker(asset.ticker);
-                        if (asset.isEvm || asset.id === "PDEX") return null;
-                        return (
-                          <HoverCard key={asset.id}>
-                            <HoverCard.Trigger asChild>
-                              <Link
-                                href={`https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`}
-                                target="_blank"
-                                className="flex flex-col items-center gap-1 px-3 pt-2 pb-1 hover:bg-level-3 rounded-sm duration-200 transition-colors"
-                              >
-                                <Token
-                                  name={asset.ticker}
-                                  appearance={asset.ticker as TokenAppearance}
-                                  size="xs"
-                                  className="rounded-full border border-secondary"
-                                />
-                                <Typography.Text appearance="primary" size="xs">
-                                  {asset.ticker}
-                                </Typography.Text>
-                              </Link>
-                            </HoverCard.Trigger>
-                            <HoverCard.Content side="top">
-                              {chainName}
-                            </HoverCard.Content>
-                          </HoverCard>
-                        );
-                      })}
+                    <div className="flex flex-items gap-1">
+                      {assets
+                        ?.filter((e) => filteredAssets.includes(e.id))
+                        .sort(
+                          (a, b) =>
+                            (activeAssets.includes(a.id) ? 0 : -1) -
+                            (activeAssets.includes(b.id) ? 0 : -1)
+                        )
+                        .map((asset) => {
+                          const chainName = getChainFromTicker(asset.ticker);
+                          const active = activeAssets.includes(asset.id);
+                          if (asset.isEvm || asset.id === "PDEX") return null;
+                          return (
+                            <HoverCard key={asset.id}>
+                              <HoverCard.Trigger asChild>
+                                <Link
+                                  href={`https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`}
+                                  target="_blank"
+                                  className={classNames(
+                                    !active &&
+                                      "pointer-events-none grayscale opacity-30",
+                                    "flex flex-col items-center gap-1 px-3 pt-2 pb-1 hover:bg-level-3 rounded-sm duration-200 transition-colors"
+                                  )}
+                                >
+                                  <Token
+                                    name={asset.ticker}
+                                    appearance={asset.ticker as TokenAppearance}
+                                    size="xs"
+                                    className="rounded-full border border-secondary"
+                                  />
+                                  <Typography.Text
+                                    appearance="primary"
+                                    size="xs"
+                                  >
+                                    {asset.ticker}
+                                  </Typography.Text>
+                                </Link>
+                              </HoverCard.Trigger>
+                              <HoverCard.Content side="top">
+                                {chainName}
+                              </HoverCard.Content>
+                            </HoverCard>
+                          );
+                        })}
                     </div>
                   </div>
                 </div>
