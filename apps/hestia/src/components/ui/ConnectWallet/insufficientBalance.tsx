@@ -7,24 +7,18 @@ import {
   TokenAppearance,
   HoverCard,
   Separator,
+  Skeleton,
 } from "@polkadex/ux";
 import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
 import { useState } from "react";
-import { getChainFromTicker, useAssets } from "@orderbook/core/index";
+import { getChainFromTicker } from "@orderbook/core/index";
 import Link from "next/link";
 import classNames from "classnames";
 
 import { GenericInfoCard, GenericExternalCard } from "../ReadyToUse";
 import { Icons } from "..";
 
-const filteredAssets = [
-  "222121451965151777636299756141619631150",
-  "95930534000017180603917534864279132680",
-  "226557799181424065994173367616174607641",
-  "3496813586714279103986568049643838918",
-];
-
-const activeAssets = ["95930534000017180603917534864279132680"];
+import { useQueryPools } from "@/hooks";
 
 export const InsufficientBalance = ({
   onClose,
@@ -36,7 +30,8 @@ export const InsufficientBalance = ({
   onClose: () => void;
 }) => {
   const [open, setOpen] = useState(false);
-  const { assets } = useAssets();
+
+  const { pools, poolsSuccess } = useQueryPools();
 
   return (
     <Interaction className="w-full gap-3">
@@ -70,7 +65,7 @@ export const InsufficientBalance = ({
             </Accordion.Trigger>
             <Accordion.Content>
               <div className="flex flex-col gap-2">
-                <div className="group flex flex-col gap-1 rounded-md py-2 border border-white hover:bg-level-1 duration-300 transition-colors cursor-pointer">
+                <div className="group flex flex-col gap-1 rounded-md py-2 border border-primary-base hover:bg-level-1 duration-300 transition-colors cursor-pointer">
                   <div className="flex items-center gap-3 px-3">
                     <div className="grid place-content-center w-7 h-7 rounded-md bg-level-1">
                       <Icons.Bridge className="w-4 h-4 text-primary" />
@@ -89,18 +84,16 @@ export const InsufficientBalance = ({
                       Activate your account with a transfer of:
                     </Typography.Text>
                     <div className="flex flex-items gap-1">
-                      {assets
-                        ?.filter((e) => filteredAssets.includes(e.id))
-                        ?.sort(
-                          (a, b) =>
-                            activeAssets.indexOf(a.id) -
-                            activeAssets.indexOf(b.id)
-                        )
-
-                        .map((asset) => {
-                          const chainName = getChainFromTicker(asset.ticker);
-                          const active = activeAssets.includes(asset.id);
-                          if (asset.isEvm || asset.id === "PDEX") return null;
+                      {!poolsSuccess ? (
+                        <>
+                          <Skeleton loading className="h-10 mt-2" />
+                        </>
+                      ) : (
+                        pools?.map((asset) => {
+                          const chainName = getChainFromTicker(
+                            asset.ticker ?? ""
+                          );
+                          const active = asset.reserve;
                           return (
                             <HoverCard key={asset.id}>
                               <HoverCard.Trigger asChild>
@@ -114,7 +107,7 @@ export const InsufficientBalance = ({
                                   )}
                                 >
                                   <Token
-                                    name={asset.ticker}
+                                    name={asset.ticker ?? ""}
                                     appearance={asset.ticker as TokenAppearance}
                                     size="xs"
                                     className="rounded-full border border-secondary"
@@ -132,7 +125,8 @@ export const InsufficientBalance = ({
                               </HoverCard.Content>
                             </HoverCard>
                           );
-                        })}
+                        })
+                      )}
                     </div>
                   </div>
                 </div>
