@@ -28,3 +28,4 @@ export * from "./transferToTrading";
 export * from "./freeCoin";
 export * from "./lock";
 export * from "./fuel";
+export * from "./pdexToken";
