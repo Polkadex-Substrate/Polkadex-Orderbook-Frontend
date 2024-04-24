@@ -109,6 +109,11 @@ export const InsufficientBalance = ({
                   </div>
                 </div>
                 <GenericExternalCard
+                  title="CEX On-Ramp"
+                  icon="CexOnRamp"
+                  href="/cexOnRamp"
+                />
+                <GenericExternalCard
                   title="Centralized exchanges"
                   icon="CentralizedExchange"
                   onClick={() => setOpen(true)}
