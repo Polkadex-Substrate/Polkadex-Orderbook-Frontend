@@ -50,6 +50,7 @@ export const RemoveTradingAccount = ({
   const [state, setState] = useState({
     removeDevice: false,
     removeBlockchain: false,
+    removeGoogleDrive: false,
   });
 
   const disableButton = useMemo(
@@ -92,6 +93,7 @@ export const RemoveTradingAccount = ({
   );
 
   const { onRemoveProxyAccountOcex } = useCall();
+
   return (
     <Fragment>
       <ConfirmTransaction
@@ -133,6 +135,20 @@ export const RemoveTradingAccount = ({
             />
             <div className="flex flex-col gap-2">
               <GenericSelectCard
+                title="Remove from Google Drive"
+                icon="GoogleDrive"
+                checked={state.removeGoogleDrive}
+                disabled={!externalStored}
+                onChange={() =>
+                  setState({
+                    ...state,
+                    removeGoogleDrive: state.removeBlockchain
+                      ? true
+                      : !state.removeGoogleDrive,
+                  })
+                }
+              />
+              <GenericSelectCard
                 title="Remove from your device"
                 icon="Device"
                 checked={state.removeDevice}
@@ -152,6 +168,7 @@ export const RemoveTradingAccount = ({
                 checked={state.removeBlockchain}
                 onChange={() =>
                   setState((prevState) => ({
+                    ...prevState,
                     removeDevice:
                       !!availableOnDevice && !state.removeBlockchain,
                     removeBlockchain: !prevState.removeBlockchain,
@@ -164,13 +181,15 @@ export const RemoveTradingAccount = ({
         </Interaction.Content>
         <Interaction.Footer>
           <Interaction.Action
-            onClick={
-              state.removeBlockchain
-                ? onOpenFeeModal
-                : externalStored
-                  ? handleRemoveFromGoogle
-                  : handleRemoveFromDevice
-            }
+            onClick={async (e) => {
+              if (state.removeBlockchain) {
+                onOpenFeeModal();
+                return;
+              } else if (state.removeGoogleDrive) {
+                await handleRemoveFromGoogle(e);
+              }
+              handleRemoveFromDevice(e);
+            }}
             disabled={disableButton}
           >
             Yes, remove account
