@@ -32,3 +32,4 @@ export * from "./tryUnlockTradeAccount";
 export * from "./fetchCandles";
 export * from "./getNewClientId";
 export * from "./exportHistory";
+export * from "./isFeatureDisabled";

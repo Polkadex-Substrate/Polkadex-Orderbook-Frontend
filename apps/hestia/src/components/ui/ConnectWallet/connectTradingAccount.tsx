@@ -11,8 +11,10 @@ import { PropsWithChildren } from "react";
 import classNames from "classnames";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { enabledFeatures } from "@orderbook/core/helpers";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
+const { googleDriveStore } = enabledFeatures;
 
 export const ConnectTradingAccount = ({
   accounts = [],
@@ -156,8 +158,9 @@ export const ConnectTradingAccount = ({
                 <GenericHorizontalCard
                   title="Google Drive"
                   icon="GoogleDrive"
-                  onClick={onConnectGDrive}
+                  onClick={googleDriveStore ? onConnectGDrive : undefined}
                   loading={connectGDriveLoading}
+                  disabled={!googleDriveStore}
                 >
                   {gDriveReady ? (
                     <div className="bg-success-base/20 text-success-base text-sm px-2 py-1 rounded-sm">

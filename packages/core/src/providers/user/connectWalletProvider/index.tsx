@@ -18,7 +18,6 @@ import {
 } from "react";
 import {
   UseMutationResult,
-  UseQueryResult,
   useMutation,
   useQuery,
 } from "@tanstack/react-query";
@@ -29,6 +28,7 @@ import {
 import { defaultConfig } from "@orderbook/core/config";
 import keyring from "@polkadot/ui-keyring";
 import { localStorageOrDefault } from "@polkadex/utils";
+import { enabledFeatures } from "@orderbook/core/helpers";
 
 import { POLKADEX_ASSET, QUERY_KEYS } from "../../../constants";
 import { transformAddress, useProfile } from "../../user/profile";
@@ -46,6 +46,7 @@ import {
   useSingleProxyAccount,
 } from "../../../hooks";
 import { useSettingsProvider } from "../../public/settings";
+const { googleDriveStore } = enabledFeatures;
 
 const sleep = async (ms: number) =>
   await new Promise((resolve) => setTimeout(resolve, ms));
@@ -334,14 +335,13 @@ export const ConnectWalletProvider = ({
   );
 
   const {
-    data,
     refetch: onConnectGoogleDrive,
     isLoading: connectGoogleDriveLoading,
     isFetching: connectGoogleDriveFetching,
     isSuccess: connectGoogleDriveSuccess,
   } = useQuery({
     staleTime: 100000,
-    enabled: !!hasLocalToken,
+    enabled: !!hasLocalToken && googleDriveStore,
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,

@@ -9,7 +9,10 @@ import {
   useTransactionManager,
   useUserAccounts,
 } from "@polkadex/react-providers";
-import { getAddressFromMnemonic } from "@orderbook/core/helpers";
+import {
+  enabledFeatures,
+  getAddressFromMnemonic,
+} from "@orderbook/core/helpers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 
@@ -19,6 +22,7 @@ import { useSettingsProvider } from "../providers/public/settings";
 import { GoogleDrive } from "../providers/user/connectWalletProvider";
 
 import { handleTransaction } from "./../helpers/signAndSendExtrinsic";
+const { googleDriveStore } = enabledFeatures;
 
 export type AddProxyAccountArgs = {
   mnemonic: string;
@@ -90,7 +94,7 @@ export function useAddProxyAccount({
       addToTxQueue(signedExtrinsic);
       await handleTransaction(signedExtrinsic);
       const { pair } = wallet.addFromMnemonic(mnemonic, name, password);
-      if (importType === "GDrive") {
+      if (importType === "GDrive" && googleDriveStore) {
         const jsonAccount = pair.toJson(password);
         await GoogleDrive.addFromJson(jsonAccount);
         await onRefetchGoogleDriveAccounts();

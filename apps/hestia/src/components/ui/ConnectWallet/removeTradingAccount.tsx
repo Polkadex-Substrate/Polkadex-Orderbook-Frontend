@@ -7,10 +7,12 @@ import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useCall, useTransactionFeeModal } from "@orderbook/core/index";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { enabledFeatures } from "@orderbook/core/helpers";
 
 import { GenericSelectCard, TradingAccountCard } from "../ReadyToUse";
 
 import { ConfirmTransaction } from "./confirmTransaction";
+const { googleDriveStore } = enabledFeatures;
 
 type RemoveProps = { proxy: string; assetId?: string };
 export const RemoveTradingAccount = ({
@@ -138,15 +140,16 @@ export const RemoveTradingAccount = ({
                 title="Remove from Google Drive"
                 icon="GoogleDrive"
                 checked={state.removeGoogleDrive}
-                disabled={!externalStored}
-                onChange={() =>
+                disabled={!externalStored || !googleDriveStore}
+                onChange={() => {
+                  if (!googleDriveStore) return;
                   setState({
                     ...state,
                     removeGoogleDrive: state.removeBlockchain
                       ? true
                       : !state.removeGoogleDrive,
-                  })
-                }
+                  });
+                }}
               />
               <GenericSelectCard
                 title="Remove from your device"

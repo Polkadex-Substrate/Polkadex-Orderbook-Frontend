@@ -21,7 +21,10 @@ import {
 } from "@orderbook/core/hooks";
 import { RiEyeOffLine, RiEyeLine } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
-import { getAddressFromMnemonic } from "@orderbook/core/helpers";
+import {
+  enabledFeatures,
+  getAddressFromMnemonic,
+} from "@orderbook/core/helpers";
 import classNames from "classnames";
 
 import {
@@ -31,6 +34,7 @@ import {
 } from "../ReadyToUse";
 
 import { ConfirmTransaction } from "./confirmTransaction";
+const { googleDriveStore } = enabledFeatures;
 
 const initialValues = {
   name: generateUsername({ useRandomNumber: false }),
@@ -216,11 +220,13 @@ export const NewTradingAccount = ({
                         title="Google Drive"
                         icon="GoogleDrive"
                         onSelect={async () => {
+                          if (!googleDriveStore) return;
                           if (!gDriveReady) await onConnectGDrive();
                           setActive("GDrive");
                         }}
                         checked={active === "GDrive"}
                         loading={connectGDriveLoading}
+                        disabled={!googleDriveStore}
                       >
                         <div
                           className={classNames(
