@@ -54,7 +54,7 @@ const TriggerCompontent = ({ onClose }: { onClose: () => void }) => {
       key="ConnectTradingAccount"
       accounts={localTradingAccounts}
       onSelect={(e) => onSelectTradingAccount(e)}
-      onTempBrowserAccount={(e) => onSetTempTrading(e)}
+      onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
       onClose={onClose}
       onImport={() => setPage("ImportTradingAccount")}
       onSelectCallback={onClose}
@@ -94,7 +94,7 @@ const CardsCompontent = ({ onClose }: { onClose: () => void }) => {
   const availableOnDevice = useMemo(
     () =>
       localTradingAccounts?.some(
-        ({ address }) => address === tempTrading?.address
+        (value) => value.address === tempTrading?.address
       ),
     [tempTrading?.address, localTradingAccounts]
   );

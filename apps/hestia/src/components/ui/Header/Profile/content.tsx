@@ -176,7 +176,7 @@ export const Content = () => {
               onRemoveCallback={() =>
                 props?.onPage("RemoveTradingAccount", true)
               }
-              onTempBrowserAccount={(e) => onSetTempTrading(e)}
+              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
               onExportBrowserAccount={(account) =>
                 onExportTradeAccount({ account })
               }
@@ -224,7 +224,7 @@ export const Content = () => {
               onSelect={(e) => onSelectTradingAccount(e)}
               onClose={() => props?.onChangeInteraction(false)}
               onImport={() => props?.onPage("ImportTradingAccount")}
-              onTempBrowserAccount={(e) => onSetTempTrading(e)}
+              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
               onSelectCallback={() => props?.onChangeInteraction(false)}
               onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}
               onExportBrowserAccount={(account) =>
@@ -269,7 +269,7 @@ export const Content = () => {
               key="TradingAccountList"
               tradingAccounts={mainProxiesAccounts}
               browserAccounts={localTradingAccounts}
-              onRemove={(e) => onSetTempTrading(e)}
+              onRemove={(e) => onSetTempTrading?.(e)}
               onClose={() => props?.onChangeInteraction(false)}
               onRemoveCallback={() => props?.onPage("RemoveTradingAccount")}
             />
@@ -296,7 +296,7 @@ export const Content = () => {
               key="TradingAccountSuccessfull"
               tradingAccount={selectedAccount}
               onClose={() => {
-                onResetTempMnemonic();
+                onResetTempMnemonic?.();
                 props?.onChangeInteraction(false);
               }}
               onTempBrowserAccount={(e) => onSetTempTrading(e)}
@@ -304,7 +304,7 @@ export const Content = () => {
                 props?.onPage("TradingAccountMnemonic", true)
               }
               onDownloadPdf={() => {}}
-              onDownloadJson={(e) => onExportTradeAccount({ account: e })}
+              onDownloadJson={(e) => onExportTradeAccount?.({ account: e })}
               onDownloadJsonCallback={() =>
                 props?.onPage("UnlockBrowserAccount", true)
               }

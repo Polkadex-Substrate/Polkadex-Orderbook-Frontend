@@ -87,7 +87,7 @@ const TriggerComponent = ({ onClose, onNext }: InteractableProps) => {
       registeredProxies={mainProxiesAccounts}
       onSelect={(e) => onSelectTradingAccount?.(e)}
       onSelectCallback={onClose}
-      onTempBrowserAccount={(e) => onSetTempTrading(e)}
+      onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
       onRemoveCallback={() => setPage("RemoveTradingAccount")}
       onExportBrowserAccount={(account) => onExportTradeAccount({ account })}
       onExportBrowserAccountCallback={() => setPage("UnlockBrowserAccount")}
@@ -134,7 +134,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
   const filteredAccounts = useMemo(
     () =>
       localTradingAccounts?.filter((item) =>
-        mainProxiesAccounts?.includes(item?.address)
+        mainProxiesAccounts?.includes(item.address)
       ),
     [localTradingAccounts, mainProxiesAccounts]
   );
@@ -171,7 +171,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
         <ConnectTradingAccount
           accounts={filteredAccounts}
           onSelect={(e) => onSelectTradingAccount(e)}
-          onTempBrowserAccount={(e) => onSetTempTrading(e)}
+          onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
           onClose={hasAccounts ? onReset : handleCloseInteraction}
           onImport={() => setPage("ImportTradingAccount")}
           onSelectCallback={onClose}
@@ -217,7 +217,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
         <TradingAccountList
           tradingAccounts={mainProxiesAccounts}
           browserAccounts={localTradingAccounts}
-          onRemove={(e) => onSetTempTrading(e)}
+          onRemove={(e) => onSetTempTrading?.(e)}
           onClose={handleClose}
           onRemoveCallback={() => setPage("RemoveTradingAccount")}
         />
@@ -273,7 +273,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
         <MaximumTradingAccount
           tradingAccounts={mainProxiesAccounts}
           browserAccounts={localTradingAccounts}
-          onRemove={(e) => onSetTempTrading(e)}
+          onRemove={(e) => onSetTempTrading?.(e)}
           onClose={handleClose}
           onRemoveCallback={() => setPage("RemoveTradingAccount")}
         />

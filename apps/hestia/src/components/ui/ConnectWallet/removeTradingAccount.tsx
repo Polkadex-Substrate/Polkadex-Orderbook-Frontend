@@ -7,6 +7,7 @@ import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useCall, useTransactionFeeModal } from "@orderbook/core/index";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { GenericSelectCard, TradingAccountCard } from "../ReadyToUse";
 
@@ -24,7 +25,7 @@ export const RemoveTradingAccount = ({
   availableOnDevice,
   enabledExtensionAccount = false,
 }: {
-  tradingAccount?: KeyringPair;
+  tradingAccount?: TradeAccount;
   fundWallet?: ExtensionAccount;
   onRemoveFromDevice: (e: string) => void;
   onRemoveGoogleDrive: (e: string) => Promise<void>;

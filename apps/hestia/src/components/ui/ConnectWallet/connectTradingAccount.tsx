@@ -10,6 +10,7 @@ import { KeyringPair } from "@polkadot/keyring/types";
 import { PropsWithChildren } from "react";
 import classNames from "classnames";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
 
@@ -32,12 +33,12 @@ export const ConnectTradingAccount = ({
   gDriveReady,
   children,
 }: PropsWithChildren<{
-  accounts?: KeyringPair[];
+  accounts?: TradeAccount[];
   onClose: () => void;
   onImport: () => void;
   onImportMnemonic: () => void;
-  onSelect: (e: KeyringPair) => void;
-  onTempBrowserAccount: (e: KeyringPair) => void;
+  onSelect: (e: TradeAccount) => void;
+  onTempBrowserAccount: (e: TradeAccount) => void;
   onSelectCallback: () => void;
   onRemoveCallback: () => void;
   onExportBrowserAccountCallback: () => void;

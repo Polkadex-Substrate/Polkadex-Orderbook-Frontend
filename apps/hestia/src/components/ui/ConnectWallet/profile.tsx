@@ -46,7 +46,7 @@ export const Profile = ({
   onLogout: () => void;
   onActions: () => void;
   onSwitch: () => void;
-  onTempBrowserAccount: (e: KeyringPair) => void;
+  onTempBrowserAccount: (e: TradeAccount) => void;
   onRemoveCallback: () => void;
   onExportBrowserAccountCallback: () => void;
   onExportBrowserAccount: (account: KeyringPair) => void;
@@ -54,7 +54,7 @@ export const Profile = ({
   fundWalletPresent?: boolean;
   fundWallet?: ExtensionAccount;
   tradeAccount?: TradeAccount;
-  localTradingAccounts: KeyringPair[];
+  localTradingAccounts: TradeAccount[];
   mainProxiesAccounts: string[];
   onConnectWallet: () => void;
 }) => {
@@ -187,7 +187,7 @@ export const Profile = ({
                         onRemoveCallback={onRemoveCallback}
                         onSelectTradingAccount={() => onSelectTradingAccount(v)}
                         onSetState={setState}
-                        onTempBrowserAccount={() => onTempBrowserAccount(v)}
+                        onTempBrowserAccount={onTempBrowserAccount}
                       />
                     ))}
 
@@ -215,7 +215,7 @@ export const Profile = ({
                         onRemoveCallback={onRemoveCallback}
                         onSelectTradingAccount={() => onSelectTradingAccount(v)}
                         onSetState={setState}
-                        onTempBrowserAccount={() => onTempBrowserAccount(v)}
+                        onTempBrowserAccount={onTempBrowserAccount}
                       />
                     ))}
                   </div>

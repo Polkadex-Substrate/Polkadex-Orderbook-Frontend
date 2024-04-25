@@ -149,7 +149,7 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
         <ConnectTradingAccount
           accounts={localTradingAccounts}
           onSelect={(e) => onSelectTradingAccount(e)}
-          onTempBrowserAccount={(e) => onSetTempTrading(e)}
+          onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
           onClose={onReset}
           onImport={() => setPage("ImportTradingAccount")}
           onSelectCallback={onClose}

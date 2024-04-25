@@ -9,6 +9,7 @@ import classNames from "classnames";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { RiArrowRightSLine } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { GenericHorizontalCard, TradingAccountCard } from "../ReadyToUse";
 
@@ -34,14 +35,14 @@ export const ExistingUser = ({
   onTradingAccountList: () => void;
   onRecover: () => void;
   onBack: () => void;
-  accounts?: KeyringPair[];
+  accounts?: TradeAccount[];
   registeredProxies: string[];
-  onSelect: (e: KeyringPair) => void;
+  onSelect: (e: TradeAccount) => void;
   onSelectCallback: () => void;
   onRemoveCallback: () => void;
   onExportBrowserAccountCallback: () => void;
   onExportBrowserAccount: (account: KeyringPair) => void;
-  onTempBrowserAccount: (e: KeyringPair) => void;
+  onTempBrowserAccount: (e: TradeAccount) => void;
 }) => {
   const hasTradingAccounts = !!accounts?.length;
   const { isStoreInGoogleDrive } = useConnectWalletProvider();

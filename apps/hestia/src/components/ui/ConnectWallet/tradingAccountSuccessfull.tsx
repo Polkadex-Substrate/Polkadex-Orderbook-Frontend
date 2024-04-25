@@ -9,7 +9,6 @@ import {
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { KeyringPair } from "@polkadot/keyring/types";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
@@ -23,9 +22,9 @@ export const TradingAccountSuccessfull = ({
   onDownloadPdf,
   onDownloadJsonCallback,
 }: {
-  tradingAccount?: KeyringPair;
+  tradingAccount?: TradeAccount;
   onClose: () => void;
-  onTempBrowserAccount: (e: KeyringPair) => void;
+  onTempBrowserAccount: (e: TradeAccount) => void;
   onOpenMnemonic: () => void;
   onDownloadJson: (e: TradeAccount) => void;
   onDownloadPdf: () => void;
@@ -90,8 +89,7 @@ export const TradingAccountSuccessfull = ({
                       e.preventDefault();
                       e.stopPropagation();
                       try {
-                        if (tradingAccount?.isLocked)
-                          tradingAccount?.unlock("");
+                        if (tradingAccount.isLocked) tradingAccount.unlock("");
                         onDownloadJson(tradingAccount);
                       } catch (error) {
                         onTempBrowserAccount(tradingAccount);
