@@ -14,6 +14,7 @@ import classNames from "classnames";
 import { START_EPOCH } from "@orderbook/core/constants";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
+import { QuickStart } from "../ui/Footer/QuickStart";
 
 import { Table } from "./Table";
 import { Help } from "./Help";
@@ -70,7 +71,7 @@ export function Template() {
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
-  const { onOpenChange } = useTour();
+  const { onClose, onOpenChange, open } = useTour();
   useEffect(() => {
     const epochsLength = epochs?.length || 0;
     if (epochs && epochs?.length > 2) {
@@ -80,6 +81,7 @@ export function Template() {
 
   return (
     <Fragment>
+      <QuickStart open={open} onOpenChange={onClose} />
       <div
         className="flex flex-1 flex-col bg-backgroundBase h-full"
         vaul-drawer-wrapper=""

@@ -23,11 +23,7 @@ export type RemoveProxyAccountArgs = {
 interface RemoveProxyAccount extends MutateHookProps {
   onRemoveGoogleDrive: (value: string) => Promise<void>;
 }
-export function useRemoveProxyAccount({
-  onError,
-  onSuccess,
-  onRemoveGoogleDrive,
-}: RemoveProxyAccount) {
+export function useRemoveProxyAccount(props: RemoveProxyAccount) {
   const queryClient = useQueryClient();
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
@@ -75,15 +71,15 @@ export function useRemoveProxyAccount({
         onUserLogout();
         removeFromStorage(ACTIVE_ACCOUNT_KEY);
       }
-      await onRemoveGoogleDrive(proxy);
+      await props.onRemoveGoogleDrive(proxy);
       wallet.remove(proxy);
     },
     onError: (error) => {
-      onError?.(error as Error);
+      props?.onError?.(error as Error);
       console.log(error);
     },
     onSuccess: () => {
-      onSuccess?.("Trading account removed from blockchain");
+      props?.onSuccess?.("Trading account removed from blockchain");
       onPushNotification(NOTIFICATIONS.removeTradingAccount());
     },
   });

@@ -9,6 +9,7 @@ import { useAssets } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
+import { QuickStart } from "../ui/Footer/QuickStart";
 
 import { Overview } from "./Overview";
 import { Table } from "./Table";
@@ -25,7 +26,7 @@ export function Template() {
   const [interactionRef, interactionHeight] = useSizeObserver();
   const { width } = useWindowSize();
 
-  const { onOpenChange } = useTour();
+  const { open, onClose, onOpenChange } = useTour();
   const { height: overviewHeight = 0 } = useResizeObserver({
     ref: overviewRef,
     box: "border-box",
@@ -54,6 +55,7 @@ export function Template() {
 
   return (
     <Fragment>
+      <QuickStart open={open} onOpenChange={onClose} />
       <div
         className="flex flex-1 flex-col bg-backgroundBase h-full"
         vaul-drawer-wrapper=""

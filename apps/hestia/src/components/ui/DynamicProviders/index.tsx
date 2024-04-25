@@ -134,8 +134,10 @@ export const DynamicProviders = ({ children }: { children: ReactNode }) => {
                         >
                           <TransactionManagerProvider>
                             <ConnectWalletProvider>
-                              <Progress />
-                              {children}
+                              <Fragment>
+                                <Progress />
+                                {children}
+                              </Fragment>
                             </ConnectWalletProvider>
                           </TransactionManagerProvider>
                         </SubscriptionProvider>

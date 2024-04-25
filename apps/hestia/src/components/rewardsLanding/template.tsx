@@ -4,6 +4,8 @@ import { useResizeObserver } from "usehooks-ts";
 import { Fragment, useMemo, useRef } from "react";
 import { useWindowSize } from "react-use";
 
+import { QuickStart } from "../ui/Footer/QuickStart";
+
 import { Info } from "./info";
 import { HowItWorks } from "./howItWorks";
 import { Faq } from "./faq";
@@ -17,7 +19,7 @@ export function Template() {
 
   const footerRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
-  const { onOpenChange } = useTour();
+  const { onOpenChange, open, onClose } = useTour();
 
   const { height: footerHeight = 0 } = useResizeObserver({
     ref: footerRef,
@@ -27,6 +29,7 @@ export function Template() {
 
   return (
     <Fragment>
+      <QuickStart open={open} onOpenChange={onClose} />
       <div
         className="flex flex-1 flex-col bg-backgroundBase h-full"
         vaul-drawer-wrapper=""
