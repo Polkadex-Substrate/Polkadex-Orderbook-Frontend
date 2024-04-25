@@ -86,7 +86,7 @@ export const InsufficientBalance = ({
                     <div className="flex flex-items gap-1">
                       {!poolsSuccess ? (
                         <>
-                          <Skeleton loading className="h-10 mt-2" />
+                          <Skeleton loading className="h-12 mt-2" />
                         </>
                       ) : (
                         pools?.map((asset) => {

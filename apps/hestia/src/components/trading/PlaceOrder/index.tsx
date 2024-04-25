@@ -3,13 +3,10 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { Tabs } from "@polkadex/ux";
 import { Market } from "@orderbook/core/utils/orderbookService/types";
-import {
-  tryUnlockTradeAccount,
-  decimalPlaces,
-  trimFloat,
-} from "@orderbook/core/helpers";
+import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { useFunds, useTickers } from "@orderbook/core/hooks";
+import { BalanceFormatter } from "@orderbook/format";
 
 import { LimitOrder } from "./Limit";
 import { MarketOrder } from "./Market";
@@ -18,30 +15,27 @@ import { Unlock } from "./unlock";
 type Props = { market?: Market; isBuy?: boolean; isResponsive?: boolean };
 
 export const PlaceOrder = ({ market, isBuy, isResponsive }: Props) => {
+  const toHuman = BalanceFormatter.toHuman;
   const [isPasswordProtected, setIsPasswordProtected] = useState(false);
   const { selectedAccount } = useConnectWalletProvider();
   const { getFreeProxyBalance } = useFunds();
   const { currentTicker } = useTickers(market?.id);
 
-  const pricePrecision = (market && decimalPlaces(market.price_tick_size)) || 0;
-  const qtyPrecision = (market && decimalPlaces(market.qty_step_size)) || 0;
-
   const [availableQuoteAmount, availableBaseAmount] = useMemo(() => {
-    const quoteAmount = trimFloat({
-      value: getFreeProxyBalance(market?.quoteAsset?.id || "-1"),
-      digitsAfterDecimal: pricePrecision,
-    });
-    const baseAmount = trimFloat({
-      value: getFreeProxyBalance(market?.baseAsset?.id || "-1"),
-      digitsAfterDecimal: qtyPrecision,
-    });
+    const quoteAmount = toHuman(
+      Number(getFreeProxyBalance(market?.quoteAsset?.id || "-1")),
+      8
+    );
+    const baseAmount = toHuman(
+      Number(getFreeProxyBalance(market?.baseAsset?.id || "-1")),
+      8
+    );
     return [+quoteAmount, +baseAmount];
   }, [
     getFreeProxyBalance,
     market?.baseAsset?.id,
     market?.quoteAsset?.id,
-    pricePrecision,
-    qtyPrecision,
+    toHuman,
   ]);
 
   useEffect(() => {
