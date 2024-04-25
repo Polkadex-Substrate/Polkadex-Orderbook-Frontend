@@ -94,7 +94,6 @@ export function useAddProxyAccount({
         const jsonAccount = pair.toJson(password);
         await GoogleDrive.addFromJson(jsonAccount);
         await onRefetchGoogleDriveAccounts();
-        wallet.remove(pair.address);
       }
 
       await onUserSelectTradingAddress({

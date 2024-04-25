@@ -22,6 +22,7 @@ import {
 import { RiEyeOffLine, RiEyeLine } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { getAddressFromMnemonic } from "@orderbook/core/helpers";
+import classNames from "classnames";
 
 import {
   ErrorMessage,
@@ -214,33 +215,32 @@ export const NewTradingAccount = ({
                       <GenericVerticalCard
                         title="Google Drive"
                         icon="GoogleDrive"
-                        onSelect={() => setActive("GDrive")}
+                        onSelect={async () => {
+                          if (!gDriveReady) await onConnectGDrive();
+                          setActive("GDrive");
+                        }}
                         checked={active === "GDrive"}
                         loading={connectGDriveLoading}
                       >
-                        {gDriveReady ? (
-                          <div className="bg-success-base/20 text-success-base text-sm px-2 py-1 rounded-sm">
-                            Connected
-                          </div>
-                        ) : (
-                          <Button.Solid
-                            appearance="secondary"
-                            size="sm"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              if (!gDriveReady) onConnectGDrive();
-                            }}
+                        <div
+                          className={classNames(
+                            gDriveReady
+                              ? "bg-success-base/20"
+                              : "bg-secondary-base",
+                            "text-sm px-2 py-1 rounded-sm"
+                          )}
+                        >
+                          <Typography.Text
+                            appearance={gDriveReady ? "success" : "base"}
                           >
-                            Connect
-                          </Button.Solid>
-                        )}
+                            {gDriveReady ? "Connected" : "Connect"}
+                          </Typography.Text>
+                        </div>
                       </GenericVerticalCard>
                       <GenericVerticalCard
                         title="Browser"
                         icon="Device"
-                        onSelect={() => setActive("Local")}
-                        checked={active === "Local"}
+                        checked
                       />
                     </div>
                     {error && !isLoading && (

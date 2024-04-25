@@ -94,9 +94,9 @@ const CardsCompontent = ({ onClose }: { onClose: () => void }) => {
   const availableOnDevice = useMemo(
     () =>
       localTradingAccounts?.some(
-        ({ data }) => data.address === tempTrading?.data.address
+        ({ address }) => address === tempTrading?.address
       ),
-    [tempTrading?.data.address, localTradingAccounts]
+    [tempTrading?.address, localTradingAccounts]
   );
 
   return (
@@ -106,7 +106,7 @@ const CardsCompontent = ({ onClose }: { onClose: () => void }) => {
           tempBrowserAccount={tempTrading}
           onClose={onReset}
           onAction={(account, password) =>
-            onExportTradeAccount({ account: account.data, password })
+            onExportTradeAccount({ account, password })
           }
           onResetTempBrowserAccount={onResetTempTrading}
         />

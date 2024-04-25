@@ -45,8 +45,8 @@ export const PlaceOrder = ({ market, isBuy, isResponsive }: Props) => {
   ]);
 
   useEffect(() => {
-    tryUnlockTradeAccount(selectedAccount?.data);
-    setIsPasswordProtected(Boolean(selectedAccount?.data.isLocked));
+    tryUnlockTradeAccount(selectedAccount);
+    setIsPasswordProtected(Boolean(selectedAccount?.isLocked));
   }, [selectedAccount]);
 
   return (
@@ -64,7 +64,7 @@ export const PlaceOrder = ({ market, isBuy, isResponsive }: Props) => {
         {isPasswordProtected ? (
           <Unlock
             onAction={() => setIsPasswordProtected(false)}
-            tempBrowserAccount={selectedAccount?.data}
+            tempBrowserAccount={selectedAccount}
           />
         ) : (
           <Fragment>

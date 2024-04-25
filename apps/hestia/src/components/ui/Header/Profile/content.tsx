@@ -111,7 +111,7 @@ export const Content = () => {
   const filteredAccounts = useMemo(
     () =>
       localTradingAccounts?.filter((item) =>
-        mainProxiesAccounts?.includes(item.data.address)
+        mainProxiesAccounts?.includes(item.address)
       ),
     [localTradingAccounts, mainProxiesAccounts]
   );
@@ -129,15 +129,15 @@ export const Content = () => {
   const availableOnDevice = useMemo(
     () =>
       localTradingAccounts?.some(
-        (value) => value.data.address === tempTrading?.data.address
+        (value) => value.address === tempTrading?.address
       ),
-    [localTradingAccounts, tempTrading?.data.address]
+    [localTradingAccounts, tempTrading?.address]
   );
 
   // Choose extensionAccount according to tempTrading address
   const tempExtensionAccount = useMemo(() => {
     const mainAddress = allAccounts?.find(
-      (acc) => acc.tradeAddress === tempTrading?.data.address
+      (acc) => acc.tradeAddress === tempTrading?.address
     )?.mainAddress;
 
     const extensionAccount = extensionAccounts?.find(
@@ -145,7 +145,7 @@ export const Content = () => {
     );
 
     return extensionAccount;
-  }, [allAccounts, extensionAccounts, tempTrading?.data.address]);
+  }, [allAccounts, extensionAccounts, tempTrading?.address]);
 
   // Choose extension according to tempFundingWallet
   const tempSelectedExtension = useMemo(() => {
@@ -186,7 +186,7 @@ export const Content = () => {
               tradingWalletPresent={browserAccountPresent}
               fundWalletPresent={fundWalletPresent}
               fundWallet={selectedFundingWallet}
-              tradeAccount={selectedAccount?.data}
+              tradeAccount={selectedAccount}
               localTradingAccounts={localTradingAccounts}
               mainProxiesAccounts={mainProxiesAccounts}
               onConnectWallet={() => props?.onPage("ConnectWallet", true)}
@@ -214,7 +214,7 @@ export const Content = () => {
               tempBrowserAccount={tempTrading}
               onClose={() => props?.onChangeInteraction(false)}
               onAction={(account, password) =>
-                onExportTradeAccount({ account: account.data, password })
+                onExportTradeAccount({ account, password })
               }
               onResetTempBrowserAccount={onResetTempTrading}
             />
@@ -282,7 +282,7 @@ export const Content = () => {
               onRemoveGoogleDrive={async (e) => await onRemoveGoogleDrive(e)}
               onRemoveFromChain={async () =>
                 await onRemoveTradingAccountFromChain?.({
-                  proxy: tempTrading?.data.address as string,
+                  proxy: tempTrading?.address as string,
                   selectedWallet,
                 })
               }

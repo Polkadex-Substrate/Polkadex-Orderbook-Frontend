@@ -63,7 +63,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
 
     const onCancelOrder = async (payload: CancelOrderArgs | null) => {
       if (!payload) return;
-      if (selectedAccount?.data.isLocked) {
+      if (selectedAccount?.isLocked) {
         setShowPassword(true);
         setOrderPayload(payload);
       } else {
@@ -146,7 +146,7 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     };
 
     useEffect(() => {
-      if (selectedAccount) tryUnlockTradeAccount(selectedAccount.data);
+      if (selectedAccount) tryUnlockTradeAccount(selectedAccount);
     }, [selectedAccount]);
 
     useEffect(() => {

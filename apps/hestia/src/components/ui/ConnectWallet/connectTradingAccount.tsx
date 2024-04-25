@@ -9,7 +9,7 @@ import {
 import { KeyringPair } from "@polkadot/keyring/types";
 import { PropsWithChildren } from "react";
 import classNames from "classnames";
-import { Account } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
 
@@ -32,12 +32,12 @@ export const ConnectTradingAccount = ({
   gDriveReady,
   children,
 }: PropsWithChildren<{
-  accounts?: Account[];
+  accounts?: KeyringPair[];
   onClose: () => void;
   onImport: () => void;
   onImportMnemonic: () => void;
-  onSelect: (e: Account) => void;
-  onTempBrowserAccount: (e: Account) => void;
+  onSelect: (e: KeyringPair) => void;
+  onTempBrowserAccount: (e: KeyringPair) => void;
   onSelectCallback: () => void;
   onRemoveCallback: () => void;
   onExportBrowserAccountCallback: () => void;
@@ -49,6 +49,7 @@ export const ConnectTradingAccount = ({
   connectGDriveLoading?: boolean;
   gDriveReady?: boolean;
 }>) => {
+  const { isStoreInGoogleDrive } = useConnectWalletProvider();
   return (
     <Loading.Spinner active={backupGDriveAccountLoading}>
       <Interaction className="w-full md:min-w-[24rem] md:max-w-[24rem]">
@@ -76,15 +77,15 @@ export const ConnectTradingAccount = ({
                   {connectGDriveLoading && (
                     <Skeleton loading className="min-h-14 rounded-sm" />
                   )}
-                  {accounts.map((value, i) => {
-                    const { data, type } = value;
+                  {accounts?.map((value, i) => {
+                    const externalStored = isStoreInGoogleDrive(value.address);
                     return (
                       <TradingAccountCard
                         key={i}
-                        address={data.address}
-                        name={data.meta.name as string}
+                        address={value.address}
+                        name={value.meta.name as string}
                         enabledExtensionAccount={enabledExtensionAccount}
-                        type={type}
+                        external={externalStored}
                         onRemove={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
@@ -101,8 +102,8 @@ export const ConnectTradingAccount = ({
                           e.preventDefault();
                           e.stopPropagation();
                           try {
-                            if (data.isLocked) data.unlock("");
-                            onExportBrowserAccount(data);
+                            if (value.isLocked) value.unlock("");
+                            onExportBrowserAccount(value);
                           } catch (error) {
                             onTempBrowserAccount(value);
                             onExportBrowserAccountCallback();
@@ -111,7 +112,7 @@ export const ConnectTradingAccount = ({
                         onBackupGDrive={async (e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          await onBackupGDriveAccount(data);
+                          await onBackupGDriveAccount(value);
                         }}
                       />
                     );

@@ -101,9 +101,9 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
   const availableOnDevice = useMemo(
     () =>
       localTradingAccounts?.some(
-        (value) => value.data.address === tempTrading?.data?.address
+        (value) => value.address === tempTrading?.address
       ),
-    [tempTrading?.data?.address, localTradingAccounts]
+    [tempTrading?.address, localTradingAccounts]
   );
 
   return (
@@ -140,7 +140,7 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
           tempBrowserAccount={tempTrading}
           onClose={() => setPage("ConnectTradingAccount")}
           onAction={(account, password) =>
-            onExportTradeAccount({ account: account.data, password })
+            onExportTradeAccount({ account, password })
           }
           onResetTempBrowserAccount={onResetTempTrading}
         />

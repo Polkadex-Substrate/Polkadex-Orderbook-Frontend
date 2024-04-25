@@ -3,7 +3,6 @@ import { useFormik } from "formik";
 import { useEffect, useMemo, useState } from "react";
 import { unLockAccountValidations } from "@orderbook/core/validations";
 import { KeyringPair } from "@polkadot/keyring/types";
-import { Account } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ErrorMessage } from "../ReadyToUse";
 import { Icons } from "..";
@@ -15,8 +14,8 @@ export const UnlockAccount = ({
   onResetTempBrowserAccount,
 }: {
   onClose: () => void;
-  onAction: (account: Account, password?: string) => void;
-  tempBrowserAccount?: Account;
+  onAction: (account: KeyringPair, password?: string) => void;
+  tempBrowserAccount?: KeyringPair;
   onResetTempBrowserAccount?: () => void;
 }) => {
   const [error, setError] = useState("");
@@ -34,7 +33,7 @@ export const UnlockAccount = ({
       onSubmit: async ({ password }) => {
         try {
           const pass = password?.replace(/\s+/g, "");
-          tempBrowserAccount?.data.unlock(pass);
+          tempBrowserAccount?.unlock(pass);
           if (tempBrowserAccount) {
             onAction(tempBrowserAccount, pass);
             handleClose();

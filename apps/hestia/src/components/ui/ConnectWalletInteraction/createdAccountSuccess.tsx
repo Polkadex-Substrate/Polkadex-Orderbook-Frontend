@@ -70,7 +70,7 @@ const CardsComponent = () => {
           tempBrowserAccount={tempTrading}
           onClose={onReset}
           onAction={(account, password) =>
-            onExportTradeAccount({ account: account.data, password })
+            onExportTradeAccount({ account, password })
           }
           onResetTempBrowserAccount={onResetTempTrading}
         />

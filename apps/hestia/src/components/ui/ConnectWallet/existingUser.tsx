@@ -8,7 +8,7 @@ import {
 import classNames from "classnames";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { RiArrowRightSLine } from "@remixicon/react";
-import { Account } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { GenericHorizontalCard, TradingAccountCard } from "../ReadyToUse";
 
@@ -34,16 +34,17 @@ export const ExistingUser = ({
   onTradingAccountList: () => void;
   onRecover: () => void;
   onBack: () => void;
-  accounts?: Account[];
+  accounts?: KeyringPair[];
   registeredProxies: string[];
-  onSelect: (e: Account) => void;
+  onSelect: (e: KeyringPair) => void;
   onSelectCallback: () => void;
   onRemoveCallback: () => void;
   onExportBrowserAccountCallback: () => void;
   onExportBrowserAccount: (account: KeyringPair) => void;
-  onTempBrowserAccount: (e: Account) => void;
+  onTempBrowserAccount: (e: KeyringPair) => void;
 }) => {
   const hasTradingAccounts = !!accounts?.length;
+  const { isStoreInGoogleDrive } = useConnectWalletProvider();
 
   return (
     <Interaction className="w-full md:min-w-[24rem] md:max-w-[24rem]">
@@ -70,14 +71,15 @@ export const ExistingUser = ({
                     "border-b border-primary overflow-hidden hover:overflow-auto pb-7 scrollbar-hide"
                 )}
               >
-                {accounts.map((value, i) => {
-                  const { data, type } = value;
+                {accounts?.map((value, i) => {
+                  const externalStored = isStoreInGoogleDrive(value.address);
+
                   return (
                     <TradingAccountCard
                       key={i}
-                      address={data.address}
-                      name={data.meta.name as string}
-                      type={type}
+                      address={value.address}
+                      name={value.meta.name as string}
+                      external={externalStored}
                       onSelect={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -94,8 +96,8 @@ export const ExistingUser = ({
                         e.preventDefault();
                         e.stopPropagation();
                         try {
-                          if (data.isLocked) data.unlock("");
-                          onExportBrowserAccount(data);
+                          if (value.isLocked) value.unlock("");
+                          onExportBrowserAccount(value);
                         } catch (error) {
                           onTempBrowserAccount(value);
                           onExportBrowserAccountCallback();

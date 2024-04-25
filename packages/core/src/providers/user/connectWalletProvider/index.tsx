@@ -58,24 +58,20 @@ export const GoogleDrive = new GDriveExternalAccountStore(
   defaultConfig.googleClientId
 );
 
-export type Account = {
-  data: KeyringPair;
-  type: "Browser" | "Google Drive";
-};
 type ConnectWalletState = {
   // active extension account
   // TODO: rename to selectedExtensionAccount
   selectedWallet?: ExtensionAccount;
   // active trading account
   // TODO: rename to selectedTradingAccount
-  selectedAccount?: Account; // TODO: Remove
+  selectedAccount?: KeyringPair; // TODO: Remove
   // selected extension
   selectedExtension?: (typeof ExtensionsArray)[0];
   // list of all trading accounts in browser
-  localTradingAccounts: Account[];
+  localTradingAccounts: KeyringPair[];
   // TODO: rename to onSelectExtensionAccount
   onSelectWallet: (payload: ExtensionAccount) => void;
-  onSelectTradingAccount: (value: Account) => void;
+  onSelectTradingAccount: (value: KeyringPair) => void;
   // TODO: redefine type in polkadex-ts
   onSelectExtension: (
     payload: (typeof ExtensionsArray)[0],
@@ -93,11 +89,11 @@ type ConnectWalletState = {
   ) => Promise<void>;
   // TODO: all the below must be moved into local state of ConnectWalletInteraction
   onExportTradeAccount: (value: ExportTradeAccountProps) => void;
-  onSetTempTrading: (value: Account) => void;
+  onSetTempTrading: (value: KeyringPair) => void;
   onResetTempMnemonic: () => void;
   onResetTempTrading: () => void;
   tempMnemonic?: string;
-  tempTrading?: Account;
+  tempTrading?: KeyringPair;
   proxiesAccounts?: string[];
   proxiesStatus: GenericStatus;
   registerStatus: GenericStatus;
@@ -137,7 +133,7 @@ type ConnectWalletState = {
   removeGoogleDriveSuccess: UseMutationResult["isSuccess"];
 
   gDriveReady: boolean;
-  googleDriveAccounts?: Account[];
+  isStoreInGoogleDrive: (e: string) => boolean;
 };
 
 export const ConnectWalletProvider = ({
@@ -147,7 +143,7 @@ export const ConnectWalletProvider = ({
 }) => {
   const [gDriveReady, setGDriveReady] = useState(false);
   const [tempMnemonic, setTempMnemonic] = useState<string>("");
-  const [tempTrading, setTempTrading] = useState<Account>();
+  const [tempTrading, setTempTrading] = useState<KeyringPair>();
   const {
     selectedAddresses,
     onUserSelectMainAddress,
@@ -237,12 +233,10 @@ export const ConnectWalletProvider = ({
   const proxiesAccounts = useMemo(() => {
     return allProxiesAccounts
       .filter(({ mainAddress }) =>
-        [selectedWallet?.address, tempTrading?.data?.address].includes(
-          mainAddress
-        )
+        [selectedWallet?.address, tempTrading?.address].includes(mainAddress)
       )
       .map(({ tradeAddress }) => tradeAddress);
-  }, [allProxiesAccounts, selectedWallet?.address, tempTrading?.data?.address]);
+  }, [allProxiesAccounts, selectedWallet?.address, tempTrading?.address]);
 
   const onSelectExtensionAccount = (payload: ExtensionAccount) => {
     const mainAddress = payload.address;
@@ -257,7 +251,7 @@ export const ConnectWalletProvider = ({
     callbackFn?.();
   };
 
-  const onSetTempTrading = (value: Account) => {
+  const onSetTempTrading = (value: KeyringPair) => {
     setTempTrading(value);
   };
 
@@ -362,10 +356,14 @@ export const ConnectWalletProvider = ({
       initialData: [],
       queryFn: async () => {
         const accounts = await GoogleDrive.getAll();
-        return accounts.map((account) => ({
-          type: "Google Drive",
-          data: keyring.createFromJson(account),
-        })) as Account[];
+        return accounts.map((account) => {
+          const data = keyring.createFromJson(account);
+          const alreadyStored = localTradingAccounts.find(
+            ({ address }) => address === data.address
+          );
+          if (!alreadyStored) wallet.add(data, "");
+          return data;
+        });
       },
       onError: (error: { message: string }) =>
         onHandleError(error?.message ?? error),
@@ -400,29 +398,21 @@ export const ConnectWalletProvider = ({
       onHandleError(error?.message ?? error),
   });
 
-  const localAccounts = useMemo(
+  const localTradingAccounts = useMemo(
     () =>
       isReady
-        ? (localAddresses?.map((value) => ({
-            type: "Browser",
-            data: wallet.getPair(value),
-          })) as Account[])
+        ? localAddresses?.map((value) => wallet.getPair(value) as KeyringPair)
         : [],
     [localAddresses, wallet, isReady]
   );
 
-  const localTradingAccounts = useMemo(
-    () => [...googleDriveAccounts, ...localAccounts],
-    [localAccounts, googleDriveAccounts]
-  );
-
   const selectedAccount = useMemo(() => {
     const selected = selectedAddresses?.tradeAddress;
-    const availableLocalAccount = localAccounts?.find(
-      (e) => e.data.address === selectedAddresses?.tradeAddress
+    const availableLocalAccount = localTradingAccounts?.find(
+      (e) => e?.address === selectedAddresses?.tradeAddress
     );
     const availableExternalAccount = googleDriveAccounts?.find(
-      (e) => e.data.address === selectedAddresses?.tradeAddress
+      (e) => e.address === selectedAddresses?.tradeAddress
     );
     if (availableLocalAccount && selected && isReady) {
       return availableLocalAccount;
@@ -432,7 +422,7 @@ export const ConnectWalletProvider = ({
     return undefined;
   }, [
     googleDriveAccounts,
-    localAccounts,
+    localTradingAccounts,
     isReady,
     selectedAddresses?.tradeAddress,
   ]);
@@ -443,15 +433,19 @@ export const ConnectWalletProvider = ({
   );
 
   const onSelectTradingAccount = useCallback(
-    async ({ type, data }: Account) => {
+    async (data: KeyringPair) => {
       await onUserSelectTradingAddress({
         tradeAddress: data.address,
-        isNew: type !== "Browser",
       });
     },
     [onUserSelectTradingAddress]
   );
 
+  const isStoreInGoogleDrive = useCallback(
+    (address: string) =>
+      !!googleDriveAccounts?.find((e) => e.address === address),
+    [googleDriveAccounts]
+  );
   return (
     <Provider
       value={{
@@ -522,7 +516,7 @@ export const ConnectWalletProvider = ({
         removeGoogleDriveSuccess,
 
         gDriveReady,
-        googleDriveAccounts,
+        isStoreInGoogleDrive,
       }}
     >
       {children}
@@ -580,8 +574,8 @@ export const Context = createContext<ConnectWalletState>({
   onRemoveGoogleDrive: async () => {},
   removeGoogleDriveLoading: true,
   removeGoogleDriveSuccess: false,
-  googleDriveAccounts: [],
   gDriveReady: false,
+  isStoreInGoogleDrive: () => false,
 });
 
 const Provider = ({

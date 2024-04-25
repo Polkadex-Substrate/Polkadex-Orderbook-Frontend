@@ -1,4 +1,4 @@
-import { RiMore2Line } from "@remixicon/react";
+import { RiCloudLine, RiMore2Line } from "@remixicon/react";
 import { MouseEvent, useState } from "react";
 import {
   Button,
@@ -16,7 +16,7 @@ import { useExtensionAccountFromBrowserAccount } from "@orderbook/core/hooks";
 export const TradingAccountCard = ({
   name,
   address,
-  type,
+  external,
   onSelect,
   onRemove,
   onExport,
@@ -25,7 +25,7 @@ export const TradingAccountCard = ({
 }: {
   name: string;
   address: string;
-  type?: string;
+  external?: boolean;
   onSelect?: (e: MouseEvent<HTMLElement>) => void;
   onRemove?: (e: MouseEvent<HTMLDivElement>) => void;
   onExport?: (e: MouseEvent<HTMLDivElement>) => void;
@@ -113,7 +113,7 @@ export const TradingAccountCard = ({
                   Export as JSON
                 </Dropdown.Item>
               )}
-              {onBackupGDrive && type === "Browser" && (
+              {onBackupGDrive && !external && (
                 <Dropdown.Item
                   onClick={(e) => {
                     onBackupGDrive(e);
@@ -128,11 +128,13 @@ export const TradingAccountCard = ({
         )}
       </div>
       <div className="flex items-center justify-between px-4 py-2 bg-grayscale">
-        {type && (
-          <div className="bg-level-1 px-2 py-1 rounded-full text-xs text-secondary">
-            {type}
-          </div>
-        )}
+        <div className="flex items-center gap-1 bg-level-1 px-2 py-1 rounded-full">
+          <Typography.Text appearance="primary">Browser</Typography.Text>
+          {external && (
+            <RiCloudLine className="w-3.5 h-3.5 text-success-base" />
+          )}
+        </div>
+
         {enabledExtensionAccount ? (
           <Skeleton loading={isLoading} className="max-w-32 h-4">
             <HoverCard>

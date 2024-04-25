@@ -1,6 +1,6 @@
 import { Accordion, Interaction, Typography } from "@polkadex/ux";
 import { MouseEvent } from "react";
-import { Account } from "@orderbook/core/providers/user/connectWalletProvider";
+import { KeyringPair } from "@polkadot/keyring/types";
 
 import { RemoveWalletCard } from "../ReadyToUse";
 
@@ -12,8 +12,8 @@ export const TradingAccountList = ({
   onRemoveCallback,
 }: {
   tradingAccounts?: string[];
-  browserAccounts: Account[];
-  onRemove: (e: Account) => void;
+  browserAccounts: KeyringPair[];
+  onRemove: (e: KeyringPair) => void;
   onClose: (e: MouseEvent<HTMLButtonElement>) => void;
   onRemoveCallback: () => void;
 }) => {
@@ -34,7 +34,7 @@ export const TradingAccountList = ({
               <div className="flex flex-col gap-4">
                 {tradingAccounts?.map((v) => {
                   const account = browserAccounts?.find(
-                    ({ data }) => data.address === v
+                    ({ address }) => address === v
                   );
                   const tradingAccount = {
                     data: {
@@ -48,11 +48,11 @@ export const TradingAccountList = ({
                   return (
                     <RemoveWalletCard
                       key={v}
-                      name={account?.data.meta.name}
+                      name={account?.meta.name}
                       address={v}
                       showTooltip={tradingAccounts.length === 1}
                       onClick={() => {
-                        onRemove(tradingAccount as Account);
+                        onRemove(tradingAccount as unknown as KeyringPair);
                         onRemoveCallback();
                       }}
                     />

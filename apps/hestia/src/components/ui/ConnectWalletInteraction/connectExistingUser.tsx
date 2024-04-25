@@ -46,7 +46,7 @@ const TriggerComponent = ({ onClose, onNext }: InteractableProps) => {
   const filteredAccounts = useMemo(
     () =>
       localTradingAccounts?.filter((item) =>
-        mainProxiesAccounts?.includes(item.data.address)
+        mainProxiesAccounts?.includes(item.address)
       ),
     [localTradingAccounts, mainProxiesAccounts]
   );
@@ -134,7 +134,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
   const filteredAccounts = useMemo(
     () =>
       localTradingAccounts?.filter((item) =>
-        mainProxiesAccounts?.includes(item?.data.address)
+        mainProxiesAccounts?.includes(item?.address)
       ),
     [localTradingAccounts, mainProxiesAccounts]
   );
@@ -152,10 +152,8 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
 
   const availableOnDevice = useMemo(
     () =>
-      filteredAccounts?.some(
-        (value) => value.data.address === tempTrading?.data.address
-      ),
-    [tempTrading?.data.address, filteredAccounts]
+      filteredAccounts?.some((value) => value.address === tempTrading?.address),
+    [tempTrading?.address, filteredAccounts]
   );
 
   const handleClose = useCallback(
@@ -195,7 +193,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
           tempBrowserAccount={tempTrading}
           onClose={() => setPage("ConnectTradingAccount")}
           onAction={(account, password) =>
-            onExportTradeAccount({ account: account.data, password })
+            onExportTradeAccount({ account, password })
           }
           onResetTempBrowserAccount={onResetTempTrading}
         />

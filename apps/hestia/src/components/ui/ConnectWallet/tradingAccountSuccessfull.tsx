@@ -9,7 +9,8 @@ import {
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Account } from "@orderbook/core/providers/user/connectWalletProvider";
+import { KeyringPair } from "@polkadot/keyring/types";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
 
@@ -22,9 +23,9 @@ export const TradingAccountSuccessfull = ({
   onDownloadPdf,
   onDownloadJsonCallback,
 }: {
-  tradingAccount?: Account;
+  tradingAccount?: KeyringPair;
   onClose: () => void;
-  onTempBrowserAccount: (e: Account) => void;
+  onTempBrowserAccount: (e: KeyringPair) => void;
   onOpenMnemonic: () => void;
   onDownloadJson: (e: TradeAccount) => void;
   onDownloadPdf: () => void;
@@ -32,6 +33,9 @@ export const TradingAccountSuccessfull = ({
 }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const { isStoreInGoogleDrive } = useConnectWalletProvider();
+  const externalStored = isStoreInGoogleDrive(tradingAccount?.address ?? "");
+
   return (
     <Interaction className="w-full md:min-w-[24rem] md:max-w-[24rem]">
       <Interaction.Content className="flex flex-col gap-6 flex-1 mb-4">
@@ -55,9 +59,9 @@ export const TradingAccountSuccessfull = ({
           </Typography.Text>
           <div className="flex flex-col gap-2">
             <TradingAccountCard
-              address={tradingAccount?.data.address || ""}
-              name={tradingAccount?.data.meta.name || ""}
-              type={tradingAccount?.type || ""}
+              address={tradingAccount?.address || ""}
+              name={tradingAccount?.meta.name || ""}
+              external={externalStored}
             />
             <GenericHorizontalCard title="Download file" icon="Download">
               <Dropdown open={open} onOpenChange={setOpen}>
@@ -86,9 +90,9 @@ export const TradingAccountSuccessfull = ({
                       e.preventDefault();
                       e.stopPropagation();
                       try {
-                        if (tradingAccount?.data.isLocked)
-                          tradingAccount?.data.unlock("");
-                        onDownloadJson(tradingAccount.data);
+                        if (tradingAccount?.isLocked)
+                          tradingAccount?.unlock("");
+                        onDownloadJson(tradingAccount);
                       } catch (error) {
                         onTempBrowserAccount(tradingAccount);
                         onDownloadJsonCallback();

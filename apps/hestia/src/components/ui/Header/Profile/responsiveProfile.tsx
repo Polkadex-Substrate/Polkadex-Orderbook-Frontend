@@ -23,7 +23,7 @@ export const ResponsiveProfile = ({
           browserAccountPresent={browserAccountPresent}
           extensionAccountPresent={extensionAccountPresent}
           extensionAccountName={selectedWallet?.name ?? ""}
-          browserAccountName={selectedAccount?.data.meta.name ?? ""}
+          browserAccountName={selectedAccount?.meta.name ?? ""}
         />
       </Popover.Trigger>
       <Popover.Content sideOffset={10}>

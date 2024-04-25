@@ -14,7 +14,7 @@ export const GenericVerticalCard = ({
 }: PropsWithChildren<{
   title: string;
   icon: IconsProps;
-  onSelect: () => void;
+  onSelect?: () => void;
   checked?: boolean;
   disabled?: boolean;
   loading?: boolean;
@@ -24,7 +24,7 @@ export const GenericVerticalCard = ({
       <Loading.Spinner active={loading}>
         <div
           role="button"
-          onClick={disabled ? undefined : onSelect}
+          onClick={disabled || !onSelect ? undefined : onSelect}
           className={classNames(
             disabled
               ? "opacity-50"
