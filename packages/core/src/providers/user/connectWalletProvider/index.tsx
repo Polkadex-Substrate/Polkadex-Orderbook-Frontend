@@ -354,8 +354,6 @@ export const ConnectWalletProvider = ({
       }
       return true;
     },
-    onError: (error: { message: string }) =>
-      onHandleError(error?.message ?? error),
   });
 
   const { data: googleDriveAccounts, refetch: onRefetchGoogleDriveAccounts } =

@@ -1,7 +1,7 @@
 "use client";
 
-import { Fragment, MouseEvent, useCallback, useMemo, useState } from "react";
-import { Interaction, Typography } from "@polkadex/ux";
+import { MouseEvent, useCallback, useMemo, useState } from "react";
+import { Interaction, Loading, Typography } from "@polkadex/ux";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useCall, useTransactionFeeModal } from "@orderbook/core/index";
@@ -95,7 +95,7 @@ export const RemoveTradingAccount = ({
   const { onRemoveProxyAccountOcex } = useCall();
 
   return (
-    <Fragment>
+    <Loading.Spinner active={state.removeBlockchain ? false : loading}>
       <ConfirmTransaction
         action={async (e) => {
           await handleRemoveBlockchain(removeProps, e);
@@ -200,6 +200,6 @@ export const RemoveTradingAccount = ({
           <Interaction.Close onClick={onCancel}>Cancel</Interaction.Close>
         </Interaction.Footer>
       </Interaction>
-    </Fragment>
+    </Loading.Spinner>
   );
 };
