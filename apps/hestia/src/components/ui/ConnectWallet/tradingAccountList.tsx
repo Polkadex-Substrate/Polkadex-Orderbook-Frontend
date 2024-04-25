@@ -37,13 +37,10 @@ export const TradingAccountList = ({
                     ({ address }) => address === v
                   );
                   const tradingAccount = {
-                    data: {
-                      address: v,
-                      meta: {
-                        name: "Trading Account",
-                      },
+                    address: v,
+                    meta: {
+                      name: "Trading Account",
                     },
-                    type: "Browser",
                   };
                   return (
                     <RemoveWalletCard
@@ -52,7 +49,7 @@ export const TradingAccountList = ({
                       address={v}
                       showTooltip={tradingAccounts.length === 1}
                       onClick={() => {
-                        onRemove(tradingAccount as unknown as KeyringPair);
+                        onRemove(tradingAccount as KeyringPair);
                         onRemoveCallback();
                       }}
                     />

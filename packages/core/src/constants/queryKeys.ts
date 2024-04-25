@@ -96,5 +96,7 @@ export const QUERY_KEYS = {
     assetName,
     assetsAmount,
   ],
-  queryPools: () => [PREFIX],
+  queryPools: () => [PREFIX, "queryPools"],
+  googleSession: () => [PREFIX, "googleSession"],
+  googleAccounts: () => [PREFIX, "googleAccounts"],
 };

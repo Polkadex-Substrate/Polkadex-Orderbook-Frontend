@@ -18,14 +18,19 @@ import {
 } from "react";
 import {
   UseMutationResult,
+  UseQueryResult,
   useMutation,
   useQuery,
 } from "@tanstack/react-query";
-import { GDriveExternalAccountStore } from "@polkadex/local-wallets";
+import {
+  GDriveExternalAccountStore,
+  GOOGLE_LOCAL_STORAGE_KEY,
+} from "@polkadex/local-wallets";
 import { defaultConfig } from "@orderbook/core/config";
 import keyring from "@polkadot/ui-keyring";
+import { localStorageOrDefault } from "@polkadex/utils";
 
-import { POLKADEX_ASSET } from "../../../constants";
+import { POLKADEX_ASSET, QUERY_KEYS } from "../../../constants";
 import { transformAddress, useProfile } from "../../user/profile";
 import {
   AddProxyAccountArgs,
@@ -160,17 +165,6 @@ export const ConnectWalletProvider = ({
   // TODO: rename to useBrowserAccounts
   const { wallet, isReady, localAddresses } = useUserAccounts();
   const onSetTempMnemonic = (value: string) => setTempMnemonic(value);
-
-  const {
-    error: removingError,
-    mutateAsync: onRemoveTradingAccountFromChain,
-    status: removingStatus,
-  } = useRemoveProxyAccount({
-    onError: (e: Error) => {
-      onHandleError(e.message);
-    },
-    onSuccess: (msg) => msg && onHandleAlert(msg),
-  });
 
   const {
     onChainBalances,
@@ -327,23 +321,38 @@ export const ConnectWalletProvider = ({
         setGDriveReady(true);
       }
       await GoogleDrive.addFromJson(jsonAccount);
-      wallet.remove(tradeAccount.address);
+      await sleep(2000);
       await onRefetchGoogleDriveAccounts();
     },
     onError: (error: { message: string }) =>
       onHandleError(error?.message ?? error),
   });
 
+  const hasLocalToken = useMemo(
+    () => localStorageOrDefault(GOOGLE_LOCAL_STORAGE_KEY, null, true),
+    []
+  );
+
   const {
-    mutateAsync: onConnectGoogleDrive,
+    data,
+    refetch: onConnectGoogleDrive,
     isLoading: connectGoogleDriveLoading,
+    isFetching: connectGoogleDriveFetching,
     isSuccess: connectGoogleDriveSuccess,
-  } = useMutation({
-    mutationFn: async () => {
+  } = useQuery({
+    staleTime: 100000,
+    enabled: !!hasLocalToken,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+    initialData: undefined,
+    queryFn: async () => {
       if (!gDriveReady) {
         await GoogleDrive.init();
         setGDriveReady(true);
       }
+      return true;
     },
     onError: (error: { message: string }) =>
       onHandleError(error?.message ?? error),
@@ -351,8 +360,8 @@ export const ConnectWalletProvider = ({
 
   const { data: googleDriveAccounts, refetch: onRefetchGoogleDriveAccounts } =
     useQuery({
+      queryKey: QUERY_KEYS.googleAccounts(),
       enabled: gDriveReady,
-      queryKey: [!!gDriveReady],
       initialData: [],
       queryFn: async () => {
         const accounts = await GoogleDrive.getAll();
@@ -446,6 +455,22 @@ export const ConnectWalletProvider = ({
       !!googleDriveAccounts?.find((e) => e.address === address),
     [googleDriveAccounts]
   );
+
+  const {
+    error: removingError,
+    mutateAsync: onRemoveTradingAccountFromChain,
+    status: removingStatus,
+  } = useRemoveProxyAccount({
+    onError: (e: Error) => {
+      onHandleError(e.message);
+    },
+    onSuccess: (msg) => msg && onHandleAlert(msg),
+    onRemoveGoogleDrive,
+  });
+
+  const handleConnectGoogleDrive = useCallback(async () => {
+    await onConnectGoogleDrive();
+  }, [onConnectGoogleDrive]);
   return (
     <Provider
       value={{
@@ -507,8 +532,9 @@ export const ConnectWalletProvider = ({
         backupGoogleDriveLoading,
         backupGoogleDriveSuccess,
 
-        onConnectGoogleDrive,
-        connectGoogleDriveLoading,
+        onConnectGoogleDrive: handleConnectGoogleDrive,
+        connectGoogleDriveLoading:
+          connectGoogleDriveLoading && connectGoogleDriveFetching,
         connectGoogleDriveSuccess,
 
         onRemoveGoogleDrive,

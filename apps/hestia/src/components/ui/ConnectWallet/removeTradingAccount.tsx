@@ -129,7 +129,7 @@ export const RemoveTradingAccount = ({
             </div>
             <TradingAccountCard
               address={tradingAccount?.address ?? ""}
-              name={tradingAccount?.meta.name as string}
+              name={tradingAccount?.meta?.name as string}
               external={externalStored}
               enabledExtensionAccount={enabledExtensionAccount}
             />
@@ -163,7 +163,7 @@ export const RemoveTradingAccount = ({
                 }
               />
               <GenericSelectCard
-                title="Remove  from blockchain"
+                title="Remove from blockchain"
                 icon="Blockchain"
                 checked={state.removeBlockchain}
                 onChange={() =>
@@ -172,6 +172,8 @@ export const RemoveTradingAccount = ({
                     removeDevice:
                       !!availableOnDevice && !state.removeBlockchain,
                     removeBlockchain: !prevState.removeBlockchain,
+                    removeGoogleDrive:
+                      externalStored && !state.removeGoogleDrive,
                   }))
                 }
                 disabled={!fundWallet}
@@ -187,6 +189,7 @@ export const RemoveTradingAccount = ({
                 return;
               } else if (state.removeGoogleDrive) {
                 await handleRemoveFromGoogle(e);
+                return;
               }
               handleRemoveFromDevice(e);
             }}
