@@ -1,6 +1,6 @@
 import { Accordion, Interaction, Typography } from "@polkadex/ux";
-import { MouseEvent } from "react";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { MouseEvent } from "react";
 
 import { RemoveWalletCard } from "../ReadyToUse";
 

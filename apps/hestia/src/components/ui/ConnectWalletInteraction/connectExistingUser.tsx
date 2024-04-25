@@ -4,6 +4,7 @@ import { Fragment, MouseEvent, useCallback, useMemo } from "react";
 import { Interactable, useInteractableProvider } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { ExistingUser } from "../ConnectWallet/existingUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
@@ -224,7 +225,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
       </Interactable.Card>
       <Interactable.Card pageName="RemoveTradingAccount">
         <RemoveTradingAccount
-          tradingAccount={tempTrading}
+          tradingAccount={tempTrading as TradeAccount}
           fundWallet={selectedWallet}
           availableOnDevice={availableOnDevice}
           onRemoveFromDevice={(e) => onRemoveTradingAccountFromDevice(e)}

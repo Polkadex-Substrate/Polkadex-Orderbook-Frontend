@@ -4,6 +4,7 @@ import { Interactable, Modal, useInteractableProvider } from "@polkadex/ux";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { Fragment, useMemo } from "react";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
@@ -140,7 +141,7 @@ const CardsCompontent = ({ onClose }: { onClose: () => void }) => {
       </Interactable.Card>
       <Interactable.Card pageName="RemoveTradingAccount">
         <RemoveTradingAccount
-          tradingAccount={tempTrading}
+          tradingAccount={tempTrading as TradeAccount}
           onRemoveFromDevice={(e) => onRemoveTradingAccountFromDevice(e)}
           onRemoveGoogleDrive={async (e) => await onRemoveGoogleDrive(e)}
           selectedExtension={selectedExtension}

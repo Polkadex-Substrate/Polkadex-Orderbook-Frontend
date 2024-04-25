@@ -5,7 +5,6 @@ import { Interaction, Typography } from "@polkadex/ux";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useCall, useTransactionFeeModal } from "@orderbook/core/index";
-import { KeyringPair } from "@polkadot/keyring/types";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { TradeAccount } from "@orderbook/core/providers/types";
 
@@ -25,7 +24,7 @@ export const RemoveTradingAccount = ({
   availableOnDevice,
   enabledExtensionAccount = false,
 }: {
-  tradingAccount?: TradeAccount;
+  tradingAccount: TradeAccount;
   fundWallet?: ExtensionAccount;
   onRemoveFromDevice: (e: string) => void;
   onRemoveGoogleDrive: (e: string) => Promise<void>;
@@ -88,9 +87,9 @@ export const RemoveTradingAccount = ({
 
   const removeProps = useMemo(
     () => ({
-      proxy: tradingAccount?.address ?? "",
+      proxy: tradingAccount.address ?? "",
     }),
-    [tradingAccount?.address]
+    [tradingAccount.address]
   );
 
   const { onRemoveProxyAccountOcex } = useCall();
@@ -106,7 +105,7 @@ export const RemoveTradingAccount = ({
         extrinsicFn={() =>
           onRemoveProxyAccountOcex([tradingAccount?.address ?? ""])
         }
-        sender={tradingAccount?.address ?? ""}
+        sender={tradingAccount?.address}
         tokenFee={tokenFee}
         setTokenFee={setTokenFee}
         openFeeModal={openFeeModal}

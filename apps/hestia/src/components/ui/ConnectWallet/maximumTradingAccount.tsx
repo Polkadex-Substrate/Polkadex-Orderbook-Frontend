@@ -51,7 +51,7 @@ export const MaximumTradingAccount = ({
               <div className="flex flex-col gap-4">
                 {tradingAccounts?.map((v) => {
                   const account = browserAccounts?.find(
-                    ({ address }) => address === v
+                    (acc) => acc.address === v
                   );
                   const tradingAccount = {
                     address: v,
@@ -62,7 +62,7 @@ export const MaximumTradingAccount = ({
                   return (
                     <RemoveWalletCard
                       key={v}
-                      name={account?.meta.name}
+                      name={account?.meta?.name}
                       address={v}
                       showTooltip={tradingAccounts.length === 1}
                       onClick={() => {

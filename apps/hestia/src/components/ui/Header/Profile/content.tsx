@@ -12,6 +12,7 @@ import {
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { Profile } from "../../ConnectWallet/profile";
 import { NewTradingAccount } from "../../ConnectWallet/newTradingAccount";
@@ -275,7 +276,7 @@ export const Content = () => {
             />
             <RemoveTradingAccount
               key="RemoveTradingAccount"
-              tradingAccount={tempTrading}
+              tradingAccount={tempTrading as TradeAccount}
               fundWallet={tempExtensionAccount}
               availableOnDevice={availableOnDevice}
               onRemoveFromDevice={(e) => onRemoveTradingAccountFromDevice(e)}
