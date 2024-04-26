@@ -72,24 +72,6 @@ export const createOrderSigningPayload = (
   return codec as Codec;
 };
 
-export const createCancelOrderPayloadSigned = (
-  api: ApiPromise,
-  userKeyring: KeyringPair,
-  orderId: string,
-  base: string,
-  quote: string
-) => {
-  const orderIdCodec = api.createType("order_id", orderId);
-  const tradingPair = `${base}-${quote}`;
-  const signature = signPayload(api, userKeyring, orderIdCodec);
-  return {
-    orderId: orderIdCodec,
-    account: userKeyring.address,
-    pair: tradingPair,
-    signature: signature,
-  };
-};
-
 export const createCancelAllPayload = (
   api: ApiPromise,
   userKeyring: KeyringPair,
@@ -103,6 +85,6 @@ export const createCancelAllPayload = (
     market: market,
     timestamp: getNonce(),
   });
-  const signature = signPayload(api, userKeyring, signingPayload);
+  const signature = signPayload(userKeyring, signingPayload);
   return { payload: signingPayload, signature };
 };

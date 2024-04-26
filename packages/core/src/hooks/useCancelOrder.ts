@@ -1,9 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
-import { useUserAccounts } from "@polkadex/react-providers";
 import {
-  createCancelOrderPayloadSigned,
+  useExtensionAccounts,
+  useUserAccounts,
+} from "@polkadex/react-providers";
+import {
   isAssetPDEX,
   isValidAddress,
+  signPayload,
 } from "@orderbook/core/helpers";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
@@ -20,6 +23,7 @@ export type CancelOrderArgs = {
 export const useCancelOrder = () => {
   const { wallet } = useUserAccounts();
   const { onHandleError, onHandleAlert, onHandleInfo } = useSettingsProvider();
+  const { extensionAccounts } = useExtensionAccounts();
   const {
     selectedAddresses: { mainAddress, tradeAddress },
   } = useProfile();
@@ -31,24 +35,37 @@ export const useCancelOrder = () => {
         throw new Error("You are not connected to blockchain");
 
       const keyringPair = wallet.getPair(tradeAddress);
-      if (!isValidAddress(tradeAddress) || !keyringPair)
-        throw new Error("Invalid Trading Account");
+      const account = extensionAccounts.find(
+        ({ address }) => address === mainAddress
+      );
+      if (!account && (!isValidAddress(tradeAddress) || !keyringPair))
+        throw new Error("No valid Account Found");
 
-      if (keyringPair?.isLocked)
+      if (!account && keyringPair?.isLocked)
         throw new Error("Please unlock your account first");
 
       onHandleInfo?.("Cancelling order...");
 
       const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
       const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
+      const pair = `${baseAsset}-${quoteAsset}`;
 
-      const { pair, signature } = createCancelOrderPayloadSigned(
-        api,
-        keyringPair,
-        orderId,
-        baseAsset,
-        quoteAsset
-      );
+      const isSignedByExtension = !keyringPair;
+      let signature: { Sr25519: string };
+      if (isSignedByExtension) {
+        const signer = account?.signer;
+        if (!signer) throw new Error("No signer for MainAccount found");
+        const result = signer?.signRaw({
+          address: mainAddress,
+          data: pair,
+        });
+        signature = { Sr25519: result?.signature };
+      } else {
+        signature = signPayload(
+          keyringPair,
+          api.createType("order_id", orderId)
+        );
+      }
 
       const payload = JSON.stringify({
         CancelOrder: [orderId, mainAddress, tradeAddress, pair, signature],
