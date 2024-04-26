@@ -25,7 +25,6 @@ export function Template() {
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
-  const formwRef = useRef<HTMLDivElement | null>(null);
   const footerRef = useRef<HTMLDivElement | null>(null);
   const interactionRef = useRef<HTMLDivElement | null>(null);
 
@@ -43,9 +42,13 @@ export function Template() {
     useConnectWalletProvider();
 
   useEffect(() => {
+    const widgetDiv = document.getElementById("cede-widget");
+    if (widgetDiv) {
+      widgetDiv.innerHTML = "";
+    }
     renderSendWidget("#cede-widget", {
       theme: {
-        borderRadius: -15,
+        borderRadius: 1,
         borderColor: extend.colors["secondary-base"],
         inputBorderColor: extend.colors["secondary-base"],
         logoBorderColor: extend.colors["primary-base"],
@@ -57,7 +60,7 @@ export function Template() {
         address: selectedWallet?.address,
       },
     });
-  }, []);
+  }, [selectedWallet?.address]);
 
   const mobileView = useMemo(() => width <= 640, [width]);
 
@@ -79,15 +82,13 @@ export function Template() {
           }}
         >
           <div className="flex flex-col flex-1">
-            <div ref={formwRef} className="flex-1 flex flex-col">
-              <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-secondary-base flex-wrap">
-                <Typography.Text bold size="lg">
-                  CEX On-Ramp
-                </Typography.Text>
-                <RiInformation2Line className="w-6 h-6 text-primary" />
-              </div>
+            <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-secondary-base flex-wrap">
+              <Typography.Text bold size="lg">
+                CEX On-Ramp
+              </Typography.Text>
+              <RiInformation2Line className="w-6 h-6 text-primary" />
             </div>
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-1 flex-col items-center justify-center">
               <div id="cede-widget" />
             </div>
             <Help ref={helpRef} />
