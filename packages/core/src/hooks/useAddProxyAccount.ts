@@ -15,11 +15,11 @@ import {
 } from "@orderbook/core/helpers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { MutateHookProps } from "@orderbook/core/hooks/types";
+import { KeyringPair$Json } from "@polkadot/keyring/types";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { NOTIFICATIONS, QUERY_KEYS } from "../constants";
 import { useSettingsProvider } from "../providers/public/settings";
-import { GoogleDrive } from "../providers/user/connectWalletProvider";
 
 import { handleTransaction } from "./../helpers/signAndSendExtrinsic";
 const { googleDriveStore } = enabledFeatures;
@@ -36,12 +36,14 @@ export type AddProxyAccountArgs = {
 interface UseAddProxyAccount extends MutateHookProps {
   onSetTempMnemonic: (value: string) => void;
   onRefetchGoogleDriveAccounts: UseQueryResult["refetch"];
+  onAddAccountFromJson: (json: KeyringPair$Json) => void;
 }
 export function useAddProxyAccount({
   onSetTempMnemonic,
   onSuccess,
   onError,
   onRefetchGoogleDriveAccounts,
+  onAddAccountFromJson,
 }: UseAddProxyAccount) {
   const queryClient = useQueryClient();
   const { api } = useNativeApi();
@@ -96,7 +98,7 @@ export function useAddProxyAccount({
       const { pair } = wallet.addFromMnemonic(mnemonic, name, password);
       if (importType === "GDrive" && googleDriveStore) {
         const jsonAccount = pair.toJson(password);
-        await GoogleDrive.addFromJson(jsonAccount);
+        await onAddAccountFromJson(jsonAccount);
         await onRefetchGoogleDriveAccounts();
       }
 

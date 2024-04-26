@@ -5,8 +5,8 @@ import {
   useExtensionAccounts,
   useUserAccounts,
 } from "@polkadex/react-providers";
+import { KeyringPair$Json, KeyringPair } from "@polkadot/keyring/types";
 import FileSaver from "file-saver";
-import { KeyringPair } from "@polkadot/keyring/types";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import {
   PropsWithChildren,
@@ -57,11 +57,6 @@ export type ExportTradeAccountProps = {
   account: KeyringPair;
   password?: string;
 };
-
-export const GoogleDrive = new GDriveExternalAccountStore(
-  defaultConfig.googleApiKey,
-  defaultConfig.googleClientId
-);
 
 type ConnectWalletState = {
   // active extension account
@@ -143,7 +138,6 @@ type ConnectWalletState = {
 
   gDriveReady: boolean;
   isStoreInGoogleDrive: (e: string) => boolean;
-  onRemoveTempGoogleAccount: (e: string) => void;
   attentionAccounts: KeyringPair[];
   googleDriveAccounts: KeyringPair[];
 };
@@ -153,9 +147,15 @@ export const ConnectWalletProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [tempGoogleAccounts, setTempGoogleAccounts] = useState<KeyringPair[]>(
+  const GoogleDrive = useMemo(
+    () =>
+      new GDriveExternalAccountStore(
+        defaultConfig.googleApiKey,
+        defaultConfig.googleClientId
+      ),
     []
   );
+
   const [gDriveReady, setGDriveReady] = useState(false);
   const [tempMnemonic, setTempMnemonic] = useState<string>("");
   const [tempTrading, setTempTrading] = useState<KeyringPair>();
@@ -377,6 +377,11 @@ export const ConnectWalletProvider = ({
       },
     });
 
+  const onAddAccountFromJson = useCallback(
+    (json: KeyringPair$Json) => GoogleDrive.addFromJson(json),
+    [GoogleDrive]
+  );
+
   const {
     error: registerError,
     mutateAsync: onRegisterTradeAccount,
@@ -386,6 +391,7 @@ export const ConnectWalletProvider = ({
     onSuccess: (msg) => msg && onHandleAlert(msg),
     onSetTempMnemonic,
     onRefetchGoogleDriveAccounts,
+    onAddAccountFromJson,
   });
   const {
     mutateAsync: onRemoveGoogleDrive,
@@ -466,18 +472,11 @@ export const ConnectWalletProvider = ({
     [googleDriveAccounts, localTradingAccounts]
   );
 
-  const onRemoveTempGoogleAccount = useCallback(
-    (e: string) =>
-      setTempGoogleAccounts((prev) => prev.filter((a) => a.address !== e)),
-    []
-  );
-
   const {
     mutateAsync: onImportFromGoogle,
     isLoading: importFromGoogleLoading,
     isSuccess: importFromGoogleSuccess,
   } = useImportGoogleAccount({
-    onRemoveTempGoogleAccount,
     onRefetchGoogleDriveAccounts,
   });
 
@@ -553,7 +552,6 @@ export const ConnectWalletProvider = ({
 
         gDriveReady,
         isStoreInGoogleDrive,
-        onRemoveTempGoogleAccount,
         attentionAccounts,
 
         onImportFromGoogle,
@@ -619,7 +617,6 @@ export const Context = createContext<ConnectWalletState>({
   removeGoogleDriveSuccess: false,
   gDriveReady: false,
   isStoreInGoogleDrive: () => false,
-  onRemoveTempGoogleAccount: () => {},
   attentionAccounts: [],
   onImportFromGoogle: async () => {},
   importFromGoogleLoading: true,
