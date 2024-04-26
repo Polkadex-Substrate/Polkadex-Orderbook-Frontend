@@ -63,6 +63,7 @@ const TriggerCompontent = ({ onClose }: { onClose: () => void }) => {
       onExportBrowserAccount={(account) => onExportTradeAccount({ account })}
       onExportBrowserAccountCallback={() => setPage("UnlockBrowserAccount")}
       onImportMnemonic={() => setPage("ImportTradingAccountMnemonic")}
+      onExportGoogleCallback={() => setPage("ExportGoogleDriveAccount")}
       enabledExtensionAccount
       backupGDriveAccountLoading={backupGoogleDriveLoading}
       onBackupGDriveAccount={(account) => onBackupGoogleDrive({ account })}
@@ -90,8 +91,10 @@ const CardsCompontent = ({ onClose }: { onClose: () => void }) => {
     onImportFromMnemonic,
     onRemoveGoogleDrive,
     removeGoogleDriveLoading,
+    onBackupGoogleDrive,
+    backupGoogleDriveLoading,
   } = useConnectWalletProvider();
-  const { onReset } = useInteractableProvider();
+  const { onReset, setPage } = useInteractableProvider();
   const availableOnDevice = useMemo(
     () =>
       localTradingAccounts?.some(
@@ -149,6 +152,17 @@ const CardsCompontent = ({ onClose }: { onClose: () => void }) => {
           availableOnDevice={availableOnDevice}
           enabledExtensionAccount={!selectedWallet}
           loading={removeGoogleDriveLoading}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="ExportGoogleDriveAccount">
+        <UnlockAccount
+          tempBrowserAccount={tempTrading}
+          onClose={() => setPage("ConnectTradingAccount")}
+          onAction={async (account, password) =>
+            await onBackupGoogleDrive({ account, password })
+          }
+          onResetTempBrowserAccount={onResetTempTrading}
+          loading={backupGoogleDriveLoading}
         />
       </Interactable.Card>
     </Fragment>

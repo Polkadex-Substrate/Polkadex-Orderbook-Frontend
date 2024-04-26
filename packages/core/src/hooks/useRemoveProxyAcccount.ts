@@ -9,6 +9,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { handleTransaction, removeFromStorage } from "@orderbook/core/helpers";
 import { ACTIVE_ACCOUNT_KEY } from "@orderbook/core/providers/user/profile/constants";
+import { KeyringPair } from "@polkadot/keyring/types";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { NOTIFICATIONS, QUERY_KEYS } from "../constants";
@@ -22,11 +23,17 @@ export type RemoveProxyAccountArgs = {
 
 interface RemoveProxyAccount extends MutateHookProps {
   onRemoveGoogleDrive: (value: string) => Promise<void>;
+  googleDriveAccounts: KeyringPair[];
 }
-export function useRemoveProxyAccount(props: RemoveProxyAccount) {
+export function useRemoveProxyAccount({
+  onRemoveGoogleDrive,
+  googleDriveAccounts,
+  onError,
+  onSuccess,
+}: RemoveProxyAccount) {
   const queryClient = useQueryClient();
   const { api } = useNativeApi();
-  const { wallet } = useUserAccounts();
+  const { wallet, localAddresses } = useUserAccounts();
   const { selectedAddresses, onUserLogout } = useProfile();
   const { onPushNotification } = useSettingsProvider();
   const { addToTxQueue } = useTransactionManager();
@@ -71,15 +78,16 @@ export function useRemoveProxyAccount(props: RemoveProxyAccount) {
         onUserLogout();
         removeFromStorage(ACTIVE_ACCOUNT_KEY);
       }
-      await props.onRemoveGoogleDrive(proxy);
-      wallet.remove(proxy);
+      const isGDriveStored = googleDriveAccounts?.some((e) =>
+        e.address.includes(proxy)
+      );
+      const isLocalStored = localAddresses.includes(proxy);
+      if (isGDriveStored) await onRemoveGoogleDrive(proxy);
+      if (isLocalStored) wallet.remove(proxy);
     },
-    onError: (error) => {
-      props?.onError?.(error as Error);
-      console.log(error);
-    },
+    onError: (error) => onError?.(error as Error),
     onSuccess: () => {
-      props?.onSuccess?.("Trading account removed from blockchain");
+      onSuccess?.("Trading account removed from blockchain");
       onPushNotification(NOTIFICATIONS.removeTradingAccount());
     },
   });

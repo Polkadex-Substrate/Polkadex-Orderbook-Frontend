@@ -12,10 +12,11 @@ import {
 import classNames from "classnames";
 import { useExtensionAccounts } from "@polkadex/react-providers";
 import { useExtensionAccountFromBrowserAccount } from "@orderbook/core/hooks";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 export const TradingAccountCard = ({
-  name,
-  address,
+  account,
   external,
   onSelect,
   onRemove,
@@ -23,8 +24,7 @@ export const TradingAccountCard = ({
   onBackupGDrive,
   enabledExtensionAccount = false,
 }: {
-  name: string;
-  address: string;
+  account: TradeAccount;
   external?: boolean;
   onSelect?: (e: MouseEvent<HTMLElement>) => void;
   onRemove?: (e: MouseEvent<HTMLDivElement>) => void;
@@ -32,6 +32,10 @@ export const TradingAccountCard = ({
   onBackupGDrive?: (e: MouseEvent<HTMLDivElement>) => void;
   enabledExtensionAccount?: boolean;
 }) => {
+  const {
+    address,
+    meta: { name },
+  } = account;
   const [open, setOpen] = useState(false);
   const shortAddress = truncateString(address);
   const hasRemove = typeof onRemove === "function";
@@ -48,6 +52,7 @@ export const TradingAccountCard = ({
     enabledExtensionAccount
   );
 
+  const { onBackupGoogleDrive } = useConnectWalletProvider();
   const extensionAccounName = extensionAccounts?.find(
     (value) => value.address === data
   )?.name;
@@ -113,11 +118,21 @@ export const TradingAccountCard = ({
                   Export as JSON
                 </Dropdown.Item>
               )}
-              {onBackupGDrive && !external && (
+              {!external && (
                 <Dropdown.Item
-                  onClick={(e) => {
-                    onBackupGDrive(e);
-                    setOpen(false);
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (account?.isLocked) {
+                      try {
+                        account.unlock("");
+                        await onBackupGoogleDrive({ account, password: "" });
+                        setOpen(false);
+                      } catch (error) {
+                        onBackupGDrive?.(e);
+                        setOpen(false);
+                      }
+                    }
                   }}
                 >
                   Backup in Google Drive

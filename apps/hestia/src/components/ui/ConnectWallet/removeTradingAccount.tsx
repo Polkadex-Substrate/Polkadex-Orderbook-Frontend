@@ -28,7 +28,7 @@ export const RemoveTradingAccount = ({
 }: {
   tradingAccount: TradeAccount;
   fundWallet?: ExtensionAccount;
-  onRemoveFromDevice: (e: string) => void;
+  onRemoveFromDevice: (e: string) => Promise<void>;
   onRemoveGoogleDrive: (e: string) => Promise<void>;
   onRemoveFromChain?: (props: RemoveProps) => Promise<void>;
   onCancel: (e: MouseEvent<HTMLButtonElement>) => void;
@@ -129,12 +129,14 @@ export const RemoveTradingAccount = ({
                 Don&apos;t worry your funds are safe in your funding account.
               </Typography.Paragraph>
             </div>
-            <TradingAccountCard
-              address={tradingAccount?.address ?? ""}
-              name={tradingAccount?.meta?.name as string}
-              external={externalStored}
-              enabledExtensionAccount={enabledExtensionAccount}
-            />
+            {tradingAccount && (
+              <TradingAccountCard
+                account={tradingAccount}
+                external={externalStored}
+                enabledExtensionAccount={enabledExtensionAccount}
+              />
+            )}
+
             <div className="flex flex-col gap-2">
               <GenericSelectCard
                 title="Remove from Google Drive"
@@ -190,8 +192,10 @@ export const RemoveTradingAccount = ({
               if (state.removeBlockchain) {
                 onOpenFeeModal();
                 return;
-              } else if (state.removeGoogleDrive) {
+              }
+              if (state.removeGoogleDrive) {
                 await handleRemoveFromGoogle(e);
+                if (state.removeDevice) handleRemoveFromDevice(e);
                 return;
               }
               handleRemoveFromDevice(e);

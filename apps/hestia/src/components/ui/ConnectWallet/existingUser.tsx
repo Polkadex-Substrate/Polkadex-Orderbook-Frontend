@@ -78,8 +78,7 @@ export const ExistingUser = ({
                   return (
                     <TradingAccountCard
                       key={i}
-                      address={value.address}
-                      name={value.meta.name as string}
+                      account={value}
                       external={externalStored}
                       onSelect={(e) => {
                         e.preventDefault();

@@ -11,7 +11,7 @@ export const Unlock = ({
   tempBrowserAccount,
   onAction,
 }: {
-  onAction: (account: KeyringPair, password?: string) => void;
+  onAction: (account: KeyringPair, password: string) => void | Promise<void>;
   tempBrowserAccount?: KeyringPair;
 }) => {
   const [error, setError] = useState("");
@@ -33,7 +33,7 @@ export const Unlock = ({
         const pass = password?.replace(/\s+/g, "");
         tempBrowserAccount?.unlock(pass);
         if (tempBrowserAccount) {
-          onAction(tempBrowserAccount, pass);
+          await onAction(tempBrowserAccount, pass);
         }
       } catch (error) {
         setError("Invalid Password");

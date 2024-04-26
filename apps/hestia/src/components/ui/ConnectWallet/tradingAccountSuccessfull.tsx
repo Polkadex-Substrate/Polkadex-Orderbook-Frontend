@@ -57,11 +57,12 @@ export const TradingAccountSuccessfull = ({
             Trading account details
           </Typography.Text>
           <div className="flex flex-col gap-2">
-            <TradingAccountCard
-              address={tradingAccount?.address || ""}
-              name={tradingAccount?.meta.name || ""}
-              external={externalStored}
-            />
+            {tradingAccount && (
+              <TradingAccountCard
+                account={tradingAccount}
+                external={externalStored}
+              />
+            )}
             <GenericHorizontalCard title="Download file" icon="Download">
               <Dropdown open={open} onOpenChange={setOpen}>
                 <Dropdown.Trigger

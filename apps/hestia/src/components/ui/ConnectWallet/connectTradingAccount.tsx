@@ -7,13 +7,17 @@ import {
   Typography,
 } from "@polkadex/ux";
 import { KeyringPair } from "@polkadot/keyring/types";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useMemo } from "react";
 import classNames from "classnames";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { enabledFeatures } from "@orderbook/core/helpers";
 
-import { TradingAccountCard, GenericHorizontalCard } from "../ReadyToUse";
+import {
+  TradingAccountCard,
+  GenericHorizontalCard,
+  AttentionAccountCard,
+} from "../ReadyToUse";
 const { googleDriveStore } = enabledFeatures;
 
 export const ConnectTradingAccount = ({
@@ -33,6 +37,7 @@ export const ConnectTradingAccount = ({
   enabledExtensionAccount = false,
   connectGDriveLoading,
   gDriveReady,
+  onExportGoogleCallback,
   children,
 }: PropsWithChildren<{
   accounts?: TradeAccount[];
@@ -43,6 +48,7 @@ export const ConnectTradingAccount = ({
   onTempBrowserAccount: (e: TradeAccount) => void;
   onSelectCallback: () => void;
   onRemoveCallback: () => void;
+  onExportGoogleCallback: () => void;
   onExportBrowserAccountCallback: () => void;
   onExportBrowserAccount: (account: KeyringPair) => void;
   onBackupGDriveAccount: (account: KeyringPair) => Promise<void>;
@@ -52,7 +58,13 @@ export const ConnectTradingAccount = ({
   connectGDriveLoading?: boolean;
   gDriveReady?: boolean;
 }>) => {
-  const { isStoreInGoogleDrive } = useConnectWalletProvider();
+  const { isStoreInGoogleDrive, attentionAccounts } =
+    useConnectWalletProvider();
+
+  const tradingAccounts = useMemo(
+    () => accounts?.length + attentionAccounts.length,
+    [accounts?.length, attentionAccounts.length]
+  );
   return (
     <Loading.Spinner active={backupGDriveAccountLoading}>
       <Interaction className="w-full md:min-w-[24rem] md:max-w-[24rem]">
@@ -61,7 +73,7 @@ export const ConnectTradingAccount = ({
         </Interaction.Title>
         <Interaction.Content withPadding={false}>
           <div className="flex flex-col gap-6">
-            {accounts.length ? (
+            {tradingAccounts ? (
               <div className="flex flex-col gap-3">
                 <Typography.Text
                   appearance="secondary"
@@ -73,20 +85,22 @@ export const ConnectTradingAccount = ({
                 <div
                   className={classNames(
                     "flex flex-col gap-3 max-h-[10rem] px-7",
-                    accounts?.length > 1 &&
+                    tradingAccounts > 1 &&
                       "border-b border-primary overflow-hidden hover:overflow-auto pb-7 scrollbar-hide"
                   )}
                 >
                   {connectGDriveLoading && (
                     <Skeleton loading className="min-h-14 rounded-sm" />
                   )}
+                  {attentionAccounts?.map((e) => (
+                    <AttentionAccountCard key={e.address} account={e} />
+                  ))}
                   {accounts?.map((value, i) => {
                     const externalStored = isStoreInGoogleDrive(value.address);
                     return (
                       <TradingAccountCard
                         key={i}
-                        address={value.address}
-                        name={value.meta.name as string}
+                        account={value}
                         enabledExtensionAccount={enabledExtensionAccount}
                         external={externalStored}
                         onRemove={(e) => {
@@ -115,6 +129,11 @@ export const ConnectTradingAccount = ({
                         onBackupGDrive={async (e) => {
                           e.preventDefault();
                           e.stopPropagation();
+                          if (value?.isLocked) {
+                            onTempBrowserAccount(value);
+                            onExportGoogleCallback();
+                            return;
+                          }
                           await onBackupGDriveAccount(value);
                         }}
                       />

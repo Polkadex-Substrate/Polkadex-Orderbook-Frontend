@@ -182,11 +182,23 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
           }
           onExportBrowserAccountCallback={() => setPage("UnlockBrowserAccount")}
           onImportMnemonic={() => setPage("ImportTradingAccountMnemonic")}
+          onExportGoogleCallback={() => setPage("ExportGoogleDriveAccount")}
           backupGDriveAccountLoading={backupGoogleDriveLoading}
           onBackupGDriveAccount={(account) => onBackupGoogleDrive({ account })}
           onConnectGDrive={onConnectGoogleDrive}
           connectGDriveLoading={connectGoogleDriveLoading}
           gDriveReady={gDriveReady}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="ExportGoogleDriveAccount">
+        <UnlockAccount
+          tempBrowserAccount={tempTrading}
+          onClose={() => setPage("ConnectTradingAccount")}
+          onAction={async (account, password) =>
+            await onBackupGoogleDrive({ account, password })
+          }
+          onResetTempBrowserAccount={onResetTempTrading}
+          loading={backupGoogleDriveLoading}
         />
       </Interactable.Card>
       <Interactable.Card pageName="UnlockBrowserAccount">

@@ -219,6 +219,16 @@ export const Content = () => {
               }
               onResetTempBrowserAccount={onResetTempTrading}
             />
+            <UnlockAccount
+              key="ExportGoogleDriveAccount"
+              tempBrowserAccount={tempTrading}
+              onClose={() => props?.onPage("ConnectTradingAccount")}
+              onAction={async (account, password) =>
+                await onBackupGoogleDrive({ account, password })
+              }
+              onResetTempBrowserAccount={onResetTempTrading}
+              loading={backupGoogleDriveLoading}
+            />
             <ConnectTradingAccount
               key="ConnectTradingAccount"
               accounts={filteredAccounts}
@@ -236,6 +246,9 @@ export const Content = () => {
               }
               onImportMnemonic={() =>
                 props?.onPage("ImportTradingAccountMnemonic")
+              }
+              onExportGoogleCallback={() =>
+                props?.onPage("ExportGoogleDriveAccount")
               }
               backupGDriveAccountLoading={backupGoogleDriveLoading}
               onBackupGDriveAccount={(account) =>
