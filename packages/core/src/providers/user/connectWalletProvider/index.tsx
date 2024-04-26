@@ -354,6 +354,7 @@ export const ConnectWalletProvider = ({
     refetchOnWindowFocus: false,
     retry: false,
     initialData: undefined,
+    queryKey: [QUERY_KEYS.googleSession()],
     queryFn: async () => {
       if (!gDriveReady) {
         await GoogleDrive.init();
