@@ -7,15 +7,17 @@ import { RiInformation2Line } from "@remixicon/react";
 import { Fragment, useEffect, useMemo, useRef } from "react";
 import { useResizeObserver, useWindowSize } from "usehooks-ts";
 
-import { Help } from "../transfer/Help";
-import { SelectAsset } from "../transfer/SelectAsset";
+import { themeConfig } from "../../../../../themeConfig";
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 import { QuickStart } from "../ui/Footer/QuickStart";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
-import { themeConfig } from "../../../../../themeConfig";
+
+import { Help } from "./Help";
 
 import { Footer, Header } from "@/components/ui";
-import { useTour, useTransfer } from "@/hooks";
+import { useTour } from "@/hooks";
+
+const extend = themeConfig.theme.extend;
 
 export function Template() {
   const { width } = useWindowSize();
@@ -37,13 +39,6 @@ export function Template() {
     box: "border-box",
   });
 
-  const {
-    onChangeAsset,
-    selectedAsset,
-    assetsInteraction,
-    onAssetsInteraction,
-  } = useTransfer();
-
   const { selectedWallet, browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
@@ -51,10 +46,10 @@ export function Template() {
     renderSendWidget("#cede-widget", {
       theme: {
         borderRadius: -15,
-        borderColor: themeConfig.theme.extend.colors["secondary-base"],
-        inputBorderColor: themeConfig.theme.extend.colors["secondary-base"],
-        logoBorderColor: themeConfig.theme.extend.colors["primary-base"],
-        accentColor: themeConfig.theme.extend.colors["primary-base"],
+        borderColor: extend.colors["secondary-base"],
+        inputBorderColor: extend.colors["secondary-base"],
+        logoBorderColor: extend.colors["primary-base"],
+        accentColor: extend.colors["primary-base"],
       },
       config: {
         tokenSymbol: "PDEX",
@@ -70,12 +65,6 @@ export function Template() {
     <Fragment>
       <QuickStart open={open} onOpenChange={onClose} />
       <ConnectTradingInteraction />
-      <SelectAsset
-        open={assetsInteraction}
-        onOpenChange={() => onAssetsInteraction()}
-        selectedAssetId={selectedAsset?.id}
-        onChangeAsset={onChangeAsset}
-      />
       <div
         className="flex flex-1 flex-col bg-backgroundBase h-full"
         vaul-drawer-wrapper=""
