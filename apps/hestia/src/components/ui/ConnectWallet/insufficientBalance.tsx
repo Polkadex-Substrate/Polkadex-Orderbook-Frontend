@@ -1,21 +1,24 @@
 import {
   Accordion,
   Typography,
-  Illustrations,
   Interaction,
   Dropdown,
   Token,
   TokenAppearance,
   HoverCard,
   Separator,
+  Skeleton,
 } from "@polkadex/ux";
 import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
 import { useState } from "react";
-import { getChainFromTicker, useAssets } from "@orderbook/core/index";
+import { getChainFromTicker } from "@orderbook/core/index";
 import Link from "next/link";
+import classNames from "classnames";
 
 import { GenericInfoCard, GenericExternalCard } from "../ReadyToUse";
 import { Icons } from "..";
+
+import { useQueryPools } from "@/hooks";
 
 export const InsufficientBalance = ({
   onClose,
@@ -27,14 +30,18 @@ export const InsufficientBalance = ({
   onClose: () => void;
 }) => {
   const [open, setOpen] = useState(false);
-  const { assets } = useAssets();
+
+  const { pools, poolsSuccess } = useQueryPools();
 
   return (
     <Interaction className="w-full gap-3">
       <Interaction.Content className="flex flex-col gap-4 flex-1">
         <div className="flex flex-col gap-5 border-b border-primary">
           <div className="flex flex-col gap-2 items-center text-center">
-            <Illustrations.Error className="max-w-[4rem] w-full" />
+            <Icons.PdexToken className="max-w-[4rem] w-full" />
+            <Typography.Heading size="lg">
+              The CEXier DEX runs on PDEX
+            </Typography.Heading>
             <Typography.Text appearance="primary">
               You need some PDEX to cover the existential deposit and the small
               transaction fee to create your trading account.
@@ -58,13 +65,13 @@ export const InsufficientBalance = ({
             </Accordion.Trigger>
             <Accordion.Content>
               <div className="flex flex-col gap-2">
-                <div className="group flex flex-col gap-1 rounded-md py-2 border border-primary hover:bg-level-1 duration-300 transition-colors cursor-pointer">
+                <div className="group flex flex-col gap-1 rounded-md py-2 border border-primary-base hover:bg-level-1 duration-300 transition-colors cursor-pointer">
                   <div className="flex items-center gap-3 px-3">
                     <div className="grid place-content-center w-7 h-7 rounded-md bg-level-1">
                       <Icons.Bridge className="w-4 h-4 text-primary" />
                     </div>
                     <Typography.Text className="group-hover:text-current duration-300 transition-colors">
-                      Decentralized bridge
+                      THEA - Decentralized bridge
                     </Typography.Text>
                   </div>
                   <Separator.Horizontal />
@@ -74,37 +81,52 @@ export const InsufficientBalance = ({
                       size="xs"
                       className="self-center"
                     >
-                      Activate your account using:
+                      Activate your account with a transfer of:
                     </Typography.Text>
-                    <div className="flex flex-items gap-1 overflow-hidden hover:overflow-auto hover:pb-2">
-                      {assets?.map((asset) => {
-                        const chainName = getChainFromTicker(asset.ticker);
-                        if (asset.isEvm || asset.id === "PDEX") return null;
-                        return (
-                          <HoverCard key={asset.id}>
-                            <HoverCard.Trigger asChild>
-                              <Link
-                                href={`https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`}
-                                target="_blank"
-                                className="flex flex-col items-center gap-1 px-3 pt-2 pb-1 hover:bg-level-3 rounded-sm duration-200 transition-colors"
-                              >
-                                <Token
-                                  name={asset.ticker}
-                                  appearance={asset.ticker as TokenAppearance}
-                                  size="xs"
-                                  className="rounded-full border border-secondary"
-                                />
-                                <Typography.Text appearance="primary" size="xs">
-                                  {asset.ticker}
-                                </Typography.Text>
-                              </Link>
-                            </HoverCard.Trigger>
-                            <HoverCard.Content side="top">
-                              {chainName}
-                            </HoverCard.Content>
-                          </HoverCard>
-                        );
-                      })}
+                    <div className="flex flex-items gap-1">
+                      {!poolsSuccess ? (
+                        <>
+                          <Skeleton loading className="h-12 mt-2" />
+                        </>
+                      ) : (
+                        pools?.map((asset) => {
+                          const chainName = getChainFromTicker(
+                            asset.ticker ?? ""
+                          );
+                          const active = asset.reserve;
+                          return (
+                            <HoverCard key={asset.id}>
+                              <HoverCard.Trigger asChild>
+                                <Link
+                                  href={`https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`}
+                                  target="_blank"
+                                  className={classNames(
+                                    !active &&
+                                      "pointer-events-none grayscale opacity-30",
+                                    "flex flex-col items-center gap-1 px-3 pt-2 pb-1 hover:bg-level-3 rounded-sm duration-200 transition-colors"
+                                  )}
+                                >
+                                  <Token
+                                    name={asset.ticker ?? ""}
+                                    appearance={asset.ticker as TokenAppearance}
+                                    size="xs"
+                                    className="rounded-full border border-secondary"
+                                  />
+                                  <Typography.Text
+                                    appearance="primary"
+                                    size="xs"
+                                  >
+                                    {asset.ticker}
+                                  </Typography.Text>
+                                </Link>
+                              </HoverCard.Trigger>
+                              <HoverCard.Content side="top">
+                                {chainName}
+                              </HoverCard.Content>
+                            </HoverCard>
+                          );
+                        })
+                      )}
                     </div>
                   </div>
                 </div>
