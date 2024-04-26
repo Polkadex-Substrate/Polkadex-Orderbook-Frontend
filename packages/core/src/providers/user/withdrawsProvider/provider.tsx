@@ -68,7 +68,7 @@ export const WithdrawsProvider: T.WithdrawsComponent = ({ children }) => {
             amount,
             nonce
           );
-          const signature = signPayload(api, keyringPair, signingPayload);
+          const signature = signPayload(keyringPair, signingPayload);
           const res = await executeWithdraw(
             [mainAddress, tradeAddress, payload, signature],
             tradeAddress

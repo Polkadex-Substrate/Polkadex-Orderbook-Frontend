@@ -45,7 +45,7 @@ export const useWithdraw = () => {
         amount,
         nonce
       );
-      const signature = signPayload(api, keyringPair, signingPayload);
+      const signature = signPayload(keyringPair, signingPayload);
 
       await appsyncOrderbookService.operation.withdraw({
         address: tradeAddress,
