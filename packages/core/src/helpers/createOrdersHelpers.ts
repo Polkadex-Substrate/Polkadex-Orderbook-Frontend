@@ -61,7 +61,9 @@ export const createOrderSigningPayload = (
 ): Codec | object => {
   const codec = api.createType("OrderPayload", order);
   if (isSignedByExtension) {
-    const payload = codec.toJSON() as any;
+    const payload = codec.toJSON() as unknown as ReturnType<
+      typeof createOrderPayload
+    >;
     payload.main_account = encodeAddress(
       payload.main_account,
       SS58_DEFAULT_FORMAT
