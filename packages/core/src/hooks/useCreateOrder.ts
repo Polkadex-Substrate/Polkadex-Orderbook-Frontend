@@ -1,13 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
-import { useUserAccounts } from "@polkadex/react-providers";
+import {
+  useExtensionAccounts,
+  useUserAccounts,
+} from "@polkadex/react-providers";
 import {
   createOrderPayload,
+  createOrderSigningPayload,
   formatNumber,
-  getNewClientId,
-  getNonce,
   isValidAddress,
   signPayload,
 } from "@orderbook/core/helpers";
+import { Codec } from "@polkadot/types/types";
 
 import {
   OrderSide,
@@ -37,6 +40,7 @@ export const useCreateOrder = () => {
     selectedAddresses: { mainAddress, tradeAddress },
   } = useProfile();
   const { api } = useNativeApi();
+  const { extensionAccounts } = useExtensionAccounts();
 
   return useMutation({
     mutationFn: async (args: CreateOrderArgs) => {
@@ -47,26 +51,42 @@ export const useCreateOrder = () => {
       const keyringPair = wallet.getPair(tradeAddress);
       if (!isValidAddress(tradeAddress) || !keyringPair)
         throw new Error("Invalid Trading Account");
-
-      const timestamp = getNonce();
-      const clientOrderId = getNewClientId();
-      const order = createOrderPayload(
-        api,
+      const order = createOrderPayload({
         tradeAddress,
-        orderType,
+        type: orderType,
         side,
-        symbol[0],
-        symbol[1],
-        formatNumber(String(amount)),
-        formatNumber(price),
-        timestamp,
-        clientOrderId,
-        mainAddress
+        baseAsset: symbol[0],
+        quoteAsset: symbol[1],
+        quantity: formatNumber(String(amount)),
+        price: formatNumber(price),
+        mainAddress,
+      });
+
+      // check if the order needs to be signed by the extension
+      const isSignedByExtension = tradeAddress === mainAddress;
+      const signingPayload = createOrderSigningPayload(
+        order,
+        api,
+        isSignedByExtension
       );
-
-      const signature = signPayload(api, keyringPair, order);
-      const payload = JSON.stringify({ PlaceOrder: [order, signature] });
-
+      let signature: { Sr25519: string };
+      if (isSignedByExtension) {
+        const account = extensionAccounts.find(
+          (account) => account.address === order.main_account
+        );
+        const signer = account?.signer;
+        if (!signer) throw new Error("MainAccount signer found");
+        const result = await signer.signRaw({
+          address: mainAddress,
+          data: JSON.stringify(signingPayload),
+        });
+        signature = { Sr25519: result.signature.slice(2) };
+      } else {
+        signature = signPayload(keyringPair, signingPayload as Codec);
+      }
+      const payload = JSON.stringify({
+        PlaceOrder: [signingPayload, signature],
+      });
       await appsyncOrderbookService.operation.placeOrder({
         payload,
         token: tradeAddress,
