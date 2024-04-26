@@ -220,9 +220,9 @@ export const NewTradingAccount = ({
                         title="Google Drive"
                         icon="GoogleDrive"
                         onSelect={async () => {
-                          if (!googleDriveStore || gDriveReady) return;
-                          await onConnectGDrive();
-                          setActive("GDrive");
+                          if (!googleDriveStore) return;
+                          if (!gDriveReady) await onConnectGDrive();
+                          setActive(active === "GDrive" ? "Local" : "GDrive");
                         }}
                         checked={active === "GDrive"}
                         loading={connectGDriveLoading}
