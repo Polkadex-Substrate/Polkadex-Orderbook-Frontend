@@ -4,10 +4,14 @@ import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
   createWithdrawSigningPayload,
-  getNonce,
   signPayload,
 } from "@orderbook/core/helpers";
-import { useUserAccounts } from "@polkadex/react-providers";
+import {
+  useExtensionAccounts,
+  useUserAccounts,
+} from "@polkadex/react-providers";
+import { KeyringPair } from "@polkadot/keyring/types";
+import { Codec } from "@polkadot/types/types";
 
 import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 import { appsyncOrderbookService } from "../utils/orderbookService";
@@ -25,6 +29,11 @@ export const useWithdraw = () => {
   const { onHandleAlert, onHandleError } = useSettingsProvider();
   const { wallet } = useUserAccounts();
   const { isReady } = useOrderbookService();
+  const { extensionAccounts } = useExtensionAccounts();
+
+  const mainAccountSigner = extensionAccounts.find(
+    (account) => account.address === mainAddress
+  )?.signer;
 
   const { mutateAsync, status } = useMutation({
     mutationFn: async ({ asset, amount }: WithdrawArgs) => {
@@ -34,22 +43,39 @@ export const useWithdraw = () => {
         throw new Error("You are not connected to blockchain");
 
       const keyringPair = wallet.getPair(tradeAddress);
-      if (tradeAddress?.trim().length === 0 || !keyringPair)
+      const isTradingAccountPresent =
+        tradeAddress?.trim().length === 0 || !keyringPair;
+      if (!mainAccountSigner && isTradingAccountPresent)
         throw new Error("Invalid Trading Account");
 
-      const nonce = getNonce();
-      const payload = { asset_id: { asset }, amount, timestamp: nonce };
-      const signingPayload = createWithdrawSigningPayload(
-        api,
-        asset,
-        amount,
-        nonce
-      );
-      const signature = signPayload(keyringPair, signingPayload);
+      const isSignedByExtension = !isTradingAccountPresent;
+      const payload = { asset_id: { asset }, amount };
 
+      const signingPayload = createWithdrawSigningPayload(
+        {
+          asset,
+          amount,
+        },
+        api,
+        isSignedByExtension
+      );
+      let signature: { Sr25519: string };
+      if (isSignedByExtension) {
+        const result = await mainAccountSigner.signRaw({
+          data: JSON.stringify(signingPayload),
+          address: mainAddress,
+        });
+        signature = { Sr25519: result.signature.slice(2) };
+      } else {
+        signature = signPayload(
+          keyringPair as KeyringPair,
+          signingPayload as Codec
+        );
+      }
+      const proxy = isSignedByExtension ? mainAddress : tradeAddress;
       await appsyncOrderbookService.operation.withdraw({
-        address: tradeAddress,
-        payload: [mainAddress, tradeAddress, payload, signature],
+        address: proxy,
+        payload: [mainAddress, proxy, payload, signature],
       });
     },
     onError: (error) => {
