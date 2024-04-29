@@ -86,7 +86,7 @@ export const InsufficientBalance = ({
                     <div className="flex flex-items gap-1">
                       {!poolsSuccess ? (
                         <>
-                          <Skeleton loading className="h-10 mt-2" />
+                          <Skeleton loading className="h-12 mt-2" />
                         </>
                       ) : (
                         pools?.map((asset) => {
@@ -130,6 +130,11 @@ export const InsufficientBalance = ({
                     </div>
                   </div>
                 </div>
+                <GenericExternalCard
+                  title="CEX On-Ramp"
+                  icon="CexOnRamp"
+                  href="/cexOnRamp"
+                />
                 <GenericExternalCard
                   title="Centralized exchanges"
                   icon="CentralizedExchange"

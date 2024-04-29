@@ -13,6 +13,7 @@ export const useQueryPools = () => {
     error: poolsError,
   } = useQuery({
     queryKey: QUERY_KEYS.queryPools(),
+    enabled: !!swap && !!assets,
     queryFn: async () => {
       if (!swap || !assets) return;
       const data = await swap.queryPools();
