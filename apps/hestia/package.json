@@ -12,6 +12,7 @@
     "clear": "rm -rf .next"
   },
   "dependencies": {
+    "@cedelabs/widgets-universal": "^1.2.0",
     "@juggle/resize-observer": "^3.4.0",
     "@next/bundle-analyzer": "^14.0.1",
     "@orderbook/core": "*",

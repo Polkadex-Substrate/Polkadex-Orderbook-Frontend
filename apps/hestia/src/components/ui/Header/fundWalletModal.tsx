@@ -164,6 +164,22 @@ export const FundWalletModal = ({
           </div>
         </div>
         <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2 px-4">
+            <Typography.Text appearance="secondary">
+              I have crypto assets on CEXs
+            </Typography.Text>
+          </div>
+          <div className="flex flex-col gap-2">
+            <FundHorizontalCard
+              icon="CexOnRamp"
+              title="CEX On-Ramp"
+              description="Transfer from Kucoin or Gate.io via cede.store"
+              href="/cexOnRamp"
+              target="_blank"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col gap-3">
           <div className="px-4">
             <Typography.Text appearance="secondary">
               I don&apos;t have crypto assets yet
