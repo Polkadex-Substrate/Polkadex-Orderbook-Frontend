@@ -18,7 +18,7 @@
     "@orderbook/eslint-config": "*",
     "@orderbook/tsconfig": "*",
     "@polkadex/blockchain-api": "^1.1.61",
-    "@polkadex/local-wallets": "^2.2.0",
+    "@polkadex/local-wallets": "^2.3.0",
     "@polkadex/numericals": "^0.3.0",
     "@polkadex/polkadex-api": "^3.2.0",
     "@polkadex/react-providers": "^2.1.0",
