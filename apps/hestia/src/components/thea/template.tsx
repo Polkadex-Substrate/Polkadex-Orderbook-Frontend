@@ -12,6 +12,7 @@ import { Help } from "./Help";
 import { Form } from "./Form";
 import { History } from "./History";
 import { fakeData } from "./History/columns";
+import { Assets } from "./Assets";
 
 import { Footer, Header } from "@/components/ui";
 import { useSizeObserver, useTour } from "@/hooks";
@@ -67,7 +68,7 @@ export function Template({ id }: { id: string }) {
                 <div className="flex items-center justify-between gap-2 border-b border-primary px-4 w-full py-2">
                   <Tabs.List>
                     <Tabs.Trigger value="history">History</Tabs.Trigger>
-                    <Tabs.Trigger value="readyToClaim">Assets</Tabs.Trigger>
+                    <Tabs.Trigger value="assets">Assets</Tabs.Trigger>
                   </Tabs.List>
                   <Button.Ghost
                     appearance="secondary"
@@ -84,6 +85,9 @@ export function Template({ id }: { id: string }) {
                   <Fragment>
                     <Tabs.Content value="history" className="flex flex-col">
                       <History />
+                    </Tabs.Content>
+                    <Tabs.Content value="assets" className="flex flex-col">
+                      <Assets />
                     </Tabs.Content>
                   </Fragment>
                 ) : (
