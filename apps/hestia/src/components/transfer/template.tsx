@@ -10,7 +10,6 @@ import { useResizeObserver, useWindowSize } from "usehooks-ts";
 
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
-import { QuickStart } from "../ui/Footer/QuickStart";
 
 import { Help } from "./Help";
 import { SelectAsset } from "./SelectAsset";
@@ -29,7 +28,7 @@ export function Template() {
   const router = useRouter();
   const pathname = usePathname();
   const { width } = useWindowSize();
-  const { onOpenChange, open, onClose } = useTour();
+  const { onOpenChange } = useTour();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
@@ -106,7 +105,6 @@ export function Template() {
 
   return (
     <Fragment>
-      <QuickStart open={open} onOpenChange={onClose} />
       <ConnectTradingInteraction />
       <SelectAsset
         open={assetsInteraction}

@@ -9,7 +9,6 @@ import { useResizeObserver, useWindowSize } from "usehooks-ts";
 
 import { themeConfig } from "../../../../../themeConfig";
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
-import { QuickStart } from "../ui/Footer/QuickStart";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
 import { Help } from "./Help";
@@ -21,7 +20,7 @@ const extend = themeConfig.theme.extend;
 
 export function Template() {
   const { width } = useWindowSize();
-  const { onOpenChange, open, onClose } = useTour();
+  const { onOpenChange } = useTour();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
@@ -66,7 +65,6 @@ export function Template() {
 
   return (
     <Fragment>
-      <QuickStart open={open} onOpenChange={onClose} />
       <ConnectTradingInteraction />
       <div
         className="flex flex-1 flex-col bg-backgroundBase h-full"
