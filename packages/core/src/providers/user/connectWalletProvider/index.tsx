@@ -16,21 +16,16 @@ import {
   useMemo,
   useState,
 } from "react";
-import {
-  UseMutationResult,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query";
+import { UseMutationResult } from "@tanstack/react-query";
 import {
   GDriveExternalAccountStore,
   GOOGLE_LOCAL_STORAGE_KEY,
 } from "@polkadex/local-wallets";
 import { defaultConfig } from "@orderbook/core/config";
-import keyring from "@polkadot/ui-keyring";
 import { localStorageOrDefault } from "@polkadex/utils";
-import { enabledFeatures, sleep } from "@orderbook/core/helpers";
+import { enabledFeatures } from "@orderbook/core/helpers";
 
-import { POLKADEX_ASSET, QUERY_KEYS } from "../../../constants";
+import { POLKADEX_ASSET } from "../../../constants";
 import { transformAddress, useProfile } from "../../user/profile";
 import {
   AddProxyAccountArgs,
@@ -39,11 +34,15 @@ import {
   ImportFromMnemonic,
   RemoveProxyAccountArgs,
   useAddProxyAccount,
+  useBackupTradingAccount,
+  useConnectGoogle,
+  useGoogleTradingAccounts,
   useImportGoogleAccount,
   useImportProxyAccount,
   useImportProxyAccountMnemonic,
   useOnChainBalances,
   useProxyAccounts,
+  useRemoveGoogleTradingAccount,
   useRemoveProxyAccount,
   useSingleProxyAccount,
 } from "../../../hooks";
@@ -313,28 +312,6 @@ export const ConnectWalletProvider = ({
     () => !!mainProxiesAccounts?.length,
     [mainProxiesAccounts?.length]
   );
-  const {
-    mutateAsync: onBackupGoogleDrive,
-    isLoading: backupGoogleDriveLoading,
-    isSuccess: backupGoogleDriveSuccess,
-  } = useMutation({
-    mutationFn: async ({
-      account: tradeAccount,
-      password,
-    }: ExportTradeAccountProps) => {
-      tradeAccount.isLocked && tradeAccount.unlock(password);
-      const jsonAccount = tradeAccount.toJson(password);
-      if (!gDriveReady) {
-        await GoogleDrive.init();
-        setGDriveReady(true);
-      }
-      await GoogleDrive.addFromJson(jsonAccount);
-      await sleep(2000);
-      await onRefetchGoogleDriveAccounts();
-    },
-    onError: (error: { message: string }) =>
-      onHandleError(error?.message ?? error),
-  });
 
   const hasLocalToken = useMemo(
     () => localStorageOrDefault(GOOGLE_LOCAL_STORAGE_KEY, null, true),
@@ -346,37 +323,29 @@ export const ConnectWalletProvider = ({
     isLoading: connectGoogleDriveLoading,
     isFetching: connectGoogleDriveFetching,
     isSuccess: connectGoogleDriveSuccess,
-  } = useQuery({
-    staleTime: 100000,
+  } = useConnectGoogle({
+    GoogleDrive,
+    gDriveReady,
+    setGDriveReady,
     enabled: !!hasLocalToken && googleDriveStore,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    retry: false,
-    initialData: undefined,
-    queryKey: [QUERY_KEYS.googleSession()],
-    queryFn: async () => {
-      if (!gDriveReady) {
-        await GoogleDrive.init();
-        setGDriveReady(true);
-      }
-      return true;
-    },
   });
 
   const { data: googleDriveAccounts, refetch: onRefetchGoogleDriveAccounts } =
-    useQuery({
-      queryKey: QUERY_KEYS.googleAccounts(),
-      enabled: gDriveReady,
-      initialData: [],
-      queryFn: async () => {
-        const accounts = await GoogleDrive.getAll();
-        return accounts.map((account) => keyring.createFromJson(account));
-      },
-      onError: (error: { message: string }) => {
-        onHandleError(error?.message ?? error);
-      },
+    useGoogleTradingAccounts({
+      GoogleDrive,
+      gDriveReady,
     });
+
+  const {
+    mutateAsync: onBackupGoogleDrive,
+    isLoading: backupGoogleDriveLoading,
+    isSuccess: backupGoogleDriveSuccess,
+  } = useBackupTradingAccount({
+    GoogleDrive,
+    gDriveReady,
+    setGDriveReady,
+    onRefetchGoogleDriveAccounts,
+  });
 
   const onAddAccountFromJson = useCallback(
     (json: KeyringPair$Json) => GoogleDrive.addFromJson(json),
@@ -394,22 +363,16 @@ export const ConnectWalletProvider = ({
     onRefetchGoogleDriveAccounts,
     onAddAccountFromJson,
   });
+
   const {
     mutateAsync: onRemoveGoogleDrive,
     isLoading: removeGoogleDriveLoading,
     isSuccess: removeGoogleDriveSuccess,
-  } = useMutation({
-    mutationFn: async (value: string) => {
-      if (!gDriveReady) {
-        await GoogleDrive.init();
-        setGDriveReady(true);
-      }
-      await GoogleDrive.remove(value);
-      await sleep(2000);
-      await onRefetchGoogleDriveAccounts();
-    },
-    onError: (error: { message: string }) =>
-      onHandleError(error?.message ?? error),
+  } = useRemoveGoogleTradingAccount({
+    GoogleDrive,
+    gDriveReady,
+    setGDriveReady,
+    onRefetchGoogleDriveAccounts,
   });
 
   const localTradingAccounts = useMemo(
