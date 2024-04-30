@@ -14,13 +14,11 @@ import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 import { Help } from "./Help";
 
 import { Footer, Header } from "@/components/ui";
-import { useTour } from "@/hooks";
 
 const extend = themeConfig.theme.extend;
 
 export function Template() {
   const { width } = useWindowSize();
-  const { onOpenChange } = useTour();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
@@ -103,7 +101,7 @@ export function Template() {
             />
           </div>
         )}
-        {!mobileView && <Footer onOpenChange={onOpenChange} ref={footerRef} />}
+        {!mobileView && <Footer ref={footerRef} />}
       </div>
     </Fragment>
   );

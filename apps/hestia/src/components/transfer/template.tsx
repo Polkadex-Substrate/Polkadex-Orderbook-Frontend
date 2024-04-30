@@ -18,7 +18,7 @@ import { History } from "./History";
 import { ReadyToClaim } from "./ReadyToClaim";
 
 import { Footer, Header } from "@/components/ui";
-import { useTour, useTransfer } from "@/hooks";
+import { useTransfer } from "@/hooks";
 import { defaultConfig } from "@/config";
 
 const sleep = async (ms: number) =>
@@ -28,7 +28,6 @@ export function Template() {
   const router = useRouter();
   const pathname = usePathname();
   const { width } = useWindowSize();
-  const { onOpenChange } = useTour();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
@@ -201,7 +200,7 @@ export function Template() {
             />
           </div>
         )}
-        {!mobileView && <Footer onOpenChange={onOpenChange} ref={footerRef} />}
+        {!mobileView && <Footer ref={footerRef} />}
       </div>
     </Fragment>
   );

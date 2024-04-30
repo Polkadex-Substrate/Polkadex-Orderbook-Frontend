@@ -20,13 +20,12 @@ import { TradeHistory } from "./TradeHistory";
 import { Footer, Header } from "@/components/ui";
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ConnectAccountWrapper } from "@/components/ui/ReadyToUse";
-import { useSizeObserver, useTour } from "@/hooks";
+import { useSizeObserver } from "@/hooks";
 
 export function Template() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { width } = useWindowSize();
-  const { onOpenChange } = useTour();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
@@ -205,9 +204,7 @@ export function Template() {
               />
             </div>
           )}
-          {!mobileView && (
-            <Footer onOpenChange={onOpenChange} marketsActive ref={footerRef} />
-          )}
+          {!mobileView && <Footer marketsActive ref={footerRef} />}
         </Tabs>
       </div>
     </Fragment>

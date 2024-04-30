@@ -20,7 +20,7 @@ import { Help } from "./Help";
 import { Info } from "./info";
 
 import { Footer, Header } from "@/components/ui";
-import { useSizeObserver, useTour } from "@/hooks";
+import { useSizeObserver } from "@/hooks";
 
 export function Template() {
   const [tab, setTab] = useState("0");
@@ -70,7 +70,6 @@ export function Template() {
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
-  const { onOpenChange } = useTour();
   useEffect(() => {
     const epochsLength = epochs?.length || 0;
     if (epochs && epochs?.length > 2) {
@@ -223,7 +222,7 @@ export function Template() {
           </Fragment>
         )
       ) : (
-        <Footer onOpenChange={onOpenChange} ref={footerRef} />
+        <Footer ref={footerRef} />
       )}
     </div>
   );

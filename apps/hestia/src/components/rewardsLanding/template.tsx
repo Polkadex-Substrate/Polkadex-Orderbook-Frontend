@@ -10,14 +10,12 @@ import { Faq } from "./faq";
 import { CallToAction } from "./callToAction";
 
 import { Footer, Header } from "@/components/ui";
-import { useTour } from "@/hooks";
 
 export function Template() {
   const { width } = useWindowSize();
 
   const footerRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
-  const { onOpenChange } = useTour();
 
   const { height: footerHeight = 0 } = useResizeObserver({
     ref: footerRef,
@@ -42,9 +40,7 @@ export function Template() {
         <Faq />
         <CallToAction />
       </main>
-      {!mobileView && (
-        <Footer onOpenChange={onOpenChange} marketsActive ref={footerRef} />
-      )}
+      {!mobileView && <Footer marketsActive ref={footerRef} />}
     </div>
   );
 }

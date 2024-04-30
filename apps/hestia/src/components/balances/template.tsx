@@ -2,21 +2,19 @@
 
 import { HoverCard, Popover, Typography, Checkbox, Input } from "@polkadex/ux";
 import { useResizeObserver, useWindowSize } from "usehooks-ts";
-import { Fragment, useMemo, useRef } from "react";
-import Link from "next/link";
+import { useMemo, useRef } from "react";
 import { RiMore2Line, RiInformation2Line } from "@remixicon/react";
 import { useAssets } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
-import { QuickStart } from "../ui/Footer/QuickStart";
 
 import { Overview } from "./Overview";
 import { Table } from "./Table";
 import { Help } from "./Help";
 
 import { Footer, Header } from "@/components/ui";
-import { useSizeObserver, useTour } from "@/hooks";
+import { useSizeObserver } from "@/hooks";
 
 export function Template() {
   const headerRef = useRef<HTMLDivElement | null>(null);
@@ -26,7 +24,6 @@ export function Template() {
   const [interactionRef, interactionHeight] = useSizeObserver();
   const { width } = useWindowSize();
 
-  const { onOpenChange } = useTour();
   const { height: overviewHeight = 0 } = useResizeObserver({
     ref: overviewRef,
     box: "border-box",
@@ -85,11 +82,11 @@ export function Template() {
               />
               {width >= 680 ? (
                 <div className="flex items-center gap-4">
-                  <HoverCard>
+                  <HoverCard open={false}>
                     <HoverCard.Trigger>
-                      <Link href="/" className="text-primary-base text-sm">
+                      <Typography.Text appearance="disabled">
                         Convert small balance to PDEX
-                      </Link>
+                      </Typography.Text>
                     </HoverCard.Trigger>
                     <HoverCard.Content className="max-w-[15rem]">
                       After each trade, you might have a bit of residual balance
@@ -126,11 +123,11 @@ export function Template() {
                           Hide 0 balances
                         </Checkbox.Label>
                       </Checkbox.Solid>{" "}
-                      <HoverCard>
+                      <HoverCard open={false}>
                         <HoverCard.Trigger>
-                          <Link href="/" className="text-primary-base">
+                          <Typography.Text appearance="disabled">
                             Convert small balance to PDEX
-                          </Link>
+                          </Typography.Text>
                         </HoverCard.Trigger>
                         <HoverCard.Content className="max-w-[15rem]">
                           After each trade, you might have a bit of residual
@@ -159,9 +156,7 @@ export function Template() {
           />
         </div>
       )}
-      {!mobileView && (
-        <Footer onOpenChange={onOpenChange} marketsActive ref={footerRef} />
-      )}
+      {!mobileView && <Footer marketsActive ref={footerRef} />}
     </div>
   );
 }
