@@ -11,7 +11,6 @@ import { sleep } from "@orderbook/core/helpers";
 
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
-import { QuickStart } from "../ui/Footer/QuickStart";
 
 import { Help } from "./Help";
 import { SelectAsset } from "./SelectAsset";
@@ -20,14 +19,13 @@ import { History } from "./History";
 import { ReadyToClaim } from "./ReadyToClaim";
 
 import { Footer, Header } from "@/components/ui";
-import { useTour, useTransfer } from "@/hooks";
+import { useTransfer } from "@/hooks";
 import { defaultConfig } from "@/config";
 
 export function Template() {
   const router = useRouter();
   const pathname = usePathname();
   const { width } = useWindowSize();
-  const { onOpenChange, open, onClose } = useTour();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
@@ -104,7 +102,6 @@ export function Template() {
 
   return (
     <Fragment>
-      <QuickStart open={open} onOpenChange={onClose} />
       <ConnectTradingInteraction />
       <SelectAsset
         open={assetsInteraction}
@@ -201,7 +198,7 @@ export function Template() {
             />
           </div>
         )}
-        {!mobileView && <Footer onOpenChange={onOpenChange} ref={footerRef} />}
+        {!mobileView && <Footer ref={footerRef} />}
       </div>
     </Fragment>
   );
