@@ -9,19 +9,16 @@ import { useResizeObserver, useWindowSize } from "usehooks-ts";
 
 import { themeConfig } from "../../../../../themeConfig";
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
-import { QuickStart } from "../ui/Footer/QuickStart";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
 import { Help } from "./Help";
 
 import { Footer, Header } from "@/components/ui";
-import { useTour } from "@/hooks";
 
 const extend = themeConfig.theme.extend;
 
 export function Template() {
   const { width } = useWindowSize();
-  const { onOpenChange, open, onClose } = useTour();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
@@ -66,7 +63,6 @@ export function Template() {
 
   return (
     <Fragment>
-      <QuickStart open={open} onOpenChange={onClose} />
       <ConnectTradingInteraction />
       <div
         className="flex flex-1 flex-col bg-backgroundBase h-full"
@@ -105,7 +101,7 @@ export function Template() {
             />
           </div>
         )}
-        {!mobileView && <Footer onOpenChange={onOpenChange} ref={footerRef} />}
+        {!mobileView && <Footer ref={footerRef} />}
       </div>
     </Fragment>
   );
