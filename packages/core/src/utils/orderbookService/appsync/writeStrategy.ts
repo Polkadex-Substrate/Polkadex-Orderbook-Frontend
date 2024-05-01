@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable spaced-comment */
+// TODO: wrong @polkadex/polkadex-api polkadot api version
+
 import { GraphQLResult } from "@aws-amplify/api";
 import BigNumber from "bignumber.js";
 import { UNIT_BN } from "@orderbook/core/constants";
@@ -226,10 +230,11 @@ class AppsyncV1Operations implements OrderbookOperationStrategy {
   }: ClaimRewardArgs): Promise<void> {
     const assetId =
       tokenFeeId && tokenFeeId !== "PDEX" ? { assetId: tokenFeeId } : {};
+
     const ext = (await lmp.claimRewardsTx(
       epoch,
       market
-    )) as SubmittableExtrinsicType<"promise">;
+    )) as unknown as SubmittableExtrinsicType<"promise">;
 
     const res = await signAndSendExtrinsic(api, ext, { signer }, address, true);
     if (!res.isSuccess) {

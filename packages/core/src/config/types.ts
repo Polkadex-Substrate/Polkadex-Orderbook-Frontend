@@ -19,4 +19,10 @@ export type DefaultConfig = {
   mainUrl: string;
   blockedAssets: string[];
   subscanApi: string;
+  googleApiKey: string;
+  googleClientId: string;
+  disabledFeatures: Array<Features>;
 };
+
+export type Features = (typeof features)[number];
+export const features = ["googleDriveStore", "payWithAnotherFee"] as const;

@@ -68,6 +68,8 @@ const nextConfig = {
     SENTRY_DSN: process.env.SENTRY_DSN,
     SENTRY_AUTH: process.env.SENTRY_AUTH,
     DISABLED_FEATURES: process.env.DISABLED_FEATURES,
+    GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   },
 };
 
