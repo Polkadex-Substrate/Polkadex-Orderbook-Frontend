@@ -123,6 +123,7 @@ export const themeConfig = {
           "skeletonPulse 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite",
         accordionDown: "accordionDown 300ms cubic-bezier(0.87, 0, 0.13, 1)",
         accordionUp: "accordionUp 300ms cubic-bezier(0.87, 0, 0.13, 1)",
+        smoothBouce: "smoothBouce 6s infinite",
       },
       keyframes: {
         infiniteHorizontal: {
@@ -148,6 +149,14 @@ export const themeConfig = {
         accordionUp: {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
+        },
+        smoothBouce: {
+          "0%, 100%": {
+            transform: "translateY(0)",
+          },
+          "50%": {
+            transform: "translateY(-30px)",
+          },
         },
       },
     },
