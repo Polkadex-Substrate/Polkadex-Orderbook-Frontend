@@ -37,13 +37,13 @@ import {
   KlineHistoryProps,
   OrderStatus,
   OrderType,
-  OrderHistoryProps,
   BookLevel,
   MaybePaginated,
   LatestTradesPropsForMarket,
   OrderSide,
   TransactionHistoryProps,
   UserAllHistoryProps,
+  OpenOrdersProps,
 } from "./../types";
 import {
   fetchBatchFromAppSync,
@@ -193,18 +193,26 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     return markets || [];
   }
 
-  async getOpenOrders(args: OrderHistoryProps): Promise<Order[]> {
+  async getOpenOrders(args: OpenOrdersProps): Promise<Order[]> {
     if (!this.isReady()) {
       await this.init();
     }
+
+    const queryKey = args.basedOnFundingAccount
+      ? "listOpenOrdersByMainAccount"
+      : "listOpenOrdersByTradeAccount";
+
+    const variables = {
+      [args.basedOnFundingAccount ? "main_account" : "trade_account"]:
+        args.address,
+    };
+
     const openOrderQueryResult = await fetchFullListFromAppSync<APIOrder>(
-      QUERIES.listOpenOrdersByTradeAccount,
-      {
-        trade_account: args.address,
-        limit: args.limit,
-      },
-      "listOpenOrdersByTradeAccount"
+      QUERIES[queryKey],
+      variables,
+      queryKey
     );
+
     const openOrders = openOrderQueryResult?.map((item): Order => {
       return this.mapApiOrderToOrder(item, this._marketList);
     });
@@ -217,21 +225,31 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     if (!this.isReady()) {
       await this.init();
     }
+
+    const queryKey = args.basedOnFundingAccount
+      ? "listOrderHistoryByMainAccount"
+      : "listOrderHistoryByTradeAccount";
+
+    const variables = {
+      [args.basedOnFundingAccount ? "main_account" : "trade_account"]:
+        args.address,
+      limit: args.limit,
+      from: args.from.toISOString(),
+      to: args.to.toISOString(),
+      nextToken: args.pageParams,
+    };
+
     const orderHistoryQueryResult = await fetchBatchFromAppSync<APIOrder>(
-      QUERIES.listOrderHistoryByTradeAccount,
-      {
-        trade_account: args.address,
-        limit: args.limit,
-        from: args.from.toISOString(),
-        to: args.to.toISOString(),
-        nextToken: args.pageParams,
-      },
-      "listOrderHistoryByTradeAccount",
+      QUERIES[queryKey],
+      variables,
+      queryKey,
       args.batchLimit
     );
+
     if (!orderHistoryQueryResult) {
       return { data: [], nextToken: null };
     }
+
     const orderHistory = orderHistoryQueryResult?.response?.map(
       (item): Order => {
         return this.mapApiOrderToOrder(item, this._marketList);
@@ -304,16 +322,24 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
     if (!this.isReady()) {
       await this.init();
     }
+
+    const queryKey = args.basedOnFundingAccount
+      ? "listTradesByMainAccount"
+      : "listTradesByTradeAccount";
+
+    const variables = {
+      [args.basedOnFundingAccount ? "main_account" : "trade_account"]:
+        args.address,
+      limit: args.limit,
+      from: args.from.toISOString(),
+      to: args.to.toISOString(),
+      nextToken: args.pageParams,
+    };
+
     const queryResult = await fetchBatchFromAppSync<UserTrade>(
-      QUERIES.listTradesByTradeAccount,
-      {
-        trade_account: args.address,
-        limit: args.limit,
-        from: args.from.toISOString(),
-        to: args.to.toISOString(),
-        nextToken: args.pageParams,
-      },
-      "listTradesByTradeAccount",
+      QUERIES[queryKey],
+      variables,
+      queryKey,
       args.batchLimit
     );
     if (!queryResult) {
@@ -444,13 +470,13 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       await this.init();
     }
     const orderHistoryQueryResult = await fetchFullListFromAppSync<APIOrder>(
-      QUERIES.listOrderHistoryByTradeAccount,
+      QUERIES.listOrderHistoryByMainAccount,
       {
-        trade_account: args.address,
+        main_account: args.address,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
       },
-      "listOrderHistoryByTradeAccount"
+      "listOrderHistoryByMainAccount"
     );
     if (!orderHistoryQueryResult) {
       return [];
@@ -469,13 +495,13 @@ class AppsyncV1Reader implements OrderbookReadStrategy {
       await this.init();
     }
     const queryResult = await fetchFullListFromAppSync<UserTrade>(
-      QUERIES.listTradesByTradeAccount,
+      QUERIES.listTradesByMainAccount,
       {
-        trade_account: args.address,
+        main_account: args.address,
         from: args.from.toISOString(),
         to: args.to.toISOString(),
       },
-      "listTradesByTradeAccount"
+      "listTradesByMainAccount"
     );
     if (!queryResult) {
       return [];
