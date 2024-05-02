@@ -93,7 +93,14 @@ export const ConnectTradingAccount = ({
                     <Skeleton loading className="min-h-14 rounded-sm" />
                   )}
                   {attentionAccounts?.map((e) => (
-                    <AttentionAccountCard key={e.address} account={e} />
+                    <AttentionAccountCard
+                      key={e.address}
+                      account={e}
+                      onRemove={() => {
+                        onTempBrowserAccount(e);
+                        onRemoveCallback();
+                      }}
+                    />
                   ))}
                   {accounts?.map((value, i) => {
                     const externalStored = isStoreInGoogleDrive(value.address);
