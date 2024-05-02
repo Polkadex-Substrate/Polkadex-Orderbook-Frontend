@@ -66,6 +66,9 @@ const CardsComponent = () => {
     registerError,
     selectedExtension,
     walletBalance,
+    onConnectGoogleDrive,
+    connectGoogleDriveLoading,
+    gDriveReady,
   } = useConnectWalletProvider();
 
   return (
@@ -80,6 +83,9 @@ const CardsComponent = () => {
           selectedExtension={selectedExtension}
           onCreateCallback={() => setPage("TradingAccountSuccessfull")}
           onClose={onReset}
+          onConnectGDrive={onConnectGoogleDrive}
+          connectGDriveLoading={connectGoogleDriveLoading}
+          gDriveReady={gDriveReady}
         />
       </Interactable.Card>
       <Interactable.Card pageName="InsufficientBalance">

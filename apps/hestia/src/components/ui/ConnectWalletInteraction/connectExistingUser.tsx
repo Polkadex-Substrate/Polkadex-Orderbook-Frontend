@@ -1,10 +1,10 @@
 "use client";
 
 import { Fragment, MouseEvent, useCallback, useMemo } from "react";
-import { TradeAccount } from "@orderbook/core/providers/types";
 import { Interactable, useInteractableProvider } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { ExistingUser } from "../ConnectWallet/existingUser";
 import { NewTradingAccount } from "../ConnectWallet/newTradingAccount";
@@ -84,13 +84,9 @@ const TriggerComponent = ({ onClose, onNext }: InteractableProps) => {
       onCreate={() => setPage(redirectEnoughBalance)}
       onRecover={() => setPage("ConnectTradingAccount")}
       onTradingAccountList={() => setPage("TradingAccountList")}
-      accounts={filteredAccounts as TradeAccount[]}
+      accounts={filteredAccounts}
       registeredProxies={mainProxiesAccounts}
-      onSelect={(e) =>
-        onSelectTradingAccount?.({
-          tradeAddress: e.address,
-        })
-      }
+      onSelect={(e) => onSelectTradingAccount?.(e)}
       onSelectCallback={onClose}
       onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
       onRemoveCallback={() => setPage("RemoveTradingAccount")}
@@ -126,6 +122,13 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
     importFromMnemonicError,
     importFromMnemonicStatus,
     onImportFromMnemonic,
+    onBackupGoogleDrive,
+    backupGoogleDriveLoading,
+    onConnectGoogleDrive,
+    connectGoogleDriveLoading,
+    gDriveReady,
+    onRemoveGoogleDrive,
+    removeGoogleDriveLoading,
   } = useConnectWalletProvider();
   const { setPage, onReset } = useInteractableProvider();
 
@@ -167,10 +170,8 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
     <Fragment>
       <Interactable.Card pageName="ConnectTradingAccount">
         <ConnectTradingAccount
-          accounts={filteredAccounts as TradeAccount[]}
-          onSelect={(e) =>
-            onSelectTradingAccount?.({ tradeAddress: e.address })
-          }
+          accounts={filteredAccounts}
+          onSelect={(e) => onSelectTradingAccount(e)}
           onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
           onClose={hasAccounts ? onReset : handleCloseInteraction}
           onImport={() => setPage("ImportTradingAccount")}
@@ -180,9 +181,24 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
             onExportTradeAccount({ account })
           }
           onExportBrowserAccountCallback={() => setPage("UnlockBrowserAccount")}
-          onImportMnemonic={() => {
-            setPage("ImportTradingAccountMnemonic");
-          }}
+          onImportMnemonic={() => setPage("ImportTradingAccountMnemonic")}
+          onExportGoogleCallback={() => setPage("ExportGoogleDriveAccount")}
+          backupGDriveAccountLoading={backupGoogleDriveLoading}
+          onBackupGDriveAccount={(account) => onBackupGoogleDrive({ account })}
+          onConnectGDrive={onConnectGoogleDrive}
+          connectGDriveLoading={connectGoogleDriveLoading}
+          gDriveReady={gDriveReady}
+        />
+      </Interactable.Card>
+      <Interactable.Card pageName="ExportGoogleDriveAccount">
+        <UnlockAccount
+          tempBrowserAccount={tempTrading}
+          onClose={() => setPage("ConnectTradingAccount")}
+          onAction={async (account, password) =>
+            await onBackupGoogleDrive({ account, password })
+          }
+          onResetTempBrowserAccount={onResetTempTrading}
+          loading={backupGoogleDriveLoading}
         />
       </Interactable.Card>
       <Interactable.Card pageName="UnlockBrowserAccount">
@@ -205,6 +221,9 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
           selectedExtension={selectedExtension}
           onCreateCallback={() => onNext("TradingAccountSuccessfull")}
           onClose={handleClose}
+          onConnectGDrive={onConnectGoogleDrive}
+          connectGDriveLoading={connectGoogleDriveLoading}
+          gDriveReady={gDriveReady}
         />
       </Interactable.Card>
       <Interactable.Card pageName="TradingAccountList">
@@ -221,13 +240,12 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
           tradingAccount={tempTrading as TradeAccount}
           fundWallet={selectedWallet}
           availableOnDevice={availableOnDevice}
-          onRemoveFromDevice={() =>
-            onRemoveTradingAccountFromDevice?.(tempTrading?.address as string)
-          }
+          onRemoveFromDevice={(e) => onRemoveTradingAccountFromDevice(e)}
+          onRemoveGoogleDrive={async (e) => await onRemoveGoogleDrive(e)}
           onRemoveFromChain={async (e) =>
             await onRemoveTradingAccountFromChain?.({ ...e, selectedWallet })
           }
-          loading={removingStatus === "loading"}
+          loading={removingStatus === "loading" || removeGoogleDriveLoading}
           errorTitle="Error"
           errorMessage={(removingError as Error)?.message ?? removingError}
           selectedExtension={selectedExtension}

@@ -5,10 +5,11 @@ import {
   Interaction,
   Separator,
 } from "@polkadex/ux";
-import { TradeAccount } from "@orderbook/core/providers/types";
 import classNames from "classnames";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { RiArrowRightSLine } from "@remixicon/react";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { GenericHorizontalCard, TradingAccountCard } from "../ReadyToUse";
 
@@ -44,6 +45,7 @@ export const ExistingUser = ({
   onTempBrowserAccount: (e: TradeAccount) => void;
 }) => {
   const hasTradingAccounts = !!accounts?.length;
+  const { isStoreInGoogleDrive } = useConnectWalletProvider();
 
   return (
     <Interaction className="w-full md:min-w-[24rem] md:max-w-[24rem]">
@@ -70,37 +72,40 @@ export const ExistingUser = ({
                     "border-b border-primary overflow-hidden hover:overflow-auto pb-7 scrollbar-hide"
                 )}
               >
-                {accounts.map((value, i) => (
-                  <TradingAccountCard
-                    key={i}
-                    address={value.address}
-                    name={value.meta.name as string}
-                    type="Browser"
-                    onSelect={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onSelect(value);
-                      onSelectCallback();
-                    }}
-                    onRemove={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onTempBrowserAccount(value);
-                      onRemoveCallback();
-                    }}
-                    onExport={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      try {
-                        if (value.isLocked) value.unlock("");
-                        onExportBrowserAccount(value);
-                      } catch (error) {
+                {accounts?.map((value, i) => {
+                  const externalStored = isStoreInGoogleDrive(value.address);
+
+                  return (
+                    <TradingAccountCard
+                      key={i}
+                      account={value}
+                      external={externalStored}
+                      onSelect={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onSelect(value);
+                        onSelectCallback();
+                      }}
+                      onRemove={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         onTempBrowserAccount(value);
-                        onExportBrowserAccountCallback();
-                      }
-                    }}
-                  />
-                ))}
+                        onRemoveCallback();
+                      }}
+                      onExport={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        try {
+                          if (value.isLocked) value.unlock("");
+                          onExportBrowserAccount(value);
+                        } catch (error) {
+                          onTempBrowserAccount(value);
+                          onExportBrowserAccountCallback();
+                        }
+                      }}
+                    />
+                  );
+                })}
               </div>
             </div>
           ) : (

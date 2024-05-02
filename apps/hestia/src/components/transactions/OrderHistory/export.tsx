@@ -26,7 +26,7 @@ export const Export = () => {
   const exportedFileName = `Order_History_${new Date().getTime()}_Polkadex_Orderbook`;
   const [loading, setLoading] = useState(false);
   const {
-    selectedAddresses: { tradeAddress },
+    selectedAddresses: { mainAddress },
   } = useProfile();
   const { onHandleAlert, onHandleError, onHandleInfo } = useSettingsProvider();
 
@@ -38,7 +38,7 @@ export const Export = () => {
       const dateFrom = subMonths(now, 6);
       const dateTo = endOfDay(now);
       const allOrderHistory = await exportOrderHistory(
-        tradeAddress,
+        mainAddress,
         dateFrom,
         dateTo
       );
