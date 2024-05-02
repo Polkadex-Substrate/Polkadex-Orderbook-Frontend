@@ -4,8 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 import { unLockAccountValidations } from "@orderbook/core/validations";
 import { KeyringPair } from "@polkadot/keyring/types";
 
-import { ErrorMessage } from "../ReadyToUse";
 import { Icons } from "..";
+
+import { ErrorMessage } from ".";
 
 export const UnlockAccount = ({
   onClose,
@@ -14,9 +15,10 @@ export const UnlockAccount = ({
   onResetTempBrowserAccount,
 }: {
   onClose: () => void;
-  onAction: (account: KeyringPair, password?: string) => void;
+  onAction: (account: KeyringPair, password: string) => Promise<void> | void;
   tempBrowserAccount?: KeyringPair;
   onResetTempBrowserAccount?: () => void;
+  loading?: boolean;
 }) => {
   const [error, setError] = useState("");
   const handleClose = () => {
@@ -35,7 +37,7 @@ export const UnlockAccount = ({
           const pass = password?.replace(/\s+/g, "");
           tempBrowserAccount?.unlock(pass);
           if (tempBrowserAccount) {
-            onAction(tempBrowserAccount, pass);
+            await onAction(tempBrowserAccount, pass);
             handleClose();
           }
         } catch (error) {
@@ -64,7 +66,7 @@ export const UnlockAccount = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <Interaction className="bg-backgroundBase rounded-sm">
+      <Interaction className="bg-backgroundBase rounded-sm w-full">
         <Interaction.Content className="flex flex-col gap-1 flex-1">
           <div className="flex flex-col gap-8 items-center">
             <div className="flex flex-col text-center items-center gap-5">

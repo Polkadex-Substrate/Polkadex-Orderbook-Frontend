@@ -41,7 +41,7 @@ const TriggerComponent = ({ onClose }: { onClose: () => void }) => {
       onClose={handleClose}
       onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
       onOpenMnemonic={() => setPage("TradingAccountMnemonic")}
-      onDownloadPdf={() => window.alert("Downloading...")}
+      onDownloadPdf={() => {}}
       onDownloadJson={(e) => onExportTradeAccount?.({ account: e })}
       onDownloadJsonCallback={() => setPage("UnlockBrowserAccount")}
     />

@@ -61,7 +61,9 @@
   "dependencies": {
     "@polkadex/react-providers": "^2.0.0",
     "@polkadot-cloud/assets": "^0.3.0",
-    "@polkadot/api": "latest",
+    "@polkadot/api": "^10.12.6",
+    "@polkadex/local-wallets": "^2.2.0",
+    "@polkadex/utils": "^0.2.0",
     "@polkadot/extension-dapp": "^0.46.6",
     "@polkadot/ui-keyring": "^3.6.4",
     "@polkadot/util-crypto": "^12.6.2",
@@ -98,5 +100,9 @@
     "jest": "^29.7.0",
     "ts-jest": "^29.1.1",
     "typescript": "^5.3.3"
+  },
+  "resolutions": {
+    "@polkadot/api": "^10.12.6",
+    "@polkadot/types": "^10.12.6"
   }
 }

@@ -1,21 +1,25 @@
 "use client";
 
-import { Fragment, MouseEvent, useCallback, useMemo, useState } from "react";
-import { Interaction, Typography } from "@polkadex/ux";
-import { TradeAccount } from "@orderbook/core/providers/types";
+import { MouseEvent, useCallback, useMemo, useState } from "react";
+import { Interaction, Loading, Typography } from "@polkadex/ux";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useCall, useTransactionFeeModal } from "@orderbook/core/index";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { TradeAccount } from "@orderbook/core/providers/types";
+import { enabledFeatures } from "@orderbook/core/helpers";
 
 import { GenericSelectCard, TradingAccountCard } from "../ReadyToUse";
 
 import { ConfirmTransaction } from "./confirmTransaction";
+const { googleDriveStore } = enabledFeatures;
 
 type RemoveProps = { proxy: string; assetId?: string };
 export const RemoveTradingAccount = ({
   tradingAccount,
   fundWallet,
   onRemoveFromDevice,
+  onRemoveGoogleDrive,
   onRemoveFromChain,
   onCancel,
   loading,
@@ -24,7 +28,8 @@ export const RemoveTradingAccount = ({
 }: {
   tradingAccount: TradeAccount;
   fundWallet?: ExtensionAccount;
-  onRemoveFromDevice: () => void;
+  onRemoveFromDevice: (e: string) => Promise<void>;
+  onRemoveGoogleDrive: (e: string) => Promise<void>;
   onRemoveFromChain?: (props: RemoveProps) => Promise<void>;
   onCancel: (e: MouseEvent<HTMLButtonElement>) => void;
   loading?: boolean;
@@ -41,10 +46,13 @@ export const RemoveTradingAccount = ({
     tokenFee,
     setTokenFee,
   } = useTransactionFeeModal();
+  const { isStoreInGoogleDrive } = useConnectWalletProvider();
+  const externalStored = isStoreInGoogleDrive(tradingAccount?.address ?? "");
 
   const [state, setState] = useState({
     removeDevice: false,
     removeBlockchain: false,
+    removeGoogleDrive: false,
   });
 
   const disableButton = useMemo(
@@ -63,12 +71,20 @@ export const RemoveTradingAccount = ({
     [onCancel, onRemoveFromChain, tokenFee?.id]
   );
 
-  const handleRemoveDevice = useCallback(
+  const handleRemoveFromDevice = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
-      onRemoveFromDevice?.();
+      onRemoveFromDevice?.(tradingAccount?.address ?? "");
       onCancel(event);
     },
-    [onCancel, onRemoveFromDevice]
+    [onCancel, onRemoveFromDevice, tradingAccount?.address]
+  );
+
+  const handleRemoveFromGoogle = useCallback(
+    async (event: MouseEvent<HTMLButtonElement>) => {
+      await onRemoveGoogleDrive(tradingAccount?.address ?? "");
+      onCancel(event);
+    },
+    [onCancel, onRemoveGoogleDrive, tradingAccount?.address]
   );
 
   const removeProps = useMemo(
@@ -79,8 +95,9 @@ export const RemoveTradingAccount = ({
   );
 
   const { onRemoveProxyAccountOcex } = useCall();
+
   return (
-    <Fragment>
+    <Loading.Spinner active={state.removeBlockchain ? false : loading}>
       <ConfirmTransaction
         action={async (e) => {
           await handleRemoveBlockchain(removeProps, e);
@@ -88,9 +105,9 @@ export const RemoveTradingAccount = ({
         }}
         actionLoading={!!loading}
         extrinsicFn={() =>
-          onRemoveProxyAccountOcex([tradingAccount.address ?? ""])
+          onRemoveProxyAccountOcex([tradingAccount?.address ?? ""])
         }
-        sender={tradingAccount.address}
+        sender={tradingAccount?.address}
         tokenFee={tokenFee}
         setTokenFee={setTokenFee}
         openFeeModal={openFeeModal}
@@ -112,13 +129,30 @@ export const RemoveTradingAccount = ({
                 Don&apos;t worry your funds are safe in your funding account.
               </Typography.Paragraph>
             </div>
-            <TradingAccountCard
-              address={tradingAccount?.address ?? ""}
-              name={tradingAccount?.meta?.name as string}
-              type="Browser"
-              enabledExtensionAccount={enabledExtensionAccount}
-            />
+            {tradingAccount && (
+              <TradingAccountCard
+                account={tradingAccount}
+                external={externalStored}
+                enabledExtensionAccount={enabledExtensionAccount}
+              />
+            )}
+
             <div className="flex flex-col gap-2">
+              <GenericSelectCard
+                title="Remove from Google Drive"
+                icon="GoogleDrive"
+                checked={state.removeGoogleDrive}
+                disabled={!externalStored || !googleDriveStore}
+                onChange={() => {
+                  if (!googleDriveStore) return;
+                  setState({
+                    ...state,
+                    removeGoogleDrive: state.removeBlockchain
+                      ? true
+                      : !state.removeGoogleDrive,
+                  });
+                }}
+              />
               <GenericSelectCard
                 title="Remove from your device"
                 icon="Device"
@@ -134,14 +168,17 @@ export const RemoveTradingAccount = ({
                 }
               />
               <GenericSelectCard
-                title="Remove  from blockchain"
+                title="Remove from blockchain"
                 icon="Blockchain"
                 checked={state.removeBlockchain}
                 onChange={() =>
                   setState((prevState) => ({
+                    ...prevState,
                     removeDevice:
                       !!availableOnDevice && !state.removeBlockchain,
                     removeBlockchain: !prevState.removeBlockchain,
+                    removeGoogleDrive:
+                      externalStored && !state.removeGoogleDrive,
                   }))
                 }
                 disabled={!fundWallet}
@@ -151,9 +188,18 @@ export const RemoveTradingAccount = ({
         </Interaction.Content>
         <Interaction.Footer>
           <Interaction.Action
-            onClick={
-              state.removeBlockchain ? onOpenFeeModal : handleRemoveDevice
-            }
+            onClick={async (e) => {
+              if (state.removeBlockchain) {
+                onOpenFeeModal();
+                return;
+              }
+              if (state.removeGoogleDrive) {
+                await handleRemoveFromGoogle(e);
+                if (state.removeDevice) handleRemoveFromDevice(e);
+                return;
+              }
+              handleRemoveFromDevice(e);
+            }}
             disabled={disableButton}
           >
             Yes, remove account
@@ -161,6 +207,6 @@ export const RemoveTradingAccount = ({
           <Interaction.Close onClick={onCancel}>Cancel</Interaction.Close>
         </Interaction.Footer>
       </Interaction>
-    </Fragment>
+    </Loading.Spinner>
   );
 };

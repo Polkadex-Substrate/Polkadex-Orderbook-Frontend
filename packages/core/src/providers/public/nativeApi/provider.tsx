@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable spaced-comment */
 import { useEffect, useReducer, useState } from "react";
 import { ApiPromise } from "@polkadot/api";
 import { defaultConfig } from "@orderbook/core/config";
@@ -5,6 +7,7 @@ import {
   createApi,
   statics,
 } from "@orderbook/core/providers/public/nativeApi/statics";
+// TODO: wrong @polkadex/polkadex-api polkadot api version
 import { LmpApi, SwapApi } from "@polkadex/polkadex-api";
 
 import { Provider } from "./context";
@@ -22,7 +25,9 @@ export const NativeApiProvider: T.NativeApiComponent = ({ children }) => {
 
   useEffect(() => {
     const onReady = (api: ApiPromise) => {
+      //@ts-ignore
       const lmp = new LmpApi(api);
+      //@ts-ignore
       const swap = new SwapApi(api);
       setLmp(lmp);
       setSwap(swap);

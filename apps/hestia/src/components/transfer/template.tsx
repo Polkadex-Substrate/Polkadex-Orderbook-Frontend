@@ -7,6 +7,7 @@ import { useTransactions, useTransferHistory } from "@orderbook/core/hooks";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { usePathname, useRouter } from "next/navigation";
 import { useResizeObserver, useWindowSize } from "usehooks-ts";
+import { sleep } from "@orderbook/core/helpers";
 
 import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
@@ -20,9 +21,6 @@ import { ReadyToClaim } from "./ReadyToClaim";
 import { Footer, Header } from "@/components/ui";
 import { useTransfer } from "@/hooks";
 import { defaultConfig } from "@/config";
-
-const sleep = async (ms: number) =>
-  await new Promise((resolve) => setTimeout(resolve, ms));
 
 export function Template() {
   const router = useRouter();

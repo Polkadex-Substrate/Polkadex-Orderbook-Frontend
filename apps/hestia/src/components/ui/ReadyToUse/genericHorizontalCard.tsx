@@ -1,6 +1,7 @@
 import { ComponentPropsWithoutRef, PropsWithChildren } from "react";
 import { Icon, Loading, Typography } from "@polkadex/ux";
 import type { IconsProps } from "@polkadex/ux";
+import classNames from "classnames";
 
 import { ErrorMessage } from ".";
 
@@ -27,9 +28,10 @@ export const GenericHorizontalCard = ({
       <div
         {...props}
         role="button"
-        className={`flex flex-col gap-3 group cursor-pointer ${
+        className={classNames(
+          "flex flex-col gap-3 group cursor-pointer",
           disabled && "opacity-40 pointer-events-none"
-        }`}
+        )}
       >
         <div className="flex items-center justify-between p-2.5 rounded-md border border-primary group-hover:bg-level-1 duration-300 transition-colors">
           <div className="flex items-center gap-2">
