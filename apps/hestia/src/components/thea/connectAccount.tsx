@@ -1,22 +1,42 @@
 "use client";
 
 import { Interactable, Modal } from "@polkadex/ux";
-import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
-import { useExtensionAccounts } from "@polkadex/react-providers";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
+import {
+  ExtensionAccount,
+  useExtensionAccounts,
+} from "@polkadex/react-providers";
+import { Chain } from "@polkadex/thea";
 
-import { ConnectWallet } from "./connectWallet";
-
-import { Authorization } from "@/components/ui/ConnectWallet/authorization";
-import { ExtensionAccounts } from "@/components/ui/ConnectWallet/extensionAccounts";
+import {
+  Authorization,
+  ConnectWallet,
+  Extension,
+  ExtensionAccounts,
+} from "./connectWallet";
 
 export const ConnectAccount = ({
   open,
   onOpenChange,
+  selectedChain,
+  setChain,
+  setAccount,
+  selectedAccount,
 }: {
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
+  selectedChain: Chain | null;
+  setChain: Dispatch<SetStateAction<Chain | null>>;
+  setAccount: Dispatch<SetStateAction<ExtensionAccount>>;
+  selectedAccount: ExtensionAccount | null;
 }) => {
-  const { onSetAccount, extension, setExtension } = [] as any;
+  const [extension, setExtension] = useState<Extension>();
 
   const { connectExtensionAccounts, extensionAccounts } =
     useExtensionAccounts();
@@ -47,6 +67,9 @@ export const ConnectAccount = ({
             <ConnectWallet
               onSetExtension={setExtension}
               onClose={handleClose}
+              selectedChain={selectedChain}
+              setChain={setChain}
+              selectedAccount={selectedAccount}
             />
           </Interactable.Trigger>
           <Interactable.Content>
@@ -57,7 +80,6 @@ export const ConnectAccount = ({
                 }
                 extensionName={extension?.title}
                 extensionIcon={extension?.id}
-                onActionCallback={() => {}}
               />
             </Interactable.Card>
             <Interactable.Card pageName="accounts">
@@ -65,10 +87,10 @@ export const ConnectAccount = ({
                 key="ConnectFundingWallets"
                 extensionAccounts={walletsFiltered}
                 onSelectExtensionAccount={(e) => {
-                  onSetAccount(e);
+                  setAccount(e);
                   handleClose();
                 }}
-                // onResetExtension={() => setExtension(null)}
+                onResetExtension={() => setExtension(null)}
                 onClose={handleClose}
               />
             </Interactable.Card>

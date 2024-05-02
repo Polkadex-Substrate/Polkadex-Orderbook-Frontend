@@ -97,4 +97,5 @@ export const QUERY_KEYS = {
     assetsAmount,
   ],
   queryPools: () => [PREFIX, "queryPools"],
+  getTheaBalances: (address: string) => [PREFIX, "getTheaBalances", address],
 };

@@ -1,4 +1,4 @@
-import { Token, Tokens, Typography, tokenAppearance } from "@polkadex/ux";
+import { Token, Typography, TokenAppearance } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 
 export const TokenCard = ({
@@ -6,7 +6,7 @@ export const TokenCard = ({
   ticker,
   tokenName,
 }: {
-  icon: keyof typeof Tokens;
+  icon: TokenAppearance;
   ticker: string;
   tokenName: string;
 }) => {
@@ -17,7 +17,7 @@ export const TokenCard = ({
         name={icon}
         size={width <= 600 ? "xs" : "md"}
         className="p-0.5 rounded-full border border-primary max-sm:w-5 max-sm:h-5"
-        appearance={icon as keyof typeof tokenAppearance}
+        appearance={icon as TokenAppearance}
       />
       <div className="flex flex-col gap-0.5">
         <Typography.Text>{ticker}</Typography.Text>

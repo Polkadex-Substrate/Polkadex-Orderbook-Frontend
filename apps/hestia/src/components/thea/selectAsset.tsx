@@ -1,12 +1,18 @@
 "use client";
 
-import { Interaction, Modal, Searchable, Skeleton } from "@polkadex/ux";
+import {
+  Interaction,
+  Modal,
+  Searchable,
+  Skeleton,
+  TokenAppearance,
+} from "@polkadex/ux";
 import { SetStateAction, Dispatch, useCallback, ComponentProps } from "react";
 import classNames from "classnames";
 import { twMerge } from "tailwind-merge";
+import { useTheaProvider } from "@orderbook/core/providers";
 
 import { TokenCard } from "../ui/ReadyToUse";
-const fakeAssets: any = [];
 
 export const SelectAsset = ({
   open,
@@ -15,11 +21,10 @@ export const SelectAsset = ({
 }: {
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
-  loading: boolean;
+  loading?: boolean;
 }) => {
   const handleClose = useCallback(() => onOpenChange(false), [onOpenChange]);
-
-  const onSelectToken = (e: any) => {};
+  const { supportedAssets, setSelectedAsset } = useTheaProvider();
   return (
     <Modal
       open={open}
@@ -49,19 +54,19 @@ export const SelectAsset = ({
                     heading="Assets"
                     className="[&_[cmdk-group-heading]]:px-3"
                   >
-                    {fakeAssets?.map((e, i) => {
+                    {supportedAssets?.map((e, i) => {
                       return (
                         <Searchable.Item
                           key={i}
                           value={e.ticker}
                           className="p-3"
-                          onSelect={() => onSelectToken(e)}
+                          onSelect={() => setSelectedAsset(e)}
                         >
                           <TokenCard
                             key={e.id}
-                            icon={e.ticker}
+                            icon={e.ticker as TokenAppearance}
                             ticker={e.ticker}
-                            tokenName={e.name}
+                            tokenName={e.logo}
                           />
                         </Searchable.Item>
                       );

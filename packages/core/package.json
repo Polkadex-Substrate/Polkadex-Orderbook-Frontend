@@ -60,6 +60,7 @@
   },
   "dependencies": {
     "@polkadex/react-providers": "^2.0.0",
+    "@polkadex/thea": "^4.1.0",
     "@polkadot-cloud/assets": "^0.3.0",
     "@polkadot/api": "latest",
     "@polkadot/extension-dapp": "^0.46.6",

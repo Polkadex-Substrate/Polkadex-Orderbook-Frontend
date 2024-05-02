@@ -1,7 +1,7 @@
 "use client";
 
 import { Table, GenericMessage, Input } from "@polkadex/ux";
-import { Fragment, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -14,6 +14,7 @@ import {
   getFacetedUniqueValues,
 } from "@tanstack/react-table";
 import classNames from "classnames";
+import { useTheaProvider } from "@orderbook/core/providers";
 
 import { columns, fakeData } from "./columns";
 import { Filters } from "./Filters";
@@ -23,11 +24,24 @@ import { Filters } from "./Filters";
 const actionKeys = ["token", "source", "date"];
 
 export const Assets = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
+  const { supportedAssets, balances } = useTheaProvider();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+  const assets = useMemo(
+    () =>
+      supportedAssets?.map((e) => {
+        const balance = balances?.find((x) => x.ticker.includes(e.ticker));
+        return {
+          ...e,
+          balance: balance?.amount ?? 0,
+        };
+      }),
+    [balances, supportedAssets]
+  );
+
   const table = useReactTable({
-    data: fakeData,
+    data: assets,
     state: {
       sorting,
       columnFilters,
@@ -42,6 +56,7 @@ export const Assets = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
+  if (!assets) return <div>No source selected</div>;
   // return <SkeletonCollection />;
   return (
     <Fragment>

@@ -1,22 +1,54 @@
-import { Button, Input, Token, Typography } from "@polkadex/ux";
+import {
+  Button,
+  Input,
+  Token,
+  TokenAppearance,
+  Typography,
+} from "@polkadex/ux";
 import { RiArrowDownSLine } from "@remixicon/react";
 import { Fragment, useState } from "react";
+import { useTheaProvider } from "@orderbook/core/providers";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
+import { tokens } from "../connectWallet";
 
 import { WalletCard } from "./wallet";
 
 export const Form = () => {
   const [openAsset, setOpenAsset] = useState(false);
-  const [openFromAccount, setOpenFromAccount] = useState(false);
+  const [openSourceModal, setOpenSourceModal] = useState(false);
+  const [openDestinationModal, setOpenDestinationModal] = useState(false);
 
+  const {
+    sourceChain,
+    setSourceChain,
+    destinationChain,
+    setDestinationChain,
+    sourceAccount,
+    setSourceAccount,
+    destinationAccount,
+    setDestinationAccount,
+    selectedAsset,
+  } = useTheaProvider();
   return (
     <Fragment>
-      <SelectAsset open={openAsset} onOpenChange={setOpenAsset} loading />
+      <SelectAsset open={openAsset} onOpenChange={setOpenAsset} />
       <ConnectAccount
-        open={openFromAccount}
-        onOpenChange={setOpenFromAccount}
+        open={openSourceModal}
+        onOpenChange={setOpenSourceModal}
+        selectedChain={sourceChain}
+        setChain={setSourceChain}
+        selectedAccount={sourceAccount}
+        setAccount={setSourceAccount}
+      />
+      <ConnectAccount
+        open={openDestinationModal}
+        onOpenChange={setOpenDestinationModal}
+        selectedChain={destinationChain}
+        setChain={setDestinationChain}
+        selectedAccount={destinationAccount}
+        setAccount={setDestinationAccount}
       />
       <div className="flex flex-col gap-4 flex-1 max-w-[800px] mx-auto py-10 w-full px-2">
         <div className="flex flex-col gap-8">
@@ -29,18 +61,37 @@ export const Form = () => {
                   <Button.Outline
                     appearance="secondary"
                     className="gap-1 px-2 py-7 justify-between"
-                    onClick={() => setOpenFromAccount(true)}
+                    onClick={() => setOpenSourceModal(true)}
                   >
                     <div className="flex items-center gap-2">
-                      <Token name="DOT" size="md" />
+                      {sourceChain ? (
+                        <Token
+                          name={
+                            tokens[sourceChain?.name as keyof typeof tokens]
+                          }
+                          size="md"
+                          appearance={
+                            tokens[
+                              sourceChain?.name as keyof typeof tokens
+                            ] as TokenAppearance
+                          }
+                          className="rounded-full border border-primary"
+                        />
+                      ) : (
+                        <div className="w-7 h-7 rounded-full bg-level-2" />
+                      )}
                       <Typography.Text size="lg" bold>
-                        Ethereum
+                        {sourceChain ? sourceChain.name : "Select"}
                       </Typography.Text>
                     </div>
                     <RiArrowDownSLine className="w-4 h-4" />
                   </Button.Outline>
                 </div>
-                <WalletCard>0xCCfa92aD6...59444be6</WalletCard>
+                {sourceAccount && (
+                  <WalletCard name={sourceAccount.name}>
+                    {sourceAccount.address}
+                  </WalletCard>
+                )}
               </div>
               <div className="flex flex-col gap-2 flex-1">
                 <div className="flex flex-col gap-2">
@@ -48,17 +99,40 @@ export const Form = () => {
                   <Button.Outline
                     appearance="secondary"
                     className="gap-1 px-2 py-7 justify-between"
+                    onClick={() => setOpenDestinationModal(true)}
+                    disabled={!sourceChain}
                   >
                     <div className="flex items-center gap-2">
-                      <Token name="PDEX" size="md" />
+                      {destinationChain ? (
+                        <Token
+                          name={
+                            tokens[
+                              destinationChain?.name as keyof typeof tokens
+                            ]
+                          }
+                          size="md"
+                          appearance={
+                            tokens[
+                              destinationChain?.name as keyof typeof tokens
+                            ] as TokenAppearance
+                          }
+                          className="rounded-full border border-primary"
+                        />
+                      ) : (
+                        <div className="w-7 h-7 rounded-full bg-level-2" />
+                      )}
                       <Typography.Text size="lg" bold>
-                        Polkadex
+                        {destinationChain ? destinationChain.name : "Select"}
                       </Typography.Text>
                     </div>
                     <RiArrowDownSLine className="w-4 h-4" />
                   </Button.Outline>
                 </div>
-                <WalletCard>0xCCfa92aD6...59444be6</WalletCard>
+                {destinationAccount && (
+                  <WalletCard name={destinationAccount.name}>
+                    {destinationAccount.address}
+                  </WalletCard>
+                )}
               </div>
             </div>
           </div>
@@ -70,9 +144,20 @@ export const Form = () => {
                 appearance="secondary"
                 className="gap-1 px-2 py-7 justify-between"
                 onClick={() => setOpenAsset(true)}
+                disabled={!sourceChain && !destinationChain}
               >
                 <div className="flex items-center gap-2">
-                  <Token name="DOT" size="md" />
+                  {selectedAsset ? (
+                    <Token
+                      name={selectedAsset.ticker}
+                      size="md"
+                      appearance={selectedAsset.ticker as TokenAppearance}
+                      className="rounded-full border border-primary"
+                    />
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-level-5" />
+                  )}
+
                   <Typography.Text size="md">Select token</Typography.Text>
                 </div>
                 <RiArrowDownSLine className="w-4 h-4" />
@@ -80,7 +165,9 @@ export const Form = () => {
             </div>
           </div>
         </div>
-        <Button.Solid disabled>Bridge</Button.Solid>
+        <Button.Solid disabled={!sourceChain && !destinationChain}>
+          Bridge
+        </Button.Solid>
       </div>
     </Fragment>
   );

@@ -27,4 +27,7 @@ export const defaultConfig: DefaultConfig = {
   mainUrl: process.env.MAIN_URL || "/trading",
   blockedAssets: process.env.BLOCKED_ASSETS?.split(",") || [],
   subscanApi: process.env.SUBSCAN_API || "",
+  disabledTheaChains: process.env.DISABLED_THEA_CHAINS?.split(",") ?? [
+    "0x25a5cc106eea7138acab33231d7160d69cb777ee0c2c553fcddf5138993e6dd9",
+  ],
 };

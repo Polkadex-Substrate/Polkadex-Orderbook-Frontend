@@ -1,12 +1,19 @@
-import { Button, Typography, typeofChildren } from "@polkadex/ux";
+import {
+  Button,
+  Typography,
+  truncateString,
+  typeofChildren,
+} from "@polkadex/ux";
 import { RiWalletLine } from "@remixicon/react";
 import { ComponentProps } from "react";
 
-export const WalletCard = ({
-  children,
-  ...props
-}: ComponentProps<typeof Button.Outline>) => {
+interface Props extends ComponentProps<typeof Button.Outline> {
+  name?: string;
+}
+export const WalletCard = ({ name, children, ...props }: Props) => {
   const isString = typeofChildren(children);
+  const shortAddress =
+    isString && typeof children === "string" && truncateString(children);
 
   return (
     <div className="flex items-center gap-2">
@@ -14,7 +21,16 @@ export const WalletCard = ({
         <div className="w-6 h-6 p-1.5 flex items-center justify-center rounded-sm bg-level-2">
           <RiWalletLine className="w-full h-full" />
         </div>
-        {isString ? <Typography.Text>{children}</Typography.Text> : children}
+        {isString ? (
+          <div className="flex items-center gap-1">
+            {name && <Typography.Text>{name}</Typography.Text>}
+            <Typography.Text appearance={name ? "primary" : "base"}>
+              {name ? `(${shortAddress})` : shortAddress}
+            </Typography.Text>
+          </div>
+        ) : (
+          children
+        )}
       </div>
       <Button.Solid appearance="secondary" size="xs" {...props}>
         Change

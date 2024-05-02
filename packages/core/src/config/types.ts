@@ -19,4 +19,5 @@ export type DefaultConfig = {
   mainUrl: string;
   blockedAssets: string[];
   subscanApi: string;
+  disabledTheaChains: string[];
 };

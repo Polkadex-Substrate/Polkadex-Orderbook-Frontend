@@ -1,23 +1,30 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { AssetsProps } from "@orderbook/core/hooks";
-import { Button, Dropdown, Tokens, Typography } from "@polkadex/ux";
+import { Button, Dropdown, TokenAppearance, Typography } from "@polkadex/ux";
 import { Fragment } from "react";
 import Link from "next/link";
 import { RiMore2Line } from "@remixicon/react";
+import { Asset } from "@polkadex/thea";
+import { getChainFromTicker } from "@orderbook/core/helpers";
 
 import { TokenCard } from "@/components/ui/ReadyToUse";
 import { AmountCard } from "@/components/ui/ReadyToUse/amountCard";
 
-const columnHelper = createColumnHelper<AssetsProps>();
+interface Props extends Asset {
+  balance: number;
+}
+const columnHelper = createColumnHelper<Props>();
 export const columns = [
-  columnHelper.accessor((row) => row, {
+  columnHelper.accessor((row) => row.ticker, {
     id: "token",
     cell: (e) => {
+      const ticker = e.getValue();
+      const name = getChainFromTicker(ticker);
       return (
         <TokenCard
-          tokenName={e.getValue().name}
-          ticker={e.getValue().ticker}
-          icon={e.getValue().ticker as keyof typeof Tokens}
+          tokenName={name}
+          ticker={ticker}
+          icon={ticker as TokenAppearance}
         />
       );
     },
@@ -33,7 +40,7 @@ export const columns = [
       return valA > valB ? 1 : -1;
     },
   }),
-  columnHelper.accessor((row) => row.onChainBalance, {
+  columnHelper.accessor((row) => row.balance, {
     id: "balance",
     cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
     header: () => (
