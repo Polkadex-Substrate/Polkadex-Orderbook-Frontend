@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@polkadex/ux";
 import { RiArrowDownSLine } from "@remixicon/react";
-import { Fragment, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useTheaProvider } from "@orderbook/core/providers";
 
 import { SelectAsset } from "../selectAsset";
@@ -30,7 +30,14 @@ export const Form = () => {
     destinationAccount,
     setDestinationAccount,
     selectedAsset,
+    balances,
   } = useTheaProvider();
+
+  const balance = useMemo(
+    () => balances.find((x) => x.ticker.includes(selectedAsset?.ticker ?? "")),
+    [balances, selectedAsset?.ticker]
+  );
+
   return (
     <Fragment>
       <SelectAsset open={openAsset} onOpenChange={setOpenAsset} />
@@ -138,34 +145,56 @@ export const Form = () => {
           </div>
           <div className="flex flex-col gap-3">
             <Typography.Heading>Asset</Typography.Heading>
-            <div className="flex item-center border border-primary rounded-sm">
-              <Input.Vertical className="w-full pl-4 py-4" placeholder="0.00" />
-              <Button.Outline
-                appearance="secondary"
-                className="gap-1 px-2 py-7 justify-between"
-                onClick={() => setOpenAsset(true)}
-                disabled={!sourceChain && !destinationChain}
-              >
-                <div className="flex items-center gap-2">
-                  {selectedAsset ? (
-                    <Token
-                      name={selectedAsset.ticker}
-                      size="md"
-                      appearance={selectedAsset.ticker as TokenAppearance}
-                      className="rounded-full border border-primary"
-                    />
-                  ) : (
-                    <div className="w-6 h-6 rounded-full bg-level-5" />
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between gap-2">
+                <Typography.Text appearance="primary">Amount</Typography.Text>
+                {selectedAsset && (
+                  <Typography.Text appearance="primary">
+                    Available: {balance?.amount ?? 0} {selectedAsset?.ticker}
+                  </Typography.Text>
+                )}
+              </div>
+              <div className="flex item-center border border-primary rounded-sm">
+                <Input.Vertical className="w-full pl-4 py-4" placeholder="0.00">
+                  {sourceAccount && (
+                    <Input.Action
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      MAX
+                    </Input.Action>
                   )}
+                </Input.Vertical>
+                <Button.Outline
+                  appearance="secondary"
+                  className="gap-1 px-2 py-7 justify-between ml-4 "
+                  onClick={() => setOpenAsset(true)}
+                  disabled={!sourceChain || !destinationChain}
+                >
+                  <div className="flex items-center gap-2">
+                    {selectedAsset ? (
+                      <Token
+                        name={selectedAsset.ticker}
+                        size="md"
+                        appearance={selectedAsset.ticker as TokenAppearance}
+                        className="rounded-full border border-primary"
+                      />
+                    ) : (
+                      <div className="w-6 h-6 rounded-full bg-level-5" />
+                    )}
 
-                  <Typography.Text size="md">Select token</Typography.Text>
-                </div>
-                <RiArrowDownSLine className="w-4 h-4" />
-              </Button.Outline>
+                    <Typography.Text size="md">
+                      {selectedAsset ? selectedAsset.ticker : "Select token"}
+                    </Typography.Text>
+                  </div>
+                  <RiArrowDownSLine className="w-4 h-4" />
+                </Button.Outline>
+              </div>
             </div>
           </div>
         </div>
-        <Button.Solid disabled={!sourceChain && !destinationChain}>
+        <Button.Solid disabled={!sourceChain || !destinationChain}>
           Bridge
         </Button.Solid>
       </div>

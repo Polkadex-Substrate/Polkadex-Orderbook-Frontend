@@ -1,18 +1,23 @@
 import { Token, Typography, TokenAppearance } from "@polkadex/ux";
+import { ComponentProps } from "react";
+import { twMerge } from "tailwind-merge";
 import { useWindowSize } from "usehooks-ts";
 
+interface Props extends ComponentProps<"div"> {
+  icon: TokenAppearance;
+  ticker: string;
+  tokenName: string;
+}
 export const TokenCard = ({
   icon,
   ticker,
   tokenName,
-}: {
-  icon: TokenAppearance;
-  ticker: string;
-  tokenName: string;
-}) => {
+  className,
+  ...props
+}: Props) => {
   const { width } = useWindowSize();
   return (
-    <div className="flex items-center gap-3">
+    <div className={twMerge("flex items-center gap-3", className)} {...props}>
       <Token
         name={icon}
         size={width <= 600 ? "xs" : "md"}

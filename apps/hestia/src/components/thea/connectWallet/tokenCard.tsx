@@ -13,31 +13,31 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { trimFloat } from "@polkadex/numericals";
 import { parseScientific } from "@orderbook/core/helpers";
+import { useTheaProvider } from "@orderbook/core/providers";
 
 export const TokenCard = ({
   icon,
   ticker,
   tokenName,
-  assetId,
   disabled,
 }: {
   icon: string;
   ticker: string;
   tokenName: string;
-  assetId: string;
   disabled?: boolean;
 }) => {
-  const { balances, balancesLoading, isLogged } = {} as any;
+  const { balances, balancesLoading } = useTheaProvider();
 
-  const asset = useMemo(
-    () => balances?.find(({ id }) => id === assetId)?.balance,
-    [balances, assetId]
+  const amount = useMemo(
+    () => balances?.find((e) => e.ticker.includes(ticker))?.amount,
+    [balances, ticker]
   );
   const balance = useMemo(() => {
-    const trimmedBalance = trimFloat({ value: asset?.toString() ?? "" });
+    const trimmedBalance = trimFloat({ value: amount?.toString() ?? "" });
     return parseScientific(trimmedBalance);
-  }, [asset]);
+  }, [amount]);
 
+  console.log("balance", balance);
   return (
     <div
       className={classNames(
@@ -81,17 +81,11 @@ export const TokenCard = ({
           </Typography.Text>
         </div>
       </div>
-      {isLogged && (
-        <Skeleton loading={balancesLoading} className="max-w-20 max-h-5">
-          <Typography.Text
-            size="xs"
-            appearance="primary"
-            className="self-center"
-          >
-            {balance} {ticker}
-          </Typography.Text>
-        </Skeleton>
-      )}
+      <Skeleton loading={balancesLoading} className="max-w-20 max-h-5">
+        <Typography.Text size="xs" appearance="primary" className="self-center">
+          {balance} {ticker}
+        </Typography.Text>
+      </Skeleton>
     </div>
   );
 };

@@ -25,6 +25,7 @@ export const columns = [
           tokenName={name}
           ticker={ticker}
           icon={ticker as TokenAppearance}
+          className="max-md:pr-6 md:min-w-40"
         />
       );
     },
@@ -51,13 +52,12 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row, {
     id: "actions",
-    cell: (e) => {
+    cell: () => {
       return (
         <div className="flex items-center justify-end gap-2">
-          <Button.Solid asChild size="xs" appearance="secondary">
+          <Button.Solid size="xs" appearance="secondary">
             Bridge
           </Button.Solid>
-
           <Dropdown>
             <Dropdown.Trigger className="group">
               <RiMore2Line className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
@@ -78,16 +78,4 @@ export const columns = [
     header: () => <Fragment />,
     footer: (e) => e.column.id,
   }),
-];
-
-export const fakeData = [
-  {
-    id: "1",
-    ticker: "PDEX",
-    name: "Polkadex",
-    decimal: 12,
-    free_balance: "0.00",
-    onChainBalance: "0.00",
-    inOrdersBalance: "0.00",
-  },
 ];

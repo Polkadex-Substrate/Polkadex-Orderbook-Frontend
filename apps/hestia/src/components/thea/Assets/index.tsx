@@ -16,15 +16,15 @@ import {
 import classNames from "classnames";
 import { useTheaProvider } from "@orderbook/core/providers";
 
-import { columns, fakeData } from "./columns";
+import { columns } from "./columns";
 import { Filters } from "./Filters";
 
-// import { SkeletonCollection } from "@/components/ui/ReadyToUse";
+import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
-const actionKeys = ["token", "source", "date"];
+const actionKeys = ["token", "balance", "date"];
 
 export const Assets = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
-  const { supportedAssets, balances } = useTheaProvider();
+  const { supportedAssets, balances, balancesLoading } = useTheaProvider();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -56,19 +56,18 @@ export const Assets = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  if (!assets) return <div>No source selected</div>;
-  // return <SkeletonCollection />;
+  if (balancesLoading) return <SkeletonCollection />;
   return (
     <Fragment>
       <div className="flex-1 flex flex-col">
         <div className="flex items-center justify-between pl-5">
           <Input.Search
-            placeholder="Search transaction.."
+            placeholder="Search asset.."
             className="max-sm:focus:text-[16px]"
           />
           <Filters availableTokens={[]} table={table} />
         </div>
-        {fakeData.length ? (
+        {assets ? (
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base min-h-40">
             <div
               className="overflow-y-hidden hover:overflow-y-auto px-3"
@@ -85,20 +84,21 @@ export const Assets = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
                       key={headerGroup.id}
                       className="border-none sticky top-0 bg-backgroundBase"
                     >
-                      {headerGroup.headers.map((header) => {
+                      {headerGroup.headers.map((header, i) => {
                         const getSorted = header.column.getIsSorted();
                         const isActionTab = actionKeys.includes(header.id);
+                        const fitContent = i === 0 || i === 1;
                         const handleSort = (): void => {
                           const isDesc = getSorted === "desc";
                           header.column.toggleSorting(!isDesc);
                         };
-
                         return (
                           <Table.Head
                             key={header.id}
                             className={classNames(
                               !isActionTab && "cursor-pointer"
                             )}
+                            style={{ width: fitContent ? "1%" : "auto" }}
                             {...(isActionTab && { onClick: handleSort })}
                           >
                             {header.isPlaceholder

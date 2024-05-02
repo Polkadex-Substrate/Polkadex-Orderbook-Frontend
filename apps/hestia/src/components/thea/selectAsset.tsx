@@ -11,8 +11,9 @@ import { SetStateAction, Dispatch, useCallback, ComponentProps } from "react";
 import classNames from "classnames";
 import { twMerge } from "tailwind-merge";
 import { useTheaProvider } from "@orderbook/core/providers";
+import { getChainFromTicker } from "@orderbook/core/helpers";
 
-import { TokenCard } from "../ui/ReadyToUse";
+import { TokenCard } from "./connectWallet";
 
 export const SelectAsset = ({
   open,
@@ -55,18 +56,22 @@ export const SelectAsset = ({
                     className="[&_[cmdk-group-heading]]:px-3"
                   >
                     {supportedAssets?.map((e, i) => {
+                      const tokenName = getChainFromTicker(e.ticker);
                       return (
                         <Searchable.Item
                           key={i}
                           value={e.ticker}
                           className="p-3"
-                          onSelect={() => setSelectedAsset(e)}
+                          onSelect={() => {
+                            setSelectedAsset(e);
+                            onOpenChange(false);
+                          }}
                         >
                           <TokenCard
                             key={e.id}
                             icon={e.ticker as TokenAppearance}
                             ticker={e.ticker}
-                            tokenName={e.logo}
+                            tokenName={tokenName}
                           />
                         </Searchable.Item>
                       );

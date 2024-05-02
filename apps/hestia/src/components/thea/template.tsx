@@ -5,13 +5,13 @@ import { useWindowSize } from "usehooks-ts";
 import { Fragment, useMemo, useRef, useState } from "react";
 import { RiDownload2Line, RiInformation2Line } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useTheaProvider } from "@orderbook/core/providers";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
 import { Help } from "./Help";
 import { Form } from "./Form";
 import { History } from "./History";
-import { fakeData } from "./History/columns";
 import { Assets } from "./Assets";
 
 import { Footer, Header } from "@/components/ui";
@@ -28,7 +28,7 @@ export function Template({ id }: { id: string }) {
   const { width } = useWindowSize();
 
   const { onOpenChange } = useTour();
-
+  const { sourceAccount } = useTheaProvider();
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
@@ -81,7 +81,7 @@ export function Template({ id }: { id: string }) {
                     </Typography.Text>
                   </Button.Ghost>
                 </div>
-                {fakeData ? (
+                {sourceAccount ? (
                   <Fragment>
                     <Tabs.Content value="history" className="flex flex-col">
                       <History />
@@ -94,7 +94,10 @@ export function Template({ id }: { id: string }) {
                   <GenericMessage
                     title="Connect a source wallet"
                     illustration="ConnectAccount"
-                    className="bg-level-0 border-b border-primary"
+                    className="bg-level-0 border-y border-y-primary"
+                    imageProps={{
+                      className: "w-22 self-center",
+                    }}
                   />
                 )}
               </div>

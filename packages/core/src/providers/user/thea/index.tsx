@@ -41,23 +41,45 @@ export const TheaProvider = ({ children }: { children: ReactNode }) => {
     [getAllChains]
   );
 
-  const connector = useMemo(
+  const sourceConnector = useMemo(
     () => sourceChain && getChainConnector(sourceChain.genesis),
     [sourceChain]
   );
+  const destinationConnector = useMemo(
+    () => destinationChain && getChainConnector(destinationChain.genesis),
+    [destinationChain]
+  );
+
+  const sourceAssets = useMemo(
+    () => (sourceConnector ? sourceConnector.getSupportedAssets() : []),
+    [sourceConnector]
+  );
+
+  const destinationAssets = useMemo(
+    () =>
+      destinationConnector ? destinationConnector.getSupportedAssets() : [],
+    [destinationConnector]
+  );
+
   const supportedAssets = useMemo(
-    () => (connector ? connector.getSupportedAssets() : []),
-    [connector]
+    () =>
+      sourceAssets && destinationAssets
+        ? sourceAssets?.filter((e) =>
+            destinationAssets?.some((x) => e?.ticker === x?.ticker)
+          )
+        : [],
+    [sourceAssets, destinationAssets]
   );
 
   const {
     data: balances = [],
     isLoading: balancesLoading,
+    isFetching: balancesFetching,
     isSuccess: balancesSuccess,
   } = useTheaBalances({
-    connector,
+    connector: sourceConnector,
     sourceAddress: sourceAccount?.address ?? "",
-    assets: supportedAssets,
+    assets: sourceAssets,
   });
 
   return (
@@ -75,11 +97,13 @@ export const TheaProvider = ({ children }: { children: ReactNode }) => {
         chains,
 
         supportedAssets,
+        destinationAssets,
+
         selectedAsset,
         setSelectedAsset,
 
         balances,
-        balancesLoading,
+        balancesLoading: balancesLoading && balancesFetching,
         balancesSuccess,
       }}
     >
@@ -102,6 +126,8 @@ type State = {
   setSourceChain: Dispatch<SetStateAction<Chain | null>>;
 
   supportedAssets: Asset[];
+  destinationAssets: Asset[];
+
   selectedAsset: Asset | null;
   setSelectedAsset: Dispatch<SetStateAction<Asset>>;
 
@@ -122,6 +148,8 @@ export const Context = createContext<State>({
   chains: [],
 
   supportedAssets: [],
+  destinationAssets: [],
+
   selectedAsset: null,
   setSelectedAsset: () => {},
 
