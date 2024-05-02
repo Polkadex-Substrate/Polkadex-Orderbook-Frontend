@@ -24,7 +24,7 @@ export type ProfileContextInterface = ProfileContextState & {
   onSetTotal: (payload: string) => void;
   onUserSelectTradingAddress: (value: {
     tradeAddress: string;
-    isNew?: true;
+    isNew?: boolean;
   }) => Promise<void>;
   onUserSelectMainAddress: (value: { mainAddress: string }) => void;
   onUserLogout: () => void;

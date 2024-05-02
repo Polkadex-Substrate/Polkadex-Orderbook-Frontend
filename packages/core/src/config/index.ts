@@ -1,3 +1,5 @@
+import { Features } from "./types";
+
 import { DefaultConfig } from ".";
 export * from "./types";
 
@@ -27,4 +29,9 @@ export const defaultConfig: DefaultConfig = {
   mainUrl: process.env.MAIN_URL || "/trading",
   blockedAssets: process.env.BLOCKED_ASSETS?.split(",") || [],
   subscanApi: process.env.SUBSCAN_API || "",
+  googleApiKey: process.env.GOOGLE_API_KEY ?? "",
+  googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
+  disabledFeatures: (process.env.DISABLED_FEATURES?.split(
+    ","
+  ) as Array<Features>) ?? ["payWithAnotherFee"],
 };

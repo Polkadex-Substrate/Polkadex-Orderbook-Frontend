@@ -9,10 +9,10 @@ import {
   useExtensionAccounts,
   useExtensions,
 } from "@polkadex/react-providers";
-import { TradeAccount } from "@orderbook/core/providers/types";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { MINIMUM_PDEX_REQUIRED } from "@orderbook/core/constants";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { Profile } from "../../ConnectWallet/profile";
 import { NewTradingAccount } from "../../ConnectWallet/newTradingAccount";
@@ -36,7 +36,6 @@ export const Content = () => {
   const {
     selectedWallet,
     onSelectTradingAccount,
-    selectedAccount,
     onLogout,
     localTradingAccounts,
     onSetTempTrading,
@@ -61,6 +60,15 @@ export const Content = () => {
     importFromMnemonicError,
     importFromMnemonicStatus,
     onImportFromMnemonic,
+    onBackupGoogleDrive,
+    backupGoogleDriveLoading,
+    onConnectGoogleDrive,
+    connectGoogleDriveLoading,
+    gDriveReady,
+    onRemoveGoogleDrive,
+    removeGoogleDriveLoading,
+    browserAccountPresent,
+    selectedAccount,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
   const { onToogleConnectExtension } = useSettingsProvider();
@@ -159,9 +167,7 @@ export const Content = () => {
               onImportTradingAccount={() =>
                 props?.onPage("ConnectTradingAccount", true)
               }
-              onSelectTradingAccount={(tradeAddress) =>
-                onSelectTradingAccount({ tradeAddress })
-              }
+              onSelectTradingAccount={(e) => onSelectTradingAccount(e)}
               onSwitch={() => {
                 onToogleConnectExtension();
                 onLogout?.();
@@ -178,7 +184,7 @@ export const Content = () => {
               onExportBrowserAccountCallback={() =>
                 props?.onPage("UnlockBrowserAccount", true)
               }
-              tradingWalletPresent={!!selectedAccount?.address}
+              tradingWalletPresent={browserAccountPresent}
               fundWalletPresent={fundWalletPresent}
               fundWallet={selectedFundingWallet}
               tradeAccount={selectedAccount}
@@ -200,6 +206,9 @@ export const Content = () => {
                 props?.onPage("TradingAccountSuccessfull", true)
               }
               onClose={() => props?.onChangeInteraction(false)}
+              onConnectGDrive={onConnectGoogleDrive}
+              connectGDriveLoading={connectGoogleDriveLoading}
+              gDriveReady={gDriveReady}
             />
             <UnlockAccount
               key="UnlockBrowserAccount"
@@ -210,12 +219,20 @@ export const Content = () => {
               }
               onResetTempBrowserAccount={onResetTempTrading}
             />
+            <UnlockAccount
+              key="ExportGoogleDriveAccount"
+              tempBrowserAccount={tempTrading}
+              onClose={() => props?.onPage("ConnectTradingAccount")}
+              onAction={async (account, password) =>
+                await onBackupGoogleDrive({ account, password })
+              }
+              onResetTempBrowserAccount={onResetTempTrading}
+              loading={backupGoogleDriveLoading}
+            />
             <ConnectTradingAccount
               key="ConnectTradingAccount"
-              accounts={filteredAccounts as TradeAccount[]}
-              onSelect={(e) => {
-                onSelectTradingAccount?.({ tradeAddress: e.address });
-              }}
+              accounts={filteredAccounts}
+              onSelect={(e) => onSelectTradingAccount(e)}
               onClose={() => props?.onChangeInteraction(false)}
               onImport={() => props?.onPage("ImportTradingAccount")}
               onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
@@ -230,6 +247,16 @@ export const Content = () => {
               onImportMnemonic={() =>
                 props?.onPage("ImportTradingAccountMnemonic")
               }
+              onExportGoogleCallback={() =>
+                props?.onPage("ExportGoogleDriveAccount")
+              }
+              backupGDriveAccountLoading={backupGoogleDriveLoading}
+              onBackupGDriveAccount={(account) =>
+                onBackupGoogleDrive({ account })
+              }
+              onConnectGDrive={onConnectGoogleDrive}
+              connectGDriveLoading={connectGoogleDriveLoading}
+              gDriveReady={gDriveReady}
             >
               <GenericHorizontalCard
                 title="Registered trading accounts"
@@ -265,18 +292,15 @@ export const Content = () => {
               tradingAccount={tempTrading as TradeAccount}
               fundWallet={tempExtensionAccount}
               availableOnDevice={availableOnDevice}
-              onRemoveFromDevice={() =>
-                onRemoveTradingAccountFromDevice?.(
-                  tempTrading?.address as string
-                )
-              }
+              onRemoveFromDevice={(e) => onRemoveTradingAccountFromDevice(e)}
+              onRemoveGoogleDrive={async (e) => await onRemoveGoogleDrive(e)}
               onRemoveFromChain={async () =>
                 await onRemoveTradingAccountFromChain?.({
                   proxy: tempTrading?.address as string,
                   selectedWallet,
                 })
               }
-              loading={removingStatus === "loading"}
+              loading={removingStatus === "loading" || removeGoogleDriveLoading}
               errorTitle="Error"
               errorMessage={(removingError as Error)?.message ?? removingError}
               selectedExtension={tempSelectedExtension}
@@ -289,11 +313,11 @@ export const Content = () => {
                 onResetTempMnemonic?.();
                 props?.onChangeInteraction(false);
               }}
-              onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
+              onTempBrowserAccount={(e) => onSetTempTrading(e)}
               onOpenMnemonic={() =>
                 props?.onPage("TradingAccountMnemonic", true)
               }
-              onDownloadPdf={() => window.alert("Downloading...")}
+              onDownloadPdf={() => {}}
               onDownloadJson={(e) => onExportTradeAccount?.({ account: e })}
               onDownloadJsonCallback={() =>
                 props?.onPage("UnlockBrowserAccount", true)

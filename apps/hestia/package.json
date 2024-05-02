@@ -12,12 +12,14 @@
     "clear": "rm -rf .next"
   },
   "dependencies": {
+    "@cedelabs/widgets-universal": "^1.2.0",
     "@juggle/resize-observer": "^3.4.0",
     "@next/bundle-analyzer": "^14.0.1",
     "@orderbook/core": "*",
     "@orderbook/eslint-config": "*",
     "@orderbook/tsconfig": "*",
     "@polkadex/blockchain-api": "^1.1.61",
+    "@polkadex/local-wallets": "^2.3.0",
     "@polkadex/numericals": "^0.3.0",
     "@polkadex/polkadex-api": "^3.2.0",
     "@polkadex/react-providers": "^2.1.0",

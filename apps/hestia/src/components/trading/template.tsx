@@ -19,7 +19,7 @@ import { ResponsiveAssetInfo } from "./AssetInfo/responsiveAssetInfo";
 
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { Footer, Header } from "@/components/ui";
-import { useSizeObserver, useTour } from "@/hooks";
+import { useSizeObserver } from "@/hooks";
 
 export function Template({ id }: { id: string }) {
   const [footerRef, footerHeight] = useSizeObserver();
@@ -29,7 +29,6 @@ export function Template({ id }: { id: string }) {
   const orderbookPanelRef = useRef<ImperativePanelHandle>(null);
 
   const { width } = useWindowSize();
-  const { onOpenChange } = useTour();
   const { list } = useMarkets();
   const currentMarket = getCurrentMarket(list, id);
 
@@ -179,11 +178,7 @@ export function Template({ id }: { id: string }) {
           market={currentMarket}
         />
       ) : (
-        <Footer
-          onOpenChange={() => onOpenChange(true)}
-          marketsActive
-          ref={footerRef}
-        />
+        <Footer marketsActive ref={footerRef} />
       )}
     </Fragment>
   );

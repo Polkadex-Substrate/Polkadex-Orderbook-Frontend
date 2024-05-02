@@ -28,7 +28,9 @@
         "UNDER_MAINTENACE",
         "MAIN_URL",
         "BLOCKED_ASSETS",
-        "DISABLED_FEATURES"
+        "DISABLED_FEATURES",
+        "GOOGLE_API_KEY",
+        "GOOGLE_CLIENT_ID"
       ]
     },
     "generate": {

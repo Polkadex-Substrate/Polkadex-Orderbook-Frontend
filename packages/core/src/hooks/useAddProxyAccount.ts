@@ -1,19 +1,28 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  UseQueryResult,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   ExtensionAccount,
   useTransactionManager,
   useUserAccounts,
 } from "@polkadex/react-providers";
-import { getAddressFromMnemonic } from "@orderbook/core/helpers";
+import {
+  enabledFeatures,
+  getAddressFromMnemonic,
+} from "@orderbook/core/helpers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 import { MutateHookProps } from "@orderbook/core/hooks/types";
+import { KeyringPair$Json } from "@polkadot/keyring/types";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
 import { NOTIFICATIONS, QUERY_KEYS } from "../constants";
 import { useSettingsProvider } from "../providers/public/settings";
 
 import { handleTransaction } from "./../helpers/signAndSendExtrinsic";
+const { googleDriveStore } = enabledFeatures;
 
 export type AddProxyAccountArgs = {
   mnemonic: string;
@@ -21,15 +30,20 @@ export type AddProxyAccountArgs = {
   password?: string;
   tokenFeeId?: string;
   selectedWallet?: ExtensionAccount;
+  importType?: "Local" | "GDrive";
 };
 
 interface UseAddProxyAccount extends MutateHookProps {
   onSetTempMnemonic: (value: string) => void;
+  onRefetchGoogleDriveAccounts: UseQueryResult["refetch"];
+  onAddAccountFromJson: (json: KeyringPair$Json) => void;
 }
 export function useAddProxyAccount({
   onSetTempMnemonic,
   onSuccess,
   onError,
+  onRefetchGoogleDriveAccounts,
+  onAddAccountFromJson,
 }: UseAddProxyAccount) {
   const queryClient = useQueryClient();
   const { api } = useNativeApi();
@@ -45,6 +59,7 @@ export function useAddProxyAccount({
       password,
       tokenFeeId,
       selectedWallet,
+      importType,
     }: AddProxyAccountArgs) => {
       if (!api || !wallet)
         throw new Error("You are not connected to blockchain ");
@@ -81,6 +96,12 @@ export function useAddProxyAccount({
       addToTxQueue(signedExtrinsic);
       await handleTransaction(signedExtrinsic);
       const { pair } = wallet.addFromMnemonic(mnemonic, name, password);
+      if (importType === "GDrive" && googleDriveStore) {
+        const jsonAccount = pair.toJson(password);
+        await onAddAccountFromJson(jsonAccount);
+        await onRefetchGoogleDriveAccounts();
+      }
+
       await onUserSelectTradingAddress({
         tradeAddress: pair.address,
         isNew: true,

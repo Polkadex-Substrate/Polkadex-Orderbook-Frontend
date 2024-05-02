@@ -145,6 +145,7 @@ export interface UserHistoryProps<T = null> {
   pageParams: T;
   market?: string;
   batchLimit: number;
+  basedOnFundingAccount?: boolean;
 }
 export interface UserAllHistoryProps {
   address: string;
@@ -161,9 +162,9 @@ export interface TransactionHistoryProps<T = null> {
   transaction_type: "DEPOSIT" | "WITHDRAW";
 }
 
-export interface OrderHistoryProps {
+export interface OpenOrdersProps {
   address: string;
-  limit: number;
+  basedOnFundingAccount?: boolean;
 }
 export interface MarketHistoryProps<T = null> {
   market: string;

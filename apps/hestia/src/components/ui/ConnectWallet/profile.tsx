@@ -41,7 +41,7 @@ export const Profile = ({
   onConnectWallet,
 }: {
   onCreateTradingAccount: () => void;
-  onSelectTradingAccount: (value: string) => void;
+  onSelectTradingAccount: (value: KeyringPair) => void;
   onImportTradingAccount: () => void;
   onLogout: () => void;
   onActions: () => void;
@@ -185,7 +185,7 @@ export const Profile = ({
                           onExportBrowserAccountCallback
                         }
                         onRemoveCallback={onRemoveCallback}
-                        onSelectTradingAccount={onSelectTradingAccount}
+                        onSelectTradingAccount={() => onSelectTradingAccount(v)}
                         onSetState={setState}
                         onTempBrowserAccount={onTempBrowserAccount}
                       />
@@ -213,7 +213,7 @@ export const Profile = ({
                           onExportBrowserAccountCallback
                         }
                         onRemoveCallback={onRemoveCallback}
-                        onSelectTradingAccount={onSelectTradingAccount}
+                        onSelectTradingAccount={() => onSelectTradingAccount(v)}
                         onSetState={setState}
                         onTempBrowserAccount={onTempBrowserAccount}
                       />

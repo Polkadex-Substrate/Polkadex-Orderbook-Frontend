@@ -4,8 +4,8 @@ import {
   Illustrations,
   Interaction,
 } from "@polkadex/ux";
-import { TradeAccount } from "@orderbook/core/providers/types";
 import { MouseEvent } from "react";
+import { TradeAccount } from "@orderbook/core/providers/types";
 
 import { RemoveWalletCard } from "../ReadyToUse";
 

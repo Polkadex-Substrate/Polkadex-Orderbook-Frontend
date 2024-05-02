@@ -23,6 +23,7 @@ export * from "./discord";
 export * from "./bridge";
 export * from "./creditCard";
 export * from "./centralizedExchange";
+export * from "./cexOnRamp";
 export * from "./transferToFunding";
 export * from "./transferToTrading";
 export * from "./freeCoin";

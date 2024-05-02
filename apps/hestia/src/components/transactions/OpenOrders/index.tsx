@@ -47,7 +47,10 @@ export const OpenOrders = forwardRef<HTMLDivElement, Props>(
     const { mutateAsync: cancelOrder } = useCancelOrder();
     const { mutateAsync: onCancelAllOrders } = useCancelAllOrders();
 
-    const { isLoading, openOrders: allOpenOrders } = useOpenOrders();
+    const { isLoading, openOrders: allOpenOrders } = useOpenOrders(
+      undefined,
+      true
+    );
     const [showPassword, setShowPassword] = useState(false);
     const [orderPayload, setOrderPayload] = useState<CancelOrderArgs | null>(
       null
