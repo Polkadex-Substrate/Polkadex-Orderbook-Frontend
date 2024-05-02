@@ -51,7 +51,7 @@ export const TradeHistory = forwardRef<HTMLDivElement, Props>(
       isFetchingNextPage,
       hasNextPage,
       onFetchNextPage,
-    } = useTradeHistory(rowsPerPage);
+    } = useTradeHistory(rowsPerPage, undefined, true);
 
     const tradeHistoryPerPage = useMemo(
       () =>
