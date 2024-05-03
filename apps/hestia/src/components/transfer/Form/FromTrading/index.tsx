@@ -14,6 +14,7 @@ import { SwitchType } from "@/hooks";
 
 export const FromTrading = ({
   isLocalAccountPresent,
+  isBalanceFetching,
   isExtensionAccountPresent,
   fromFunding,
   extensionAccountName,
@@ -28,6 +29,7 @@ export const FromTrading = ({
   type,
 }: {
   fromFunding?: boolean;
+  isBalanceFetching: boolean;
   extensionAccountName?: string;
   extensionAccountAddress?: string;
   extensionAccountBalance?: string;
@@ -81,7 +83,7 @@ export const FromTrading = ({
             </InlineAccountCard>
           )}
 
-          <Skeleton loading={!selectedAssetTicker} className="h-auto max-w-20">
+          <Skeleton loading={isBalanceFetching} className="h-auto max-w-20">
             <Typography.Text
               appearance="primary"
               size="xs"
