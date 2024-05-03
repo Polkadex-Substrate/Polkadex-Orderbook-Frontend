@@ -98,6 +98,7 @@ export const TheaProvider = ({ children }: { children: ReactNode }) => {
 
         supportedAssets,
         destinationAssets,
+        sourceAssets,
 
         selectedAsset,
         setSelectedAsset,
@@ -127,6 +128,7 @@ type State = {
 
   supportedAssets: Asset[];
   destinationAssets: Asset[];
+  sourceAssets: Asset[];
 
   selectedAsset: Asset | null;
   setSelectedAsset: Dispatch<SetStateAction<Asset>>;
@@ -149,6 +151,7 @@ export const Context = createContext<State>({
 
   supportedAssets: [],
   destinationAssets: [],
+  sourceAssets: [],
 
   selectedAsset: null,
   setSelectedAsset: () => {},

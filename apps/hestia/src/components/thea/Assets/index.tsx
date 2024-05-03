@@ -24,20 +24,20 @@ import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 const actionKeys = ["token", "balance", "date"];
 
 export const Assets = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
-  const { supportedAssets, balances, balancesLoading } = useTheaProvider();
+  const { sourceAssets, balances, balancesLoading } = useTheaProvider();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const assets = useMemo(
     () =>
-      supportedAssets?.map((e) => {
+      sourceAssets?.map((e) => {
         const balance = balances?.find((x) => x.ticker.includes(e.ticker));
         return {
           ...e,
           balance: balance?.amount ?? 0,
         };
       }),
-    [balances, supportedAssets]
+    [balances, sourceAssets]
   );
 
   const table = useReactTable({
@@ -96,6 +96,7 @@ export const Assets = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
                           <Table.Head
                             key={header.id}
                             className={classNames(
+                              "whitespace-nowrap",
                               !isActionTab && "cursor-pointer"
                             )}
                             style={{ width: fitContent ? "1%" : "auto" }}

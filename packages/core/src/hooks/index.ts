@@ -32,3 +32,4 @@ export * from "./useTransactionFee";
 export * from "./useCall";
 export * from "./useTransactionFeeModal";
 export * from "./useTheaBalances";
+export * from "./useTheaTransactions";

@@ -98,4 +98,6 @@ export const QUERY_KEYS = {
   ],
   queryPools: () => [PREFIX, "queryPools"],
   getTheaBalances: (address: string) => [PREFIX, "getTheaBalances", address],
+  getTheDeposits: (address: string) => [PREFIX, "getTheDeposits", address],
+  getTheWithadraws: (address: string) => [PREFIX, "getTheWithadraws", address],
 };
