@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "yarn generate && next dev",
     "build": "next build",
-    "dev:build": "export __NEXT_TEST_MODE=1 && next build",
+    "dev:build": "yarn generate && export __NEXT_TEST_MODE=1 && next build",
     "generate": "chmod +x copy_charting_library_files.sh && ./copy_charting_library_files.sh",
     "start": "next start",
     "lint": "next lint --fix",
