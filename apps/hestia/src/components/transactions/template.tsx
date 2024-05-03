@@ -10,7 +10,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
-import { QuickStart } from "../ui/Footer/QuickStart";
 
 import { Help } from "./Help";
 import { TransferHistory } from "./Transfer";
@@ -21,13 +20,12 @@ import { TradeHistory } from "./TradeHistory";
 import { Footer, Header } from "@/components/ui";
 import { ConnectTradingInteraction } from "@/components/ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ConnectAccountWrapper } from "@/components/ui/ReadyToUse";
-import { useSizeObserver, useTour } from "@/hooks";
+import { useSizeObserver } from "@/hooks";
 
 export function Template() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { width } = useWindowSize();
-  const { onOpenChange, open, onClose } = useTour();
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const helpRef = useRef<HTMLDivElement | null>(null);
@@ -74,7 +72,7 @@ export function Template() {
     [headerHeight, overviewHeight, helpHeight, tableRowsHeight, footerHeight]
   );
   const {
-    selectedAddresses: { mainAddress, tradeAddress },
+    selectedAddresses: { mainAddress },
   } = useProfile();
   const mobileView = useMemo(() => width <= 640, [width]);
   const { browserAccountPresent, extensionAccountPresent } =
@@ -82,7 +80,6 @@ export function Template() {
 
   return (
     <Fragment>
-      <QuickStart open={open} onOpenChange={onClose} />
       <ConnectTradingInteraction />
       <div
         className="flex flex-1 flex-col bg-backgroundBase h-full"
@@ -161,36 +158,36 @@ export function Template() {
                 )}
               </Tabs.Content>
               <Tabs.Content value="openOrders" className="flex-1 flex">
-                {tradeAddress?.length ? (
+                {mainAddress?.length ? (
                   <OpenOrders
                     ref={tableRowsRef}
                     maxHeight={maxHeight}
                     searchTerm={searchTerm}
                   />
                 ) : (
-                  <ConnectAccountWrapper />
+                  <ConnectAccountWrapper funding />
                 )}
               </Tabs.Content>
               <Tabs.Content value="orderHistory" className="flex-1 flex">
-                {tradeAddress?.length ? (
+                {mainAddress?.length ? (
                   <OrderHistory
                     ref={tableRowsRef}
                     maxHeight={maxHeight}
                     searchTerm={searchTerm}
                   />
                 ) : (
-                  <ConnectAccountWrapper />
+                  <ConnectAccountWrapper funding />
                 )}
               </Tabs.Content>
               <Tabs.Content value="tradeHistory" className="flex-1 flex">
-                {tradeAddress?.length ? (
+                {mainAddress?.length ? (
                   <TradeHistory
                     ref={tableRowsRef}
                     maxHeight={maxHeight}
                     searchTerm={searchTerm}
                   />
                 ) : (
-                  <ConnectAccountWrapper />
+                  <ConnectAccountWrapper funding />
                 )}
               </Tabs.Content>
               <Help ref={helpRef} />
@@ -207,9 +204,7 @@ export function Template() {
               />
             </div>
           )}
-          {!mobileView && (
-            <Footer onOpenChange={onOpenChange} marketsActive ref={footerRef} />
-          )}
+          {!mobileView && <Footer marketsActive ref={footerRef} />}
         </Tabs>
       </div>
     </Fragment>

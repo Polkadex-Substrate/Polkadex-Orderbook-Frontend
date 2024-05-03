@@ -8,24 +8,33 @@ import { appsyncOrderbookService } from "../utils/orderbookService";
 import { QUERY_KEYS } from "../constants";
 import { Ifilters } from "../providers/types";
 
-export const useOpenOrders = (filters?: Ifilters) => {
+export const useOpenOrders = (
+  filters?: Ifilters,
+  basedOnFundingAccount?: boolean
+) => {
   const { onHandleError } = useSettingsProvider();
   const {
-    selectedAddresses: { tradeAddress },
+    selectedAddresses: { tradeAddress, mainAddress },
   } = useProfile();
-  const shouldFetchOpenOrders = Boolean(tradeAddress?.length > 0);
+
+  const address = useMemo(
+    () => (basedOnFundingAccount ? mainAddress : tradeAddress),
+    [basedOnFundingAccount, mainAddress, tradeAddress]
+  );
+
+  const shouldFetchOpenOrders = Boolean(address?.length > 0);
 
   const {
     data: openOrders,
     isLoading,
     isFetching,
   } = useQuery({
-    queryKey: QUERY_KEYS.openOrders(tradeAddress),
+    queryKey: QUERY_KEYS.openOrders(address, basedOnFundingAccount),
     enabled: shouldFetchOpenOrders,
     queryFn: async () => {
       return await appsyncOrderbookService.query.getOpenOrders({
-        address: tradeAddress,
-        limit: 25,
+        address,
+        basedOnFundingAccount,
       });
     },
     initialData: [],

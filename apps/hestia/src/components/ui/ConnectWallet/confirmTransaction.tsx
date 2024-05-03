@@ -32,6 +32,7 @@ import {
   FeeAssetReserve,
   OTHER_ASSET_EXISTENTIAL,
   TransactionFeeProps,
+  enabledFeatures,
   useFunds,
   useTransactionFee,
 } from "@orderbook/core/index";
@@ -40,7 +41,7 @@ import { useConnectWalletProvider } from "@orderbook/core/providers/user/connect
 import { ErrorMessage, GenericHorizontalItem, Terms } from "../ReadyToUse";
 
 import { usePool } from "@/hooks";
-import { isDisabledFeature } from "@/helpers";
+const { payWithAnotherFee } = enabledFeatures;
 
 interface Props extends TransactionFeeProps {
   action:
@@ -63,7 +64,6 @@ export const ConfirmTransaction = ({
   setOpenFeeModal,
 }: Props) => {
   const { walletBalance = 0, selectedWallet } = useConnectWalletProvider();
-  const tokenSelectionDisabled = isDisabledFeature("payWithAnotherFee");
 
   const { fee, hash, palletName, extrinsicName, loading, success } =
     useTransactionFee({
@@ -244,7 +244,7 @@ export const ConfirmTransaction = ({
                   <Dropdown.Trigger
                     ref={ref}
                     className=" px-3 py-3 bg-level-1 border border-primary"
-                    disabled={tokenSelectionDisabled}
+                    disabled={!payWithAnotherFee}
                   >
                     <div className="flex-1 w-full flex items-cneter justify-between gap-2">
                       <Typography.Text appearance="primary">
@@ -278,7 +278,7 @@ export const ConfirmTransaction = ({
                           );
 
                           const disableDropdown =
-                            tokenSelectionDisabled && e?.id !== "PDEX";
+                            !payWithAnotherFee && e?.id !== "PDEX";
 
                           return (
                             <Dropdown.Item

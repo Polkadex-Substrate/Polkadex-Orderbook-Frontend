@@ -283,11 +283,11 @@ export const Form = ({
         <Modal.Content>
           <UnlockAccount
             onClose={() => setShowPassword(false)}
-            onAction={() =>
+            onAction={() => {
               formRef?.current?.dispatchEvent(
                 new Event("submit", { cancelable: true, bubbles: true })
-              )
-            }
+              );
+            }}
             tempBrowserAccount={selectedAccount}
           />
         </Modal.Content>

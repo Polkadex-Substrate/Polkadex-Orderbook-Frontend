@@ -21,4 +21,10 @@ export type DefaultConfig = {
   subscanApi: string;
   disabledTheaChains: string[];
   subqueryUrl: string;
+  googleApiKey: string;
+  googleClientId: string;
+  disabledFeatures: Array<Features>;
 };
+
+export type Features = (typeof features)[number];
+export const features = ["googleDriveStore", "payWithAnotherFee"] as const;
