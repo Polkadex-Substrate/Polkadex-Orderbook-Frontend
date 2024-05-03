@@ -34,6 +34,8 @@ export const useCancelOrder = () => {
       if (!api?.isConnected)
         throw new Error("You are not connected to blockchain");
 
+      if (!tradeAddress) throw new Error("No trading account selected");
+
       const keyringPair = wallet.getPair(tradeAddress);
       const account = extensionAccounts.find(
         ({ address }) => address === mainAddress
