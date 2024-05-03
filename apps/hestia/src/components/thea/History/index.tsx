@@ -1,7 +1,7 @@
 "use client";
 
 import { Table, GenericMessage, Input } from "@polkadex/ux";
-import { Fragment, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -14,20 +14,29 @@ import {
   getFacetedUniqueValues,
 } from "@tanstack/react-table";
 import classNames from "classnames";
+import { useTheaProvider } from "@orderbook/core/providers";
 
-import { columns, fakeData } from "./columns";
+import { columns } from "./columns";
 import { Filters } from "./Filters";
 
-// import { SkeletonCollection } from "@/components/ui/ReadyToUse";
+import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
 const actionKeys = ["token", "source", "date"];
 
 export const History = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
+  const { deposits, withdrawals, depositsLoading, withdrawalsLoading } =
+    useTheaProvider();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+  const data = useMemo(
+    () =>
+      [...withdrawals, ...deposits].sort((a, b) => b.timestamp - a.timestamp),
+    [withdrawals, deposits]
+  );
+
   const table = useReactTable({
-    data: fakeData,
+    data,
     state: {
       sorting,
       columnFilters,
@@ -42,7 +51,7 @@ export const History = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  // return <SkeletonCollection />;
+  if (depositsLoading || withdrawalsLoading) return <SkeletonCollection />;
   return (
     <Fragment>
       <div className="flex-1 flex flex-col">
@@ -53,10 +62,10 @@ export const History = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
           />
           <Filters availableTokens={[]} table={table} />
         </div>
-        {fakeData.length ? (
+        {data.length ? (
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base min-h-40">
             <div
-              className="overflow-y-hidden hover:overflow-y-auto px-3"
+              className="max-h-[400px] overflow-auto scrollbar-hide px-3"
               style={{
                 maxHeight: tableMaxHeight,
                 scrollbarGutter: "stable",

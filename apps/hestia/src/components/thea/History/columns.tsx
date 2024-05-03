@@ -5,37 +5,46 @@ import {
   Copy,
   Token,
   Typography,
-  tokenAppearance,
+  TokenAppearance,
   truncateString,
 } from "@polkadex/ux";
 import { intlFormat } from "date-fns";
 import { RiArrowRightLine, RiFileCopyLine } from "@remixicon/react";
+import { Transactions } from "@orderbook/core/index";
+import classNames from "classnames";
 
-const columnHelper = createColumnHelper<(typeof fakeData)[0]>();
+import { NetworkCard } from "./networkCard";
+
+const columnHelper = createColumnHelper<Transactions[0]>();
 
 export const columns = [
   columnHelper.accessor((row) => row, {
     id: "token",
     cell: (e) => {
-      const { asset, status, amount } = e.getValue();
-      const { ticker } = asset;
-
+      const { asset, amount, status } = e.getValue();
+      const formattedAmount = amount.toFormat();
+      const ready = ["CLAIMED", "READY"].includes(status);
       return (
         <div className="flex items-center gap-3">
           <Token
-            name={ticker}
+            name={asset?.ticker as TokenAppearance}
             size="md"
             className="p-0.5 rounded-full border border-primary"
-            appearance={ticker as keyof typeof tokenAppearance}
+            appearance={asset?.ticker as TokenAppearance}
           />
           <div className="flex flex-col">
-            <Typography.Text size="sm" bold>
-              {amount} {ticker}
+            <Typography.Text size="sm">
+              {formattedAmount} {asset?.ticker}
             </Typography.Text>
             <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-success-base" />
+              <div
+                className={classNames(
+                  "w-1.5 h-1.5 rounded-full",
+                  ready ? "bg-success-base" : "bg-attention-base"
+                )}
+              />
               <Typography.Text appearance="success" size="xs">
-                {status}
+                {ready ? "Completed" : "Pending"}
               </Typography.Text>
             </div>
           </div>
@@ -52,32 +61,23 @@ export const columns = [
   columnHelper.accessor((row) => row, {
     id: "source",
     cell: (e) => {
-      const { sourceChain, destinationChain } = e.getValue();
+      const { from, to } = e.getValue();
+      const polkadotNetwork =
+        "0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3"; // temp
+
       return (
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1">
-            <Token
-              name={sourceChain.ticker}
-              size="xs"
-              className="p-0.5 rounded-full border border-primary"
-              appearance={sourceChain.ticker as keyof typeof tokenAppearance}
-            />
-            <Typography.Text size="sm">{sourceChain.name}</Typography.Text>
-          </div>
+          <NetworkCard
+            name={from?.name ?? ""}
+            isPolkadotEcosystem={!from?.genesis.includes(polkadotNetwork)}
+          />
           <div className="flex items-center justify-center w-5 h-5 p-0.5 bg-level-1 border border-primary">
             <RiArrowRightLine className="w-full h-full text-primary" />
           </div>
-          <div className="flex items-center gap-1">
-            <Token
-              name={destinationChain.ticker}
-              size="xs"
-              className="p-0.5 rounded-full border border-primary"
-              appearance={
-                destinationChain.ticker as keyof typeof tokenAppearance
-              }
-            />
-            <Typography.Text size="sm">{destinationChain.name}</Typography.Text>
-          </div>
+          <NetworkCard
+            name={to?.name ?? ""}
+            isPolkadotEcosystem={!to?.genesis.includes(polkadotNetwork)}
+          />
         </div>
       );
     },
@@ -88,10 +88,10 @@ export const columns = [
     ),
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.destinationAddress, {
+  columnHelper.accessor((row) => row, {
     id: "destinationAddress",
     cell: (e) => {
-      const address = e.getValue();
+      const address = "0x0000000000";
       const shortAddress = truncateString(address);
       return (
         <Copy value={address}>
@@ -111,7 +111,7 @@ export const columns = [
     ),
     footer: (e) => e.column.id,
   }),
-  columnHelper.accessor((row) => row.date, {
+  columnHelper.accessor((row) => row.timestamp, {
     id: "date",
     cell: (e) => (
       <Typography.Text size="sm" className=" whitespace-nowrap">
@@ -135,51 +135,4 @@ export const columns = [
     ),
     footer: (e) => e.column.id,
   }),
-];
-
-export const fakeData = [
-  {
-    id: 1,
-    asset: {
-      id: 1,
-      name: "Tether",
-      ticker: "USDT",
-    },
-    status: "Completed",
-    amount: 0.24,
-    sourceChain: {
-      id: 1,
-      name: "Ethereum",
-      ticker: "ETH",
-    },
-    destinationChain: {
-      id: 1,
-      name: "Polkadex",
-      ticker: "PDEX",
-    },
-    destinationAddress: "5GEBxWEmpWoS9EGTwyxZgPoqV4UAd3PV2xWBKRuW7HMbDkB1",
-    date: new Date(),
-  },
-  {
-    id: 2,
-    asset: {
-      id: 1,
-      name: "Tether",
-      ticker: "USDT",
-    },
-    status: "Completed",
-    amount: 10.56,
-    sourceChain: {
-      id: 1,
-      name: "Ethereum",
-      ticker: "ETH",
-    },
-    destinationChain: {
-      id: 1,
-      name: "Polkadex",
-      ticker: "PDEX",
-    },
-    destinationAddress: "5GEBxWEmpWoS9EGTwyxZgPoqV4UAd3PV2xWBKRuW7HMbDkB1",
-    date: new Date(),
-  },
 ];

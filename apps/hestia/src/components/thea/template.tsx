@@ -116,9 +116,7 @@ export function Template({ id }: { id: string }) {
             />
           </div>
         )}
-        {!mobileView && (
-          <Footer onOpenChange={onOpenChange} marketsActive ref={footerRef} />
-        )}
+        {!mobileView && <Footer marketsActive ref={footerRef} />}
       </div>
     </Fragment>
   );

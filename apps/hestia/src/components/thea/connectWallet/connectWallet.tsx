@@ -63,19 +63,18 @@ export const ConnectWallet = ({
                   1. Select a network
                 </Typography.Text>
                 <div className="w-full px-3">
-                  <Expandable>
+                  <Expandable className="max-h-[280px] overflow-auto scrollbar-hide">
                     {chains.map((e) => {
                       const id = e.genesis;
                       const visible = selectedChain?.genesis.includes(id);
-                      const icon =
-                        tokens[e.name as keyof typeof tokens] ?? "UNKN";
+
                       return (
                         <Expandable.Item
                           key={e.genesis}
                           visible={selectedChain ? !!visible : true}
                           onSelect={() => setChain(selectedChain ? null : e)}
                         >
-                          <SelectNetwork icon={icon} active={!!selectedChain}>
+                          <SelectNetwork icon={e.logo} active={!!selectedChain}>
                             {e.name}
                           </SelectNetwork>
                         </Expandable.Item>

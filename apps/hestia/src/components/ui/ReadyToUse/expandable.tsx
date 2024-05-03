@@ -1,15 +1,19 @@
 "use client";
 
-import { PropsWithChildren, ReactNode } from "react";
+import { ComponentProps, PropsWithChildren } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMeasure } from "react-use";
+import { twMerge } from "tailwind-merge";
 
-const Expandable = ({ children }: { children: ReactNode }) => {
+const Expandable = ({ children, className }: ComponentProps<"div">) => {
   const [ref, bounds] = useMeasure<HTMLDivElement>();
   return (
     <motion.div
       animate={{ height: bounds.height ?? 0 }}
-      className="border border-primary rounded-md overflow-hidden"
+      className={twMerge(
+        "border border-primary rounded-md overflow-hidden",
+        className
+      )}
     >
       <div ref={ref} className="flex flex-col">
         {children}

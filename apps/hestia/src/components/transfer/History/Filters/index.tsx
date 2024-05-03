@@ -7,9 +7,12 @@ import { useWindowSize } from "usehooks-ts";
 import classNames from "classnames";
 import { RiMore2Line, RiCloseLine } from "@remixicon/react";
 
-import { filters } from "..";
-
 import { FacetedFilter } from "./facetedFilter";
+
+export const filters = {
+  status: ["Confirmed", "Pending", "Failed", "Ready"],
+  from: ["Trading/Funding", "Funding/Trading", "Funding/Custom"],
+};
 
 interface FiltersProps<TData> {
   table: Table<TData>;

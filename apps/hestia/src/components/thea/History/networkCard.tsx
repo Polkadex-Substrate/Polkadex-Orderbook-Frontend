@@ -1,0 +1,45 @@
+import { HoverCard, Typography } from "@polkadex/ux";
+import { RiInformationLine } from "@remixicon/react";
+
+import * as Icons from "@/components/ui/ChainIcons";
+
+export const NetworkCard = ({
+  name,
+  isPolkadotEcosystem,
+}: {
+  name: string;
+  isPolkadotEcosystem?: boolean;
+}) => {
+  const IconComponent = Icons[name as keyof typeof Icons];
+
+  if (isPolkadotEcosystem)
+    return (
+      <div className="flex items-center gap-1">
+        <div className="flex items-center justify-center w-6 h-6 p-1 rounded-full border border-primary">
+          <IconComponent />
+        </div>
+        <Typography.Text size="sm">{name}</Typography.Text>
+      </div>
+    );
+  return (
+    <HoverCard>
+      <HoverCard.Trigger>
+        <div className="flex items-center gap-1">
+          <div className="flex items-center justify-center w-6 h-6 p-1 rounded-full border border-primary">
+            <IconComponent />
+          </div>
+          <div className="flex flex-col">
+            <Typography.Text size="sm">{name}</Typography.Text>
+            <div className="flex items-center gap-1">
+              <RiInformationLine className="w-3 h-3 text-primary" />
+              <Typography.Text size="xs" appearance="primary">
+                Ecosystem
+              </Typography.Text>
+            </div>
+          </div>
+        </div>
+      </HoverCard.Trigger>
+      <HoverCard.Content>Parachain within Polkadot ecosystem</HoverCard.Content>
+    </HoverCard>
+  );
+};

@@ -5,7 +5,8 @@ import { Fragment } from "react";
 import Link from "next/link";
 import { RiMore2Line } from "@remixicon/react";
 import { Asset } from "@polkadex/thea";
-import { getChainFromTicker } from "@orderbook/core/helpers";
+import { getChainFromTicker, parseScientific } from "@orderbook/core/helpers";
+import { trimFloat } from "@polkadex/numericals";
 
 import { TokenCard } from "@/components/ui/ReadyToUse";
 import { AmountCard } from "@/components/ui/ReadyToUse/amountCard";
@@ -43,7 +44,11 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.balance, {
     id: "balance",
-    cell: (e) => <AmountCard>{e.getValue()}</AmountCard>,
+    cell: (e) => {
+      const trimmedBalance = trimFloat({ value: e.getValue() ?? "" });
+      const formattedBalance = parseScientific(trimmedBalance);
+      return <AmountCard>{formattedBalance}</AmountCard>;
+    },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Balance

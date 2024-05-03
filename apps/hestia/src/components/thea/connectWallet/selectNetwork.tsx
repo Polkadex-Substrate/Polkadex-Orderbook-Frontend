@@ -1,8 +1,10 @@
 "use client";
 
-import { Typography, Token, tokenAppearance } from "@polkadex/ux";
+import { Typography } from "@polkadex/ux";
 import { RiExpandUpDownFill } from "@remixicon/react";
 import { PropsWithChildren } from "react";
+
+import * as Icons from "@/components/ui/ChainIcons";
 
 export const SelectNetwork = ({
   icon,
@@ -12,15 +14,13 @@ export const SelectNetwork = ({
   icon: string;
   active?: boolean;
 }>) => {
+  const IconComponent = Icons[icon as keyof typeof Icons];
   return (
     <div className="flex items-center justify-between gap-2 px-2 py-3 rounded-md w-full">
       <div className="flex items-center gap-2">
-        <Token
-          appearance={icon as keyof typeof tokenAppearance}
-          name={icon}
-          size="md"
-          className="rounded-full border border-secondary"
-        />
+        <div className="flex items-center justify-center w-9 h-9 p-1.5 rounded-full border border-primary">
+          <IconComponent />
+        </div>
         <Typography.Text>{children}</Typography.Text>
       </div>
       {active ? (

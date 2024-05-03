@@ -70,7 +70,7 @@ export const Assets = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
         {assets ? (
           <div className="flex-1 flex flex-col justify-between border-b border-secondary-base min-h-40">
             <div
-              className="overflow-y-hidden hover:overflow-y-auto px-3"
+              className="max-h-[400px] overflow-auto scrollbar-hide px-3"
               style={{
                 maxHeight: tableMaxHeight,
                 scrollbarGutter: "stable",

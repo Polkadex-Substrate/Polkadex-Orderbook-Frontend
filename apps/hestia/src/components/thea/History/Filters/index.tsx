@@ -7,9 +7,12 @@ import { useWindowSize } from "usehooks-ts";
 import classNames from "classnames";
 import { RiMore2Line, RiCloseLine } from "@remixicon/react";
 
-import { filters } from "..";
-
 import { FacetedFilter } from "./facetedFilter";
+
+export const filters = {
+  status: ["Confirmed", "Pending", "Failed", "Ready"],
+  from: ["Trading/Funding", "Funding/Trading", "Funding/Custom"],
+};
 
 interface FiltersProps<TData> {
   table: Table<TData>;
@@ -40,7 +43,7 @@ export const Filters = <TData,>({
               <Popover.Trigger className="group">
                 <RiMore2Line className="w-6 h-6 text-primary group-hover:text-current transition-colors duration-300" />
               </Popover.Trigger>
-              <Popover.Content className="flex flex-col gap-3 p-2">
+              {/* <Popover.Content className="flex flex-col gap-3 p-2">
                 {table.getColumn("token") && (
                   <FacetedFilter
                     column={table.getColumn("token")}
@@ -65,7 +68,7 @@ export const Filters = <TData,>({
                     withoutBorder
                   />
                 )}
-              </Popover.Content>
+              </Popover.Content> */}
             </Popover>
           </>
         ) : (

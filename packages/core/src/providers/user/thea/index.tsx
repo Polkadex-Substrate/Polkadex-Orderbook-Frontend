@@ -18,7 +18,11 @@ import {
 } from "@polkadex/thea";
 import { defaultConfig } from "@orderbook/core/config";
 import { ExtensionAccount } from "@polkadex/react-providers";
-import { useTheaBalances } from "@orderbook/core/hooks";
+import {
+  Transactions,
+  useTheaBalances,
+  useTheaTransactions,
+} from "@orderbook/core/hooks";
 const { disabledTheaChains } = defaultConfig;
 export type GenericStatus = "error" | "idle" | "success" | "loading";
 
@@ -82,6 +86,25 @@ export const TheaProvider = ({ children }: { children: ReactNode }) => {
     assets: sourceAssets,
   });
 
+  const [
+    {
+      data: deposits = [],
+      isLoading: depositsLoading,
+      isFetching: depositsFetching,
+      isSuccess: depositsSuccess,
+    },
+    {
+      data: withdrawals = [],
+      isLoading: withdrawalsLoading,
+      isFetching: withdrawalsFetching,
+      isSuccess: withdrawalsSuccess,
+    },
+  ] = useTheaTransactions({
+    sourceAddress: sourceAccount?.address ?? "",
+    assets: sourceAssets,
+    chains,
+  });
+
   return (
     <Provider
       value={{
@@ -106,6 +129,14 @@ export const TheaProvider = ({ children }: { children: ReactNode }) => {
         balances,
         balancesLoading: balancesLoading && balancesFetching,
         balancesSuccess,
+
+        deposits,
+        depositsLoading: depositsLoading && depositsFetching,
+        depositsSuccess,
+
+        withdrawals,
+        withdrawalsLoading: withdrawalsLoading && withdrawalsFetching,
+        withdrawalsSuccess,
       }}
     >
       {children}
@@ -136,6 +167,14 @@ type State = {
   balances: AssetAmount[];
   balancesLoading: boolean;
   balancesSuccess: boolean;
+
+  deposits: Transactions;
+  depositsLoading: boolean;
+  depositsSuccess: boolean;
+
+  withdrawals: Transactions;
+  withdrawalsLoading: boolean;
+  withdrawalsSuccess: boolean;
 };
 export const Context = createContext<State>({
   sourceAccount: null,
@@ -159,6 +198,14 @@ export const Context = createContext<State>({
   balances: [],
   balancesLoading: false,
   balancesSuccess: false,
+
+  deposits: [],
+  depositsLoading: false,
+  depositsSuccess: false,
+
+  withdrawals: [],
+  withdrawalsLoading: false,
+  withdrawalsSuccess: false,
 });
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {

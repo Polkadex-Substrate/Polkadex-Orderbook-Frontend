@@ -38,3 +38,4 @@ export * from "./useBackupTradingAccount";
 export * from "./useGoogleTradingAccounts";
 export * from "./useRemoveGoogleTradingAccount";
 export * from "./useConnectGoogle";
+export * from "./useTransactions";
