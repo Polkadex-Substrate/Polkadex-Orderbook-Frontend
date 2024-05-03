@@ -1,5 +1,5 @@
 import { RiAlertLine, RiCloudLine } from "@remixicon/react";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, MouseEvent, useCallback, useMemo, useState } from "react";
 import {
   Button,
   Copy,
@@ -11,13 +11,16 @@ import {
 import classNames from "classnames";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { useExtensionAccountFromBrowserAccount } from "@orderbook/core/index";
 
 import { Unlock } from "@/components/trading/PlaceOrder/unlock";
 
 export const AttentionAccountCard = ({
   account,
+  onRemove,
 }: {
   account: TradeAccount;
+  onRemove: () => void;
 }) => {
   const shortAddress = useMemo(
     () => truncateString(account.address),
@@ -25,6 +28,36 @@ export const AttentionAccountCard = ({
   );
   const [showPassword, setShowPassword] = useState(false);
   const { onImportFromGoogle } = useConnectWalletProvider();
+  const { isLoading, isError } = useExtensionAccountFromBrowserAccount(
+    account.address,
+    true
+  );
+
+  const handleImport = useCallback(
+    async (e: MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (account?.isLocked) {
+        try {
+          account.unlock("");
+          await onImportFromGoogle({ account, password: "" });
+        } catch (error) {
+          setShowPassword(true);
+        }
+      }
+    },
+    [onImportFromGoogle, account]
+  );
+
+  const handleRemove = useCallback(
+    async (e: MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onRemove();
+    },
+    [onRemove]
+  );
+
   return (
     <Fragment>
       <div
@@ -49,23 +82,17 @@ export const AttentionAccountCard = ({
             </Skeleton>
           </div>
           <PopConfirm open={showPassword} onOpenChange={setShowPassword}>
-            <PopConfirm.Trigger asChild>
-              <Button.Light
-                appearance="tertiary"
-                className="h-fit w-fit"
-                onClick={async () => {
-                  if (account?.isLocked) {
-                    try {
-                      account.unlock("");
-                      await onImportFromGoogle({ account, password: "" });
-                    } catch (error) {
-                      setShowPassword(true);
-                    }
-                  }
-                }}
-              >
-                Import
-              </Button.Light>
+            <PopConfirm.Trigger asChild={!isLoading}>
+              <Skeleton loading={isLoading} className="min-w-20 min-h-6">
+                <Button.Light
+                  appearance={isError ? "danger" : "tertiary"}
+                  className="h-fit w-fit"
+                  disabled={isLoading}
+                  onClick={isError ? handleRemove : handleImport}
+                >
+                  {isError ? "Remove" : "Import"}
+                </Button.Light>
+              </Skeleton>
             </PopConfirm.Trigger>
             <PopConfirm.Content className="p-0">
               <PopConfirm.Description>
@@ -82,12 +109,14 @@ export const AttentionAccountCard = ({
         </div>
         <div className="flex items-center gap-2 px-4 py-2 bg-grayscale">
           <RiCloudLine className="w-3.5 h-3.5 text-success-base" />
-          <div className="w-fit flex items-center gap-1 bg-danger-base/20 px-2 py-0.5 rounded-full">
-            <RiAlertLine className="w-3 h-3 text-danger-base" />
-            <Typography.Text appearance="danger" size="xs">
-              Require attention
-            </Typography.Text>
-          </div>
+          <Skeleton loading={isLoading} className="max-w-14 min-h-5 bg-level-4">
+            <div className="w-fit flex items-center gap-1 bg-danger-base/20 px-2 py-0.5 rounded-full">
+              <RiAlertLine className="w-3 h-3 text-danger-base" />
+              <Typography.Text appearance="danger" size="xs">
+                {isError ? "No linked funding account" : "Require attention"}
+              </Typography.Text>
+            </div>
+          </Skeleton>
         </div>
       </div>
     </Fragment>
