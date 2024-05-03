@@ -48,9 +48,9 @@ export const useCreateOrder = () => {
       if (!api?.isConnected)
         throw new Error("You are not connected to blockchain");
 
-      const keyringPair = wallet.getPair(tradeAddress);
-      if (!isValidAddress(tradeAddress) || !keyringPair)
+      if (!isValidAddress(tradeAddress))
         throw new Error("Invalid Trading Account");
+
       const order = createOrderPayload({
         tradeAddress,
         type: orderType,
@@ -82,6 +82,9 @@ export const useCreateOrder = () => {
         });
         signature = { Sr25519: result.signature.slice(2) };
       } else {
+        const keyringPair = wallet.getPair(tradeAddress);
+        if (!keyringPair) throw new Error("Invalid Trading Account");
+
         signature = signPayload(keyringPair, signingPayload as Codec);
       }
       const payload = JSON.stringify({
