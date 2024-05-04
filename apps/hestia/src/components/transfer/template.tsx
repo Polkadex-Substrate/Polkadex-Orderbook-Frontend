@@ -80,6 +80,7 @@ export function Template() {
     type,
     onChangeType,
     createQueryString,
+    loading: isBalanceFetching,
   } = useTransfer();
 
   const { readyWithdrawals } = useTransactions();
@@ -131,6 +132,7 @@ export function Template() {
                 <RiInformation2Line className="w-6 h-6 text-primary" />
               </div>
               <Form
+                isBalanceFetching={isBalanceFetching}
                 assetsInteraction={assetsInteraction}
                 selectedAsset={selectedAsset}
                 onAssetsInteraction={onAssetsInteraction}
