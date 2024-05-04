@@ -30,6 +30,8 @@ export const useCancelOrder = () => {
       if (!api?.isConnected)
         throw new Error("You are not connected to blockchain");
 
+      if (!tradeAddress) throw new Error("No trading account selected");
+
       const keyringPair = wallet.getPair(tradeAddress);
       if (!isValidAddress(tradeAddress) || !keyringPair)
         throw new Error("Invalid Trading Account");
