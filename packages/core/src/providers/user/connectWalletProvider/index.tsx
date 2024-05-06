@@ -127,6 +127,7 @@ type ConnectWalletState = {
   mainProxiesLoading: boolean;
   mainProxiesSuccess: boolean;
   importFromMnemonicError: unknown;
+  // TODO: Rename to tradingAccountPresent
   browserAccountPresent: boolean;
   extensionAccountPresent: boolean;
   // TODO: Rename to hasProxyAccounts
@@ -416,7 +417,10 @@ export const ConnectWalletProvider = ({
   ]);
 
   const browserAccountPresent = useMemo(
-    () => !!Object.keys(selectedTradingAccount?.account ?? {})?.length,
+    () =>
+      selectedTradingAccount?.type === SelectedTradingAccountType.Extension
+        ? true
+        : !!Object.keys(selectedTradingAccount?.account ?? {})?.length,
     [selectedTradingAccount]
   );
 
