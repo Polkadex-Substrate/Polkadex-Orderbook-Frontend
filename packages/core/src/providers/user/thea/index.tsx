@@ -3,9 +3,9 @@
 import {
   Dispatch,
   PropsWithChildren,
-  ReactNode,
   SetStateAction,
   createContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -23,11 +23,25 @@ import {
   useTheaBalances,
   useTheaTransactions,
 } from "@orderbook/core/hooks";
-const { disabledTheaChains } = defaultConfig;
+import { isIdentical } from "@orderbook/core/helpers";
+const {
+  disabledTheaChains,
+  defaultTheaDestinationChain,
+  defaultTheaSourceChain,
+} = defaultConfig;
 export type GenericStatus = "error" | "idle" | "success" | "loading";
 
 export { useTheaProvider } from "./useThea";
-export const TheaProvider = ({ children }: { children: ReactNode }) => {
+export const TheaProvider = ({
+  initialAssetTicker,
+  initialSourceName,
+  initialDestinationName,
+  children,
+}: PropsWithChildren<{
+  initialAssetTicker: string | null;
+  initialSourceName: string | null;
+  initialDestinationName: string | null;
+}>) => {
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
   const [sourceChain, setSourceChain] = useState<Chain | null>(null);
   const [destinationChain, setDestinationChain] = useState<Chain | null>(null);
@@ -74,6 +88,56 @@ export const TheaProvider = ({ children }: { children: ReactNode }) => {
         : [],
     [sourceAssets, destinationAssets]
   );
+
+  const initialAsset = useMemo(() => {
+    if (supportedAssets) {
+      const asset =
+        initialAssetTicker &&
+        isIdentical(supportedAssets, initialAssetTicker, "ticker");
+      return asset || supportedAssets[0];
+    }
+  }, [initialAssetTicker, supportedAssets]);
+
+  const initialSource = useMemo(() => {
+    if (chains) {
+      return !!initialSourceName && initialSourceName !== initialDestinationName
+        ? isIdentical(chains, initialSourceName, "name")
+        : isIdentical(chains, defaultTheaSourceChain, "name");
+    }
+  }, [initialSourceName, chains, initialDestinationName]);
+
+  const initialDestination = useMemo(() => {
+    if (chains) {
+      return !!initialDestinationName &&
+        initialSourceName !== initialDestinationName
+        ? isIdentical(chains, initialDestinationName, "name")
+        : isIdentical(chains, defaultTheaDestinationChain, "name");
+    }
+  }, [initialDestinationName, initialSourceName, chains]);
+
+  useEffect(() => {
+    if (initialDestination && !destinationChain) {
+      setDestinationChain(initialDestination);
+    }
+  }, [initialDestination, destinationChain]);
+
+  useEffect(() => {
+    if (initialSource && !sourceChain) {
+      setSourceChain(initialSource);
+    }
+  }, [initialSource, sourceChain]);
+
+  useEffect(() => {
+    if (!selectedAsset && destinationChain && sourceChain && supportedAssets) {
+      setSelectedAsset(initialAsset || supportedAssets[0]);
+    }
+  }, [
+    initialAsset,
+    selectedAsset,
+    destinationChain,
+    sourceChain,
+    supportedAssets,
+  ]);
 
   const {
     data: balances = [],

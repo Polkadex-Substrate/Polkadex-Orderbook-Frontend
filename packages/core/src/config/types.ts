@@ -24,6 +24,8 @@ export type DefaultConfig = {
   googleApiKey: string;
   googleClientId: string;
   disabledFeatures: Array<Features>;
+  defaultTheaSourceChain: string;
+  defaultTheaDestinationChain: string;
 };
 
 export type Features = (typeof features)[number];

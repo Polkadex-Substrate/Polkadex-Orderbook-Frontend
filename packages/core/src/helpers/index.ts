@@ -34,3 +34,4 @@ export * from "./getNewClientId";
 export * from "./exportHistory";
 export * from "./isFeatureDisabled";
 export * from "./sleep";
+export * from "./isIdentical";

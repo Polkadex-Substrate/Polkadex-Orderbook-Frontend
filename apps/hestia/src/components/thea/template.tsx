@@ -15,9 +15,9 @@ import { History } from "./History";
 import { Assets } from "./Assets";
 
 import { Footer, Header } from "@/components/ui";
-import { useSizeObserver, useTour } from "@/hooks";
+import { useSizeObserver } from "@/hooks";
 
-export function Template({ id }: { id: string }) {
+export function Template() {
   const [activeTab, setActiveTab] = useState("history");
 
   const headerRef = useRef<HTMLDivElement | null>(null);
@@ -27,7 +27,6 @@ export function Template({ id }: { id: string }) {
   const [interactionRef, interactionHeight] = useSizeObserver();
   const { width } = useWindowSize();
 
-  const { onOpenChange } = useTour();
   const { sourceAccount } = useTheaProvider();
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();

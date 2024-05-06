@@ -40,4 +40,7 @@ export const defaultConfig: DefaultConfig = {
   disabledFeatures: (process.env.DISABLED_FEATURES?.split(
     ","
   ) as Array<Features>) ?? ["payWithAnotherFee"],
+  defaultTheaSourceChain: process.env.DEFAULT_THEA_SOURCE_CHAIN ?? "Polkadot",
+  defaultTheaDestinationChain:
+    process.env.DEFAULT_THEA_DESTINATION_CHAIN ?? "Polkadex",
 };
