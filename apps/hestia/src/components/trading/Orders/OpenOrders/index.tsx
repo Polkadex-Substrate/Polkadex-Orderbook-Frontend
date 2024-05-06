@@ -61,7 +61,7 @@ export const OpenOrdersTable = ({
   const markets = useMemo(() => openOrders.map((e) => e.market), [openOrders]);
   const onCancelOrder = async (payload: CancelOrderArgs | null) => {
     if (!payload) return;
-    if (selectedAccount?.isLocked) {
+    if (selectedAccount?.account?.isLocked) {
       setShowPassword(true);
       setOrderPayload(payload);
     } else {
@@ -82,8 +82,9 @@ export const OpenOrdersTable = ({
   });
 
   useEffect(() => {
-    if (selectedAccount) tryUnlockTradeAccount(selectedAccount);
-  }, [selectedAccount]);
+    if (selectedAccount?.account)
+      tryUnlockTradeAccount(selectedAccount.account);
+  }, [selectedAccount?.account]);
 
   useEffect(() => {
     if (!responsiveView && !!responsiveState) {
@@ -113,7 +114,7 @@ export const OpenOrdersTable = ({
           <UnlockAccount
             onClose={() => setShowPassword(false)}
             onAction={async () => await onCancelOrder(orderPayload)}
-            tempBrowserAccount={selectedAccount}
+            tempBrowserAccount={selectedAccount?.account}
           />
         </Modal.Content>
       </Modal>

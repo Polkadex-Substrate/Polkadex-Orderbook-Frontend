@@ -187,7 +187,7 @@ export const Content = () => {
               tradingWalletPresent={browserAccountPresent}
               fundWalletPresent={fundWalletPresent}
               fundWallet={selectedFundingWallet}
-              tradeAccount={selectedAccount}
+              tradeAccount={selectedAccount?.account}
               localTradingAccounts={localTradingAccounts}
               mainProxiesAccounts={mainProxiesAccounts}
               onConnectWallet={() => props?.onPage("ConnectWallet", true)}
@@ -308,7 +308,7 @@ export const Content = () => {
             />
             <TradingAccountSuccessfull
               key="TradingAccountSuccessfull"
-              tradingAccount={selectedAccount}
+              tradingAccount={selectedAccount?.account}
               onClose={() => {
                 onResetTempMnemonic?.();
                 props?.onChangeInteraction(false);

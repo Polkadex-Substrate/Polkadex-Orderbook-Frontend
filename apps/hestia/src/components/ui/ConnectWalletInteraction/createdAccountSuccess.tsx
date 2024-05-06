@@ -37,7 +37,7 @@ const TriggerComponent = ({ onClose }: { onClose: () => void }) => {
   const { setPage } = useInteractableProvider();
   return (
     <TradingAccountSuccessfull
-      tradingAccount={selectedAccount}
+      tradingAccount={selectedAccount?.account}
       onClose={handleClose}
       onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
       onOpenMnemonic={() => setPage("TradingAccountMnemonic")}

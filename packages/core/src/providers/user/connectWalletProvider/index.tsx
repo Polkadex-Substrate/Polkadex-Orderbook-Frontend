@@ -57,13 +57,22 @@ export type ExportTradeAccountProps = {
   password?: string;
 };
 
+export enum SelectedTradingAccountType {
+  Extension,
+  Keyring,
+}
+export type SelectedTradingAccount = {
+  account?: KeyringPair;
+  type: SelectedTradingAccountType;
+};
+
 type ConnectWalletState = {
   // active extension account
   // TODO: rename to selectedExtensionAccount
   selectedWallet?: ExtensionAccount;
   // active trading account
   // TODO: rename to selectedTradingAccount
-  selectedAccount?: KeyringPair; // TODO: Remove
+  selectedAccount?: SelectedTradingAccount; // TODO: Remove
   // selected extension
   selectedExtension?: (typeof ExtensionsArray)[0];
   // list of all trading accounts in browser
@@ -121,6 +130,7 @@ type ConnectWalletState = {
   importFromMnemonicError: unknown;
   browserAccountPresent: boolean;
   extensionAccountPresent: boolean;
+  // TODO: Rename to hasProxyAccounts
   hasAccount: boolean;
 
   onBackupGoogleDrive: (value: ExportTradeAccountProps) => Promise<void>;
@@ -385,16 +395,29 @@ export const ConnectWalletProvider = ({
 
   const selectedAccount = useMemo(() => {
     const selected = selectedAddresses?.tradeAddress;
+
+    if (selected === selectedWallet?.address) {
+      return { type: SelectedTradingAccountType.Extension };
+    }
+
     const availableLocalAccount = localTradingAccounts?.find(
       (e) => e?.address === selectedAddresses?.tradeAddress
     );
 
     if (availableLocalAccount && selected && isReady)
-      return availableLocalAccount;
-  }, [localTradingAccounts, isReady, selectedAddresses?.tradeAddress]);
+      return {
+        account: availableLocalAccount,
+        type: SelectedTradingAccountType.Keyring,
+      };
+  }, [
+    localTradingAccounts,
+    isReady,
+    selectedAddresses?.tradeAddress,
+    selectedWallet?.address,
+  ]);
 
   const browserAccountPresent = useMemo(
-    () => !!Object.keys(selectedAccount ?? {})?.length,
+    () => !!Object.keys(selectedAccount?.account ?? {})?.length,
     [selectedAccount]
   );
 

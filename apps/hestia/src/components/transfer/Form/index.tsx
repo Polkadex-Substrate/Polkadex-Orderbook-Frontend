@@ -161,7 +161,7 @@ export const Form = ({
   );
 
   const onSubmitWithdraw = async ({ amount }: { amount: number }) => {
-    if (selectedAccount?.isLocked) setShowPassword(true);
+    if (selectedAccount?.account?.isLocked) setShowPassword(true);
     else {
       const asset = isAssetPDEX(selectedAsset?.id) ? "PDEX" : selectedAsset?.id;
       if (!asset) return;
@@ -249,7 +249,7 @@ export const Form = ({
   const disabled = !hasAccount || loading || !(isValid && dirty);
 
   useEffect(() => {
-    if (!isTransferFromFunding) tryUnlockTradeAccount(selectedAccount);
+    if (!isTransferFromFunding) tryUnlockTradeAccount(selectedAccount?.account);
   }, [selectedAccount, isTransferFromFunding]);
 
   const { onDepositOcex } = useCall();
@@ -288,7 +288,7 @@ export const Form = ({
                 new Event("submit", { cancelable: true, bubbles: true })
               );
             }}
-            tempBrowserAccount={selectedAccount}
+            tempBrowserAccount={selectedAccount?.account}
           />
         </Modal.Content>
       </Modal>
@@ -307,8 +307,8 @@ export const Form = ({
               extensionAccountName={selectedWallet?.name}
               extensionAccountAddress={selectedWallet?.address}
               extensionAccountBalance={selectedAsset?.onChainBalance}
-              localAccountName={selectedAccount?.meta?.name}
-              localAccountAddress={selectedAccount?.address}
+              localAccountName={selectedAccount?.account?.meta?.name}
+              localAccountAddress={selectedAccount?.account?.address}
               localAccountBalance={selectedAsset?.free_balance}
               selectedAssetTicker={selectedAsset?.ticker}
             />
