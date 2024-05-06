@@ -24,7 +24,7 @@ export const Trigger = ({
       <div className="flex items-center justify-center pl-2">
         <Icons.Avatar className="w-6 h-6" />
       </div>
-      <div className="flex flex-col w-full text-left">
+      <div className="flex flex-col w-full h-full py-3 text-left">
         <HoverCard>
           <HoverCard.Trigger>
             <Typography.Text
@@ -36,9 +36,6 @@ export const Trigger = ({
               {extensionAccount}
             </Typography.Text>
           </HoverCard.Trigger>
-          <HoverCard.Content side="right" className="text-xs p-1 font-semibold">
-            Funding account
-          </HoverCard.Content>
         </HoverCard>
       </div>
     </div>

@@ -125,7 +125,10 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
           extensionAccounts={walletsFiltered}
           loading={!!mainProxiesLoading}
           success={!!mainProxiesSuccess}
-          onSelectExtensionAccount={(e) => onSelectWallet?.(e)}
+          onSelectExtensionAccount={(e) => {
+            onSelectWallet?.(e);
+            onClose();
+          }}
           onTryAgain={() =>
             selectedExtension && onSelectExtension?.(selectedExtension)
           }
