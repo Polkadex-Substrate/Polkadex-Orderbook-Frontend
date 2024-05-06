@@ -34,7 +34,7 @@ export const Profile = ({
   const { width } = useWindowSize();
   const {
     selectedWallet,
-    selectedAccount,
+    selectedTradingAccount,
     browserAccountPresent,
     extensionAccountPresent,
   } = useConnectWalletProvider();
@@ -86,7 +86,9 @@ export const Profile = ({
                 browserAccountPresent={browserAccountPresent}
                 extensionAccountPresent={extensionAccountPresent}
                 extensionAccountName={selectedWallet?.name ?? ""}
-                browserAccountName={selectedAccount?.account?.meta.name ?? ""}
+                browserAccountName={
+                  selectedTradingAccount?.account?.meta.name ?? ""
+                }
               />
             </Popover.Trigger>
             <Popover.Content withArrow className="z-[15]">

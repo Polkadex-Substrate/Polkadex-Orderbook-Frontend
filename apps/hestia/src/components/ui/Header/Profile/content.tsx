@@ -68,7 +68,7 @@ export const Content = () => {
     onRemoveGoogleDrive,
     removeGoogleDriveLoading,
     browserAccountPresent,
-    selectedAccount,
+    selectedTradingAccount,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
   const { onToogleConnectExtension } = useSettingsProvider();
@@ -187,7 +187,7 @@ export const Content = () => {
               tradingWalletPresent={browserAccountPresent}
               fundWalletPresent={fundWalletPresent}
               fundWallet={selectedFundingWallet}
-              tradeAccount={selectedAccount?.account}
+              tradeAccount={selectedTradingAccount?.account}
               localTradingAccounts={localTradingAccounts}
               mainProxiesAccounts={mainProxiesAccounts}
               onConnectWallet={() => props?.onPage("ConnectWallet", true)}
@@ -308,7 +308,7 @@ export const Content = () => {
             />
             <TradingAccountSuccessfull
               key="TradingAccountSuccessfull"
-              tradingAccount={selectedAccount?.account}
+              tradingAccount={selectedTradingAccount?.account}
               onClose={() => {
                 onResetTempMnemonic?.();
                 props?.onChangeInteraction(false);

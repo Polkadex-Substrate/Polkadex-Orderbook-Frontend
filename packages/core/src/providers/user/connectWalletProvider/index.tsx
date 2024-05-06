@@ -71,8 +71,7 @@ type ConnectWalletState = {
   // TODO: rename to selectedExtensionAccount
   selectedWallet?: ExtensionAccount;
   // active trading account
-  // TODO: rename to selectedTradingAccount
-  selectedAccount?: SelectedTradingAccount; // TODO: Remove
+  selectedTradingAccount?: SelectedTradingAccount;
   // selected extension
   selectedExtension?: (typeof ExtensionsArray)[0];
   // list of all trading accounts in browser
@@ -393,7 +392,7 @@ export const ConnectWalletProvider = ({
     [localAddresses, wallet, isReady]
   );
 
-  const selectedAccount = useMemo(() => {
+  const selectedTradingAccount = useMemo(() => {
     const selected = selectedAddresses?.tradeAddress;
 
     if (selected === selectedWallet?.address) {
@@ -417,8 +416,8 @@ export const ConnectWalletProvider = ({
   ]);
 
   const browserAccountPresent = useMemo(
-    () => !!Object.keys(selectedAccount?.account ?? {})?.length,
-    [selectedAccount]
+    () => !!Object.keys(selectedTradingAccount?.account ?? {})?.length,
+    [selectedTradingAccount]
   );
 
   const onSelectTradingAccount = useCallback(
@@ -474,7 +473,7 @@ export const ConnectWalletProvider = ({
         browserAccountPresent,
         extensionAccountPresent,
         selectedWallet,
-        selectedAccount,
+        selectedTradingAccount,
         selectedExtension,
         localTradingAccounts,
         onSelectExtension,
