@@ -69,7 +69,7 @@ export const Profile = ({
               </Button.Solid>
             </AccountCard>
           </div>
-          {fundWalletPresent && (
+          {!fundWalletPresent && (
             <div className="flex flex-col gap-2">
               <Button.Solid
                 appearance="tertiary"
