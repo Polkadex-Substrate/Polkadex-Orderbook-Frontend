@@ -32,12 +32,8 @@ export const Profile = ({
   unreadNotifications: number;
 }) => {
   const { width } = useWindowSize();
-  const {
-    selectedWallet,
-    selectedTradingAccount,
-    browserAccountPresent,
-    extensionAccountPresent,
-  } = useConnectWalletProvider();
+  const { selectedWallet, browserAccountPresent, extensionAccountPresent } =
+    useConnectWalletProvider();
 
   const responsiveView = useMemo(() => width > 640, [width]);
 
@@ -83,12 +79,8 @@ export const Profile = ({
           <Popover>
             <Popover.Trigger superpositionTrigger>
               <Trigger
-                browserAccountPresent={browserAccountPresent}
                 extensionAccountPresent={extensionAccountPresent}
                 extensionAccountName={selectedWallet?.name ?? ""}
-                browserAccountName={
-                  selectedTradingAccount?.account?.meta.name ?? ""
-                }
               />
             </Popover.Trigger>
             <Popover.Content withArrow className="z-[15]">
