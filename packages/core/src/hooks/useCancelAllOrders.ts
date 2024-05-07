@@ -47,11 +47,12 @@ export const useCancelAllOrders = () => {
         if (!signer) throw new Error("No signer for main account found");
         const result = await signer.signRaw({
           address: mainAddress,
-          data: JSON.stringify(signingPayload),
+          data: market,
         });
         signature = { Sr25519: result?.signature.slice(2) };
       } else {
         const keyringPair = wallet.getPair(tradeAddress);
+
         if (!isValidAddress(tradeAddress) || !keyringPair)
           throw new Error("Invalid trading account");
 
