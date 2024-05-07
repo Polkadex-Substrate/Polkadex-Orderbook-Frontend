@@ -42,7 +42,8 @@ export const useCancelOrder = () => {
       const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
       const pair = `${baseAsset}-${quoteAsset}`;
 
-      const isSignedByExtension = mainAddress === tradeAddress;
+      const isSignedByExtension =
+        tradeAddress?.trim().length === 0 || mainAddress === tradeAddress;
       let signature: { Sr25519: string };
       if (isSignedByExtension) {
         const signer = getSigner(mainAddress);

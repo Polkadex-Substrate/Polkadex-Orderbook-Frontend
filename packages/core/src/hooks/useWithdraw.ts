@@ -6,10 +6,7 @@ import {
   createWithdrawSigningPayload,
   signPayload,
 } from "@orderbook/core/helpers";
-import {
-  useExtensionAccounts,
-  useUserAccounts,
-} from "@polkadex/react-providers";
+import { useUserAccounts } from "@polkadex/react-providers";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { Codec } from "@polkadot/types/types";
 
@@ -24,16 +21,12 @@ type WithdrawArgs = {
 export const useWithdraw = () => {
   const {
     selectedAddresses: { mainAddress, tradeAddress },
+    getSigner,
   } = useProfile();
   const { api } = useNativeApi();
   const { onHandleAlert, onHandleError } = useSettingsProvider();
   const { wallet } = useUserAccounts();
   const { isReady } = useOrderbookService();
-  const { extensionAccounts } = useExtensionAccounts();
-
-  const mainAccountSigner = extensionAccounts.find(
-    (account) => account.address === mainAddress
-  )?.signer;
 
   const { mutateAsync, status } = useMutation({
     mutationFn: async ({ asset, amount }: WithdrawArgs) => {
@@ -42,13 +35,9 @@ export const useWithdraw = () => {
       if (!api || !api?.isConnected)
         throw new Error("You are not connected to blockchain");
 
-      const keyringPair = wallet.getPair(tradeAddress);
-      const isTradingAccountPresent =
-        tradeAddress?.trim().length === 0 || !keyringPair;
-      if (!mainAccountSigner && isTradingAccountPresent)
-        throw new Error("Invalid Trading Account");
+      const isSignedByExtension =
+        tradeAddress?.trim().length === 0 || mainAddress === tradeAddress;
 
-      const isSignedByExtension = !isTradingAccountPresent;
       const payload = { asset_id: { asset }, amount };
 
       const signingPayload = createWithdrawSigningPayload(
@@ -59,14 +48,21 @@ export const useWithdraw = () => {
         api,
         isSignedByExtension
       );
+
       let signature: { Sr25519: string };
+
       if (isSignedByExtension) {
-        const result = await mainAccountSigner.signRaw({
+        const signer = getSigner(mainAddress);
+        if (!signer) throw new Error("No signer for main account found");
+
+        const result = await signer.signRaw({
           data: JSON.stringify(signingPayload),
           address: mainAddress,
         });
         signature = { Sr25519: result.signature.slice(2) };
       } else {
+        const keyringPair = wallet.getPair(tradeAddress);
+
         signature = signPayload(
           keyringPair as KeyringPair,
           signingPayload as Codec
