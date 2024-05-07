@@ -3,13 +3,19 @@
 import { Dispatch, Fragment, SetStateAction, useMemo, useState } from "react";
 import { ExtensionAccount, useExtensions } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
-import { Interaction, Typography, useInteractableProvider } from "@polkadex/ux";
+import {
+  Button,
+  Interaction,
+  Typography,
+  useInteractableProvider,
+} from "@polkadex/ux";
 import { useTheaProvider } from "@orderbook/core/providers";
 import { useMeasure } from "react-use";
 import { motion, MotionConfig, AnimatePresence } from "framer-motion";
 import { Chain } from "@polkadex/thea";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { RiExpandUpDownFill } from "@remixicon/react";
+import classNames from "classnames";
 
 import { Expandable } from "../../ui/ReadyToUse/expandable";
 
@@ -112,9 +118,22 @@ export const ConnectWallet = ({
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                <Typography.Text appearance="secondary" className="px-7">
-                  2. Select a wallet
-                </Typography.Text>
+                <div className="flex justify-between items-center">
+                  <Typography.Text appearance="secondary" className="px-7">
+                    2. Select a wallet
+                  </Typography.Text>
+                  {selectedChain && accountOpen && (
+                    <Button.Light
+                      appearance="secondary"
+                      size="xs"
+                      className="mr-4"
+                      onClick={() => setAccountOpen(false)}
+                    >
+                      Cancel
+                    </Button.Light>
+                  )}
+                </div>
+
                 <AnimatePresence>
                   {selectedChain && !networkOpen && (
                     <Fragment>
