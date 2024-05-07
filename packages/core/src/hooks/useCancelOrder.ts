@@ -42,17 +42,19 @@ export const useCancelOrder = () => {
       const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
       const pair = `${baseAsset}-${quoteAsset}`;
 
+      // check if the order needs to be cancelled by the extension
       const isSignedByExtension =
         tradeAddress?.trim().length === 0 || mainAddress === tradeAddress;
+
       let signature: { Sr25519: string };
       if (isSignedByExtension) {
         const signer = getSigner(mainAddress);
         if (!signer) throw new Error("No signer for main account found");
         const result = await signer.signRaw({
           address: mainAddress,
-          data: pair,
+          data: orderId,
         });
-        signature = { Sr25519: result?.signature };
+        signature = { Sr25519: result?.signature.slice(2) };
       } else {
         const keyringPair = wallet.getPair(tradeAddress);
 

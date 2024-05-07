@@ -83,7 +83,7 @@ export const Profile = ({
                 extensionAccountName={selectedWallet?.name ?? ""}
               />
             </Popover.Trigger>
-            <Popover.Content withArrow className="z-[15]">
+            <Popover.Content withArrow className="z-[15] overflow-hidden">
               <Content />
             </Popover.Content>
             <Popover.Overlay className="z-[14]" />

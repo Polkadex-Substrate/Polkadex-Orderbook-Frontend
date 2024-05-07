@@ -10,7 +10,6 @@ import { useUserAccounts } from "@polkadex/react-providers";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { Codec } from "@polkadot/types/types";
 
-import { useOrderbookService } from "../providers/public/orderbookServiceProvider/useOrderbookService";
 import { appsyncOrderbookService } from "../utils/orderbookService";
 
 type WithdrawArgs = {
@@ -26,19 +25,15 @@ export const useWithdraw = () => {
   const { api } = useNativeApi();
   const { onHandleAlert, onHandleError } = useSettingsProvider();
   const { wallet } = useUserAccounts();
-  const { isReady } = useOrderbookService();
 
   const { mutateAsync, status } = useMutation({
     mutationFn: async ({ asset, amount }: WithdrawArgs) => {
-      if (!isReady) throw new Error("Orderbook service not initialized");
-
       if (!api || !api?.isConnected)
         throw new Error("You are not connected to blockchain");
 
+      // check if the withdrawal needs to be signed by the extension
       const isSignedByExtension =
         tradeAddress?.trim().length === 0 || mainAddress === tradeAddress;
-
-      const payload = { asset_id: { asset }, amount };
 
       const signingPayload = createWithdrawSigningPayload(
         {
@@ -71,7 +66,7 @@ export const useWithdraw = () => {
       const proxy = isSignedByExtension ? mainAddress : tradeAddress;
       await appsyncOrderbookService.operation.withdraw({
         address: proxy,
-        payload: [mainAddress, proxy, payload, signature],
+        payload: [mainAddress, proxy, signingPayload, signature],
       });
     },
     onError: (error) => {
