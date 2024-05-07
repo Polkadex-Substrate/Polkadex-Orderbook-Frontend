@@ -2,19 +2,23 @@
 
 import {
   ComponentProps,
+  Dispatch,
   MouseEvent,
   PropsWithChildren,
+  SetStateAction,
   createContext,
   useCallback,
   useContext,
-  useState,
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMeasure } from "react-use";
 import { twMerge } from "tailwind-merge";
 
-const Expandable = ({ children, className }: ComponentProps<"div">) => {
-  const [open, setOpen] = useState(false);
+interface Props extends ComponentProps<"div"> {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+const Expandable = ({ open, setOpen, children, className }: Props) => {
   const [ref, bounds] = useMeasure<HTMLDivElement>();
 
   const handleOpen = useCallback(
@@ -23,7 +27,7 @@ const Expandable = ({ children, className }: ComponentProps<"div">) => {
       e.stopPropagation();
       setOpen(!open);
     },
-    [open]
+    [open, setOpen]
   );
 
   return (

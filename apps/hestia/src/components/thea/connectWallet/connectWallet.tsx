@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { ExtensionAccount, useExtensions } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import { Interaction, Typography, useInteractableProvider } from "@polkadex/ux";
@@ -40,6 +40,7 @@ export const ConnectWallet = ({
   secondaryChain?: string;
   from?: boolean;
 }) => {
+  const [open, setOpen] = useState(false);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
@@ -74,7 +75,11 @@ export const ConnectWallet = ({
                   1. Select a network
                 </Typography.Text>
                 <div className="w-full px-3">
-                  <Expandable className="max-h-[280px] overflow-auto scrollbar-hide">
+                  <Expandable
+                    open={open}
+                    setOpen={setOpen}
+                    className="max-h-[280px] overflow-auto scrollbar-hide"
+                  >
                     {chains.map((e) => {
                       const id = e.genesis;
                       const visible = selectedChain?.genesis.includes(id);
@@ -105,7 +110,7 @@ export const ConnectWallet = ({
                 </div>
               </div>
               <AnimatePresence>
-                {selectedChain && !selectedAccount && (
+                {selectedChain && !selectedAccount && !open && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
