@@ -2834,9 +2834,9 @@
   integrity sha512-mNW+FfvKZqa1axChEd1ReRpw3P8siiW28YQ8BBJpR2syZqb5cJWOG4Sr/dj3lBcBNQqcqnAUkZPnBxQj8+Ftvg==
 
 "@cedelabs/providers@*":
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/@cedelabs/providers/-/providers-1.9.2.tgz#d1c651decb83c543618433cf08e48219f58b6ba5"
-  integrity sha512-g6/kWTlsDCI2TcXIHBXdxDkjwZCu9YE8hXdKHcmolrmYb7t0HEttwhE1uBaHEMYcTMlDRrf7dRpGy85F+FCbdQ==
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@cedelabs/providers/-/providers-1.10.0.tgz#370890b9024507fe2003ccde3bc86ef73b240da2"
+  integrity sha512-z0m3SppOYXVLopecJ6oJrpk0hT0YyjIvXufKVzrppiM/fIJnu9lknz7OVWbJidJIggGDonFMXCxZHGLmVcBuIg==
   dependencies:
     "@metamask/providers" "^8.1.1"
     "@metamask/safe-event-emitter" "^3.0.0"
@@ -8723,9 +8723,9 @@ end-of-stream@^1.1.0, end-of-stream@^1.4.4:
     once "^1.4.0"
 
 enhanced-resolve@^5.12.0, enhanced-resolve@^5.16.0:
-  version "5.16.0"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.16.0.tgz#65ec88778083056cb32487faa9aef82ed0864787"
-  integrity sha512-O+QWCviPNSSLAD9Ucn8Awv+poAkqn3T1XY5/N7kR7rQO9yfSGWkYZDwpJ+iKF7B8rxaQKWngSqACpgzeapSyoA==
+  version "5.16.1"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.16.1.tgz#e8bc63d51b826d6f1cbc0a150ecb5a8b0c62e567"
+  integrity sha512-4U5pNsuDl0EhuZpq46M5xPslstkviJuhrdobaRDBk2Jy2KO37FDAJl4lb2KlNabxT0m4MTK2UHNrsAcphE8nyw==
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
@@ -9560,9 +9560,9 @@ fraction.js@^4.3.6:
   integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
 
 framer-motion@^11.0.8, framer-motion@^11.1.7:
-  version "11.1.8"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.1.8.tgz#4eb00899b454187e13e8b26b19634d78ee3893b4"
-  integrity sha512-W2OGZmNfUarhh6A/rLXernq/JthjekbgeRWqzigPpbaShe/+HfQKUDSjiEdL302XOlINtO+SCFCiR1hlqN3uOA==
+  version "11.1.9"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.1.9.tgz#1ef021fc35615eb83d6baa903a47ba872be99187"
+  integrity sha512-flECDIPV4QDNcOrDafVFiIazp8X01HFpzc01eDKJsdNH/wrATcYydJSH9JbPWMS8UD5lZlw+J1sK8LG2kICgqw==
   dependencies:
     tslib "^2.4.0"
 
@@ -12432,9 +12432,9 @@ safe-regex-test@^1.0.3:
     is-regex "^1.1.4"
 
 sass@^1.68.0:
-  version "1.76.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.76.0.tgz#fe15909500735ac154f0dc7386d656b62b03987d"
-  integrity sha512-nc3LeqvF2FNW5xGF1zxZifdW3ffIz5aBb7I7tSvOoNu7z1RQ6pFt9MBuiPtjgaI62YWrM/txjWlOCFiGtf2xpw==
+  version "1.77.0"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.77.0.tgz#e736c69aff9fae4a4e6dae60a979eee9c942f321"
+  integrity sha512-eGj4HNfXqBWtSnvItNkn7B6icqH14i3CiCGbzMKs3BAPTq62pp9NBYsBgyN4cA+qssqo9r26lW4JSvlaUUWbgw==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
@@ -13624,9 +13624,9 @@ vaul@^0.8.0:
     "@radix-ui/react-dialog" "^1.0.4"
 
 viem@^2.9.0:
-  version "2.9.32"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.9.32.tgz#7270beb447d0df5185030172403a67334cb99970"
-  integrity sha512-V2K1kkR+L/JZ1be/3NTsqLhN7BsMXXTTFOH3/LyEALbL8gln7QCHvmI942VbY9l5eYYH1EQ90vwKh24TqDd9gw==
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.10.1.tgz#0dffc8e4c7a03dd06de098931b3666b68a040964"
+  integrity sha512-sfbcFdzlMHSZI+4RpqidxOqPu6xwWtmqDBWSVml2XV+n21dgQFmVRN0nHhZoyMDSo4mTSKtWwW9sHHu9vUF2mw==
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"

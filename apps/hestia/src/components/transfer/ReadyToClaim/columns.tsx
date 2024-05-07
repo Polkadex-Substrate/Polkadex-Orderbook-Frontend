@@ -1,5 +1,10 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { Tokens, Tooltip, Typography, truncateString } from "@polkadex/ux";
+import {
+  TokenAppearance,
+  Tooltip,
+  Typography,
+  truncateString,
+} from "@polkadex/ux";
 import { getChainFromTicker } from "@orderbook/core/helpers";
 import { RiArrowRightLine } from "@remixicon/react";
 
@@ -19,7 +24,7 @@ export const columns = [
         <TokenCard
           tokenName={name}
           ticker={tokenTicker}
-          icon={tokenTicker as keyof typeof Tokens}
+          icon={tokenTicker as TokenAppearance}
         />
       );
     },

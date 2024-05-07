@@ -36,7 +36,7 @@ export const ConnectAccount = ({
   selectedChain: Chain | null;
   secondaryChain?: string;
   setChain: Dispatch<SetStateAction<Chain | null>>;
-  setAccount: Dispatch<SetStateAction<ExtensionAccount>>;
+  setAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
   selectedAccount?: ExtensionAccount;
   from?: boolean;
 }) => {

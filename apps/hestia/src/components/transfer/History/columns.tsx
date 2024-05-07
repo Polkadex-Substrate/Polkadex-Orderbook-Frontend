@@ -2,7 +2,7 @@
 
 import { createColumnHelper } from "@tanstack/react-table";
 import { Transaction } from "@orderbook/core/utils/orderbookService";
-import { Tokens, Typography, truncateString } from "@polkadex/ux";
+import { TokenAppearance, Typography, truncateString } from "@polkadex/ux";
 import { intlFormat } from "date-fns";
 import Link from "next/link";
 import { getChainFromTicker } from "@orderbook/core/helpers";
@@ -48,7 +48,7 @@ export const columns = [
         <TokenCard
           tokenName={name}
           ticker={tokenTicker}
-          icon={tokenTicker as keyof typeof Tokens}
+          icon={tokenTicker as TokenAppearance}
         />
       );
     },

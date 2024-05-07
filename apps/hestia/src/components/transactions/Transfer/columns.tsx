@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { Tokens, Tooltip, Typography, truncateString } from "@polkadex/ux";
+import {
+  TokenAppearance,
+  Tooltip,
+  Typography,
+  truncateString,
+} from "@polkadex/ux";
 import { createColumnHelper } from "@tanstack/react-table";
 import { RiExternalLinkLine } from "@remixicon/react";
 
@@ -69,7 +74,7 @@ export const columns = () => [
           <TokenCard
             tokenName={""}
             ticker={tokenTicker ?? "UNKNOWN"}
-            icon={tokenTicker as keyof typeof Tokens}
+            icon={tokenTicker as TokenAppearance}
           />
         </div>
       );

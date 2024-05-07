@@ -237,11 +237,11 @@ export const TheaProvider = ({
 
 type State = {
   sourceAccount?: ExtensionAccount;
-  setSourceAccount: Dispatch<SetStateAction<ExtensionAccount>>;
+  setSourceAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
   chains: Chain[];
 
   destinationAccount?: ExtensionAccount;
-  setDestinationAccount: Dispatch<SetStateAction<ExtensionAccount>>;
+  setDestinationAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
 
   destinationChain: Chain | null;
   setDestinationChain: Dispatch<SetStateAction<Chain | null>>;
@@ -253,7 +253,7 @@ type State = {
   sourceAssets: Asset[];
 
   selectedAsset: Asset | null;
-  setSelectedAsset: Dispatch<SetStateAction<Asset>>;
+  setSelectedAsset: Dispatch<SetStateAction<Asset | null>>;
 
   balances: AssetAmount[];
   balancesLoading: boolean;

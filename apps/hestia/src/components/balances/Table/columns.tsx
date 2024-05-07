@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { AssetsProps } from "@orderbook/core/hooks";
 import { getChainFromTicker } from "@orderbook/core/helpers";
-import { Tokens, Typography } from "@polkadex/ux";
+import { TokenAppearance, Typography } from "@polkadex/ux";
 import { Fragment } from "react";
 
 import { ActionsCard } from "./actionsCard";
@@ -18,7 +18,7 @@ export const columns = [
         <TokenCard
           tokenName={e.getValue().name}
           ticker={e.getValue().ticker}
-          icon={e.getValue().ticker as keyof typeof Tokens}
+          icon={e.getValue().ticker as TokenAppearance}
         />
       );
     },
