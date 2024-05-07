@@ -31,11 +31,6 @@ export const useCancelOrder = () => {
       if (!api?.isConnected)
         throw new Error("You are not connected to blockchain");
 
-      if (!tradeAddress) throw new Error("No trading account selected");
-
-      if (!isValidAddress(tradeAddress))
-        throw new Error("Invalid trading account");
-
       onHandleInfo?.("Cancelling order...");
 
       const baseAsset = isAssetPDEX(base) ? "PDEX" : base;
@@ -56,6 +51,9 @@ export const useCancelOrder = () => {
         });
         signature = { Sr25519: result?.signature.slice(2) };
       } else {
+        if (!isValidAddress(tradeAddress))
+          throw new Error("Invalid trading account");
+
         const keyringPair = wallet.getPair(tradeAddress);
 
         if (!keyringPair) throw new Error("Invalid trading account");
