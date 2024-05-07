@@ -29,6 +29,7 @@ export const ConnectAccount = ({
   setChain,
   setAccount,
   selectedAccount,
+  from,
 }: {
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
@@ -36,7 +37,8 @@ export const ConnectAccount = ({
   secondaryChain?: string;
   setChain: Dispatch<SetStateAction<Chain | null>>;
   setAccount: Dispatch<SetStateAction<ExtensionAccount>>;
-  selectedAccount: ExtensionAccount | null;
+  selectedAccount?: ExtensionAccount;
+  from?: boolean;
 }) => {
   const [extension, setExtension] = useState<Extension>();
 
@@ -73,6 +75,7 @@ export const ConnectAccount = ({
               setChain={setChain}
               selectedAccount={selectedAccount}
               secondaryChain={secondaryChain}
+              from={from}
             />
           </Interactable.Trigger>
           <Interactable.Content>

@@ -8,11 +8,14 @@ import { useTheaProvider } from "@orderbook/core/providers";
 import { useMeasure } from "react-use";
 import { motion, MotionConfig, AnimatePresence } from "framer-motion";
 import { Chain } from "@polkadex/thea";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Expandable } from "../../ui/ReadyToUse/expandable";
 
 import { ProviderCard } from "./providerCard";
 import { SelectNetwork } from "./selectNetwork";
+
+import { createQueryString } from "@/helpers";
 
 export type Extension = (typeof ExtensionsArray)[0] | null;
 
@@ -27,14 +30,20 @@ export const ConnectWallet = ({
   setChain,
   selectedAccount,
   secondaryChain,
+  from,
 }: {
   onClose: () => void;
   onSetExtension: (e: Extension) => void;
   selectedChain: Chain | null;
   setChain: Dispatch<SetStateAction<Chain | null>>;
-  selectedAccount: ExtensionAccount | null;
+  selectedAccount?: ExtensionAccount;
   secondaryChain?: string;
+  from?: boolean;
 }) => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { push } = useRouter();
+
   const { setPage } = useInteractableProvider();
   const { extensionsStatus } = useExtensions();
   const { chains } = useTheaProvider();
@@ -75,7 +84,16 @@ export const ConnectWallet = ({
                           key={e.genesis}
                           visible={!!visible}
                           hasData={!!selectedChain}
-                          onSelect={() => setChain(e)}
+                          onSelect={() => {
+                            setChain(e);
+                            createQueryString({
+                              name: from ? "from" : "to",
+                              value: e.name,
+                              pathname,
+                              searchParams,
+                              push,
+                            });
+                          }}
                         >
                           <SelectNetwork icon={e.logo} active={!!selectedChain}>
                             {e.name}

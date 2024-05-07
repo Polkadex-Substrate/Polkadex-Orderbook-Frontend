@@ -49,6 +49,7 @@ export const Form = () => {
         setChain={setSourceChain}
         selectedAccount={sourceAccount}
         setAccount={setSourceAccount}
+        from
       />
       <ConnectAccount
         open={openDestinationModal}

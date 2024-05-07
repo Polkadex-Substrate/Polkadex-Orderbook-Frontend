@@ -24,6 +24,8 @@ import {
   useTheaTransactions,
 } from "@orderbook/core/hooks";
 import { isIdentical } from "@orderbook/core/helpers";
+
+import { useConnectWalletProvider } from "../connectWalletProvider";
 const {
   disabledTheaChains,
   defaultTheaDestinationChain,
@@ -45,14 +47,18 @@ export const TheaProvider = ({
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
   const [sourceChain, setSourceChain] = useState<Chain | null>(null);
   const [destinationChain, setDestinationChain] = useState<Chain | null>(null);
-
-  const [sourceAccount, setSourceAccount] = useState<ExtensionAccount | null>(
-    null
-  );
+  const [sourceAccount, setSourceAccount] = useState<ExtensionAccount>();
   const [destinationAccount, setDestinationAccount] =
-    useState<ExtensionAccount | null>(null);
+    useState<ExtensionAccount>();
+  const { selectedWallet } = useConnectWalletProvider();
 
   const { getAllChains } = new Thea();
+
+  const sourceAccountSelected = useMemo(
+    () => sourceAccount ?? selectedWallet,
+    [sourceAccount, selectedWallet]
+  );
+
   const chains = useMemo(
     () =>
       getAllChains()?.filter((e) => !disabledTheaChains.includes(e.genesis)),
@@ -142,7 +148,7 @@ export const TheaProvider = ({
     isSuccess: balancesSuccess,
   } = useTheaBalances({
     connector: sourceConnector,
-    sourceAddress: sourceAccount?.address ?? "",
+    sourceAddress: sourceAccountSelected?.address ?? "",
     assets: sourceAssets,
   });
 
@@ -185,7 +191,7 @@ export const TheaProvider = ({
       isSuccess: withdrawalsSuccess,
     },
   ] = useTheaTransactions({
-    sourceAddress: sourceAccount?.address ?? "",
+    sourceAddress: sourceAccountSelected?.address ?? "",
     assets: sourceAssets,
     chains,
   });
@@ -193,7 +199,7 @@ export const TheaProvider = ({
   return (
     <Provider
       value={{
-        sourceAccount,
+        sourceAccount: sourceAccountSelected,
         setSourceAccount,
         destinationAccount,
         setDestinationAccount,
@@ -230,11 +236,11 @@ export const TheaProvider = ({
 };
 
 type State = {
-  sourceAccount: ExtensionAccount | null;
+  sourceAccount?: ExtensionAccount;
   setSourceAccount: Dispatch<SetStateAction<ExtensionAccount>>;
   chains: Chain[];
 
-  destinationAccount: ExtensionAccount | null;
+  destinationAccount?: ExtensionAccount;
   setDestinationAccount: Dispatch<SetStateAction<ExtensionAccount>>;
 
   destinationChain: Chain | null;
@@ -262,9 +268,9 @@ type State = {
   withdrawalsSuccess: boolean;
 };
 export const Context = createContext<State>({
-  sourceAccount: null,
+  sourceAccount: undefined,
   setSourceAccount: () => {},
-  destinationAccount: null,
+  destinationAccount: undefined,
   setDestinationAccount: () => {},
 
   destinationChain: null,

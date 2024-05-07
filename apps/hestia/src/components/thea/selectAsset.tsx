@@ -12,8 +12,11 @@ import classNames from "classnames";
 import { twMerge } from "tailwind-merge";
 import { useTheaProvider } from "@orderbook/core/providers";
 import { getChainFromTicker } from "@orderbook/core/helpers";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { TokenCard } from "./connectWallet";
+
+import { createQueryString } from "@/helpers";
 
 export const SelectAsset = ({
   open,
@@ -26,6 +29,10 @@ export const SelectAsset = ({
 }) => {
   const handleClose = useCallback(() => onOpenChange(false), [onOpenChange]);
   const { supportedAssets, setSelectedAsset } = useTheaProvider();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { push } = useRouter();
+
   return (
     <Modal
       open={open}
@@ -64,6 +71,13 @@ export const SelectAsset = ({
                           className="p-3"
                           onSelect={() => {
                             setSelectedAsset(e);
+                            createQueryString({
+                              name: "asset",
+                              value: e.ticker,
+                              pathname,
+                              searchParams,
+                              push,
+                            });
                             onOpenChange(false);
                           }}
                         >
