@@ -1,8 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import {
-  useExtensionAccounts,
-  useUserAccounts,
-} from "@polkadex/react-providers";
+import { useUserAccounts } from "@polkadex/react-providers";
 import {
   isAssetPDEX,
   isValidAddress,
@@ -23,9 +20,9 @@ export type CancelOrderArgs = {
 export const useCancelOrder = () => {
   const { wallet } = useUserAccounts();
   const { onHandleError, onHandleAlert, onHandleInfo } = useSettingsProvider();
-  const { extensionAccounts } = useExtensionAccounts();
   const {
     selectedAddresses: { mainAddress, tradeAddress },
+    getSigner,
   } = useProfile();
   const { api } = useNativeApi();
 
@@ -36,15 +33,8 @@ export const useCancelOrder = () => {
 
       if (!tradeAddress) throw new Error("No trading account selected");
 
-      const keyringPair = wallet.getPair(tradeAddress);
-      const account = extensionAccounts.find(
-        ({ address }) => address === mainAddress
-      );
-      if (!account && (!isValidAddress(tradeAddress) || !keyringPair))
-        throw new Error("No valid Account Found");
-
-      if (!account && keyringPair?.isLocked)
-        throw new Error("Please unlock your account first");
+      if (!isValidAddress(tradeAddress))
+        throw new Error("Invalid trading account");
 
       onHandleInfo?.("Cancelling order...");
 
@@ -52,17 +42,24 @@ export const useCancelOrder = () => {
       const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
       const pair = `${baseAsset}-${quoteAsset}`;
 
-      const isSignedByExtension = !keyringPair;
+      const isSignedByExtension = mainAddress === tradeAddress;
       let signature: { Sr25519: string };
       if (isSignedByExtension) {
-        const signer = account?.signer;
-        if (!signer) throw new Error("No signer for MainAccount found");
-        const result = signer?.signRaw({
+        const signer = getSigner(mainAddress);
+        if (!signer) throw new Error("No signer for main account found");
+        const result = await signer.signRaw({
           address: mainAddress,
           data: pair,
         });
         signature = { Sr25519: result?.signature };
       } else {
+        const keyringPair = wallet.getPair(tradeAddress);
+
+        if (!keyringPair) throw new Error("Invalid trading account");
+
+        if (keyringPair?.isLocked)
+          throw new Error("Please unlock your account first");
+
         signature = signPayload(
           keyringPair,
           api.createType("order_id", orderId)

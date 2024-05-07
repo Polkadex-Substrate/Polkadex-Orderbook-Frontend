@@ -1,8 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import {
-  useExtensionAccounts,
-  useUserAccounts,
-} from "@polkadex/react-providers";
+import { useUserAccounts } from "@polkadex/react-providers";
 import {
   createOrderPayload,
   createOrderSigningPayload,
@@ -38,9 +35,9 @@ export const useCreateOrder = () => {
     useSettingsProvider();
   const {
     selectedAddresses: { mainAddress, tradeAddress },
+    getSigner,
   } = useProfile();
   const { api } = useNativeApi();
-  const { extensionAccounts } = useExtensionAccounts();
 
   return useMutation({
     mutationFn: async (args: CreateOrderArgs) => {
@@ -49,7 +46,7 @@ export const useCreateOrder = () => {
         throw new Error("You are not connected to blockchain");
 
       if (!isValidAddress(tradeAddress))
-        throw new Error("Invalid Trading Account");
+        throw new Error("Invalid trading account");
 
       const order = createOrderPayload({
         tradeAddress,
@@ -71,11 +68,8 @@ export const useCreateOrder = () => {
       );
       let signature: { Sr25519: string };
       if (isSignedByExtension) {
-        const account = extensionAccounts.find(
-          (account) => account.address === order.main_account
-        );
-        const signer = account?.signer;
-        if (!signer) throw new Error("MainAccount signer found");
+        const signer = getSigner(mainAddress);
+        if (!signer) throw new Error("No signer for main account found");
         const result = await signer.signRaw({
           address: mainAddress,
           data: JSON.stringify(signingPayload),
@@ -83,7 +77,7 @@ export const useCreateOrder = () => {
         signature = { Sr25519: result.signature.slice(2) };
       } else {
         const keyringPair = wallet.getPair(tradeAddress);
-        if (!keyringPair) throw new Error("Invalid Trading Account");
+        if (!keyringPair) throw new Error("Invalid trading account");
 
         signature = signPayload(keyringPair, signingPayload as Codec);
       }
