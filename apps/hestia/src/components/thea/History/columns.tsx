@@ -69,14 +69,14 @@ export const columns = [
         <div className="flex items-center gap-2">
           <NetworkCard
             name={from?.name ?? ""}
-            isPolkadotEcosystem={!from?.genesis.includes(polkadotNetwork)}
+            isPolkadotEcosystem={!from?.genesis?.includes(polkadotNetwork)}
           />
           <div className="flex items-center justify-center w-5 h-5 p-0.5 bg-level-1 border border-primary">
             <RiArrowRightLine className="w-full h-full text-primary" />
           </div>
           <NetworkCard
             name={to?.name ?? ""}
-            isPolkadotEcosystem={!to?.genesis.includes(polkadotNetwork)}
+            isPolkadotEcosystem={!to?.genesis?.includes(polkadotNetwork)}
           />
         </div>
       );

@@ -10,14 +10,16 @@ export const NetworkCard = ({
   name: string;
   isPolkadotEcosystem?: boolean;
 }) => {
-  const IconComponent = Icons[name as keyof typeof Icons];
+  const IconComponent = name ? Icons[name as keyof typeof Icons] : null;
 
   if (isPolkadotEcosystem)
     return (
       <div className="flex items-center gap-1">
-        <div className="flex items-center justify-center w-6 h-6 p-1 rounded-full border border-primary">
-          <IconComponent />
-        </div>
+        {IconComponent && (
+          <div className="flex items-center justify-center w-6 h-6 p-1 rounded-full border border-primary">
+            <IconComponent />
+          </div>
+        )}
         <Typography.Text size="sm">{name}</Typography.Text>
       </div>
     );
@@ -25,9 +27,11 @@ export const NetworkCard = ({
     <HoverCard>
       <HoverCard.Trigger>
         <div className="flex items-center gap-1">
-          <div className="flex items-center justify-center w-6 h-6 p-1 rounded-full border border-primary">
-            <IconComponent />
-          </div>
+          {IconComponent && (
+            <div className="flex items-center justify-center w-6 h-6 p-1 rounded-full border border-primary">
+              <IconComponent />
+            </div>
+          )}
           <div className="flex flex-col">
             <Typography.Text size="sm">{name}</Typography.Text>
             <div className="flex items-center gap-1">

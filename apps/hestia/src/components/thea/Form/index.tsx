@@ -75,7 +75,14 @@ export const Form = () => {
                   />
                 </div>
                 {sourceAccount && (
-                  <WalletCard name={sourceAccount.name}>
+                  <WalletCard
+                    name={sourceAccount.name}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setOpenSourceModal(true);
+                    }}
+                  >
                     {sourceAccount.address}
                   </WalletCard>
                 )}
@@ -90,7 +97,14 @@ export const Form = () => {
                   />
                 </div>
                 {destinationAccount && (
-                  <WalletCard name={destinationAccount.name}>
+                  <WalletCard
+                    name={destinationAccount.name}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setOpenDestinationModal(true);
+                    }}
+                  >
                     {destinationAccount.address}
                   </WalletCard>
                 )}

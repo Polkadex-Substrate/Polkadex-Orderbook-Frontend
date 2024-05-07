@@ -13,6 +13,8 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useMeasure } from "react-use";
 import { twMerge } from "tailwind-merge";
+import { RiExpandUpDownFill } from "@remixicon/react";
+import { Typography } from "@polkadex/ux";
 
 interface Props extends ComponentProps<"div"> {
   open: boolean;
@@ -68,9 +70,20 @@ const Item = ({
         <motion.button
           type="button"
           onClick={hasData && !open ? setOpen : setSelect}
-          className="hover:bg-level-1 transition-colors duration-200 border-primary/40 border-b last:border-b-none"
+          className="flex justify-between items-center hover:bg-level-1 transition-colors duration-200 border-primary/40 border-b last:border-b-none"
         >
           {children}
+          <div className="mr-4">
+            {open ? (
+              <div className="bg-secondary-base/70 rounded-sm px-2">
+                <Typography.Text bold appearance="primary" size="xs">
+                  Select
+                </Typography.Text>
+              </div>
+            ) : (
+              <RiExpandUpDownFill className="w-4 h-4 text-secondary" />
+            )}
+          </div>
         </motion.button>
       )}
     </AnimatePresence>

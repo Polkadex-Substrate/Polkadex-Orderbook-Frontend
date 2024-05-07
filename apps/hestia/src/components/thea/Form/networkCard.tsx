@@ -1,3 +1,4 @@
+"use client";
 import { Button, Typography } from "@polkadex/ux";
 import { RiArrowDownSLine } from "@remixicon/react";
 
