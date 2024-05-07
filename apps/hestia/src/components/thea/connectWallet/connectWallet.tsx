@@ -71,8 +71,9 @@ export const ConnectWallet = ({
                       return (
                         <Expandable.Item
                           key={e.genesis}
-                          visible={selectedChain ? !!visible : true}
-                          onSelect={() => setChain(selectedChain ? null : e)}
+                          visible={!!visible}
+                          hasData={!!selectedChain}
+                          onSelect={() => setChain(e)}
                         >
                           <SelectNetwork icon={e.logo} active={!!selectedChain}>
                             {e.name}
