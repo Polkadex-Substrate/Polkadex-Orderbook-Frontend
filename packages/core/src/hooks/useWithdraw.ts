@@ -5,6 +5,7 @@ import { useProfile } from "@orderbook/core/providers/user/profile";
 import {
   createWithdrawSigningPayload,
   signPayload,
+  isValidAddress,
 } from "@orderbook/core/helpers";
 import { useUserAccounts } from "@polkadex/react-providers";
 import { KeyringPair } from "@polkadot/keyring/types";
@@ -58,10 +59,16 @@ export const useWithdraw = () => {
       } else {
         const keyringPair = wallet.getPair(tradeAddress);
 
+        if (!isValidAddress(tradeAddress) || !keyringPair)
+          throw new Error("Invalid trading account");
+
+        if (keyringPair?.isLocked)
+          throw new Error("Please unlock your account first");
+
         signature = signPayload(
           api,
           keyringPair as KeyringPair,
-          signingPayload as Codec
+          api.createType("WithdrawPayload", signingPayload) as Codec
         );
       }
       const proxy = isSignedByExtension ? mainAddress : tradeAddress;
@@ -76,7 +83,7 @@ export const useWithdraw = () => {
     },
     onSuccess: () =>
       onHandleAlert(
-        "Your withdrawal is being processed and will be available for you to claim in a few minutes"
+        "Your withdrawal is being processed and will be credited in a few minutes"
       ),
   });
 
