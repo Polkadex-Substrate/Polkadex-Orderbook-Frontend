@@ -1,6 +1,5 @@
 import { ApiPromise } from "@polkadot/api";
 import { getNonce } from "@orderbook/core/helpers/getNonce";
-import { Codec } from "@polkadot/types/types";
 
 type WithdrawPayload = {
   asset: string | "PDEX";
@@ -25,5 +24,5 @@ export const createWithdrawSigningPayload = (
     amount: payload.amount,
     timestamp: getNonce(),
   };
-  return api.createType("WithdrawPayload", { ...data }) as Codec;
+  return data;
 };

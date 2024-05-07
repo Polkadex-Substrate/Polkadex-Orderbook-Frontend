@@ -35,7 +35,7 @@ export const ResponsiveInteraction = forwardRef<
       </Drawer>
       <div
         ref={ref}
-        className="flex flex-col gap-4 bg-level-1 border-t border-primary py-3 px-2 fixed bottom-0 left-0 w-full z-[2]"
+        className="flex flex-col gap-1 bg-level-1 border-t border-primary px-2 fixed bottom-0 left-0 w-full z-[2]"
       >
         <ResponsiveProfile
           browserAccountPresent={browserAccountPresent}

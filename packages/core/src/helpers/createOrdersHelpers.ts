@@ -1,6 +1,5 @@
 import { ApiPromise } from "@polkadot/api";
 import { Codec } from "@polkadot/types/types";
-import { KeyringPair } from "@polkadot/keyring/types";
 import { getNonce } from "@orderbook/core/helpers/getNonce";
 import { encodeAddress } from "@polkadot/util-crypto";
 import { getNewClientId } from "@orderbook/core/helpers/getNewClientId";
@@ -9,7 +8,6 @@ import { SS58_DEFAULT_FORMAT } from "@orderbook/core/constants";
 import { OrderSide, OrderType, OrderTypeEnum } from "../utils/orderbookService";
 
 import { isAssetPDEX } from "./isAssetPDEX";
-import { signPayload } from "./enclavePayloadSigner";
 
 type OrderPayload = {
   tradeAddress: string;
@@ -76,17 +74,24 @@ export const createOrderSigningPayload = (
 
 export const createCancelAllPayload = (
   api: ApiPromise,
-  userKeyring: KeyringPair,
   market: string,
   mainAddress: string,
-  tradeAddress: string
+  tradeAddress: string,
+  isSignedByExtension: boolean
 ) => {
+  if (isSignedByExtension) {
+    return {
+      main: mainAddress,
+      proxy: tradeAddress,
+      market: market,
+      timestamp: getNonce(),
+    };
+  }
   const signingPayload = api.createType("CancelAllPayload", {
     main: mainAddress,
     proxy: tradeAddress,
     market: market,
     timestamp: getNonce(),
   });
-  const signature = signPayload(userKeyring, signingPayload);
-  return { payload: signingPayload, signature };
+  return signingPayload;
 };

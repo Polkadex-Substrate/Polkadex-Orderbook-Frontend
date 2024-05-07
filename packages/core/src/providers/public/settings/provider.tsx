@@ -12,8 +12,10 @@ export const SettingProvider: T.SettingComponent = ({
   const [state, dispatch] = useReducer(settingReducer, initialState);
 
   // Global Setting Actions
-  const onToogleConnectExtension = (payload?: boolean) =>
-    dispatch(A.toogleConnectExtension(payload));
+  const onToogleConnectExtension = useCallback(
+    (payload?: boolean) => dispatch(A.toogleConnectExtension(payload)),
+    []
+  );
 
   const onToogleConnectTrading = (payload?: boolean) =>
     dispatch(A.toogleConnectTrading(payload));

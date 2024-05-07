@@ -1,8 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import {
-  useExtensionAccounts,
-  useUserAccounts,
-} from "@polkadex/react-providers";
+import { useUserAccounts } from "@polkadex/react-providers";
 import {
   createOrderPayload,
   createOrderSigningPayload,
@@ -38,9 +35,9 @@ export const useCreateOrder = () => {
     useSettingsProvider();
   const {
     selectedAddresses: { mainAddress, tradeAddress },
+    getSigner,
   } = useProfile();
   const { api } = useNativeApi();
-  const { extensionAccounts } = useExtensionAccounts();
 
   return useMutation({
     mutationFn: async (args: CreateOrderArgs) => {
@@ -48,9 +45,9 @@ export const useCreateOrder = () => {
       if (!api?.isConnected)
         throw new Error("You are not connected to blockchain");
 
-      const keyringPair = wallet.getPair(tradeAddress);
-      if (!isValidAddress(tradeAddress) || !keyringPair)
-        throw new Error("Invalid Trading Account");
+      if (!isValidAddress(tradeAddress))
+        throw new Error("Invalid trading account");
+
       const order = createOrderPayload({
         tradeAddress,
         type: orderType,
@@ -62,7 +59,7 @@ export const useCreateOrder = () => {
         mainAddress,
       });
 
-      // check if the order needs to be signed by the extension
+      // Check if the order needs to be signed by the extension
       const isSignedByExtension = tradeAddress === mainAddress;
       const signingPayload = createOrderSigningPayload(
         order,
@@ -71,18 +68,21 @@ export const useCreateOrder = () => {
       );
       let signature: { Sr25519: string };
       if (isSignedByExtension) {
-        const account = extensionAccounts.find(
-          (account) => account.address === order.main_account
-        );
-        const signer = account?.signer;
-        if (!signer) throw new Error("MainAccount signer found");
+        const signer = getSigner(mainAddress);
+        if (!signer) throw new Error("No signer for main account found");
         const result = await signer.signRaw({
           address: mainAddress,
           data: JSON.stringify(signingPayload),
         });
         signature = { Sr25519: result.signature.slice(2) };
       } else {
-        signature = signPayload(keyringPair, signingPayload as Codec);
+        const keyringPair = wallet.getPair(tradeAddress);
+        if (!keyringPair) throw new Error("Invalid trading account");
+
+        if (keyringPair?.isLocked)
+          throw new Error("Please unlock your account first");
+
+        signature = signPayload(api, keyringPair, signingPayload as Codec);
       }
       const payload = JSON.stringify({
         PlaceOrder: [signingPayload, signature],

@@ -5,6 +5,7 @@ import { Fragment, useCallback, useMemo } from "react";
 import { Interactable, useInteractableProvider } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
@@ -80,7 +81,9 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
     gDriveReady,
     onRemoveGoogleDrive,
     removeGoogleDriveLoading,
+    browserAccountPresent,
   } = useConnectWalletProvider();
+  const { onToogleConnectExtension } = useSettingsProvider();
 
   const { setPage, onReset } = useInteractableProvider();
   const sourceId = selectedExtension?.id;
@@ -93,11 +96,19 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
     [extensionAccounts, sourceId]
   );
 
-  const onRedirect = useCallback(
-    () =>
-      selectedWallet ? onNext(hasAccount ? "ExistingUser" : "NewUser") : null,
-    [selectedWallet, onNext, hasAccount]
-  );
+  const onRedirect = useCallback(() => {
+    if (!selectedWallet) return null;
+
+    return browserAccountPresent
+      ? onToogleConnectExtension(false)
+      : onNext(hasAccount ? "ExistingUser" : "NewUser");
+  }, [
+    hasAccount,
+    onNext,
+    onToogleConnectExtension,
+    browserAccountPresent,
+    selectedWallet,
+  ]);
 
   const availableOnDevice = useMemo(
     () =>
@@ -125,7 +136,7 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
           extensionAccounts={walletsFiltered}
           loading={!!mainProxiesLoading}
           success={!!mainProxiesSuccess}
-          onSelectExtensionAccount={(e) => onSelectWallet?.(e)}
+          onSelectExtensionAccount={async (e) => await onSelectWallet?.(e)}
           onTryAgain={() =>
             selectedExtension && onSelectExtension?.(selectedExtension)
           }

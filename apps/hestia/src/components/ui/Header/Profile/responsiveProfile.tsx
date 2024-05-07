@@ -13,17 +13,15 @@ export const ResponsiveProfile = ({
   browserAccountPresent: boolean;
   extensionAccountPresent: boolean;
 }) => {
-  const { selectedWallet, selectedAccount } = useConnectWalletProvider();
+  const { selectedWallet } = useConnectWalletProvider();
 
   return browserAccountPresent || extensionAccountPresent ? (
     <Popover>
       <Popover.Trigger>
         <Trigger
           responsive
-          browserAccountPresent={browserAccountPresent}
           extensionAccountPresent={extensionAccountPresent}
           extensionAccountName={selectedWallet?.name ?? ""}
-          browserAccountName={selectedAccount?.meta?.name ?? ""}
         />
       </Popover.Trigger>
       <Popover.Content sideOffset={10}>
