@@ -57,13 +57,13 @@ export type ExportTradeAccountProps = {
   password?: string;
 };
 
-export enum SelectedTradingAccountType {
+export enum TradeAccountType {
   Extension,
   Keyring,
 }
 export type SelectedTradingAccount = {
   account?: KeyringPair;
-  type: SelectedTradingAccountType;
+  type: TradeAccountType;
 };
 
 type ConnectWalletState = {
@@ -397,7 +397,7 @@ export const ConnectWalletProvider = ({
     const selected = selectedAddresses?.tradeAddress;
 
     if (selected === selectedWallet?.address) {
-      return { type: SelectedTradingAccountType.Extension };
+      return { type: TradeAccountType.Extension };
     }
 
     const availableLocalAccount = localTradingAccounts?.find(
@@ -407,7 +407,7 @@ export const ConnectWalletProvider = ({
     if (availableLocalAccount && selected && isReady)
       return {
         account: availableLocalAccount,
-        type: SelectedTradingAccountType.Keyring,
+        type: TradeAccountType.Keyring,
       };
   }, [
     localTradingAccounts,
@@ -418,7 +418,7 @@ export const ConnectWalletProvider = ({
 
   const browserAccountPresent = useMemo(
     () =>
-      selectedTradingAccount?.type === SelectedTradingAccountType.Extension
+      selectedTradingAccount?.type === TradeAccountType.Extension
         ? true
         : !!Object.keys(selectedTradingAccount?.account ?? {})?.length,
     [selectedTradingAccount]

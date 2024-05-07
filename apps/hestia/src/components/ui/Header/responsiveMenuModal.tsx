@@ -191,7 +191,9 @@ export const ResponsiveMenuModal = ({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <RiPaletteLine className="w-4 h-4 text-primary" />
-                    <Typography.Text size="lg">Color Prefence</Typography.Text>
+                    <Typography.Text size="lg">
+                      Color Preference
+                    </Typography.Text>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 bg-success-base" />
