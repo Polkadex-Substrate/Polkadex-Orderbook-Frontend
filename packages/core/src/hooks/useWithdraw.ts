@@ -74,7 +74,12 @@ export const useWithdraw = () => {
       const proxy = isSignedByExtension ? mainAddress : tradeAddress;
       await appsyncOrderbookService.operation.withdraw({
         address: proxy,
-        payload: [mainAddress, proxy, signingPayload, signature],
+        payload: [
+          mainAddress,
+          proxy,
+          { ...signingPayload, asset_id: { asset } },
+          signature,
+        ],
       });
     },
     onError: (error) => {
