@@ -26,12 +26,14 @@ export const ConnectWallet = ({
   selectedChain,
   setChain,
   selectedAccount,
+  secondaryChain,
 }: {
   onClose: () => void;
   onSetExtension: (e: Extension) => void;
   selectedChain: Chain | null;
   setChain: Dispatch<SetStateAction<Chain | null>>;
   selectedAccount: ExtensionAccount | null;
+  secondaryChain?: string;
 }) => {
   const { setPage } = useInteractableProvider();
   const { extensionsStatus } = useExtensions();
@@ -67,7 +69,7 @@ export const ConnectWallet = ({
                     {chains.map((e) => {
                       const id = e.genesis;
                       const visible = selectedChain?.genesis.includes(id);
-
+                      if (id === secondaryChain) return null;
                       return (
                         <Expandable.Item
                           key={e.genesis}

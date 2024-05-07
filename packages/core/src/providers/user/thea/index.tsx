@@ -116,21 +116,17 @@ export const TheaProvider = ({
   }, [initialDestinationName, initialSourceName, chains]);
 
   useEffect(() => {
-    if (initialDestination && !destinationChain) {
+    if (initialDestination && !destinationChain)
       setDestinationChain(initialDestination);
-    }
   }, [initialDestination, destinationChain]);
 
   useEffect(() => {
-    if (initialSource && !sourceChain) {
-      setSourceChain(initialSource);
-    }
+    if (initialSource && !sourceChain) setSourceChain(initialSource);
   }, [initialSource, sourceChain]);
 
   useEffect(() => {
-    if (!selectedAsset && destinationChain && sourceChain && supportedAssets) {
+    if (!selectedAsset && destinationChain && sourceChain && supportedAssets)
       setSelectedAsset(initialAsset || supportedAssets[0]);
-    }
   }, [
     initialAsset,
     selectedAsset,
@@ -149,6 +145,31 @@ export const TheaProvider = ({
     sourceAddress: sourceAccount?.address ?? "",
     assets: sourceAssets,
   });
+
+  const selectedAssetSupported = useMemo(
+    () =>
+      !!selectedAsset &&
+      supportedAssets?.find((e) => e.ticker.includes(selectedAsset.ticker)),
+    [selectedAsset, supportedAssets]
+  );
+
+  useEffect(() => {
+    if (
+      selectedAsset &&
+      sourceChain &&
+      destinationChain &&
+      supportedAssets &&
+      !selectedAssetSupported
+    ) {
+      setSelectedAsset(null);
+    }
+  }, [
+    destinationChain,
+    selectedAsset,
+    selectedAssetSupported,
+    sourceChain,
+    supportedAssets,
+  ]);
 
   const [
     {

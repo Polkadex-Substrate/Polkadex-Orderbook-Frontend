@@ -11,9 +11,9 @@ import { useTheaProvider } from "@orderbook/core/providers";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
-import { tokens } from "../connectWallet";
 
 import { WalletCard } from "./wallet";
+import { NetworkCard } from "./networkCard";
 
 export const Form = () => {
   const [openAsset, setOpenAsset] = useState(false);
@@ -45,6 +45,7 @@ export const Form = () => {
         open={openSourceModal}
         onOpenChange={setOpenSourceModal}
         selectedChain={sourceChain}
+        secondaryChain={destinationChain?.genesis}
         setChain={setSourceChain}
         selectedAccount={sourceAccount}
         setAccount={setSourceAccount}
@@ -53,6 +54,7 @@ export const Form = () => {
         open={openDestinationModal}
         onOpenChange={setOpenDestinationModal}
         selectedChain={destinationChain}
+        secondaryChain={sourceChain?.genesis}
         setChain={setDestinationChain}
         selectedAccount={destinationAccount}
         setAccount={setDestinationAccount}
@@ -65,34 +67,11 @@ export const Form = () => {
               <div className="flex flex-col gap-2 flex-1">
                 <div className="flex flex-col gap-2">
                   <Typography.Text appearance="primary">From</Typography.Text>
-                  <Button.Outline
-                    appearance="secondary"
-                    className="gap-1 px-2 py-7 justify-between"
-                    onClick={() => setOpenSourceModal(true)}
-                  >
-                    <div className="flex items-center gap-2">
-                      {sourceChain ? (
-                        <Token
-                          name={
-                            tokens[sourceChain?.name as keyof typeof tokens]
-                          }
-                          size="md"
-                          appearance={
-                            tokens[
-                              sourceChain?.name as keyof typeof tokens
-                            ] as TokenAppearance
-                          }
-                          className="rounded-full border border-primary"
-                        />
-                      ) : (
-                        <div className="w-7 h-7 rounded-full bg-level-2" />
-                      )}
-                      <Typography.Text size="lg" bold>
-                        {sourceChain ? sourceChain.name : "Select"}
-                      </Typography.Text>
-                    </div>
-                    <RiArrowDownSLine className="w-4 h-4" />
-                  </Button.Outline>
+                  <NetworkCard
+                    name={sourceChain?.name ?? ""}
+                    icon={sourceChain?.logo ?? ""}
+                    onOpenModal={() => setOpenSourceModal(true)}
+                  />
                 </div>
                 {sourceAccount && (
                   <WalletCard name={sourceAccount.name}>
@@ -103,37 +82,11 @@ export const Form = () => {
               <div className="flex flex-col gap-2 flex-1">
                 <div className="flex flex-col gap-2">
                   <Typography.Text appearance="primary">To</Typography.Text>
-                  <Button.Outline
-                    appearance="secondary"
-                    className="gap-1 px-2 py-7 justify-between"
-                    onClick={() => setOpenDestinationModal(true)}
-                    disabled={!sourceChain}
-                  >
-                    <div className="flex items-center gap-2">
-                      {destinationChain ? (
-                        <Token
-                          name={
-                            tokens[
-                              destinationChain?.name as keyof typeof tokens
-                            ]
-                          }
-                          size="md"
-                          appearance={
-                            tokens[
-                              destinationChain?.name as keyof typeof tokens
-                            ] as TokenAppearance
-                          }
-                          className="rounded-full border border-primary"
-                        />
-                      ) : (
-                        <div className="w-7 h-7 rounded-full bg-level-2" />
-                      )}
-                      <Typography.Text size="lg" bold>
-                        {destinationChain ? destinationChain.name : "Select"}
-                      </Typography.Text>
-                    </div>
-                    <RiArrowDownSLine className="w-4 h-4" />
-                  </Button.Outline>
+                  <NetworkCard
+                    name={destinationChain?.name ?? ""}
+                    icon={destinationChain?.logo ?? ""}
+                    onOpenModal={() => setOpenDestinationModal(true)}
+                  />
                 </div>
                 {destinationAccount && (
                   <WalletCard name={destinationAccount.name}>
