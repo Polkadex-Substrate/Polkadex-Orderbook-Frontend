@@ -20,7 +20,10 @@ import {
 } from "react";
 import { RiArrowDownSLine, RiArrowRightLine } from "@remixicon/react";
 import classNames from "classnames";
-import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import {
+  TradeAccountType,
+  useConnectWalletProvider,
+} from "@orderbook/core/providers/user/connectWalletProvider";
 import {
   getChainFromTicker,
   isAssetPDEX,
@@ -309,8 +312,16 @@ export const Form = ({
               extensionAccountName={selectedWallet?.name}
               extensionAccountAddress={selectedWallet?.address}
               extensionAccountBalance={selectedAsset?.onChainBalance}
-              localAccountName={selectedTradingAccount?.account?.meta?.name}
-              localAccountAddress={selectedTradingAccount?.account?.address}
+              localAccountName={
+                selectedTradingAccount?.type === TradeAccountType.Keyring
+                  ? selectedTradingAccount?.account?.meta?.name
+                  : selectedWallet?.name
+              }
+              localAccountAddress={
+                selectedTradingAccount?.type === TradeAccountType.Keyring
+                  ? selectedTradingAccount?.account?.address
+                  : selectedWallet?.address
+              }
               localAccountBalance={selectedAsset?.free_balance}
               selectedAssetTicker={selectedAsset?.ticker}
             />
