@@ -79,7 +79,10 @@ export const useCreateOrder = () => {
         const keyringPair = wallet.getPair(tradeAddress);
         if (!keyringPair) throw new Error("Invalid trading account");
 
-        signature = signPayload(keyringPair, signingPayload as Codec);
+        if (keyringPair?.isLocked)
+          throw new Error("Please unlock your account first");
+
+        signature = signPayload(api, keyringPair, signingPayload as Codec);
       }
       const payload = JSON.stringify({
         PlaceOrder: [signingPayload, signature],

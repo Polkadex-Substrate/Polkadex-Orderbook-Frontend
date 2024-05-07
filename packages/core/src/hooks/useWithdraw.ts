@@ -59,6 +59,7 @@ export const useWithdraw = () => {
         const keyringPair = wallet.getPair(tradeAddress);
 
         signature = signPayload(
+          api,
           keyringPair as KeyringPair,
           signingPayload as Codec
         );

@@ -62,6 +62,7 @@ export const useCancelOrder = () => {
           throw new Error("Please unlock your account first");
 
         signature = signPayload(
+          api,
           keyringPair,
           api.createType("order_id", orderId)
         );

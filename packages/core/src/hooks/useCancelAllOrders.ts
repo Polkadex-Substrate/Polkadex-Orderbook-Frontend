@@ -59,7 +59,7 @@ export const useCancelAllOrders = () => {
         if (keyringPair?.isLocked)
           throw new Error("Please unlock your account first");
 
-        signature = signPayload(keyringPair, signingPayload as Codec);
+        signature = signPayload(api, keyringPair, signingPayload as Codec);
       }
 
       const payload = JSON.stringify({
