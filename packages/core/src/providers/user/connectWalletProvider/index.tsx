@@ -77,7 +77,7 @@ type ConnectWalletState = {
   // list of all trading accounts in browser
   localTradingAccounts: KeyringPair[];
   // TODO: rename to onSelectExtensionAccount
-  onSelectWallet: (payload: ExtensionAccount) => void;
+  onSelectWallet: (payload: ExtensionAccount) => Promise<void>;
   onSelectTradingAccount: (value: KeyringPair) => void;
   // TODO: redefine type in polkadex-ts
   onSelectExtension: (
@@ -251,9 +251,9 @@ export const ConnectWalletProvider = ({
       .map(({ tradeAddress }) => tradeAddress);
   }, [allProxiesAccounts, selectedWallet?.address, tempTrading?.address]);
 
-  const onSelectExtensionAccount = (payload: ExtensionAccount) => {
+  const onSelectExtensionAccount = async (payload: ExtensionAccount) => {
     const mainAddress = payload.address;
-    onUserSelectMainAddress({ mainAddress });
+    await onUserSelectMainAddress({ mainAddress });
   };
 
   const onSelectExtension = (
@@ -557,7 +557,7 @@ export const ConnectWalletProvider = ({
 
 export const Context = createContext<ConnectWalletState>({
   localTradingAccounts: [],
-  onSelectWallet: () => {},
+  onSelectWallet: async () => {},
   onSelectTradingAccount: () => {},
   onSelectExtension: () => {},
   onResetWallet: () => {},
