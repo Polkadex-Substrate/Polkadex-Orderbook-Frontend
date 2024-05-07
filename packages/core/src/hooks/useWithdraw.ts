@@ -31,7 +31,7 @@ export const useWithdraw = () => {
       if (!api || !api?.isConnected)
         throw new Error("You are not connected to blockchain");
 
-      // check if the withdrawal needs to be signed by the extension
+      // Check if the withdrawal needs to be signed by the extension
       const isSignedByExtension =
         tradeAddress?.trim().length === 0 || mainAddress === tradeAddress;
 

@@ -37,7 +37,7 @@ export const useCancelOrder = () => {
       const quoteAsset = isAssetPDEX(quote) ? "PDEX" : quote;
       const pair = `${baseAsset}-${quoteAsset}`;
 
-      // check if the order needs to be cancelled by the extension
+      // Check if the order needs to be cancelled by the extension
       const isSignedByExtension =
         tradeAddress?.trim().length === 0 || mainAddress === tradeAddress;
 

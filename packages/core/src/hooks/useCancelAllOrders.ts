@@ -28,7 +28,7 @@ export const useCancelAllOrders = () => {
 
       onHandleInfo?.("Cancelling orders...");
 
-      // check if the orders needs to be cancelled by the extension
+      // Check if the orders needs to be cancelled by the extension
       const isSignedByExtension =
         tradeAddress?.trim().length === 0 || mainAddress === tradeAddress;
 

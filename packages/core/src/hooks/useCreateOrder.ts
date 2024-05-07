@@ -59,7 +59,7 @@ export const useCreateOrder = () => {
         mainAddress,
       });
 
-      // check if the order needs to be signed by the extension
+      // Check if the order needs to be signed by the extension
       const isSignedByExtension = tradeAddress === mainAddress;
       const signingPayload = createOrderSigningPayload(
         order,
