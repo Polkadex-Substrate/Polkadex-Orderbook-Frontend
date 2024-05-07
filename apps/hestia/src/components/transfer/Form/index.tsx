@@ -56,6 +56,7 @@ import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
 import { ConfirmTransaction } from "@/components/ui/ConnectWallet/confirmTransaction";
 const initialValues = { amount: 0.0 };
 export const Form = ({
+  isBalanceFetching,
   refetch,
   selectedAsset,
   onAssetsInteraction,
@@ -68,6 +69,7 @@ export const Form = ({
   type: SwitchType;
   onChangeType: (e: SwitchType) => void;
   assetsInteraction?: boolean;
+  isBalanceFetching: boolean;
   refetch: () => Promise<void>;
 }) => {
   const [cardFocus, setCardFocus] = useState(false);
@@ -135,7 +137,9 @@ export const Form = ({
   const handleMax = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    isTransferFromFunding ? onChangeFundingMax() : onChangeTradingMax();
+    isTransferFromFunding || isFundingToFunding
+      ? onChangeFundingMax()
+      : onChangeTradingMax();
   };
 
   const handleChanteType = (e: MouseEvent<HTMLElement>) => {
@@ -307,6 +311,7 @@ export const Form = ({
             <FromFunding
               isLocalAccountPresent={isLocalAccountPresent}
               isExtensionAccountPresent={isExtensionAccountPresent}
+              isBalanceFetching={isBalanceFetching}
               focused={cardFocus}
               fromFunding={isFromFunding}
               extensionAccountName={selectedWallet?.name}
@@ -342,6 +347,7 @@ export const Form = ({
             <FromTrading
               isLocalAccountPresent={isLocalAccountPresent}
               isExtensionAccountPresent={isExtensionAccountPresent}
+              isBalanceFetching={isBalanceFetching}
               fromFunding={isTransferFromFunding}
               extensionAccountName={selectedWallet?.name}
               extensionAccountAddress={selectedWallet?.address}
