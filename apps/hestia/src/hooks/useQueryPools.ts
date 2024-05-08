@@ -18,7 +18,7 @@ export const useQueryPools = () => {
       if (!swap || !assets) return;
       let data = await swap.queryPools();
       // filter out pools with 0 liquidity
-      data = data.filter((p) => Number(p.lpToken) > 0);
+      data = data.filter((p) => Number(p.base) + Number(p.quote) > 0);
       return await Promise.all(
         data.map(async (e) => {
           const quote = assets.find(
