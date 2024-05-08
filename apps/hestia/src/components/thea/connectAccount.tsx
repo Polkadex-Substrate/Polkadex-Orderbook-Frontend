@@ -19,7 +19,7 @@ import {
   ConnectWallet,
   Extension,
   ExtensionAccounts,
-} from "./connectWallet";
+} from "./ConnectWallet";
 
 export const ConnectAccount = ({
   open,

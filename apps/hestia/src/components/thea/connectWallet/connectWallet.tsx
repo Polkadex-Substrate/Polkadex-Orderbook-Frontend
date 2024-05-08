@@ -5,17 +5,18 @@ import { ExtensionAccount, useExtensions } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import {
   Button,
+  Input,
   Interaction,
+  Separator,
   Typography,
   useInteractableProvider,
 } from "@polkadex/ux";
 import { useTheaProvider } from "@orderbook/core/providers";
 import { useMeasure } from "react-use";
-import { motion, MotionConfig, AnimatePresence } from "framer-motion";
+import { motion, MotionConfig } from "framer-motion";
 import { Chain } from "@polkadex/thea";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { RiExpandUpDownFill } from "@remixicon/react";
-import classNames from "classnames";
 
 import { Expandable } from "../../ui/ReadyToUse/expandable";
 
@@ -80,74 +81,79 @@ export const ConnectWallet = ({
             }}
           >
             <div ref={ref} className="flex flex-col gap-3">
-              <div className="flex flex-col gap-2">
-                <Typography.Text appearance="secondary" className="px-7">
-                  1. Select a network
-                </Typography.Text>
-                <div className="w-full px-3">
-                  <Expandable
-                    open={networkOpen}
-                    setOpen={setNetworkOpen}
-                    className="max-h-[280px] overflow-auto scrollbar-hide"
-                  >
-                    {chains.map((e) => {
-                      const id = e.genesis;
-                      const visible = selectedChain?.genesis.includes(id);
-                      if (id === secondaryChain) return null;
-                      return (
-                        <Expandable.Item
-                          key={e.genesis}
-                          visible={!!visible}
-                          hasData={!!selectedChain}
-                          onSelect={() => {
-                            setChain(e);
-                            createQueryString({
-                              name: from ? "from" : "to",
-                              value: e.name,
-                              pathname,
-                              searchParams,
-                              push,
-                            });
-                          }}
-                        >
-                          <SelectNetwork icon={e.logo}>{e.name}</SelectNetwork>
-                        </Expandable.Item>
-                      );
-                    })}
-                  </Expandable>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="flex justify-between items-center">
+              {!accountOpen && (
+                <div className="flex flex-col gap-2">
                   <Typography.Text appearance="secondary" className="px-7">
-                    2. Select a wallet
+                    1. Select a network
                   </Typography.Text>
-                  {selectedChain && accountOpen && (
-                    <Button.Light
-                      appearance="secondary"
-                      size="xs"
-                      className="mr-4"
-                      onClick={() => setAccountOpen(false)}
+                  <div className="w-full px-3">
+                    <Expandable
+                      open={networkOpen}
+                      setOpen={setNetworkOpen}
+                      className="max-h-[280px] overflow-auto scrollbar-hide"
                     >
-                      Cancel
-                    </Button.Light>
-                  )}
+                      {chains.map((e) => {
+                        const id = e.genesis;
+                        const visible = selectedChain?.genesis.includes(id);
+                        if (id === secondaryChain) return null;
+                        return (
+                          <Expandable.Item
+                            key={e.genesis}
+                            visible={!!visible}
+                            hasData={!!selectedChain}
+                            onSelect={() => {
+                              setChain(e);
+                              createQueryString({
+                                data: [
+                                  { name: from ? "from" : "to", value: e.name },
+                                ],
+                                pathname,
+                                searchParams,
+                                push,
+                              });
+                            }}
+                          >
+                            <SelectNetwork icon={e.logo}>
+                              {e.name}
+                            </SelectNetwork>
+                          </Expandable.Item>
+                        );
+                      })}
+                    </Expandable>
+                  </div>
                 </div>
+              )}
 
-                <AnimatePresence>
-                  {selectedChain && !networkOpen && (
-                    <Fragment>
-                      {!accountOpen && selectedAccount ? (
-                        <div className="flex items-center justify-between gap-2 mx-4 pl-2 pr-3 py-3 hover:bg-level-1 transition-colors duration-200 border-primary border rounded-md cursor-pointer">
-                          <AccountCard
-                            name={selectedAccount.name}
-                            address={selectedAccount.address}
-                            onClick={() => setAccountOpen(true)}
-                            hoverable={false}
-                          />
-                          <RiExpandUpDownFill className="w-4 h-4 text-secondary" />
-                        </div>
-                      ) : (
+              {selectedChain && !networkOpen && (
+                <div className="flex flex-col gap-2">
+                  <div className="flex justify-between items-center">
+                    <Typography.Text appearance="secondary" className="px-7">
+                      2. Select a wallet
+                    </Typography.Text>
+                    {selectedChain && accountOpen && (
+                      <Button.Light
+                        appearance="secondary"
+                        size="xs"
+                        className="mr-4"
+                        onClick={() => setAccountOpen(false)}
+                      >
+                        Cancel
+                      </Button.Light>
+                    )}
+                  </div>
+                  <Fragment>
+                    {!accountOpen && selectedAccount ? (
+                      <div className="flex items-center justify-between gap-2 mx-4 pl-2 pr-3 py-3 hover:bg-level-1 transition-colors duration-200 border-primary border rounded-md cursor-pointer">
+                        <AccountCard
+                          name={selectedAccount.name}
+                          address={selectedAccount.address}
+                          onClick={() => setAccountOpen(true)}
+                          hoverable={false}
+                        />
+                        <RiExpandUpDownFill className="w-4 h-4 text-secondary" />
+                      </div>
+                    ) : (
+                      <Fragment>
                         <div className="flex flex-col px-3 overflow-auto">
                           {ExtensionsWhitelist?.map((value) => (
                             <ProviderCard
@@ -165,11 +171,41 @@ export const ConnectWallet = ({
                             />
                           ))}
                         </div>
-                      )}
-                    </Fragment>
-                  )}
-                </AnimatePresence>
-              </div>
+                        <div className="px-3">
+                          <div className="flex flex-col gap-3">
+                            <div className="flex items-center gap-2 px-4">
+                              <Separator.Horizontal className=" bg-level-2" />
+                              <Typography.Text
+                                appearance="secondary"
+                                size="xs"
+                                className="whitespace-nowrap"
+                              >
+                                Or enter a custom address
+                              </Typography.Text>
+                            </div>
+                            {!from && (
+                              <div className="pl-1 pr-4 border border-primary rounded-md">
+                                <Input.Vertical
+                                  className="w-full pl-4 py-4"
+                                  placeholder="Enter an address"
+                                >
+                                  <Input.Action
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                    }}
+                                  >
+                                    PASTE
+                                  </Input.Action>
+                                </Input.Vertical>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </Fragment>
+                    )}
+                  </Fragment>
+                </div>
+              )}
             </div>
           </motion.div>
         </Interaction.Content>

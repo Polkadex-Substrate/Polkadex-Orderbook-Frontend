@@ -14,7 +14,7 @@ import { useTheaProvider } from "@orderbook/core/providers";
 import { getChainFromTicker } from "@orderbook/core/helpers";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { TokenCard } from "./connectWallet";
+import { TokenCard } from "./ConnectWallet";
 
 import { createQueryString } from "@/helpers";
 
