@@ -16,7 +16,9 @@ export const useQueryPools = () => {
     enabled: !!swap && !!assets,
     queryFn: async () => {
       if (!swap || !assets) return;
-      const data = await swap.queryPools();
+      let data = await swap.queryPools();
+      // filter out pools with 0 liquidity
+      data = data.filter((p) => Number(p.lpToken) === 0);
       return await Promise.all(
         data.map(async (e) => {
           const quote = assets.find(
