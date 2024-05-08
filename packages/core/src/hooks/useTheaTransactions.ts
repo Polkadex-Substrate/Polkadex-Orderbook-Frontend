@@ -17,10 +17,12 @@ export const useTheaTransactions = ({
   sourceAddress,
   assets,
   chains,
+  selectedChain,
 }: {
   sourceAddress: string;
   assets: Asset[];
   chains: Chain[];
+  selectedChain: string;
 }) => {
   const enabled = useMemo(
     () => !!sourceAddress && !!assets && !!chains,
@@ -30,7 +32,7 @@ export const useTheaTransactions = ({
   return useQueries({
     queries: [
       {
-        queryKey: QUERY_KEYS.getTheDeposits(sourceAddress),
+        queryKey: QUERY_KEYS.getTheDeposits(sourceAddress, selectedChain),
         enabled,
         queryFn: async () => {
           const data = await chainQuery.fetchTheaDeposits({
@@ -40,7 +42,7 @@ export const useTheaTransactions = ({
         },
       },
       {
-        queryKey: QUERY_KEYS.getTheWithadraws(sourceAddress),
+        queryKey: QUERY_KEYS.getTheWithadraws(sourceAddress, selectedChain),
         enabled,
         queryFn: async () => {
           const data = await chainQuery.fetchTheaWithdrawals({
