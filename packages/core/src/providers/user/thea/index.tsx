@@ -15,6 +15,7 @@ import {
   Chain,
   Asset,
   AssetAmount,
+  BaseChainAdapter,
 } from "@polkadex/thea";
 import { defaultConfig } from "@orderbook/core/config";
 import { ExtensionAccount } from "@polkadex/react-providers";
@@ -79,7 +80,11 @@ export const TheaProvider = ({
     [destinationChain]
   );
   const polkadexConnector = useMemo(
-    () => destinationChain && getChainConnector(destinationChain.genesis),
+    () =>
+      destinationChain &&
+      getChainConnector(
+        "0x3920bcb4960a1eef5580cd5367ff3f430eef052774f78468852f7b9cb39f8a3c"
+      ),
     [destinationChain]
   );
   const sourceAssets = useMemo(
@@ -225,6 +230,9 @@ export const TheaProvider = ({
   return (
     <Provider
       value={{
+        sourceConnector,
+        destinationConnector,
+
         sourceAccount: sourceAccountSelected,
         setSourceAccount,
         destinationAccount: destinationAccountSelected,
@@ -267,6 +275,9 @@ export const TheaProvider = ({
 };
 
 type State = {
+  sourceConnector: BaseChainAdapter | null;
+  destinationConnector: BaseChainAdapter | null;
+
   sourceAccount?: ExtensionAccount;
   setSourceAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
   chains: Chain[];
@@ -303,6 +314,9 @@ type State = {
   withdrawalsSuccess: boolean;
 };
 export const Context = createContext<State>({
+  sourceConnector: null,
+  destinationConnector: null,
+
   sourceAccount: undefined,
   setSourceAccount: () => {},
   destinationAccount: undefined,

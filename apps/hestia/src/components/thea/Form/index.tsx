@@ -17,6 +17,7 @@ import { WalletCard } from "./wallet";
 import { NetworkCard } from "./networkCard";
 
 import { createQueryString } from "@/helpers";
+import { useBridge } from "@/hooks";
 
 export const Form = () => {
   const [openAsset, setOpenAsset] = useState(false);
@@ -61,6 +62,9 @@ export const Form = () => {
       push,
     });
   };
+
+  const { setAmount, amount, onBridge } = useBridge();
+
   return (
     <Fragment>
       <SelectAsset open={openAsset} onOpenChange={setOpenAsset} />
@@ -153,7 +157,12 @@ export const Form = () => {
                 )}
               </div>
               <div className="flex item-center border border-primary rounded-sm">
-                <Input.Vertical className="w-full pl-4 py-4" placeholder="0.00">
+                <Input.Vertical
+                  value={amount}
+                  onChange={(e) => setAmount(e.currentTarget.value)}
+                  className="w-full pl-4 py-4"
+                  placeholder="0.00"
+                >
                   {sourceAccount && (
                     <Input.Action
                       onClick={(e) => {
@@ -192,7 +201,10 @@ export const Form = () => {
             </div>
           </div>
         </div>
-        <Button.Solid disabled={!sourceChain || !destinationChain}>
+        <Button.Solid
+          disabled={!sourceChain || !destinationChain}
+          onClick={onBridge}
+        >
           Bridge
         </Button.Solid>
       </div>
