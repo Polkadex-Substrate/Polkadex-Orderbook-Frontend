@@ -12,7 +12,8 @@ import { TokenCard } from "@/components/ui/ReadyToUse";
 import { AmountCard } from "@/components/ui/ReadyToUse/amountCard";
 
 interface Props extends Asset {
-  balance: number;
+  destinationBalance: number;
+  sourceBalance: number;
 }
 const columnHelper = createColumnHelper<Props>();
 export const columns = [
@@ -42,8 +43,25 @@ export const columns = [
       return valA > valB ? 1 : -1;
     },
   }),
-  columnHelper.accessor((row) => row.balance, {
-    id: "balance",
+  columnHelper.accessor((row) => row.sourceBalance, {
+    id: "sourceBalance",
+    cell: (e) => {
+      const trimmedBalance = trimFloat({ value: e.getValue() ?? "" });
+      const formattedBalance = parseScientific(trimmedBalance);
+      return (
+        <AmountCard className="max-md:pr-6 md:min-w-40">
+          {formattedBalance}
+        </AmountCard>
+      );
+    },
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Source Balance
+      </Typography.Text>
+    ),
+  }),
+  columnHelper.accessor((row) => row.destinationBalance, {
+    id: "destinationBalance",
     cell: (e) => {
       const trimmedBalance = trimFloat({ value: e.getValue() ?? "" });
       const formattedBalance = parseScientific(trimmedBalance);
@@ -51,7 +69,7 @@ export const columns = [
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Balance
+        Destination Balance
       </Typography.Text>
     ),
   }),

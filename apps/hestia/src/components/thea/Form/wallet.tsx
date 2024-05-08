@@ -5,16 +5,20 @@ import {
   typeofChildren,
 } from "@polkadex/ux";
 import { RiWalletLine } from "@remixicon/react";
-import { ComponentProps } from "react";
+import { ComponentProps, useMemo } from "react";
+
+import { truncateNames } from "@/helpers";
 
 interface Props extends ComponentProps<typeof Button.Outline> {
   name?: string;
 }
-export const WalletCard = ({ name, children, ...props }: Props) => {
-  const isString = typeofChildren(children);
-  const shortAddress =
-    isString && typeof children === "string" && truncateString(children);
-
+export const WalletCard = ({ name = "", children, ...props }: Props) => {
+  const isString = useMemo(() => typeofChildren(children), [children]);
+  const shortAddress = useMemo(
+    () => isString && typeof children === "string" && truncateString(children),
+    [children, isString]
+  );
+  const shortName = useMemo(() => truncateNames(name, 15), [name]);
   return (
     <div className="flex items-center gap-2">
       <div className="flex items-center gap-2">
@@ -23,9 +27,9 @@ export const WalletCard = ({ name, children, ...props }: Props) => {
         </div>
         {isString ? (
           <div className="flex items-center gap-1">
-            {name && <Typography.Text>{name}</Typography.Text>}
+            {name && <Typography.Text>{shortName}</Typography.Text>}
             <Typography.Text appearance={name ? "primary" : "base"}>
-              {name ? `(${shortAddress})` : shortAddress}
+              {shortName ? `(${shortAddress})` : shortAddress}
             </Typography.Text>
           </div>
         ) : (

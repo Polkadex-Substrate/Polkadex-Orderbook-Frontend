@@ -24,20 +24,32 @@ import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 const actionKeys = ["token", "balance", "date"];
 
 export const Assets = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
-  const { sourceAssets, balances, balancesLoading } = useTheaProvider();
+  const {
+    sourceAssets,
+    destinationBalances,
+    destinationBalancesLoading,
+    sourceBalancesLoading,
+    sourceBalances,
+  } = useTheaProvider();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const assets = useMemo(
     () =>
       sourceAssets?.map((e) => {
-        const balance = balances?.find((x) => x.ticker.includes(e.ticker));
+        const sourceBalance = sourceBalances?.find((x) =>
+          x.ticker.includes(e.ticker)
+        );
+        const destinationBalance = destinationBalances?.find((x) =>
+          x.ticker.includes(e.ticker)
+        );
         return {
           ...e,
-          balance: balance?.amount ?? 0,
+          sourceBalance: sourceBalance?.amount ?? 0,
+          destinationBalance: destinationBalance?.amount ?? 0,
         };
       }),
-    [balances, sourceAssets]
+    [sourceBalances, destinationBalances, sourceAssets]
   );
 
   const table = useReactTable({
@@ -56,7 +68,8 @@ export const Assets = ({ tableMaxHeight }: { tableMaxHeight?: string }) => {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  if (balancesLoading) return <SkeletonCollection />;
+  if (sourceBalancesLoading || destinationBalancesLoading)
+    return <SkeletonCollection />;
   return (
     <Fragment>
       <div className="flex-1 flex flex-col">

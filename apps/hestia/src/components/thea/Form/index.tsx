@@ -33,15 +33,18 @@ export const Form = () => {
     destinationAccount,
     setDestinationAccount,
     selectedAsset,
-    balances,
+    sourceBalances,
   } = useTheaProvider();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
 
   const balance = useMemo(
-    () => balances.find((x) => x.ticker.includes(selectedAsset?.ticker ?? "")),
-    [balances, selectedAsset?.ticker]
+    () =>
+      sourceBalances?.find((x) =>
+        x.ticker.includes(selectedAsset?.ticker ?? "")
+      ),
+    [sourceBalances, selectedAsset?.ticker]
   );
 
   const onSwitchChain = () => {

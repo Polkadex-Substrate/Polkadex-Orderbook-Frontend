@@ -155,14 +155,27 @@ export const TheaProvider = ({
   ]);
 
   const {
-    data: balances = [],
-    isLoading: balancesLoading,
-    isFetching: balancesFetching,
-    isSuccess: balancesSuccess,
+    data: sourceBalances = [],
+    isLoading: sourceBalancesLoading,
+    isFetching: sourceBalancesFetching,
+    isSuccess: sourceBalancesSuccess,
   } = useTheaBalances({
     connector: sourceConnector,
     sourceAddress: sourceAccountSelected?.address,
     assets: sourceAssets,
+    chain: sourceChain?.genesis,
+  });
+
+  const {
+    data: destinationBalances = [],
+    isLoading: destinationBalancesLoading,
+    isFetching: destinationBalancesFetching,
+    isSuccess: destinationBalancesSuccess,
+  } = useTheaBalances({
+    connector: destinationConnector,
+    sourceAddress: destinationAccountSelected?.address,
+    assets: destinationAssets,
+    chain: destinationChain?.genesis,
   });
 
   const selectedAssetSupported = useMemo(
@@ -230,9 +243,14 @@ export const TheaProvider = ({
         selectedAsset,
         setSelectedAsset,
 
-        balances,
-        balancesLoading: balancesLoading && balancesFetching,
-        balancesSuccess,
+        sourceBalances,
+        sourceBalancesLoading: sourceBalancesLoading && sourceBalancesFetching,
+        sourceBalancesSuccess,
+
+        destinationBalances,
+        destinationBalancesLoading:
+          destinationBalancesLoading && destinationBalancesFetching,
+        destinationBalancesSuccess,
 
         deposits,
         depositsLoading: depositsLoading && depositsFetching,
@@ -268,9 +286,13 @@ type State = {
   selectedAsset: Asset | null;
   setSelectedAsset: Dispatch<SetStateAction<Asset | null>>;
 
-  balances: AssetAmount[];
-  balancesLoading: boolean;
-  balancesSuccess: boolean;
+  sourceBalances: AssetAmount[];
+  sourceBalancesLoading: boolean;
+  sourceBalancesSuccess: boolean;
+
+  destinationBalances: AssetAmount[];
+  destinationBalancesLoading: boolean;
+  destinationBalancesSuccess: boolean;
 
   deposits: Transactions;
   depositsLoading: boolean;
@@ -299,9 +321,13 @@ export const Context = createContext<State>({
   selectedAsset: null,
   setSelectedAsset: () => {},
 
-  balances: [],
-  balancesLoading: false,
-  balancesSuccess: false,
+  sourceBalances: [],
+  sourceBalancesLoading: false,
+  sourceBalancesSuccess: false,
+
+  destinationBalances: [],
+  destinationBalancesLoading: false,
+  destinationBalancesSuccess: false,
 
   deposits: [],
   depositsLoading: false,

@@ -8,18 +8,20 @@ export const useTheaBalances = ({
   sourceAddress = "",
   connector,
   assets,
+  chain = "",
 }: {
   sourceAddress?: string;
   connector: BaseChainAdapter | null;
   assets: Asset[];
+  chain?: string;
 }): UseQueryResult<AssetAmount[], Error> => {
   const enabled = useMemo(
-    () => !!sourceAddress && !!assets && !!connector,
-    [sourceAddress, assets, connector]
+    () => !!sourceAddress && !!assets && !!connector && !!chain,
+    [sourceAddress, assets, connector, chain]
   );
 
   return useQuery({
-    queryKey: QUERY_KEYS.getTheaBalances(sourceAddress),
+    queryKey: QUERY_KEYS.getTheaBalances(sourceAddress, chain),
     enabled,
     queryFn: async () => await connector?.getBalances(sourceAddress, assets),
   });

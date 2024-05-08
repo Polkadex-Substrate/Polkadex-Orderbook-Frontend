@@ -26,11 +26,11 @@ export const TokenCard = ({
   tokenName: string;
   disabled?: boolean;
 }) => {
-  const { balances, balancesLoading } = useTheaProvider();
+  const { sourceBalances, sourceBalancesLoading } = useTheaProvider();
 
   const amount = useMemo(
-    () => balances?.find((e) => e.ticker.includes(ticker))?.amount,
-    [balances, ticker]
+    () => sourceBalances?.find((e) => e.ticker.includes(ticker))?.amount,
+    [sourceBalances, ticker]
   );
   const balance = useMemo(() => {
     const trimmedBalance = trimFloat({ value: amount?.toString() ?? "" });
@@ -81,7 +81,7 @@ export const TokenCard = ({
           </Typography.Text>
         </div>
       </div>
-      <Skeleton loading={balancesLoading} className="max-w-20 max-h-5">
+      <Skeleton loading={sourceBalancesLoading} className="max-w-20 max-h-5">
         <Typography.Text size="xs" appearance="primary" className="self-center">
           {balance} {ticker}
         </Typography.Text>

@@ -120,7 +120,12 @@ export const QUERY_KEYS = {
     assetsAmount,
   ],
   queryPools: () => [PREFIX, "queryPools"],
-  getTheaBalances: (address: string) => [PREFIX, "getTheaBalances", address],
+  getTheaBalances: (address: string, chain: string) => [
+    PREFIX,
+    "getTheaBalances",
+    address,
+    chain,
+  ],
   getTheDeposits: (address: string) => [PREFIX, "getTheDeposits", address],
   getTheWithadraws: (address: string) => [PREFIX, "getTheWithadraws", address],
   googleSession: () => [PREFIX, "googleSession"],
