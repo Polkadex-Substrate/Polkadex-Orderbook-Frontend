@@ -121,18 +121,8 @@ export const QUERY_KEYS = {
   ],
   queryPools: () => [PREFIX, "queryPools"],
   getTheaBalances: (address: string) => [PREFIX, "getTheaBalances", address],
-  getTheDeposits: (address: string, selectedChain: string) => [
-    PREFIX,
-    "getTheDeposits",
-    address,
-    selectedChain,
-  ],
-  getTheWithadraws: (address: string, selectedChain: string) => [
-    PREFIX,
-    "getTheWithadraws",
-    address,
-    selectedChain,
-  ],
+  getTheDeposits: (address: string) => [PREFIX, "getTheDeposits", address],
+  getTheWithadraws: (address: string) => [PREFIX, "getTheWithadraws", address],
   googleSession: () => [PREFIX, "googleSession"],
   googleAccounts: () => [PREFIX, "googleAccounts"],
 };

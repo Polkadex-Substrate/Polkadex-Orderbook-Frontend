@@ -73,10 +73,18 @@ export const TheaProvider = ({
     () => destinationChain && getChainConnector(destinationChain.genesis),
     [destinationChain]
   );
-
+  const polkadexConnector = useMemo(
+    () => destinationChain && getChainConnector(destinationChain.genesis),
+    [destinationChain]
+  );
   const sourceAssets = useMemo(
     () => (sourceConnector ? sourceConnector.getSupportedAssets() : []),
     [sourceConnector]
+  );
+
+  const polkadexAssets = useMemo(
+    () => (polkadexConnector ? polkadexConnector.getSupportedAssets() : []),
+    [polkadexConnector]
   );
 
   const destinationAssets = useMemo(
@@ -148,7 +156,7 @@ export const TheaProvider = ({
     isSuccess: balancesSuccess,
   } = useTheaBalances({
     connector: sourceConnector,
-    sourceAddress: sourceAccountSelected?.address ?? "",
+    sourceAddress: sourceAccountSelected?.address,
     assets: sourceAssets,
   });
 
@@ -191,10 +199,9 @@ export const TheaProvider = ({
       isSuccess: withdrawalsSuccess,
     },
   ] = useTheaTransactions({
-    sourceAddress: sourceAccountSelected?.address ?? "",
-    assets: sourceAssets,
+    sourceAddress: sourceAccountSelected?.address,
+    assets: polkadexAssets,
     chains,
-    selectedChain: sourceChain?.genesis ?? "",
   });
 
   return (

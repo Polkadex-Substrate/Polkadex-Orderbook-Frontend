@@ -14,15 +14,13 @@ import { defaultConfig } from "../config";
 const chainQuery = new PolkadexChainQuery(defaultConfig.subqueryUrl);
 
 export const useTheaTransactions = ({
-  sourceAddress,
+  sourceAddress = "",
   assets,
   chains,
-  selectedChain,
 }: {
-  sourceAddress: string;
+  sourceAddress?: string;
   assets: Asset[];
   chains: Chain[];
-  selectedChain: string;
 }) => {
   const enabled = useMemo(
     () => !!sourceAddress && !!assets && !!chains,
@@ -32,7 +30,7 @@ export const useTheaTransactions = ({
   return useQueries({
     queries: [
       {
-        queryKey: QUERY_KEYS.getTheDeposits(sourceAddress, selectedChain),
+        queryKey: QUERY_KEYS.getTheDeposits(sourceAddress),
         enabled,
         queryFn: async () => {
           const data = await chainQuery.fetchTheaDeposits({
@@ -42,7 +40,7 @@ export const useTheaTransactions = ({
         },
       },
       {
-        queryKey: QUERY_KEYS.getTheWithadraws(sourceAddress, selectedChain),
+        queryKey: QUERY_KEYS.getTheWithadraws(sourceAddress),
         enabled,
         queryFn: async () => {
           const data = await chainQuery.fetchTheaWithdrawals({
@@ -65,8 +63,8 @@ const formatResult = (
     const assetId = data?.assetId.toString();
     const networkId = networks[data?.networkId];
     const pdexAsset = assets.find((e) => typeof e?.id === "undefined");
-    const asset = assets.find((e) => e?.id?.toString().includes(assetId));
 
+    const asset = assets.find((e) => e?.id?.toString().includes(assetId));
     const fromNetwork = chains.find((e) =>
       e.genesis.toString().includes(networkId)
     );

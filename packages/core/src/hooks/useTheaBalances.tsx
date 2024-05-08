@@ -5,11 +5,11 @@ import { useMemo } from "react";
 import { QUERY_KEYS } from "../constants";
 
 export const useTheaBalances = ({
-  sourceAddress,
+  sourceAddress = "",
   connector,
   assets,
 }: {
-  sourceAddress: string;
+  sourceAddress?: string;
   connector: BaseChainAdapter | null;
   assets: Asset[];
 }): UseQueryResult<AssetAmount[], Error> => {
