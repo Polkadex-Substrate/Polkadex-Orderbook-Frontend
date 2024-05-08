@@ -5,7 +5,7 @@ import {
   TokenAppearance,
   Typography,
 } from "@polkadex/ux";
-import { RiArrowDownSLine } from "@remixicon/react";
+import { RiArrowDownSLine, RiArrowLeftRightLine } from "@remixicon/react";
 import { Fragment, useMemo, useState } from "react";
 import { useTheaProvider } from "@orderbook/core/providers";
 
@@ -31,6 +31,7 @@ export const Form = () => {
     setDestinationAccount,
     selectedAsset,
     balances,
+    onSwitchChain,
   } = useTheaProvider();
 
   const balance = useMemo(
@@ -64,7 +65,7 @@ export const Form = () => {
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-3">
             <Typography.Heading>Networks</Typography.Heading>
-            <div className="flex max-lg:flex-col  gap-2">
+            <div className="flex max-lg:flex-col gap-2">
               <div className="flex flex-col gap-2 flex-1">
                 <div className="flex flex-col gap-2">
                   <Typography.Text appearance="primary">From</Typography.Text>
@@ -87,6 +88,13 @@ export const Form = () => {
                   </WalletCard>
                 )}
               </div>
+              <Button.Icon
+                variant="outline"
+                className="lg:mt-9 h-10 w-10 p-3 max-lg:self-center"
+                onClick={onSwitchChain}
+              >
+                <RiArrowLeftRightLine className="w-full h-full" />
+              </Button.Icon>
               <div className="flex flex-col gap-2 flex-1">
                 <div className="flex flex-col gap-2">
                   <Typography.Text appearance="primary">To</Typography.Text>

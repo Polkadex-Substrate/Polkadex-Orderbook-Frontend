@@ -5,6 +5,7 @@ import {
   PropsWithChildren,
   SetStateAction,
   createContext,
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -58,6 +59,16 @@ export const TheaProvider = ({
     () => sourceAccount ?? selectedWallet,
     [sourceAccount, selectedWallet]
   );
+
+  const destinationAccountSelected = useMemo(
+    () => destinationAccount ?? selectedWallet,
+    [destinationAccount, selectedWallet]
+  );
+
+  const onSwitchChain = useCallback(() => {
+    setSourceChain(destinationChain);
+    setDestinationChain(sourceChain);
+  }, [destinationChain, sourceChain]);
 
   const chains = useMemo(
     () =>
@@ -209,7 +220,7 @@ export const TheaProvider = ({
       value={{
         sourceAccount: sourceAccountSelected,
         setSourceAccount,
-        destinationAccount,
+        destinationAccount: destinationAccountSelected,
         setDestinationAccount,
 
         sourceChain,
@@ -236,6 +247,8 @@ export const TheaProvider = ({
         withdrawals,
         withdrawalsLoading: withdrawalsLoading && withdrawalsFetching,
         withdrawalsSuccess,
+
+        onSwitchChain,
       }}
     >
       {children}
@@ -274,6 +287,8 @@ type State = {
   withdrawals: Transactions;
   withdrawalsLoading: boolean;
   withdrawalsSuccess: boolean;
+
+  onSwitchChain: () => void;
 };
 export const Context = createContext<State>({
   sourceAccount: undefined,
@@ -305,6 +320,8 @@ export const Context = createContext<State>({
   withdrawals: [],
   withdrawalsLoading: false,
   withdrawalsSuccess: false,
+
+  onSwitchChain: () => {},
 });
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
