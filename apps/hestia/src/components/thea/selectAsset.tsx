@@ -72,8 +72,7 @@ export const SelectAsset = ({
                           onSelect={() => {
                             setSelectedAsset(e);
                             createQueryString({
-                              name: "asset",
-                              value: e.ticker,
+                              data: [{ name: "asset", value: e.ticker }],
                               pathname,
                               searchParams,
                               push,

@@ -8,12 +8,15 @@ import {
 import { RiArrowDownSLine, RiArrowLeftRightLine } from "@remixicon/react";
 import { Fragment, useMemo, useState } from "react";
 import { useTheaProvider } from "@orderbook/core/providers";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
 
 import { WalletCard } from "./wallet";
 import { NetworkCard } from "./networkCard";
+
+import { createQueryString } from "@/helpers";
 
 export const Form = () => {
   const [openAsset, setOpenAsset] = useState(false);
@@ -31,14 +34,30 @@ export const Form = () => {
     setDestinationAccount,
     selectedAsset,
     balances,
-    onSwitchChain,
   } = useTheaProvider();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { push } = useRouter();
 
   const balance = useMemo(
     () => balances.find((x) => x.ticker.includes(selectedAsset?.ticker ?? "")),
     [balances, selectedAsset?.ticker]
   );
 
+  const onSwitchChain = () => {
+    setSourceChain(destinationChain);
+    setDestinationChain(sourceChain);
+    const data = [
+      { name: "from", value: destinationChain?.name },
+      { name: "to", value: sourceChain?.name },
+    ];
+    createQueryString({
+      data,
+      pathname,
+      searchParams,
+      push,
+    });
+  };
   return (
     <Fragment>
       <SelectAsset open={openAsset} onOpenChange={setOpenAsset} />

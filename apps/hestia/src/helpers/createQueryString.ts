@@ -2,20 +2,18 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { ReadonlyURLSearchParams } from "next/navigation";
 
 type Props = {
-  name: string;
-  value: string;
+  data: Array<{ name: string; value?: string }>;
   pathname: string;
   searchParams: ReadonlyURLSearchParams;
   push: AppRouterInstance["push"];
 };
 export const createQueryString = ({
-  name,
-  value,
+  data,
   pathname,
   searchParams,
   push,
 }: Props) => {
   const params = new URLSearchParams(searchParams.toString());
-  params.set(name, value);
+  data.forEach(({ name, value = "" }) => params.set(name, value));
   push(pathname + "?" + params.toString());
 };
