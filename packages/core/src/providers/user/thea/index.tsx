@@ -194,7 +194,7 @@ export const TheaProvider = ({
     sourceAddress: sourceAccountSelected?.address ?? "",
     assets: sourceAssets,
     chains,
-    selectedChain: sourceChain?.genesis,
+    selectedChain: sourceChain?.genesis ?? "",
   });
 
   return (
