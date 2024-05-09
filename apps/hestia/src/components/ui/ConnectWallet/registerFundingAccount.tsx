@@ -30,7 +30,7 @@ export const RegisterFundingAccount = ({
   const { tokenFee, setTokenFee } = useTransactionFeeModal();
 
   const proxyAccount = useMemo(
-    () => fundWallet?.address,
+    () => fundWallet?.address as string,
     [fundWallet?.address]
   );
 
@@ -47,7 +47,7 @@ export const RegisterFundingAccount = ({
       }}
       actionLoading={!!loading}
       extrinsicFn={() => onAddProxyAccountOcex([proxyAccount])}
-      sender={proxyAccount as string}
+      sender={proxyAccount}
       tokenFee={tokenFee}
       setTokenFee={setTokenFee}
       openFeeModal={open}

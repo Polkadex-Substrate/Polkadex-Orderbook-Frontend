@@ -24,18 +24,17 @@ import { useSettingsProvider } from "../providers/public/settings";
 import { handleTransaction } from "./../helpers/signAndSendExtrinsic";
 const { googleDriveStore } = enabledFeatures;
 
+export type KeyringTypeProxy = {
+  mnemonic: string;
+  name: string;
+  password?: string;
+  importType?: "Local" | "GDrive";
+};
+
 export type AddProxyAccountArgs = {
   tokenFeeId?: string;
   selectedWallet?: ExtensionAccount;
-} & (
-  | {
-      mnemonic: string;
-      name: string;
-      password?: string;
-      importType?: "Local" | "GDrive";
-    }
-  | { isExtensionProxy: boolean }
-);
+} & (KeyringTypeProxy | { isExtensionProxy: boolean });
 
 interface UseAddProxyAccount extends MutateHookProps {
   onSetTempMnemonic: (value: string) => void;
