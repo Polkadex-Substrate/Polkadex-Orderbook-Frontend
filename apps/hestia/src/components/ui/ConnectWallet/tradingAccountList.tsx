@@ -1,16 +1,19 @@
 import { Accordion, Interaction, Typography } from "@polkadex/ux";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { MouseEvent } from "react";
+import { ExtensionAccount } from "@polkadex/react-providers";
 
 import { RemoveWalletCard } from "../ReadyToUse";
 
 export const TradingAccountList = ({
+  fundWallet,
   tradingAccounts,
   browserAccounts,
   onRemove,
   onClose,
   onRemoveCallback,
 }: {
+  fundWallet?: ExtensionAccount;
   tradingAccounts?: string[];
   browserAccounts: TradeAccount[];
   onRemove: (e: TradeAccount) => void;
@@ -47,7 +50,12 @@ export const TradingAccountList = ({
                       key={v}
                       name={account?.meta?.name}
                       address={v}
-                      showTooltip={tradingAccounts.length === 1}
+                      showTooltip={
+                        // Avoid removing trading account if it have same address as funding account
+                        fundWallet?.address === v
+                          ? true
+                          : tradingAccounts.length === 1
+                      }
                       onClick={() => {
                         onRemove(tradingAccount as TradeAccount);
                         onRemoveCallback();
