@@ -16,10 +16,10 @@ export const useQueryPools = () => {
     enabled: !!swap && !!assets,
     queryFn: async () => {
       if (!swap || !assets) return;
-      let data = await swap.queryPools();
+      const data = await swap.queryPools();
+      console.log("data", data);
       // filter out pools with 0 liquidity
-      data = data.filter((p) => Number(p.base) + Number(p.quote) > 0);
-      return await Promise.all(
+      const value = await Promise.all(
         data.map(async (e) => {
           const quote = assets.find(
             (val) => val.id.toLowerCase() === e.quote.toLowerCase()
@@ -31,6 +31,7 @@ export const useQueryPools = () => {
           };
         })
       );
+      return value.filter((e) => e.reserve > 0);
     },
   });
 
