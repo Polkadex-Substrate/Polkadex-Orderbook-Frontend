@@ -25,13 +25,17 @@ import { handleTransaction } from "./../helpers/signAndSendExtrinsic";
 const { googleDriveStore } = enabledFeatures;
 
 export type AddProxyAccountArgs = {
-  mnemonic: string;
-  name: string;
-  password?: string;
   tokenFeeId?: string;
   selectedWallet?: ExtensionAccount;
-  importType?: "Local" | "GDrive";
-};
+} & (
+  | {
+      mnemonic: string;
+      name: string;
+      password?: string;
+      importType?: "Local" | "GDrive";
+    }
+  | { isExtensionProxy: boolean }
+);
 
 interface UseAddProxyAccount extends MutateHookProps {
   onSetTempMnemonic: (value: string) => void;
@@ -53,18 +57,56 @@ export function useAddProxyAccount({
   const { addToTxQueue } = useTransactionManager();
 
   const { mutateAsync, status, error } = useMutation({
-    mutationFn: async ({
-      mnemonic,
-      name,
-      password,
-      tokenFeeId,
-      selectedWallet,
-      importType,
-    }: AddProxyAccountArgs) => {
+    mutationFn: async (addProxyArgs: AddProxyAccountArgs) => {
       if (!api || !wallet)
-        throw new Error("You are not connected to blockchain ");
+        throw new Error("You are not connected to blockchain");
 
-      if (!selectedWallet) throw new Error("selectedWallet is not defined");
+      const { selectedWallet, tokenFeeId } = addProxyArgs;
+
+      if (!selectedWallet) throw new Error("Funding account not selected");
+
+      const registeredProxies =
+        await appsyncOrderbookService.query.getTradingAddresses(
+          selectedWallet.address
+        );
+
+      // Register funding account as proxy
+      if ("isExtensionProxy" in addProxyArgs) {
+        if (registeredProxies.includes(selectedWallet.address))
+          throw new Error(
+            "Funding account already registered as trading account"
+          );
+
+        appsyncOrderbookService.subscriber.subscribeAccountUpdate(
+          selectedWallet.address,
+          () => {
+            queryClient.setQueryData(
+              QUERY_KEYS.singleProxyAccounts(selectedWallet.address),
+              (proxies?: string[]): string[] => {
+                return proxies
+                  ? [...proxies, selectedWallet.address]
+                  : [selectedWallet.address];
+              }
+            );
+          }
+        );
+
+        const signedExtrinsic =
+          await appsyncOrderbookService.operation.createProxyAcccount({
+            api,
+            account: selectedWallet,
+            proxyAddress: selectedWallet.address,
+            tokenFeeId,
+            firstAccount: !registeredProxies.length,
+          });
+        addToTxQueue(signedExtrinsic);
+        await handleTransaction(signedExtrinsic);
+        await onUserSelectTradingAddress({
+          tradeAddress: selectedWallet.address,
+          isNew: true,
+        });
+        return;
+      }
 
       appsyncOrderbookService.subscriber.subscribeAccountUpdate(
         selectedWallet.address,
@@ -78,12 +120,9 @@ export function useAddProxyAccount({
         }
       );
 
+      // Create trading account with keyring type
+      const { mnemonic, name, password, importType } = addProxyArgs;
       const proxy = getAddressFromMnemonic(mnemonic);
-
-      const registeredProxies =
-        await appsyncOrderbookService.query.getTradingAddresses(
-          selectedWallet.address
-        );
 
       const signedExtrinsic =
         await appsyncOrderbookService.operation.createProxyAcccount({

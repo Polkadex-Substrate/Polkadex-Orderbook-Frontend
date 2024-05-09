@@ -10,6 +10,7 @@ import { KeyringPair } from "@polkadot/keyring/types";
 import { RiArrowRightSLine } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { ExtensionAccount } from "@polkadex/react-providers";
 
 import { GenericHorizontalCard, TradingAccountCard } from "../ReadyToUse";
 
@@ -17,11 +18,12 @@ export const ExistingUser = ({
   onClose,
   onReadMore,
   onBack,
-  onCreate,
+  onCreateTradingAccount,
   onRecover,
   onTradingAccountList,
   accounts,
   registeredProxies,
+  fundWallet,
   onSelect,
   onSelectCallback,
   onTempBrowserAccount,
@@ -31,10 +33,11 @@ export const ExistingUser = ({
 }: {
   onClose: () => void;
   onReadMore: () => void;
-  onCreate: () => void;
+  onCreateTradingAccount: (isExtensionProxy: boolean) => void;
   onTradingAccountList: () => void;
   onRecover: () => void;
   onBack: () => void;
+  fundWallet?: ExtensionAccount;
   accounts?: TradeAccount[];
   registeredProxies: string[];
   onSelect: (e: TradeAccount) => void;
@@ -151,10 +154,18 @@ export const ExistingUser = ({
             )}
 
             <div className="flex flex-col gap-2">
+              {!registeredProxies.includes(fundWallet?.address as string) && (
+                <GenericHorizontalCard
+                  title="Register funding account"
+                  icon="Wallet"
+                  label="NEW"
+                  onClick={() => onCreateTradingAccount(true)}
+                />
+              )}
               <GenericHorizontalCard
                 title="Create new trading account"
                 icon="Plus"
-                onClick={onCreate}
+                onClick={() => onCreateTradingAccount(false)}
               />
               <GenericHorizontalCard
                 title="Import trading account"
