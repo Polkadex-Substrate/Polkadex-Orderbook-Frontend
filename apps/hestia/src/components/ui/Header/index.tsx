@@ -15,6 +15,7 @@ import {
 } from "@remixicon/react";
 
 import { ConnectWalletInteraction } from "../ConnectWalletInteraction";
+import { ConnectTradingInteraction } from "../ConnectWalletInteraction/connectTradingInteraction";
 
 import { HeaderLink } from "./headerLink";
 import { Profile } from "./Profile";
@@ -42,6 +43,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
     <Fragment>
       <ResponsiveMenuModal open={menu} onOpenChange={setMenu} />
       <ConnectWalletInteraction />
+      <ConnectTradingInteraction />
       <NotificationsModal
         open={notifications}
         onOpenChange={setNotifications}

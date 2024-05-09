@@ -1,10 +1,8 @@
 "use client";
 
 import { useResizeObserver } from "usehooks-ts";
-import { Fragment, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useWindowSize } from "react-use";
-
-import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 
 import { Info } from "./info";
 import { HowItWorks } from "./howItWorks";
@@ -26,26 +24,23 @@ export function Template() {
   const mobileView = useMemo(() => width <= 750, [width]);
 
   return (
-    <Fragment>
-      <ConnectTradingInteraction />
-      <div
-        className="flex flex-1 flex-col bg-backgroundBase h-full"
-        vaul-drawer-wrapper=""
+    <div
+      className="flex flex-1 flex-col bg-backgroundBase h-full"
+      vaul-drawer-wrapper=""
+    >
+      <Header ref={headerRef} />
+      <main
+        className="flex flex-col flex-1 overflow-auto w-full max-w-[1100px] m-auto"
+        style={{
+          paddingBottom: `${footerHeight}px`,
+        }}
       >
-        <Header ref={headerRef} />
-        <main
-          className="flex flex-col flex-1 overflow-auto w-full max-w-[1100px] m-auto"
-          style={{
-            paddingBottom: `${footerHeight}px`,
-          }}
-        >
-          <Info />
-          <HowItWorks />
-          <Faq />
-          <CallToAction />
-        </main>
-        {!mobileView && <Footer marketsActive ref={footerRef} />}
-      </div>
-    </Fragment>
+        <Info />
+        <HowItWorks />
+        <Faq />
+        <CallToAction />
+      </main>
+      {!mobileView && <Footer marketsActive ref={footerRef} />}
+    </div>
   );
 }

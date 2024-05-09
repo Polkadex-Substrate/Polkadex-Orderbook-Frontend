@@ -9,7 +9,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useResizeObserver, useWindowSize } from "usehooks-ts";
 import { sleep } from "@orderbook/core/helpers";
 
-import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
 import { Help } from "./Help";
@@ -103,7 +102,6 @@ export function Template() {
 
   return (
     <Fragment>
-      <ConnectTradingInteraction />
       <SelectAsset
         open={assetsInteraction}
         onOpenChange={() => onAssetsInteraction()}
