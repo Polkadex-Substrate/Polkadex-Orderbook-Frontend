@@ -152,6 +152,7 @@ const CardsCompontent = ({ onClose }: { onClose: () => void }) => {
           availableOnDevice={availableOnDevice}
           enabledExtensionAccount={!selectedWallet}
           loading={removeGoogleDriveLoading}
+          fundWallet={selectedWallet}
         />
       </Interactable.Card>
       <Interactable.Card pageName="ExportGoogleDriveAccount">

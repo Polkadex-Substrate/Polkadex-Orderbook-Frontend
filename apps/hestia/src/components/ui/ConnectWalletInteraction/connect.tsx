@@ -6,6 +6,7 @@ import { Interactable, useInteractableProvider } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
@@ -84,6 +85,7 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
     browserAccountPresent,
   } = useConnectWalletProvider();
   const { onToogleConnectExtension } = useSettingsProvider();
+  const { allAccounts } = useProfile();
 
   const { setPage, onReset } = useInteractableProvider();
   const sourceId = selectedExtension?.id;
@@ -117,6 +119,17 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
       ),
     [tempTrading?.address, localTradingAccounts]
   );
+
+  // Used only for removing trading account from blockchain
+  const choosenfundingWallet = useMemo(() => {
+    const mainAddress = allAccounts.find(
+      (a) => a.tradeAddress === tempTrading?.address
+    )?.mainAddress;
+
+    if (!mainAddress) return undefined;
+
+    return extensionAccounts.find((e) => e.address === mainAddress);
+  }, [allAccounts, extensionAccounts, tempTrading?.address]);
 
   return (
     <Fragment>
@@ -235,6 +248,7 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
           onCancel={() => setPage("ConnectTradingAccount")}
           enabledExtensionAccount
           loading={removeGoogleDriveLoading}
+          fundWallet={choosenfundingWallet}
         />
       </Interactable.Card>
     </Fragment>
