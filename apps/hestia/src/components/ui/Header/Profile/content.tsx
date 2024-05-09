@@ -63,15 +63,12 @@ export const Content = () => {
         <>
           <Multistep.Trigger>
             <Profile
-              onSwitch={() => {
-                onToogleConnectExtension();
-                onLogout?.();
-              }}
+              onSwitch={onToogleConnectExtension}
               onLogout={() => onLogout?.()}
               fundWalletPresent={extensionAccountPresent}
               fundWallet={selectedFundingWallet}
               onConnectWallet={() => props?.onPage("ConnectWallet", true)}
-              onConnectTradingAccount={() => onToogleConnectTrading(true)}
+              onConnectTradingAccount={onToogleConnectTrading}
             />
           </Multistep.Trigger>
           <Multistep.Content>

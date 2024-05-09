@@ -97,19 +97,17 @@ export const Profile = ({
           )}
         </div>
       </div>
-      {fundWalletPresent && (
-        <div className="flex flex-col gap-6 p-4 bg-level-0">
-          <Button.Solid
-            size="md"
-            appearance="secondary"
-            className="flex gap-2 items-center bg-level-1 text-primary"
-            onClick={onConnectTradingAccount}
-          >
-            <RiSettings3Fill className="w-4 h-4" />
-            Settings
-          </Button.Solid>
-        </div>
-      )}
+      <div className="flex flex-col gap-6 p-4 bg-level-0">
+        <Button.Solid
+          size="md"
+          appearance="secondary"
+          className="flex gap-2 items-center bg-level-1 text-primary"
+          onClick={onConnectTradingAccount}
+        >
+          <RiSettings3Fill className="w-4 h-4" />
+          Settings
+        </Button.Solid>
+      </div>
     </div>
   );
 };
