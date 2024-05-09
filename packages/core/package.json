@@ -59,7 +59,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@polkadex/react-providers": "^2.0.0",
+    "@polkadex/react-providers": "^2.2.0",
     "@polkadot-cloud/assets": "^0.3.0",
     "@polkadot/api": "^10.12.6",
     "@polkadex/local-wallets": "^2.2.0",
