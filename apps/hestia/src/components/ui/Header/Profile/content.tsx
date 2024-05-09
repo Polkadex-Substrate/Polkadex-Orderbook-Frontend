@@ -25,7 +25,8 @@ export const Content = () => {
     extensionAccountPresent,
   } = useConnectWalletProvider();
   const sourceId = selectedExtension?.id;
-  const { onToogleConnectExtension } = useSettingsProvider();
+  const { onToogleConnectExtension, onToogleConnectTrading } =
+    useSettingsProvider();
   const { extensionsStatus } = useExtensions();
   const { connectExtensionAccounts, extensionAccounts } =
     useExtensionAccounts();
@@ -70,6 +71,7 @@ export const Content = () => {
               fundWalletPresent={extensionAccountPresent}
               fundWallet={selectedFundingWallet}
               onConnectWallet={() => props?.onPage("ConnectWallet", true)}
+              onConnectTradingAccount={() => onToogleConnectTrading(true)}
             />
           </Multistep.Trigger>
           <Multistep.Content>

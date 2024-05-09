@@ -2,6 +2,7 @@ import {
   RiArrowLeftRightLine,
   RiInformationLine,
   RiShutDownLine,
+  RiSettings3Fill,
 } from "@remixicon/react";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import { Button, Typography, PopConfirm } from "@polkadex/ux";
@@ -14,16 +15,18 @@ export const Profile = ({
   fundWallet,
   onSwitch,
   onConnectWallet,
+  onConnectTradingAccount,
 }: {
   onLogout: () => void;
   onSwitch: () => void;
   fundWalletPresent?: boolean;
   fundWallet?: ExtensionAccount;
   onConnectWallet: () => void;
+  onConnectTradingAccount: () => void;
 }) => {
   return (
     <div className="flex flex-col flex-1 md:w-[23rem] bg-backgroundBase rounded-sm max-sm:w-[90vw]">
-      <div className="flex flex-col gap-6 p-4 border-b border-primary bg-level-0">
+      <div className="flex flex-col gap-6 p-4 bg-level-0">
         <div className="flex items-center justify-between">
           <Typography.Text appearance="secondary" size="sm">
             Funding account
@@ -69,7 +72,7 @@ export const Profile = ({
               </Button.Solid>
             </AccountCard>
           </div>
-          {!fundWalletPresent && (
+          {fundWalletPresent && (
             <div className="flex flex-col gap-2">
               <Button.Solid
                 appearance="tertiary"
@@ -79,7 +82,7 @@ export const Profile = ({
                 Connect Wallet
               </Button.Solid>
               <div className="flex items-center gap-2">
-                <RiInformationLine className="w-4 h-4 text-attention-base" />
+                <RiInformationLine className="w-6 h-6 text-attention-base" />
                 <Typography.Paragraph
                   appearance="primary"
                   className=" whitespace-normal"
@@ -94,6 +97,19 @@ export const Profile = ({
           )}
         </div>
       </div>
+      {fundWalletPresent && (
+        <div className="flex flex-col gap-6 p-4 bg-level-0">
+          <Button.Solid
+            size="md"
+            appearance="secondary"
+            className="flex gap-2 items-center bg-level-1 text-primary"
+            onClick={onConnectTradingAccount}
+          >
+            <RiSettings3Fill className="w-4 h-4" />
+            Settings
+          </Button.Solid>
+        </div>
+      )}
     </div>
   );
 };
