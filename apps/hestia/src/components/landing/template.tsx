@@ -1,4 +1,7 @@
 "use client";
+import { Fragment } from "react";
+
+import { ConnectTradingInteraction } from "../ui/ConnectWalletInteraction/connectTradingInteraction";
 
 import { Hero } from "./hero";
 import { HowItWorks } from "./HowItWorks";
@@ -10,15 +13,18 @@ import { Header } from "@/components/ui";
 
 export function Template() {
   return (
-    <div className="flex flex-col flex-1">
-      <Header />
-      <main>
-        <Hero />
-        <HowItWorks />
-        <Features />
-        <QuickLinks />
-      </main>
-      <Footer />
-    </div>
+    <Fragment>
+      <ConnectTradingInteraction />
+      <div className="flex flex-col flex-1">
+        <Header />
+        <main>
+          <Hero />
+          <HowItWorks />
+          <Features />
+          <QuickLinks />
+        </main>
+        <Footer />
+      </div>
+    </Fragment>
   );
 }
