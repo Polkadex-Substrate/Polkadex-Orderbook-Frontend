@@ -17,7 +17,6 @@ export const useQueryPools = () => {
     queryFn: async () => {
       if (!swap || !assets) return;
       const data = await swap.queryPools();
-      console.log("data", data);
       // filter out pools with 0 liquidity
       const value = await Promise.all(
         data.map(async (e) => {
