@@ -66,11 +66,14 @@ export const Profile = ({
           </Tooltip>
           <Tooltip>
             <Tooltip.Trigger asChild>
-              <Badge value={unreadNotifications}>
-                <Button.Icon onClick={onOpenNotifications}>
-                  <RiNotification3Line className="h-full w-full" />
-                </Button.Icon>
-              </Badge>
+              <Button.Icon className="relative" onClick={onOpenNotifications}>
+                <RiNotification3Line className="h-full w-full" />
+                {unreadNotifications > 0 && (
+                  <Badge className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4">
+                    {unreadNotifications > 9 ? `9+` : `${unreadNotifications}`}
+                  </Badge>
+                )}
+              </Button.Icon>
             </Tooltip.Trigger>
             <Tooltip.Content>Notifications</Tooltip.Content>
           </Tooltip>

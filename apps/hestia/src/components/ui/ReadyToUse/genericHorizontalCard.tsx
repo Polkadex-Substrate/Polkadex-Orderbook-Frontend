@@ -5,12 +5,15 @@ import classNames from "classnames";
 
 import { ErrorMessage } from ".";
 
+import Badge from "@/components/ui/Temp/badge";
+
 interface GenericHorizontalCardProps extends ComponentPropsWithoutRef<"div"> {
   title: string;
   icon: IconsProps;
   loading?: boolean;
   error?: string;
   disabled?: boolean;
+  label?: string;
 }
 export const GenericHorizontalCard = ({
   title,
@@ -19,6 +22,7 @@ export const GenericHorizontalCard = ({
   loading,
   error,
   disabled,
+  label,
   ...props
 }: PropsWithChildren<GenericHorizontalCardProps>) => {
   const isStringType = typeof children === "string";
@@ -45,6 +49,7 @@ export const GenericHorizontalCard = ({
             >
               {title}
             </Typography.Text>
+            {label && <Badge>{label}</Badge>}
           </div>
           {isStringType ? (
             <div className="bg-secondary-base text-sm px-2 py-1 rounded-sm">
