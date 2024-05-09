@@ -30,7 +30,7 @@ export const useQueryPools = () => {
           };
         })
       );
-      return value.filter((e) => e.reserve > 0);
+      return value.sort((a, b) => b.reserve - a.reserve);
     },
   });
 
