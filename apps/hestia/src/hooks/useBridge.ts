@@ -3,12 +3,12 @@
  * -
  */
 
-import { useCallback, useState } from "react";
 import { useTheaProvider } from "@orderbook/core/providers";
 import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
+import { useMutation } from "@tanstack/react-query";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 export function useBridge() {
-  const [amount, setAmount] = useState("0.00");
   const {
     sourceConnector,
     destinationChain,
@@ -16,41 +16,38 @@ export function useBridge() {
     destinationAccount,
     sourceAccount,
   } = useTheaProvider();
-  const onBridge = useCallback(async () => {
-    if (
-      amount &&
-      sourceConnector &&
-      destinationChain &&
-      selectedAsset &&
-      destinationAccount &&
-      sourceAccount
-    )
-      try {
-        const transferConfig = await sourceConnector?.getTransferConfig(
-          destinationChain,
-          selectedAsset,
-          destinationAccount.address,
-          sourceAccount.address
-        );
-        const ext = await transferConfig.transfer<SubmittableExtrinsic>(
-          Number(amount)
-        );
-        console.log(">>>", ext);
-        await ext.signAndSend(sourceAccount.address, {
-          signer: sourceAccount.signer,
-        });
-        window.alert("Success");
-      } catch (error) {
-        console.log("ERROR", error);
+
+  const { onHandleAlert, onHandleError } = useSettingsProvider();
+  return useMutation({
+    mutationFn: async ({ amount }: { amount: number }) => {
+      if (
+        !sourceAccount ||
+        !destinationChain ||
+        !selectedAsset ||
+        !destinationAccount
+      )
+        return;
+      const transferConfig = await sourceConnector?.getTransferConfig(
+        destinationChain,
+        selectedAsset,
+        destinationAccount.address,
+        sourceAccount.address
+      );
+      if (!transferConfig) {
+        onHandleError?.("transferConfig error");
+        return;
       }
-    else window.alert("Error");
-  }, [
-    amount,
-    sourceConnector,
-    destinationChain,
-    destinationAccount,
-    sourceAccount,
-    selectedAsset,
-  ]);
-  return { onBridge, setAmount, amount };
+
+      const ext = await transferConfig.transfer<SubmittableExtrinsic>(
+        Number(amount)
+      );
+
+      await ext.signAndSend(sourceAccount.address, {
+        signer: sourceAccount.signer,
+      });
+      onHandleAlert("Success");
+    },
+    onError: (error: Error) => onHandleError?.(error.message),
+    onSuccess: () => onHandleAlert(`Orders cancelled`),
+  });
 }

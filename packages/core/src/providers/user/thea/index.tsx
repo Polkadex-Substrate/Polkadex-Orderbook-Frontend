@@ -5,6 +5,7 @@ import {
   PropsWithChildren,
   SetStateAction,
   createContext,
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -16,15 +17,18 @@ import {
   Asset,
   AssetAmount,
   BaseChainAdapter,
+  TransferConfig,
 } from "@polkadex/thea";
 import { defaultConfig } from "@orderbook/core/config";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import {
   Transactions,
+  networks,
   useTheaBalances,
   useTheaTransactions,
 } from "@orderbook/core/hooks";
 import { isIdentical } from "@orderbook/core/helpers";
+import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
 
 import { useConnectWalletProvider } from "../connectWalletProvider";
 const {
@@ -53,7 +57,7 @@ export const TheaProvider = ({
     useState<ExtensionAccount>();
   const { selectedWallet } = useConnectWalletProvider();
 
-  const { getAllChains } = new Thea();
+  const { getAllChains } = useMemo(() => new Thea(), []);
 
   const sourceAccountSelected = useMemo(
     () => sourceAccount ?? selectedWallet,
@@ -75,10 +79,12 @@ export const TheaProvider = ({
     () => sourceChain && getChainConnector(sourceChain.genesis),
     [sourceChain]
   );
+
   const destinationConnector = useMemo(
     () => destinationChain && getChainConnector(destinationChain.genesis),
     [destinationChain]
   );
+
   const polkadexConnector = useMemo(
     () =>
       destinationChain &&
@@ -87,6 +93,7 @@ export const TheaProvider = ({
       ),
     [destinationChain]
   );
+
   const sourceAssets = useMemo(
     () => (sourceConnector ? sourceConnector.getSupportedAssets() : []),
     [sourceConnector]
@@ -227,6 +234,48 @@ export const TheaProvider = ({
     chains,
   });
 
+  const getTransferConfig = useCallback(async () => {
+    if (
+      !sourceAccount ||
+      !destinationChain ||
+      !selectedAsset ||
+      !destinationAccount
+    )
+      return undefined;
+    return await sourceConnector?.getTransferConfig(
+      destinationChain,
+      selectedAsset,
+      destinationAccount.address,
+      sourceAccount.address
+    );
+  }, [
+    destinationChain,
+    selectedAsset,
+    sourceAccount,
+    destinationAccount,
+    sourceConnector,
+  ]);
+
+  const existential = useMemo(
+    () => (sourceChain?.genesis === networks[0] ? 1 : OTHER_ASSET_EXISTENTIAL),
+    [sourceChain?.genesis]
+  ); // TODO: Remove netowkrs
+
+  const selectedAssetAmount = useMemo(
+    () =>
+      selectedAsset && sourceBalances
+        ? sourceBalances.find((e) => e.ticker === selectedAsset?.ticker)
+            ?.amount ?? 0
+        : 0,
+    [selectedAsset, sourceBalances]
+  );
+
+  const selectedAssetBalance = useMemo(
+    () =>
+      selectedAssetAmount > existential ? selectedAssetAmount - existential : 0,
+    [selectedAssetAmount, existential]
+  );
+
   return (
     <Provider
       value={{
@@ -247,9 +296,12 @@ export const TheaProvider = ({
         supportedAssets,
         destinationAssets,
         sourceAssets,
+        polkadexAssets,
 
         selectedAsset,
         setSelectedAsset,
+        selectedAssetBalance,
+        selectedAssetAmount,
 
         sourceBalances,
         sourceBalancesLoading: sourceBalancesLoading && sourceBalancesFetching,
@@ -267,6 +319,9 @@ export const TheaProvider = ({
         withdrawals,
         withdrawalsLoading: withdrawalsLoading && withdrawalsFetching,
         withdrawalsSuccess,
+
+        getTransferConfig,
+        existential,
       }}
     >
       {children}
@@ -293,9 +348,12 @@ type State = {
   supportedAssets: Asset[];
   destinationAssets: Asset[];
   sourceAssets: Asset[];
+  polkadexAssets: Asset[];
 
   selectedAsset: Asset | null;
   setSelectedAsset: Dispatch<SetStateAction<Asset | null>>;
+  selectedAssetBalance: number;
+  selectedAssetAmount: number;
 
   sourceBalances: AssetAmount[];
   sourceBalancesLoading: boolean;
@@ -312,6 +370,9 @@ type State = {
   withdrawals: Transactions;
   withdrawalsLoading: boolean;
   withdrawalsSuccess: boolean;
+
+  getTransferConfig: () => Promise<TransferConfig | undefined>;
+  existential: number;
 };
 export const Context = createContext<State>({
   sourceConnector: null,
@@ -331,9 +392,12 @@ export const Context = createContext<State>({
   supportedAssets: [],
   destinationAssets: [],
   sourceAssets: [],
+  polkadexAssets: [],
 
   selectedAsset: null,
   setSelectedAsset: () => {},
+  selectedAssetBalance: 0,
+  selectedAssetAmount: 0,
 
   sourceBalances: [],
   sourceBalancesLoading: false,
@@ -350,6 +414,9 @@ export const Context = createContext<State>({
   withdrawals: [],
   withdrawalsLoading: false,
   withdrawalsSuccess: false,
+
+  getTransferConfig: async () => undefined,
+  existential: 0,
 });
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {

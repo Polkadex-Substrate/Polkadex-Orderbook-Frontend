@@ -9,17 +9,20 @@ import { RiArrowDownSLine, RiArrowLeftRightLine } from "@remixicon/react";
 import { Fragment, useMemo, useState } from "react";
 import { useTheaProvider } from "@orderbook/core/providers";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useTransactionFeeModal } from "@orderbook/core/index";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
 
 import { WalletCard } from "./wallet";
 import { NetworkCard } from "./networkCard";
+import { AvailableBalance } from "./availableBalance";
 
-import { createQueryString } from "@/helpers";
-import { useBridge } from "@/hooks";
+import { createQueryString, formatAmount } from "@/helpers";
 
 export const Form = () => {
+  const [amount, setAmount] = useState("");
+
   const [openAsset, setOpenAsset] = useState(false);
   const [openSourceModal, setOpenSourceModal] = useState(false);
   const [openDestinationModal, setOpenDestinationModal] = useState(false);
@@ -34,19 +37,13 @@ export const Form = () => {
     destinationAccount,
     setDestinationAccount,
     selectedAsset,
-    sourceBalances,
+    selectedAssetBalance,
+    existential,
+    selectedAssetAmount,
   } = useTheaProvider();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
-
-  const balance = useMemo(
-    () =>
-      sourceBalances?.find((x) =>
-        x.ticker.includes(selectedAsset?.ticker ?? "")
-      ),
-    [sourceBalances, selectedAsset?.ticker]
-  );
 
   const onSwitchChain = () => {
     setSourceChain(destinationChain);
@@ -63,10 +60,65 @@ export const Form = () => {
     });
   };
 
-  const { setAmount, amount, onBridge } = useBridge();
+  const onChangeMax = () => {
+    if (selectedAssetBalance > existential) {
+      const formattedBalance = formatAmount(selectedAssetBalance);
+      setAmount(formattedBalance);
+    } else {
+      setAmount("0");
+    }
+  };
+  const { setOpenFeeModal } = useTransactionFeeModal();
+
+  // const onSubmitBridge = useCallback(
+  //   async (e: FormEvent<HTMLFormElement>) => {
+  //     e.preventDefault();
+  //     if (!ext.current) {
+  //       const transferConfig = await getTransferConfig();
+  //       if (transferConfig)
+  //         ext.current = await transferConfig.transfer<SubmittableExtrinsic>(
+  //           Number(amount)
+  //         );
+  //     }
+  //     await mutateAsync({ amount: Number(amount) });
+  //   },
+  //   [amount, mutateAsync, getTransferConfig]
+  // );
+
+  const disabled = useMemo(
+    () =>
+      !selectedAsset ||
+      !sourceAccount ||
+      !sourceChain ||
+      !destinationAccount ||
+      !destinationChain ||
+      !amount,
+    [
+      selectedAsset,
+      sourceAccount,
+      sourceChain,
+      destinationAccount,
+      destinationChain,
+      amount,
+    ]
+  );
 
   return (
     <Fragment>
+      {/* <ConfirmTransaction
+        action={() =>
+          formRef?.current?.dispatchEvent(
+            new Event("submit", { cancelable: true, bubbles: true })
+          )
+        }
+        actionLoading={!!isLoading}
+        extrinsicFn={() => {}}
+        sender={sourceAccount?.address ?? ""}
+        tokenFee={tokenFee}
+        setTokenFee={setTokenFee}
+        openFeeModal={openFeeModal}
+        setOpenFeeModal={setOpenFeeModal}
+      /> */}
       <SelectAsset open={openAsset} onOpenChange={setOpenAsset} />
       <ConnectAccount
         open={openSourceModal}
@@ -87,7 +139,14 @@ export const Form = () => {
         selectedAccount={destinationAccount}
         setAccount={setDestinationAccount}
       />
-      <div className="flex flex-col gap-4 flex-1 max-w-[800px] mx-auto py-10 w-full px-2">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpenFeeModal(true);
+        }}
+        className="flex flex-col gap-4 flex-1 max-w-[800px] mx-auto py-8 w-full px-2"
+      >
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-3">
             <Typography.Heading>Networks</Typography.Heading>
@@ -115,6 +174,7 @@ export const Form = () => {
                 )}
               </div>
               <Button.Icon
+                type="button"
                 variant="outline"
                 className="lg:mt-9 h-10 w-10 p-3 max-lg:self-center"
                 onClick={onSwitchChain}
@@ -151,9 +211,13 @@ export const Form = () => {
               <div className="flex items-center justify-between gap-2">
                 <Typography.Text appearance="primary">Amount</Typography.Text>
                 {selectedAsset && (
-                  <Typography.Text appearance="primary">
-                    Available: {balance?.amount ?? 0} {selectedAsset?.ticker}
-                  </Typography.Text>
+                  <AvailableBalance
+                    locked={0}
+                    existential={existential}
+                    balance={selectedAssetAmount}
+                    available={selectedAssetBalance}
+                    assetTicker={selectedAsset.ticker}
+                  />
                 )}
               </div>
               <div className="flex item-center border border-primary rounded-sm">
@@ -163,10 +227,12 @@ export const Form = () => {
                   className="w-full pl-4 py-4"
                   placeholder="0.00"
                 >
-                  {sourceAccount && (
+                  {sourceAccount && selectedAssetBalance && (
                     <Input.Action
+                      type="button"
                       onClick={(e) => {
                         e.preventDefault();
+                        onChangeMax();
                       }}
                     >
                       MAX
@@ -174,6 +240,7 @@ export const Form = () => {
                   )}
                 </Input.Vertical>
                 <Button.Outline
+                  type="button"
                   appearance="secondary"
                   className="gap-1 px-2 py-7 justify-between ml-4 "
                   onClick={() => setOpenAsset(true)}
@@ -201,13 +268,10 @@ export const Form = () => {
             </div>
           </div>
         </div>
-        <Button.Solid
-          disabled={!sourceChain || !destinationChain}
-          onClick={onBridge}
-        >
+        <Button.Solid className="w-full py-5" size="md" disabled={disabled}>
           Bridge
         </Button.Solid>
-      </div>
+      </form>
     </Fragment>
   );
 };

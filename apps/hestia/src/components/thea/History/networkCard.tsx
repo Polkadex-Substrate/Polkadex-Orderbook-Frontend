@@ -1,13 +1,13 @@
 import { HoverCard, Typography } from "@polkadex/ux";
-import { RiInformationLine } from "@remixicon/react";
+import { RiInformationFill } from "@remixicon/react";
 
 import * as Icons from "@/components/ui/ChainIcons";
 
 export const NetworkCard = ({
-  name,
+  name = "",
   isPolkadotEcosystem,
 }: {
-  name: string;
+  name?: string;
   isPolkadotEcosystem?: boolean;
 }) => {
   const IconComponent = name ? Icons[name as keyof typeof Icons] : null;
@@ -35,7 +35,7 @@ export const NetworkCard = ({
           <div className="flex flex-col">
             <Typography.Text size="sm">{name}</Typography.Text>
             <div className="flex items-center gap-1">
-              <RiInformationLine className="w-3 h-3 text-primary" />
+              <RiInformationFill className="w-2.5 h-2.5 text-actionInput" />
               <Typography.Text size="xs" appearance="primary">
                 Ecosystem
               </Typography.Text>

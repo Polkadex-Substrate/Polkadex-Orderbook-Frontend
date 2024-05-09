@@ -30,7 +30,7 @@ export const useTheaTransactions = ({
   return useQueries({
     queries: [
       {
-        queryKey: QUERY_KEYS.getTheDeposits(sourceAddress),
+        queryKey: QUERY_KEYS.getTheDeposits(sourceAddress, assets.length),
         enabled,
         queryFn: async () => {
           const data = await chainQuery.fetchTheaDeposits({
@@ -40,7 +40,7 @@ export const useTheaTransactions = ({
         },
       },
       {
-        queryKey: QUERY_KEYS.getTheWithadraws(sourceAddress),
+        queryKey: QUERY_KEYS.getTheWithadraws(sourceAddress, assets.length),
         enabled,
         queryFn: async () => {
           const data = await chainQuery.fetchTheaWithdrawals({
@@ -68,6 +68,7 @@ const formatResult = (
     const fromNetwork = chains.find((e) =>
       e.genesis.toString().includes(networkId)
     );
+
     const polkadexNetwork = chains.find((e) =>
       e.genesis.toString().includes(networks[0])
     );
@@ -80,12 +81,13 @@ const formatResult = (
       id: isDeposit ? data.id : data.blockHash,
       to: isDeposit ? polkadexNetwork : fromNetwork,
       status: data.status,
+      hash: data.blockHash,
       isDeposit,
     };
   });
 
 export type Transactions = ReturnType<typeof formatResult>;
-
+export type Transaction = Transactions[0];
 // Temp
 export const networks = [
   "0x3920bcb4960a1eef5580cd5367ff3f430eef052774f78468852f7b9cb39f8a3c", // Polkadex

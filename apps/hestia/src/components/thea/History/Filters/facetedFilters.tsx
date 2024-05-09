@@ -20,6 +20,8 @@ export const FacetedFilter = <TData, TValue>({
 
   return (
     <FilterGroup>
+      {/* eslint-disable-next-line */}
+      {/* @ts-ignore */}
       <FilterGroup.Root>
         <FilterGroup.Trigger
           className={classNames(withoutBorder && "border-0")}
@@ -45,7 +47,9 @@ export const FacetedFilter = <TData, TValue>({
           </FilterGroup.Filters>
         </FilterGroup.Trigger>
       </FilterGroup.Root>
-      <FilterGroup.Content>
+      {/* eslint-disable-next-line */}
+      {/* @ts-ignore */}
+      <FilterGroup.Content className="overflow-auto max-h-[200px]">
         {values.map((v) => {
           const isSelected = selectedValues.has(v);
           return (
@@ -66,6 +70,7 @@ export const FacetedFilter = <TData, TValue>({
         })}
         {!!selectedValues.size && (
           <FilterGroup.Button
+            className="bg-level-2 w-full border-primary border-t"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();

@@ -1,5 +1,4 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { AssetsProps } from "@orderbook/core/hooks";
 import { Button, Dropdown, TokenAppearance, Typography } from "@polkadex/ux";
 import { Fragment } from "react";
 import Link from "next/link";
@@ -16,7 +15,7 @@ interface Props extends Asset {
   sourceBalance: number;
 }
 const columnHelper = createColumnHelper<Props>();
-export const columns = [
+export const columns = (sourceChain?: string, destinationChain?: string) => [
   columnHelper.accessor((row) => row.ticker, {
     id: "token",
     cell: (e) => {
@@ -37,10 +36,11 @@ export const columns = [
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
-    sortingFn: (rowA, rowB, columnId) => {
-      const valA = (rowA.getValue(columnId) as AssetsProps).ticker;
-      const valB = (rowB.getValue(columnId) as AssetsProps).ticker;
-      return valA > valB ? 1 : -1;
+    sortingFn: (rowA, rowB) => {
+      const valA = rowA.original.ticker;
+      const valB = rowB.original.ticker;
+      if (valA === valB) return 0;
+      return valA < valB ? 1 : -1;
     },
   }),
   columnHelper.accessor((row) => row.sourceBalance, {
@@ -56,7 +56,7 @@ export const columns = [
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Source Balance
+        {sourceChain} Balance
       </Typography.Text>
     ),
   }),
@@ -69,7 +69,7 @@ export const columns = [
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
-        Destination Balance
+        {destinationChain} Balance
       </Typography.Text>
     ),
   }),

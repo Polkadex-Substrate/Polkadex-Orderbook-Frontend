@@ -1,11 +1,12 @@
 "use client";
 
-import { Button, GenericMessage, Tabs, Typography } from "@polkadex/ux";
+import { GenericMessage, Tabs, Typography } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
-import { Fragment, useMemo, useRef, useState } from "react";
-import { RiDownload2Line, RiInformation2Line } from "@remixicon/react";
+import { Fragment, useMemo, useState } from "react";
+import { RiInformation2Line } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { useTheaProvider } from "@orderbook/core/providers";
+import { useMeasure } from "react-use";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
@@ -15,23 +16,43 @@ import { History } from "./History";
 import { Assets } from "./Assets";
 
 import { Footer, Header } from "@/components/ui";
-import { useSizeObserver } from "@/hooks";
 
 export function Template() {
   const [activeTab, setActiveTab] = useState("history");
 
-  const headerRef = useRef<HTMLDivElement | null>(null);
-  const helpRef = useRef<HTMLDivElement | null>(null);
-  const overviewRef = useRef<HTMLDivElement | null>(null);
-  const [footerRef, footerHeight] = useSizeObserver();
-  const [interactionRef, interactionHeight] = useSizeObserver();
   const { width } = useWindowSize();
+  const [overViewRef, overviewBounds] = useMeasure<HTMLDivElement>();
+  const [headerRef, headerBounds] = useMeasure<HTMLDivElement>();
+  const [helpRef, helpBounds] = useMeasure<HTMLDivElement>();
+  const [footerRef, footerBounds] = useMeasure<HTMLDivElement>();
+  const [interactionRef, interactionBounds] = useMeasure<HTMLDivElement>();
+  const [tableTitleRef, tableTitleBounds] = useMeasure<HTMLDivElement>();
+  const [filtersRef, filtersBounds] = useMeasure<HTMLDivElement>();
 
   const { sourceAccount } = useTheaProvider();
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
   const mobileView = useMemo(() => width <= 640, [width]);
+
+  const paddingBottom = useMemo(
+    () =>
+      mobileView ? `${interactionBounds.height}px` : `${footerBounds.height}px`,
+    [interactionBounds.height, footerBounds.height, mobileView]
+  );
+
+  const tableMaxHeight = useMemo(
+    () =>
+      `calc(100vh - ${headerBounds.height + helpBounds.height + overviewBounds.height + tableTitleBounds.height + filtersBounds.height + 30}px)`,
+    [
+      headerBounds.height,
+      helpBounds.height,
+      overviewBounds.height,
+      tableTitleBounds.height,
+      filtersBounds.height,
+    ]
+  );
+
   return (
     <Fragment>
       <div
@@ -42,51 +63,47 @@ export function Template() {
         <main
           className="flex flex-1 overflow-auto border-x border-secondary-base w-full max-w-[1920px] h-full m-auto"
           style={{
-            paddingBottom: mobileView
-              ? `${interactionHeight}px`
-              : `${footerHeight}px`,
+            paddingBottom,
           }}
         >
           <div className="flex-1 flex flex-col">
-            <div
-              ref={overviewRef}
-              className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-secondary-base"
-            >
-              <Typography.Text bold size="lg">
-                Bridge
-              </Typography.Text>
-              <RiInformation2Line className="w-6 h-6 text-primary" />
+            <div ref={overViewRef} className="flex flex-col">
+              <div className="flex items-center justify-between p-4 border-b border-secondary-base">
+                <Typography.Text bold size="lg">
+                  Bridge
+                </Typography.Text>
+                <RiInformation2Line className="w-6 h-6 text-primary" />
+              </div>
+              <Form />
             </div>
-            <Form />
             <Tabs
               value={activeTab}
               onValueChange={setActiveTab}
               className="border-t border-primary"
             >
               <div className="flex-1 flex flex-col">
-                <div className="flex items-center justify-between gap-2 border-b border-primary px-4 w-full py-2">
+                <div
+                  ref={tableTitleRef}
+                  className="border-b border-primary px-4 w-full py-2"
+                >
                   <Tabs.List>
                     <Tabs.Trigger value="history">History</Tabs.Trigger>
                     <Tabs.Trigger value="assets">Assets</Tabs.Trigger>
                   </Tabs.List>
-                  <Button.Ghost
-                    appearance="secondary"
-                    size="sm"
-                    className="gap-2"
-                  >
-                    <RiDownload2Line className="w-3.5 h-3.5" />
-                    <Typography.Text appearance="primary">
-                      Export data
-                    </Typography.Text>
-                  </Button.Ghost>
                 </div>
                 {sourceAccount ? (
                   <Fragment>
                     <Tabs.Content value="history" className="flex flex-col">
-                      <History />
+                      <History
+                        ref={filtersRef}
+                        tableMaxHeight={tableMaxHeight}
+                      />
                     </Tabs.Content>
                     <Tabs.Content value="assets" className="flex flex-col">
-                      <Assets />
+                      <Assets
+                        ref={filtersRef}
+                        tableMaxHeight={tableMaxHeight}
+                      />
                     </Tabs.Content>
                   </Fragment>
                 ) : (
@@ -115,7 +132,7 @@ export function Template() {
             />
           </div>
         )}
-        {!mobileView && <Footer marketsActive ref={footerRef} />}
+        {!mobileView && <Footer ref={footerRef} />}
       </div>
     </Fragment>
   );

@@ -14,6 +14,7 @@ export const NetworkCard = ({ onOpenModal, name, icon }: Props) => {
 
   return (
     <Button.Outline
+      type="button"
       appearance="secondary"
       className="gap-1 px-2 py-7 justify-between"
       onClick={onOpenModal}

@@ -126,8 +126,18 @@ export const QUERY_KEYS = {
     address,
     chain,
   ],
-  getTheDeposits: (address: string) => [PREFIX, "getTheDeposits", address],
-  getTheWithadraws: (address: string) => [PREFIX, "getTheWithadraws", address],
+  getTheDeposits: (address: string, assets: number) => [
+    PREFIX,
+    "getTheDeposits",
+    address,
+    assets,
+  ],
+  getTheWithadraws: (address: string, assets: number) => [
+    PREFIX,
+    "getTheWithadraws",
+    address,
+    assets,
+  ],
   googleSession: () => [PREFIX, "googleSession"],
   googleAccounts: () => [PREFIX, "googleAccounts"],
 };
