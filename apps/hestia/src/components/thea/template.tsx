@@ -1,9 +1,9 @@
 "use client";
 
-import { GenericMessage, Tabs, Typography } from "@polkadex/ux";
+import { Button, GenericMessage, Tabs, Typography } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { Fragment, useMemo, useState } from "react";
-import { RiInformation2Line } from "@remixicon/react";
+import { RiInformation2Line, RiRefreshLine } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { useTheaProvider } from "@orderbook/core/providers";
 import { useMeasure } from "react-use";
@@ -29,7 +29,8 @@ export function Template() {
   const [tableTitleRef, tableTitleBounds] = useMeasure<HTMLDivElement>();
   const [filtersRef, filtersBounds] = useMeasure<HTMLDivElement>();
 
-  const { sourceAccount } = useTheaProvider();
+  const { sourceAccount, onRefreshTransactions, transactionsRefetching } =
+    useTheaProvider();
   const { browserAccountPresent, extensionAccountPresent } =
     useConnectWalletProvider();
 
@@ -84,12 +85,26 @@ export function Template() {
               <div className="flex-1 flex flex-col">
                 <div
                   ref={tableTitleRef}
-                  className="border-b border-primary px-4 w-full py-2"
+                  className="flex items-center justify-between border-b border-primary px-4 w-full py-2"
                 >
                   <Tabs.List>
                     <Tabs.Trigger value="history">History</Tabs.Trigger>
                     <Tabs.Trigger value="assets">Assets</Tabs.Trigger>
                   </Tabs.List>
+                  <Button.Light
+                    appearance="secondary"
+                    size="xs"
+                    className="gap-1"
+                    onClick={onRefreshTransactions}
+                    disabled={transactionsRefetching}
+                  >
+                    <RiRefreshLine className="w-4 h-4 text-primary" />
+                    {transactionsRefetching && (
+                      <Typography.Text appearance="primary" size="xs">
+                        Refetching..
+                      </Typography.Text>
+                    )}
+                  </Button.Light>
                 </div>
                 {sourceAccount ? (
                   <Fragment>

@@ -221,18 +221,27 @@ export const TheaProvider = ({
       isLoading: depositsLoading,
       isFetching: depositsFetching,
       isSuccess: depositsSuccess,
+      isRefetching: depositsRefetching,
+      refetch: onDepositsRefetch,
     },
     {
       data: withdrawals = [],
       isLoading: withdrawalsLoading,
       isFetching: withdrawalsFetching,
       isSuccess: withdrawalsSuccess,
+      isRefetching: withdrawalsRefetching,
+      refetch: onWithdrawalsRefetch,
     },
   ] = useTheaTransactions({
     sourceAddress: sourceAccountSelected?.address,
     assets: polkadexAssets,
     chains,
   });
+
+  const onRefreshTransactions = useCallback(async () => {
+    await onWithdrawalsRefetch();
+    await onDepositsRefetch();
+  }, [onWithdrawalsRefetch, onDepositsRefetch]);
 
   const getTransferConfig = useCallback(async () => {
     if (
@@ -276,6 +285,10 @@ export const TheaProvider = ({
     [selectedAssetAmount, existential]
   );
 
+  const transactionsRefetching = useMemo(
+    () => withdrawalsRefetching || depositsRefetching,
+    [withdrawalsRefetching, depositsRefetching]
+  );
   return (
     <Provider
       value={{
@@ -322,6 +335,8 @@ export const TheaProvider = ({
 
         getTransferConfig,
         existential,
+        onRefreshTransactions,
+        transactionsRefetching,
       }}
     >
       {children}
@@ -373,6 +388,8 @@ type State = {
 
   getTransferConfig: () => Promise<TransferConfig | undefined>;
   existential: number;
+  transactionsRefetching: boolean;
+  onRefreshTransactions: () => Promise<void>;
 };
 export const Context = createContext<State>({
   sourceConnector: null,
@@ -417,6 +434,8 @@ export const Context = createContext<State>({
 
   getTransferConfig: async () => undefined,
   existential: 0,
+  transactionsRefetching: false,
+  onRefreshTransactions: async () => {},
 });
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
