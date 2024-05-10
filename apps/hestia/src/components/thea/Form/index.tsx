@@ -72,21 +72,6 @@ export const Form = () => {
     });
   };
 
-  // const onSubmitBridge = useCallback(
-  //   async (e: FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     if (!ext.current) {
-  //       const transferConfig = await getTransferConfig();
-  //       if (transferConfig)
-  //         ext.current = await transferConfig.transfer<SubmittableExtrinsic>(
-  //           Number(amount)
-  //         );
-  //     }
-  //     await mutateAsync({ amount: Number(amount) });
-  //   },
-  //   [amount, mutateAsync, getTransferConfig]
-  // );
-
   const {
     handleSubmit,
     errors,
@@ -95,6 +80,7 @@ export const Form = () => {
     dirty,
     values,
     setFieldValue,
+    resetForm,
   } = useFormik({
     initialValues,
     validationSchema: bridgeValidations(1, selectedAssetBalance), // TODO: Remove statuc min
@@ -132,6 +118,10 @@ export const Form = () => {
         openFeeModal={openFeeModal}
         setOpenFeeModal={setOpenFeeModal}
         amount={Number(values.amount)}
+        onSuccess={() => {
+          resetForm();
+          setOpenFeeModal(false);
+        }}
       />
       <SelectAsset open={openAsset} onOpenChange={setOpenAsset} />
       <ConnectAccount
@@ -245,7 +235,7 @@ export const Form = () => {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        setOpenSourceModal(true);
+                        setOpenDestinationModal(true);
                       }}
                     >
                       Connect wallet

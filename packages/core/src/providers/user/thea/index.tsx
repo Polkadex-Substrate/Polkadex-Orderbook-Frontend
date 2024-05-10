@@ -175,6 +175,13 @@ export const TheaProvider = ({
     chain: sourceChain?.genesis,
   });
 
+  const { data: polkadexBalances = [] } = useTheaBalances({
+    connector: polkadexConnector,
+    sourceAddress: sourceAccountSelected?.address,
+    assets: polkadexAssets,
+    chain: networks[0],
+  });
+
   const {
     data: destinationBalances = [],
     isLoading: destinationBalancesLoading,
@@ -182,7 +189,7 @@ export const TheaProvider = ({
     isSuccess: destinationBalancesSuccess,
   } = useTheaBalances({
     connector: destinationConnector,
-    sourceAddress: destinationAccountSelected?.address,
+    sourceAddress: sourceAccountSelected?.address,
     assets: destinationAssets,
     chain: destinationChain?.genesis,
   });
@@ -260,9 +267,22 @@ export const TheaProvider = ({
     [selectedAssetAmount, existential]
   );
 
+  const PDEXBalance = useMemo(
+    () =>
+      polkadexBalances
+        ? polkadexBalances.find((e) => e.ticker === "PDEX")?.amount ?? 0 // Remove static data
+        : 0,
+    [polkadexBalances]
+  );
+
   const transactionsRefetching = useMemo(
     () => withdrawalsRefetching || depositsRefetching,
     [withdrawalsRefetching, depositsRefetching]
+  );
+
+  const isPolkadexChain = useMemo(
+    () => !!(sourceChain?.genesis === networks[0]),
+    [sourceChain?.genesis]
   );
 
   const {
@@ -329,6 +349,8 @@ export const TheaProvider = ({
         existential,
         onRefreshTransactions,
         transactionsRefetching,
+        PDEXBalance,
+        isPolkadexChain,
       }}
     >
       {children}
@@ -385,6 +407,8 @@ type State = {
   existential: number;
   transactionsRefetching: boolean;
   onRefreshTransactions: () => Promise<void>;
+  PDEXBalance: number;
+  isPolkadexChain: boolean;
 };
 export const Context = createContext<State>({
   sourceConnector: null,
@@ -434,6 +458,8 @@ export const Context = createContext<State>({
   existential: 0,
   transactionsRefetching: false,
   onRefreshTransactions: async () => {},
+  PDEXBalance: 0,
+  isPolkadexChain: false,
 });
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {

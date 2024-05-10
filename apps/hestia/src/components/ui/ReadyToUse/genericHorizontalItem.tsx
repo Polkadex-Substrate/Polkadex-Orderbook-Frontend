@@ -32,7 +32,9 @@ export const GenericHorizontalItem = ({
               <Typography.Text appearance="primary">{label}</Typography.Text>
             </div>
           </Tooltip.Trigger>
-          <Tooltip.Content side="left">{tooltip}</Tooltip.Content>
+          <Tooltip.Content className="max-w-[250px]" side="left">
+            {tooltip}
+          </Tooltip.Content>
         </Tooltip>
       ) : (
         <Typography.Text appearance="primary">{label}</Typography.Text>
