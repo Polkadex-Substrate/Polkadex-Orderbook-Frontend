@@ -52,7 +52,12 @@ export const Trigger = ({
           </HoverCard.Trigger>
         </HoverCard>
         {browserAccountPresent && (
-          <div className="flex items-center justify-between gap-2 p-1 bg-level-2 rounded-sm w-full">
+          <div
+            className={classNames(
+              "flex items-center justify-between gap-2 p-1 bg-level-2 rounded-sm w-full",
+              responsive && "mb-2"
+            )}
+          >
             <Typography.Text size="xs" bold className="whitespace-nowrap">
               {browserAccount}
             </Typography.Text>

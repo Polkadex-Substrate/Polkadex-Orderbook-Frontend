@@ -18,7 +18,7 @@ import { History } from "./History";
 import { ReadyToClaim } from "./ReadyToClaim";
 
 import { Footer, Header } from "@/components/ui";
-import { useTransfer } from "@/hooks";
+import { useSizeObserver, useTransfer } from "@/hooks";
 import { defaultConfig } from "@/config";
 
 export function Template() {
@@ -31,7 +31,7 @@ export function Template() {
   const tableTitleRef = useRef<HTMLDivElement | null>(null);
   const formwRef = useRef<HTMLDivElement | null>(null);
   const footerRef = useRef<HTMLDivElement | null>(null);
-  const interactionRef = useRef<HTMLDivElement | null>(null);
+  const [interactionRef, interactionHeight] = useSizeObserver();
 
   const { height: helpHeight = 0 } = useResizeObserver({
     ref: helpRef,
@@ -55,11 +55,6 @@ export function Template() {
 
   const { height: footerHeight = 0 } = useResizeObserver({
     ref: footerRef,
-    box: "border-box",
-  });
-
-  const { height: interactionHeight = 0 } = useResizeObserver({
-    ref: interactionRef,
     box: "border-box",
   });
 
@@ -190,7 +185,7 @@ export function Template() {
         {mobileView && (browserAccountPresent || extensionAccountPresent) && (
           <div
             ref={interactionRef}
-            className="flex flex-col gap-4 bg-level-1 border-t border-primary px-2 fixed bottom-0 left-0 w-full"
+            className="flex flex-col gap-4 py-2 bg-level-1 border-t border-primary px-2 fixed bottom-0 left-0 w-full"
           >
             <ResponsiveProfile
               extensionAccountPresent={extensionAccountPresent}
