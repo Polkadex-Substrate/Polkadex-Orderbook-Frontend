@@ -3,7 +3,10 @@
 import { Button, Popover, Tooltip } from "@polkadex/ux";
 import { useMemo } from "react";
 import Link from "next/link";
-import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import {
+  TradeAccountType,
+  useConnectWalletProvider,
+} from "@orderbook/core/providers/user/connectWalletProvider";
 import { useWindowSize } from "react-use";
 import {
   RiBookReadLine,
@@ -32,8 +35,12 @@ export const Profile = ({
   unreadNotifications: number;
 }) => {
   const { width } = useWindowSize();
-  const { selectedWallet, browserAccountPresent, extensionAccountPresent } =
-    useConnectWalletProvider();
+  const {
+    selectedWallet,
+    browserAccountPresent,
+    extensionAccountPresent,
+    selectedTradingAccount,
+  } = useConnectWalletProvider();
 
   const responsiveView = useMemo(() => width > 640, [width]);
 
@@ -84,6 +91,15 @@ export const Profile = ({
               <Trigger
                 extensionAccountPresent={extensionAccountPresent}
                 extensionAccountName={selectedWallet?.name ?? ""}
+                browserAccountName={
+                  selectedTradingAccount?.account?.meta.name || ""
+                }
+                browserAccountPresent={
+                  !!(
+                    selectedTradingAccount &&
+                    selectedTradingAccount?.type === TradeAccountType.Keyring
+                  )
+                }
               />
             </Popover.Trigger>
             <Popover.Content withArrow className="z-[15]">

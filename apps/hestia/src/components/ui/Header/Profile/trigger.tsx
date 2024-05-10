@@ -1,18 +1,27 @@
 import { HoverCard, Icons, Typography } from "@polkadex/ux";
+import { RiArrowDownSLine } from "@remixicon/react";
 import classNames from "classnames";
 
 export const Trigger = ({
   extensionAccountPresent,
+  browserAccountName,
+  browserAccountPresent,
   extensionAccountName,
   responsive,
 }: {
   extensionAccountName: string;
+  browserAccountName: string;
+  browserAccountPresent: boolean;
   extensionAccountPresent: boolean;
   responsive?: boolean;
 }) => {
   const extensionAccount = extensionAccountPresent
     ? extensionAccountName
     : "Wallet not present";
+
+  const browserAccount = browserAccountPresent
+    ? `Trading account (${browserAccountName})`
+    : "No trading account";
 
   return (
     <div
@@ -21,22 +30,30 @@ export const Trigger = ({
         responsive ? "w-full" : "border-x border-primary pr-1"
       )}
     >
-      <div className="flex items-center justify-center pl-2">
+      <div className="flex items-center justify-center px-2">
         <Icons.Avatar className="w-6 h-6" />
       </div>
-      <div className="flex flex-col w-full h-full py-3 text-left">
+      <div
+        className={classNames(
+          "flex flex-col w-full h-full text-left",
+          !browserAccountPresent && "py-2"
+        )}
+      >
         <HoverCard>
           <HoverCard.Trigger>
-            <Typography.Text
-              size="xs"
-              bold
-              appearance="primary"
-              className="p-2"
-            >
+            <Typography.Text size="xs" bold appearance="primary">
               {extensionAccount}
             </Typography.Text>
           </HoverCard.Trigger>
         </HoverCard>
+        {browserAccountPresent && (
+          <div className="flex items-center justify-between gap-2 p-1 bg-level-2 rounded-sm w-full">
+            <Typography.Text size="xs" bold className="whitespace-nowrap">
+              {browserAccount}
+            </Typography.Text>
+            <RiArrowDownSLine className="w-3 h-3" />
+          </div>
+        )}
       </div>
     </div>
   );
