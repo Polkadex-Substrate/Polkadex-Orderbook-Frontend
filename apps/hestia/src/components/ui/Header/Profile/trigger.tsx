@@ -41,7 +41,12 @@ export const Trigger = ({
       >
         <HoverCard>
           <HoverCard.Trigger>
-            <Typography.Text size="xs" bold appearance="primary">
+            <Typography.Text
+              size="xs"
+              bold
+              appearance="primary"
+              className="mr-1"
+            >
               {extensionAccount}
             </Typography.Text>
           </HoverCard.Trigger>
