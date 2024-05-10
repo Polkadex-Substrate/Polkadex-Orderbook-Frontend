@@ -37,7 +37,6 @@ export const TokenCard = ({
     return parseScientific(trimmedBalance);
   }, [amount]);
 
-  console.log("balance", balance);
   return (
     <div
       className={classNames(
