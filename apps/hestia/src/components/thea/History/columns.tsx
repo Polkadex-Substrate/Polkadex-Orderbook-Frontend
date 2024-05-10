@@ -1,19 +1,12 @@
 "use client";
 
 import { createColumnHelper } from "@tanstack/react-table";
-import {
-  Copy,
-  Token,
-  Typography,
-  TokenAppearance,
-  truncateString,
-} from "@polkadex/ux";
-import { intlFormat } from "date-fns";
+import { Copy, Typography, truncateString } from "@polkadex/ux";
 import { RiArrowRightLine, RiFileCopyLine } from "@remixicon/react";
 import { Transaction, networks } from "@orderbook/core/index";
-import classNames from "classnames";
 
 import { NetworkCard } from "./networkCard";
+import { TokenInfo } from "./tokenInfo";
 
 import { formatedDate } from "@/helpers";
 
@@ -27,33 +20,11 @@ export const columns = [
       const formattedAmount = amount.toFormat();
       const ready = ["CLAIMED", "APPROVED", "READY"].includes(status);
       return (
-        <div className="flex items-center gap-3">
-          <Token
-            name={asset?.ticker as TokenAppearance}
-            size="md"
-            className="p-0.5 rounded-full border border-primary"
-            appearance={asset?.ticker as TokenAppearance}
-          />
-          <div className="flex flex-col">
-            <Typography.Text size="sm">
-              {formattedAmount} {asset?.ticker}
-            </Typography.Text>
-            <div className="flex items-center gap-1">
-              <div
-                className={classNames(
-                  "w-1.5 h-1.5 rounded-full",
-                  ready ? "bg-success-base" : "bg-attention-base"
-                )}
-              />
-              <Typography.Text
-                appearance={ready ? "success" : "attention"}
-                size="xs"
-              >
-                {ready ? "Completed" : "Pending"}
-              </Typography.Text>
-            </div>
-          </div>
-        </div>
+        <TokenInfo
+          ticker={asset?.ticker}
+          ready={ready}
+          amount={formattedAmount}
+        />
       );
     },
     header: () => (
@@ -130,29 +101,6 @@ export const columns = [
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         To
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row.hash, {
-    id: "txHash",
-    cell: (e) => {
-      const value = e.getValue();
-      const short = truncateString(e.getValue());
-      return (
-        <Copy value={value}>
-          <div className="flex items-center gap-1">
-            <RiFileCopyLine className="w-3 h-3 text-actionInput" />
-            <Typography.Text appearance="primary" size="sm">
-              {short}
-            </Typography.Text>
-          </div>
-        </Copy>
-      );
-    },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        TxHash
       </Typography.Text>
     ),
     footer: (e) => e.column.id,

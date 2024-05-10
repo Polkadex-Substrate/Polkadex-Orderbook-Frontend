@@ -16,7 +16,7 @@ export const NetworkCard = ({
     return (
       <div className="flex items-center gap-1">
         {IconComponent && (
-          <div className="flex items-center justify-center w-6 h-6 p-1 rounded-full border border-primary">
+          <div className="max-sm:hidden sm:flex items-center justify-center w-6 h-6 p-1 rounded-full border border-primary">
             <IconComponent />
           </div>
         )}
@@ -28,7 +28,7 @@ export const NetworkCard = ({
       <HoverCard.Trigger>
         <div className="flex items-center gap-1">
           {IconComponent && (
-            <div className="flex items-center justify-center w-6 h-6 p-1 rounded-full border border-primary">
+            <div className="max-sm:hidden sm:flex items-center justify-center w-6 h-6 p-1 rounded-full border border-primary">
               <IconComponent />
             </div>
           )}

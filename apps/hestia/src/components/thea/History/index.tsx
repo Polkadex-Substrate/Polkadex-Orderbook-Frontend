@@ -1,7 +1,7 @@
 "use client";
 
 import { Table, GenericMessage } from "@polkadex/ux";
-import { forwardRef, Fragment, useMemo, useState } from "react";
+import { forwardRef, Fragment, useEffect, useMemo, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -15,16 +15,27 @@ import {
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import { useTheaProvider } from "@orderbook/core/providers";
+import { Transaction } from "@orderbook/core/index";
+import { useWindowSize } from "usehooks-ts";
 
 import { columns } from "./columns";
 import { Filters } from "./Filters";
+import { ResponsiveTable } from "./responsiveTable";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
 const actionKeys = ["token", "date"];
+const responsiveKeys = ["destinationAddress", "date"];
 
 export const History = forwardRef<HTMLDivElement, { tableMaxHeight?: string }>(
   ({ tableMaxHeight }, ref) => {
+    const [responsiveState, setResponsiveState] = useState(false);
+    const [responsiveData, setResponsiveData] = useState<Transaction | null>(
+      null
+    );
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
     const {
       deposits,
       withdrawals,
@@ -33,8 +44,7 @@ export const History = forwardRef<HTMLDivElement, { tableMaxHeight?: string }>(
       polkadexAssets,
       chains,
     } = useTheaProvider();
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const { width } = useWindowSize();
 
     const data = useMemo(
       () =>
@@ -57,10 +67,23 @@ export const History = forwardRef<HTMLDivElement, { tableMaxHeight?: string }>(
       columns,
       getCoreRowModel: getCoreRowModel(),
     });
+    const responsiveView = useMemo(() => width <= 1040, [width]);
+
+    useEffect(() => {
+      if (!responsiveView && !!responsiveState) {
+        setResponsiveState(false);
+        setResponsiveData(null);
+      }
+    }, [responsiveState, responsiveView]);
 
     if (depositsLoading || withdrawalsLoading) return <SkeletonCollection />;
     return (
       <Fragment>
+        <ResponsiveTable
+          data={responsiveData}
+          onOpenChange={setResponsiveState}
+          open={responsiveState}
+        />
         <div className="flex-1 flex flex-col">
           <div ref={ref}>
             <Filters
@@ -95,6 +118,11 @@ export const History = forwardRef<HTMLDivElement, { tableMaxHeight?: string }>(
                             header.column.toggleSorting(!isDesc);
                           };
 
+                          if (
+                            responsiveView &&
+                            responsiveKeys.includes(header.id)
+                          )
+                            return null;
                           return (
                             <Table.Head
                               key={header.id}
@@ -120,8 +148,23 @@ export const History = forwardRef<HTMLDivElement, { tableMaxHeight?: string }>(
                     {table.getRowModel().rows.map((row) => (
                       <Table.Row key={row.id}>
                         {row.getVisibleCells().map((cell) => {
+                          if (
+                            responsiveView &&
+                            responsiveKeys.includes(cell.column.id)
+                          )
+                            return null;
+
+                          const responsiveProps = responsiveView
+                            ? {
+                                className: "cursor-pointer",
+                                onClick: () => {
+                                  setResponsiveState(true);
+                                  setResponsiveData(row.original);
+                                },
+                              }
+                            : {};
                           return (
-                            <Table.Cell key={cell.id}>
+                            <Table.Cell key={cell.id} {...responsiveProps}>
                               {flexRender(
                                 cell.column.columnDef.cell,
                                 cell.getContext()
