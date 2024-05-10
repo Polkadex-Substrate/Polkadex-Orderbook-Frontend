@@ -9,7 +9,6 @@ import {
   enabledFeatures,
   getAddressFromMnemonic,
 } from "@orderbook/core/helpers";
-import { useProfile } from "@orderbook/core/providers/user/profile";
 import { MutateHookProps } from "@orderbook/core/hooks/types";
 import { KeyringPair$Json } from "@polkadot/keyring/types";
 
@@ -46,7 +45,6 @@ export function useAddProxyAccount({
 }: UseAddProxyAccount) {
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
-  const { onUserSelectTradingAddress } = useProfile();
   const { onPushNotification } = useSettingsProvider();
   const { addToTxQueue } = useTransactionManager();
 
@@ -81,10 +79,6 @@ export function useAddProxyAccount({
           });
         addToTxQueue(signedExtrinsic);
         await handleTransaction(signedExtrinsic);
-        await onUserSelectTradingAddress({
-          tradeAddress: selectedWallet.address,
-          isNew: true,
-        });
         return;
       }
 
@@ -109,10 +103,6 @@ export function useAddProxyAccount({
         await onRefetchGoogleDriveAccounts();
       }
 
-      await onUserSelectTradingAddress({
-        tradeAddress: pair.address,
-        isNew: true,
-      });
       onSetTempMnemonic(mnemonic);
     },
     onError: (error: Error) => {

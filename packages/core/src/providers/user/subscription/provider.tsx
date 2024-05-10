@@ -60,6 +60,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
   const { dateFrom, dateTo } = useSessionProvider();
   const {
     selectedAddresses: { tradeAddress, mainAddress },
+    onUserSelectTradingAddress,
   } = useProfile();
   const { api } = useNativeApi();
   const { extensionAccounts } = useExtensionAccounts();
@@ -363,7 +364,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
   );
 
   const onAccountsUpdate = useCallback(
-    (payload: AccountUpdateEvent) => {
+    async (payload: AccountUpdateEvent) => {
       if (payload.type === "AddProxy") {
         // Update for selected extension account
         queryClient.setQueryData(
@@ -385,6 +386,12 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
             ];
           }
         );
+
+        // Select newly created trading account
+        await onUserSelectTradingAddress({
+          tradeAddress: payload.proxy,
+          isNew: true,
+        });
       } else if (payload.type === "RemoveProxy") {
         // Update for selected extension account
         queryClient.setQueryData(
@@ -407,7 +414,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
         );
       }
     },
-    [extensionAccounts, mainAddress, queryClient]
+    [extensionAccounts, mainAddress, onUserSelectTradingAddress, queryClient]
   );
 
   const onBalanceUpdate = useCallback(
