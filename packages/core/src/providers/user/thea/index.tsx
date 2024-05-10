@@ -25,6 +25,7 @@ import {
   Transactions,
   networks,
   useTheaBalances,
+  useTheaConfig,
   useTheaTransactions,
 } from "@orderbook/core/hooks";
 import { isIdentical } from "@orderbook/core/helpers";
@@ -86,11 +87,7 @@ export const TheaProvider = ({
   );
 
   const polkadexConnector = useMemo(
-    () =>
-      destinationChain &&
-      getChainConnector(
-        "0x3920bcb4960a1eef5580cd5367ff3f430eef052774f78468852f7b9cb39f8a3c"
-      ),
+    () => destinationChain && getChainConnector(networks[0]),
     [destinationChain]
   );
 
@@ -243,28 +240,6 @@ export const TheaProvider = ({
     await onDepositsRefetch();
   }, [onWithdrawalsRefetch, onDepositsRefetch]);
 
-  const getTransferConfig = useCallback(async () => {
-    if (
-      !sourceAccount ||
-      !destinationChain ||
-      !selectedAsset ||
-      !destinationAccount
-    )
-      return undefined;
-    return await sourceConnector?.getTransferConfig(
-      destinationChain,
-      selectedAsset,
-      destinationAccount.address,
-      sourceAccount.address
-    );
-  }, [
-    destinationChain,
-    selectedAsset,
-    sourceAccount,
-    destinationAccount,
-    sourceConnector,
-  ]);
-
   const existential = useMemo(
     () => (sourceChain?.genesis === networks[0] ? 1 : OTHER_ASSET_EXISTENTIAL),
     [sourceChain?.genesis]
@@ -289,6 +264,19 @@ export const TheaProvider = ({
     () => withdrawalsRefetching || depositsRefetching,
     [withdrawalsRefetching, depositsRefetching]
   );
+
+  const {
+    data: transferConfig,
+    isLoading: transferConfigLoading,
+    isFetching: transferConfigFetching,
+    isSuccess: transferConfigSuccess,
+  } = useTheaConfig({
+    connector: sourceConnector,
+    destinationAddress: destinationAccountSelected?.address,
+    sourceAddress: destinationAccountSelected?.address,
+    selectedAsset,
+    destinationChain,
+  });
   return (
     <Provider
       value={{
@@ -333,7 +321,10 @@ export const TheaProvider = ({
         withdrawalsLoading: withdrawalsLoading && withdrawalsFetching,
         withdrawalsSuccess,
 
-        getTransferConfig,
+        transferConfig,
+        transferConfigLoading: transferConfigLoading && transferConfigFetching,
+        transferConfigSuccess,
+
         existential,
         onRefreshTransactions,
         transactionsRefetching,
@@ -386,7 +377,10 @@ type State = {
   withdrawalsLoading: boolean;
   withdrawalsSuccess: boolean;
 
-  getTransferConfig: () => Promise<TransferConfig | undefined>;
+  transferConfig: TransferConfig | undefined;
+  transferConfigLoading: boolean;
+  transferConfigSuccess: boolean;
+
   existential: number;
   transactionsRefetching: boolean;
   onRefreshTransactions: () => Promise<void>;
@@ -432,7 +426,10 @@ export const Context = createContext<State>({
   withdrawalsLoading: false,
   withdrawalsSuccess: false,
 
-  getTransferConfig: async () => undefined,
+  transferConfig: undefined,
+  transferConfigLoading: false,
+  transferConfigSuccess: false,
+
   existential: 0,
   transactionsRefetching: false,
   onRefreshTransactions: async () => {},

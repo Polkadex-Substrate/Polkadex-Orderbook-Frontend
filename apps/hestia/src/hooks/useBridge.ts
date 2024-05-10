@@ -9,31 +9,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
 export function useBridge() {
-  const {
-    sourceConnector,
-    destinationChain,
-    selectedAsset,
-    destinationAccount,
-    sourceAccount,
-  } = useTheaProvider();
-
   const { onHandleAlert, onHandleError } = useSettingsProvider();
+  const { transferConfig, sourceAccount } = useTheaProvider();
   return useMutation({
     mutationFn: async ({ amount }: { amount: number }) => {
-      if (
-        !sourceAccount ||
-        !destinationChain ||
-        !selectedAsset ||
-        !destinationAccount
-      )
-        return;
-      const transferConfig = await sourceConnector?.getTransferConfig(
-        destinationChain,
-        selectedAsset,
-        destinationAccount.address,
-        sourceAccount.address
-      );
-      if (!transferConfig) {
+      if (!transferConfig || !sourceAccount) {
         onHandleError?.("transferConfig error");
         return;
       }

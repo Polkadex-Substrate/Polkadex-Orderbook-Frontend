@@ -140,4 +140,17 @@ export const QUERY_KEYS = {
   ],
   googleSession: () => [PREFIX, "googleSession"],
   googleAccounts: () => [PREFIX, "googleAccounts"],
+  getTheConfig: (
+    sourceAddress: string,
+    destinationAddress: string,
+    asset: string,
+    destinationChain: string
+  ) => [
+    PREFIX,
+    "getTheConfig",
+    sourceAddress,
+    destinationAddress,
+    asset,
+    destinationChain,
+  ],
 };

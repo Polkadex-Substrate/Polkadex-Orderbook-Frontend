@@ -13,7 +13,6 @@ import {
   truncateString,
 } from "@polkadex/ux";
 import {
-  RiAddLine,
   RiExternalLinkLine,
   RiFileCopyLine,
   RiGasStationLine,
@@ -21,23 +20,17 @@ import {
 import {
   Dispatch,
   Fragment,
-  MouseEvent,
   SetStateAction,
-  useCallback,
-  useEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import { useResizeObserver } from "usehooks-ts";
 import Link from "next/link";
-import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
 import {
   FeeAssetReserve,
-  OTHER_ASSET_EXISTENTIAL,
-  TransactionFeeProps,
   enabledFeatures,
   useFunds,
-  useTransactionFee,
 } from "@orderbook/core/index";
 import { useTheaProvider } from "@orderbook/core/providers";
 
@@ -49,44 +42,32 @@ import {
 } from "@/components/ui/ReadyToUse";
 const { payWithAnotherFee } = enabledFeatures;
 
-interface Props extends TransactionFeeProps {
-  action:
-    | ((event: MouseEvent<HTMLButtonElement>) => Promise<void>)
-    | ((event: MouseEvent<HTMLButtonElement>) => void);
-  actionLoading: boolean;
-  tokenFee: FeeAssetReserve | null;
-  setTokenFee: Dispatch<SetStateAction<FeeAssetReserve | null>>;
+interface Props {
   openFeeModal: boolean;
   setOpenFeeModal: Dispatch<SetStateAction<boolean>>;
   amount: number;
 }
 export const ConfirmTransaction = ({
-  action,
-  extrinsicFn,
-  sender,
-  actionLoading,
-  tokenFee,
-  setTokenFee,
   openFeeModal,
   setOpenFeeModal,
   amount,
 }: Props) => {
-  const { mutateAsync } = useBridge();
-  const ext = useRef<SubmittableExtrinsic>();
+  const { mutateAsync, isLoading } = useBridge();
+  const [tokenFee, setTokenFee] = useState<FeeAssetReserve | null>({
+    id: "PDEX",
+    name: "PDEX",
+  });
 
   const {
-    sourceBalances = 0,
+    selectedAssetBalance,
     sourceAccount,
-    getTransferConfig,
+    destinationAccount,
+    transferConfig,
+    transferConfigLoading,
   } = useTheaProvider();
 
-  const { fee, hash, palletName, extrinsicName, loading, success } =
-    useTransactionFee({
-      extrinsicFn,
-      sender,
-    });
-
-  const isLoading = useMemo(() => loading && !success, [loading, success]);
+  const sourceFee = transferConfig?.sourceFee?.amount ?? 0;
+  const destinationFee = transferConfig?.destinationFee?.amount ?? 0;
 
   const ref = useRef<HTMLButtonElement>(null);
 
@@ -102,57 +83,33 @@ export const ConfirmTransaction = ({
     poolReservesSuccess,
   } = usePool({
     asset: tokenFee?.id ?? "",
-    amount: fee,
+    amount: transferConfig?.sourceFee.amount ?? 0,
   });
 
   const { balances, loading: balancesLoading } = useFunds();
 
   const isPDEX = useMemo(() => tokenFee?.id === "PDEX", [tokenFee?.id]);
 
-  const existential = useMemo(
-    () => (isPDEX ? 1 : OTHER_ASSET_EXISTENTIAL),
-    [isPDEX]
-  );
-  const selectedAssetBalance = useMemo(
-    () => balances.find((e) => e.asset.id === tokenFee?.id),
-    [tokenFee?.id, balances]
-  );
+  const pdexBalance = 100;
 
   const error = useMemo(
     () =>
       tokenFee?.id && isPDEX
-        ? walletBalance < fee + existential
-        : Number(selectedAssetBalance?.onChainBalance) < swapPrice,
-    [
-      tokenFee?.id,
-      fee,
-      selectedAssetBalance?.onChainBalance,
-      swapPrice,
-      isPDEX,
-      walletBalance,
-      existential,
-    ]
+        ? pdexBalance < sourceFee
+        : selectedAssetBalance < swapPrice,
+    [isPDEX, selectedAssetBalance, swapPrice, tokenFee?.id, sourceFee]
   );
 
-  const shortHash = useMemo(() => truncateString(hash), [hash]);
-  const shortAddress = useMemo(
+  const shortSourceAddress = useMemo(
     () => truncateString(sourceAccount?.address ?? "", 4),
     [sourceAccount?.address]
   );
 
+  const shortDestinationAddress = useMemo(
+    () => truncateString(destinationAccount?.address ?? "", 4),
+    [destinationAccount?.address]
+  );
   const disabled = useMemo(() => !!error || !tokenFee, [error, tokenFee]);
-
-  const getConfig = useCallback(async () => {
-    const transferConfig = await getTransferConfig();
-    if (transferConfig)
-      ext.current = await transferConfig.transfer<SubmittableExtrinsic>(
-        Number(amount)
-      );
-  }, [amount, getTransferConfig]);
-
-  useEffect(() => {
-    getConfig();
-  }, [getConfig]);
 
   return (
     <Modal
@@ -162,7 +119,7 @@ export const ConfirmTransaction = ({
       className="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
     >
       <Modal.Content>
-        <Loading.Spinner active={actionLoading}>
+        <Loading.Spinner active={isLoading}>
           <Interaction className="w-full gap-2 md:min-w-[24rem] md:max-w-[24rem]">
             <Interaction.Title
               onClose={{ onClick: () => setOpenFeeModal(false) }}
@@ -170,70 +127,50 @@ export const ConfirmTransaction = ({
               Confirm Transaction
             </Interaction.Title>
             <Interaction.Content className="flex flex-col p-3">
-              <div className="flex flex-col border-b border-primary px-3 pb-4">
-                <Typography.Text appearance="primary">
-                  Extrinsic
-                </Typography.Text>
-                <Accordion type="multiple">
-                  <Accordion.Item value="extrinsic">
-                    <Accordion.Trigger>
-                      <Skeleton
-                        loading={isLoading}
-                        className="min-h-4 max-w-28"
-                      >
-                        <Typography.Text>{extrinsicName}</Typography.Text>
-                      </Skeleton>
-                      <Accordion.Icon>
-                        <RiAddLine className="w-4 h-4 text-primary" />
-                      </Accordion.Icon>
-                    </Accordion.Trigger>
-                    <Accordion.Content>
-                      <div className="flex flex-col mt-4 border-t border-primary">
-                        <GenericHorizontalItem label="Name" className="px-0">
-                          <Skeleton
-                            loading={isLoading}
-                            className="min-h-4 max-w-14"
-                          >
-                            <Copy value={hash}>
-                              <Typography.Text>{palletName}</Typography.Text>
-                            </Copy>
-                          </Skeleton>
-                        </GenericHorizontalItem>
-                        <GenericHorizontalItem
-                          label="Call hash"
-                          className="px-0"
-                        >
-                          <Skeleton
-                            loading={isLoading}
-                            className="min-h-4 max-w-20"
-                          >
-                            <Copy value={hash}>
-                              <div className="flex items-center gap-1">
-                                <RiFileCopyLine className="w-3 h-3 text-secondary" />
-                                <Typography.Text>{shortHash}</Typography.Text>
-                              </div>
-                            </Copy>
-                          </Skeleton>
-                        </GenericHorizontalItem>
-                      </div>
-                    </Accordion.Content>
-                  </Accordion.Item>
-                </Accordion>
-              </div>
               <div className="flex flex-col border-b border-primary">
-                <GenericHorizontalItem label="Sending from">
+                <GenericHorizontalItem label="Amount">
+                  <Typography.Text>{amount}</Typography.Text>
+                </GenericHorizontalItem>
+                <GenericHorizontalItem label="Sending wallet">
                   <Skeleton
                     loading={!sourceAccount}
                     className="min-h-4 max-w-24"
                   >
-                    <Copy value="0xD3…6Ae">
+                    <Copy value={sourceAccount?.address ?? ""}>
                       <div className="flex items-center gap-1">
                         <RiFileCopyLine className="w-3 h-3 text-secondary" />
                         <Typography.Text>
-                          {sourceAccount?.name} • {shortAddress}
+                          {sourceAccount?.name} • {shortSourceAddress}
                         </Typography.Text>
                       </div>
                     </Copy>
+                  </Skeleton>
+                </GenericHorizontalItem>
+                <GenericHorizontalItem label="Destination wallet">
+                  =
+                  <Copy value={destinationAccount?.address ?? ""}>
+                    <div className="flex items-center gap-1">
+                      <RiFileCopyLine className="w-3 h-3 text-secondary" />
+                      <Typography.Text>
+                        {destinationAccount?.name} • {shortDestinationAddress}
+                      </Typography.Text>
+                    </div>
+                  </Copy>
+                </GenericHorizontalItem>
+                <GenericHorizontalItem label="Estimated source chain fee">
+                  <Skeleton
+                    loading={transferConfigLoading}
+                    className="min-h-4 max-w-24"
+                  >
+                    <Typography.Text>{sourceFee}</Typography.Text>
+                  </Skeleton>
+                </GenericHorizontalItem>
+                <GenericHorizontalItem label="Estimated destination chain fee">
+                  <Skeleton
+                    loading={transferConfigLoading}
+                    className="min-h-4 max-w-24"
+                  >
+                    <Typography.Text>{destinationFee}</Typography.Text>
                   </Skeleton>
                 </GenericHorizontalItem>
                 {!!tokenFee && !isPDEX && !isLoading ? (
@@ -249,7 +186,7 @@ export const ConfirmTransaction = ({
                           <Typography.Text appearance="primary">
                             ≈
                           </Typography.Text>
-                          <Typography.Text appearance="primary">{`${fee} PDEX`}</Typography.Text>
+                          <Typography.Text appearance="primary">{`${sourceFee} PDEX`}</Typography.Text>
                         </div>
                       </Skeleton>
                     </div>
@@ -262,7 +199,7 @@ export const ConfirmTransaction = ({
                         loading={isLoading}
                         className="min-h-4 min-w-14"
                       >
-                        <Typography.Text>{fee} PDEX</Typography.Text>
+                        <Typography.Text>{destinationFee}</Typography.Text>
                       </Skeleton>
                     </div>
                   </GenericHorizontalItem>
@@ -392,7 +329,7 @@ export const ConfirmTransaction = ({
               <Interaction.Action
                 disabled={disabled}
                 appearance={disabled ? "secondary" : "primary"}
-                onClick={action}
+                onClick={async () => await mutateAsync({ amount })}
               >
                 Sign and Submit
               </Interaction.Action>

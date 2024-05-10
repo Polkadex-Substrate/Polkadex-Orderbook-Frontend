@@ -13,6 +13,7 @@ import { useTransactionFeeModal } from "@orderbook/core/index";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
+import { ConfirmTransaction } from "../Connect/confirmTransaction";
 
 import { WalletCard } from "./wallet";
 import { NetworkCard } from "./networkCard";
@@ -22,8 +23,8 @@ import { createQueryString, formatAmount } from "@/helpers";
 
 export const Form = () => {
   const [amount, setAmount] = useState("");
-
   const [openAsset, setOpenAsset] = useState(false);
+  const [openFeeModal, setOpenFeeModal] = useState(false);
   const [openSourceModal, setOpenSourceModal] = useState(false);
   const [openDestinationModal, setOpenDestinationModal] = useState(false);
 
@@ -40,6 +41,7 @@ export const Form = () => {
     selectedAssetBalance,
     existential,
     selectedAssetAmount,
+    transferConfig,
   } = useTheaProvider();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -65,8 +67,6 @@ export const Form = () => {
     const formattedBalance = formatAmount(selectedAssetBalance);
     setAmount(formattedBalance);
   };
-
-  const { setOpenFeeModal } = useTransactionFeeModal();
 
   // const onSubmitBridge = useCallback(
   //   async (e: FormEvent<HTMLFormElement>) => {
@@ -103,20 +103,11 @@ export const Form = () => {
 
   return (
     <Fragment>
-      {/* <ConfirmTransaction
-        action={() =>
-          formRef?.current?.dispatchEvent(
-            new Event("submit", { cancelable: true, bubbles: true })
-          )
-        }
-        actionLoading={!!isLoading}
-        extrinsicFn={() => {}}
-        sender={sourceAccount?.address ?? ""}
-        tokenFee={tokenFee}
-        setTokenFee={setTokenFee}
+      <ConfirmTransaction
         openFeeModal={openFeeModal}
         setOpenFeeModal={setOpenFeeModal}
-      /> */}
+        amount={Number(amount)}
+      />
       <SelectAsset open={openAsset} onOpenChange={setOpenAsset} />
       <ConnectAccount
         open={openSourceModal}
