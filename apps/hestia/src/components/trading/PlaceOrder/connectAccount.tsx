@@ -21,7 +21,7 @@ const ConnectAccount = () => {
     return true;
   }, [mainAddress, tradeAddress]);
 
-  if (mainProxiesAccounts.length === 0) {
+  if (mainAddress && mainProxiesAccounts.length === 0) {
     return (
       <Button.Solid
         type="button"

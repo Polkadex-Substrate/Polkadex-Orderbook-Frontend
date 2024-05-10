@@ -12,9 +12,9 @@ export const ConnectAccountWrapper = ({
     onToogleConnectExtension,
     onToogleFundWallet,
   } = useSettingsProvider();
-  const { mainProxiesAccounts } = useConnectWalletProvider();
+  const { mainProxiesAccounts, selectedWallet } = useConnectWalletProvider();
 
-  if (mainProxiesAccounts.length === 0) {
+  if (selectedWallet?.address && mainProxiesAccounts.length === 0) {
     return (
       <GenericMessage
         title="Please get some funds in your account to get started."
