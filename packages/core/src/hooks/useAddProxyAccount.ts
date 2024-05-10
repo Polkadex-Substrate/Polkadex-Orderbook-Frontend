@@ -1,9 +1,5 @@
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import {
-  UseQueryResult,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { UseQueryResult, useMutation } from "@tanstack/react-query";
 import {
   ExtensionAccount,
   useTransactionManager,
@@ -18,7 +14,7 @@ import { MutateHookProps } from "@orderbook/core/hooks/types";
 import { KeyringPair$Json } from "@polkadot/keyring/types";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
-import { NOTIFICATIONS, QUERY_KEYS } from "../constants";
+import { NOTIFICATIONS } from "../constants";
 import { useSettingsProvider } from "../providers/public/settings";
 
 import { handleTransaction } from "./../helpers/signAndSendExtrinsic";
@@ -48,7 +44,6 @@ export function useAddProxyAccount({
   onRefetchGoogleDriveAccounts,
   onAddAccountFromJson,
 }: UseAddProxyAccount) {
-  const queryClient = useQueryClient();
   const { api } = useNativeApi();
   const { wallet } = useUserAccounts();
   const { onUserSelectTradingAddress } = useProfile();
@@ -76,20 +71,6 @@ export function useAddProxyAccount({
             "Funding account already registered as trading account"
           );
 
-        appsyncOrderbookService.subscriber.subscribeAccountUpdate(
-          selectedWallet.address,
-          () => {
-            queryClient.setQueryData(
-              QUERY_KEYS.singleProxyAccounts(selectedWallet.address),
-              (proxies?: string[]): string[] => {
-                return proxies
-                  ? [...proxies, selectedWallet.address]
-                  : [selectedWallet.address];
-              }
-            );
-          }
-        );
-
         const signedExtrinsic =
           await appsyncOrderbookService.operation.createProxyAcccount({
             api,
@@ -106,18 +87,6 @@ export function useAddProxyAccount({
         });
         return;
       }
-
-      appsyncOrderbookService.subscriber.subscribeAccountUpdate(
-        selectedWallet.address,
-        () => {
-          queryClient.setQueryData(
-            QUERY_KEYS.singleProxyAccounts(selectedWallet.address),
-            (proxies?: string[]): string[] => {
-              return proxies ? [...proxies, pair.address] : [pair.address];
-            }
-          );
-        }
-      );
 
       // Create trading account with keyring type
       const { mnemonic, name, password, importType } = addProxyArgs;

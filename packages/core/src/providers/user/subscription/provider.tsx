@@ -14,6 +14,7 @@ import {
   Ticker,
   Balance,
   Kline,
+  AccountUpdateEvent,
 } from "@orderbook/core/utils/orderbookService";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import {
@@ -37,8 +38,9 @@ import {
   replaceOrPushOrder,
 } from "@orderbook/core/utils/orderbookService/appsync/helpers";
 import { useOrderbook } from "@orderbook/core/hooks";
+import { useExtensionAccounts } from "@polkadex/react-providers";
 
-import { useProfile } from "../profile";
+import { UserAddressTuple, useProfile } from "../profile";
 import { useSettingsProvider } from "../../public/settings";
 import { useSessionProvider } from "../sessionProvider";
 import { useNativeApi } from "../../public/nativeApi";
@@ -60,6 +62,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
     selectedAddresses: { tradeAddress, mainAddress },
   } = useProfile();
   const { api } = useNativeApi();
+  const { extensionAccounts } = useExtensionAccounts();
 
   const isTradingPage = path.startsWith("/trading");
   const marketName = isTradingPage ? marketId : null;
@@ -359,6 +362,54 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
     [api, mainAddress]
   );
 
+  const onAccountsUpdate = useCallback(
+    (payload: AccountUpdateEvent) => {
+      if (payload.type === "AddProxy") {
+        // Update for selected extension account
+        queryClient.setQueryData(
+          QUERY_KEYS.singleProxyAccounts(mainAddress),
+          (proxies?: string[]): string[] => {
+            return proxies ? [...proxies, payload.proxy] : [payload.proxy];
+          }
+        );
+
+        // Update for all extension accounts
+        queryClient.setQueryData(
+          QUERY_KEYS.proxyAccounts(
+            extensionAccounts.map(({ address }) => address)
+          ),
+          (userAddresses?: UserAddressTuple[]): UserAddressTuple[] => {
+            return [
+              ...(userAddresses || []),
+              { mainAddress: payload.main, tradeAddress: payload.proxy },
+            ];
+          }
+        );
+      } else if (payload.type === "RemoveProxy") {
+        // Update for selected extension account
+        queryClient.setQueryData(
+          QUERY_KEYS.singleProxyAccounts(mainAddress),
+          (proxies?: string[]) => {
+            return proxies?.filter((value) => value !== payload.proxy);
+          }
+        );
+
+        // Update for all extension accounts
+        queryClient.setQueryData(
+          QUERY_KEYS.proxyAccounts(
+            extensionAccounts.map(({ address }) => address)
+          ),
+          (userAddresses?: UserAddressTuple[]): UserAddressTuple[] => {
+            return (userAddresses || [])?.filter(
+              (e) => e.tradeAddress !== payload.proxy
+            );
+          }
+        );
+      }
+    },
+    [extensionAccounts, mainAddress, queryClient]
+  );
+
   const onBalanceUpdate = useCallback(
     async (payload: Balance) => {
       try {
@@ -549,6 +600,20 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
       };
     }
   }, [mainAddress, onBalanceUpdate, isReady]);
+
+  // Account update subscription
+  useEffect(() => {
+    if (mainAddress && isReady) {
+      const subscription =
+        appsyncOrderbookService.subscriber.subscribeAccountUpdate(
+          mainAddress,
+          onAccountsUpdate
+        );
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [isReady, mainAddress, onAccountsUpdate]);
 
   return <Provider value={{ onCandleSubscribe }}>{children}</Provider>;
 };
