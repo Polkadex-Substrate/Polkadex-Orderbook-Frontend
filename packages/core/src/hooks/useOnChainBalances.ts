@@ -45,6 +45,7 @@ export const useOnChainBalances = () => {
       onHandleError(errorMessage);
     },
     refetchOnMount: false,
+    refetchInterval: 12 * 1000,
   });
 
   return {
