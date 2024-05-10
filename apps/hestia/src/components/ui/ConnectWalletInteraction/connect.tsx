@@ -83,6 +83,8 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
     onRemoveGoogleDrive,
     removeGoogleDriveLoading,
     browserAccountPresent,
+    walletLoading,
+    walletSuccess,
   } = useConnectWalletProvider();
   const { onToogleConnectExtension } = useSettingsProvider();
   const { allAccounts } = useProfile();
@@ -147,8 +149,8 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
       <Interactable.Card pageName="ConnectFundingWallets">
         <ExtensionAccounts
           extensionAccounts={walletsFiltered}
-          loading={!!mainProxiesLoading}
-          success={!!mainProxiesSuccess}
+          loading={!!mainProxiesLoading || !!walletLoading}
+          success={!!mainProxiesSuccess && !!walletSuccess}
           onSelectExtensionAccount={async (e) => await onSelectWallet?.(e)}
           onTryAgain={() =>
             selectedExtension && onSelectExtension?.(selectedExtension)
