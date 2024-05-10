@@ -4,17 +4,17 @@ import { Fragment } from "react";
 import Link from "next/link";
 import { RiMore2Line } from "@remixicon/react";
 import { Asset } from "@polkadex/thea";
-import { getChainFromTicker, parseScientific } from "@orderbook/core/helpers";
-import { trimFloat } from "@polkadex/numericals";
+import { getChainFromTicker } from "@orderbook/core/helpers";
 
 import { TokenCard } from "@/components/ui/ReadyToUse";
 import { AmountCard } from "@/components/ui/ReadyToUse/amountCard";
+import { formatAmount } from "@/helpers";
 
-interface Props extends Asset {
+export interface AssetsProps extends Asset {
   destinationBalance: number;
   sourceBalance: number;
 }
-const columnHelper = createColumnHelper<Props>();
+const columnHelper = createColumnHelper<AssetsProps>();
 export const columns = (sourceChain?: string, destinationChain?: string) => [
   columnHelper.accessor((row) => row.ticker, {
     id: "token",
@@ -46,8 +46,7 @@ export const columns = (sourceChain?: string, destinationChain?: string) => [
   columnHelper.accessor((row) => row.sourceBalance, {
     id: "sourceBalance",
     cell: (e) => {
-      const trimmedBalance = trimFloat({ value: e.getValue() ?? "" });
-      const formattedBalance = parseScientific(trimmedBalance);
+      const formattedBalance = formatAmount(e.getValue());
       return (
         <AmountCard className="max-md:pr-6 md:min-w-40">
           {formattedBalance}
@@ -63,8 +62,7 @@ export const columns = (sourceChain?: string, destinationChain?: string) => [
   columnHelper.accessor((row) => row.destinationBalance, {
     id: "destinationBalance",
     cell: (e) => {
-      const trimmedBalance = trimFloat({ value: e.getValue() ?? "" });
-      const formattedBalance = parseScientific(trimmedBalance);
+      const formattedBalance = formatAmount(e.getValue());
       return <AmountCard>{formattedBalance}</AmountCard>;
     },
     header: () => (

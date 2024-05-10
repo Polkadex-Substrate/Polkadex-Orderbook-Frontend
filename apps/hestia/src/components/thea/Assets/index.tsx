@@ -1,7 +1,14 @@
 "use client";
 
 import { Table, GenericMessage, Input, Checkbox } from "@polkadex/ux";
-import { ChangeEvent, forwardRef, Fragment, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  forwardRef,
+  Fragment,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -15,15 +22,24 @@ import {
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import { useTheaProvider } from "@orderbook/core/providers";
+import { useWindowSize } from "usehooks-ts";
 
-import { columns } from "./columns";
+import { AssetsProps, columns } from "./columns";
+import { ResponsiveTable } from "./responsiveTable";
 
 import { SkeletonCollection } from "@/components/ui/ReadyToUse";
 
 const actionKeys = ["token", "sourceBalance", "destinationBalance"];
 
+const responsiveKeys = ["actions", "destinationBalance"];
+
 export const Assets = forwardRef<HTMLDivElement, { tableMaxHeight?: string }>(
   ({ tableMaxHeight }, ref) => {
+    const [responsiveState, setResponsiveState] = useState(false);
+    const [responsiveData, setResponsiveData] = useState<AssetsProps | null>(
+      null
+    );
+
     const [sorting, setSorting] = useState<SortingState>([
       { desc: true, id: "sourceBalance" },
     ]);
@@ -41,6 +57,7 @@ export const Assets = forwardRef<HTMLDivElement, { tableMaxHeight?: string }>(
       sourceChain,
       destinationChain,
     } = useTheaProvider();
+    const { width } = useWindowSize();
 
     const assets = useMemo(
       () =>
@@ -80,7 +97,6 @@ export const Assets = forwardRef<HTMLDivElement, { tableMaxHeight?: string }>(
       ]
     );
 
-    console.log("Assets", assets);
     const table = useReactTable({
       data: assets,
       state: {
@@ -106,10 +122,24 @@ export const Assets = forwardRef<HTMLDivElement, { tableMaxHeight?: string }>(
     const onSearchToken = (e: ChangeEvent<HTMLInputElement>) =>
       setFilters({ ...filters, search: e.target.value });
 
+    const responsiveView = useMemo(() => width <= 800, [width]);
+
+    useEffect(() => {
+      if (!responsiveView && !!responsiveState) {
+        setResponsiveState(false);
+        setResponsiveData(null);
+      }
+    }, [responsiveState, responsiveView]);
+
     if (sourceBalancesLoading || destinationBalancesLoading)
       return <SkeletonCollection />;
     return (
       <Fragment>
+        <ResponsiveTable
+          data={responsiveData}
+          onOpenChange={setResponsiveState}
+          open={responsiveState}
+        />
         <div className="flex-1 flex flex-col">
           <div
             ref={ref}
@@ -156,6 +186,11 @@ export const Assets = forwardRef<HTMLDivElement, { tableMaxHeight?: string }>(
                             const isDesc = getSorted === "desc";
                             header.column.toggleSorting(!isDesc);
                           };
+                          if (
+                            responsiveView &&
+                            responsiveKeys.includes(header.id)
+                          )
+                            return null;
                           return (
                             <Table.Head
                               key={header.id}
@@ -183,8 +218,23 @@ export const Assets = forwardRef<HTMLDivElement, { tableMaxHeight?: string }>(
                     {table.getRowModel().rows.map((row) => (
                       <Table.Row key={row.id}>
                         {row.getVisibleCells().map((cell) => {
+                          if (
+                            responsiveView &&
+                            responsiveKeys.includes(cell.column.id)
+                          )
+                            return null;
+
+                          const responsiveProps = responsiveView
+                            ? {
+                                className: "cursor-pointer",
+                                onClick: () => {
+                                  setResponsiveState(true);
+                                  setResponsiveData(row.original);
+                                },
+                              }
+                            : {};
                           return (
-                            <Table.Cell key={cell.id}>
+                            <Table.Cell key={cell.id} {...responsiveProps}>
                               {flexRender(
                                 cell.column.columnDef.cell,
                                 cell.getContext()
