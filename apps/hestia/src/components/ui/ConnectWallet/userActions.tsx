@@ -26,14 +26,15 @@ export const UserActions = ({
         Options
       </Interaction.Title>
       <Interaction.Content className="flex flex-col gap-2 flex-1">
-        {!registeredProxies.includes(fundWallet?.address as string) && (
-          <GenericHorizontalCard
-            title="Register funding account"
-            icon="Wallet"
-            label="NEW"
-            onClick={() => onCreateTradingAccount(true)}
-          />
-        )}
+        {registeredProxies.length > 0 &&
+          !registeredProxies.includes(fundWallet?.address as string) && (
+            <GenericHorizontalCard
+              title="Register funding account"
+              icon="Wallet"
+              label="NEW"
+              onClick={() => onCreateTradingAccount(true)}
+            />
+          )}
         {fundWalletIsPresent && (
           <GenericHorizontalCard
             title="Create new trading account"

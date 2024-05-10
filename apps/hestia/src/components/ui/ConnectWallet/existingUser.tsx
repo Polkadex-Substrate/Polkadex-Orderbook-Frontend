@@ -155,14 +155,15 @@ export const ExistingUser = ({
             )}
 
             <div className="flex flex-col gap-2">
-              {!registeredProxies.includes(fundWallet?.address as string) && (
-                <GenericHorizontalCard
-                  title="Register funding account"
-                  icon="Wallet"
-                  label="NEW"
-                  onClick={() => onCreateTradingAccount(true)}
-                />
-              )}
+              {registeredProxies.length > 0 &&
+                !registeredProxies.includes(fundWallet?.address as string) && (
+                  <GenericHorizontalCard
+                    title="Register funding account"
+                    icon="Wallet"
+                    label="NEW"
+                    onClick={() => onCreateTradingAccount(true)}
+                  />
+                )}
               <GenericHorizontalCard
                 title="Create new trading account"
                 icon="Plus"
