@@ -123,7 +123,7 @@ export const ExistingUser = ({
                   </Typography.Text>
                   <Typography.Paragraph size="sm" appearance="primary">
                     You can either register your funding account or can have a
-                    trading account in browser to access Orderbook. Import your
+                    trading account in browser to start trading. Import your
                     trading account or set up a new one.
                   </Typography.Paragraph>
                 </div>
