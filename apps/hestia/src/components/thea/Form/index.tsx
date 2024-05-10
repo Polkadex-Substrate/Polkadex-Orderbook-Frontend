@@ -61,13 +61,11 @@ export const Form = () => {
   };
 
   const onChangeMax = () => {
-    if (selectedAssetBalance > existential) {
-      const formattedBalance = formatAmount(selectedAssetBalance);
-      setAmount(formattedBalance);
-    } else {
-      setAmount("0");
-    }
+    if (!selectedAssetBalance) return;
+    const formattedBalance = formatAmount(selectedAssetBalance);
+    setAmount(formattedBalance);
   };
+
   const { setOpenFeeModal } = useTransactionFeeModal();
 
   // const onSubmitBridge = useCallback(
