@@ -5,7 +5,11 @@ import {
   TokenAppearance,
   Typography,
 } from "@polkadex/ux";
-import { RiArrowDownSLine, RiArrowLeftRightLine } from "@remixicon/react";
+import {
+  RiArrowDownSLine,
+  RiArrowLeftRightLine,
+  RiWalletLine,
+} from "@remixicon/react";
 import { Fragment, useMemo, useState } from "react";
 import { useTheaProvider } from "@orderbook/core/providers";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
@@ -45,7 +49,7 @@ export const Form = () => {
     transferConfigLoading,
   } = useTheaProvider();
 
-  const { min = 0, max = 0 } = transferConfig ?? {};
+  const { min, max } = transferConfig ?? {};
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
@@ -154,7 +158,7 @@ export const Form = () => {
                     onOpenModal={() => setOpenSourceModal(true)}
                   />
                 </div>
-                {sourceAccount && (
+                {sourceAccount ? (
                   <WalletCard
                     name={sourceAccount.name}
                     onClick={(e) => {
@@ -165,6 +169,26 @@ export const Form = () => {
                   >
                     {sourceAccount.address}
                   </WalletCard>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 p-1.5 flex items-center justify-center rounded-sm bg-level-2">
+                        <RiWalletLine className="w-full h-full" />
+                      </div>
+                      <Typography.Text>Connect a wallet</Typography.Text>
+                    </div>
+                    <Button.Solid
+                      appearance="secondary"
+                      size="xs"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setOpenSourceModal(true);
+                      }}
+                    >
+                      Change
+                    </Button.Solid>
+                  </div>
                 )}
               </div>
               <Button.Icon
@@ -184,7 +208,7 @@ export const Form = () => {
                     onOpenModal={() => setOpenDestinationModal(true)}
                   />
                 </div>
-                {destinationAccount && (
+                {destinationAccount ? (
                   <WalletCard
                     name={destinationAccount.name}
                     onClick={(e) => {
@@ -195,6 +219,26 @@ export const Form = () => {
                   >
                     {destinationAccount.address}
                   </WalletCard>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 p-1.5 flex items-center justify-center rounded-sm bg-level-2">
+                        <RiWalletLine className="w-full h-full" />
+                      </div>
+                      <Typography.Text>Connect a wallet</Typography.Text>
+                    </div>
+                    <Button.Solid
+                      appearance="secondary"
+                      size="xs"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setOpenDestinationModal(true);
+                      }}
+                    >
+                      Change
+                    </Button.Solid>
+                  </div>
                 )}
               </div>
             </div>
