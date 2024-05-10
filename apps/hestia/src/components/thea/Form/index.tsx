@@ -42,7 +42,10 @@ export const Form = () => {
     existential,
     selectedAssetAmount,
     transferConfig,
+    transferConfigLoading,
   } = useTheaProvider();
+
+  const { min = 0, max = 0 } = transferConfig ?? {};
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
@@ -90,6 +93,7 @@ export const Form = () => {
       !sourceChain ||
       !destinationAccount ||
       !destinationChain ||
+      transferConfigLoading ||
       !amount,
     [
       selectedAsset,
@@ -97,6 +101,7 @@ export const Form = () => {
       sourceChain,
       destinationAccount,
       destinationChain,
+      transferConfigLoading,
       amount,
     ]
   );
