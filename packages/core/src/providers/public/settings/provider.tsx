@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 
 import { Provider } from "./context";
 import { settingReducer, initialState } from "./reducer";
@@ -10,6 +10,7 @@ export const SettingProvider: T.SettingComponent = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(settingReducer, initialState);
+  const [fundWallet, setFundWallet] = useState(false);
 
   // Global Setting Actions
   const onToogleConnectExtension = useCallback(
@@ -19,6 +20,11 @@ export const SettingProvider: T.SettingComponent = ({
 
   const onToogleConnectTrading = (payload?: boolean) =>
     dispatch(A.toogleConnectTrading(payload));
+
+  const onToogleFundWallet = useCallback(
+    (payload?: boolean) => setFundWallet((e) => !e || !!payload),
+    []
+  );
 
   const onToggleChartRebuild = useCallback(() => {
     dispatch(A.toggleChartRebuild());
@@ -87,6 +93,8 @@ export const SettingProvider: T.SettingComponent = ({
     <Provider
       value={{
         ...state,
+        fundWallet,
+        onToogleFundWallet,
         onToggleChartRebuild,
         onToggleMarketSelector,
         onToggleOpenOrdersPairsSwitcher,

@@ -26,11 +26,12 @@ import { FundWalletModal } from "./fundWalletModal";
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const [menu, setMenu] = useState(false);
   const [notifications, setNotifications] = useState(false);
-  const [fundWallet, setFundWallet] = useState(false);
   const {
+    fundWallet,
     connectExtension,
     onToogleConnectExtension,
     notifications: allNotifications,
+    onToogleFundWallet,
   } = useSettingsProvider();
   const lastUsedMarketUrl = getMarketUrl();
   const isRewardDisabled = !defaultConfig.enableLmp;
@@ -48,7 +49,10 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
         open={notifications}
         onOpenChange={setNotifications}
       />
-      <FundWalletModal open={fundWallet} onOpenChange={setFundWallet} />
+      <FundWalletModal
+        open={fundWallet}
+        onOpenChange={() => onToogleFundWallet()}
+      />
       <header
         ref={ref}
         className="flex justify-between items-center px-3 flex-wrap border-b border-primary sticky top-0 left-0 bg-backgroundBase z-10"
@@ -156,7 +160,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           onClick={() => onToogleConnectExtension(!connectExtension)}
           onOpenMenu={() => setMenu(true)}
           onOpenNotifications={() => setNotifications(true)}
-          onOpenFundWallet={() => setFundWallet(true)}
+          onOpenFundWallet={() => onToogleFundWallet(true)}
         />
       </header>
     </Fragment>
