@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Accordion,
   Button,
   Copy,
   Dropdown,
@@ -147,7 +146,6 @@ export const ConfirmTransaction = ({
                   </Skeleton>
                 </GenericHorizontalItem>
                 <GenericHorizontalItem label="Destination wallet">
-                  =
                   <Copy value={destinationAccount?.address ?? ""}>
                     <div className="flex items-center gap-1">
                       <RiFileCopyLine className="w-3 h-3 text-secondary" />

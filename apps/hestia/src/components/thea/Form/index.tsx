@@ -3,6 +3,7 @@ import {
   Input,
   Token,
   TokenAppearance,
+  Tooltip,
   Typography,
 } from "@polkadex/ux";
 import {
@@ -13,7 +14,9 @@ import {
 import { Fragment, useMemo, useState } from "react";
 import { useTheaProvider } from "@orderbook/core/providers";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { useTransactionFeeModal } from "@orderbook/core/index";
+import { useFormik } from "formik";
+import classNames from "classnames";
+import { bridgeValidations } from "@orderbook/core/validations";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
@@ -24,9 +27,10 @@ import { NetworkCard } from "./networkCard";
 import { AvailableBalance } from "./availableBalance";
 
 import { createQueryString, formatAmount } from "@/helpers";
-
+const initialValues = {
+  amount: "",
+};
 export const Form = () => {
-  const [amount, setAmount] = useState("");
   const [openAsset, setOpenAsset] = useState(false);
   const [openFeeModal, setOpenFeeModal] = useState(false);
   const [openSourceModal, setOpenSourceModal] = useState(false);
@@ -45,11 +49,10 @@ export const Form = () => {
     selectedAssetBalance,
     existential,
     selectedAssetAmount,
-    transferConfig,
     transferConfigLoading,
+    sourceBalancesLoading,
   } = useTheaProvider();
 
-  const { min, max } = transferConfig ?? {};
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
@@ -69,12 +72,6 @@ export const Form = () => {
     });
   };
 
-  const onChangeMax = () => {
-    if (!selectedAssetBalance) return;
-    const formattedBalance = formatAmount(selectedAssetBalance);
-    setAmount(formattedBalance);
-  };
-
   // const onSubmitBridge = useCallback(
   //   async (e: FormEvent<HTMLFormElement>) => {
   //     e.preventDefault();
@@ -90,6 +87,19 @@ export const Form = () => {
   //   [amount, mutateAsync, getTransferConfig]
   // );
 
+  const {
+    handleSubmit,
+    errors,
+    getFieldProps,
+    isValid,
+    dirty,
+    values,
+    setFieldValue,
+  } = useFormik({
+    initialValues,
+    validationSchema: bridgeValidations(1, selectedAssetBalance), // TODO: Remove statuc min
+    onSubmit: () => setOpenFeeModal(true),
+  });
   const disabled = useMemo(
     () =>
       !selectedAsset ||
@@ -98,7 +108,7 @@ export const Form = () => {
       !destinationAccount ||
       !destinationChain ||
       transferConfigLoading ||
-      !amount,
+      !(isValid && dirty),
     [
       selectedAsset,
       sourceAccount,
@@ -106,16 +116,22 @@ export const Form = () => {
       destinationAccount,
       destinationChain,
       transferConfigLoading,
-      amount,
+      dirty,
+      isValid,
     ]
   );
 
+  const onChangeMax = () => {
+    if (!selectedAssetBalance) return;
+    const formattedBalance = formatAmount(selectedAssetBalance);
+    setFieldValue("amount", formattedBalance);
+  };
   return (
     <Fragment>
       <ConfirmTransaction
         openFeeModal={openFeeModal}
         setOpenFeeModal={setOpenFeeModal}
-        amount={Number(amount)}
+        amount={Number(values.amount)}
       />
       <SelectAsset open={openAsset} onOpenChange={setOpenAsset} />
       <ConnectAccount
@@ -138,11 +154,7 @@ export const Form = () => {
         setAccount={setDestinationAccount}
       />
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setOpenFeeModal(true);
-        }}
+        onSubmit={handleSubmit}
         className="flex flex-col gap-4 flex-1 max-w-[800px] mx-auto py-8 w-full px-2"
       >
         <div className="flex flex-col gap-8">
@@ -255,32 +267,48 @@ export const Form = () => {
                     balance={selectedAssetAmount}
                     available={selectedAssetBalance}
                     assetTicker={selectedAsset.ticker}
+                    loading={sourceBalancesLoading}
                   />
                 )}
               </div>
               <div className="flex item-center border border-primary rounded-sm">
-                <Input.Vertical
-                  value={amount}
-                  onChange={(e) => setAmount(e.currentTarget.value)}
-                  className="w-full pl-4 py-4"
-                  placeholder="0.00"
-                >
-                  {sourceAccount && selectedAssetBalance && (
-                    <Input.Action
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        onChangeMax();
-                      }}
+                <Tooltip open={!!errors.amount}>
+                  <Tooltip.Trigger asChild>
+                    <div
+                      className={classNames(
+                        "w-full pr-4",
+                        errors.amount && "border-danger-base border"
+                      )}
                     >
-                      MAX
-                    </Input.Action>
-                  )}
-                </Input.Vertical>
+                      <Input.Vertical
+                        type="text"
+                        autoComplete="off"
+                        placeholder="Enter an amount"
+                        {...getFieldProps("amount")}
+                        className="max-sm:focus:text-[16px] w-full pl-4 py-4"
+                      >
+                        {sourceAccount && selectedAssetBalance && (
+                          <Input.Action
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              onChangeMax();
+                            }}
+                          >
+                            MAX
+                          </Input.Action>
+                        )}
+                      </Input.Vertical>
+                    </div>
+                  </Tooltip.Trigger>
+                  <Tooltip.Content className="bg-level-5 z-[2] p-1">
+                    {errors.amount}
+                  </Tooltip.Content>
+                </Tooltip>
                 <Button.Outline
                   type="button"
                   appearance="secondary"
-                  className="gap-1 px-2 py-7 justify-between ml-4 "
+                  className="gap-1 px-2 py-7 justify-between"
                   onClick={() => setOpenAsset(true)}
                   disabled={!sourceChain || !destinationChain}
                 >

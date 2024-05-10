@@ -1,4 +1,4 @@
-import { HoverCard, Separator, Typography } from "@polkadex/ux";
+import { HoverCard, Separator, Skeleton, Typography } from "@polkadex/ux";
 import { RiArrowDownSLine, RiInformationFill } from "@remixicon/react";
 import { useMemo, useState } from "react";
 
@@ -12,6 +12,7 @@ export const AvailableBalance = ({
   balance,
   assetTicker = "",
   sourceTicker = "",
+  loading,
 }: {
   existential: number;
   locked: number;
@@ -19,6 +20,7 @@ export const AvailableBalance = ({
   balance: number;
   assetTicker?: string;
   sourceTicker?: string;
+  loading: boolean;
 }) => {
   const existentialAmount = useMemo(
     () => formatAmount(existential),
@@ -39,13 +41,15 @@ export const AvailableBalance = ({
           setOpen(true);
         }}
       >
-        <div className="flex items-center gap-1">
-          <RiInformationFill className="w-3 h-3 text-actionInput" />
-          <Typography.Text size="xs" appearance="primary">
-            Available: {availableAmount} {assetTicker}
-          </Typography.Text>
-          <RiArrowDownSLine className="w-3 h-3 text-primary group-hover:rotate-180 duration-300 transition-transform" />
-        </div>
+        <Skeleton loading={loading} className="min-w-12 min-h-4">
+          <div className="flex items-center gap-1">
+            <RiInformationFill className="w-3 h-3 text-actionInput" />
+            <Typography.Text size="xs" appearance="primary">
+              Available: {availableAmount} {assetTicker}
+            </Typography.Text>
+            <RiArrowDownSLine className="w-3 h-3 text-primary group-hover:rotate-180 duration-300 transition-transform" />
+          </div>
+        </Skeleton>
       </HoverCard.Trigger>
       <HoverCard.Content className="max-w-[300px] p-4">
         <div className="flex flex-col gap-3">

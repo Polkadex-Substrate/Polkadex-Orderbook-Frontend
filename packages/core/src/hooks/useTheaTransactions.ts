@@ -62,7 +62,7 @@ const formatResult = (
   value?.map((data) => {
     const assetId = data?.assetId.toString();
     const networkId = networks[data?.networkId];
-    const pdexAsset = assets.find((e) => typeof e?.id === "undefined");
+    const pdexAsset = assets.find((e) => typeof e?.id === "undefined"); // Wrong assets
 
     const asset = assets.find((e) => e?.id?.toString().includes(assetId));
     const fromNetwork = chains.find((e) =>

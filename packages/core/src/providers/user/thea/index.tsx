@@ -277,6 +277,7 @@ export const TheaProvider = ({
     selectedAsset,
     destinationChain,
   });
+
   return (
     <Provider
       value={{
