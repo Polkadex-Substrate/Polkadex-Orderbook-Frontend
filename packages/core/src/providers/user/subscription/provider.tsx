@@ -83,7 +83,10 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
             );
 
             if (payload.status === "OPEN") {
-              if (findOrder) {
+              if (
+                findOrder &&
+                payload.filledQuantity > findOrder.filledQuantity
+              ) {
                 const notf = NOTIFICATIONS.partialFilledOrder(findOrder);
                 onPushNotification(notf);
                 onHandleInfo?.(notf.message, notf.description);
