@@ -32,7 +32,6 @@ export const useOnChainBalances = () => {
     isSuccess,
     data: onChainBalances,
     isError,
-    isFetching,
     status,
   } = useQuery({
     queryKey: QUERY_KEYS.onChainBalances(mainAddress),
@@ -49,7 +48,7 @@ export const useOnChainBalances = () => {
   });
 
   return {
-    isOnChainBalanceLoading: isLoading || isFetching,
+    isOnChainBalanceLoading: isLoading,
     isOnChainBalanceSuccess: isSuccess,
     onChainBalances: onChainBalances,
     isOnChainBalanceError: isError,
