@@ -119,7 +119,11 @@ const CardsCompontent = ({ onClose }: { onClose: () => void }) => {
         <ImportTradingAccount
           onImport={async (e) => await onImportFromFile?.(e)}
           onRedirect={onClose}
-          onClose={onReset}
+          onClose={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onReset();
+          }}
           loading={importFromFileStatus === "loading"}
           whitelistBrowserAccounts={
             Object.keys(selectedWallet ?? {}).length

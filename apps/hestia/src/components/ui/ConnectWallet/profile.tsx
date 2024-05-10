@@ -11,18 +11,18 @@ import { AccountCard } from "../ReadyToUse";
 
 export const Profile = ({
   onLogout,
+  onActions,
   fundWalletPresent,
   fundWallet,
   onSwitch,
   onConnectWallet,
-  onConnectTradingAccount,
 }: {
   onLogout: () => void;
   onSwitch: () => void;
+  onActions: () => void;
   fundWalletPresent?: boolean;
   fundWallet?: ExtensionAccount;
   onConnectWallet: () => void;
-  onConnectTradingAccount: () => void;
 }) => {
   return (
     <div className="flex flex-col flex-1 md:w-[23rem] bg-backgroundBase rounded-sm max-sm:w-[90vw]">
@@ -102,7 +102,7 @@ export const Profile = ({
           size="md"
           appearance="secondary"
           className="flex gap-2 items-center bg-level-1 text-primary"
-          onClick={onConnectTradingAccount}
+          onClick={onActions}
         >
           <RiSettings3Fill className="w-4 h-4" />
           Settings

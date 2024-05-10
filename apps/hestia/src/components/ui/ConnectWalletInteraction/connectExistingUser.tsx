@@ -250,7 +250,6 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
       </Interactable.Card>
       <Interactable.Card pageName="TradingAccountList">
         <TradingAccountList
-          fundWallet={selectedWallet}
           tradingAccounts={mainProxiesAccounts}
           browserAccounts={localTradingAccounts}
           onRemove={(e) => onSetTempTrading?.(e)}

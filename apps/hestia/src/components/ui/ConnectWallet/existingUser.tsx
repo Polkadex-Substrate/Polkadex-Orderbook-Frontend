@@ -119,11 +119,12 @@ export const ExistingUser = ({
               <div className="flex flex-col gap-5 px-7">
                 <div className="flex flex-col gap-1">
                   <Typography.Text bold size="xl">
-                    No trading account found in browser
+                    No trading account found
                   </Typography.Text>
                   <Typography.Paragraph size="sm" appearance="primary">
-                    You must have a trading account in browser to access
-                    Orderbook. Import your current account or set up a new one.
+                    You can either register your funding account or can have a
+                    trading account in browser to access Orderbook. Import your
+                    trading account or set up a new one.
                   </Typography.Paragraph>
                 </div>
                 <button
