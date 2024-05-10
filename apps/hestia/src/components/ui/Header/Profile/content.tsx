@@ -31,6 +31,7 @@ import { TradingAccountMnemonic } from "../../ConnectWallet/tradingAccountMnemon
 import { ImportTradingAccount } from "../../ConnectWallet/importTradingAccount";
 import { ImportTradingAccountMnemonic } from "../../ConnectWallet/importTradingAccountMnemonic";
 import { GenericHorizontalCard } from "../../ReadyToUse";
+import { RegisterFundingAccount } from "../../ConnectWallet/registerFundingAccount";
 
 export const Content = () => {
   const {
@@ -111,15 +112,23 @@ export const Content = () => {
     [localTradingAccounts, mainProxiesAccounts]
   );
 
-  const redirectMaximumAccounts =
-    (mainProxiesAccounts?.length ?? 0) >= 3
-      ? "MaximumTradingAccount"
+  const getRedirectPage = (isExtensionProxy: boolean) => {
+    const registerProxyAccount = isExtensionProxy
+      ? "RegisterFundingAccount"
       : "NewTradingAccount";
 
-  const redirectEnoughBalance =
-    (walletBalance ?? 0) >= MINIMUM_PDEX_REQUIRED
-      ? redirectMaximumAccounts
-      : "InsufficientBalance";
+    const redirectMaximumAccounts =
+      (mainProxiesAccounts?.length ?? 0) >= 3
+        ? "MaximumTradingAccount"
+        : registerProxyAccount;
+
+    const redirectEnoughBalance =
+      (walletBalance ?? 0) >= MINIMUM_PDEX_REQUIRED
+        ? redirectMaximumAccounts
+        : "InsufficientBalance";
+
+    return redirectEnoughBalance;
+  };
 
   const availableOnDevice = useMemo(
     () =>
@@ -179,7 +188,7 @@ export const Content = () => {
               onCreateCallback={() =>
                 props?.onPage("TradingAccountSuccessfull", true)
               }
-              onClose={() => props?.onChangeInteraction(false)}
+              onClose={() => props?.onPage("UserActions", true)}
               onConnectGDrive={onConnectGoogleDrive}
               connectGDriveLoading={connectGoogleDriveLoading}
               gDriveReady={gDriveReady}
@@ -243,15 +252,24 @@ export const Content = () => {
             <UserActions
               key="UserActions"
               onClose={() => props?.onChangeInteraction(false)}
-              onNewTradingAccount={() =>
-                props?.onPage(redirectEnoughBalance, true)
-              }
+              onCreateTradingAccount={(isExtensionProxy: boolean) => {
+                const page = getRedirectPage(isExtensionProxy);
+                props?.onPage(page, true);
+              }}
               onImportTradingAccount={() =>
                 props?.onPage("ConnectTradingAccount")
               }
+              fundWallet={selectedWallet}
               fundWalletIsPresent={isPresent}
               onTradingAccountList={() => props?.onPage("TradingAccountList")}
               registeredProxies={mainProxiesAccounts}
+            />
+            <RegisterFundingAccount
+              key="RegisterFundingAccount"
+              onCreateAccount={onRegisterTradeAccount}
+              fundWallet={selectedWallet}
+              loading={registerStatus === "loading"}
+              onClose={() => props?.onPage("UserActions", true)}
             />
             <TradingAccountList
               key="TradingAccountList"
