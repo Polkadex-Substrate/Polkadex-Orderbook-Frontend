@@ -105,7 +105,7 @@ export const Profile = ({
           onClick={onActions}
         >
           <RiSettings3Fill className="w-4 h-4" />
-          Settings
+          Options
         </Button.Solid>
       </div>
     </div>
