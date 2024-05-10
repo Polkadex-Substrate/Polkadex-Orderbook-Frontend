@@ -175,7 +175,7 @@ export const Form = () => {
                       <div className="w-6 h-6 p-1.5 flex items-center justify-center rounded-sm bg-level-2">
                         <RiWalletLine className="w-full h-full" />
                       </div>
-                      <Typography.Text>Connect a wallet</Typography.Text>
+                      <Typography.Text>Account not present</Typography.Text>
                     </div>
                     <Button.Solid
                       appearance="secondary"
@@ -186,7 +186,7 @@ export const Form = () => {
                         setOpenSourceModal(true);
                       }}
                     >
-                      Change
+                      Connect wallet
                     </Button.Solid>
                   </div>
                 )}
@@ -225,7 +225,7 @@ export const Form = () => {
                       <div className="w-6 h-6 p-1.5 flex items-center justify-center rounded-sm bg-level-2">
                         <RiWalletLine className="w-full h-full" />
                       </div>
-                      <Typography.Text>Connect a wallet</Typography.Text>
+                      <Typography.Text>Account not present</Typography.Text>
                     </div>
                     <Button.Solid
                       appearance="secondary"
@@ -233,10 +233,10 @@ export const Form = () => {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        setOpenDestinationModal(true);
+                        setOpenSourceModal(true);
                       }}
                     >
-                      Change
+                      Connect wallet
                     </Button.Solid>
                   </div>
                 )}
