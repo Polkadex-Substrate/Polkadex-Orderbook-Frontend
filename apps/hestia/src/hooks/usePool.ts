@@ -10,7 +10,7 @@ export const usePool = ({
 }: {
   asset?: string;
   amount?: number;
-  enabled: boolean;
+  enabled?: boolean;
 }) => {
   const { swap } = useNativeApi();
   const { assets } = useAssets();

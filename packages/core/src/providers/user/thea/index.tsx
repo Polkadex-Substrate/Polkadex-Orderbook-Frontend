@@ -177,7 +177,7 @@ export const TheaProvider = ({
 
   const { data: polkadexBalances = [] } = useTheaBalances({
     connector: polkadexConnector,
-    sourceAddress: sourceAccountSelected?.address,
+    sourceAddress: destinationAccountSelected?.address,
     assets: polkadexAssets,
     chain: networks[0],
   });

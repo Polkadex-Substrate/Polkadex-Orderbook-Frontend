@@ -8,9 +8,12 @@ import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
 import { useMutation } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 
+const withdrawMessage =
+  "After withdrawal initiation, expect tokens on the destination chain in 2-3 minutes";
+
 export function useBridge({ onSuccess }: { onSuccess: () => void }) {
   const { onHandleAlert, onHandleError } = useSettingsProvider();
-  const { transferConfig, sourceAccount } = useTheaProvider();
+  const { transferConfig, sourceAccount, isPolkadexChain } = useTheaProvider();
   return useMutation({
     mutationFn: async ({
       amount,
@@ -35,7 +38,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
         // assetId,
       });
       onSuccess();
-      onHandleAlert("Bridge Success");
+      onHandleAlert(isPolkadexChain ? withdrawMessage : "Deposit Success");
     },
     onError: (error: Error) => onHandleError?.(error.message),
   });
