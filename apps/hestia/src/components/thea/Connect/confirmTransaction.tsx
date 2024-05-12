@@ -4,9 +4,11 @@ import {
   Button,
   Copy,
   Dropdown,
+  HoverCard,
   Interaction,
   Loading,
   Modal,
+  Separator,
   Skeleton,
   Typography,
   truncateString,
@@ -15,6 +17,7 @@ import {
   RiExternalLinkLine,
   RiFileCopyLine,
   RiGasStationLine,
+  RiInformationFill,
 } from "@remixicon/react";
 import {
   Dispatch,
@@ -30,6 +33,7 @@ import Link from "next/link";
 import {
   FeeAssetReserve,
   enabledFeatures,
+  isNegative,
   useFunds,
 } from "@orderbook/core/index";
 import { useTheaProvider } from "@orderbook/core/providers";
@@ -38,8 +42,10 @@ import { useBridge, usePool } from "@/hooks";
 import {
   ErrorMessage,
   GenericHorizontalItem,
+  ResponsiveCard,
   Terms,
 } from "@/components/ui/ReadyToUse";
+import { formatAmount } from "@/helpers";
 const { payWithAnotherFee } = enabledFeatures;
 
 interface Props {
@@ -61,15 +67,17 @@ export const ConfirmTransaction = ({
   const [tokenFee, setTokenFee] = useState<FeeAssetReserve>(initialValue);
 
   const {
-    selectedAssetBalance,
+    selectedAssetAmount,
     sourceAccount,
     destinationAccount,
     transferConfig,
     transferConfigLoading,
-    PDEXBalance,
+    destinationPDEXBalance,
+    sourcePDEXBalance,
     selectedAsset,
     isPolkadexChain,
     polkadexAssets,
+    existential,
   } = useTheaProvider();
 
   const sourceFee = transferConfig?.sourceFee?.amount ?? 0;
@@ -82,8 +90,8 @@ export const ConfirmTransaction = ({
   });
 
   const showAutoSwap = useMemo(
-    () => !isPolkadexChain && !PDEXBalance,
-    [isPolkadexChain, PDEXBalance]
+    () => !isPolkadexChain && !destinationPDEXBalance,
+    [isPolkadexChain, destinationPDEXBalance]
   );
 
   const selectedAssetId = useMemo(
@@ -93,7 +101,7 @@ export const ConfirmTransaction = ({
       )?.id,
     [polkadexAssets, selectedAsset?.ticker]
   );
-  const isPDEX = useMemo(() => tokenFee?.id === "PDEX", [tokenFee?.id]);
+  const tokenfeeIsPDEX = useMemo(() => tokenFee?.id === "PDEX", [tokenFee?.id]);
 
   const {
     swapPrice = 0,
@@ -103,28 +111,10 @@ export const ConfirmTransaction = ({
   } = usePool({
     asset: isPolkadexChain ? tokenFee?.id : selectedAssetId,
     amount: isPolkadexChain ? transferConfig?.sourceFee.amount : 1.5,
-    enabled: isPolkadexChain ? !isPDEX : !PDEXBalance,
+    enabled: isPolkadexChain ? !tokenfeeIsPDEX : !destinationPDEXBalance,
   });
 
   const { balances, loading: balancesLoading } = useFunds();
-
-  const error = useMemo(
-    () =>
-      isPolkadexChain
-        ? tokenFee?.id && isPDEX
-          ? PDEXBalance < sourceFee
-          : selectedAssetBalance < swapPrice
-        : false,
-    [
-      isPDEX,
-      selectedAssetBalance,
-      swapPrice,
-      tokenFee?.id,
-      sourceFee,
-      PDEXBalance,
-      isPolkadexChain,
-    ]
-  );
 
   const shortSourceAddress = useMemo(
     () => truncateString(sourceAccount?.address ?? "", 4),
@@ -137,9 +127,62 @@ export const ConfirmTransaction = ({
   );
   const { mutateAsync, isLoading } = useBridge({ onSuccess });
 
+  const error = useMemo(() => {
+    const autoSwapAmount = showAutoSwap ? swapPrice : 0;
+    if (isPolkadexChain) {
+      if (tokenfeeIsPDEX) return sourcePDEXBalance < sourceFee + existential;
+      return selectedAssetAmount < swapPrice;
+    }
+    return selectedAssetAmount <= amount + existential + autoSwapAmount;
+  }, [
+    tokenfeeIsPDEX,
+    selectedAssetAmount,
+    swapPrice,
+    sourceFee,
+    isPolkadexChain,
+    sourcePDEXBalance,
+    amount,
+    existential,
+    showAutoSwap,
+  ]);
+
   const disabled = useMemo(
     () => !!error || !tokenFee || isLoading,
     [error, tokenFee, isLoading]
+  );
+
+  const selectedFeeBalance = useMemo(() => {
+    if (isPolkadexChain) {
+      if (tokenfeeIsPDEX) return sourcePDEXBalance;
+      return selectedAssetAmount;
+    }
+    return selectedAssetAmount;
+  }, [isPolkadexChain, selectedAssetAmount, sourcePDEXBalance, tokenfeeIsPDEX]);
+
+  const selectedFeeBalanceFormatted = useMemo(
+    () => formatAmount(selectedFeeBalance),
+    [selectedFeeBalance]
+  );
+
+  const selectedAvailableFeeBalanceFormatted = useMemo(() => {
+    const autoSwapAmount = !isPolkadexChain && showAutoSwap ? swapPrice : 0;
+
+    const fee = tokenfeeIsPDEX ? sourceFee : swapPrice;
+    const amount = selectedFeeBalance - (existential + fee + autoSwapAmount);
+    return isNegative(amount.toString()) ? 0 : formatAmount(amount);
+  }, [
+    selectedFeeBalance,
+    existential,
+    sourceFee,
+    swapPrice,
+    tokenfeeIsPDEX,
+    isPolkadexChain,
+    showAutoSwap,
+  ]);
+
+  const existentialFormatted = useMemo(
+    () => formatAmount(existential),
+    [existential]
   );
 
   useEffect(() => {
@@ -196,8 +239,8 @@ export const ConfirmTransaction = ({
                 {showAutoSwap && (
                   <GenericHorizontalItem
                     label="Swap required"
-                    tooltip="In order to bridge your funds and sign transactions on Polkadex, you must have at least 1.5 PDEX in your wallet. Your current balance is 0.00 PDEX.
-                  A small part of your transfer will be auto-swapped to PDEX to meet this requirement"
+                    tooltip={`In order to bridge your funds and sign transactions on Polkadex, you must have at least 1.5 PDEX in your destination wallet. Your current destination wallet balance is ${destinationPDEXBalance} PDEX.
+                  A small part of your transfer will be auto-swapped to PDEX to meet this requirement`}
                   >
                     <div className="flex items-center gap-1">
                       <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
@@ -226,7 +269,9 @@ export const ConfirmTransaction = ({
                 {!!tokenFee && isPolkadexChain ? (
                   <GenericHorizontalItem
                     label="Estimated fee"
-                    tooltip="Swap using Polkapool"
+                    tooltip={
+                      tokenfeeIsPDEX ? undefined : "Swap using Polkapool"
+                    }
                   >
                     <div className="flex items-center gap-1">
                       <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
@@ -235,7 +280,7 @@ export const ConfirmTransaction = ({
                         className="min-h-4 w-10"
                       >
                         <div className="flex items-center gap-1">
-                          {!isPDEX && (
+                          {!tokenfeeIsPDEX && (
                             <Fragment>
                               <Typography.Text>
                                 {swapPrice.toFixed(4)} {tokenFee?.name}
@@ -245,7 +290,6 @@ export const ConfirmTransaction = ({
                               </Typography.Text>
                             </Fragment>
                           )}
-
                           <Typography.Text appearance="primary">
                             {sourceFee.toFixed(4)}{" "}
                             {transferConfig?.sourceFee.ticker}
@@ -270,6 +314,73 @@ export const ConfirmTransaction = ({
                     </div>
                   </GenericHorizontalItem>
                 )}
+                <HoverCard>
+                  <HoverCard.Trigger>
+                    <div className="flex items-cneter justify-between gap-2 px-3 py-3">
+                      <div className="flex items-center gap-1">
+                        <RiInformationFill className="w-3 h-3 text-actionInput" />
+                        <Typography.Text appearance="primary">
+                          Available wallet
+                        </Typography.Text>
+                      </div>
+                      <Typography.Text>
+                        {selectedAvailableFeeBalanceFormatted}{" "}
+                        {isPolkadexChain
+                          ? "PDEX"
+                          : transferConfig?.sourceFee.ticker}
+                      </Typography.Text>
+                    </div>
+                  </HoverCard.Trigger>
+                  <HoverCard.Content className="max-w-[300px] p-4">
+                    <div className="flex flex-col gap-3">
+                      <ResponsiveCard label="Existential">
+                        {existentialFormatted}{" "}
+                        {isPolkadexChain
+                          ? "PDEX"
+                          : transferConfig?.sourceFee.ticker}
+                      </ResponsiveCard>
+                      <ResponsiveCard label="Estimated fee">
+                        {tokenfeeIsPDEX
+                          ? sourceFee.toFixed(4)
+                          : swapPrice.toFixed(4)}{" "}
+                        {tokenfeeIsPDEX
+                          ? transferConfig?.sourceFee.ticker
+                          : tokenFee?.name}
+                      </ResponsiveCard>
+                      {showAutoSwap && (
+                        <ResponsiveCard label="Auto swap">
+                          {swapPrice.toFixed(4)}{" "}
+                          {transferConfig?.sourceFee.ticker}
+                        </ResponsiveCard>
+                      )}
+                      <ResponsiveCard label="Balance">
+                        {selectedFeeBalanceFormatted}{" "}
+                        {isPolkadexChain
+                          ? "PDEX"
+                          : transferConfig?.sourceFee.ticker}
+                      </ResponsiveCard>
+                      <ResponsiveCard label="Available">
+                        {selectedAvailableFeeBalanceFormatted}{" "}
+                        {isPolkadexChain
+                          ? "PDEX"
+                          : transferConfig?.sourceFee.ticker}
+                      </ResponsiveCard>
+                    </div>
+                    <Separator.Horizontal className="my-3" />
+                    <div>
+                      <Typography.Paragraph
+                        size="xs"
+                        appearance="primary"
+                        className="leading-5"
+                      >
+                        On Substrate-based chains like Polkadot and Kusama,
+                        accounts need to maintain a minimum balance (Existential
+                        Deposit) to stay active and prevent blockchain bloating.
+                      </Typography.Paragraph>
+                    </div>
+                  </HoverCard.Content>
+                </HoverCard>
+
                 {isPolkadexChain && (
                   <Dropdown>
                     <Dropdown.Trigger

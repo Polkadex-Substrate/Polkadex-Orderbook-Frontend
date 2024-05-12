@@ -29,7 +29,7 @@ import {
   useTheaTransactions,
 } from "@orderbook/core/hooks";
 import { isIdentical } from "@orderbook/core/helpers";
-import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
+import { EXISTENTIAL } from "@orderbook/core/constants";
 
 import { useConnectWalletProvider } from "../connectWalletProvider";
 const {
@@ -175,7 +175,7 @@ export const TheaProvider = ({
     chain: sourceChain?.genesis,
   });
 
-  const { data: polkadexBalances = [] } = useTheaBalances({
+  const { data: polkadexDestinationBalances = [] } = useTheaBalances({
     connector: polkadexConnector,
     sourceAddress: destinationAccountSelected?.address,
     assets: polkadexAssets,
@@ -248,9 +248,13 @@ export const TheaProvider = ({
   }, [onWithdrawalsRefetch, onDepositsRefetch]);
 
   const existential = useMemo(
-    () => (sourceChain?.genesis === networks[0] ? 1 : OTHER_ASSET_EXISTENTIAL),
+    () =>
+      sourceChain?.genesis
+        ? EXISTENTIAL[sourceChain?.genesis as keyof typeof EXISTENTIAL]
+            .existential
+        : 0,
     [sourceChain?.genesis]
-  ); // TODO: Remove netowkrs
+  );
 
   const selectedAssetAmount = useMemo(
     () =>
@@ -263,16 +267,10 @@ export const TheaProvider = ({
 
   const selectedAssetBalance = useMemo(
     () =>
-      selectedAssetAmount > existential ? selectedAssetAmount - existential : 0,
-    [selectedAssetAmount, existential]
-  );
-
-  const PDEXBalance = useMemo(
-    () =>
-      polkadexBalances
-        ? polkadexBalances.find((e) => e.ticker === "PDEX")?.amount ?? 0 // Remove static data
+      selectedAssetAmount >= existential
+        ? selectedAssetAmount - existential
         : 0,
-    [polkadexBalances]
+    [selectedAssetAmount, existential]
   );
 
   const transactionsRefetching = useMemo(
@@ -283,6 +281,23 @@ export const TheaProvider = ({
   const isPolkadexChain = useMemo(
     () => !!(sourceChain?.genesis === networks[0]),
     [sourceChain?.genesis]
+  );
+
+  const destinationPDEXBalance = useMemo(
+    () =>
+      polkadexDestinationBalances
+        ? polkadexDestinationBalances.find((e) => e.ticker === "PDEX")
+            ?.amount ?? 0 // Remove static data
+        : 0,
+    [polkadexDestinationBalances]
+  );
+
+  const sourcePDEXBalance = useMemo(
+    () =>
+      isPolkadexChain
+        ? sourceBalances.find((e) => e.ticker === "PDEX")?.amount ?? 0 // Remove static data
+        : 0,
+    [isPolkadexChain, sourceBalances]
   );
 
   const {
@@ -349,7 +364,8 @@ export const TheaProvider = ({
         existential,
         onRefreshTransactions,
         transactionsRefetching,
-        PDEXBalance,
+        destinationPDEXBalance,
+        sourcePDEXBalance,
         isPolkadexChain,
       }}
     >
@@ -407,7 +423,8 @@ type State = {
   existential: number;
   transactionsRefetching: boolean;
   onRefreshTransactions: () => Promise<void>;
-  PDEXBalance: number;
+  destinationPDEXBalance: number;
+  sourcePDEXBalance: number;
   isPolkadexChain: boolean;
 };
 export const Context = createContext<State>({
@@ -458,7 +475,8 @@ export const Context = createContext<State>({
   existential: 0,
   transactionsRefetching: false,
   onRefreshTransactions: async () => {},
-  PDEXBalance: 0,
+  destinationPDEXBalance: 0,
+  sourcePDEXBalance: 0,
   isPolkadexChain: false,
 });
 

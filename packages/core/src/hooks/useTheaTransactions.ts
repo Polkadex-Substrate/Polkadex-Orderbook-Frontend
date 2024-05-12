@@ -8,7 +8,7 @@ import {
 import { toUnit } from "@polkadex/numericals";
 import { Asset, Chain } from "@polkadex/thea";
 
-import { QUERY_KEYS } from "../constants";
+import { EXISTENTIAL, QUERY_KEYS } from "../constants";
 import { defaultConfig } from "../config";
 
 const chainQuery = new PolkadexChainQuery(defaultConfig.subqueryUrl);
@@ -63,7 +63,6 @@ const formatResult = (
     const assetId = data?.assetId.toString();
     const networkId = networks[data?.networkId];
     const pdexAsset = assets.find((e) => typeof e?.id === "undefined"); // Wrong assets
-
     const asset = assets.find((e) => e?.id?.toString().includes(assetId));
     const fromNetwork = chains.find((e) =>
       e.genesis.toString().includes(networkId)
@@ -73,9 +72,14 @@ const formatResult = (
       e.genesis.toString().includes(networks[0])
     );
 
+    const decimales =
+      networksArr.find(
+        (x) => x.ticker.toLowerCase() === asset?.ticker.toLowerCase()
+      )?.decimals ?? 12;
+
     return {
       timestamp: Number(data.timestamp),
-      amount: toUnit(data.amount, asset?.decimal || 12),
+      amount: toUnit(data.amount, isDeposit ? decimales : 12),
       asset: asset || pdexAsset,
       from: isDeposit ? fromNetwork : polkadexNetwork,
       id: isDeposit ? data.id : data.blockHash,
@@ -88,6 +92,9 @@ const formatResult = (
 
 export type Transactions = ReturnType<typeof formatResult>;
 export type Transaction = Transactions[0];
+
+const networksArr = Object.values(EXISTENTIAL);
+
 // Temp
 export const networks = [
   "0x3920bcb4960a1eef5580cd5367ff3f430eef052774f78468852f7b9cb39f8a3c", // Polkadex

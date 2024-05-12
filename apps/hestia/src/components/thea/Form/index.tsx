@@ -17,6 +17,7 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import classNames from "classnames";
 import { bridgeValidations } from "@orderbook/core/validations";
+import { isNegative } from "@orderbook/core/helpers";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
@@ -51,6 +52,8 @@ export const Form = () => {
     selectedAssetAmount,
     transferConfigLoading,
     sourceBalancesLoading,
+    transferConfig,
+    isPolkadexChain,
   } = useTheaProvider();
 
   const searchParams = useSearchParams();
@@ -70,6 +73,7 @@ export const Form = () => {
       searchParams,
       push,
     });
+    resetForm();
   };
 
   const {
@@ -83,7 +87,10 @@ export const Form = () => {
     resetForm,
   } = useFormik({
     initialValues,
-    validationSchema: bridgeValidations(1, selectedAssetBalance), // TODO: Remove statuc min
+    validationSchema: bridgeValidations(
+      1,
+      isPolkadexChain ? selectedAssetAmount : selectedAssetBalance
+    ), // TODO: Remove statuc min
     onSubmit: () => setOpenFeeModal(true),
   });
   const disabled = useMemo(
@@ -107,11 +114,24 @@ export const Form = () => {
     ]
   );
 
+  const availableAmount = useMemo(() => {
+    const avl = isPolkadexChain
+      ? selectedAssetAmount
+      : selectedAssetBalance - (transferConfig?.sourceFee?.amount ?? 0);
+
+    return isNegative(avl.toString()) ? 0 : avl;
+  }, [
+    isPolkadexChain,
+    selectedAssetAmount,
+    selectedAssetBalance,
+    transferConfig?.sourceFee?.amount,
+  ]);
+
   const onChangeMax = () => {
-    if (!selectedAssetBalance) return;
-    const formattedBalance = formatAmount(selectedAssetBalance);
-    setFieldValue("amount", formattedBalance);
+    const formattedAmount = formatAmount(availableAmount);
+    setFieldValue("amount", formattedAmount);
   };
+
   return (
     <Fragment>
       <ConfirmTransaction
@@ -252,12 +272,12 @@ export const Form = () => {
                 <Typography.Text appearance="primary">Amount</Typography.Text>
                 {selectedAsset && (
                   <AvailableBalance
-                    locked={0}
                     existential={existential}
                     balance={selectedAssetAmount}
-                    available={selectedAssetBalance}
                     assetTicker={selectedAsset.ticker}
                     loading={sourceBalancesLoading}
+                    estimatedFee={transferConfig?.sourceFee.amount}
+                    isPolkadexChain={isPolkadexChain}
                   />
                 )}
               </div>
@@ -277,7 +297,7 @@ export const Form = () => {
                         {...getFieldProps("amount")}
                         className="max-sm:focus:text-[16px] w-full pl-4 py-4"
                       >
-                        {sourceAccount && selectedAssetBalance && (
+                        {sourceAccount && availableAmount && (
                           <Input.Action
                             type="button"
                             onClick={(e) => {

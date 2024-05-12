@@ -186,10 +186,12 @@ export const ConnectWallet = ({
                             {!from && (
                               <div className="pl-1 pr-4 border border-primary rounded-md">
                                 <Input.Vertical
+                                  disabled
                                   className="w-full pl-4 py-4"
                                   placeholder="Enter an address"
                                 >
                                   <Input.Action
+                                    disabled
                                     onClick={(e) => {
                                       e.preventDefault();
                                     }}
