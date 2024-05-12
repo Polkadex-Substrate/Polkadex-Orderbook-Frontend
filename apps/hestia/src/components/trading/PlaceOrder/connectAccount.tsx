@@ -6,7 +6,7 @@ import { useMemo } from "react";
 
 const ConnectAccount = () => {
   const {
-    selectedAddresses: { mainAddress, tradeAddress },
+    selectedAddresses: { mainAddress },
   } = useProfile();
   const {
     onToogleConnectTrading,
@@ -15,11 +15,7 @@ const ConnectAccount = () => {
   } = useSettingsProvider();
   const { mainProxiesAccounts } = useConnectWalletProvider();
 
-  const isFundingButton = useMemo(() => {
-    if (!mainAddress) return true;
-    if (!tradeAddress) return false;
-    return true;
-  }, [mainAddress, tradeAddress]);
+  const isFundingType = useMemo(() => !mainAddress, [mainAddress]);
 
   if (mainAddress && mainProxiesAccounts.length === 0) {
     return (
@@ -38,12 +34,12 @@ const ConnectAccount = () => {
       type="button"
       appearance="secondary"
       onClick={() =>
-        isFundingButton
+        isFundingType
           ? onToogleConnectExtension(true)
           : onToogleConnectTrading(true)
       }
     >
-      Connect {isFundingButton ? "Funding" : "Trading"} Account
+      Connect {isFundingType ? "Funding" : "Trading"} Account
     </Button.Solid>
   );
 };
