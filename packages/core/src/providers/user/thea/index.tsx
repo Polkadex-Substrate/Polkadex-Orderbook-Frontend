@@ -38,7 +38,7 @@ const {
   defaultTheaSourceChain,
 } = defaultConfig;
 export type GenericStatus = "error" | "idle" | "success" | "loading";
-
+export type CustomAccount = { name: string; address: string };
 export { useTheaProvider } from "./useThea";
 export const TheaProvider = ({
   initialAssetTicker,
@@ -54,8 +54,7 @@ export const TheaProvider = ({
   const [sourceChain, setSourceChain] = useState<Chain | null>(null);
   const [destinationChain, setDestinationChain] = useState<Chain | null>(null);
   const [sourceAccount, setSourceAccount] = useState<ExtensionAccount>();
-  const [destinationAccount, setDestinationAccount] =
-    useState<ExtensionAccount>();
+  const [destinationAccount, setDestinationAccount] = useState<CustomAccount>();
   const { selectedWallet } = useConnectWalletProvider();
 
   const { getAllChains } = useMemo(() => new Thea(), []);
@@ -388,8 +387,8 @@ type State = {
   setSourceAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
   chains: Chain[];
 
-  destinationAccount?: ExtensionAccount;
-  setDestinationAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
+  destinationAccount?: CustomAccount;
+  setDestinationAccount: Dispatch<SetStateAction<CustomAccount | undefined>>;
 
   destinationChain: Chain | null;
   setDestinationChain: Dispatch<SetStateAction<Chain | null>>;

@@ -22,9 +22,7 @@ export const WalletCard = ({ name = "", children, ...props }: Props) => {
   return (
     <div className="flex items-center gap-2">
       <div className="flex items-center gap-2">
-        <div className="w-6 h-6 p-1.5 flex items-center justify-center rounded-sm bg-level-2">
-          <RiWalletLine className="w-full h-full" />
-        </div>
+        <RiWalletLine className="w-3.5 h-3.5 text-actionInput" />
         {isString ? (
           <div className="flex items-center gap-1">
             {name && <Typography.Text>{shortName}</Typography.Text>}

@@ -13,6 +13,7 @@ import {
   useExtensionAccounts,
 } from "@polkadex/react-providers";
 import { Chain } from "@polkadex/thea";
+import { CustomAccount } from "@orderbook/core/providers";
 
 import {
   Authorization,
@@ -28,6 +29,7 @@ export const ConnectAccount = ({
   secondaryChain,
   setChain,
   setAccount,
+  setCustomAccount,
   selectedAccount,
   from,
 }: {
@@ -36,8 +38,9 @@ export const ConnectAccount = ({
   selectedChain: Chain | null;
   secondaryChain?: string;
   setChain: Dispatch<SetStateAction<Chain | null>>;
-  setAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
-  selectedAccount?: ExtensionAccount;
+  setAccount?: (e: ExtensionAccount) => void;
+  setCustomAccount?: (e: CustomAccount) => void;
+  selectedAccount?: CustomAccount;
   from?: boolean;
 }) => {
   const [extension, setExtension] = useState<Extension>();
@@ -75,6 +78,10 @@ export const ConnectAccount = ({
               setChain={setChain}
               selectedAccount={selectedAccount}
               secondaryChain={secondaryChain}
+              onSelectCustomAccount={(e) => {
+                setCustomAccount?.(e);
+                handleClose();
+              }}
               from={from}
             />
           </Interactable.Trigger>
@@ -93,7 +100,9 @@ export const ConnectAccount = ({
                 key="ConnectFundingWallets"
                 extensionAccounts={walletsFiltered}
                 onSelectExtensionAccount={(e) => {
-                  setAccount(e);
+                  if (!from)
+                    setCustomAccount?.({ name: e.name, address: e.address });
+                  else setAccount?.(e);
                   handleClose();
                 }}
                 onResetExtension={() => setExtension(null)}

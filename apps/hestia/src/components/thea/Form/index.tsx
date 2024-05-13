@@ -150,7 +150,10 @@ export const Form = () => {
         selectedChain={sourceChain}
         secondaryChain={destinationChain?.genesis}
         setChain={setSourceChain}
-        selectedAccount={sourceAccount}
+        selectedAccount={{
+          name: sourceAccount?.name ?? "",
+          address: sourceAccount?.address ?? "",
+        }}
         setAccount={setSourceAccount}
         from
       />
@@ -161,7 +164,7 @@ export const Form = () => {
         secondaryChain={sourceChain?.genesis}
         setChain={setDestinationChain}
         selectedAccount={destinationAccount}
-        setAccount={setDestinationAccount}
+        setCustomAccount={(e) => setDestinationAccount(e)}
       />
       <form
         onSubmit={handleSubmit}
@@ -194,8 +197,8 @@ export const Form = () => {
                 ) : (
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 p-1.5 flex items-center justify-center rounded-sm bg-level-2">
-                        <RiWalletLine className="w-full h-full" />
+                      <div className="w-6 h-6 p-1.5 flex items-center justify-center rounded-sm bg-level-3">
+                        <RiWalletLine className="w-full h-full text-actionInput" />
                       </div>
                       <Typography.Text>Account not present</Typography.Text>
                     </div>

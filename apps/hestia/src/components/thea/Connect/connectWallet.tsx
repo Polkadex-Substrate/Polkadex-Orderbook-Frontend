@@ -1,22 +1,32 @@
 "use client";
 
-import { Dispatch, Fragment, SetStateAction, useMemo, useState } from "react";
-import { ExtensionAccount, useExtensions } from "@polkadex/react-providers";
+import {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useExtensions } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
+import { isValidAddress } from "@orderbook/core/helpers";
 import {
   Button,
   Input,
   Interaction,
   Separator,
   Typography,
+  truncateString,
   useInteractableProvider,
 } from "@polkadex/ux";
-import { useTheaProvider } from "@orderbook/core/providers";
+import { CustomAccount, useTheaProvider } from "@orderbook/core/providers";
 import { useMeasure } from "react-use";
 import { motion, MotionConfig } from "framer-motion";
 import { Chain } from "@polkadex/thea";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { RiExpandUpDownFill } from "@remixicon/react";
+import { CUSTOM_ADDRES_NAME } from "@orderbook/core/constants";
 
 import { Expandable } from "../../ui/ReadyToUse/expandable";
 
@@ -39,16 +49,19 @@ export const ConnectWallet = ({
   setChain,
   selectedAccount,
   secondaryChain,
+  onSelectCustomAccount,
   from,
 }: {
   onClose: () => void;
   onSetExtension: (e: Extension) => void;
   selectedChain: Chain | null;
   setChain: Dispatch<SetStateAction<Chain | null>>;
-  selectedAccount?: ExtensionAccount;
+  selectedAccount?: CustomAccount;
   secondaryChain?: string;
+  onSelectCustomAccount?: (e: CustomAccount) => void;
   from?: boolean;
 }) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const [networkOpen, setNetworkOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
 
@@ -68,6 +81,34 @@ export const ConnectWallet = ({
     [extensionsStatus]
   );
   const [ref, bounds] = useMeasure<HTMLDivElement>();
+
+  const onPaste = async () => {
+    if (!buttonRef.current || !selectedChain) return;
+    try {
+      const address = await navigator.clipboard.readText();
+
+      const isValid = isValidAddress(address);
+
+      if (!isValid || !address) {
+        buttonRef.current.innerText = "Invalid address";
+        return;
+      }
+      onSelectCustomAccount?.({
+        name: CUSTOM_ADDRES_NAME,
+        address,
+      });
+      buttonRef.current.innerText = "Pasted";
+    } catch (error) {
+      buttonRef.current.innerText = "Invalid address";
+      console.log(error);
+    }
+  };
+
+  const isCustomAddress = useMemo(
+    () => selectedAccount?.name.includes(CUSTOM_ADDRES_NAME),
+    [selectedAccount?.name]
+  );
+
   return (
     <MotionConfig transition={{ duration: 0.3, ease: "easeInOut" }}>
       <Interaction className="w-full sm:min-w-[24rem] sm:max-w-[24rem] rounded-md">
@@ -171,38 +212,55 @@ export const ConnectWallet = ({
                             />
                           ))}
                         </div>
-                        <div className="px-3">
-                          <div className="flex flex-col gap-3">
-                            <div className="flex items-center gap-2 px-4">
-                              <Separator.Horizontal className=" bg-level-2" />
-                              <Typography.Text
-                                appearance="secondary"
-                                size="xs"
-                                className="whitespace-nowrap"
-                              >
-                                Or enter a custom address
-                              </Typography.Text>
-                            </div>
-                            {!from && (
-                              <div className="pl-1 pr-4 border border-primary rounded-md">
-                                <Input.Vertical
-                                  disabled
-                                  className="w-full pl-4 py-4"
-                                  placeholder="Enter an address"
+                        {!from && (
+                          <div className="px-3">
+                            <div className="flex flex-col gap-3">
+                              <div className="flex items-center gap-2 px-4">
+                                <Separator.Horizontal className=" bg-level-2" />
+                                <Typography.Text
+                                  appearance="secondary"
+                                  size="xs"
+                                  className="whitespace-nowrap"
                                 >
-                                  <Input.Action
-                                    disabled
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                    }}
-                                  >
-                                    PASTE
-                                  </Input.Action>
-                                </Input.Vertical>
+                                  Or enter a custom address
+                                </Typography.Text>
                               </div>
-                            )}
+                              <div className="flex flex-col gap-3">
+                                <div className="pl-1 pr-4 border border-primary rounded-md">
+                                  <Input.Vertical
+                                    disabled
+                                    className="w-full pl-4 py-4"
+                                    placeholder="Enter an address"
+                                    value={
+                                      !accountOpen && isCustomAddress
+                                        ? truncateString(
+                                            selectedAccount?.address ?? "",
+                                            12
+                                          )
+                                        : ""
+                                    }
+                                  >
+                                    <Input.Action
+                                      ref={buttonRef}
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        onPaste();
+                                      }}
+                                      onMouseOut={() => {
+                                        if (buttonRef.current) {
+                                          buttonRef.current.innerText = "Paste";
+                                        }
+                                      }}
+                                    >
+                                      Paste
+                                    </Input.Action>
+                                  </Input.Vertical>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        </div>
+                        )}
                       </Fragment>
                     )}
                   </Fragment>

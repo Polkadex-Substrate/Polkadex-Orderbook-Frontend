@@ -165,20 +165,9 @@ export const ConfirmTransaction = ({
   );
 
   const selectedAvailableFeeBalanceFormatted = useMemo(() => {
-    const autoSwapAmount = !isPolkadexChain && showAutoSwap ? swapPrice : 0;
-
-    const fee = tokenfeeIsPDEX ? sourceFee : swapPrice;
-    const amount = selectedFeeBalance - (existential + fee + autoSwapAmount);
+    const amount = selectedFeeBalance - existential;
     return isNegative(amount.toString()) ? 0 : formatAmount(amount);
-  }, [
-    selectedFeeBalance,
-    existential,
-    sourceFee,
-    swapPrice,
-    tokenfeeIsPDEX,
-    isPolkadexChain,
-    showAutoSwap,
-  ]);
+  }, [selectedFeeBalance, existential]);
 
   const existentialFormatted = useMemo(
     () => formatAmount(existential),
