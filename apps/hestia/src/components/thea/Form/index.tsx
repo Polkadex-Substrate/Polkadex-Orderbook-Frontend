@@ -278,7 +278,7 @@ export const Form = () => {
                     existential={existential}
                     balance={selectedAssetAmount}
                     assetTicker={selectedAsset.ticker}
-                    loading={sourceBalancesLoading}
+                    loading={sourceBalancesLoading || transferConfigLoading}
                     estimatedFee={transferConfig?.sourceFee.amount}
                     isPolkadexChain={isPolkadexChain}
                   />
