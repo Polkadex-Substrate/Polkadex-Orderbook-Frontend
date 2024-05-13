@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { Decimal, InitialMarkets, isNegative } from "@orderbook/core/index";
 import { Typography, Token, tokenAppearance } from "@polkadex/ux";
 import { RiStarLine } from "@remixicon/react";
+import { trimFloat } from "@polkadex/numericals";
 
 const columnHelper = createColumnHelper<InitialMarkets>();
 
@@ -57,18 +58,6 @@ export const columns = ({
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row, {
-    id: "price",
-    cell: (e) => {
-      return <Typography.Text size="xs">{e.getValue().last}</Typography.Text>;
-    },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Price
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
-  columnHelper.accessor((row) => row, {
     id: "change",
     cell: (e) => {
       const { price_change_percent } = e.getValue();
@@ -90,5 +79,50 @@ export const columns = ({
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = +(rowA.getValue(columnId) as InitialMarkets)
+        .price_change_percent;
+      const numB = +(rowB.getValue(columnId) as InitialMarkets)
+        .price_change_percent;
+      return numA > numB ? 1 : -1;
+    },
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "price",
+    cell: (e) => {
+      return <Typography.Text size="xs">{e.getValue().last}</Typography.Text>;
+    },
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Price
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = +(rowA.getValue(columnId) as InitialMarkets).last;
+      const numB = +(rowB.getValue(columnId) as InitialMarkets).last;
+      return numA > numB ? 1 : -1;
+    },
+  }),
+  columnHelper.accessor((row) => row, {
+    id: "volume24h",
+    cell: (e) => {
+      return (
+        <Typography.Text size="xs">
+          {trimFloat({ value: e.getValue().volume, digitsAfterDecimal: 2 })}
+        </Typography.Text>
+      );
+    },
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Volume 24h
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+    sortingFn: (rowA, rowB, columnId) => {
+      const numA = +(rowA.getValue(columnId) as InitialMarkets).volume;
+      const numB = +(rowB.getValue(columnId) as InitialMarkets).volume;
+      return numA > numB ? 1 : -1;
+    },
   }),
 ];

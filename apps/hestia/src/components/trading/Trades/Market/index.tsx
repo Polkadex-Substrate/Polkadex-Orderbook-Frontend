@@ -1,18 +1,29 @@
 import {
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import { useMarkets } from "@orderbook/core/index";
-import { Skeleton, Illustrations, GenericMessage } from "@polkadex/ux";
+import {
+  Skeleton,
+  Illustrations,
+  GenericMessage,
+  Table as PolkadexTable,
+} from "@polkadex/ux";
 import { useMemo } from "react";
+import { useWindowSize } from "usehooks-ts";
 
 import { columns } from "./columns";
 import { Tickers } from "./tickers";
 import { Filters } from "./filters";
 
-export const Markets = () => {
+const responsiveKeys = ["volume24h"];
+const actionKeys = ["volume24h", "price", "change"];
+
+export const Markets = ({ market }: { market: string }) => {
+  const { width } = useWindowSize();
   const {
     marketTokens,
     marketTickers,
@@ -26,13 +37,14 @@ export const Markets = () => {
     list,
     loading: loadingMarkets,
     tickerLoading,
-  } = useMarkets();
+  } = useMarkets(market);
 
   const hasMarkets = !!list?.length;
   const table = useReactTable({
     data: marketTokens,
     columns: columns({ onChangeFavourite: handleSelectedFavorite }),
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   const messageProps: {
@@ -42,6 +54,7 @@ export const Markets = () => {
     ? { title: "No markets", illustration: "NoData" }
     : { title: "No result found", illustration: "NoResultFound" };
 
+  const responsiveView = useMemo(() => width >= 1280 && width <= 1730, [width]);
   const loading = useMemo(
     () => loadingMarkets || tickerLoading || !hasMarkets,
     [loadingMarkets, hasMarkets, tickerLoading]
@@ -60,18 +73,30 @@ export const Markets = () => {
           {!hasMarkets || !marketTokens.length ? (
             <GenericMessage {...messageProps} />
           ) : (
-            <table className="w-full">
-              <thead className="sticky top-[-1px] bg-level-0">
+            <PolkadexTable className="w-full z-[2]">
+              <PolkadexTable.Header className="sticky top-0 bg-level-0">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id}>
+                  <PolkadexTable.Row key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
+                      const getSorted = header.column.getIsSorted();
+                      const isActionTab = actionKeys.includes(header.id);
+                      const handleSort = (): void => {
+                        const isDesc = getSorted === "desc";
+                        header.column.toggleSorting(!isDesc);
+                      };
+
+                      if (responsiveView && responsiveKeys.includes(header.id))
+                        return null;
+
                       return (
-                        <th
+                        <PolkadexTable.Head
                           className={classNames(
                             header.id === "coin" ? "text-left" : "text-right",
-                            "px-2 text-primary font-medium text-xs py-1"
+                            "px-2 text-primary font-medium text-xs py-2 whitespace-nowrap",
+                            isActionTab && "cursor-pointer"
                           )}
                           key={header.id}
+                          {...(isActionTab && { onClick: handleSort })}
                         >
                           {header.isPlaceholder
                             ? null
@@ -79,16 +104,17 @@ export const Markets = () => {
                                 header.column.columnDef.header,
                                 header.getContext()
                               )}
-                        </th>
+                          {isActionTab && <PolkadexTable.Icon />}
+                        </PolkadexTable.Head>
                       );
                     })}
-                  </tr>
+                  </PolkadexTable.Row>
                 ))}
-              </thead>
-              <tbody>
+              </PolkadexTable.Header>
+              <PolkadexTable.Body>
                 {table.getRowModel().rows.map((row) => {
                   return (
-                    <tr
+                    <PolkadexTable.Row
                       key={row.id}
                       className="hover:bg-level-1 cursor-pointer"
                     >
@@ -96,13 +122,20 @@ export const Markets = () => {
                         const firstCol = i === 0;
                         const lastCol = i === 2;
                         const active = row.original.id === id;
+
+                        if (
+                          responsiveView &&
+                          responsiveKeys.includes(cell.column.id)
+                        )
+                          return null;
+
                         return (
-                          <td
+                          <PolkadexTable.Cell
                             className={classNames(
                               firstCol ? "text-left" : "text-right",
                               firstCol && "font-semibold",
                               lastCol && "text-primary",
-                              active ? "bg-level-1" : "hover:bg-level-1",
+                              active && "bg-level-1",
                               "px-2 py-1  text-xs"
                             )}
                             key={cell.id}
@@ -115,14 +148,14 @@ export const Markets = () => {
                               cell.column.columnDef.cell,
                               cell.getContext()
                             )}
-                          </td>
+                          </PolkadexTable.Cell>
                         );
                       })}
-                    </tr>
+                    </PolkadexTable.Row>
                   );
                 })}
-              </tbody>
-            </table>
+              </PolkadexTable.Body>
+            </PolkadexTable>
           )}
         </div>
       </Skeleton>
