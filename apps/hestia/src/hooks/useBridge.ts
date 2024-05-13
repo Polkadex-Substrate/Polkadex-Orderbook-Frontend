@@ -21,6 +21,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
     sourceAccount,
     isPolkadexChain,
     onRefreshTransactions,
+    onRefetchSourceBalances,
   } = useTheaProvider();
   return useMutation({
     mutationFn: async ({
@@ -55,6 +56,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
         await sleep(3000);
         await onRefreshTransactions();
       }
+      await onRefetchSourceBalances();
     },
     onError: (error: Error) => onHandleError?.(error.message),
   });
