@@ -168,12 +168,17 @@ export const TheaProvider = ({
     isLoading: sourceBalancesLoading,
     isFetching: sourceBalancesFetching,
     isSuccess: sourceBalancesSuccess,
+    refetch: sourceBalancesRefetch,
   } = useTheaBalances({
     connector: sourceConnector,
     sourceAddress: sourceAccountSelected?.address,
     assets: sourceAssets,
     chain: sourceChain?.genesis,
   });
+
+  const onRefetchSourceBalances = useCallback(async () => {
+    await sourceBalancesRefetch();
+  }, [sourceBalancesRefetch]);
 
   const { data: polkadexDestinationBalances = [] } = useTheaBalances({
     connector: polkadexConnector,
@@ -343,6 +348,7 @@ export const TheaProvider = ({
         sourceBalances,
         sourceBalancesLoading: sourceBalancesLoading && sourceBalancesFetching,
         sourceBalancesSuccess,
+        onRefetchSourceBalances,
 
         destinationBalances,
         destinationBalancesLoading:
@@ -403,6 +409,7 @@ type State = {
   sourceBalances: AssetAmount[];
   sourceBalancesLoading: boolean;
   sourceBalancesSuccess: boolean;
+  onRefetchSourceBalances: () => Promise<void>;
 
   destinationBalances: AssetAmount[];
   destinationBalancesLoading: boolean;
@@ -455,6 +462,7 @@ export const Context = createContext<State>({
   sourceBalances: [],
   sourceBalancesLoading: false,
   sourceBalancesSuccess: false,
+  onRefetchSourceBalances: async () => {},
 
   destinationBalances: [],
   destinationBalancesLoading: false,
