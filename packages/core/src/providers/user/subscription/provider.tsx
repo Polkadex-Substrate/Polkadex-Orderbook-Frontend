@@ -72,11 +72,13 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
   const { asks, bids } = useOrderbook(market as string);
 
   const onOrderUpdates = useCallback(
-    (payload: Order) => {
+    (payload: Order, fromMainAddress?: boolean) => {
       try {
         // Update OpenOrders Realtime
         queryClient.setQueryData(
-          QUERY_KEYS.openOrders(tradeAddress),
+          fromMainAddress
+            ? QUERY_KEYS.openOrders(mainAddress, true)
+            : QUERY_KEYS.openOrders(tradeAddress),
           (oldOpenOrders?: Order[]) => {
             const prevOpenOrders = [...(oldOpenOrders || [])];
 
@@ -115,12 +117,20 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 
         // Update OrderHistory Realtime
         queryClient.setQueryData(
-          QUERY_KEYS.orderHistory(
-            dateFrom,
-            dateTo,
-            tradeAddress,
-            DEFAULT_BATCH_LIMIT
-          ),
+          fromMainAddress
+            ? QUERY_KEYS.orderHistory(
+                dateFrom,
+                dateTo,
+                mainAddress,
+                DEFAULT_BATCH_LIMIT,
+                true
+              )
+            : QUERY_KEYS.orderHistory(
+                dateFrom,
+                dateTo,
+                tradeAddress,
+                DEFAULT_BATCH_LIMIT
+              ),
           (
             oldOrderHistory: InfiniteData<MaybePaginated<Order[]>> | undefined
           ) => {
@@ -168,6 +178,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
       onHandleError,
       queryClient,
       tradeAddress,
+      mainAddress,
       onHandleInfo,
       onPushNotification,
     ]
@@ -542,7 +553,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
     return () => subscription.unsubscribe();
   }, [isReady, market, onOrderbookUpdates, queryClient]);
 
-  // Open Orders & Order history subscription
+  // Open Orders & Order history subscription (For tradeAddress)
   useEffect(() => {
     if (tradeAddress?.length && isReady) {
       const subscription = appsyncOrderbookService.subscriber.subscribeOrders(
@@ -553,6 +564,18 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
       return () => subscription.unsubscribe();
     }
   }, [tradeAddress, onOrderUpdates, isReady]);
+
+  // Open Orders & Order history subscription (For mainAddress)
+  useEffect(() => {
+    if (mainAddress?.length && isReady) {
+      const subscription = appsyncOrderbookService.subscriber.subscribeOrders(
+        mainAddress,
+        (e) => onOrderUpdates(e, true)
+      );
+
+      return () => subscription.unsubscribe();
+    }
+  }, [mainAddress, onOrderUpdates, isReady]);
 
   // Trade history subscription
   useEffect(() => {
