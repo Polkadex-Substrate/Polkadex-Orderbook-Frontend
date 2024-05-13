@@ -47,7 +47,7 @@ export const useCancelOrder = () => {
         if (!signer) throw new Error("No signer for main account found");
         const result = await signer.signRaw({
           address: mainAddress,
-          data: orderId,
+          data: orderId.slice(2),
         });
         signature = { Sr25519: result?.signature.slice(2) };
       } else {
