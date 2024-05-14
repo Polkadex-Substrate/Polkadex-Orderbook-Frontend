@@ -73,12 +73,11 @@ export const columns = ({
       return <Typography.Text size="xs">{value}</Typography.Text>;
     },
     header: () => (
-      <div className="flex gap-0.5 items-center justify-end">
+      <div className="flex gap-0.5 items-center justify-end cursor-pointer">
         <Typography.Text
           size="xs"
           onClick={() => setState("volume")}
           appearance={state === "volume" ? "primary" : "secondary"}
-          className="cursor-pointer"
         >
           Volume
         </Typography.Text>
@@ -89,7 +88,6 @@ export const columns = ({
           size="xs"
           onClick={() => setState("price")}
           appearance={state === "price" ? "primary" : "secondary"}
-          className="cursor-pointer"
         >
           Price
         </Typography.Text>
