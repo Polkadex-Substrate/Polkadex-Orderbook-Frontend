@@ -1,18 +1,25 @@
 import {
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import { useMarkets } from "@orderbook/core/index";
-import { Skeleton, Illustrations, GenericMessage } from "@polkadex/ux";
-import { useMemo } from "react";
+import {
+  Skeleton,
+  Illustrations,
+  GenericMessage,
+  Table as PolkadexTable,
+} from "@polkadex/ux";
+import { useMemo, useState } from "react";
 
-import { columns } from "./columns";
+import { ColumnSelector, columns } from "./columns";
 import { Tickers } from "./tickers";
 import { Filters } from "./filters";
 
-export const Markets = () => {
+export const Markets = ({ market }: { market: string }) => {
+  const [state, setState] = useState<ColumnSelector>("price");
   const {
     marketTokens,
     marketTickers,
@@ -26,13 +33,18 @@ export const Markets = () => {
     list,
     loading: loadingMarkets,
     tickerLoading,
-  } = useMarkets();
+  } = useMarkets(market);
 
   const hasMarkets = !!list?.length;
   const table = useReactTable({
     data: marketTokens,
-    columns: columns({ onChangeFavourite: handleSelectedFavorite }),
+    columns: columns({
+      isPrice: state === "price",
+      onChangeFavourite: handleSelectedFavorite,
+      setState,
+    }),
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   const messageProps: {
@@ -60,16 +72,16 @@ export const Markets = () => {
           {!hasMarkets || !marketTokens.length ? (
             <GenericMessage {...messageProps} />
           ) : (
-            <table className="w-full">
-              <thead className="sticky top-[-1px] bg-level-0">
+            <PolkadexTable className="w-full z-[2]">
+              <PolkadexTable.Header className="sticky top-0 bg-level-0">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id}>
+                  <PolkadexTable.Row key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
                       return (
-                        <th
+                        <PolkadexTable.Head
                           className={classNames(
                             header.id === "coin" ? "text-left" : "text-right",
-                            "px-2 text-primary font-medium text-xs py-1"
+                            "px-2 text-primary font-medium text-xs py-2 whitespace-nowrap"
                           )}
                           key={header.id}
                         >
@@ -79,16 +91,16 @@ export const Markets = () => {
                                 header.column.columnDef.header,
                                 header.getContext()
                               )}
-                        </th>
+                        </PolkadexTable.Head>
                       );
                     })}
-                  </tr>
+                  </PolkadexTable.Row>
                 ))}
-              </thead>
-              <tbody>
+              </PolkadexTable.Header>
+              <PolkadexTable.Body>
                 {table.getRowModel().rows.map((row) => {
                   return (
-                    <tr
+                    <PolkadexTable.Row
                       key={row.id}
                       className="hover:bg-level-1 cursor-pointer"
                     >
@@ -96,13 +108,14 @@ export const Markets = () => {
                         const firstCol = i === 0;
                         const lastCol = i === 2;
                         const active = row.original.id === id;
+
                         return (
-                          <td
+                          <PolkadexTable.Cell
                             className={classNames(
                               firstCol ? "text-left" : "text-right",
                               firstCol && "font-semibold",
                               lastCol && "text-primary",
-                              active ? "bg-level-1" : "hover:bg-level-1",
+                              active && "bg-level-1",
                               "px-2 py-1  text-xs"
                             )}
                             key={cell.id}
@@ -115,14 +128,14 @@ export const Markets = () => {
                               cell.column.columnDef.cell,
                               cell.getContext()
                             )}
-                          </td>
+                          </PolkadexTable.Cell>
                         );
                       })}
-                    </tr>
+                    </PolkadexTable.Row>
                   );
                 })}
-              </tbody>
-            </table>
+              </PolkadexTable.Body>
+            </PolkadexTable>
           )}
         </div>
       </Skeleton>
