@@ -8,7 +8,7 @@ import {
   Table as PolkadexTable,
 } from "@polkadex/ux";
 import { RiCloseLine } from "@remixicon/react";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -18,11 +18,9 @@ import {
 import classNames from "classnames";
 import { useMarkets } from "@orderbook/core/index";
 
-import { columns } from "./columns";
+import { ColumnSelector, columns } from "./columns";
 import { Tickers } from "./tickers";
 import { Filters } from "./filters";
-
-const actionKeys = ["volume24h", "price", "change"];
 
 export const ResponsiveMarket = ({
   market,
@@ -33,6 +31,7 @@ export const ResponsiveMarket = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const [state, setState] = useState<ColumnSelector>("price");
   const {
     marketTokens,
     marketTickers,
@@ -50,7 +49,11 @@ export const ResponsiveMarket = ({
   const hasMarkets = !!list?.length;
   const table = useReactTable({
     data: marketTokens,
-    columns: columns({ onChangeFavourite: handleSelectedFavorite }),
+    columns: columns({
+      state,
+      onChangeFavourite: handleSelectedFavorite,
+      setState,
+    }),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
@@ -106,21 +109,13 @@ export const ResponsiveMarket = ({
                   {table.getHeaderGroups().map((headerGroup) => (
                     <PolkadexTable.Row key={headerGroup.id}>
                       {headerGroup.headers.map((header) => {
-                        const getSorted = header.column.getIsSorted();
-                        const isActionTab = actionKeys.includes(header.id);
-                        const handleSort = (): void => {
-                          const isDesc = getSorted === "desc";
-                          header.column.toggleSorting(!isDesc);
-                        };
                         return (
                           <PolkadexTable.Head
                             className={classNames(
                               header.id === "coin" ? "text-left" : "text-right",
-                              "px-2 text-primary font-medium text-xs py-2",
-                              isActionTab && "cursor-pointer"
+                              "px-2 text-primary font-medium text-xs py-2"
                             )}
                             key={header.id}
-                            {...(isActionTab && { onClick: handleSort })}
                           >
                             {header.isPlaceholder
                               ? null
@@ -128,7 +123,6 @@ export const ResponsiveMarket = ({
                                   header.column.columnDef.header,
                                   header.getContext()
                                 )}
-                            {isActionTab && <PolkadexTable.Icon />}
                           </PolkadexTable.Head>
                         );
                       })}
@@ -152,8 +146,8 @@ export const ResponsiveMarket = ({
                                 firstCol ? "text-left" : "text-right",
                                 firstCol && "font-semibold",
                                 lastCol && "text-primary",
-                                active ? "bg-level-1" : "hover:bg-level-1",
-                                "px-2 py-1  text-xs"
+                                active && "bg-level-1",
+                                "px-2 py-1 text-xs"
                               )}
                               key={cell.id}
                               role="button"

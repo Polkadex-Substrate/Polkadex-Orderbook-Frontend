@@ -4,12 +4,18 @@ import { Decimal, InitialMarkets, isNegative } from "@orderbook/core/index";
 import { Typography, Token, tokenAppearance } from "@polkadex/ux";
 import { RiStarLine } from "@remixicon/react";
 import { trimFloat } from "@polkadex/numericals";
+import { Dispatch, SetStateAction } from "react";
+
+export type ColumnSelector = "price" | "volume";
 
 const columnHelper = createColumnHelper<InitialMarkets>();
-
 export const columns = ({
+  state,
+  setState,
   onChangeFavourite,
 }: {
+  state: ColumnSelector;
+  setState: Dispatch<SetStateAction<ColumnSelector>>;
   onChangeFavourite: (e: string) => void;
 }) => [
   columnHelper.accessor((row) => row, {
@@ -58,6 +64,40 @@ export const columns = ({
     footer: (e) => e.column.id,
   }),
   columnHelper.accessor((row) => row, {
+    id: "priceAndVolume",
+    cell: (e) => {
+      const value =
+        state === "price"
+          ? e.getValue().last
+          : trimFloat({ value: e.getValue().volume, digitsAfterDecimal: 2 });
+      return <Typography.Text size="xs">{value}</Typography.Text>;
+    },
+    header: () => (
+      <div className="flex gap-0.5 items-center justify-end">
+        <Typography.Text
+          size="xs"
+          onClick={() => setState("volume")}
+          appearance={state === "volume" ? "primary" : "secondary"}
+          className="cursor-pointer"
+        >
+          Volume
+        </Typography.Text>
+        <Typography.Text size="xs" appearance="primary">
+          /
+        </Typography.Text>
+        <Typography.Text
+          size="xs"
+          onClick={() => setState("price")}
+          appearance={state === "price" ? "primary" : "secondary"}
+          className="cursor-pointer"
+        >
+          Price
+        </Typography.Text>
+      </div>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row, {
     id: "change",
     cell: (e) => {
       const { price_change_percent } = e.getValue();
@@ -79,50 +119,5 @@ export const columns = ({
       </Typography.Text>
     ),
     footer: (e) => e.column.id,
-    sortingFn: (rowA, rowB, columnId) => {
-      const numA = +(rowA.getValue(columnId) as InitialMarkets)
-        .price_change_percent;
-      const numB = +(rowB.getValue(columnId) as InitialMarkets)
-        .price_change_percent;
-      return numA > numB ? 1 : -1;
-    },
-  }),
-  columnHelper.accessor((row) => row, {
-    id: "price",
-    cell: (e) => {
-      return <Typography.Text size="xs">{e.getValue().last}</Typography.Text>;
-    },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Price
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-    sortingFn: (rowA, rowB, columnId) => {
-      const numA = +(rowA.getValue(columnId) as InitialMarkets).last;
-      const numB = +(rowB.getValue(columnId) as InitialMarkets).last;
-      return numA > numB ? 1 : -1;
-    },
-  }),
-  columnHelper.accessor((row) => row, {
-    id: "volume24h",
-    cell: (e) => {
-      return (
-        <Typography.Text size="xs">
-          {trimFloat({ value: e.getValue().volume, digitsAfterDecimal: 2 })}
-        </Typography.Text>
-      );
-    },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Volume 24h
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-    sortingFn: (rowA, rowB, columnId) => {
-      const numA = +(rowA.getValue(columnId) as InitialMarkets).volume;
-      const numB = +(rowB.getValue(columnId) as InitialMarkets).volume;
-      return numA > numB ? 1 : -1;
-    },
   }),
 ];

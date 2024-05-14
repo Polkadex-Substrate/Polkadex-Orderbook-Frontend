@@ -12,18 +12,14 @@ import {
   GenericMessage,
   Table as PolkadexTable,
 } from "@polkadex/ux";
-import { useMemo } from "react";
-import { useWindowSize } from "usehooks-ts";
+import { useMemo, useState } from "react";
 
-import { columns } from "./columns";
+import { ColumnSelector, columns } from "./columns";
 import { Tickers } from "./tickers";
 import { Filters } from "./filters";
 
-const responsiveKeys = ["volume24h"];
-const actionKeys = ["volume24h", "price", "change"];
-
 export const Markets = ({ market }: { market: string }) => {
-  const { width } = useWindowSize();
+  const [state, setState] = useState<ColumnSelector>("price");
   const {
     marketTokens,
     marketTickers,
@@ -42,7 +38,11 @@ export const Markets = ({ market }: { market: string }) => {
   const hasMarkets = !!list?.length;
   const table = useReactTable({
     data: marketTokens,
-    columns: columns({ onChangeFavourite: handleSelectedFavorite }),
+    columns: columns({
+      state,
+      onChangeFavourite: handleSelectedFavorite,
+      setState,
+    }),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
@@ -54,7 +54,6 @@ export const Markets = ({ market }: { market: string }) => {
     ? { title: "No markets", illustration: "NoData" }
     : { title: "No result found", illustration: "NoResultFound" };
 
-  const responsiveView = useMemo(() => width >= 1280 && width <= 1730, [width]);
   const loading = useMemo(
     () => loadingMarkets || tickerLoading || !hasMarkets,
     [loadingMarkets, hasMarkets, tickerLoading]
@@ -78,25 +77,13 @@ export const Markets = ({ market }: { market: string }) => {
                 {table.getHeaderGroups().map((headerGroup) => (
                   <PolkadexTable.Row key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
-                      const getSorted = header.column.getIsSorted();
-                      const isActionTab = actionKeys.includes(header.id);
-                      const handleSort = (): void => {
-                        const isDesc = getSorted === "desc";
-                        header.column.toggleSorting(!isDesc);
-                      };
-
-                      if (responsiveView && responsiveKeys.includes(header.id))
-                        return null;
-
                       return (
                         <PolkadexTable.Head
                           className={classNames(
                             header.id === "coin" ? "text-left" : "text-right",
-                            "px-2 text-primary font-medium text-xs py-2 whitespace-nowrap",
-                            isActionTab && "cursor-pointer"
+                            "px-2 text-primary font-medium text-xs py-2 whitespace-nowrap"
                           )}
                           key={header.id}
-                          {...(isActionTab && { onClick: handleSort })}
                         >
                           {header.isPlaceholder
                             ? null
@@ -104,7 +91,6 @@ export const Markets = ({ market }: { market: string }) => {
                                 header.column.columnDef.header,
                                 header.getContext()
                               )}
-                          {isActionTab && <PolkadexTable.Icon />}
                         </PolkadexTable.Head>
                       );
                     })}
@@ -122,12 +108,6 @@ export const Markets = ({ market }: { market: string }) => {
                         const firstCol = i === 0;
                         const lastCol = i === 2;
                         const active = row.original.id === id;
-
-                        if (
-                          responsiveView &&
-                          responsiveKeys.includes(cell.column.id)
-                        )
-                          return null;
 
                         return (
                           <PolkadexTable.Cell
