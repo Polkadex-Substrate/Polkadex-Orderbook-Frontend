@@ -24,6 +24,9 @@ export const getChainFromTicker = (ticker: string): string => {
       return "Asset Hub";
     case "PINK":
       return "Asset Hub";
+    case "vDOT":
+    case "BNC":
+      return "Bifrost Network";
     default:
       return "Unknown";
   }
