@@ -10,11 +10,11 @@ export type ColumnSelector = "price" | "volume";
 
 const columnHelper = createColumnHelper<InitialMarkets>();
 export const columns = ({
-  state,
+  isPrice,
   setState,
   onChangeFavourite,
 }: {
-  state: ColumnSelector;
+  isPrice: boolean;
   setState: Dispatch<SetStateAction<ColumnSelector>>;
   onChangeFavourite: (e: string) => void;
 }) => [
@@ -66,10 +66,9 @@ export const columns = ({
   columnHelper.accessor((row) => row, {
     id: "priceAndVolume",
     cell: (e) => {
-      const value =
-        state === "price"
-          ? e.getValue().last
-          : trimFloat({ value: e.getValue().volume, digitsAfterDecimal: 2 });
+      const value = isPrice
+        ? e.getValue().last
+        : trimFloat({ value: e.getValue().volume, digitsAfterDecimal: 2 });
       return <Typography.Text size="xs">{value}</Typography.Text>;
     },
     header: () => (
@@ -77,7 +76,7 @@ export const columns = ({
         <Typography.Text
           size="xs"
           onClick={() => setState("volume")}
-          appearance={state === "volume" ? "primary" : "secondary"}
+          appearance={!isPrice ? "primary" : "secondary"}
         >
           Volume
         </Typography.Text>
@@ -87,7 +86,7 @@ export const columns = ({
         <Typography.Text
           size="xs"
           onClick={() => setState("price")}
-          appearance={state === "price" ? "primary" : "secondary"}
+          appearance={isPrice ? "primary" : "secondary"}
         >
           Price
         </Typography.Text>

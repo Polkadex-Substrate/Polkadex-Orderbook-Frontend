@@ -50,7 +50,7 @@ export const ResponsiveMarket = ({
   const table = useReactTable({
     data: marketTokens,
     columns: columns({
-      state,
+      isPrice: state === "price",
       onChangeFavourite: handleSelectedFavorite,
       setState,
     }),

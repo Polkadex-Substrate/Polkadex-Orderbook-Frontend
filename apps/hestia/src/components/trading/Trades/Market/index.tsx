@@ -39,7 +39,7 @@ export const Markets = ({ market }: { market: string }) => {
   const table = useReactTable({
     data: marketTokens,
     columns: columns({
-      state,
+      isPrice: state === "price",
       onChangeFavourite: handleSelectedFavorite,
       setState,
     }),
