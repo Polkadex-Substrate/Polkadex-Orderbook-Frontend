@@ -14,7 +14,7 @@ export const Tickers = ({
   loading: boolean;
 }) => {
   return (
-    <div className="flex w-full z-[2] justify-between items-center p-2 bg-level-1 border-t border-primary">
+    <div className="flex w-full sticky bottom-0 z-[2] justify-between items-center p-2 bg-level-1 border-t border-primary">
       <ul className="list-none flex items-center gap-2">
         {loading
           ? Array.from({ length: 3 }).map((_, i) => (
