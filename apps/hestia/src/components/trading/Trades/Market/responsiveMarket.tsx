@@ -92,7 +92,7 @@ export const ResponsiveMarket = ({
           <RiCloseLine className="h-full w-full" />
         </Button.Icon>
       </Modal.Title>
-      <Modal.Content className="flex-1 h-full grid grid-rows-[auto,1fr,auto] overflow-hidden ">
+      <Modal.Content className="flex-1 h-full flex flex-col overflow-hidden">
         <Filters
           onSearch={handleFieldChange}
           searchField={fieldValue.searchFieldValue}
@@ -100,12 +100,12 @@ export const ResponsiveMarket = ({
           activeFavorite={fieldValue.showFavourite}
         />
         <Skeleton loading={loading} className="h-full">
-          <div className="flex flex-col flex-1 border-t border-t-primary overflow-y-hidden scrollbar-hide bg-level-0">
+          <div className="flex flex-col flex-1 border-t border-t-primary overflow-scroll scrollbar-hide bg-level-0">
             {!hasMarkets || !marketTokens.length ? (
               <GenericMessage {...messageProps} />
             ) : (
               <PolkadexTable className="w-full">
-                <PolkadexTable.Header className="sticky top-[-1px] bg-level-0">
+                <PolkadexTable.Header className="sticky top-0 bg-level-0">
                   {table.getHeaderGroups().map((headerGroup) => (
                     <PolkadexTable.Row key={headerGroup.id}>
                       {headerGroup.headers.map((header) => {
