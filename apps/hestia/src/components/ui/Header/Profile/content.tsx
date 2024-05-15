@@ -165,6 +165,7 @@ export const Content = () => {
         <>
           <Multistep.Trigger>
             <Profile
+              tradingAccounts={mainProxiesAccounts}
               onSwitch={() => {
                 onToogleConnectExtension();
                 onLogout?.();

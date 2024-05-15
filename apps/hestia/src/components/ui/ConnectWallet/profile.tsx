@@ -10,6 +10,7 @@ import { Button, Typography, PopConfirm } from "@polkadex/ux";
 import { AccountCard } from "../ReadyToUse";
 
 export const Profile = ({
+  tradingAccounts,
   onLogout,
   onActions,
   fundWalletPresent,
@@ -17,6 +18,7 @@ export const Profile = ({
   onSwitch,
   onConnectWallet,
 }: {
+  tradingAccounts: string[];
   onLogout: () => void;
   onSwitch: () => void;
   onActions: () => void;
@@ -97,17 +99,19 @@ export const Profile = ({
           )}
         </div>
       </div>
-      <div className="flex flex-col gap-6 p-4 bg-level-0">
-        <Button.Solid
-          size="md"
-          appearance="secondary"
-          className="flex gap-2 items-center bg-level-1 text-primary"
-          onClick={onActions}
-        >
-          <RiSettings3Fill className="w-4 h-4" />
-          Options
-        </Button.Solid>
-      </div>
+      {tradingAccounts.length > 0 && (
+        <div className="flex flex-col gap-6 p-4 bg-level-0">
+          <Button.Solid
+            size="md"
+            appearance="secondary"
+            className="flex gap-2 items-center bg-level-1 text-primary"
+            onClick={onActions}
+          >
+            <RiSettings3Fill className="w-4 h-4" />
+            Options
+          </Button.Solid>
+        </div>
+      )}
     </div>
   );
 };
