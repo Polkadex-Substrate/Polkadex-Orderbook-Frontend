@@ -3687,10 +3687,10 @@
     axios "^1.2.5"
     ethers "^6.0.5"
 
-"@polkadex/ux@^6.19.0":
-  version "6.19.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.19.0.tgz#39ea27d869355057949a1c72cbea28bdccf679fa"
-  integrity sha512-KHUZpGr3jggY0UipzdpcOCHK2FPzzwDuGryrNzzyaU1xffxEUSCC6eSK9nbAlw4cGodEkKQa5XNAU51wPx44Ug==
+"@polkadex/ux@^6.20.0":
+  version "6.20.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.20.0.tgz#a7b2f32e875b366b67c9981362049edeafdbec0c"
+  integrity sha512-9qIalWnK/ZVOlvpMZZE8lB0xGFhW1Gk5+k1k+MpfqJj8+SemRKm+9ZciRRQEBsZK+vM9/C6DD5PvynWXW/XQcg==
   dependencies:
     "@floating-ui/react" "^0.26.4"
     "@headlessui/react" "^1.7.18"
