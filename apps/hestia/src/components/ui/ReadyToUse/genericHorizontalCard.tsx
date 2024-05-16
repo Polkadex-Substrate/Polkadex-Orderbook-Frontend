@@ -49,7 +49,13 @@ export const GenericHorizontalCard = ({
             >
               {title}
             </Typography.Text>
-            {label && <Badge>{label}</Badge>}
+            {label && (
+              <Badge>
+                <Typography.Text size="2xs" className="px-0.5">
+                  {label}
+                </Typography.Text>
+              </Badge>
+            )}
           </div>
           {isStringType ? (
             <div className="bg-secondary-base text-sm px-2 py-1 rounded-sm">
