@@ -114,8 +114,6 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
   const {
     localTradingAccounts,
     onSelectTradingAccount,
-    onResetWallet,
-    onResetExtension,
     selectedWallet,
     onRegisterTradeAccount,
     registerStatus,
@@ -154,17 +152,6 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
     [localTradingAccounts, mainProxiesAccounts]
   );
 
-  const hasAccounts = useMemo(
-    () => !!filteredAccounts?.length,
-    [filteredAccounts?.length]
-  );
-
-  const handleCloseInteraction = () => {
-    onResetWallet?.();
-    onResetExtension?.();
-    setPage("Connect");
-  };
-
   const availableOnDevice = useMemo(
     () =>
       filteredAccounts?.some((value) => value.address === tempTrading?.address),
@@ -187,7 +174,7 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
           accounts={filteredAccounts}
           onSelect={(e) => onSelectTradingAccount(e)}
           onTempBrowserAccount={(e) => onSetTempTrading?.(e)}
-          onClose={hasAccounts ? onReset : handleCloseInteraction}
+          onClose={onReset}
           onImport={() => setPage("ImportTradingAccount")}
           onSelectCallback={onClose}
           onRemoveCallback={() => setPage("RemoveTradingAccount")}
