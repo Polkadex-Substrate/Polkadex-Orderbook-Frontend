@@ -20,7 +20,10 @@ import {
 } from "react";
 import { RiArrowDownSLine, RiArrowRightLine } from "@remixicon/react";
 import classNames from "classnames";
-import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import {
+  TradeAccountType,
+  useConnectWalletProvider,
+} from "@orderbook/core/providers/user/connectWalletProvider";
 import {
   getChainFromTicker,
   isAssetPDEX,
@@ -93,7 +96,7 @@ export const Form = ({
     [isPolkadexToken, selectedAsset?.id]
   );
 
-  const { selectedAccount, selectedWallet } = useConnectWalletProvider();
+  const { selectedTradingAccount, selectedWallet } = useConnectWalletProvider();
   const { loading: depositLoading, mutateAsync: onFetchDeposit } = useDeposit();
   const { mutateAsync: onFetchWithdraws, loading: withdrawLoading } =
     useWithdraw();
@@ -165,7 +168,7 @@ export const Form = ({
   );
 
   const onSubmitWithdraw = async ({ amount }: { amount: number }) => {
-    if (selectedAccount?.isLocked) setShowPassword(true);
+    if (selectedTradingAccount?.account?.isLocked) setShowPassword(true);
     else {
       const asset = isAssetPDEX(selectedAsset?.id) ? "PDEX" : selectedAsset?.id;
       if (!asset) return;
@@ -238,7 +241,8 @@ export const Form = ({
     validateOnBlur: true,
     onSubmit: isFundingToFunding ? onSubmitTransfer : onHandleSubmit,
   });
-  const isLocalAccountPresent = !!Object.keys(selectedAccount ?? {}).length;
+  const isLocalAccountPresent = !!Object.keys(selectedTradingAccount ?? {})
+    .length;
   const isExtensionAccountPresent = !!Object.keys(selectedWallet ?? {}).length;
 
   const hasAccount = isFromFunding
@@ -253,8 +257,9 @@ export const Form = ({
   const disabled = !hasAccount || loading || !(isValid && dirty);
 
   useEffect(() => {
-    if (!isTransferFromFunding) tryUnlockTradeAccount(selectedAccount);
-  }, [selectedAccount, isTransferFromFunding]);
+    if (!isTransferFromFunding)
+      tryUnlockTradeAccount(selectedTradingAccount?.account);
+  }, [selectedTradingAccount, isTransferFromFunding]);
 
   const { onDepositOcex } = useCall();
   const {
@@ -292,7 +297,7 @@ export const Form = ({
                 new Event("submit", { cancelable: true, bubbles: true })
               );
             }}
-            tempBrowserAccount={selectedAccount}
+            tempBrowserAccount={selectedTradingAccount?.account}
           />
         </Modal.Content>
       </Modal>
@@ -312,8 +317,16 @@ export const Form = ({
               extensionAccountName={selectedWallet?.name}
               extensionAccountAddress={selectedWallet?.address}
               extensionAccountBalance={selectedAsset?.onChainBalance}
-              localAccountName={selectedAccount?.meta?.name}
-              localAccountAddress={selectedAccount?.address}
+              localAccountName={
+                selectedTradingAccount?.type === TradeAccountType.Keyring
+                  ? selectedTradingAccount?.account?.meta?.name
+                  : selectedWallet?.name
+              }
+              localAccountAddress={
+                selectedTradingAccount?.type === TradeAccountType.Keyring
+                  ? selectedTradingAccount?.account?.address
+                  : selectedWallet?.address
+              }
               localAccountBalance={selectedAsset?.free_balance}
               selectedAssetTicker={selectedAsset?.ticker}
             />
@@ -332,7 +345,6 @@ export const Form = ({
               />
             </button>
             <FromTrading
-              isLocalAccountPresent={isLocalAccountPresent}
               isExtensionAccountPresent={isExtensionAccountPresent}
               isBalanceFetching={isBalanceFetching}
               fromFunding={isTransferFromFunding}

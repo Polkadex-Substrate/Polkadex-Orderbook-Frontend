@@ -6,13 +6,13 @@ import {
   useUserAccounts,
 } from "@polkadex/react-providers";
 import { useProfile } from "@orderbook/core/providers/user/profile";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { handleTransaction, removeFromStorage } from "@orderbook/core/helpers";
 import { ACTIVE_ACCOUNT_KEY } from "@orderbook/core/providers/user/profile/constants";
 import { KeyringPair } from "@polkadot/keyring/types";
 
 import { appsyncOrderbookService } from "../utils/orderbookService";
-import { NOTIFICATIONS, QUERY_KEYS } from "../constants";
+import { NOTIFICATIONS } from "../constants";
 import { useSettingsProvider } from "../providers/public/settings";
 
 export type RemoveProxyAccountArgs = {
@@ -31,7 +31,6 @@ export function useRemoveProxyAccount({
   onError,
   onSuccess,
 }: RemoveProxyAccount) {
-  const queryClient = useQueryClient();
   const { api } = useNativeApi();
   const { wallet, localAddresses } = useUserAccounts();
   const { selectedAddresses, onUserLogout } = useProfile();
@@ -48,18 +47,6 @@ export function useRemoveProxyAccount({
         throw new Error("You are not connected to blockchain ");
 
       if (!selectedWallet) throw new Error("seletedWallet is not defined");
-
-      appsyncOrderbookService.subscriber.subscribeAccountUpdate(
-        selectedWallet.address,
-        () => {
-          queryClient.setQueryData(
-            QUERY_KEYS.singleProxyAccounts(selectedAddresses.mainAddress),
-            (proxies?: string[]) => {
-              return proxies?.filter((value) => value !== proxy);
-            }
-          );
-        }
-      );
 
       const signedExtrinsic =
         await appsyncOrderbookService.operation.removeAccount({
