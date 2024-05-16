@@ -5,6 +5,8 @@ import {
   TokenAppearance,
   Tooltip,
   Typography,
+  ResponsiveCard,
+  HoverInformation,
 } from "@polkadex/ux";
 import {
   RiArrowDownSLine,
@@ -22,13 +24,11 @@ import { bridgeValidations } from "@orderbook/core/validations";
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
 import { ConfirmTransaction } from "../Connect/confirmTransaction";
-import { HoverInformation } from "../../ui/Temp/hoverInformation";
 
 import { WalletCard } from "./wallet";
 import { NetworkCard } from "./networkCard";
 
 import { createQueryString, formatAmount } from "@/helpers";
-import { ResponsiveCard } from "@/components/ui/Temp/responsiveCard";
 const initialValues = {
   amount: "",
 };
@@ -211,9 +211,7 @@ export const Form = () => {
                 ) : (
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 p-1.5 flex items-center justify-center rounded-sm bg-level-3">
-                        <RiWalletLine className="w-full h-full text-actionInput" />
-                      </div>
+                      <RiWalletLine className="w-3.5 h-3.5 text-actionInput" />
                       <Typography.Text>Account not present</Typography.Text>
                     </div>
                     <Button.Solid
@@ -261,9 +259,7 @@ export const Form = () => {
                 ) : (
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 p-1.5 flex items-center justify-center rounded-sm bg-level-2">
-                        <RiWalletLine className="w-full h-full" />
-                      </div>
+                      <RiWalletLine className="w-3.5 h-3.5 text-actionInput" />
                       <Typography.Text>Account not present</Typography.Text>
                     </div>
                     <Button.Solid

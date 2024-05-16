@@ -8,6 +8,8 @@ import {
   Skeleton,
   Typography,
   truncateString,
+  ResponsiveCard,
+  HoverInformation,
 } from "@polkadex/ux";
 import {
   RiExternalLinkLine,
@@ -27,8 +29,6 @@ import {
   Terms,
 } from "@/components/ui/ReadyToUse";
 import { formatAmount } from "@/helpers";
-import { HoverInformation } from "@/components/ui/Temp/hoverInformation";
-import { ResponsiveCard } from "@/components/ui/Temp/responsiveCard";
 
 interface Props {
   openFeeModal: boolean;

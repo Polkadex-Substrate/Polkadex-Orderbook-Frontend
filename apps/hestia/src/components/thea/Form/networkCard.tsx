@@ -1,9 +1,6 @@
 "use client";
-import { Typography } from "@polkadex/ux";
+import { Typography, Chain, Button } from "@polkadex/ux";
 import { RiArrowDownSLine } from "@remixicon/react";
-
-import { Button } from "@/components/ui/Temp/button";
-import { Chain } from "@/components/ui/Temp/chain";
 
 type Props = {
   onOpenModal: () => void;

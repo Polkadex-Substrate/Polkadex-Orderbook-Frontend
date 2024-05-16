@@ -8,6 +8,7 @@ import {
   Interaction,
   Typography,
   useInteractableProvider,
+  ProviderCard,
 } from "@polkadex/ux";
 import { CustomAccount, useTheaProvider } from "@orderbook/core/providers";
 import { useMeasure } from "react-use";
@@ -17,7 +18,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { RiExpandUpDownFill } from "@remixicon/react";
 
 import { Expandable } from "../../ui/ReadyToUse/expandable";
-import { ProviderCard } from "../../ui/Temp/providerCard";
 
 import { SelectNetwork } from "./selectNetwork";
 import { AccountCard } from "./accountCard";
