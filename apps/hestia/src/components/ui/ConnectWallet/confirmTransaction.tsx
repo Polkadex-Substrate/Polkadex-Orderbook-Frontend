@@ -240,7 +240,7 @@ export const ConfirmTransaction = ({
                     </div>
                   </GenericHorizontalItem>
                 )}
-                <GenericHorizontalItem label="Existential Deposit">
+                <GenericHorizontalItem label="Existential Amount">
                   <Typography.Text>1 PDEX</Typography.Text>
                 </GenericHorizontalItem>
                 <Dropdown>
