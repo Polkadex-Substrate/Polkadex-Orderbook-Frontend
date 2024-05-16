@@ -37,12 +37,6 @@ import {
 import { ConfirmTransaction } from "./confirmTransaction";
 const { googleDriveStore } = enabledFeatures;
 
-const initialValues = {
-  name: generateUsername({ useRandomNumber: false }),
-  mnemonic: mnemonicGenerate(),
-};
-const initialState = "";
-
 export const NewTradingAccount = ({
   onClose,
   onCreateAccount,
@@ -66,6 +60,12 @@ export const NewTradingAccount = ({
   connectGDriveLoading?: boolean;
   gDriveReady?: boolean;
 }) => {
+  const initialValues = {
+    name: generateUsername({ useRandomNumber: false }),
+    mnemonic: mnemonicGenerate(),
+  };
+  const initialState = "";
+
   const formRef = useRef<HTMLFormElement | null>(null);
 
   const [show, setShow] = useState(false);
