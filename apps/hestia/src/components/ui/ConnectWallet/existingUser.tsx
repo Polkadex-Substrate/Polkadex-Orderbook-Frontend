@@ -119,7 +119,7 @@ export const ExistingUser = ({
               <div className="flex flex-col gap-5 px-7">
                 <div className="flex flex-col gap-1">
                   <Typography.Text bold size="xl">
-                    No trading account found
+                    No trading account found in browser
                   </Typography.Text>
                   <Typography.Paragraph size="sm" appearance="primary">
                     You can either register your funding account or can have a
