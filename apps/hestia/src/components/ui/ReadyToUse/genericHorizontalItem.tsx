@@ -19,7 +19,7 @@ export const GenericHorizontalItem = ({
   return (
     <div
       className={twMerge(
-        classNames("flex items-cneter justify-between gap-2 px-3 py-3"),
+        classNames("flex items-center justify-between gap-2 px-3 py-3"),
         className
       )}
       {...props}

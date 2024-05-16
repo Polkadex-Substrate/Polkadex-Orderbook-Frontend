@@ -1,9 +1,11 @@
 "use client";
 
-import classNames from "classnames";
 import { getExtensionIcon } from "@polkadot-cloud/assets/extensions";
 import { ElementType } from "react";
-import { Button, Typography } from "@polkadex/ux";
+import { Typography } from "@polkadex/ux";
+import classNames from "classnames";
+
+import { Button } from "@/components/ui/Temp/button";
 
 export const ProviderCard = ({
   title,
@@ -20,16 +22,14 @@ export const ProviderCard = ({
 }) => {
   const IconComponent = getExtensionIcon(icon) as ElementType;
   return (
-    <div
-      className={classNames(
-        "flex justify-between items-center gap-3 px-4 py-3.5 rounded-md",
-        installed && "hover:bg-level-1 duration-300 transition-colors"
-      )}
-      role="button"
-      onClick={installed ? action : undefined}
+    <Button.Ghost
+      appearance="quaternary"
+      className="flex justify-between items-center gap-3 px-4 py-3.5 h-auto"
+      onClick={action}
+      disabled={!installed}
     >
       <div className="flex justify-between items-center gap-3">
-        <div className="w-5 h-5">
+        <div className={classNames("w-5 h-5", !installed && "opacity-50")}>
           <IconComponent />
         </div>
         <Typography.Text appearance={installed ? "base" : "secondary"}>
@@ -43,6 +43,6 @@ export const ProviderCard = ({
           </a>
         </Button.Light>
       )}
-    </div>
+    </Button.Ghost>
   );
 };

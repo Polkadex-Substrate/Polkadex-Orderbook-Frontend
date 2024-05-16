@@ -22,7 +22,7 @@ export const ProviderCard = ({
   return (
     <div
       className={classNames(
-        "flex justify-between items-center gap-3 px-4 py-2 rounded-sm",
+        "flex justify-between gap-3 px-4 py-2 rounded-sm",
         installed &&
           !selected &&
           "hover:bg-level-3 duration-300 transition-colors",

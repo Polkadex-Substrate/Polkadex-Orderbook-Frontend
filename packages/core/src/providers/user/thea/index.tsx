@@ -23,13 +23,12 @@ import { defaultConfig } from "@orderbook/core/config";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import {
   Transactions,
-  networks,
   useTheaBalances,
   useTheaConfig,
   useTheaTransactions,
 } from "@orderbook/core/hooks";
 import { isIdentical } from "@orderbook/core/helpers";
-import { EXISTENTIAL } from "@orderbook/core/constants";
+import { POLKADEX_GENESIS } from "@orderbook/core/constants";
 
 import { useConnectWalletProvider } from "../connectWalletProvider";
 const {
@@ -86,7 +85,7 @@ export const TheaProvider = ({
   );
 
   const polkadexConnector = useMemo(
-    () => destinationChain && getChainConnector(networks[0]),
+    () => destinationChain && getChainConnector(POLKADEX_GENESIS),
     [destinationChain]
   );
 
@@ -183,7 +182,7 @@ export const TheaProvider = ({
     connector: polkadexConnector,
     sourceAddress: destinationAccountSelected?.address,
     assets: polkadexAssets,
-    chain: networks[0],
+    chain: POLKADEX_GENESIS,
   });
 
   const {
@@ -251,39 +250,13 @@ export const TheaProvider = ({
     await onDepositsRefetch();
   }, [onWithdrawalsRefetch, onDepositsRefetch]);
 
-  const existential = useMemo(
-    () =>
-      sourceChain?.genesis
-        ? EXISTENTIAL[sourceChain?.genesis as keyof typeof EXISTENTIAL]
-            .existential
-        : 0,
-    [sourceChain?.genesis]
-  );
-
-  const selectedAssetAmount = useMemo(
-    () =>
-      selectedAsset && sourceBalances
-        ? sourceBalances.find((e) => e.ticker === selectedAsset?.ticker)
-            ?.amount ?? 0
-        : 0,
-    [selectedAsset, sourceBalances]
-  );
-
-  const selectedAssetBalance = useMemo(
-    () =>
-      selectedAssetAmount >= existential
-        ? selectedAssetAmount - existential
-        : 0,
-    [selectedAssetAmount, existential]
-  );
-
   const transactionsRefetching = useMemo(
     () => withdrawalsRefetching || depositsRefetching,
     [withdrawalsRefetching, depositsRefetching]
   );
 
   const isPolkadexChain = useMemo(
-    () => !!(sourceChain?.genesis === networks[0]),
+    () => !!(sourceChain?.genesis === POLKADEX_GENESIS),
     [sourceChain?.genesis]
   );
 
@@ -296,14 +269,6 @@ export const TheaProvider = ({
     [polkadexDestinationBalances]
   );
 
-  const sourcePDEXBalance = useMemo(
-    () =>
-      isPolkadexChain
-        ? sourceBalances.find((e) => e.ticker === "PDEX")?.amount ?? 0 // Remove static data
-        : 0,
-    [isPolkadexChain, sourceBalances]
-  );
-
   const {
     data: transferConfig,
     isLoading: transferConfigLoading,
@@ -312,11 +277,21 @@ export const TheaProvider = ({
   } = useTheaConfig({
     connector: sourceConnector,
     destinationAddress: destinationAccountSelected?.address,
-    sourceAddress: destinationAccountSelected?.address,
+    sourceAddress: sourceAccountSelected?.address,
     selectedAsset,
     destinationChain,
   });
 
+  const selectedAssetBalance = useMemo(
+    () =>
+      selectedAsset && sourceBalances
+        ? sourceBalances.find((e) => e.ticker === selectedAsset?.ticker)
+            ?.amount ?? 0
+        : 0,
+    [selectedAsset, sourceBalances]
+  );
+
+  console.log("Config", transferConfig);
   return (
     <Provider
       value={{
@@ -342,7 +317,6 @@ export const TheaProvider = ({
         selectedAsset,
         setSelectedAsset,
         selectedAssetBalance,
-        selectedAssetAmount,
 
         sourceBalances,
         sourceBalancesLoading: sourceBalancesLoading && sourceBalancesFetching,
@@ -366,11 +340,9 @@ export const TheaProvider = ({
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
         transferConfigSuccess,
 
-        existential,
         onRefreshTransactions,
         transactionsRefetching,
         destinationPDEXBalance,
-        sourcePDEXBalance,
         isPolkadexChain,
       }}
     >
@@ -403,7 +375,6 @@ type State = {
   selectedAsset: Asset | null;
   setSelectedAsset: Dispatch<SetStateAction<Asset | null>>;
   selectedAssetBalance: number;
-  selectedAssetAmount: number;
 
   sourceBalances: AssetAmount[];
   sourceBalancesLoading: boolean;
@@ -426,11 +397,9 @@ type State = {
   transferConfigLoading: boolean;
   transferConfigSuccess: boolean;
 
-  existential: number;
   transactionsRefetching: boolean;
   onRefreshTransactions: () => Promise<void>;
   destinationPDEXBalance: number;
-  sourcePDEXBalance: number;
   isPolkadexChain: boolean;
 };
 export const Context = createContext<State>({
@@ -456,7 +425,6 @@ export const Context = createContext<State>({
   selectedAsset: null,
   setSelectedAsset: () => {},
   selectedAssetBalance: 0,
-  selectedAssetAmount: 0,
 
   sourceBalances: [],
   sourceBalancesLoading: false,
@@ -479,11 +447,9 @@ export const Context = createContext<State>({
   transferConfigLoading: false,
   transferConfigSuccess: false,
 
-  existential: 0,
   transactionsRefetching: false,
   onRefreshTransactions: async () => {},
   destinationPDEXBalance: 0,
-  sourcePDEXBalance: 0,
   isPolkadexChain: false,
 });
 

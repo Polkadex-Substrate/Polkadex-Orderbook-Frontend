@@ -1,6 +1,6 @@
 import { Drawer, Token, TokenAppearance, Typography } from "@polkadex/ux";
 import { Dispatch, SetStateAction, useMemo } from "react";
-import { Transaction, networks } from "@orderbook/core/index";
+import { POLKADEX_GENESIS, Transaction } from "@orderbook/core/index";
 
 import { NetworkCard } from "./networkCard";
 
@@ -21,16 +21,15 @@ export const ResponsiveTable = ({
     () => ["CLAIMED", "APPROVED", "READY"].includes(status),
     [status]
   );
-  const polkadotNetwork = networks[0]; // temp
 
   const isFromPolkadotNetwork = useMemo(
-    () => from?.genesis?.includes(polkadotNetwork),
-    [from?.genesis, polkadotNetwork]
+    () => from?.genesis?.includes(POLKADEX_GENESIS),
+    [from?.genesis]
   );
 
   const isToPolkadotNetwork = useMemo(
-    () => to?.genesis?.includes(polkadotNetwork),
-    [to?.genesis, polkadotNetwork]
+    () => to?.genesis?.includes(POLKADEX_GENESIS),
+    [to?.genesis]
   );
   const date = useMemo(
     () => timestamp && formatedDate(new Date(timestamp), false),

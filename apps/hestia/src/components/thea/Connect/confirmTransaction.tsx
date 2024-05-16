@@ -1,14 +1,10 @@
 "use client";
 
 import {
-  Button,
   Copy,
-  Dropdown,
-  HoverCard,
   Interaction,
   Loading,
   Modal,
-  Separator,
   Skeleton,
   Typography,
   truncateString,
@@ -19,34 +15,20 @@ import {
   RiGasStationLine,
   RiInformationFill,
 } from "@remixicon/react";
-import {
-  Dispatch,
-  Fragment,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useResizeObserver } from "usehooks-ts";
+import { Dispatch, SetStateAction, useMemo } from "react";
 import Link from "next/link";
-import {
-  FeeAssetReserve,
-  enabledFeatures,
-  isNegative,
-  useFunds,
-} from "@orderbook/core/index";
+import { THEA_AUTOSWAP } from "@orderbook/core/index";
 import { useTheaProvider } from "@orderbook/core/providers";
 
 import { useBridge, usePool } from "@/hooks";
 import {
   ErrorMessage,
   GenericHorizontalItem,
-  ResponsiveCard,
   Terms,
 } from "@/components/ui/ReadyToUse";
 import { formatAmount } from "@/helpers";
-const { payWithAnotherFee } = enabledFeatures;
+import { HoverInformation } from "@/components/ui/Temp/hoverInformation";
+import { ResponsiveCard } from "@/components/ui/Temp/responsiveCard";
 
 interface Props {
   openFeeModal: boolean;
@@ -54,40 +36,25 @@ interface Props {
   amount: number;
   onSuccess: () => void;
 }
-const initialValue = {
-  id: "PDEX",
-  name: "PDEX",
-};
+
 export const ConfirmTransaction = ({
   openFeeModal,
   setOpenFeeModal,
   amount,
   onSuccess,
 }: Props) => {
-  const [tokenFee, setTokenFee] = useState<FeeAssetReserve>(initialValue);
-
   const {
-    selectedAssetAmount,
     sourceAccount,
     destinationAccount,
     transferConfig,
     transferConfigLoading,
     destinationPDEXBalance,
-    sourcePDEXBalance,
     selectedAsset,
     isPolkadexChain,
     polkadexAssets,
-    existential,
+    sourceBalancesLoading,
   } = useTheaProvider();
-
-  const sourceFee = transferConfig?.sourceFee?.amount ?? 0;
-
-  const ref = useRef<HTMLButtonElement>(null);
-
-  const { width = 0 } = useResizeObserver({
-    ref,
-    box: "border-box",
-  });
+  const { destinationFee, sourceFee, sourceFeeBalance } = transferConfig ?? {};
 
   const showAutoSwap = useMemo(
     () => !isPolkadexChain && !destinationPDEXBalance,
@@ -101,20 +68,12 @@ export const ConfirmTransaction = ({
       )?.id,
     [polkadexAssets, selectedAsset?.ticker]
   );
-  const tokenfeeIsPDEX = useMemo(() => tokenFee?.id === "PDEX", [tokenFee?.id]);
 
-  const {
-    swapPrice = 0,
-    swapLoading,
-    poolReserves,
-    poolReservesSuccess,
-  } = usePool({
-    asset: isPolkadexChain ? tokenFee?.id : selectedAssetId,
-    amount: isPolkadexChain ? transferConfig?.sourceFee.amount : 1.5,
-    enabled: isPolkadexChain ? !tokenfeeIsPDEX : !destinationPDEXBalance,
+  const { swapPrice = 0, swapLoading } = usePool({
+    asset: selectedAssetId,
+    amount: THEA_AUTOSWAP,
+    enabled: !destinationPDEXBalance,
   });
-
-  const { balances, loading: balancesLoading } = useFunds();
 
   const shortSourceAddress = useMemo(
     () => truncateString(sourceAccount?.address ?? "", 4),
@@ -129,65 +88,52 @@ export const ConfirmTransaction = ({
 
   const error = useMemo(() => {
     const autoSwapAmount = showAutoSwap ? swapPrice : 0;
-    if (isPolkadexChain) {
-      if (tokenfeeIsPDEX) return sourcePDEXBalance < sourceFee + existential;
-      return selectedAssetAmount < swapPrice;
-    }
-    return selectedAssetAmount <= amount + existential + autoSwapAmount;
+    const balance = sourceFeeBalance?.amount ?? 0;
+
+    if (isPolkadexChain) return balance < (sourceFee?.amount ?? 0);
+
+    return balance < amount + autoSwapAmount;
   }, [
-    tokenfeeIsPDEX,
-    selectedAssetAmount,
     swapPrice,
     sourceFee,
     isPolkadexChain,
-    sourcePDEXBalance,
     amount,
-    existential,
     showAutoSwap,
+    sourceFeeBalance?.amount,
   ]);
 
-  const disabled = useMemo(
-    () => !!error || !tokenFee || isLoading,
-    [error, tokenFee, isLoading]
+  const disabled = useMemo(() => !!error || isLoading, [error, isLoading]);
+
+  const sourceFeeBalanceAmount = useMemo(
+    () => formatAmount(sourceFeeBalance?.amount ?? 0),
+    [sourceFeeBalance?.amount]
   );
 
-  const selectedFeeBalance = useMemo(() => {
-    if (isPolkadexChain) {
-      if (tokenfeeIsPDEX) return sourcePDEXBalance;
-      return selectedAssetAmount;
-    }
-    return selectedAssetAmount;
-  }, [isPolkadexChain, selectedAssetAmount, sourcePDEXBalance, tokenfeeIsPDEX]);
-
-  const selectedFeeBalanceFormatted = useMemo(
-    () => formatAmount(selectedFeeBalance),
-    [selectedFeeBalance]
-  );
-
-  const selectedAvailableFeeBalanceFormatted = useMemo(() => {
-    const autoSwapAmount = !isPolkadexChain && showAutoSwap ? swapPrice : 0;
-
-    const fee = tokenfeeIsPDEX ? sourceFee : swapPrice;
-    const amount = selectedFeeBalance - (existential + fee + autoSwapAmount);
-    return isNegative(amount.toString()) ? 0 : formatAmount(amount);
+  const [
+    destinationFeeAmount,
+    destinationFeeTicker,
+    sourceFeeAmount,
+    sourceFeeTicker,
+    estimatedFee,
+  ] = useMemo(() => {
+    const destValue = destinationFee?.amount ?? 0;
+    const sourceValue = sourceFee?.amount ?? 0;
+    const autoswapAmount = showAutoSwap ? swapPrice : 0;
+    return [
+      destValue ? `~${formatAmount(destValue)}` : "Ø",
+      destValue ? destinationFee?.ticker : "",
+      sourceValue ? `~${formatAmount(sourceValue)}` : "Ø",
+      sourceValue ? sourceFee?.ticker : "",
+      formatAmount(sourceValue + destValue + autoswapAmount),
+    ];
   }, [
-    selectedFeeBalance,
-    existential,
-    sourceFee,
-    swapPrice,
-    tokenfeeIsPDEX,
-    isPolkadexChain,
+    destinationFee?.amount,
+    destinationFee?.ticker,
+    sourceFee?.amount,
+    sourceFee?.ticker,
     showAutoSwap,
+    swapPrice,
   ]);
-
-  const existentialFormatted = useMemo(
-    () => formatAmount(existential),
-    [existential]
-  );
-
-  useEffect(() => {
-    return () => setTokenFee(initialValue);
-  }, []);
 
   return (
     <Modal
@@ -266,219 +212,52 @@ export const ConfirmTransaction = ({
                     </div>
                   </GenericHorizontalItem>
                 )}
-                {!!tokenFee && isPolkadexChain ? (
-                  <GenericHorizontalItem
-                    label="Estimated fee"
-                    tooltip={
-                      tokenfeeIsPDEX ? undefined : "Swap using Polkapool"
-                    }
-                  >
-                    <div className="flex items-center gap-1">
-                      <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
-                      <Skeleton
-                        loading={transferConfigLoading}
-                        className="min-h-4 w-10"
-                      >
-                        <div className="flex items-center gap-1">
-                          {!tokenfeeIsPDEX && (
-                            <Fragment>
-                              <Typography.Text>
-                                {swapPrice.toFixed(4)} {tokenFee?.name}
-                              </Typography.Text>
-                              <Typography.Text appearance="primary">
-                                ≈
-                              </Typography.Text>
-                            </Fragment>
-                          )}
-                          <Typography.Text appearance="primary">
-                            {sourceFee.toFixed(4)}{" "}
-                            {transferConfig?.sourceFee.ticker}
-                          </Typography.Text>
-                        </div>
-                      </Skeleton>
-                    </div>
-                  </GenericHorizontalItem>
-                ) : (
-                  <GenericHorizontalItem label="Estimated fee">
-                    <div className="flex items-center gap-1">
-                      <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />
-                      <Skeleton
-                        loading={transferConfigLoading}
-                        className="min-h-4 min-w-14"
-                      >
-                        <Typography.Text>
-                          {sourceFee.toFixed(4)}{" "}
-                          {transferConfig?.sourceFee.ticker}
-                        </Typography.Text>
-                      </Skeleton>
-                    </div>
-                  </GenericHorizontalItem>
-                )}
-                <HoverCard>
-                  <HoverCard.Trigger>
-                    <div className="flex items-cneter justify-between gap-2 px-3 py-3">
+                <HoverInformation>
+                  <HoverInformation.Trigger>
+                    <div className="w-full flex items-center justify-between gap-2 px-3 py-3">
                       <div className="flex items-center gap-1">
                         <RiInformationFill className="w-3 h-3 text-actionInput" />
                         <Typography.Text appearance="primary">
-                          Available wallet
+                          Estimated fee
                         </Typography.Text>
                       </div>
-                      <Typography.Text>
-                        {selectedAvailableFeeBalanceFormatted}{" "}
-                        {isPolkadexChain
-                          ? "PDEX"
-                          : transferConfig?.sourceFee.ticker}
-                      </Typography.Text>
-                    </div>
-                  </HoverCard.Trigger>
-                  <HoverCard.Content className="max-w-[300px] p-4">
-                    <div className="flex flex-col gap-3">
-                      <ResponsiveCard label="Existential">
-                        {existentialFormatted}{" "}
-                        {isPolkadexChain
-                          ? "PDEX"
-                          : transferConfig?.sourceFee.ticker}
-                      </ResponsiveCard>
-                      <ResponsiveCard label="Estimated fee">
-                        {tokenfeeIsPDEX
-                          ? sourceFee.toFixed(4)
-                          : swapPrice.toFixed(4)}{" "}
-                        {tokenfeeIsPDEX
-                          ? transferConfig?.sourceFee.ticker
-                          : tokenFee?.name}
-                      </ResponsiveCard>
-                      {showAutoSwap && (
-                        <ResponsiveCard label="Auto swap">
-                          {swapPrice.toFixed(4)}{" "}
-                          {transferConfig?.sourceFee.ticker}
-                        </ResponsiveCard>
-                      )}
-                      <ResponsiveCard label="Balance">
-                        {selectedFeeBalanceFormatted}{" "}
-                        {isPolkadexChain
-                          ? "PDEX"
-                          : transferConfig?.sourceFee.ticker}
-                      </ResponsiveCard>
-                      <ResponsiveCard label="Available">
-                        {selectedAvailableFeeBalanceFormatted}{" "}
-                        {isPolkadexChain
-                          ? "PDEX"
-                          : transferConfig?.sourceFee.ticker}
-                      </ResponsiveCard>
-                    </div>
-                    <Separator.Horizontal className="my-3" />
-                    <div>
-                      <Typography.Paragraph
-                        size="xs"
-                        appearance="primary"
-                        className="leading-5"
+                      <Skeleton
+                        loading={
+                          showAutoSwap ? swapLoading : transferConfigLoading
+                        }
+                        className="min-h-4 w-10"
                       >
-                        On Substrate-based chains like Polkadot and Kusama,
-                        accounts need to maintain a minimum balance (Existential
-                        Deposit) to stay active and prevent blockchain bloating.
-                      </Typography.Paragraph>
-                    </div>
-                  </HoverCard.Content>
-                </HoverCard>
-
-                {isPolkadexChain && (
-                  <Dropdown>
-                    <Dropdown.Trigger
-                      ref={ref}
-                      className=" px-3 py-3 bg-level-1 border border-primary"
-                      disabled={!payWithAnotherFee}
-                    >
-                      <div className="flex-1 w-full flex items-cneter justify-between gap-2">
-                        <Typography.Text appearance="primary">
-                          Pay fee with
-                        </Typography.Text>
                         <Typography.Text>
-                          {tokenFee ? tokenFee.name : "Select token"}
+                          {estimatedFee} {sourceFeeTicker}
                         </Typography.Text>
-                      </div>
-                      <Dropdown.Icon />
-                    </Dropdown.Trigger>
-                    <Dropdown.Content
-                      style={{
-                        minWidth: width,
-                        maxHeight: 250,
-                        overflow: "auto",
-                      }}
-                      className="scrollbar-hide min-w-56"
+                      </Skeleton>
+                    </div>
+                  </HoverInformation.Trigger>
+                  <HoverInformation.Content>
+                    <ResponsiveCard label="Source fee">
+                      {sourceFeeAmount} {sourceFeeTicker}
+                    </ResponsiveCard>
+                    <ResponsiveCard
+                      label="Destination fee"
+                      loading={transferConfigLoading}
                     >
-                      {!poolReservesSuccess ? (
-                        <div className="flex flex-col gap-2 p-4">
-                          {new Array(3).fill("").map((_, i) => (
-                            <Skeleton key={i} className="min-h-10" loading />
-                          ))}
-                        </div>
-                      ) : (
-                        <Fragment>
-                          {poolReserves?.map((e) => {
-                            const balance = balances?.find(
-                              (bal) => bal.asset.id === e.id
-                            );
+                      {destinationFeeAmount} {destinationFeeTicker}
+                    </ResponsiveCard>
+                    {showAutoSwap && (
+                      <ResponsiveCard label="Auto swap">
+                        {swapPrice.toFixed(4)} {sourceFeeTicker}
+                      </ResponsiveCard>
+                    )}
+                  </HoverInformation.Content>
+                </HoverInformation>
 
-                            const disableDropdown =
-                              !payWithAnotherFee && e?.id !== "PDEX";
-
-                            return (
-                              <Dropdown.Item
-                                key={e.id}
-                                onSelect={() => setTokenFee(e)}
-                                className="flex justify-between items-center gap-2"
-                                disabled={!e.poolReserve || disableDropdown}
-                              >
-                                {e.poolReserve ? (
-                                  <div className="flex items-center justify-between gap-1 w-full">
-                                    <Typography.Text>{e.name}</Typography.Text>
-                                    <div className="flex items-center gap-1">
-                                      <Typography.Text appearance="primary">
-                                        Balance:
-                                      </Typography.Text>
-                                      <Skeleton
-                                        loading={balancesLoading}
-                                        className="min-h-5"
-                                      >
-                                        <Typography.Text appearance="primary">
-                                          {Number(
-                                            balance?.onChainBalance
-                                          ).toFixed(4)}
-                                        </Typography.Text>
-                                      </Skeleton>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <Fragment>
-                                    <div className="flex items-center gap-1">
-                                      <Typography.Text appearance="primary">
-                                        {e.name}
-                                      </Typography.Text>
-                                      <Typography.Text appearance="primary">
-                                        (Insufficient liquidity)
-                                      </Typography.Text>
-                                    </div>
-                                    <Button.Solid
-                                      size="xs"
-                                      appearance="secondary"
-                                    >
-                                      <Link
-                                        target="_blank"
-                                        href="https://polkapool-test.netlify.app/pools"
-                                      >
-                                        Add liquidity
-                                      </Link>
-                                    </Button.Solid>
-                                  </Fragment>
-                                )}
-                              </Dropdown.Item>
-                            );
-                          })}
-                        </Fragment>
-                      )}
-                    </Dropdown.Content>
-                  </Dropdown>
-                )}
+                <ResponsiveCard
+                  label="Wallet balance"
+                  loading={transferConfigLoading || sourceBalancesLoading}
+                  className="px-3 py-3"
+                >
+                  {sourceFeeBalanceAmount} {sourceFeeTicker}
+                </ResponsiveCard>
 
                 {error && (
                   <ErrorMessage className="p-3">
@@ -512,7 +291,7 @@ export const ConfirmTransaction = ({
                 onClick={async () =>
                   await mutateAsync({
                     amount,
-                    tokenFeeId: tokenFee?.id ?? "PDEX",
+                    tokenFeeId: sourceFeeTicker ?? "",
                   })
                 }
               >

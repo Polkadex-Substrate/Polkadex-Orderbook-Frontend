@@ -73,7 +73,7 @@ export const ErrorMessages = (existential = "0", minAmount = "0") => ({
   WHITESPACE_NOT_ALLOWED: "Whitespace not allowed",
   MUST_BE_A_NUMBER: "Must be a number",
   TOO_SMALL: "Too Small!",
-  MIN: `Transaction amount must be greater than ${minAmount}`,
+  MIN: `The amount must be greater than ${minAmount}`,
 });
 
 export const MAX_DIGITS_AFTER_DECIMAL = 8;
@@ -91,6 +91,10 @@ export const DEFAULT_BATCH_LIMIT = 15;
 
 export const CUSTOM_ADDRES_NAME = "Custom address";
 export const OTHER_ASSET_EXISTENTIAL = 0.00000001;
+export const THEA_AUTOSWAP = 1.5;
+export const POLKADEX_GENESIS =
+  "0x3920bcb4960a1eef5580cd5367ff3f430eef052774f78468852f7b9cb39f8a3c";
+
 export const EXISTENTIAL = {
   "0x3920bcb4960a1eef5580cd5367ff3f430eef052774f78468852f7b9cb39f8a3c": {
     // Polkadex

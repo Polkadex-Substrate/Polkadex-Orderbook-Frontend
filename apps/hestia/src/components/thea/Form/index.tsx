@@ -9,6 +9,7 @@ import {
 import {
   RiArrowDownSLine,
   RiArrowLeftRightLine,
+  RiInformationFill,
   RiWalletLine,
 } from "@remixicon/react";
 import { Fragment, useMemo, useState } from "react";
@@ -17,17 +18,17 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import classNames from "classnames";
 import { bridgeValidations } from "@orderbook/core/validations";
-import { isNegative } from "@orderbook/core/helpers";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
 import { ConfirmTransaction } from "../Connect/confirmTransaction";
+import { HoverInformation } from "../../ui/Temp/hoverInformation";
 
 import { WalletCard } from "./wallet";
 import { NetworkCard } from "./networkCard";
-import { AvailableBalance } from "./availableBalance";
 
 import { createQueryString, formatAmount } from "@/helpers";
+import { ResponsiveCard } from "@/components/ui/Temp/responsiveCard";
 const initialValues = {
   amount: "",
 };
@@ -47,15 +48,12 @@ export const Form = () => {
     destinationAccount,
     setDestinationAccount,
     selectedAsset,
-    selectedAssetBalance,
-    existential,
-    selectedAssetAmount,
     transferConfigLoading,
     sourceBalancesLoading,
     transferConfig,
-    isPolkadexChain,
+    selectedAssetBalance,
   } = useTheaProvider();
-
+  const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
@@ -87,10 +85,7 @@ export const Form = () => {
     resetForm,
   } = useFormik({
     initialValues,
-    validationSchema: bridgeValidations(
-      1,
-      isPolkadexChain ? selectedAssetAmount : selectedAssetBalance
-    ), // TODO: Remove statuc min
+    validationSchema: bridgeValidations(min?.amount, max?.amount),
     onSubmit: () => setOpenFeeModal(true),
   });
   const disabled = useMemo(
@@ -114,23 +109,42 @@ export const Form = () => {
     ]
   );
 
-  const availableAmount = useMemo(() => {
-    const avl = isPolkadexChain
-      ? selectedAssetAmount
-      : selectedAssetBalance - (transferConfig?.sourceFee?.amount ?? 0);
-
-    return isNegative(avl.toString()) ? 0 : avl;
-  }, [
-    isPolkadexChain,
-    selectedAssetAmount,
-    selectedAssetBalance,
-    transferConfig?.sourceFee?.amount,
-  ]);
-
   const onChangeMax = () => {
-    const formattedAmount = formatAmount(availableAmount);
+    const formattedAmount = formatAmount(max?.amount ?? 0);
     setFieldValue("amount", formattedAmount);
   };
+
+  const availableValue = useMemo(
+    () => formatAmount(transferConfig?.max.amount ?? 0),
+    [transferConfig?.max.amount]
+  );
+
+  const balanceAmount = useMemo(
+    () => formatAmount(selectedAssetBalance),
+    [selectedAssetBalance]
+  );
+
+  const [
+    destinationFeeAmount,
+    destinationFeeTicker,
+    sourceFeeAmount,
+    sourceFeeTicker,
+  ] = useMemo(() => {
+    const destValue = destinationFee?.amount;
+    const sourceValue = sourceFee?.amount;
+
+    return [
+      destValue ? `~${formatAmount(destValue)}` : "Ø",
+      destValue ? destinationFee?.ticker : "",
+      sourceValue ? `~${formatAmount(sourceValue)}` : "Ø",
+      sourceValue ? sourceFee?.ticker : "",
+    ];
+  }, [
+    destinationFee?.amount,
+    destinationFee?.ticker,
+    sourceFee?.amount,
+    sourceFee?.ticker,
+  ]);
 
   return (
     <Fragment>
@@ -273,16 +287,43 @@ export const Form = () => {
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between gap-2">
                 <Typography.Text appearance="primary">Amount</Typography.Text>
-                {selectedAsset && (
-                  <AvailableBalance
-                    existential={existential}
-                    balance={selectedAssetAmount}
-                    assetTicker={selectedAsset.ticker}
-                    loading={sourceBalancesLoading || transferConfigLoading}
-                    estimatedFee={transferConfig?.sourceFee.amount}
-                    isPolkadexChain={isPolkadexChain}
-                  />
-                )}
+                <HoverInformation>
+                  <HoverInformation.Trigger
+                    loading={transferConfigLoading || sourceBalancesLoading}
+                  >
+                    <RiInformationFill className="w-3 h-3 text-actionInput" />
+                    <Typography.Text size="xs" appearance="primary">
+                      Available: {availableValue} {selectedAsset?.ticker}
+                    </Typography.Text>
+                    <HoverInformation.Arrow />
+                  </HoverInformation.Trigger>
+                  <HoverInformation.Content>
+                    <ResponsiveCard
+                      label="Source fee"
+                      loading={transferConfigLoading}
+                    >
+                      {sourceFeeAmount} {sourceFeeTicker}
+                    </ResponsiveCard>
+                    <ResponsiveCard
+                      label="Destination fee"
+                      loading={transferConfigLoading}
+                    >
+                      {destinationFeeAmount} {destinationFeeTicker}
+                    </ResponsiveCard>
+                    <ResponsiveCard
+                      label="Balance"
+                      loading={sourceBalancesLoading}
+                    >
+                      {balanceAmount} {selectedAsset?.ticker}
+                    </ResponsiveCard>
+                    <ResponsiveCard
+                      label="Available"
+                      loading={sourceBalancesLoading}
+                    >
+                      {availableValue} {selectedAsset?.ticker}
+                    </ResponsiveCard>
+                  </HoverInformation.Content>
+                </HoverInformation>
               </div>
               <div className="flex item-center border border-primary rounded-sm">
                 <Tooltip open={!!errors.amount}>
@@ -300,7 +341,7 @@ export const Form = () => {
                         {...getFieldProps("amount")}
                         className="max-sm:focus:text-[16px] w-full pl-4 py-4"
                       >
-                        {sourceAccount && availableAmount && (
+                        {sourceAccount && max?.amount && (
                           <Input.Action
                             type="button"
                             onClick={(e) => {

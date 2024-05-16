@@ -3,12 +3,12 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { Copy, Typography, truncateString } from "@polkadex/ux";
 import { RiArrowRightLine, RiFileCopyLine } from "@remixicon/react";
-import { Transaction, networks } from "@orderbook/core/index";
+import { POLKADEX_GENESIS, Transaction } from "@orderbook/core/index";
 
 import { NetworkCard } from "./networkCard";
 import { TokenInfo } from "./tokenInfo";
 
-import { formatedDate } from "@/helpers";
+import { formatAmount, formatedDate } from "@/helpers";
 
 const columnHelper = createColumnHelper<Transaction>();
 
@@ -17,13 +17,14 @@ export const columns = [
     id: "token",
     cell: (e) => {
       const { asset, amount, status } = e.getValue();
-      const formattedAmount = amount.toFormat();
+      const value = amount.toFormat();
+      const formatedAmount = formatAmount(Number(value));
       const ready = ["CLAIMED", "APPROVED", "READY"].includes(status);
       return (
         <TokenInfo
           ticker={asset?.ticker}
           ready={ready}
-          amount={formattedAmount}
+          amount={formatedAmount}
         />
       );
     },
@@ -50,10 +51,9 @@ export const columns = [
     id: "source",
     cell: (e) => {
       const { from, to } = e.getValue();
-      const polkadotNetwork = networks[0]; // temp
 
-      const isFromPolkadotNetwork = from?.genesis?.includes(polkadotNetwork);
-      const isToPolkadotNetwork = to?.genesis?.includes(polkadotNetwork);
+      const isFromPolkadotNetwork = from?.genesis?.includes(POLKADEX_GENESIS);
+      const isToPolkadotNetwork = to?.genesis?.includes(POLKADEX_GENESIS);
 
       return (
         <div className="flex items-center gap-3">
