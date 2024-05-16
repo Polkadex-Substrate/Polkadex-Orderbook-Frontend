@@ -26,7 +26,7 @@ import { ConnectAccount } from "../connectAccount";
 import { ConfirmTransaction } from "../Connect/confirmTransaction";
 
 import { WalletCard } from "./wallet";
-import { NetworkCard } from "./networkCard";
+import { SelectNetwork } from "./selectNetwork";
 
 import { createQueryString, formatAmount } from "@/helpers";
 const initialValues = {
@@ -52,6 +52,7 @@ export const Form = () => {
     sourceBalancesLoading,
     transferConfig,
     selectedAssetBalance,
+    chains,
   } = useTheaProvider();
   const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
   const searchParams = useSearchParams();
@@ -191,11 +192,24 @@ export const Form = () => {
               <div className="flex flex-col gap-2 flex-1">
                 <div className="flex flex-col gap-2">
                   <Typography.Text appearance="primary">From</Typography.Text>
-                  <NetworkCard
-                    name={sourceChain?.name ?? ""}
-                    icon={sourceChain?.logo ?? ""}
-                    onOpenModal={() => setOpenSourceModal(true)}
-                  />
+                  <SelectNetwork
+                    name={sourceChain?.name}
+                    icon={sourceChain?.logo}
+                  >
+                    {chains.map((e) => {
+                      const id = e.genesis;
+                      if (id === sourceChain?.genesis) return null;
+                      return (
+                        <SelectNetwork.Card
+                          key={e.genesis}
+                          icon={e.logo}
+                          value={e.name}
+                          side="from"
+                          onSelect={() => setSourceChain(e)}
+                        />
+                      );
+                    })}
+                  </SelectNetwork>
                 </div>
                 {sourceAccount ? (
                   <WalletCard
@@ -239,11 +253,24 @@ export const Form = () => {
               <div className="flex flex-col gap-2 flex-1">
                 <div className="flex flex-col gap-2">
                   <Typography.Text appearance="primary">To</Typography.Text>
-                  <NetworkCard
-                    name={destinationChain?.name ?? ""}
-                    icon={destinationChain?.logo ?? ""}
-                    onOpenModal={() => setOpenDestinationModal(true)}
-                  />
+                  <SelectNetwork
+                    name={destinationChain?.name}
+                    icon={destinationChain?.logo}
+                  >
+                    {chains.map((e) => {
+                      const id = e.genesis;
+                      if (id === destinationChain?.genesis) return null;
+                      return (
+                        <SelectNetwork.Card
+                          key={e.genesis}
+                          icon={e.logo}
+                          value={e.name}
+                          side="to"
+                          onSelect={() => setDestinationChain(e)}
+                        />
+                      );
+                    })}
+                  </SelectNetwork>
                 </div>
                 {destinationAccount ? (
                   <WalletCard

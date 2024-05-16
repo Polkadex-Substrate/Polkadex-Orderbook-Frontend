@@ -4,26 +4,17 @@ import { Dispatch, Fragment, SetStateAction, useMemo, useState } from "react";
 import { useExtensions } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 import {
-  Button,
   Interaction,
-  Typography,
   useInteractableProvider,
   ProviderCard,
 } from "@polkadex/ux";
-import { CustomAccount, useTheaProvider } from "@orderbook/core/providers";
-import { useMeasure } from "react-use";
-import { motion, MotionConfig } from "framer-motion";
+import { CustomAccount } from "@orderbook/core/providers";
+import { MotionConfig } from "framer-motion";
 import { Chain } from "@polkadex/thea";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { RiExpandUpDownFill } from "@remixicon/react";
 
-import { Expandable } from "../../ui/ReadyToUse/expandable";
-
-import { SelectNetwork } from "./selectNetwork";
 import { AccountCard } from "./accountCard";
 import { CustomAddress } from "./customAddress";
-
-import { createQueryString } from "@/helpers";
 
 export type Extension = (typeof ExtensionsArray)[0] | null;
 
@@ -35,9 +26,7 @@ export const ConnectWallet = ({
   onSetExtension,
   onClose,
   selectedChain,
-  setChain,
   selectedAccount,
-  secondaryChain,
   onSelectCustomAccount,
   from,
 }: {
@@ -50,16 +39,10 @@ export const ConnectWallet = ({
   onSelectCustomAccount?: (e: CustomAccount) => void;
   from?: boolean;
 }) => {
-  const [networkOpen, setNetworkOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
-
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { push } = useRouter();
 
   const { setPage } = useInteractableProvider();
   const { extensionsStatus } = useExtensions();
-  const { chains } = useTheaProvider();
   const ExtensionsWhitelist = useMemo(
     () =>
       ExtensionsArrayWhitelist?.sort(
@@ -68,7 +51,6 @@ export const ConnectWallet = ({
       ),
     [extensionsStatus]
   );
-  const [ref, bounds] = useMeasure<HTMLDivElement>();
 
   const isAccountEmpty = useMemo(
     () => Object.values(selectedAccount ?? {}).every((value) => !value),
@@ -81,115 +63,45 @@ export const ConnectWallet = ({
           Connect your wallet
         </Interaction.Title>
         <Interaction.Content withPadding={false}>
-          <motion.div
-            animate={{
-              height: bounds.height ?? 0,
-            }}
-          >
-            <div ref={ref} className="flex flex-col gap-3">
-              {!accountOpen && (
-                <div className="flex flex-col gap-2">
-                  <Typography.Text appearance="secondary" className="px-7">
-                    1. Select a network
-                  </Typography.Text>
-                  <div className="w-full px-3">
-                    <Expandable
-                      open={networkOpen}
-                      setOpen={setNetworkOpen}
-                      className="max-h-[280px] overflow-auto scrollbar-hide"
-                    >
-                      {chains.map((e) => {
-                        const id = e.genesis;
-                        const visible = selectedChain?.genesis.includes(id);
-                        if (id === secondaryChain) return null;
-                        return (
-                          <Expandable.Item
-                            key={e.genesis}
-                            visible={!!visible}
-                            hasData={!!selectedChain}
-                            onSelect={() => {
-                              setChain(e);
-                              createQueryString({
-                                data: [
-                                  { name: from ? "from" : "to", value: e.name },
-                                ],
-                                pathname,
-                                searchParams,
-                                push,
-                              });
-                            }}
-                          >
-                            <SelectNetwork icon={e.logo}>
-                              {e.name}
-                            </SelectNetwork>
-                          </Expandable.Item>
-                        );
-                      })}
-                    </Expandable>
-                  </div>
+          {selectedChain && (
+            <Fragment>
+              {!accountOpen && !isAccountEmpty ? (
+                <div className="mx-4 flex items-center justify-between gap-2 pl-2 pr-3 py-3 hover:bg-level-1 transition-colors duration-200 border-primary border rounded-md cursor-pointer">
+                  <AccountCard
+                    name={selectedAccount?.name}
+                    address={selectedAccount?.address ?? ""}
+                    onClick={() => setAccountOpen(true)}
+                    hoverable={false}
+                  />
+                  <RiExpandUpDownFill className="w-4 h-4 text-secondary" />
                 </div>
-              )}
-
-              {selectedChain && !networkOpen && (
-                <div className="flex flex-col gap-2">
-                  <div className="flex justify-between items-center">
-                    <Typography.Text appearance="secondary" className="px-7">
-                      2. Select a wallet
-                    </Typography.Text>
-                    {selectedChain && accountOpen && (
-                      <Button.Light
-                        appearance="secondary"
-                        size="xs"
-                        className="mr-4"
-                        onClick={() => setAccountOpen(false)}
-                      >
-                        Cancel
-                      </Button.Light>
-                    )}
+              ) : (
+                <Fragment>
+                  <div className="flex flex-col px-3 overflow-auto">
+                    {ExtensionsWhitelist?.map((value) => (
+                      <ProviderCard
+                        key={value.id}
+                        title={value.title}
+                        icon={value.id}
+                        action={() => {
+                          onSetExtension(value);
+                          setPage("authorization");
+                        }}
+                        href={(value.website as string) ?? value.website[0]}
+                        installed={!!extensionsStatus?.[value.id]}
+                      />
+                    ))}
                   </div>
-                  <Fragment>
-                    {!accountOpen && !isAccountEmpty ? (
-                      <div className="mx-4 flex items-center justify-between gap-2 pl-2 pr-3 py-3 hover:bg-level-1 transition-colors duration-200 border-primary border rounded-md cursor-pointer">
-                        <AccountCard
-                          name={selectedAccount?.name}
-                          address={selectedAccount?.address ?? ""}
-                          onClick={() => setAccountOpen(true)}
-                          hoverable={false}
-                        />
-                        <RiExpandUpDownFill className="w-4 h-4 text-secondary" />
-                      </div>
-                    ) : (
-                      <Fragment>
-                        <div className="flex flex-col px-3 overflow-auto">
-                          {ExtensionsWhitelist?.map((value) => (
-                            <ProviderCard
-                              key={value.id}
-                              title={value.title}
-                              icon={value.id}
-                              action={() => {
-                                onSetExtension(value);
-                                setPage("authorization");
-                              }}
-                              href={
-                                (value.website as string) ?? value.website[0]
-                              }
-                              installed={!!extensionsStatus?.[value.id]}
-                            />
-                          ))}
-                        </div>
-                      </Fragment>
-                    )}
-                  </Fragment>
-                </div>
+                </Fragment>
               )}
-              {!from && (
-                <CustomAddress
-                  selectedAccount={selectedAccount}
-                  onSelectCustomAccount={onSelectCustomAccount}
-                />
-              )}
-            </div>
-          </motion.div>
+            </Fragment>
+          )}
+          {!from && (
+            <CustomAddress
+              selectedAccount={selectedAccount}
+              onSelectCustomAccount={onSelectCustomAccount}
+            />
+          )}
         </Interaction.Content>
         <Interaction.Footer>
           <Interaction.Close appearance="secondary" onClick={onClose}>
