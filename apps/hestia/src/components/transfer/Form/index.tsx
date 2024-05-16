@@ -345,7 +345,6 @@ export const Form = ({
               />
             </button>
             <FromTrading
-              isLocalAccountPresent={isLocalAccountPresent}
               isExtensionAccountPresent={isExtensionAccountPresent}
               isBalanceFetching={isBalanceFetching}
               fromFunding={isTransferFromFunding}

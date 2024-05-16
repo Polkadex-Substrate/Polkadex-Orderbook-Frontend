@@ -376,7 +376,7 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
 
   const onAccountsUpdate = useCallback(
     async (payload: AccountUpdateEvent) => {
-      if (payload.type === "AddProxy") {
+      if (payload.type === "AddProxy" || payload.type === "RegisterAccount") {
         // Update for selected extension account
         queryClient.setQueryData(
           QUERY_KEYS.singleProxyAccounts(mainAddress),
@@ -435,37 +435,9 @@ export const SubscriptionProvider: T.SubscriptionComponent = ({
           await updateBalanceFromEvent(payload);
 
         // Update trading account balance
-        queryClient.setQueryData(
-          QUERY_KEYS.tradingBalances(mainAddress),
-          (oldData?: Balance[]): Balance[] => {
-            const prevData = [...((oldData || []) as Balance[])];
-            const old = prevData.find(
-              (i) => i.asset.id.toString() === updateBalance.assetId.toString()
-            );
-            if (!old) {
-              return prevData;
-            }
-            const newBalance: Balance = {
-              asset: {
-                decimal: 8,
-                id: updateBalance.assetId,
-                name: updateBalance.name,
-                ticker: updateBalance.symbol,
-              },
-              free: updateBalance.free_balance,
-              reserved: updateBalance.reserved_balance,
-            };
-
-            // Filter out old balances from the balance state
-            const balanceFiltered = prevData?.filter(
-              (balance) =>
-                balance.asset.id.toString() !== updateBalance.assetId.toString()
-            );
-
-            // Apply updates to the balances in the state
-            return [...balanceFiltered, newBalance];
-          }
-        );
+        queryClient.refetchQueries({
+          queryKey: QUERY_KEYS.tradingBalances(mainAddress),
+        });
 
         // Update chain balance
         queryClient.setQueryData(
