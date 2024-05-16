@@ -40,8 +40,8 @@ export const useTheaConfig = ({
       const res = await connector?.getTransferConfig(
         destinationChain,
         selectedAsset,
-        destinationAddress,
-        sourceAddress
+        sourceAddress,
+        destinationAddress
       );
       return res;
     },

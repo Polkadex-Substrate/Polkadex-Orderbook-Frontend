@@ -157,7 +157,7 @@ export const ConfirmTransaction = ({
                     {amount} {selectedAsset?.ticker}
                   </Typography.Text>
                 </GenericHorizontalItem>
-                <GenericHorizontalItem label="Sending wallet">
+                <GenericHorizontalItem label="Sender Wallet">
                   <Skeleton
                     loading={!sourceAccount}
                     className="min-h-4 max-w-24"
@@ -172,7 +172,7 @@ export const ConfirmTransaction = ({
                     </Copy>
                   </Skeleton>
                 </GenericHorizontalItem>
-                <GenericHorizontalItem label="Destination wallet">
+                <GenericHorizontalItem label="Source Wallet">
                   <Copy value={destinationAccount?.address ?? ""}>
                     <div className="flex items-center gap-1">
                       <RiFileCopyLine className="w-3 h-3 text-secondary" />
