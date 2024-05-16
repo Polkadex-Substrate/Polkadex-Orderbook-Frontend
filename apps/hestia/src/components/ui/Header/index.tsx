@@ -111,6 +111,10 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
                   href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf",
                   label: "Data Retention Policy",
                 },
+                {
+                  href: "https://pdexanalytics.com",
+                  label: "Analytics",
+                },
               ]}
             >
               More
