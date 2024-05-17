@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { decimalPlaces, getCurrentMarket } from "@orderbook/core/helpers";
+import {
+  decimalPlaces,
+  getCurrentMarket,
+  mergeDuplicateOrders,
+} from "@orderbook/core/helpers";
 import { trimFloat } from "@polkadex/numericals";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -62,34 +66,21 @@ export function useOrderbook(defaultMarket: string) {
   });
 
   const [asks, bids] = useMemo(() => {
-    const askOrders = (data?.asks || []).map((e) => [
-      +trimFloat({ value: e[0], digitsAfterDecimal: sizeState.length }),
-      +e[1],
-    ]);
+    const askOrders = mergeDuplicateOrders(
+      (data?.asks || []).map((e) => [
+        +trimFloat({ value: e[0], digitsAfterDecimal: sizeState.length }),
+        +e[1],
+      ])
+    );
 
-    const bidOrders = (data?.bids || []).map((e) => [
-      +trimFloat({ value: e[0], digitsAfterDecimal: sizeState.length }),
-      +e[1],
-    ]);
+    const bidOrders = mergeDuplicateOrders(
+      (data?.bids || []).map((e) => [
+        +trimFloat({ value: e[0], digitsAfterDecimal: sizeState.length }),
+        +e[1],
+      ])
+    );
 
-    const resultAskArr = Object.entries(
-      askOrders.reduce((acc, [key, value]) => {
-        acc[key] = (acc[key] || 0) + value;
-        return acc;
-      }, {})
-    ).map(([key, value]) => [key, value] as string[]);
-
-    const resultBidArr = Object.entries(
-      bidOrders.reduce((acc, [key, value]) => {
-        acc[key] = (acc[key] || 0) + value;
-        return acc;
-      }, {})
-    ).map(([key, value]) => [key, value] as string[]);
-
-    return [
-      sortArrayDescending(resultAskArr),
-      sortArrayDescending(resultBidArr),
-    ];
+    return [sortArrayDescending(askOrders), sortArrayDescending(bidOrders)];
   }, [data?.asks, data?.bids, sizeState.length]);
 
   const currentMarket = getCurrentMarket(list, defaultMarket);
