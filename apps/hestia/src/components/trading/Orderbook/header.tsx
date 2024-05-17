@@ -1,10 +1,11 @@
 "use client";
 
 import { Dropdown, Typography } from "@polkadex/ux";
+import { DecimalSize } from "@orderbook/core/hooks";
+import { parseScientific } from "@orderbook/core/helpers";
 
 import { FilterCard } from "./filterCard";
 
-type DecimalSize = { size: number; length: number };
 type Props = {
   selectedDecimal: number;
   decimalSizes: DecimalSize[];
@@ -47,7 +48,9 @@ export const Header = ({
         </div>
         <Dropdown>
           <Dropdown.Trigger className="gap-1 items-center opacity-50 transition-opacity ease-out duration-300 hover:opacity-100 w-full">
-            <Typography.Text size="xs">{selectedDecimal}</Typography.Text>
+            <Typography.Text size="xs">
+              {parseScientific(selectedDecimal.toString())}
+            </Typography.Text>
             <Dropdown.Icon />
           </Dropdown.Trigger>
           <Dropdown.Content>
@@ -65,7 +68,7 @@ export const Header = ({
                   }
                   checked={selectedDecimal === +value}
                 >
-                  {value}
+                  {parseScientific(value)}
                 </Dropdown.ItemCheckbox>
               ))}
           </Dropdown.Content>
