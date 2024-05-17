@@ -1,5 +1,5 @@
 import { ExtensionAccount } from "@polkadex/react-providers";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   Interaction,
   Typography,
@@ -32,6 +32,7 @@ export const ExtensionAccounts = ({
   success,
   ...props
 }: ExtensionAccountsProps) => {
+  const isClicked = useRef(false);
   const hasExtensionAccounts = !!extensionAccounts?.length;
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export const ExtensionAccounts = ({
   }, [loading, success, onRedirect]);
 
   return (
-    <Loading.Spinner active={loading}>
+    <Loading.Spinner active={isClicked.current && loading}>
       <Interaction className="w-full" {...props}>
         {hasExtensionAccounts && (
           <Interaction.Title onClose={{ onClick: onClose }}>
@@ -80,7 +81,10 @@ export const ExtensionAccounts = ({
                     key={i}
                     name={value.name}
                     address={value.address}
-                    onClick={() => onSelectExtensionAccount(value)}
+                    onClick={() => {
+                      isClicked.current = true;
+                      onSelectExtensionAccount(value);
+                    }}
                   />
                 ))}
               </div>

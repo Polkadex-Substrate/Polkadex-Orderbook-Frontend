@@ -16,7 +16,6 @@ import { AvailableMessage } from "../availableMessage";
 import { SwitchType } from "@/hooks";
 
 export const FromTrading = ({
-  isLocalAccountPresent,
   isBalanceFetching,
   isExtensionAccountPresent,
   fromFunding,
@@ -39,7 +38,6 @@ export const FromTrading = ({
   localAccountBalance?: string;
   selectedAssetTicker?: string;
   isExtensionAccountPresent?: boolean;
-  isLocalAccountPresent?: boolean;
   isFundingToFunding?: boolean;
   onChangeDirection: (e: SwitchType) => void;
   selectedExtensionAccount: ExtensionAccount | null;
@@ -48,9 +46,7 @@ export const FromTrading = ({
   >;
   type: SwitchType;
 }) => {
-  const accountNotPresent =
-    (fromFunding && !isLocalAccountPresent) ||
-    (!fromFunding && !isExtensionAccountPresent);
+  const accountNotPresent = !fromFunding && !isExtensionAccountPresent;
 
   const balance = fromFunding ? localAccountBalance : extensionAccountBalance;
   const shortAddress = truncateString(extensionAccountAddress ?? "");

@@ -101,12 +101,12 @@ export const useLimitOrder = ({ isSell, market, values, setValues }: Props) => {
         setValues({
           amount,
           price: convertedValue,
-          total,
+          total: total && formatNumber(Decimal.format(total, totalPrecision)),
         });
       }
     },
 
-    [pricePrecision, calculateTotal, setValues, values.amount]
+    [pricePrecision, calculateTotal, setValues, values.amount, totalPrecision]
   );
 
   const onChangeAmount = useCallback(

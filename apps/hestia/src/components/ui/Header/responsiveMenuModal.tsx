@@ -116,6 +116,10 @@ export const ResponsiveMenuModal = ({
                         href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf",
                         label: "Data Retention Policy",
                       },
+                      {
+                        href: "https://pdexanalytics.com",
+                        label: "Analytics",
+                      },
                     ]}
                   >
                     More
@@ -191,7 +195,9 @@ export const ResponsiveMenuModal = ({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <RiPaletteLine className="w-4 h-4 text-primary" />
-                    <Typography.Text size="lg">Color Prefence</Typography.Text>
+                    <Typography.Text size="lg">
+                      Color Preference
+                    </Typography.Text>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 bg-success-base" />

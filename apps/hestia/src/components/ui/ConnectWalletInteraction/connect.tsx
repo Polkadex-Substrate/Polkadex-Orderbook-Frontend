@@ -10,6 +10,8 @@ import {
 } from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { TradeAccount } from "@orderbook/core/providers/types";
+import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
+import { useProfile } from "@orderbook/core/providers/user/profile";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
@@ -82,7 +84,12 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
     gDriveReady,
     onRemoveGoogleDrive,
     removeGoogleDriveLoading,
+    browserAccountPresent,
+    walletLoading,
+    walletSuccess,
   } = useConnectWalletProvider();
+  const { onToogleConnectExtension } = useSettingsProvider();
+  const { allAccounts } = useProfile();
 
   const { setPage, onReset } = useInteractableProvider();
   const sourceId = selectedExtension?.id;
@@ -95,11 +102,19 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
     [extensionAccounts, sourceId]
   );
 
-  const onRedirect = useCallback(
-    () =>
-      selectedWallet ? onNext(hasAccount ? "ExistingUser" : "NewUser") : null,
-    [selectedWallet, onNext, hasAccount]
-  );
+  const onRedirect = useCallback(() => {
+    if (!selectedWallet) return null;
+
+    return browserAccountPresent
+      ? onToogleConnectExtension(false)
+      : onNext(hasAccount ? "ExistingUser" : "NewUser");
+  }, [
+    hasAccount,
+    onNext,
+    onToogleConnectExtension,
+    browserAccountPresent,
+    selectedWallet,
+  ]);
 
   const availableOnDevice = useMemo(
     () =>
@@ -109,14 +124,25 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
     [tempTrading?.address, localTradingAccounts]
   );
 
+  // Used only for removing trading account from blockchain
+  const choosenfundingWallet = useMemo(() => {
+    const mainAddress = allAccounts.find(
+      (a) => a.tradeAddress === tempTrading?.address
+    )?.mainAddress;
+
+    if (!mainAddress) return undefined;
+
+    return extensionAccounts.find((e) => e.address === mainAddress);
+  }, [allAccounts, extensionAccounts, tempTrading?.address]);
+
   return (
     <Fragment>
       <Interactable.Card pageName="ConnectFundingWallets">
         <ExtensionAccounts
           extensionAccounts={walletsFiltered}
-          loading={!!mainProxiesLoading}
-          success={!!mainProxiesSuccess}
-          onSelectExtensionAccount={(e) => onSelectWallet?.(e)}
+          loading={!!mainProxiesLoading || !!walletLoading}
+          success={!!mainProxiesSuccess && !!walletSuccess}
+          onSelectExtensionAccount={async (e) => await onSelectWallet?.(e)}
           onTryAgain={() =>
             selectedExtension && onSelectExtension?.(selectedExtension)
           }
@@ -220,6 +246,7 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
           onCancel={() => setPage("ConnectTradingAccount")}
           enabledExtensionAccount
           loading={removeGoogleDriveLoading}
+          fundWallet={choosenfundingWallet}
         />
       </Interactable.Card>
     </Fragment>
