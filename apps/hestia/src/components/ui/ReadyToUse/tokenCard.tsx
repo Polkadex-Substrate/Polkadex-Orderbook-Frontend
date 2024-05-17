@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 import { useWindowSize } from "usehooks-ts";
 
 interface Props extends ComponentProps<"div"> {
-  icon: TokenAppearance;
+  icon: string;
   ticker: string;
   tokenName: string;
 }

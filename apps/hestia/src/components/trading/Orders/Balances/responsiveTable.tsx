@@ -1,4 +1,4 @@
-import { Button, Drawer, TokenAppearance } from "@polkadex/ux";
+import { Button, Drawer, Tokens } from "@polkadex/ux";
 import { Dispatch, SetStateAction } from "react";
 import { AssetsProps } from "@orderbook/core/hooks";
 import Link from "next/link";
@@ -25,7 +25,7 @@ export const ResponsiveTable = ({
           <TokenCard
             tokenName={chainName}
             ticker={ticker}
-            icon={ticker as TokenAppearance}
+            icon={ticker as keyof typeof Tokens}
           />
         </ResponsiveCard>
         <ResponsiveCard label="Funding account">

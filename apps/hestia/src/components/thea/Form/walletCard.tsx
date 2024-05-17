@@ -3,11 +3,10 @@ import {
   Typography,
   truncateString,
   typeofChildren,
+  truncateNames,
 } from "@polkadex/ux";
 import { ComponentProps, useMemo } from "react";
 import { RiWalletLine } from "@remixicon/react";
-
-import { truncateNames } from "@/helpers";
 
 interface Props extends ComponentProps<typeof Button.Outline> {
   name?: string;
