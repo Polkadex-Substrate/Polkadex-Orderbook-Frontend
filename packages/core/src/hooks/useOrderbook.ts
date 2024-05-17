@@ -113,12 +113,8 @@ export function useOrderbook(defaultMarket: string) {
   }, [pricePrecision]);
 
   useEffect(() => {
-    const precision = Math.min(
-      initialState.length - 1,
-      Math.max(1, pricePrecision - 1)
-    );
-    setSizeState(initialState[precision]);
-  }, [initialState, pricePrecision, setSizeState]);
+    setSizeState(initialState.at(-2) as DecimalSize);
+  }, [initialState]);
 
   return {
     isPriceUp,
