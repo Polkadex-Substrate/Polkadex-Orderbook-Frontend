@@ -21,12 +21,7 @@ import {
 } from "@polkadex/thea";
 import { defaultConfig } from "@orderbook/core/config";
 import { ExtensionAccount } from "@polkadex/react-providers";
-import {
-  Transactions,
-  useTheaBalances,
-  useTheaConfig,
-  useTheaTransactions,
-} from "@orderbook/core/hooks";
+import { useTheaBalances, useTheaConfig } from "@orderbook/core/hooks";
 import { isIdentical } from "@orderbook/core/helpers";
 import { POLKADEX_GENESIS } from "@orderbook/core/constants";
 
@@ -186,18 +181,6 @@ export const TheaProvider = ({
     chain: POLKADEX_GENESIS,
   });
 
-  const {
-    data: destinationBalances = [],
-    isLoading: destinationBalancesLoading,
-    isFetching: destinationBalancesFetching,
-    isSuccess: destinationBalancesSuccess,
-  } = useTheaBalances({
-    connector: destinationConnector,
-    sourceAddress: sourceAccountSelected?.address,
-    assets: destinationAssets,
-    chain: destinationChain?.genesis,
-  });
-
   const selectedAssetSupported = useMemo(
     () =>
       !!selectedAsset &&
@@ -222,39 +205,6 @@ export const TheaProvider = ({
     sourceChain,
     supportedAssets,
   ]);
-
-  const [
-    {
-      data: deposits = [],
-      isLoading: depositsLoading,
-      isFetching: depositsFetching,
-      isSuccess: depositsSuccess,
-      isRefetching: depositsRefetching,
-      refetch: onDepositsRefetch,
-    },
-    {
-      data: withdrawals = [],
-      isLoading: withdrawalsLoading,
-      isFetching: withdrawalsFetching,
-      isSuccess: withdrawalsSuccess,
-      isRefetching: withdrawalsRefetching,
-      refetch: onWithdrawalsRefetch,
-    },
-  ] = useTheaTransactions({
-    sourceAddress: sourceAccountSelected?.address,
-    assets: polkadexAssets,
-    chains,
-  });
-
-  const onRefreshTransactions = useCallback(async () => {
-    await onWithdrawalsRefetch();
-    await onDepositsRefetch();
-  }, [onWithdrawalsRefetch, onDepositsRefetch]);
-
-  const transactionsRefetching = useMemo(
-    () => withdrawalsRefetching || depositsRefetching,
-    [withdrawalsRefetching, depositsRefetching]
-  );
 
   const isPolkadexChain = useMemo(
     () => !!(sourceChain?.genesis === POLKADEX_GENESIS),
@@ -328,26 +278,11 @@ export const TheaProvider = ({
         sourceBalancesSuccess,
         onRefetchSourceBalances,
 
-        destinationBalances,
-        destinationBalancesLoading:
-          destinationBalancesLoading && destinationBalancesFetching,
-        destinationBalancesSuccess,
-
-        deposits,
-        depositsLoading: depositsLoading && depositsFetching,
-        depositsSuccess,
-
-        withdrawals,
-        withdrawalsLoading: withdrawalsLoading && withdrawalsFetching,
-        withdrawalsSuccess,
-
         transferConfig,
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
         transferConfigSuccess,
         onRefetchTransferConfig,
 
-        onRefreshTransactions,
-        transactionsRefetching,
         destinationPDEXBalance,
         isPolkadexChain,
       }}
@@ -387,25 +322,11 @@ type State = {
   sourceBalancesSuccess: boolean;
   onRefetchSourceBalances: () => Promise<void>;
 
-  destinationBalances: AssetAmount[];
-  destinationBalancesLoading: boolean;
-  destinationBalancesSuccess: boolean;
-
-  deposits: Transactions;
-  depositsLoading: boolean;
-  depositsSuccess: boolean;
-
-  withdrawals: Transactions;
-  withdrawalsLoading: boolean;
-  withdrawalsSuccess: boolean;
-
   transferConfig: TransferConfig | undefined;
   transferConfigLoading: boolean;
   transferConfigSuccess: boolean;
   onRefetchTransferConfig: () => Promise<void>;
 
-  transactionsRefetching: boolean;
-  onRefreshTransactions: () => Promise<void>;
   destinationPDEXBalance: number;
   isPolkadexChain: boolean;
 };
@@ -438,25 +359,11 @@ export const Context = createContext<State>({
   sourceBalancesSuccess: false,
   onRefetchSourceBalances: async () => {},
 
-  destinationBalances: [],
-  destinationBalancesLoading: false,
-  destinationBalancesSuccess: false,
-
-  deposits: [],
-  depositsLoading: false,
-  depositsSuccess: false,
-
-  withdrawals: [],
-  withdrawalsLoading: false,
-  withdrawalsSuccess: false,
-
   transferConfig: undefined,
   transferConfigLoading: false,
   transferConfigSuccess: false,
   onRefetchTransferConfig: async () => {},
 
-  transactionsRefetching: false,
-  onRefreshTransactions: async () => {},
   destinationPDEXBalance: 0,
   isPolkadexChain: false,
 });

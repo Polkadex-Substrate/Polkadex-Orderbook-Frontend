@@ -32,7 +32,6 @@ export * from "./useTransactionFee";
 export * from "./useCall";
 export * from "./useTransactionFeeModal";
 export * from "./useTheaBalances";
-export * from "./useTheaTransactions";
 export * from "./useImportGoogleAccount";
 export * from "./useBackupTradingAccount";
 export * from "./useGoogleTradingAccounts";

@@ -20,7 +20,6 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
     transferConfig,
     sourceAccount,
     isPolkadexChain,
-    onRefreshTransactions,
     onRefetchSourceBalances,
   } = useTheaProvider();
 
@@ -50,10 +49,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
 
       onSuccess();
       onHandleAlert(isPolkadexChain ? withdrawMessage : depositMessage);
-      if (isPolkadexChain) {
-        await sleep(4000);
-        await onRefreshTransactions();
-      }
+      if (isPolkadexChain) await sleep(4000);
       await onRefetchSourceBalances();
     },
     onError: (error: Error) => onHandleError?.(error.message),
