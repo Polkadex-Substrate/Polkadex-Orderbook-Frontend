@@ -29,12 +29,15 @@ export const accumulateVolume = (array: string[][]) => {
 // The function merges duplicate orders by accumulating the quantities for each unique order price
 // e.g. [[1,2], [2,3], [1,5], [1,3.4], [2,4], [3,5]]
 // and returns [[1, 10.4], [2, 7], [3, 5]];
-export const mergeDuplicateOrders = (orders: number[][]) => {
+export const mergeDuplicateOrders = (orders: number[][]): string[][] => {
   const res = Object.entries(
-    orders.reduce((acc, [key, value]) => {
-      acc[key] = (acc[key] || 0) + value;
-      return acc;
-    }, {})
+    orders.reduce(
+      (acc, [key, value]) => {
+        acc[key] = (acc[key] || 0) + value;
+        return acc;
+      },
+      {} as Record<number, number>
+    )
   ).map(([key, value]) => [key, value] as string[]);
   return res;
 };

@@ -101,6 +101,7 @@ export function useOrderbook(defaultMarket: string) {
     : MAX_DIGITS_AFTER_DECIMAL;
 
   useEffect(() => {
+    // Generate array from 1 to (pricePrecision + 1) & take last 5 elements only
     setInitialState(
       Array.from(
         { length: pricePrecision + 1 },
@@ -113,7 +114,7 @@ export function useOrderbook(defaultMarket: string) {
   }, [pricePrecision]);
 
   useEffect(() => {
-    setSizeState(initialState.at(-2) as DecimalSize);
+    setSizeState(initialState.at(-2) ?? (initialState.at(-1) as DecimalSize));
   }, [initialState]);
 
   return {
