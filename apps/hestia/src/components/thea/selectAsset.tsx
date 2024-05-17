@@ -27,8 +27,12 @@ export const SelectAsset = ({
   loading?: boolean;
 }) => {
   const handleClose = useCallback(() => onOpenChange(false), [onOpenChange]);
-  const { supportedAssets, setSelectedAsset, sourceBalances } =
-    useTheaProvider();
+  const {
+    supportedAssets,
+    setSelectedAsset,
+    sourceBalances,
+    sourceBalancesLoading,
+  } = useTheaProvider();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
@@ -65,7 +69,7 @@ export const SelectAsset = ({
                     {supportedAssets?.map((e, i) => {
                       const tokenName = getChainFromTicker(e.ticker);
                       const balance =
-                        sourceBalances?.find((e) => e.ticker.includes(e.ticker))
+                        sourceBalances?.find((x) => x.ticker.includes(e.ticker))
                           ?.amount ?? 0;
 
                       return (
@@ -90,6 +94,7 @@ export const SelectAsset = ({
                             ticker={e.ticker}
                             tokenName={tokenName}
                             balance={formatAmount(balance)}
+                            loading={sourceBalancesLoading}
                           />
                         </Searchable.Item>
                       );
