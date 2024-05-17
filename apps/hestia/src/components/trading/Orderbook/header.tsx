@@ -54,18 +54,19 @@ export const Header = ({
             {decimalSizes
               .map((v) => v.size.toString())
               .map((value, i) => (
-                <Dropdown.Item
+                <Dropdown.ItemCheckbox
                   key={i}
-                  onClick={() =>
+                  onSelect={() =>
                     onChangeDecimal(
                       decimalSizes.find(
                         (v) => v.size.toString() === value
                       ) as DecimalSize
                     )
                   }
+                  checked={selectedDecimal === +value}
                 >
                   {value}
-                </Dropdown.Item>
+                </Dropdown.ItemCheckbox>
               ))}
           </Dropdown.Content>
         </Dropdown>
