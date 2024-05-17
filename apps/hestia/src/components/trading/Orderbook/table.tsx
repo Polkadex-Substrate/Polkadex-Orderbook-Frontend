@@ -111,7 +111,9 @@ export const Table = ({
                 onChangePrice(i);
               }}
             >
-              <Decimal fixed={pricePrecision}>{price}</Decimal>
+              <Decimal fixed={pricePrecision} thousSep=",">
+                {price}
+              </Decimal>
             </Typography.Text>
             <Typography.Text
               size="xs"
@@ -123,7 +125,9 @@ export const Table = ({
               }}
               className="justify-self-end"
             >
-              <Decimal fixed={qtyPrecision}>{amount}</Decimal>
+              <Decimal fixed={qtyPrecision} thousSep=",">
+                {amount}
+              </Decimal>
             </Typography.Text>
             <Typography.Text
               size="xs"
@@ -135,7 +139,9 @@ export const Table = ({
               }}
               className="justify-self-end pr-2"
             >
-              <Decimal fixed={pricePrecision}>{total[i]}</Decimal>
+              <Decimal fixed={pricePrecision} thousSep=",">
+                {total[i]}
+              </Decimal>
             </Typography.Text>
           </div>
         );
