@@ -1,4 +1,4 @@
-import { Token, Typography, TokenAppearance } from "@polkadex/ux";
+import { Typography, TokenAppearance, Token } from "@polkadex/ux";
 import classNames from "classnames";
 
 export const TokenInfo = ({
@@ -13,7 +13,7 @@ export const TokenInfo = ({
   return (
     <div className="flex items-center gap-3">
       <Token
-        name={ticker as TokenAppearance}
+        name={ticker}
         size="md"
         className="p-0.5 rounded-full border border-primary max-sm:hidden"
         appearance={ticker as TokenAppearance}

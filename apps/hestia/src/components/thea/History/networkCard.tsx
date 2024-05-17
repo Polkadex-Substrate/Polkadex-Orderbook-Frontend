@@ -10,16 +10,16 @@ export const NetworkCard = ({
 }) => {
   if (isPolkadotEcosystem)
     return (
-      <div className="flex items-center gap-1">
-        <Chain name={name} />
+      <div className="flex items-center gap-2">
+        <Chain name={name} size="2xs" />
         <Typography.Text size="sm">{name}</Typography.Text>
       </div>
     );
   return (
     <HoverCard>
       <HoverCard.Trigger>
-        <div className="flex items-center gap-1">
-          <Chain name={name} />
+        <div className="flex items-center gap-2">
+          <Chain size="2xs" name={name} />
           <div className="flex flex-col">
             <Typography.Text size="sm">{name}</Typography.Text>
             <div className="flex items-center gap-1">

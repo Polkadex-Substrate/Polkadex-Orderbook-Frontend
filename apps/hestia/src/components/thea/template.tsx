@@ -91,20 +91,22 @@ export function Template() {
                     <Tabs.Trigger value="history">History</Tabs.Trigger>
                     <Tabs.Trigger value="assets">Assets</Tabs.Trigger>
                   </Tabs.List>
-                  <Button.Light
-                    appearance="secondary"
-                    size="xs"
-                    className="gap-1"
-                    onClick={onRefreshTransactions}
-                    disabled={transactionsRefetching}
-                  >
-                    <RiRefreshLine className="w-4 h-4 text-primary" />
-                    {transactionsRefetching && (
-                      <Typography.Text appearance="primary" size="xs">
-                        Refetching..
-                      </Typography.Text>
-                    )}
-                  </Button.Light>
+                  {activeTab === "history" && (
+                    <Button.Light
+                      appearance="secondary"
+                      size="xs"
+                      className="gap-1"
+                      onClick={onRefreshTransactions}
+                      disabled={transactionsRefetching}
+                    >
+                      <RiRefreshLine className="w-4 h-4 text-primary" />
+                      {transactionsRefetching && (
+                        <Typography.Text appearance="primary" size="xs">
+                          Refetching..
+                        </Typography.Text>
+                      )}
+                    </Button.Light>
+                  )}
                 </div>
                 {sourceAccount ? (
                   <Fragment>

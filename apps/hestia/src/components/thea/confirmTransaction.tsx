@@ -288,12 +288,7 @@ export const ConfirmTransaction = ({
               <Interaction.Action
                 disabled={disabled}
                 appearance={disabled ? "secondary" : "primary"}
-                onClick={async () =>
-                  await mutateAsync({
-                    amount,
-                    tokenFeeId: sourceFeeTicker ?? "",
-                  })
-                }
+                onClick={async () => await mutateAsync({ amount })}
               >
                 Sign and Submit
               </Interaction.Action>

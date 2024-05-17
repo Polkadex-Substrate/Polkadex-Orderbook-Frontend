@@ -22,13 +22,12 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
     onRefetchSourceBalances,
   } = useTheaProvider();
   return useMutation({
-    mutationFn: async ({
-      amount,
-      tokenFeeId,
-    }: {
-      amount: number;
-      tokenFeeId: string;
-    }) => {
+    mutationFn: async ({ amount }: { amount: number }) => {
+      // const decimales =
+      //   networks.find((x) => x.id === transferConfig?.sourceChain.genesis)
+      //     ?.decimals ?? 12;
+      // const formatedAmount = toPlanck(amount, decimales).toNumber();
+
       if (!transferConfig || !sourceAccount || !api) {
         onHandleError?.("Bridge issue");
         return;
@@ -41,8 +40,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
         ext,
         { signer: sourceAccount.signer },
         sourceAccount.address,
-        true,
-        tokenFeeId
+        true
       );
       onSuccess();
       onHandleAlert(isPolkadexChain ? withdrawMessage : depositMessage);

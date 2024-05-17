@@ -7,6 +7,7 @@ import {
   Typography,
   ResponsiveCard,
   HoverInformation,
+  AccountCombobox,
 } from "@polkadex/ux";
 import {
   RiArrowDownSLine,
@@ -23,9 +24,9 @@ import { bridgeValidations } from "@orderbook/core/validations";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
-import { ConfirmTransaction } from "../Connect/confirmTransaction";
+import { ConfirmTransaction } from "../confirmTransaction";
 
-import { WalletCard } from "./wallet";
+import { WalletCard } from "./walletCard";
 import { SelectNetwork } from "./selectNetwork";
 
 import { createQueryString, formatAmount } from "@/helpers";
@@ -36,7 +37,6 @@ export const Form = () => {
   const [openAsset, setOpenAsset] = useState(false);
   const [openFeeModal, setOpenFeeModal] = useState(false);
   const [openSourceModal, setOpenSourceModal] = useState(false);
-  const [openDestinationModal, setOpenDestinationModal] = useState(false);
 
   const {
     sourceChain,
@@ -162,28 +162,12 @@ export const Form = () => {
       <ConnectAccount
         open={openSourceModal}
         onOpenChange={setOpenSourceModal}
-        selectedChain={sourceChain}
-        secondaryChain={destinationChain?.genesis}
-        setChain={setSourceChain}
-        selectedAccount={{
-          name: sourceAccount?.name ?? "",
-          address: sourceAccount?.address ?? "",
-        }}
         setAccount={setSourceAccount}
-        from
       />
-      <ConnectAccount
-        open={openDestinationModal}
-        onOpenChange={setOpenDestinationModal}
-        selectedChain={destinationChain}
-        secondaryChain={sourceChain?.genesis}
-        setChain={setDestinationChain}
-        selectedAccount={destinationAccount}
-        setCustomAccount={(e) => setDestinationAccount(e)}
-      />
+
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 flex-1 max-w-[800px] mx-auto py-8 w-full px-2"
+        className="flex flex-col gap-4 flex-1 max-w-[900px] mx-auto py-8 w-full px-2"
       >
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-3">
@@ -198,7 +182,13 @@ export const Form = () => {
                   >
                     {chains.map((e) => {
                       const id = e.genesis;
-                      if (id === sourceChain?.genesis) return null;
+                      if (
+                        [
+                          sourceChain?.genesis,
+                          destinationChain?.genesis,
+                        ].includes(id)
+                      )
+                        return null;
                       return (
                         <SelectNetwork.Card
                           key={e.genesis}
@@ -259,7 +249,13 @@ export const Form = () => {
                   >
                     {chains.map((e) => {
                       const id = e.genesis;
-                      if (id === destinationChain?.genesis) return null;
+                      if (
+                        [
+                          sourceChain?.genesis,
+                          destinationChain?.genesis,
+                        ].includes(id)
+                      )
+                        return null;
                       return (
                         <SelectNetwork.Card
                           key={e.genesis}
@@ -272,36 +268,10 @@ export const Form = () => {
                     })}
                   </SelectNetwork>
                 </div>
-                {destinationAccount ? (
-                  <WalletCard
-                    name={destinationAccount.name}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setOpenDestinationModal(true);
-                    }}
-                  >
-                    {destinationAccount.address}
-                  </WalletCard>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-2">
-                      <RiWalletLine className="w-3.5 h-3.5 text-actionInput" />
-                      <Typography.Text>Account not present</Typography.Text>
-                    </div>
-                    <Button.Solid
-                      appearance="secondary"
-                      size="xs"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setOpenDestinationModal(true);
-                      }}
-                    >
-                      Connect wallet
-                    </Button.Solid>
-                  </div>
-                )}
+                <AccountCombobox
+                  account={destinationAccount}
+                  setAccount={(e) => e && setDestinationAccount(e)}
+                />
               </div>
             </div>
           </div>

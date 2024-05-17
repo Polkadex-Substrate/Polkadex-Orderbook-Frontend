@@ -2,7 +2,12 @@
 
 import { useExtensionAccounts, useExtensions } from "@polkadex/react-providers";
 import { Fragment, useCallback, useMemo } from "react";
-import { Interactable, useInteractableProvider } from "@polkadex/ux";
+import {
+  Interactable,
+  useInteractableProvider,
+  ExtensionAccounts,
+  ConnectWallet,
+} from "@polkadex/ux";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { TradeAccount } from "@orderbook/core/providers/types";
 
@@ -11,9 +16,6 @@ import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
 import { ImportTradingAccountMnemonic } from "../ConnectWallet/importTradingAccountMnemonic";
 import { RemoveTradingAccount } from "../ConnectWallet/removeTradingAccount";
 import { ConnectTradingAccountCard } from "../ReadyToUse/connectTradingAccountCard";
-import { ExtensionAccounts } from "../ConnectWallet/extensionAccounts";
-import { Authorization } from "../ConnectWallet/authorization";
-import { ConnectWallet } from "../ConnectWallet/connectWallet";
 import { UnlockAccount } from "../ReadyToUse/unlockAccount";
 
 import { InteractableProps } from ".";
@@ -42,7 +44,7 @@ const TriggerCompontent = ({ onClose }: { onClose: () => void }) => {
       installedExtensions={extensionsStatus}
       onConnectProvider={(e) => onSelectExtension?.(e)}
       onBack={onClose}
-      onConnectCallback={() => setPage("Authorization")}
+      onConnectCallback={() => setPage("ConnectFundingWallets")}
     >
       <ConnectTradingAccountCard
         tradingAccountLentgh={localTradingAccounts?.length ?? 0}
@@ -109,17 +111,6 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
 
   return (
     <Fragment>
-      <Interactable.Card pageName="Authorization">
-        <Authorization
-          onAction={async () =>
-            await connectExtensionAccounts(selectedExtension?.id as string)
-          }
-          extensionIcon={selectedExtension?.id as string}
-          extensionName={selectedExtension?.title}
-          onActionCallback={() => setPage("ConnectFundingWallets")}
-          onClose={onReset}
-        />
-      </Interactable.Card>
       <Interactable.Card pageName="ConnectFundingWallets">
         <ExtensionAccounts
           extensionAccounts={walletsFiltered}
@@ -134,6 +125,11 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
           }
           onClose={onReset}
           onRedirect={onRedirect}
+          onPermission={async () =>
+            await connectExtensionAccounts(selectedExtension?.id as string)
+          }
+          extensionIcon={selectedExtension?.id as string}
+          extensionName={selectedExtension?.title}
         />
       </Interactable.Card>
       <Interactable.Card pageName="UnlockBrowserAccount">

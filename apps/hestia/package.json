@@ -26,7 +26,7 @@
     "@polkadex/subscan": "^1.1.61",
     "@polkadex/thea": "^5.0.0",
     "@polkadex/types": "^1.2.2",
-    "@polkadex/ux": "^6.22.0",
+    "@polkadex/ux": "^6.23.0",
     "@polkadot-cloud/assets": "^0.3.4",
     "@remixicon/react": "^4.2.0",
     "@sentry/nextjs": "^7.99.0",

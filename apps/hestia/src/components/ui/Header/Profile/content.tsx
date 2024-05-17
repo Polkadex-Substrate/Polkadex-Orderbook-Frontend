@@ -28,9 +28,9 @@ import { ConnectExtensionAccount } from "../../ConnectWallet/connnectExtensionAc
 import { FundAccount } from "../../ConnectWallet/fundAccount";
 import { MaximumTradingAccount } from "../../ConnectWallet/maximumTradingAccount";
 import { InsufficientBalance } from "../../ConnectWallet/insufficientBalance";
-import { Authorization } from "../../ConnectWallet/authorization";
 import { UnlockAccount } from "../../ReadyToUse/unlockAccount";
 import { GenericHorizontalCard } from "../../ReadyToUse";
+import { Authorization } from "../../ConnectWallet/authorization";
 
 export const Content = () => {
   const {

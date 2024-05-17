@@ -4,8 +4,8 @@ import {
   truncateString,
   typeofChildren,
 } from "@polkadex/ux";
-import { RiWalletLine } from "@remixicon/react";
 import { ComponentProps, useMemo } from "react";
+import { RiWalletLine } from "@remixicon/react";
 
 import { truncateNames } from "@/helpers";
 

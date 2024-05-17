@@ -8,7 +8,7 @@ import { POLKADEX_GENESIS, Transaction } from "@orderbook/core/index";
 import { NetworkCard } from "./networkCard";
 import { TokenInfo } from "./tokenInfo";
 
-import { formatAmount, formatedDate } from "@/helpers";
+import { formatedDate } from "@/helpers";
 
 const columnHelper = createColumnHelper<Transaction>();
 
@@ -18,15 +18,9 @@ export const columns = [
     cell: (e) => {
       const { asset, amount, status } = e.getValue();
       const value = amount.toFormat();
-      const formatedAmount = formatAmount(Number(value));
       const ready = ["CLAIMED", "APPROVED", "READY"].includes(status);
-      return (
-        <TokenInfo
-          ticker={asset?.ticker}
-          ready={ready}
-          amount={formatedAmount}
-        />
-      );
+
+      return <TokenInfo ticker={asset?.ticker} ready={ready} amount={value} />;
     },
     header: () => (
       <Typography.Text size="xs" appearance="primary">

@@ -1,14 +1,17 @@
 "use client";
 
-import { Skeleton, Typography, truncateString } from "@polkadex/ux";
+import {
+  Skeleton,
+  Typography,
+  truncateString,
+  AccountCombobox,
+} from "@polkadex/ux";
 import { Dispatch, Fragment, PropsWithChildren, SetStateAction } from "react";
 import { ExtensionAccount } from "@polkadex/react-providers";
 
 import { InlineAccountCard } from "../../../ui/ReadyToUse";
 import { Card } from "../card";
 import { AvailableMessage } from "../availableMessage";
-
-import { SelectFundingDropdown } from "./selectFundingDropdown";
 
 import { SwitchType } from "@/hooks";
 
@@ -114,10 +117,12 @@ const RenderConditional = ({
 }>) => {
   if (isFundingToFunding)
     return (
-      <SelectFundingDropdown
-        selectedExtensionAccount={selectedExtensionAccount}
-        setSelectedExtensionAccount={setSelectedExtensionAccount}
-      />
+      <div className="px-5 py-3 border-t border-primary">
+        <AccountCombobox
+          account={selectedExtensionAccount}
+          setAccount={(e) => e && setSelectedExtensionAccount(e)}
+        />
+      </div>
     );
   else if (accountNotPresent)
     return (

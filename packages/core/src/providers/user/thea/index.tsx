@@ -37,7 +37,7 @@ const {
   defaultTheaSourceChain,
 } = defaultConfig;
 export type GenericStatus = "error" | "idle" | "success" | "loading";
-export type CustomAccount = { name: string; address: string };
+
 export { useTheaProvider } from "./useThea";
 export const TheaProvider = ({
   initialAssetTicker,
@@ -53,7 +53,8 @@ export const TheaProvider = ({
   const [sourceChain, setSourceChain] = useState<Chain | null>(null);
   const [destinationChain, setDestinationChain] = useState<Chain | null>(null);
   const [sourceAccount, setSourceAccount] = useState<ExtensionAccount>();
-  const [destinationAccount, setDestinationAccount] = useState<CustomAccount>();
+  const [destinationAccount, setDestinationAccount] =
+    useState<ExtensionAccount>();
   const { selectedWallet } = useConnectWalletProvider();
 
   const { getAllChains } = useMemo(() => new Thea(), []);
@@ -274,6 +275,7 @@ export const TheaProvider = ({
     isLoading: transferConfigLoading,
     isFetching: transferConfigFetching,
     isSuccess: transferConfigSuccess,
+    refetch: transferConfigRefetch,
   } = useTheaConfig({
     connector: sourceConnector,
     destinationAddress: destinationAccountSelected?.address,
@@ -281,6 +283,10 @@ export const TheaProvider = ({
     selectedAsset,
     destinationChain,
   });
+
+  const onRefetchTransferConfig = useCallback(async () => {
+    await transferConfigRefetch();
+  }, [transferConfigRefetch]);
 
   const selectedAssetBalance = useMemo(
     () =>
@@ -291,7 +297,6 @@ export const TheaProvider = ({
     [selectedAsset, sourceBalances]
   );
 
-  console.log("Config", transferConfig);
   return (
     <Provider
       value={{
@@ -339,6 +344,7 @@ export const TheaProvider = ({
         transferConfig,
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
         transferConfigSuccess,
+        onRefetchTransferConfig,
 
         onRefreshTransactions,
         transactionsRefetching,
@@ -359,8 +365,8 @@ type State = {
   setSourceAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
   chains: Chain[];
 
-  destinationAccount?: CustomAccount;
-  setDestinationAccount: Dispatch<SetStateAction<CustomAccount | undefined>>;
+  destinationAccount?: ExtensionAccount;
+  setDestinationAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
 
   destinationChain: Chain | null;
   setDestinationChain: Dispatch<SetStateAction<Chain | null>>;
@@ -396,6 +402,7 @@ type State = {
   transferConfig: TransferConfig | undefined;
   transferConfigLoading: boolean;
   transferConfigSuccess: boolean;
+  onRefetchTransferConfig: () => Promise<void>;
 
   transactionsRefetching: boolean;
   onRefreshTransactions: () => Promise<void>;
@@ -446,6 +453,7 @@ export const Context = createContext<State>({
   transferConfig: undefined,
   transferConfigLoading: false,
   transferConfigSuccess: false,
+  onRefetchTransferConfig: async () => {},
 
   transactionsRefetching: false,
   onRefreshTransactions: async () => {},

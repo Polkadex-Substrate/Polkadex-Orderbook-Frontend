@@ -6,6 +6,7 @@ import {
   Searchable,
   Skeleton,
   TokenAppearance,
+  TokenCard,
 } from "@polkadex/ux";
 import { SetStateAction, Dispatch, useCallback, ComponentProps } from "react";
 import classNames from "classnames";
@@ -14,9 +15,7 @@ import { useTheaProvider } from "@orderbook/core/providers";
 import { getChainFromTicker } from "@orderbook/core/helpers";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { TokenCard } from "./Connect";
-
-import { createQueryString } from "@/helpers";
+import { createQueryString, formatAmount } from "@/helpers";
 
 export const SelectAsset = ({
   open,
@@ -28,7 +27,8 @@ export const SelectAsset = ({
   loading?: boolean;
 }) => {
   const handleClose = useCallback(() => onOpenChange(false), [onOpenChange]);
-  const { supportedAssets, setSelectedAsset } = useTheaProvider();
+  const { supportedAssets, setSelectedAsset, sourceBalances } =
+    useTheaProvider();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
@@ -64,6 +64,10 @@ export const SelectAsset = ({
                   >
                     {supportedAssets?.map((e, i) => {
                       const tokenName = getChainFromTicker(e.ticker);
+                      const balance =
+                        sourceBalances?.find((e) => e.ticker.includes(e.ticker))
+                          ?.amount ?? 0;
+
                       return (
                         <Searchable.Item
                           key={i}
@@ -85,6 +89,7 @@ export const SelectAsset = ({
                             icon={e.ticker as TokenAppearance}
                             ticker={e.ticker}
                             tokenName={tokenName}
+                            balance={formatAmount(balance)}
                           />
                         </Searchable.Item>
                       );

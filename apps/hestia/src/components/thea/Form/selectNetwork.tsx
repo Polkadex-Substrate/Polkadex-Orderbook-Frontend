@@ -79,8 +79,8 @@ export const Card = ({
         });
       }}
     >
-      <div className="flex items-center gap-2 py-1 rounded-md w-full">
-        <Chain name={icon} />
+      <div className="flex items-center gap-2 rounded-md w-full">
+        <Chain name={icon} size="sm" />
         <Typography.Text>{value}</Typography.Text>
       </div>
     </Dropdown.Item>
