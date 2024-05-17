@@ -36,7 +36,7 @@ export const Trigger = ({
       <div
         className={classNames(
           "flex flex-col w-full h-full text-left",
-          !browserAccountPresent && "py-2"
+          !browserAccountPresent && "py-2.5"
         )}
       >
         <HoverCard>
