@@ -140,7 +140,7 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
       <Interactable.Card pageName="ConnectFundingWallets">
         <ExtensionAccounts
           extensionAccounts={walletsFiltered}
-          loading={!!mainProxiesLoading || !!walletLoading}
+          loading={false} // TEMP
           success={!!mainProxiesSuccess && !!walletSuccess}
           onSelectExtensionAccount={async (e) => await onSelectWallet?.(e)}
           onTryAgain={() =>
