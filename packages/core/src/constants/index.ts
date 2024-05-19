@@ -92,67 +92,11 @@ export const DEFAULT_BATCH_LIMIT = 15;
 export const CUSTOM_ADDRES_NAME = "Custom address";
 export const OTHER_ASSET_EXISTENTIAL = 0.00000001;
 export const THEA_AUTOSWAP = 1.5;
-export const POLKADEX_GENESIS =
-  "0x3920bcb4960a1eef5580cd5367ff3f430eef052774f78468852f7b9cb39f8a3c";
-
-export const EXISTENTIAL = {
-  "0x3920bcb4960a1eef5580cd5367ff3f430eef052774f78468852f7b9cb39f8a3c": {
-    // Polkadex
-    existential: 1,
-    decimals: 18,
-    ticker: "PDEX",
-    ss58: 88,
-  },
-  "0x68d56f15f85d3136970ec16946040bc1752654e906147f7e43e9d539d7c3de2f": {
-    // Asset Hub
-    existential: 0.12,
-    decimals: 10,
-    ticker: "DOT",
-    ss58: 0,
-  },
-  "0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3": {
-    // Polkadot
-    existential: 1.2,
-    decimals: 10,
-    ticker: "DOT",
-    ss58: 0,
-  },
-  "0x9eb76c5184c4ab8679d2d5d819fdf90b9c001403e9e17da2e14b6d8aec4029c6": {
-    // Astar
-    existential: Number(Math.pow(10, -4).toFixed(4)),
-    decimals: 18,
-    ticker: "ASTR",
-    ss58: 5,
-  },
-  "0x1bb969d85965e4bb5a651abbedf21a54b6b31a21f66b5401cc3f1e286268d736": {
-    // Phala
-    existential: 0.02,
-    decimals: 12,
-    ticker: "PHA",
-    ss58: 30,
-  },
-  "0xfe58ea77779b7abda7da4ec526d14db9b1e9cd40a217c34892af80a9b332b76d": {
-    // Moonbeam
-    existential: 0.1,
-    decimals: 18,
-    ticker: "GLMR",
-    ss58: 1284,
-  },
-  "0x84322d9cddbf35088f1e54e9a85c967a41a56a4f43445768125e61af166c7d31": {
-    // Unique
-    existential: 0.01,
-    decimals: 18,
-    ticker: "UNQ",
-    ss58: 7391,
-  },
-  "0xbf88efe70e9e0e916416e8bed61f2b45717f517d7f3523e33c7b001e5ffcbc72": {
-    // Interlay
-    existential: 0.00001,
-    decimals: 10,
-    ticker: "INTR",
-    ss58: 2032,
-  },
-};
+export const GENESIS = [
+  "0x3920bcb4960a1eef5580cd5367ff3f430eef052774f78468852f7b9cb39f8a3c",
+  "0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3",
+  "0x25a5cc106eea7138acab33231d7160d69cb777ee0c2c553fcddf5138993e6dd9",
+];
 
 export const PALLET_ADDRESS =
   "esoEt6uZ3GuFV8EzKB2EAREe3KE9WuRVfmhK1RRtwffY78ArH";

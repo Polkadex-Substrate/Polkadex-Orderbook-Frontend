@@ -23,7 +23,7 @@ import { defaultConfig } from "@orderbook/core/config";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import { useTheaBalances, useTheaConfig } from "@orderbook/core/hooks";
 import { isIdentical } from "@orderbook/core/helpers";
-import { POLKADEX_GENESIS } from "@orderbook/core/constants";
+import { GENESIS } from "@orderbook/core/constants";
 
 import { useConnectWalletProvider } from "../connectWalletProvider";
 const {
@@ -81,7 +81,7 @@ export const TheaProvider = ({
   );
 
   const polkadexConnector = useMemo(
-    () => destinationChain && getChainConnector(POLKADEX_GENESIS),
+    () => destinationChain && getChainConnector(GENESIS[0]),
     [destinationChain]
   );
 
@@ -178,7 +178,7 @@ export const TheaProvider = ({
     connector: polkadexConnector,
     sourceAddress: destinationAccountSelected?.address,
     assets: polkadexAssets,
-    chain: POLKADEX_GENESIS,
+    chain: GENESIS[0],
   });
 
   const selectedAssetSupported = useMemo(
@@ -207,7 +207,7 @@ export const TheaProvider = ({
   ]);
 
   const isPolkadexChain = useMemo(
-    () => !!(sourceChain?.genesis === POLKADEX_GENESIS),
+    () => !!(sourceChain?.genesis === GENESIS[0]),
     [sourceChain?.genesis]
   );
 
