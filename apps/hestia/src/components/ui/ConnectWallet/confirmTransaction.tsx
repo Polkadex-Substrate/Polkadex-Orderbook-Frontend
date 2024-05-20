@@ -240,6 +240,9 @@ export const ConfirmTransaction = ({
                     </div>
                   </GenericHorizontalItem>
                 )}
+                <GenericHorizontalItem label="Existential Amount">
+                  <Typography.Text>1 PDEX</Typography.Text>
+                </GenericHorizontalItem>
                 <Dropdown>
                   <Dropdown.Trigger
                     ref={ref}
