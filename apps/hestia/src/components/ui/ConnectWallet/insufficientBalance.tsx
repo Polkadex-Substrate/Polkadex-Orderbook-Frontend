@@ -52,7 +52,7 @@ export const InsufficientBalance = ({
               {balance} PDEX
             </GenericInfoCard>
             <GenericInfoCard label="Balance required">
-              {fee} PDEX
+              {">"} {fee} PDEX
             </GenericInfoCard>
           </div>
         </div>
