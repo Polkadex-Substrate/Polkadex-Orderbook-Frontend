@@ -24,6 +24,7 @@ import { ExtensionAccount } from "@polkadex/react-providers";
 import { useTheaBalances, useTheaConfig } from "@orderbook/core/hooks";
 import { isIdentical } from "@orderbook/core/helpers";
 import { GENESIS } from "@orderbook/core/constants";
+import { UseQueryResult } from "@tanstack/react-query";
 
 import { useConnectWalletProvider } from "../connectWalletProvider";
 const {
@@ -170,10 +171,6 @@ export const TheaProvider = ({
     chain: sourceChain?.genesis,
   });
 
-  const onRefetchSourceBalances = useCallback(async () => {
-    await sourceBalancesRefetch();
-  }, [sourceBalancesRefetch]);
-
   const { data: polkadexDestinationBalances = [] } = useTheaBalances({
     connector: polkadexConnector,
     sourceAddress: destinationAccountSelected?.address,
@@ -276,7 +273,7 @@ export const TheaProvider = ({
         sourceBalances,
         sourceBalancesLoading: sourceBalancesLoading && sourceBalancesFetching,
         sourceBalancesSuccess,
-        onRefetchSourceBalances,
+        onRefetchSourceBalances: sourceBalancesRefetch,
 
         transferConfig,
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
@@ -320,7 +317,7 @@ type State = {
   sourceBalances: AssetAmount[];
   sourceBalancesLoading: boolean;
   sourceBalancesSuccess: boolean;
-  onRefetchSourceBalances: () => Promise<void>;
+  onRefetchSourceBalances?: UseQueryResult["refetch"];
 
   transferConfig: TransferConfig | undefined;
   transferConfigLoading: boolean;
@@ -357,7 +354,6 @@ export const Context = createContext<State>({
   sourceBalances: [],
   sourceBalancesLoading: false,
   sourceBalancesSuccess: false,
-  onRefetchSourceBalances: async () => {},
 
   transferConfig: undefined,
   transferConfigLoading: false,

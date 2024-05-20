@@ -50,7 +50,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
       onSuccess();
       onHandleAlert(isPolkadexChain ? withdrawMessage : depositMessage);
       if (isPolkadexChain) await sleep(4000);
-      await onRefetchSourceBalances();
+      await onRefetchSourceBalances?.();
     },
     onError: (error: Error) => onHandleError?.(error.message),
   });

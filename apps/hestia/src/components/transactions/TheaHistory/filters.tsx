@@ -5,11 +5,12 @@ import { useMemo } from "react";
 import { useWindowSize } from "usehooks-ts";
 import { RiMore2Line, RiCloseLine, RiRefreshLine } from "@remixicon/react";
 import { Asset, Chain } from "@polkadex/thea";
-import { Transaction } from "@orderbook/core";
 
 import { FacetedFilter } from "../facetedFilters";
 
 import { Export } from "./export";
+
+import { Transaction } from "@/hooks";
 
 export const filters = {
   status: ["Completed", "In Progress"],

@@ -3,9 +3,9 @@ import { Button, Tooltip, Typography } from "@polkadex/ux";
 import { useState } from "react";
 import CSVLink from "react-csv-downloader";
 import { RiDownload2Line } from "@remixicon/react";
-import { Transaction } from "@orderbook/core/index";
 
 import { formatedDate } from "@/helpers";
+import { Transaction } from "@/hooks";
 
 const csvColumns = [
   "sourceChain",
