@@ -16,6 +16,7 @@ import { TransferHistory } from "./Transfer";
 import { OpenOrders } from "./OpenOrders";
 import { OrderHistory } from "./OrderHistory";
 import { TradeHistory } from "./TradeHistory";
+import { TheaHistory } from "./TheaHistory";
 
 import { Footer, Header } from "@/components/ui";
 import { ConnectAccountWrapper } from "@/components/ui/ReadyToUse";
@@ -128,6 +129,9 @@ export function Template() {
                     <Tabs.Trigger value="tradeHistory">
                       Trade History
                     </Tabs.Trigger>
+                    <Tabs.Trigger value="theaHistory">
+                      Thea History
+                    </Tabs.Trigger>
                   </Tabs.List>
                   <ScrollArea.Bar orientation="horizontal" />
                 </ScrollArea>
@@ -176,6 +180,17 @@ export function Template() {
             <Tabs.Content value="tradeHistory" className="flex-1 flex">
               {mainAddress?.length ? (
                 <TradeHistory
+                  ref={tableRowsRef}
+                  maxHeight={maxHeight}
+                  searchTerm={searchTerm}
+                />
+              ) : (
+                <ConnectAccountWrapper funding />
+              )}
+            </Tabs.Content>
+            <Tabs.Content value="theaHistory" className="flex-1 flex">
+              {mainAddress?.length ? (
+                <TheaHistory
                   ref={tableRowsRef}
                   maxHeight={maxHeight}
                   searchTerm={searchTerm}

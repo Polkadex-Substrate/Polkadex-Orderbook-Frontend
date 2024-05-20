@@ -23,6 +23,8 @@ import { ResponsiveMenuModal } from "./responsiveMenuModal";
 import { NotificationsModal } from "./NotificationsModal";
 import { FundWalletModal } from "./fundWalletModal";
 
+const { defaultTheaSourceChain, defaultTheaDestinationChain } = defaultConfig;
+
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const [menu, setMenu] = useState(false);
   const [notifications, setNotifications] = useState(false);
@@ -67,6 +69,11 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           <div className="gap-5 hidden items-center lg:!flex">
             <HeaderLink.Single href={lastUsedMarketUrl}>
               Trade
+            </HeaderLink.Single>
+            <HeaderLink.Single
+              href={`/thea?from=${defaultTheaSourceChain}&to=${defaultTheaDestinationChain}`}
+            >
+              Bridge
             </HeaderLink.Single>
             <HeaderLink.Single disabled={isRewardDisabled} href="/rewards">
               Rewards
