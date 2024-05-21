@@ -105,5 +105,6 @@ export const START_EPOCH = 1;
 export const EVM_TOKENS = ["GLMR"];
 
 export const MINIMUM_PDEX_REQUIRED = 1;
+export const ESTIMATED_FEE = 0.02;
 
 export const SS58_DEFAULT_FORMAT = 42;

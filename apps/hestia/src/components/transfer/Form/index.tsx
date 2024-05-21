@@ -31,7 +31,10 @@ import {
   trimFloat,
   tryUnlockTradeAccount,
 } from "@orderbook/core/helpers";
-import { OTHER_ASSET_EXISTENTIAL } from "@orderbook/core/constants";
+import {
+  ESTIMATED_FEE,
+  OTHER_ASSET_EXISTENTIAL,
+} from "@orderbook/core/constants";
 import { useFormik } from "formik";
 import {
   depositValidations,
@@ -120,7 +123,8 @@ export const Form = ({
   const onChangeFundingMax = () => {
     const onChainBalance = Number(selectedAsset?.onChainBalance);
     if (onChainBalance > existentialBalance) {
-      const balance = onChainBalance - existentialBalance;
+      let balance = onChainBalance - existentialBalance;
+      if (isPolkadexToken) balance = Math.max(balance - ESTIMATED_FEE, 0);
       const trimmedBalance = +trimFloat({ value: balance });
       const formattedBalance = parseScientific(trimmedBalance.toString());
       setFieldValue("amount", formattedBalance);
