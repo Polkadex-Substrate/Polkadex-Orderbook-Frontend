@@ -339,7 +339,7 @@ export const ConfirmTransaction = ({
                     )}
                   </Dropdown.Content>
                 </Dropdown>
-                {error && (
+                {!actionLoading && error && (
                   <ErrorMessage className="p-3">
                     Your balance is not enough to pay the fee.
                   </ErrorMessage>
