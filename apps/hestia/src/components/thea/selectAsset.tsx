@@ -29,7 +29,7 @@ export const SelectAsset = ({
   const handleClose = useCallback(() => onOpenChange(false), [onOpenChange]);
   const {
     supportedAssets,
-    setSelectedAsset,
+    onSelectAsset,
     sourceBalances,
     sourceBalancesLoading,
   } = useTheaProvider();
@@ -78,7 +78,7 @@ export const SelectAsset = ({
                           value={e.ticker}
                           className="p-3"
                           onSelect={() => {
-                            setSelectedAsset(e);
+                            onSelectAsset(e);
                             createQueryString({
                               data: [{ name: "asset", value: e.ticker }],
                               pathname,

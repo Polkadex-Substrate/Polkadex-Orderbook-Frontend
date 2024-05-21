@@ -116,6 +116,15 @@ export const TheaProvider = ({
     [destinationConnector]
   );
 
+  /* Asset */
+  const onSelectAsset = (asset: Asset) => {
+    if (!sourceConnector) return;
+    const selectedDestinationChain =
+      sourceConnector.getDestinationChains(asset)[0];
+    setDestinationChain(selectedDestinationChain);
+    setSelectedAsset(asset);
+  };
+
   /* Polkadex */
   const polkadexConnector = useMemo(
     () => destinationChain && getChainConnector(GENESIS[0]),
@@ -282,7 +291,7 @@ export const TheaProvider = ({
         polkadexAssets,
 
         selectedAsset,
-        setSelectedAsset,
+        onSelectAsset,
         selectedAssetBalance,
 
         sourceBalances,
@@ -326,7 +335,7 @@ type State = {
   polkadexAssets: Asset[];
 
   selectedAsset: Asset | null;
-  setSelectedAsset: Dispatch<SetStateAction<Asset | null>>;
+  onSelectAsset: (asset: Asset) => void;
   selectedAssetBalance: number;
 
   sourceBalances: AssetAmount[];
@@ -363,7 +372,7 @@ export const Context = createContext<State>({
   polkadexAssets: [],
 
   selectedAsset: null,
-  setSelectedAsset: () => {},
+  onSelectAsset: () => {},
   selectedAssetBalance: 0,
 
   sourceBalances: [],
