@@ -355,7 +355,7 @@ export const Form = () => {
                 <Button.Outline
                   type="button"
                   appearance="secondary"
-                  className="gap-1 px-2 py-7 justify-between"
+                  className="gap-1 px-2 justify-between h-full"
                   onClick={() => setOpenAsset(true)}
                   disabled={!sourceChain || !destinationChain}
                 >
