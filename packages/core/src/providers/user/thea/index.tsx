@@ -81,6 +81,13 @@ export const TheaProvider = ({
     [destinationChain]
   );
 
+  const supportedDestinationChains = useMemo(() => {
+    return (
+      (selectedAsset && sourceConnector?.getDestinationChains(selectedAsset)) ||
+      []
+    );
+  }, [selectedAsset, sourceConnector]);
+
   const polkadexConnector = useMemo(
     () => destinationChain && getChainConnector(GENESIS[0]),
     [destinationChain]
@@ -259,7 +266,8 @@ export const TheaProvider = ({
         setSourceChain,
         destinationChain,
         setDestinationChain,
-        chains,
+        supportedSourceChains: chains,
+        supportedDestinationChains,
 
         supportedAssets,
         destinationAssets,
@@ -295,7 +303,8 @@ type State = {
 
   sourceAccount?: ExtensionAccount;
   setSourceAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
-  chains: Chain[];
+  supportedSourceChains: Chain[];
+  supportedDestinationChains: Chain[];
 
   destinationAccount?: ExtensionAccount;
   setDestinationAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
@@ -340,7 +349,8 @@ export const Context = createContext<State>({
   setDestinationChain: () => {},
   sourceChain: null,
   setSourceChain: () => {},
-  chains: [],
+  supportedSourceChains: [],
+  supportedDestinationChains: [],
 
   supportedAssets: [],
   destinationAssets: [],

@@ -52,7 +52,8 @@ export const Form = () => {
     sourceBalancesLoading,
     transferConfig,
     selectedAssetBalance,
-    chains,
+    supportedSourceChains,
+    supportedDestinationChains,
   } = useTheaProvider();
   const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
   const searchParams = useSearchParams();
@@ -180,15 +181,7 @@ export const Form = () => {
                     name={sourceChain?.name}
                     icon={sourceChain?.logo}
                   >
-                    {chains.map((e) => {
-                      const id = e.genesis;
-                      if (
-                        [
-                          sourceChain?.genesis,
-                          destinationChain?.genesis,
-                        ].includes(id)
-                      )
-                        return null;
+                    {supportedSourceChains.map((e) => {
                       return (
                         <SelectNetwork.Card
                           key={e.genesis}
@@ -247,15 +240,7 @@ export const Form = () => {
                     name={destinationChain?.name}
                     icon={destinationChain?.logo}
                   >
-                    {chains.map((e) => {
-                      const id = e.genesis;
-                      if (
-                        [
-                          sourceChain?.genesis,
-                          destinationChain?.genesis,
-                        ].includes(id)
-                      )
-                        return null;
+                    {supportedDestinationChains.map((e) => {
                       return (
                         <SelectNetwork.Card
                           key={e.genesis}
