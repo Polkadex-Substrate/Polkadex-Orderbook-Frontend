@@ -84,7 +84,7 @@ export const TheaProvider = ({
     );
   }, [selectedAsset, sourceConnector]);
 
-  const onChangeSourceChain = (chain: Chain) => {
+  const onSelectSourceChain = (chain: Chain) => {
     const connector = getChainConnector(chain.genesis);
     // Select the first asset which some available destination chains
     for (const asset of connector.getSupportedAssets()) {
@@ -271,7 +271,7 @@ export const TheaProvider = ({
         setDestinationAccount,
 
         sourceChain,
-        onChangeSourceChain,
+        onSelectSourceChain,
         destinationChain,
         setDestinationChain,
         supportedSourceChains: chains,
@@ -319,7 +319,7 @@ type State = {
   destinationChain: Chain | null;
   setDestinationChain: Dispatch<SetStateAction<Chain | null>>;
   sourceChain: Chain | null;
-  onChangeSourceChain: (chain: Chain) => void;
+  onSelectSourceChain: (chain: Chain) => void;
 
   supportedAssets: Asset[];
   destinationAssets: Asset[];
@@ -354,7 +354,7 @@ export const Context = createContext<State>({
   destinationChain: null,
   setDestinationChain: () => {},
   sourceChain: null,
-  onChangeSourceChain: () => {},
+  onSelectSourceChain: () => {},
   supportedSourceChains: [],
   supportedDestinationChains: [],
 
