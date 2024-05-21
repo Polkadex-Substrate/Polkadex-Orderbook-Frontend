@@ -4,16 +4,21 @@ import { useCallback, useMemo } from "react";
 import { QUERY_KEYS, useAssets } from "@orderbook/core/index";
 
 export const usePool = ({
-  asset,
-  amount,
+  asset = "",
+  amount = 0,
+  enabled = true,
 }: {
-  asset: string;
-  amount: number;
+  asset?: string;
+  amount?: number;
+  enabled?: boolean;
 }) => {
   const { swap } = useNativeApi();
   const { assets } = useAssets();
 
-  const enableQuery = useMemo(() => !!assets && !!swap, [assets, swap]);
+  const enableQuery = useMemo(
+    () => !!assets && !!swap && enabled,
+    [assets, swap, enabled]
+  );
 
   const handleSwapReserve = useCallback(
     async (assetId: string) => await swap?.getReserves("PDEX", assetId),

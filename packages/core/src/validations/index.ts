@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 import {
+  formatAmount,
   getDigitsAfterDecimal,
   parseScientific,
 } from "@orderbook/core/helpers";
@@ -8,6 +9,49 @@ import {
   ErrorMessages,
   MAX_DIGITS_AFTER_DECIMAL,
 } from "@orderbook/core/constants";
+
+export const bridgeValidations = (minAmount = 0, balance = 0) => {
+  const min = formatAmount(minAmount);
+
+  return Yup.object().shape({
+    amount: Yup.string()
+      .required("Required")
+      .test(
+        ErrorMessages().WHITESPACE_NOT_ALLOWED,
+        ErrorMessages().WHITESPACE_NOT_ALLOWED,
+        (value) => !/\s/.test(value || "")
+      )
+      .test(
+        ErrorMessages().MUST_BE_A_NUMBER,
+        ErrorMessages().MUST_BE_A_NUMBER,
+        (value) => /^\d+(\.\d+)?$/.test(value || "")
+      )
+      .test(
+        ErrorMessages("0", min).MIN,
+        ErrorMessages("0", min).MIN,
+        (value) => Number(value) > minAmount
+      )
+      .test(
+        ErrorMessages().CHECK_BALANCE,
+        ErrorMessages().CHECK_BALANCE,
+        (value) => Number(value) <= Number(balance)
+      )
+      .test(
+        ErrorMessages().CHECK_VALID_AMOUNT,
+        ErrorMessages().CHECK_VALID_AMOUNT,
+        (value) =>
+          !(value?.toString().includes("e") || value?.toString().includes("o"))
+      )
+      .test(
+        ErrorMessages().MAX_DIGIT_AFTER_DECIMAL,
+        ErrorMessages().MAX_DIGIT_AFTER_DECIMAL,
+        (value) =>
+          value
+            ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
+            : false
+      ),
+  });
+};
 
 export const depositValidations = (
   chainBalance: number,
