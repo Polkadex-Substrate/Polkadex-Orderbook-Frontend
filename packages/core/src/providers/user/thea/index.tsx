@@ -55,30 +55,26 @@ export const TheaProvider = ({
 
   const { getAllChains } = useMemo(() => new Thea(), []);
 
-  const sourceAccountSelected = useMemo(
-    () => sourceAccount ?? selectedWallet,
-    [sourceAccount, selectedWallet]
-  );
-
-  const destinationAccountSelected = useMemo(
-    () => destinationAccount ?? selectedWallet,
-    [destinationAccount, selectedWallet]
-  );
-
   const chains = useMemo(
     () =>
       getAllChains()?.filter((e) => !disabledTheaChains.includes(e.genesis)),
     [getAllChains]
   );
 
+  /** Source  **/
   const sourceConnector = useMemo(
     () => sourceChain && getChainConnector(sourceChain.genesis),
     [sourceChain]
   );
 
-  const destinationConnector = useMemo(
-    () => destinationChain && getChainConnector(destinationChain.genesis),
-    [destinationChain]
+  const sourceAssets = useMemo(
+    () => sourceConnector?.getSupportedAssets() || [],
+    [sourceConnector]
+  );
+
+  const sourceAccountSelected = useMemo(
+    () => sourceAccount ?? selectedWallet,
+    [sourceAccount, selectedWallet]
   );
 
   const supportedDestinationChains = useMemo(() => {
@@ -88,24 +84,19 @@ export const TheaProvider = ({
     );
   }, [selectedAsset, sourceConnector]);
 
-  const polkadexConnector = useMemo(
-    () => destinationChain && getChainConnector(GENESIS[0]),
+  /* Destination */
+  const destinationConnector = useMemo(
+    () => destinationChain && getChainConnector(destinationChain.genesis),
     [destinationChain]
   );
 
-  const sourceAssets = useMemo(
-    () => (sourceConnector ? sourceConnector.getSupportedAssets() : []),
-    [sourceConnector]
-  );
-
-  const polkadexAssets = useMemo(
-    () => (polkadexConnector ? polkadexConnector.getSupportedAssets() : []),
-    [polkadexConnector]
+  const destinationAccountSelected = useMemo(
+    () => destinationAccount ?? selectedWallet,
+    [destinationAccount, selectedWallet]
   );
 
   const destinationAssets = useMemo(
-    () =>
-      destinationConnector ? destinationConnector.getSupportedAssets() : [],
+    () => destinationConnector?.getSupportedAssets() || [],
     [destinationConnector]
   );
 
@@ -117,6 +108,17 @@ export const TheaProvider = ({
           )
         : [],
     [sourceAssets, destinationAssets]
+  );
+
+  /* Polkadex */
+  const polkadexConnector = useMemo(
+    () => destinationChain && getChainConnector(GENESIS[0]),
+    [destinationChain]
+  );
+
+  const polkadexAssets = useMemo(
+    () => polkadexConnector?.getSupportedAssets() || [],
+    [polkadexConnector]
   );
 
   const initialAsset = useMemo(() => {
