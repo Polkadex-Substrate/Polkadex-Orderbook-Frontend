@@ -67,7 +67,7 @@ export const TheaProvider = ({
     [sourceChain]
   );
 
-  const sourceAssets = useMemo(
+  const supportedAssets = useMemo(
     () => sourceConnector?.getSupportedAssets() || [],
     [sourceConnector]
   );
@@ -84,6 +84,22 @@ export const TheaProvider = ({
     );
   }, [selectedAsset, sourceConnector]);
 
+  const onChangeSourceChain = (chain: Chain) => {
+    const connector = getChainConnector(chain.genesis);
+    // Select the first asset which some available destination chains
+    for (const asset of connector.getSupportedAssets()) {
+      if (connector.getDestinationChains(asset).length > 0) {
+        const selectedAsset = asset;
+        const selectedDestinationChain =
+          connector.getDestinationChains(asset)[0];
+        setSourceChain(chain);
+        setSelectedAsset(selectedAsset);
+        setDestinationChain(selectedDestinationChain);
+        break;
+      }
+    }
+  };
+
   /* Destination */
   const destinationConnector = useMemo(
     () => destinationChain && getChainConnector(destinationChain.genesis),
@@ -98,16 +114,6 @@ export const TheaProvider = ({
   const destinationAssets = useMemo(
     () => destinationConnector?.getSupportedAssets() || [],
     [destinationConnector]
-  );
-
-  const supportedAssets = useMemo(
-    () =>
-      sourceAssets && destinationAssets
-        ? sourceAssets?.filter((e) =>
-            destinationAssets?.some((x) => e?.ticker === x?.ticker)
-          )
-        : [],
-    [sourceAssets, destinationAssets]
   );
 
   /* Polkadex */
@@ -176,7 +182,7 @@ export const TheaProvider = ({
   } = useTheaBalances({
     connector: sourceConnector,
     sourceAddress: sourceAccountSelected?.address,
-    assets: sourceAssets,
+    assets: supportedAssets,
     chain: sourceChain?.genesis,
   });
 
@@ -265,7 +271,7 @@ export const TheaProvider = ({
         setDestinationAccount,
 
         sourceChain,
-        setSourceChain,
+        onChangeSourceChain,
         destinationChain,
         setDestinationChain,
         supportedSourceChains: chains,
@@ -273,7 +279,6 @@ export const TheaProvider = ({
 
         supportedAssets,
         destinationAssets,
-        sourceAssets,
         polkadexAssets,
 
         selectedAsset,
@@ -314,11 +319,10 @@ type State = {
   destinationChain: Chain | null;
   setDestinationChain: Dispatch<SetStateAction<Chain | null>>;
   sourceChain: Chain | null;
-  setSourceChain: Dispatch<SetStateAction<Chain | null>>;
+  onChangeSourceChain: (chain: Chain) => void;
 
   supportedAssets: Asset[];
   destinationAssets: Asset[];
-  sourceAssets: Asset[];
   polkadexAssets: Asset[];
 
   selectedAsset: Asset | null;
@@ -350,13 +354,12 @@ export const Context = createContext<State>({
   destinationChain: null,
   setDestinationChain: () => {},
   sourceChain: null,
-  setSourceChain: () => {},
+  onChangeSourceChain: () => {},
   supportedSourceChains: [],
   supportedDestinationChains: [],
 
   supportedAssets: [],
   destinationAssets: [],
-  sourceAssets: [],
   polkadexAssets: [],
 
   selectedAsset: null,

@@ -40,7 +40,7 @@ export const Form = () => {
 
   const {
     sourceChain,
-    setSourceChain,
+    onChangeSourceChain,
     destinationChain,
     setDestinationChain,
     sourceAccount,
@@ -61,7 +61,8 @@ export const Form = () => {
   const { push } = useRouter();
 
   const onSwitchChain = () => {
-    setSourceChain(destinationChain);
+    if (!destinationChain) return;
+    onChangeSourceChain(destinationChain);
     setDestinationChain(sourceChain);
     const data = [
       { name: "from", value: destinationChain?.name },
@@ -188,7 +189,7 @@ export const Form = () => {
                           icon={e.logo}
                           value={e.name}
                           side="from"
-                          onSelect={() => setSourceChain(e)}
+                          onSelect={() => onChangeSourceChain(e)}
                         />
                       );
                     })}
