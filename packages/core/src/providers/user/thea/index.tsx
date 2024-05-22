@@ -61,7 +61,7 @@ export const TheaProvider = ({
     [getAllChains]
   );
 
-  /** Source  **/
+  /** Source Chain  **/
   const sourceConnector = useMemo(
     () => sourceChain && getChainConnector(sourceChain.genesis),
     [sourceChain]
@@ -85,7 +85,7 @@ export const TheaProvider = ({
     setSelectedAsset(selectedAsset);
   };
 
-  /* Destination */
+  /* Destination Chain */
   const destinationAccountSelected = useMemo(
     () => destinationAccount ?? selectedWallet,
     [destinationAccount, selectedWallet]
@@ -125,8 +125,8 @@ export const TheaProvider = ({
     setSourceChain(source);
     setDestinationChain(destination);
     const connector = getChainConnector(source.genesis);
-    const selectedAsset = connector.getSupportedAssets(destination)[0];
-    setSelectedAsset(selectedAsset);
+    const asset = selectedAsset ?? connector.getSupportedAssets(destination)[0];
+    setSelectedAsset(asset);
   };
 
   /* Polkadex */

@@ -15,7 +15,7 @@ import {
   RiInformationFill,
   RiWalletLine,
 } from "@remixicon/react";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { useTheaProvider } from "@orderbook/core/providers";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useFormik } from "formik";
@@ -61,18 +61,8 @@ export const Form = () => {
   const pathname = usePathname();
   const { push } = useRouter();
 
-  const onSwitchChain = async () => {
+  const onSwitchChain = () => {
     onSwitch();
-    const data = [
-      { name: "from", value: destinationChain?.name },
-      { name: "to", value: sourceChain?.name },
-    ];
-    createQueryString({
-      data,
-      pathname,
-      searchParams,
-      push,
-    });
     resetForm();
   };
 
@@ -143,6 +133,27 @@ export const Form = () => {
     sourceFee?.ticker,
   ]);
 
+  useEffect(() => {
+    const data = [
+      { name: "from", value: sourceChain?.name },
+      { name: "to", value: destinationChain?.name },
+      { name: "asset", value: selectedAsset?.ticker },
+    ];
+    createQueryString({
+      data,
+      pathname,
+      searchParams,
+      push,
+    });
+  }, [
+    destinationChain?.name,
+    pathname,
+    push,
+    searchParams,
+    selectedAsset?.ticker,
+    sourceChain?.name,
+  ]);
+
   return (
     <Fragment>
       <ConfirmTransaction
@@ -182,7 +193,6 @@ export const Form = () => {
                           key={e.genesis}
                           icon={e.logo}
                           value={e.name}
-                          side="from"
                           onSelect={() => onSelectSourceChain(e)}
                         />
                       );
@@ -241,7 +251,6 @@ export const Form = () => {
                           key={e.genesis}
                           icon={e.logo}
                           value={e.name}
-                          side="to"
                           onSelect={() => onSelectDestinationChain(e)}
                         />
                       );
