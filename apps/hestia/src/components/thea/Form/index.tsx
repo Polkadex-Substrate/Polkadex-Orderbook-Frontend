@@ -131,9 +131,9 @@ export const Form = () => {
     const sourceValue = sourceFee?.amount;
 
     return [
-      destValue ? `~${formatAmount(destValue)}` : "Ø",
+      destValue ? `~ ${formatAmount(destValue)}` : "Ø",
       destValue ? destinationFee?.ticker : "",
-      sourceValue ? `~${formatAmount(sourceValue)}` : "Ø",
+      sourceValue ? `~ ${formatAmount(sourceValue)}` : "Ø",
       sourceValue ? sourceFee?.ticker : "",
     ];
   }, [
@@ -266,7 +266,7 @@ export const Form = () => {
                   >
                     <RiInformationFill className="w-3 h-3 text-actionInput" />
                     <Typography.Text size="xs" appearance="primary">
-                      Available: {selectedAssetBalance} {selectedAsset?.ticker}
+                      Available: {balanceAmount} {selectedAsset?.ticker}
                     </Typography.Text>
                     <HoverInformation.Arrow />
                   </HoverInformation.Trigger>
@@ -284,16 +284,10 @@ export const Form = () => {
                       {destinationFeeAmount} {destinationFeeTicker}
                     </ResponsiveCard>
                     <ResponsiveCard
-                      label="Balance"
-                      loading={sourceBalancesLoading}
-                    >
-                      {balanceAmount} {selectedAsset?.ticker}
-                    </ResponsiveCard>
-                    <ResponsiveCard
                       label="Available"
                       loading={sourceBalancesLoading}
                     >
-                      {selectedAssetBalance} {selectedAsset?.ticker}
+                      {balanceAmount} {selectedAsset?.ticker}
                     </ResponsiveCard>
                   </HoverInformation.Content>
                 </HoverInformation>
