@@ -98,10 +98,11 @@ export const Filters = <TData,>({
           appearance="secondary"
           size="sm"
           disabled={refetchingLoading}
+          className="gap-1"
         >
           <RiRefreshLine className="w-4 h-4 text-primary" />
           {refetchingLoading && (
-            <Typography.Text appearance="primary" size="xs">
+            <Typography.Text appearance="primary" size="sm">
               Refetching..
             </Typography.Text>
           )}
