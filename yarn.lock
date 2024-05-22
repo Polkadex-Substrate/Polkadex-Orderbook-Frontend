@@ -3867,10 +3867,10 @@
     "@polkadex/types" "1.1.61"
     "@polkadex/utils" "1.1.46"
 
-"@polkadex/thea@^5.0.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-5.1.0.tgz#ed10a57e953e40d202609f42bf804be666779e05"
-  integrity sha512-V8uRPtJ0RiB5xR1VRq7lv01Eyoh5uIia4Vi6RRWBCiLBhM9Ye9KF6KF8q5SSV5Uu4t9GJt8nX4u+LsrCuCj/8w==
+"@polkadex/thea@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-5.2.0.tgz#d8ca68e5ef28efed207967206497b967e4e0596a"
+  integrity sha512-GUDOB7isG3UV1I3XmVqQZAot1O75vh6yxvpHmXZzQPKwMpzCWvRV1hF1hkdOXr+/VOu0KXSlv9duj1AhLo64Ng==
   dependencies:
     "@moonbeam-network/xcm-sdk" "^2.1.2"
     "@polkadex/numericals" "*"
@@ -3882,6 +3882,7 @@
     "@polkadot/util" "^12.6.2"
     "@polkadot/util-crypto" "^12.6.2"
     bignumber "^1.1.0"
+    lodash "^4.17.21"
     viem "^2.9.0"
 
 "@polkadex/types@1.1.61":
@@ -13679,6 +13680,7 @@ workbox-window@6.6.1, workbox-window@^6.5.4:
     workbox-core "6.6.1"
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
