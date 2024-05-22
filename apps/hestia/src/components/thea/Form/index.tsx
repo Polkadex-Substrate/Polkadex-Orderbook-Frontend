@@ -116,11 +116,6 @@ export const Form = () => {
     setFieldValue("amount", formattedAmount);
   };
 
-  const availableValue = useMemo(
-    () => formatAmount(transferConfig?.max.amount ?? 0),
-    [transferConfig?.max.amount]
-  );
-
   const balanceAmount = useMemo(
     () => formatAmount(selectedAssetBalance),
     [selectedAssetBalance]
@@ -271,7 +266,7 @@ export const Form = () => {
                   >
                     <RiInformationFill className="w-3 h-3 text-actionInput" />
                     <Typography.Text size="xs" appearance="primary">
-                      Available: {availableValue} {selectedAsset?.ticker}
+                      Available: {selectedAssetBalance} {selectedAsset?.ticker}
                     </Typography.Text>
                     <HoverInformation.Arrow />
                   </HoverInformation.Trigger>
@@ -298,7 +293,7 @@ export const Form = () => {
                       label="Available"
                       loading={sourceBalancesLoading}
                     >
-                      {availableValue} {selectedAsset?.ticker}
+                      {selectedAssetBalance} {selectedAsset?.ticker}
                     </ResponsiveCard>
                   </HoverInformation.Content>
                 </HoverInformation>
