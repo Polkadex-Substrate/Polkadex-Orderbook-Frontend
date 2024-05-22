@@ -28,5 +28,6 @@ export const useTheaBalances = ({
     ),
     enabled,
     queryFn: async () => await connector?.getBalances(sourceAddress, assets),
+    refetchInterval: 12 * 1000,
   });
 };
