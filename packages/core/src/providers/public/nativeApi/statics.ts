@@ -2,6 +2,7 @@ import { ApiPromise, WsProvider } from "@polkadot/api";
 import { RECONNECT_TIME_MS } from "@orderbook/core/providers/public/nativeApi/constants";
 import { apiTypes } from "@polkadex/polkadex-api";
 import { apiOptions } from "@polkadex/blockchain-api";
+import { orderbookTypes } from "@orderbook/core/providers/public/nativeApi/types";
 
 export interface Statics {
   api: ApiPromise;
@@ -16,7 +17,7 @@ export async function createApi(apiUrl: string[]): Promise<void> {
   statics.api = new ApiPromise({
     provider,
     runtime: { ...runtime, ...apiTypes.runtime },
-    types: { ...types, ...apiTypes.types },
+    types: { ...types, ...orderbookTypes },
     rpc: { ...rpc, ...apiTypes.rpc },
     signedExtensions: {
       ChargeAssetTxPayment: {
