@@ -10,5 +10,6 @@ export const createWithdrawSigningPayload = (
     asset_id: asset === "PDEX" ? { polkadex: null } : { asset },
     amount,
     timestamp,
+    destination_network: null,
   });
 };

@@ -50,10 +50,16 @@ export const orderbookTypes = {
       MARKET: null,
     },
   },
+  WithdrawalDestination: {
+    _enum: {
+      Polkadot: "(MultiLocation, Option<(AssetId, u128)>)",
+    },
+  },
   WithdrawPayload: {
     asset_id: "AssetId",
     amount: "String",
     timestamp: "i64",
+    destination_network: "Option<WithdrawalDestination>",
   },
 };
 
