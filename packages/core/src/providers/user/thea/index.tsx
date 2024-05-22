@@ -86,11 +86,6 @@ export const TheaProvider = ({
   };
 
   /* Destination */
-  const destinationConnector = useMemo(
-    () => destinationChain && getChainConnector(destinationChain.genesis),
-    [destinationChain]
-  );
-
   const destinationAccountSelected = useMemo(
     () => destinationAccount ?? selectedWallet,
     [destinationAccount, selectedWallet]
@@ -106,17 +101,26 @@ export const TheaProvider = ({
   );
 
   const onSelectAsset = (asset: Asset) => {
+    if (!supportedAssets.some((e) => e.ticker === asset.ticker)) return;
     setSelectedAsset(asset);
   };
 
   /* Polkadex */
+  const isPolkadexChain = useMemo(
+    () => !!(sourceChain?.genesis === GENESIS[0]),
+    [sourceChain?.genesis]
+  );
+
   const polkadexConnector = useMemo(
     () => destinationChain && getChainConnector(GENESIS[0]),
     [destinationChain]
   );
 
   // TODO: Fix it
-  const polkadexAssets = useMemo(() => [], []);
+  const polkadexAssets = useMemo(
+    () => (isPolkadexChain ? supportedAssets : []),
+    [isPolkadexChain, supportedAssets]
+  );
 
   const initialAsset = useMemo(() => {
     if (supportedAssets) {
@@ -209,11 +213,6 @@ export const TheaProvider = ({
     supportedAssets,
   ]);
 
-  const isPolkadexChain = useMemo(
-    () => !!(sourceChain?.genesis === GENESIS[0]),
-    [sourceChain?.genesis]
-  );
-
   const destinationPDEXBalance = useMemo(
     () =>
       polkadexDestinationBalances
@@ -254,7 +253,6 @@ export const TheaProvider = ({
     <Provider
       value={{
         sourceConnector,
-        destinationConnector,
 
         sourceAccount: sourceAccountSelected,
         setSourceAccount,
@@ -296,7 +294,6 @@ export const TheaProvider = ({
 
 type State = {
   sourceConnector: BaseChainAdapter | null;
-  destinationConnector: BaseChainAdapter | null;
 
   sourceAccount?: ExtensionAccount;
   setSourceAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
@@ -333,7 +330,6 @@ type State = {
 };
 export const Context = createContext<State>({
   sourceConnector: null,
-  destinationConnector: null,
 
   sourceAccount: undefined,
   setSourceAccount: () => {},
