@@ -23,7 +23,7 @@ import { defaultConfig } from "@orderbook/core/config";
 import { ExtensionAccount } from "@polkadex/react-providers";
 import { useTheaBalances, useTheaConfig } from "@orderbook/core/hooks";
 import { isIdentical } from "@orderbook/core/helpers";
-import { GENESIS } from "@orderbook/core/constants";
+import { GENESIS, POLKADEX_ASSET } from "@orderbook/core/constants";
 import { UseQueryResult } from "@tanstack/react-query";
 
 import { useConnectWalletProvider } from "../connectWalletProvider";
@@ -140,10 +140,19 @@ export const TheaProvider = ({
     [destinationChain]
   );
 
-  // TODO: Fix it
   const polkadexAssets = useMemo(
-    () => (isPolkadexChain ? supportedAssets : []),
-    [isPolkadexChain, supportedAssets]
+    () => [
+      {
+        ticker: POLKADEX_ASSET.ticker,
+        logo: POLKADEX_ASSET.ticker,
+        decimal: POLKADEX_ASSET.decimal,
+      },
+      ...(polkadexConnector
+        ?.getDestinationChains()
+        .map((c) => polkadexConnector.getSupportedAssets(c))
+        .flat() || []),
+    ],
+    [polkadexConnector]
   );
 
   /* Default Selection Logic  */

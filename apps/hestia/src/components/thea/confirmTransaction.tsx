@@ -120,9 +120,9 @@ export const ConfirmTransaction = ({
     const sourceValue = sourceFee?.amount ?? 0;
     const autoswapAmount = showAutoSwap ? swapPrice : 0;
     return [
-      destValue ? `~${formatAmount(destValue)}` : "Ø",
+      destValue ? `~ ${formatAmount(destValue)}` : "Ø",
       destValue ? destinationFee?.ticker : "",
-      sourceValue ? `~${formatAmount(sourceValue)}` : "Ø",
+      sourceValue ? `~ ${formatAmount(sourceValue)}` : "Ø",
       sourceValue ? sourceFee?.ticker : "",
       formatAmount(sourceValue + destValue + autoswapAmount),
     ];
@@ -157,7 +157,10 @@ export const ConfirmTransaction = ({
                     {amount} {selectedAsset?.ticker}
                   </Typography.Text>
                 </GenericHorizontalItem>
-                <GenericHorizontalItem label="Sender Wallet">
+                <GenericHorizontalItem
+                  label="Source Wallet"
+                  className="whitespace-nowrap"
+                >
                   <Skeleton
                     loading={!sourceAccount}
                     className="min-h-4 max-w-24"
@@ -172,7 +175,10 @@ export const ConfirmTransaction = ({
                     </Copy>
                   </Skeleton>
                 </GenericHorizontalItem>
-                <GenericHorizontalItem label="Source Wallet">
+                <GenericHorizontalItem
+                  label="Destination Wallet"
+                  className="whitespace-nowrap"
+                >
                   <Copy value={destinationAccount?.address ?? ""}>
                     <div className="flex items-center gap-1">
                       <RiFileCopyLine className="w-3 h-3 text-secondary" />
