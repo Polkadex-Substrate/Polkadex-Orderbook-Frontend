@@ -74,6 +74,7 @@ export const ErrorMessages = (existential = "0", minAmount = "0") => ({
   MUST_BE_A_NUMBER: "Must be a number",
   TOO_SMALL: "Too Small!",
   MIN: `The amount must be greater than ${minAmount}`,
+  EXISTENTIAL_DEPOSIT: `You need to keep some amount in source chain to cover the existential deposit`,
 });
 
 export const MAX_DIGITS_AFTER_DECIMAL = 8;

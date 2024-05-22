@@ -78,7 +78,11 @@ export const Form = () => {
     resetForm,
   } = useFormik({
     initialValues,
-    validationSchema: bridgeValidations(min?.amount, max?.amount),
+    validationSchema: bridgeValidations(
+      min?.amount,
+      max?.amount,
+      selectedAssetBalance
+    ),
     onSubmit: () => setOpenFeeModal(true),
   });
   const disabled = useMemo(

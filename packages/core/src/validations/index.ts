@@ -10,7 +10,11 @@ import {
   MAX_DIGITS_AFTER_DECIMAL,
 } from "@orderbook/core/constants";
 
-export const bridgeValidations = (minAmount = 0, balance = 0) => {
+export const bridgeValidations = (
+  minAmount = 0,
+  maxAmount = 0,
+  balance = 0
+) => {
   const min = formatAmount(minAmount);
 
   return Yup.object().shape({
@@ -35,6 +39,11 @@ export const bridgeValidations = (minAmount = 0, balance = 0) => {
         ErrorMessages().CHECK_BALANCE,
         ErrorMessages().CHECK_BALANCE,
         (value) => Number(value) <= Number(balance)
+      )
+      .test(
+        ErrorMessages().EXISTENTIAL_DEPOSIT,
+        ErrorMessages().EXISTENTIAL_DEPOSIT,
+        (value) => Number(value) <= Number(maxAmount)
       )
       .test(
         ErrorMessages().CHECK_VALID_AMOUNT,
