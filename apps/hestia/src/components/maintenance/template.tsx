@@ -27,9 +27,8 @@ export function Template() {
               ⚠️ Heads up traders ⚠️
             </Typography.Heading>
             <Typography.Text size="md">
-              Polkadex Orderbook and THEA will be temporarily unavailable for a
-              scheduled downtime of 6 to 12 hours starting Wednesday May 22nd at
-              9am UTC.
+              Polkadex Orderbook will be temporarily unavailable for a scheduled
+              downtime of 6 to 12 hours starting Wednesday May 22nd at 9am UTC.
             </Typography.Text>
             <Typography.Text size="md">
               During this time, LMP bug fixes and direct deposits & withdrawal
