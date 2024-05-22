@@ -40,8 +40,9 @@ const SelectNetwork = ({
         </Button.Outline>
       </Dropdown.Trigger>
       <Dropdown.Content
-        className="max-h-[240px] hover:overflow-auto overflow-hidden"
-        style={{ minWidth: bounds.width }}
+        className="max-h-[250px] hover:overflow-auto overflow-hidden"
+        style={{ minWidth: bounds.width + 20 }}
+        sideOffset={0}
       >
         {children}
       </Dropdown.Content>
