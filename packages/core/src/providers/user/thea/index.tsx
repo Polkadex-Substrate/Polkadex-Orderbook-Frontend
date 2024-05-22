@@ -134,15 +134,7 @@ export const TheaProvider = ({
     [isPolkadexChain, supportedAssets]
   );
 
-  const initialAsset = useMemo(() => {
-    if (supportedAssets) {
-      const asset =
-        initialAssetTicker &&
-        isIdentical(supportedAssets, initialAssetTicker, "ticker");
-      return asset || supportedAssets[0];
-    }
-  }, [initialAssetTicker, supportedAssets]);
-
+  /* Default Selection Logic  */
   const initialSource = useMemo(() => {
     if (chains) {
       return !!initialSourceName && initialSourceName !== initialDestinationName
@@ -159,6 +151,15 @@ export const TheaProvider = ({
         : isIdentical(chains, defaultTheaDestinationChain, "name");
     }
   }, [initialDestinationName, initialSourceName, chains]);
+
+  const initialAsset = useMemo(() => {
+    if (supportedAssets) {
+      const asset =
+        initialAssetTicker &&
+        isIdentical(supportedAssets, initialAssetTicker, "ticker");
+      return asset || supportedAssets[0];
+    }
+  }, [initialAssetTicker, supportedAssets]);
 
   useEffect(() => {
     if (initialDestination && !destinationChain)
