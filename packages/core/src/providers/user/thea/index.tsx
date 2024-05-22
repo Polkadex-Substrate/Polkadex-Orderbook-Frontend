@@ -67,37 +67,22 @@ export const TheaProvider = ({
     [sourceChain]
   );
 
-  const supportedAssets = useMemo(
-    () => sourceConnector?.getSupportedAssets() || [],
-    [sourceConnector]
-  );
-
   const sourceAccountSelected = useMemo(
     () => sourceAccount ?? selectedWallet,
     [sourceAccount, selectedWallet]
   );
 
   const supportedDestinationChains = useMemo(() => {
-    return (
-      (selectedAsset && sourceConnector?.getDestinationChains(selectedAsset)) ||
-      []
-    );
-  }, [selectedAsset, sourceConnector]);
+    return sourceConnector?.getDestinationChains() || [];
+  }, [sourceConnector]);
 
   const onSelectSourceChain = (chain: Chain) => {
     const connector = getChainConnector(chain.genesis);
-    // Select the first asset which some available destination chains
-    for (const asset of connector.getSupportedAssets()) {
-      if (connector.getDestinationChains(asset).length > 0) {
-        const selectedAsset = asset;
-        const selectedDestinationChain =
-          connector.getDestinationChains(asset)[0];
-        setSourceChain(chain);
-        setSelectedAsset(selectedAsset);
-        setDestinationChain(selectedDestinationChain);
-        break;
-      }
-    }
+    const destChain = connector.getDestinationChains()[0];
+    const selectedAsset = connector.getSupportedAssets(destChain)[0];
+    setSourceChain(chain);
+    setDestinationChain(destChain);
+    setSelectedAsset(selectedAsset);
   };
 
   /* Destination */
@@ -111,17 +96,16 @@ export const TheaProvider = ({
     [destinationAccount, selectedWallet]
   );
 
-  const destinationAssets = useMemo(
-    () => destinationConnector?.getSupportedAssets() || [],
-    [destinationConnector]
+  /* Asset */
+  const supportedAssets = useMemo(
+    () =>
+      (destinationChain &&
+        sourceConnector?.getSupportedAssets(destinationChain)) ||
+      [],
+    [destinationChain, sourceConnector]
   );
 
-  /* Asset */
   const onSelectAsset = (asset: Asset) => {
-    if (!sourceConnector) return;
-    const selectedDestinationChain =
-      sourceConnector.getDestinationChains(asset)[0];
-    setDestinationChain(selectedDestinationChain);
     setSelectedAsset(asset);
   };
 
@@ -131,10 +115,8 @@ export const TheaProvider = ({
     [destinationChain]
   );
 
-  const polkadexAssets = useMemo(
-    () => polkadexConnector?.getSupportedAssets() || [],
-    [polkadexConnector]
-  );
+  // TODO: Fix it
+  const polkadexAssets = useMemo(() => [], []);
 
   const initialAsset = useMemo(() => {
     if (supportedAssets) {
@@ -287,7 +269,6 @@ export const TheaProvider = ({
         supportedDestinationChains,
 
         supportedAssets,
-        destinationAssets,
         polkadexAssets,
 
         selectedAsset,
@@ -331,7 +312,6 @@ type State = {
   onSelectSourceChain: (chain: Chain) => void;
 
   supportedAssets: Asset[];
-  destinationAssets: Asset[];
   polkadexAssets: Asset[];
 
   selectedAsset: Asset | null;
@@ -368,7 +348,6 @@ export const Context = createContext<State>({
   supportedDestinationChains: [],
 
   supportedAssets: [],
-  destinationAssets: [],
   polkadexAssets: [],
 
   selectedAsset: null,
