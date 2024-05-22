@@ -5,6 +5,7 @@ import {
   parseScientific,
 } from "@orderbook/core/helpers";
 import {
+  ESTIMATED_FEE,
   ErrorMessages,
   MAX_DIGITS_AFTER_DECIMAL,
 } from "@orderbook/core/constants";
@@ -99,7 +100,8 @@ export const depositValidations = (
         ErrorMessages().REMAINING_BALANCE,
         ErrorMessages().REMAINING_BALANCE,
         (value) => {
-          const balanceAfterDeposit = chainBalance - Number(value);
+          const balanceAfterDeposit =
+            chainBalance - Number(value) - ESTIMATED_FEE;
           return !(isPolkadexToken && balanceAfterDeposit < 1);
         }
       )

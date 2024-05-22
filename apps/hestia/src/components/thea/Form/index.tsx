@@ -268,7 +268,7 @@ export const Form = () => {
                     <Typography.Text size="xs" appearance="primary">
                       Available: {balanceAmount} {selectedAsset?.ticker}
                     </Typography.Text>
-                    <HoverInformation.Arrow />
+                    {/* <HoverInformation.Arrow />  //TEMp */}
                   </HoverInformation.Trigger>
                   <HoverInformation.Content>
                     <ResponsiveCard

@@ -13,7 +13,6 @@ import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 import { Help } from "./Help";
 
 import { Footer, Header } from "@/components/ui";
-
 const extend = themeConfig.theme.extend;
 
 export function Template() {
