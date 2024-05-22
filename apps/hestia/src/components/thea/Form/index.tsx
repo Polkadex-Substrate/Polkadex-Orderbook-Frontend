@@ -13,6 +13,7 @@ import {
   RiArrowDownSLine,
   RiArrowLeftRightLine,
   RiInformationFill,
+  RiLoader2Line,
   RiWalletLine,
 } from "@remixicon/react";
 import { Fragment, useEffect, useMemo, useState } from "react";
@@ -364,9 +365,20 @@ export const Form = () => {
             </div>
           </div>
         </div>
-        <Button.Solid className="w-full py-5" size="md" disabled={disabled}>
-          Bridge
-        </Button.Solid>
+        {transferConfigLoading ? (
+          <Button.Solid
+            className="w-full py-5 flex items-center gap-1 opacity-60"
+            size="md"
+            disabled
+          >
+            <RiLoader2Line className="w-5 h-5 animate-spin" />
+            Connecting...
+          </Button.Solid>
+        ) : (
+          <Button.Solid className="w-full py-5" size="md" disabled={disabled}>
+            Bridge
+          </Button.Solid>
+        )}
       </form>
     </Fragment>
   );
