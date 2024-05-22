@@ -155,6 +155,22 @@ export const TheaProvider = ({
     [polkadexConnector]
   );
 
+  const { data: polkadexDestinationBalances = [] } = useTheaBalances({
+    connector: polkadexConnector,
+    sourceAddress: destinationAccountSelected?.address,
+    assets: polkadexAssets,
+    chain: GENESIS[0],
+  });
+
+  const destinationPDEXBalance = useMemo(
+    () =>
+      polkadexDestinationBalances
+        ? polkadexDestinationBalances.find((e) => e.ticker === "PDEX")
+            ?.amount ?? 0 // Remove static data
+        : 0,
+    [polkadexDestinationBalances]
+  );
+
   /* Default Selection Logic  */
   const initialSource = useMemo(() => {
     if (chains) {
@@ -202,6 +218,7 @@ export const TheaProvider = ({
     supportedAssets,
   ]);
 
+  /* Fetch balance for supported assets for source chain */
   const {
     data: sourceBalances = [],
     isLoading: sourceBalancesLoading,
@@ -215,22 +232,7 @@ export const TheaProvider = ({
     chain: sourceChain?.genesis,
   });
 
-  const { data: polkadexDestinationBalances = [] } = useTheaBalances({
-    connector: polkadexConnector,
-    sourceAddress: destinationAccountSelected?.address,
-    assets: polkadexAssets,
-    chain: GENESIS[0],
-  });
-
-  const destinationPDEXBalance = useMemo(
-    () =>
-      polkadexDestinationBalances
-        ? polkadexDestinationBalances.find((e) => e.ticker === "PDEX")
-            ?.amount ?? 0 // Remove static data
-        : 0,
-    [polkadexDestinationBalances]
-  );
-
+  /* Fetch transfer config for selected asset & source chain */
   const {
     data: transferConfig,
     isLoading: transferConfigLoading,
@@ -261,6 +263,7 @@ export const TheaProvider = ({
   return (
     <Provider
       value={{
+        supportedSourceChains: chains,
         sourceConnector,
 
         sourceAccount: sourceAccountSelected,
@@ -272,13 +275,10 @@ export const TheaProvider = ({
         onSelectSourceChain,
         destinationChain,
         onSelectDestinationChain,
-        supportedSourceChains: chains,
         supportedDestinationChains,
         onSwitchChain,
 
         supportedAssets,
-        polkadexAssets,
-
         selectedAsset,
         onSelectAsset,
         selectedAssetBalance,
@@ -295,6 +295,7 @@ export const TheaProvider = ({
 
         destinationPDEXBalance,
         isPolkadexChain,
+        polkadexAssets,
       }}
     >
       {children}
