@@ -117,6 +117,18 @@ export const TheaProvider = ({
     setSelectedAsset(asset);
   };
 
+  /* Switch Chain */
+  const onSwitchChain = () => {
+    if (!destinationChain || !sourceChain) return;
+    const source = destinationChain;
+    const destination = sourceChain;
+    setSourceChain(source);
+    setDestinationChain(destination);
+    const connector = getChainConnector(source.genesis);
+    const selectedAsset = connector.getSupportedAssets(destination)[0];
+    setSelectedAsset(selectedAsset);
+  };
+
   /* Polkadex */
   const isPolkadexChain = useMemo(
     () => !!(sourceChain?.genesis === GENESIS[0]),
@@ -253,6 +265,7 @@ export const TheaProvider = ({
         onSelectDestinationChain,
         supportedSourceChains: chains,
         supportedDestinationChains,
+        onSwitchChain,
 
         supportedAssets,
         polkadexAssets,
@@ -295,6 +308,7 @@ type State = {
   onSelectDestinationChain: (chain: Chain) => void;
   sourceChain: Chain | null;
   onSelectSourceChain: (chain: Chain) => void;
+  onSwitchChain: () => void;
 
   supportedAssets: Asset[];
   polkadexAssets: Asset[];
@@ -330,6 +344,7 @@ export const Context = createContext<State>({
   onSelectSourceChain: () => {},
   supportedSourceChains: [],
   supportedDestinationChains: [],
+  onSwitchChain: () => {},
 
   supportedAssets: [],
   polkadexAssets: [],

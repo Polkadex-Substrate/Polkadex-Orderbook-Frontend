@@ -54,16 +54,15 @@ export const Form = () => {
     selectedAssetBalance,
     supportedSourceChains,
     supportedDestinationChains,
+    onSwitchChain: onSwitch,
   } = useTheaProvider();
   const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
 
-  const onSwitchChain = () => {
-    if (!destinationChain || !sourceChain) return;
-    onSelectSourceChain(destinationChain);
-    onSelectDestinationChain(sourceChain);
+  const onSwitchChain = async () => {
+    onSwitch();
     const data = [
       { name: "from", value: destinationChain?.name },
       { name: "to", value: sourceChain?.name },
