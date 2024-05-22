@@ -91,6 +91,18 @@ export const TheaProvider = ({
     [destinationAccount, selectedWallet]
   );
 
+  const onSelectDestinationChain = (chain: Chain) => {
+    if (
+      !sourceConnector
+        ?.getDestinationChains()
+        .some((e) => e.genesis === chain.genesis)
+    )
+      return;
+    const selectedAsset = sourceConnector.getSupportedAssets(chain)[0];
+    setDestinationChain(chain);
+    setSelectedAsset(selectedAsset);
+  };
+
   /* Asset */
   const supportedAssets = useMemo(
     () =>
@@ -188,31 +200,6 @@ export const TheaProvider = ({
     chain: GENESIS[0],
   });
 
-  const selectedAssetSupported = useMemo(
-    () =>
-      !!selectedAsset &&
-      supportedAssets?.find((e) => e.ticker.includes(selectedAsset.ticker)),
-    [selectedAsset, supportedAssets]
-  );
-
-  useEffect(() => {
-    if (
-      selectedAsset &&
-      sourceChain &&
-      destinationChain &&
-      supportedAssets &&
-      !selectedAssetSupported
-    ) {
-      setSelectedAsset(null);
-    }
-  }, [
-    destinationChain,
-    selectedAsset,
-    selectedAssetSupported,
-    sourceChain,
-    supportedAssets,
-  ]);
-
   const destinationPDEXBalance = useMemo(
     () =>
       polkadexDestinationBalances
@@ -262,7 +249,7 @@ export const TheaProvider = ({
         sourceChain,
         onSelectSourceChain,
         destinationChain,
-        setDestinationChain,
+        onSelectDestinationChain,
         supportedSourceChains: chains,
         supportedDestinationChains,
 
@@ -304,7 +291,7 @@ type State = {
   setDestinationAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
 
   destinationChain: Chain | null;
-  setDestinationChain: Dispatch<SetStateAction<Chain | null>>;
+  onSelectDestinationChain: (chain: Chain) => void;
   sourceChain: Chain | null;
   onSelectSourceChain: (chain: Chain) => void;
 
@@ -337,7 +324,7 @@ export const Context = createContext<State>({
   setDestinationAccount: () => {},
 
   destinationChain: null,
-  setDestinationChain: () => {},
+  onSelectDestinationChain: () => {},
   sourceChain: null,
   onSelectSourceChain: () => {},
   supportedSourceChains: [],
