@@ -21,6 +21,10 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
     sourceAccount,
     isPolkadexChain,
     onRefetchSourceBalances,
+    selectedAsset,
+    destinationChain,
+    destinationConnector,
+    destinationAccount,
   } = useTheaProvider();
 
   return useMutation({
@@ -34,6 +38,32 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
         transferConfig.sourceFee.amount > transferConfig.sourceFeeBalance.amount
       ) {
         throw new Error("Insufficient transaction fee balance on source chain");
+      }
+
+      // For DED and PINK withdrawal
+      if (
+        destinationChain?.name === "AssetHub" &&
+        ["DED", "PINK"].includes(selectedAsset?.ticker || "")
+      ) {
+        const usdtAsset =
+          destinationConnector
+            ?.getDestinationChains()
+            .map((c) => destinationConnector.getSupportedAssets(c))
+            .flat()
+            .filter((a) => a.ticker === "USDT") || [];
+
+        const usdtBalance =
+          (
+            await destinationConnector?.getBalances(
+              destinationAccount?.address as string,
+              usdtAsset
+            )
+          )?.[0].amount || 0;
+
+        if (usdtBalance < 0.7)
+          throw new Error(
+            `Insufficient USDT balance to cover the existential deposit on Asset Hub`
+          );
       }
 
       const ext = await transferConfig.transfer<SubmittableExtrinsic>(amount);

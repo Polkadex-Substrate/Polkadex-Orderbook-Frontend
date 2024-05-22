@@ -86,6 +86,11 @@ export const TheaProvider = ({
   };
 
   /* Destination Chain */
+  const destinationConnector = useMemo(
+    () => destinationChain && getChainConnector(destinationChain.genesis),
+    [destinationChain]
+  );
+
   const destinationAccountSelected = useMemo(
     () => destinationAccount ?? selectedWallet,
     [destinationAccount, selectedWallet]
@@ -265,6 +270,7 @@ export const TheaProvider = ({
       value={{
         supportedSourceChains: chains,
         sourceConnector,
+        destinationConnector,
 
         sourceAccount: sourceAccountSelected,
         setSourceAccount,
@@ -305,6 +311,7 @@ export const TheaProvider = ({
 
 type State = {
   sourceConnector: BaseChainAdapter | null;
+  destinationConnector: BaseChainAdapter | null;
 
   sourceAccount?: ExtensionAccount;
   setSourceAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
@@ -342,6 +349,7 @@ type State = {
 };
 export const Context = createContext<State>({
   sourceConnector: null,
+  destinationConnector: null,
 
   sourceAccount: undefined,
   setSourceAccount: () => {},
