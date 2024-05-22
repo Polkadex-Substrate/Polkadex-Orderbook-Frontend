@@ -129,9 +129,7 @@ export function Template() {
                     <Tabs.Trigger value="tradeHistory">
                       Trade History
                     </Tabs.Trigger>
-                    <Tabs.Trigger value="theaHistory">
-                      Thea History
-                    </Tabs.Trigger>
+                    <Tabs.Trigger value="crossChain">Cross Chain</Tabs.Trigger>
                   </Tabs.List>
                   <ScrollArea.Bar orientation="horizontal" />
                 </ScrollArea>
@@ -188,7 +186,7 @@ export function Template() {
                 <ConnectAccountWrapper funding />
               )}
             </Tabs.Content>
-            <Tabs.Content value="theaHistory" className="flex-1 flex">
+            <Tabs.Content value="crossChain" className="flex-1 flex">
               {mainAddress?.length ? (
                 <TheaHistory
                   ref={tableRowsRef}

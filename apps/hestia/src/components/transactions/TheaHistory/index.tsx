@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
 "use client";
 
 import { Table, GenericMessage } from "@polkadex/ux";
@@ -41,14 +38,20 @@ const actionKeys = ["token", "date"];
 const responsiveKeys = ["hash", "date"];
 
 const polkadexConnector = getChainConnector(GENESIS[0]);
-const assets = polkadexConnector.getSupportedAssets();
+const assets =
+  polkadexConnector
+    ?.getDestinationChains()
+    .map((c) => polkadexConnector.getSupportedAssets(c))
+    .flat() || [];
 const { getAllChains } = new Thea();
 const chains = getAllChains();
 
 const baseAssets = getAllChains()
   .map((e) =>
     getChainConnector(e.genesis)
-      .getSupportedAssets()
+      .getDestinationChains()
+      .map((c) => getChainConnector(e.genesis).getSupportedAssets(c))
+      .flat()
       .map((x) => (x.id !== undefined ? null : x))
   )
   .flat()
