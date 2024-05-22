@@ -23,8 +23,17 @@ export function Template() {
             <Typography.Heading size="5xl">
               We&apos;re improving your experience
             </Typography.Heading>
+            <Typography.Heading size="xl">
+              ⚠️ Heads up traders ⚠️
+            </Typography.Heading>
             <Typography.Text size="md">
-              We&apos;ll be back up and running again shortly.
+              Polkadex Orderbook and THEA will be temporarily unavailable for a
+              scheduled downtime of 6 to 12 hours starting Wednesday May 22nd at
+              9am UTC.
+            </Typography.Text>
+            <Typography.Text size="md">
+              During this time, LMP bug fixes and direct deposits & withdrawal
+              functionality will be deployed to the backend 🛠️
             </Typography.Text>
             <div className="flex flex-col gap-2">
               <Typography.Text appearance="primary">Need help?</Typography.Text>
