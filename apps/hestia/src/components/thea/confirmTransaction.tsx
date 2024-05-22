@@ -52,7 +52,6 @@ export const ConfirmTransaction = ({
     selectedAsset,
     isPolkadexChain,
     polkadexAssets,
-    sourceBalancesLoading,
   } = useTheaProvider();
   const { destinationFee, sourceFee, sourceFeeBalance } = transferConfig ?? {};
 
@@ -90,7 +89,7 @@ export const ConfirmTransaction = ({
     const autoSwapAmount = showAutoSwap ? swapPrice : 0;
     const balance = sourceFeeBalance?.amount ?? 0;
 
-    if (isPolkadexChain) return balance < (sourceFee?.amount ?? 0);
+    if (!isPolkadexChain) return balance < (sourceFee?.amount ?? 0);
 
     return balance < amount + autoSwapAmount;
   }, [
@@ -103,11 +102,6 @@ export const ConfirmTransaction = ({
   ]);
 
   const disabled = useMemo(() => !!error || isLoading, [error, isLoading]);
-
-  const sourceFeeBalanceAmount = useMemo(
-    () => formatAmount(sourceFeeBalance?.amount ?? 0),
-    [sourceFeeBalance?.amount]
-  );
 
   const [
     destinationFeeAmount,
@@ -256,15 +250,6 @@ export const ConfirmTransaction = ({
                     )}
                   </HoverInformation.Content>
                 </HoverInformation>
-
-                <ResponsiveCard
-                  label="Wallet balance"
-                  loading={transferConfigLoading || sourceBalancesLoading}
-                  className="px-3 py-3"
-                >
-                  {sourceFeeBalanceAmount} {sourceFeeTicker}
-                </ResponsiveCard>
-
                 {error && (
                   <ErrorMessage className="p-3">
                     Your balance is not enough to pay the fee.

@@ -9,9 +9,9 @@ import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { signAndSubmitPromiseWrapper } from "@polkadex/blockchain-api";
 
 const withdrawMessage =
-  "After withdrawal initiation, expect tokens on the destination chain in 2-3 minutes";
+  "After withdrawal initiation, expect tokens on the destination chain in a few minutes";
 const depositMessage =
-  "Deposit Success. Processed transactions take up to 20 minutes to appear on the History";
+  "Deposit Success. Processed transactions take a few minutes to appear in History";
 
 export function useBridge({ onSuccess }: { onSuccess: () => void }) {
   const { api } = useNativeApi();
@@ -28,6 +28,12 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
       if (!transferConfig || !sourceAccount || !api) {
         onHandleError?.("Bridge issue");
         return;
+      }
+
+      if (
+        transferConfig.sourceFee.amount > transferConfig.sourceFeeBalance.amount
+      ) {
+        throw new Error("Insufficient transaction fee balance on source chain");
       }
 
       const ext = await transferConfig.transfer<SubmittableExtrinsic>(amount);
