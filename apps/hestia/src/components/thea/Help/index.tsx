@@ -16,7 +16,6 @@ export const Help = forwardRef<HTMLDivElement>((_, ref) => {
         title="Cross-chain bridge transactions"
         description="Explore your transactions."
         href="/history?tab=crossChain"
-        target="_blank"
       >
         <Button.Icon
           size="2sm"
@@ -30,7 +29,6 @@ export const Help = forwardRef<HTMLDivElement>((_, ref) => {
         title="Having Trouble?"
         description="Feel free to get in touch."
         href="https://discord.gg/G4KMw2sGGe"
-        target="_blank"
       >
         <Button.Icon
           size="2sm"
