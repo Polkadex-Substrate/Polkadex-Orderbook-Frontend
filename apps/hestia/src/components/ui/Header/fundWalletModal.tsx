@@ -77,7 +77,7 @@ export const FundWalletModal = ({
                           <Dropdown.Item
                             key={asset.id}
                             onClick={() =>
-                              window.open(`/thea?from=${chainName}`)
+                              window.open(`/thea?from=${chainName}`, "_self")
                             }
                           >
                             <div className="flex items-center justify-center gap-2">
@@ -115,7 +115,7 @@ export const FundWalletModal = ({
                           <Dropdown.Item
                             key={asset.id}
                             onClick={() =>
-                              window.open(`/thea?from=${chainName}`)
+                              window.open(`/thea?from=${chainName}`, "_self")
                             }
                           >
                             <div className="flex items-center justify-center gap-2">
@@ -156,6 +156,7 @@ export const FundWalletModal = ({
               title="Transfer to trading account"
               description="Move funds from your funding account to your trading account."
               href="/transfer/USDT?type=deposit"
+              onClick={() => onOpenChange(false)}
             />
           </div>
         </div>
