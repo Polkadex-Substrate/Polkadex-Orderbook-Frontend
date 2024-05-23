@@ -51,8 +51,8 @@ export const InsufficientBalance = ({
             <GenericInfoCard label="Your balance">
               {balance} PDEX
             </GenericInfoCard>
-            <GenericInfoCard label="Balance required">
-              {">"} {fee} PDEX
+            <GenericInfoCard label="Existential Amount">
+              {fee} PDEX
             </GenericInfoCard>
           </div>
         </div>
