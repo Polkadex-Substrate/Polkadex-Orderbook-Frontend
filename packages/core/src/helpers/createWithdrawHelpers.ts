@@ -16,6 +16,7 @@ export const createWithdrawSigningPayload = (
       asset_id: { asset: payload.asset },
       amount: payload.amount,
       timestamp: getNonce(),
+      destination_network: null,
     };
   }
   const data = {
@@ -23,6 +24,7 @@ export const createWithdrawSigningPayload = (
       payload.asset === "PDEX" ? { polkadex: null } : { asset: payload.asset },
     amount: payload.amount,
     timestamp: getNonce(),
+    destination_network: null,
   };
   return data;
 };
