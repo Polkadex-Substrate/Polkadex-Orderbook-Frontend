@@ -99,6 +99,10 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <HeaderLink.Dropdown
               items={[
                 {
+                  href: "https://pdexanalytics.com",
+                  label: "Analytics",
+                },
+                {
                   href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf",
                   label: "Terms of use",
                 },
@@ -117,10 +121,6 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
                 {
                   href: "https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Data_Retention_Policy.pdf",
                   label: "Data Retention Policy",
-                },
-                {
-                  href: "https://pdexanalytics.com",
-                  label: "Analytics",
                 },
               ]}
             >
