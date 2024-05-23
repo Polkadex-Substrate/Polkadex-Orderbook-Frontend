@@ -5,6 +5,5 @@ export const formatAmount = (amount: number) => {
   const trimmedBalance = trimFloat({
     value: parseScientific(amount.toString()),
   });
-  console.log(trimmedBalance);
   return trimmedBalance;
 };
