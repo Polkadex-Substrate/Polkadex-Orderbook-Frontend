@@ -91,12 +91,11 @@ export const ConfirmTransaction = ({
 
     if (!isPolkadexChain) return balance < (sourceFee?.amount ?? 0);
 
-    return balance < amount + autoSwapAmount;
+    return balance < (sourceFee?.amount ?? 0) + autoSwapAmount;
   }, [
     swapPrice,
     sourceFee,
     isPolkadexChain,
-    amount,
     showAutoSwap,
     sourceFeeBalance?.amount,
   ]);
