@@ -20,14 +20,11 @@ export const Card = ({
       {children}
       <div className="flex flex-col gap-2 max-w-[25rem]">
         <div className="flex flex-col">
-          <div className="flex items-center gap-2">
-            <Typography.Paragraph
-              size="md"
-              className="font-medium leading-normal"
-            >
+          <div className="flex items-center gap-1">
+            <Typography.Text size="base" className="font-medium leading-normal">
               {title}
-            </Typography.Paragraph>
-            <RiExternalLinkLine className="w-3 h-3 opacity-50" />
+            </Typography.Text>
+            <RiExternalLinkLine className="w-4 h-4 opacity-50" />
           </div>
           {description && (
             <Typography.Paragraph appearance="primary" size="sm">
