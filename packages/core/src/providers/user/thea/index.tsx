@@ -187,12 +187,17 @@ export const TheaProvider = ({
 
   const initialDestination = useMemo(() => {
     if (chains) {
+      const defaultChain =
+        initialSourceName !== defaultTheaDestinationChain
+          ? isIdentical(chains, defaultTheaDestinationChain, "name")
+          : undefined;
+
       return !!initialDestinationName &&
         initialSourceName !== initialDestinationName
         ? isIdentical(chains, initialDestinationName, "name")
-        : isIdentical(chains, defaultTheaDestinationChain, "name");
+        : defaultChain;
     }
-  }, [initialDestinationName, initialSourceName, chains]);
+  }, [chains, initialDestinationName, initialSourceName]);
 
   const initialAsset = useMemo(() => {
     if (supportedAssets) {
@@ -204,13 +209,18 @@ export const TheaProvider = ({
   }, [initialAssetTicker, supportedAssets]);
 
   useEffect(() => {
-    if (initialDestination && !destinationChain)
-      setDestinationChain(initialDestination);
-  }, [initialDestination, destinationChain]);
-
-  useEffect(() => {
     if (initialSource && !sourceChain) setSourceChain(initialSource);
   }, [initialSource, sourceChain]);
+
+  useEffect(() => {
+    if (!destinationChain && sourceChain && supportedDestinationChains)
+      setDestinationChain(initialDestination || supportedDestinationChains[0]);
+  }, [
+    initialDestination,
+    destinationChain,
+    supportedDestinationChains,
+    sourceChain,
+  ]);
 
   useEffect(() => {
     if (!selectedAsset && destinationChain && sourceChain && supportedAssets)
