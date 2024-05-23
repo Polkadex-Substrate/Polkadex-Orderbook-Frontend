@@ -22,7 +22,7 @@ import {
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import { useWindowSize } from "usehooks-ts";
-import { Asset, getChainConnector, Thea } from "@polkadex/thea";
+import { getChainConnector, Thea } from "@polkadex/thea";
 import { GENESIS } from "@orderbook/core/constants";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 
@@ -43,15 +43,9 @@ const { getAllChains } = new Thea();
 const chains = getAllChains();
 
 const baseAssets = getAllChains()
-  .map((e) =>
-    getChainConnector(e.genesis)
-      .getDestinationChains()
-      .map((c) => getChainConnector(e.genesis).getSupportedAssets(c))
-      .flat()
-      .map((x) => (x.id !== undefined ? null : x))
-  )
-  .flat()
-  .filter((e) => e !== null) as NonNullable<Asset[]>;
+  .filter((c) => c.genesis !== GENESIS[0])
+  .map((e) => getChainConnector(e.genesis).getAllAssets())
+  .flat();
 
 export const TheaHistory = forwardRef<
   HTMLDivElement,
