@@ -20,7 +20,7 @@ export const Help = forwardRef<HTMLDivElement>((_, ref) => {
         <Button.Icon
           size="2sm"
           appearance="secondary"
-          className="rounded-md bg-secondary-base"
+          className="rounded-md bg-secondary-base pointer-events-none"
         >
           <RiBookOpenLine className="w-full h-full" />
         </Button.Icon>
@@ -34,7 +34,7 @@ export const Help = forwardRef<HTMLDivElement>((_, ref) => {
         <Button.Icon
           size="2sm"
           appearance="secondary"
-          className="rounded-md bg-secondary-base"
+          className="rounded-md bg-secondary-base pointer-events-none"
         >
           <RiFeedbackLine className="w-full h-full" />
         </Button.Icon>

@@ -20,17 +20,17 @@ export const Card = ({
       {children}
       <div className="flex flex-col gap-2 max-w-[25rem]">
         <div className="flex flex-col">
-          <div className="flex items-center gap-2">
-            <Typography.Paragraph
-              size="md"
-              className="font-medium leading-normal"
-            >
-              {title}
-            </Typography.Paragraph>
-            <Link href={href} target={target}>
-              <RiExternalLinkLine className="w-4 h-4 opacity-50" />
-            </Link>
-          </div>
+          <Link href={href} target={target}>
+            <div className="flex items-center gap-2">
+              <Typography.Paragraph
+                size="md"
+                className="font-medium leading-normal"
+              >
+                {title}
+              </Typography.Paragraph>
+              <RiExternalLinkLine className="w-3 h-3 opacity-50" />
+            </div>
+          </Link>
           {description && (
             <Typography.Paragraph appearance="primary" size="sm">
               {description}
