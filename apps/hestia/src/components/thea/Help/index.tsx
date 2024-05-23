@@ -10,7 +10,7 @@ export const Help = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <div
       ref={ref}
-      className="flex items-start max-md:flex-col max-md:gap-4 max-w-[900px] flex-1 mx-auto w-full mt-20 max-md:pb-4"
+      className="flex items-start max-md:flex-col max-md:gap-4 max-w-[900px] flex-1 mx-auto w-full mt-20 max-lg:pb-4"
     >
       <Card
         title="Cross-chain bridge transactions"
@@ -29,6 +29,7 @@ export const Help = forwardRef<HTMLDivElement>((_, ref) => {
         title="Having Trouble?"
         description="Feel free to get in touch."
         href="https://discord.gg/G4KMw2sGGe"
+        target="_blank"
       >
         <Button.Icon
           size="2sm"
