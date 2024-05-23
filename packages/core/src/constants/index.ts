@@ -116,3 +116,7 @@ export const MINIMUM_PDEX_REQUIRED = 1;
 export const ESTIMATED_FEE = 0.02;
 
 export const SS58_DEFAULT_FORMAT = 42;
+
+export const INTRO = {
+  connectedWallet: "connectedWallet",
+};

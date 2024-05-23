@@ -29,6 +29,7 @@ export const UserActions = ({
         {registeredProxies.length > 0 &&
           !registeredProxies.includes(fundWallet?.address as string) && (
             <GenericHorizontalCard
+              id="optionSelect"
               title="Register funding account"
               icon="Wallet"
               label="NEW"

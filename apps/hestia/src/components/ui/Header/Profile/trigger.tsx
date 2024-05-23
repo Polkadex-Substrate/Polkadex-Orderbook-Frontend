@@ -25,6 +25,7 @@ export const Trigger = ({
 
   return (
     <div
+      id="accountSelect"
       className={classNames(
         "flex items-center  hover:bg-level-1 duration-300 transition-colors",
         responsive ? "w-full" : "border-x border-primary pr-1"

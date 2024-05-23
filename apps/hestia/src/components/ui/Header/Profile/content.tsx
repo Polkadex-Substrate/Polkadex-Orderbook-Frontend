@@ -33,7 +33,13 @@ import { ImportTradingAccountMnemonic } from "../../ConnectWallet/importTradingA
 import { GenericHorizontalCard } from "../../ReadyToUse";
 import { RegisterFundingAccount } from "../../ConnectWallet/registerFundingAccount";
 
-export const Content = () => {
+export const Content = ({
+  defaultIndex = 0,
+  defaultActive = false,
+}: {
+  defaultIndex?: number;
+  defaultActive?: boolean;
+}) => {
   const {
     onSelectExtension,
     extensionAccountPresent,
@@ -160,7 +166,11 @@ export const Content = () => {
   }, [tempExtensionAccount?.source]);
 
   return (
-    <Multistep.Interactive className="h-auto max-h-screen">
+    <Multistep.Interactive
+      defaultIndex={defaultIndex}
+      defaultActive={defaultActive}
+      className="h-auto max-h-screen"
+    >
       {(props) => (
         <>
           <Multistep.Trigger>
