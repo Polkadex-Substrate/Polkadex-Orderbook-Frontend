@@ -55,9 +55,40 @@ export const TheaProvider = ({
 
   const { getAllChains } = useMemo(() => new Thea(), []);
 
+  const chains = useMemo(
+    () =>
+      getAllChains()?.filter((e) => !disabledTheaChains.includes(e.genesis)),
+    [getAllChains]
+  );
+
+  /** Source Chain  **/
+  const sourceConnector = useMemo(
+    () => sourceChain && getChainConnector(sourceChain.genesis),
+    [sourceChain]
+  );
+
   const sourceAccountSelected = useMemo(
     () => sourceAccount ?? selectedWallet,
     [sourceAccount, selectedWallet]
+  );
+
+  const supportedDestinationChains = useMemo(() => {
+    return sourceConnector?.getDestinationChains() || [];
+  }, [sourceConnector]);
+
+  const onSelectSourceChain = (chain: Chain) => {
+    const connector = getChainConnector(chain.genesis);
+    const destChain = connector.getDestinationChains()[0];
+    const selectedAsset = connector.getSupportedAssets(destChain)[0];
+    setSourceChain(chain);
+    setDestinationChain(destChain);
+    setSelectedAsset(selectedAsset);
+  };
+
+  /* Destination Chain */
+  const destinationConnector = useMemo(
+    () => destinationChain && getChainConnector(destinationChain.genesis),
+    [destinationChain]
   );
 
   const destinationAccountSelected = useMemo(
@@ -65,20 +96,48 @@ export const TheaProvider = ({
     [destinationAccount, selectedWallet]
   );
 
-  const chains = useMemo(
+  const onSelectDestinationChain = (chain: Chain) => {
+    if (
+      !sourceConnector
+        ?.getDestinationChains()
+        .some((e) => e.genesis === chain.genesis)
+    )
+      return;
+    const selectedAsset = sourceConnector.getSupportedAssets(chain)[0];
+    setDestinationChain(chain);
+    setSelectedAsset(selectedAsset);
+  };
+
+  /* Asset */
+  const supportedAssets = useMemo(
     () =>
-      getAllChains()?.filter((e) => !disabledTheaChains.includes(e.genesis)),
-    [getAllChains]
+      (destinationChain &&
+        sourceConnector?.getSupportedAssets(destinationChain)) ||
+      [],
+    [destinationChain, sourceConnector]
   );
 
-  const sourceConnector = useMemo(
-    () => sourceChain && getChainConnector(sourceChain.genesis),
-    [sourceChain]
-  );
+  const onSelectAsset = (asset: Asset) => {
+    if (!supportedAssets.some((e) => e.ticker === asset.ticker)) return;
+    setSelectedAsset(asset);
+  };
 
-  const destinationConnector = useMemo(
-    () => destinationChain && getChainConnector(destinationChain.genesis),
-    [destinationChain]
+  /* Switch Chain */
+  const onSwitchChain = () => {
+    if (!destinationChain || !sourceChain) return;
+    const source = destinationChain;
+    const destination = sourceChain;
+    setSourceChain(source);
+    setDestinationChain(destination);
+    const connector = getChainConnector(source.genesis);
+    const asset = selectedAsset ?? connector.getSupportedAssets(destination)[0];
+    setSelectedAsset(asset);
+  };
+
+  /* Polkadex */
+  const isPolkadexChain = useMemo(
+    () => !!(sourceChain?.genesis === GENESIS[0]),
+    [sourceChain?.genesis]
   );
 
   const polkadexConnector = useMemo(
@@ -86,41 +145,28 @@ export const TheaProvider = ({
     [destinationChain]
   );
 
-  const sourceAssets = useMemo(
-    () => (sourceConnector ? sourceConnector.getSupportedAssets() : []),
-    [sourceConnector]
-  );
-
   const polkadexAssets = useMemo(
-    () => (polkadexConnector ? polkadexConnector.getSupportedAssets() : []),
+    () => polkadexConnector?.getAllAssets() || [],
     [polkadexConnector]
   );
 
-  const destinationAssets = useMemo(
+  const { data: polkadexDestinationBalances = [] } = useTheaBalances({
+    connector: polkadexConnector,
+    sourceAddress: destinationAccountSelected?.address,
+    assets: polkadexAssets,
+    chain: GENESIS[0],
+  });
+
+  const destinationPDEXBalance = useMemo(
     () =>
-      destinationConnector ? destinationConnector.getSupportedAssets() : [],
-    [destinationConnector]
+      polkadexDestinationBalances
+        ? polkadexDestinationBalances.find((e) => e.ticker === "PDEX")
+            ?.amount ?? 0 // Remove static data
+        : 0,
+    [polkadexDestinationBalances]
   );
 
-  const supportedAssets = useMemo(
-    () =>
-      sourceAssets && destinationAssets
-        ? sourceAssets?.filter((e) =>
-            destinationAssets?.some((x) => e?.ticker === x?.ticker)
-          )
-        : [],
-    [sourceAssets, destinationAssets]
-  );
-
-  const initialAsset = useMemo(() => {
-    if (supportedAssets) {
-      const asset =
-        initialAssetTicker &&
-        isIdentical(supportedAssets, initialAssetTicker, "ticker");
-      return asset || supportedAssets[0];
-    }
-  }, [initialAssetTicker, supportedAssets]);
-
+  /* Default Selection Logic  */
   const initialSource = useMemo(() => {
     if (chains) {
       return !!initialSourceName && initialSourceName !== initialDestinationName
@@ -131,21 +177,40 @@ export const TheaProvider = ({
 
   const initialDestination = useMemo(() => {
     if (chains) {
+      const defaultChain =
+        initialSourceName !== defaultTheaDestinationChain
+          ? isIdentical(chains, defaultTheaDestinationChain, "name")
+          : undefined;
+
       return !!initialDestinationName &&
         initialSourceName !== initialDestinationName
         ? isIdentical(chains, initialDestinationName, "name")
-        : isIdentical(chains, defaultTheaDestinationChain, "name");
+        : defaultChain;
     }
-  }, [initialDestinationName, initialSourceName, chains]);
+  }, [chains, initialDestinationName, initialSourceName]);
 
-  useEffect(() => {
-    if (initialDestination && !destinationChain)
-      setDestinationChain(initialDestination);
-  }, [initialDestination, destinationChain]);
+  const initialAsset = useMemo(() => {
+    if (supportedAssets) {
+      const asset =
+        initialAssetTicker &&
+        isIdentical(supportedAssets, initialAssetTicker, "ticker");
+      return asset || supportedAssets[0];
+    }
+  }, [initialAssetTicker, supportedAssets]);
 
   useEffect(() => {
     if (initialSource && !sourceChain) setSourceChain(initialSource);
   }, [initialSource, sourceChain]);
+
+  useEffect(() => {
+    if (!destinationChain && sourceChain && supportedDestinationChains)
+      setDestinationChain(initialDestination || supportedDestinationChains[0]);
+  }, [
+    initialDestination,
+    destinationChain,
+    supportedDestinationChains,
+    sourceChain,
+  ]);
 
   useEffect(() => {
     if (!selectedAsset && destinationChain && sourceChain && supportedAssets)
@@ -158,6 +223,7 @@ export const TheaProvider = ({
     supportedAssets,
   ]);
 
+  /* Fetch balance for supported assets for source chain */
   const {
     data: sourceBalances = [],
     isLoading: sourceBalancesLoading,
@@ -167,56 +233,11 @@ export const TheaProvider = ({
   } = useTheaBalances({
     connector: sourceConnector,
     sourceAddress: sourceAccountSelected?.address,
-    assets: sourceAssets,
+    assets: supportedAssets,
     chain: sourceChain?.genesis,
   });
 
-  const { data: polkadexDestinationBalances = [] } = useTheaBalances({
-    connector: polkadexConnector,
-    sourceAddress: destinationAccountSelected?.address,
-    assets: polkadexAssets,
-    chain: GENESIS[0],
-  });
-
-  const selectedAssetSupported = useMemo(
-    () =>
-      !!selectedAsset &&
-      supportedAssets?.find((e) => e.ticker.includes(selectedAsset.ticker)),
-    [selectedAsset, supportedAssets]
-  );
-
-  useEffect(() => {
-    if (
-      selectedAsset &&
-      sourceChain &&
-      destinationChain &&
-      supportedAssets &&
-      !selectedAssetSupported
-    ) {
-      setSelectedAsset(null);
-    }
-  }, [
-    destinationChain,
-    selectedAsset,
-    selectedAssetSupported,
-    sourceChain,
-    supportedAssets,
-  ]);
-
-  const isPolkadexChain = useMemo(
-    () => !!(sourceChain?.genesis === GENESIS[0]),
-    [sourceChain?.genesis]
-  );
-
-  const destinationPDEXBalance = useMemo(
-    () =>
-      polkadexDestinationBalances
-        ? polkadexDestinationBalances.find((e) => e.ticker === "PDEX")
-            ?.amount ?? 0 // Remove static data
-        : 0,
-    [polkadexDestinationBalances]
-  );
-
+  /* Fetch transfer config for selected asset & source chain */
   const {
     data: transferConfig,
     isLoading: transferConfigLoading,
@@ -247,6 +268,7 @@ export const TheaProvider = ({
   return (
     <Provider
       value={{
+        supportedSourceChains: chains,
         sourceConnector,
         destinationConnector,
 
@@ -256,18 +278,15 @@ export const TheaProvider = ({
         setDestinationAccount,
 
         sourceChain,
-        setSourceChain,
+        onSelectSourceChain,
         destinationChain,
-        setDestinationChain,
-        chains,
+        onSelectDestinationChain,
+        supportedDestinationChains,
+        onSwitchChain,
 
         supportedAssets,
-        destinationAssets,
-        sourceAssets,
-        polkadexAssets,
-
         selectedAsset,
-        setSelectedAsset,
+        onSelectAsset,
         selectedAssetBalance,
 
         sourceBalances,
@@ -282,6 +301,7 @@ export const TheaProvider = ({
 
         destinationPDEXBalance,
         isPolkadexChain,
+        polkadexAssets,
       }}
     >
       {children}
@@ -295,23 +315,23 @@ type State = {
 
   sourceAccount?: ExtensionAccount;
   setSourceAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
-  chains: Chain[];
+  supportedSourceChains: Chain[];
+  supportedDestinationChains: Chain[];
 
   destinationAccount?: ExtensionAccount;
   setDestinationAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
 
   destinationChain: Chain | null;
-  setDestinationChain: Dispatch<SetStateAction<Chain | null>>;
+  onSelectDestinationChain: (chain: Chain) => void;
   sourceChain: Chain | null;
-  setSourceChain: Dispatch<SetStateAction<Chain | null>>;
+  onSelectSourceChain: (chain: Chain) => void;
+  onSwitchChain: () => void;
 
   supportedAssets: Asset[];
-  destinationAssets: Asset[];
-  sourceAssets: Asset[];
   polkadexAssets: Asset[];
 
   selectedAsset: Asset | null;
-  setSelectedAsset: Dispatch<SetStateAction<Asset | null>>;
+  onSelectAsset: (asset: Asset) => void;
   selectedAssetBalance: number;
 
   sourceBalances: AssetAmount[];
@@ -337,18 +357,18 @@ export const Context = createContext<State>({
   setDestinationAccount: () => {},
 
   destinationChain: null,
-  setDestinationChain: () => {},
+  onSelectDestinationChain: () => {},
   sourceChain: null,
-  setSourceChain: () => {},
-  chains: [],
+  onSelectSourceChain: () => {},
+  supportedSourceChains: [],
+  supportedDestinationChains: [],
+  onSwitchChain: () => {},
 
   supportedAssets: [],
-  destinationAssets: [],
-  sourceAssets: [],
   polkadexAssets: [],
 
   selectedAsset: null,
-  setSelectedAsset: () => {},
+  onSelectAsset: () => {},
   selectedAssetBalance: 0,
 
   sourceBalances: [],

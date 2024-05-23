@@ -51,8 +51,8 @@ export const InsufficientBalance = ({
             <GenericInfoCard label="Your balance">
               {balance} PDEX
             </GenericInfoCard>
-            <GenericInfoCard label="Balance required">
-              {">"} {fee} PDEX
+            <GenericInfoCard label="Existential Amount">
+              {fee} PDEX
             </GenericInfoCard>
           </div>
         </div>
@@ -98,7 +98,13 @@ export const InsufficientBalance = ({
                             <HoverCard key={asset.id}>
                               <HoverCard.Trigger asChild>
                                 <Link
-                                  href={`https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`}
+                                  href={{
+                                    pathname: "/thea",
+                                    query: {
+                                      from: chainName,
+                                      to: "Polkadex",
+                                    },
+                                  }}
                                   target="_blank"
                                   className={classNames(
                                     !active &&

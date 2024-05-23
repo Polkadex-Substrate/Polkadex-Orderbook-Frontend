@@ -52,7 +52,6 @@ export const ConfirmTransaction = ({
     selectedAsset,
     isPolkadexChain,
     polkadexAssets,
-    sourceBalancesLoading,
   } = useTheaProvider();
   const { destinationFee, sourceFee, sourceFeeBalance } = transferConfig ?? {};
 
@@ -90,24 +89,18 @@ export const ConfirmTransaction = ({
     const autoSwapAmount = showAutoSwap ? swapPrice : 0;
     const balance = sourceFeeBalance?.amount ?? 0;
 
-    if (isPolkadexChain) return balance < (sourceFee?.amount ?? 0);
+    if (!isPolkadexChain) return balance < (sourceFee?.amount ?? 0);
 
-    return balance < amount + autoSwapAmount;
+    return balance < (sourceFee?.amount ?? 0) + autoSwapAmount;
   }, [
     swapPrice,
     sourceFee,
     isPolkadexChain,
-    amount,
     showAutoSwap,
     sourceFeeBalance?.amount,
   ]);
 
   const disabled = useMemo(() => !!error || isLoading, [error, isLoading]);
-
-  const sourceFeeBalanceAmount = useMemo(
-    () => formatAmount(sourceFeeBalance?.amount ?? 0),
-    [sourceFeeBalance?.amount]
-  );
 
   const [
     destinationFeeAmount,
@@ -120,9 +113,9 @@ export const ConfirmTransaction = ({
     const sourceValue = sourceFee?.amount ?? 0;
     const autoswapAmount = showAutoSwap ? swapPrice : 0;
     return [
-      destValue ? `~${formatAmount(destValue)}` : "Ø",
+      destValue ? `~ ${formatAmount(destValue)}` : "Ø",
       destValue ? destinationFee?.ticker : "",
-      sourceValue ? `~${formatAmount(sourceValue)}` : "Ø",
+      sourceValue ? `~ ${formatAmount(sourceValue)}` : "Ø",
       sourceValue ? sourceFee?.ticker : "",
       formatAmount(sourceValue + destValue + autoswapAmount),
     ];
@@ -157,7 +150,10 @@ export const ConfirmTransaction = ({
                     {amount} {selectedAsset?.ticker}
                   </Typography.Text>
                 </GenericHorizontalItem>
-                <GenericHorizontalItem label="Sender Wallet">
+                <GenericHorizontalItem
+                  label="Source Wallet"
+                  className="whitespace-nowrap"
+                >
                   <Skeleton
                     loading={!sourceAccount}
                     className="min-h-4 max-w-24"
@@ -172,7 +168,10 @@ export const ConfirmTransaction = ({
                     </Copy>
                   </Skeleton>
                 </GenericHorizontalItem>
-                <GenericHorizontalItem label="Source Wallet">
+                <GenericHorizontalItem
+                  label="Destination Wallet"
+                  className="whitespace-nowrap"
+                >
                   <Copy value={destinationAccount?.address ?? ""}>
                     <div className="flex items-center gap-1">
                       <RiFileCopyLine className="w-3 h-3 text-secondary" />
@@ -250,15 +249,6 @@ export const ConfirmTransaction = ({
                     )}
                   </HoverInformation.Content>
                 </HoverInformation>
-
-                <ResponsiveCard
-                  label="Wallet balance"
-                  loading={transferConfigLoading || sourceBalancesLoading}
-                  className="px-3 py-3"
-                >
-                  {sourceFeeBalanceAmount} {sourceFeeTicker}
-                </ResponsiveCard>
-
                 {error && (
                   <ErrorMessage className="p-3">
                     Your balance is not enough to pay the fee.

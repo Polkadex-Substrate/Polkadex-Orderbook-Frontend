@@ -44,17 +44,12 @@ export const Overview = () => {
         </HoverCard>
       </div>
       <div className="flex items-center gap-2 sm:max-w-[25rem] w-full flex-wrap">
-        <OverviewCard
-          icon="RiSkipDownLine"
-          target="_blank"
-          href="https://thea.polkadex.trade/"
-        >
+        <OverviewCard icon="RiSkipDownLine" href="/thea">
           Deposit
         </OverviewCard>
         <OverviewCard
           icon="RiSkipUpLine"
-          target="_blank"
-          href="https://thea.polkadex.trade/withdraw"
+          href="/thea?from=Polkadex&to=Polkadot"
         >
           Withdraw
         </OverviewCard>

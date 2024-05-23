@@ -21,8 +21,13 @@ export const useTheaBalances = ({
   );
 
   return useQuery({
-    queryKey: QUERY_KEYS.getTheaBalances(sourceAddress, chain),
+    queryKey: QUERY_KEYS.getTheaBalances(
+      sourceAddress,
+      chain,
+      assets.map((a) => a.ticker)
+    ),
     enabled,
     queryFn: async () => await connector?.getBalances(sourceAddress, assets),
+    refetchInterval: 12 * 1000,
   });
 };

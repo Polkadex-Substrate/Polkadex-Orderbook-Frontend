@@ -1,11 +1,8 @@
 "use client";
 import { Typography, Chain, Button, Dropdown } from "@polkadex/ux";
 import { RiArrowDownSLine } from "@remixicon/react";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { PropsWithChildren, useState } from "react";
 import { useMeasure } from "react-use";
-
-import { createQueryString } from "@/helpers";
 
 const SelectNetwork = ({
   name = "",
@@ -43,8 +40,9 @@ const SelectNetwork = ({
         </Button.Outline>
       </Dropdown.Trigger>
       <Dropdown.Content
-        className="max-h-[240px] hover:overflow-auto overflow-hidden"
-        style={{ minWidth: bounds.width }}
+        className="max-h-[250px] hover:overflow-auto overflow-hidden"
+        style={{ minWidth: bounds.width + 20 }}
+        sideOffset={0}
       >
         {children}
       </Dropdown.Content>
@@ -56,29 +54,13 @@ export const Card = ({
   icon,
   value,
   onSelect,
-  side,
 }: {
   icon: string;
   value: string;
-  side: "to" | "from";
   onSelect: () => void;
 }) => {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { push } = useRouter();
-
   return (
-    <Dropdown.Item
-      onSelect={() => {
-        onSelect();
-        createQueryString({
-          data: [{ name: side, value }],
-          pathname,
-          searchParams,
-          push,
-        });
-      }}
-    >
+    <Dropdown.Item onSelect={onSelect}>
       <div className="flex items-center gap-2 rounded-md w-full">
         <Chain name={icon} size="sm" />
         <Typography.Text>{value}</Typography.Text>

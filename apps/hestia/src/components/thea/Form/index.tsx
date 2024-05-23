@@ -13,9 +13,10 @@ import {
   RiArrowDownSLine,
   RiArrowLeftRightLine,
   RiInformationFill,
+  RiLoader2Line,
   RiWalletLine,
 } from "@remixicon/react";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { useTheaProvider } from "@orderbook/core/providers";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useFormik } from "formik";
@@ -40,9 +41,9 @@ export const Form = () => {
 
   const {
     sourceChain,
-    setSourceChain,
+    onSelectSourceChain,
     destinationChain,
-    setDestinationChain,
+    onSelectDestinationChain,
     sourceAccount,
     setSourceAccount,
     destinationAccount,
@@ -52,7 +53,9 @@ export const Form = () => {
     sourceBalancesLoading,
     transferConfig,
     selectedAssetBalance,
-    chains,
+    supportedSourceChains,
+    supportedDestinationChains,
+    onSwitchChain: onSwitch,
   } = useTheaProvider();
   const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
   const searchParams = useSearchParams();
@@ -60,18 +63,7 @@ export const Form = () => {
   const { push } = useRouter();
 
   const onSwitchChain = () => {
-    setSourceChain(destinationChain);
-    setDestinationChain(sourceChain);
-    const data = [
-      { name: "from", value: destinationChain?.name },
-      { name: "to", value: sourceChain?.name },
-    ];
-    createQueryString({
-      data,
-      pathname,
-      searchParams,
-      push,
-    });
+    onSwitch();
     resetForm();
   };
 
@@ -86,7 +78,11 @@ export const Form = () => {
     resetForm,
   } = useFormik({
     initialValues,
-    validationSchema: bridgeValidations(min?.amount, max?.amount),
+    validationSchema: bridgeValidations(
+      min?.amount,
+      max?.amount,
+      selectedAssetBalance
+    ),
     onSubmit: () => setOpenFeeModal(true),
   });
   const disabled = useMemo(
@@ -115,11 +111,6 @@ export const Form = () => {
     setFieldValue("amount", formattedAmount);
   };
 
-  const availableValue = useMemo(
-    () => formatAmount(transferConfig?.max.amount ?? 0),
-    [transferConfig?.max.amount]
-  );
-
   const balanceAmount = useMemo(
     () => formatAmount(selectedAssetBalance),
     [selectedAssetBalance]
@@ -135,9 +126,9 @@ export const Form = () => {
     const sourceValue = sourceFee?.amount;
 
     return [
-      destValue ? `~${formatAmount(destValue)}` : "Ø",
+      destValue ? `~ ${formatAmount(destValue)}` : "Ø",
       destValue ? destinationFee?.ticker : "",
-      sourceValue ? `~${formatAmount(sourceValue)}` : "Ø",
+      sourceValue ? `~ ${formatAmount(sourceValue)}` : "Ø",
       sourceValue ? sourceFee?.ticker : "",
     ];
   }, [
@@ -145,6 +136,27 @@ export const Form = () => {
     destinationFee?.ticker,
     sourceFee?.amount,
     sourceFee?.ticker,
+  ]);
+
+  useEffect(() => {
+    const data = [
+      { name: "from", value: sourceChain?.name },
+      { name: "to", value: destinationChain?.name },
+      { name: "asset", value: selectedAsset?.ticker },
+    ];
+    createQueryString({
+      data,
+      pathname,
+      searchParams,
+      push,
+    });
+  }, [
+    destinationChain?.name,
+    pathname,
+    push,
+    searchParams,
+    selectedAsset?.ticker,
+    sourceChain?.name,
   ]);
 
   return (
@@ -180,22 +192,13 @@ export const Form = () => {
                     name={sourceChain?.name}
                     icon={sourceChain?.logo}
                   >
-                    {chains.map((e) => {
-                      const id = e.genesis;
-                      if (
-                        [
-                          sourceChain?.genesis,
-                          destinationChain?.genesis,
-                        ].includes(id)
-                      )
-                        return null;
+                    {supportedSourceChains.map((e) => {
                       return (
                         <SelectNetwork.Card
                           key={e.genesis}
                           icon={e.logo}
                           value={e.name}
-                          side="from"
-                          onSelect={() => setSourceChain(e)}
+                          onSelect={() => onSelectSourceChain(e)}
                         />
                       );
                     })}
@@ -247,22 +250,13 @@ export const Form = () => {
                     name={destinationChain?.name}
                     icon={destinationChain?.logo}
                   >
-                    {chains.map((e) => {
-                      const id = e.genesis;
-                      if (
-                        [
-                          sourceChain?.genesis,
-                          destinationChain?.genesis,
-                        ].includes(id)
-                      )
-                        return null;
+                    {supportedDestinationChains.map((e) => {
                       return (
                         <SelectNetwork.Card
                           key={e.genesis}
                           icon={e.logo}
                           value={e.name}
-                          side="to"
-                          onSelect={() => setDestinationChain(e)}
+                          onSelect={() => onSelectDestinationChain(e)}
                         />
                       );
                     })}
@@ -286,7 +280,7 @@ export const Form = () => {
                   >
                     <RiInformationFill className="w-3 h-3 text-actionInput" />
                     <Typography.Text size="xs" appearance="primary">
-                      Available: {availableValue} {selectedAsset?.ticker}
+                      Available: {balanceAmount} {selectedAsset?.ticker}
                     </Typography.Text>
                     {/* <HoverInformation.Arrow />  //TEMp */}
                   </HoverInformation.Trigger>
@@ -304,16 +298,10 @@ export const Form = () => {
                       {destinationFeeAmount} {destinationFeeTicker}
                     </ResponsiveCard>
                     <ResponsiveCard
-                      label="Balance"
-                      loading={sourceBalancesLoading}
-                    >
-                      {balanceAmount} {selectedAsset?.ticker}
-                    </ResponsiveCard>
-                    <ResponsiveCard
                       label="Available"
                       loading={sourceBalancesLoading}
                     >
-                      {availableValue} {selectedAsset?.ticker}
+                      {balanceAmount} {selectedAsset?.ticker}
                     </ResponsiveCard>
                   </HoverInformation.Content>
                 </HoverInformation>
@@ -355,7 +343,7 @@ export const Form = () => {
                 <Button.Outline
                   type="button"
                   appearance="secondary"
-                  className="gap-1 px-2 py-7 justify-between"
+                  className="gap-1 px-2 justify-between h-full"
                   onClick={() => setOpenAsset(true)}
                   disabled={!sourceChain || !destinationChain}
                 >
@@ -381,9 +369,20 @@ export const Form = () => {
             </div>
           </div>
         </div>
-        <Button.Solid className="w-full py-5" size="md" disabled={disabled}>
-          Bridge
-        </Button.Solid>
+        {transferConfigLoading ? (
+          <Button.Solid
+            className="w-full py-5 flex items-center gap-1 opacity-60"
+            size="md"
+            disabled
+          >
+            <RiLoader2Line className="w-5 h-5 animate-spin" />
+            Connecting...
+          </Button.Solid>
+        ) : (
+          <Button.Solid className="w-full py-5" size="md" disabled={disabled}>
+            Bridge
+          </Button.Solid>
+        )}
       </form>
     </Fragment>
   );

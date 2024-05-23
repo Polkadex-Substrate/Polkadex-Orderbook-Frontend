@@ -22,7 +22,7 @@ import {
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import { useWindowSize } from "usehooks-ts";
-import { Asset, getChainConnector, Thea } from "@polkadex/thea";
+import { getChainConnector, Thea } from "@polkadex/thea";
 import { GENESIS } from "@orderbook/core/constants";
 import { useProfile } from "@orderbook/core/providers/user/profile";
 
@@ -38,18 +38,14 @@ const actionKeys = ["token", "date"];
 const responsiveKeys = ["hash", "date"];
 
 const polkadexConnector = getChainConnector(GENESIS[0]);
-const assets = polkadexConnector.getSupportedAssets();
+const polkadexAssets = polkadexConnector?.getAllAssets() || [];
 const { getAllChains } = new Thea();
 const chains = getAllChains();
 
 const baseAssets = getAllChains()
-  .map((e) =>
-    getChainConnector(e.genesis)
-      .getSupportedAssets()
-      .map((x) => (x.id !== undefined ? null : x))
-  )
-  .flat()
-  .filter((e) => e !== null) as NonNullable<Asset[]>;
+  .filter((c) => c.genesis !== GENESIS[0])
+  .map((e) => getChainConnector(e.genesis).getAllAssets())
+  .flat();
 
 export const TheaHistory = forwardRef<
   HTMLDivElement,
@@ -83,7 +79,7 @@ export const TheaHistory = forwardRef<
     },
   ] = useTheaTransactions({
     sourceAddress: mainAddress,
-    assets,
+    assets: polkadexAssets,
     chains,
     baseAssets,
   });
@@ -147,7 +143,7 @@ export const TheaHistory = forwardRef<
             refetchingLoading={depositsRefetching || withdrawalsRefetching}
             data={data}
             chains={chains}
-            assets={assets}
+            assets={polkadexAssets}
             table={table}
             address={mainAddress}
           />

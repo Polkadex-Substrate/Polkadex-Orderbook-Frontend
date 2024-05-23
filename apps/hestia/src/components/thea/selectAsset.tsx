@@ -13,9 +13,8 @@ import classNames from "classnames";
 import { twMerge } from "tailwind-merge";
 import { useTheaProvider } from "@orderbook/core/providers";
 import { getChainFromTicker } from "@orderbook/core/helpers";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { createQueryString, formatAmount } from "@/helpers";
+import { formatAmount } from "@/helpers";
 
 export const SelectAsset = ({
   open,
@@ -29,13 +28,10 @@ export const SelectAsset = ({
   const handleClose = useCallback(() => onOpenChange(false), [onOpenChange]);
   const {
     supportedAssets,
-    setSelectedAsset,
+    onSelectAsset,
     sourceBalances,
     sourceBalancesLoading,
   } = useTheaProvider();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { push } = useRouter();
 
   return (
     <Modal
@@ -78,13 +74,7 @@ export const SelectAsset = ({
                           value={e.ticker}
                           className="p-3"
                           onSelect={() => {
-                            setSelectedAsset(e);
-                            createQueryString({
-                              data: [{ name: "asset", value: e.ticker }],
-                              pathname,
-                              searchParams,
-                              push,
-                            });
+                            onSelectAsset(e);
                             onOpenChange(false);
                           }}
                         >
