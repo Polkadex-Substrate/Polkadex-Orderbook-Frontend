@@ -2,8 +2,7 @@
 
 import { Button } from "@polkadex/ux";
 import { forwardRef } from "react";
-import { RiExternalLinkLine } from "@remixicon/react";
-import Link from "next/link";
+import { RiBookOpenLine, RiFeedbackLine } from "@remixicon/react";
 
 import { Card } from "./card";
 
@@ -11,14 +10,34 @@ export const Help = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <div
       ref={ref}
-      className="flex items-center max-md:flex-col border-t border-primary"
+      className="flex items-start max-md:flex-col max-md:gap-4 max-w-[900px] flex-1 mx-auto w-full mt-20"
     >
-      <Card title="Having Trouble?" description="Feel free to get in touch.">
-        <Link href="https://discord.gg/G4KMw2sGGe" target="_blank">
-          <Button.Icon variant="outline">
-            <RiExternalLinkLine className="w-full h-full" />
-          </Button.Icon>
-        </Link>
+      <Card
+        title="Cross-chain bridge transactions"
+        description="Explore your transactions."
+        href="/history?tab=crossChain"
+      >
+        <Button.Icon
+          size="2sm"
+          appearance="secondary"
+          className="rounded-md bg-secondary-base"
+        >
+          <RiBookOpenLine className="w-full h-full" />
+        </Button.Icon>
+      </Card>
+      <Card
+        title="Having Trouble?"
+        description="Feel free to get in touch."
+        href="https://discord.gg/G4KMw2sGGe"
+        target="_blank"
+      >
+        <Button.Icon
+          size="2sm"
+          appearance="secondary"
+          className="rounded-md bg-secondary-base"
+        >
+          <RiFeedbackLine className="w-full h-full" />
+        </Button.Icon>
       </Card>
     </div>
   );
