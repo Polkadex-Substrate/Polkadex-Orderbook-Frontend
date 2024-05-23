@@ -16,7 +16,7 @@ export const Card = ({
   target?: HTMLAttributeAnchorTarget;
 }>) => {
   return (
-    <div className="flex-1 w-full max-md:first:border-b md:h-full flex items-center max-lg:flex-row-reverse px-5 py-6 h-fit gap-4 border-secondary-base">
+    <div className="flex-1 w-full max-md:first:border-b md:h-full flex items-center px-5 py-6 h-fit gap-4 border-secondary-base">
       {children}
       <div className="flex flex-col gap-2 max-w-[25rem]">
         <div className="flex flex-col">
