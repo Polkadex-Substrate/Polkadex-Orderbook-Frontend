@@ -77,9 +77,7 @@ export const FundWalletModal = ({
                           <Dropdown.Item
                             key={asset.id}
                             onClick={() =>
-                              window.open(
-                                `https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`
-                              )
+                              window.open(`/thea?from=${chainName}`)
                             }
                           >
                             <div className="flex items-center justify-center gap-2">
@@ -117,9 +115,7 @@ export const FundWalletModal = ({
                           <Dropdown.Item
                             key={asset.id}
                             onClick={() =>
-                              window.open(
-                                `https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`
-                              )
+                              window.open(`/thea?from=${chainName}`)
                             }
                           >
                             <div className="flex items-center justify-center gap-2">
