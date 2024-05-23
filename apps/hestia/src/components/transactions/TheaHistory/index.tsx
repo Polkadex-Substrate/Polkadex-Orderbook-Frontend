@@ -38,11 +38,7 @@ const actionKeys = ["token", "date"];
 const responsiveKeys = ["hash", "date"];
 
 const polkadexConnector = getChainConnector(GENESIS[0]);
-const assets =
-  polkadexConnector
-    ?.getDestinationChains()
-    .map((c) => polkadexConnector.getSupportedAssets(c))
-    .flat() || [];
+const polkadexAssets = polkadexConnector?.getAllAssets() || [];
 const { getAllChains } = new Thea();
 const chains = getAllChains();
 
@@ -89,7 +85,7 @@ export const TheaHistory = forwardRef<
     },
   ] = useTheaTransactions({
     sourceAddress: mainAddress,
-    assets,
+    assets: polkadexAssets,
     chains,
     baseAssets,
   });
@@ -153,7 +149,7 @@ export const TheaHistory = forwardRef<
             refetchingLoading={depositsRefetching || withdrawalsRefetching}
             data={data}
             chains={chains}
-            assets={assets}
+            assets={polkadexAssets}
             table={table}
             address={mainAddress}
           />

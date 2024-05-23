@@ -47,9 +47,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
       ) {
         const usdtAsset =
           destinationConnector
-            ?.getDestinationChains()
-            .map((c) => destinationConnector.getSupportedAssets(c))
-            .flat()
+            ?.getAllAssets()
             .filter((a) => a.ticker === "USDT") || [];
 
         const usdtBalance =
