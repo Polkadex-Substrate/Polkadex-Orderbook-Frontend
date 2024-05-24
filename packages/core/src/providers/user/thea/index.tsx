@@ -132,7 +132,7 @@ export const TheaProvider = ({
     const supportedAssets = connector.getSupportedAssets(destination);
     const asset =
       supportedAssets.find((a) => a.ticker === selectedAsset?.ticker) ??
-      connector.getSupportedAssets(destination)[0];
+      supportedAssets[0];
     setSelectedAsset(asset);
   };
 
