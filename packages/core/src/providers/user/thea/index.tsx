@@ -129,7 +129,10 @@ export const TheaProvider = ({
     setSourceChain(source);
     setDestinationChain(destination);
     const connector = getChainConnector(source.genesis);
-    const asset = selectedAsset ?? connector.getSupportedAssets(destination)[0];
+    const supportedAssets = connector.getSupportedAssets(destination);
+    const asset =
+      supportedAssets.find((a) => a.ticker === selectedAsset?.ticker) ??
+      connector.getSupportedAssets(destination)[0];
     setSelectedAsset(asset);
   };
 

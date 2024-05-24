@@ -6,7 +6,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { signAndSendExtrinsic, sleep } from "@orderbook/core/helpers";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
-import { signAndSubmitPromiseWrapper } from "@polkadex/blockchain-api";
 
 const withdrawMessage =
   "After withdrawal initiation, expect tokens on the destination chain in a few minutes";
@@ -33,6 +32,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
         throw new Error("Bridge issue");
       }
 
+      // TODO: Need to consider Existensial Deposit here (polkadex-ts)
       if (
         transferConfig.sourceFee.amount > transferConfig.sourceFeeBalance.amount
       ) {
@@ -64,21 +64,14 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
       }
 
       const ext = await transferConfig.transfer<SubmittableExtrinsic>(amount);
-      if (isPolkadexChain)
-        await signAndSendExtrinsic(
-          api,
-          ext,
-          { signer: sourceAccount.signer },
-          sourceAccount.address,
-          true
-        );
-      else
-        await signAndSubmitPromiseWrapper({
-          signer: sourceAccount.signer,
-          tx: ext,
-          address: sourceAccount.address,
-          criteria: "IS_FINALIZED",
-        });
+
+      await signAndSendExtrinsic(
+        api,
+        ext,
+        { signer: sourceAccount.signer },
+        sourceAccount.address,
+        true
+      );
 
       onSuccess();
       onHandleAlert(isPolkadexChain ? withdrawMessage : depositMessage);
