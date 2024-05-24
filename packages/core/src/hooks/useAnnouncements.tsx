@@ -26,12 +26,9 @@ export const useAnnouncements = () =>
         JSON.parse(localStorage.getItem(DEFAULTANNOUNCEMENTSNAME) as string) ||
         [];
       return result?.annoucementsCollection?.items[0].cardsCollection.items.map(
-        (e: Announcement) => {
+        (e: any) => {
           const active = !local.includes(e.sys.id);
-          const description = documentToPlainTextString(e.description);
-
-          console.log("DES", description);
-          console.log("e.description", e.description);
+          const description = documentToPlainTextString(e.description.json);
 
           return {
             category: "Announcements",
