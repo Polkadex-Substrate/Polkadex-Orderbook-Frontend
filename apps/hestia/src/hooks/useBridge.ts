@@ -6,6 +6,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { signAndSendExtrinsic, sleep } from "@orderbook/core/helpers";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
+import { NOTIFICATIONS } from "@orderbook/core/constants";
+import { Chain } from "@polkadex/thea";
 
 const withdrawMessage =
   "After withdrawal initiation, expect tokens on the destination chain in a few minutes";
@@ -14,7 +16,8 @@ const depositMessage =
 
 export function useBridge({ onSuccess }: { onSuccess: () => void }) {
   const { api } = useNativeApi();
-  const { onHandleAlert, onHandleError } = useSettingsProvider();
+  const { onHandleAlert, onHandleError, onPushNotification } =
+    useSettingsProvider();
   const {
     transferConfig,
     sourceAccount,
@@ -77,7 +80,17 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
       onHandleAlert(isPolkadexChain ? withdrawMessage : depositMessage);
       if (isPolkadexChain) await sleep(4000);
       await onRefetchSourceBalances?.();
+      return amount;
     },
     onError: (error: Error) => onHandleError?.(error.message),
+    onSuccess: (amount: number) =>
+      onPushNotification(
+        NOTIFICATIONS.crossChainTransfer({
+          sourceChain: transferConfig?.sourceChain as Chain,
+          destinationChain: transferConfig?.destinationChain as Chain,
+          asset: selectedAsset?.ticker as string,
+          amount,
+        })
+      ),
   });
 }
