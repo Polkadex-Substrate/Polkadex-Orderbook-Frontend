@@ -26,6 +26,11 @@ export type DefaultConfig = {
   disabledFeatures: Array<Features>;
   defaultTheaSourceChain: string;
   defaultTheaDestinationChain: string;
+  contentfulSpaceId: string;
+  contentfulAccessToken: string;
+  contentfulPreviewToken: string;
+  contentfulEnvironment: string;
+  contentfulManagementToken: string;
 };
 
 export type Features = (typeof features)[number];

@@ -39,3 +39,4 @@ export * from "./useRemoveGoogleTradingAccount";
 export * from "./useConnectGoogle";
 export * from "./useTransactions";
 export * from "./useTheaConfig";
+export * from "./useAnnouncements";

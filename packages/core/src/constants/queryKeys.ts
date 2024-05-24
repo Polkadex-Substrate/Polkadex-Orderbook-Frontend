@@ -154,4 +154,5 @@ export const QUERY_KEYS = {
     asset,
     destinationChain,
   ],
+  getAnnouncements: () => ["getAnnouncements"],
 };

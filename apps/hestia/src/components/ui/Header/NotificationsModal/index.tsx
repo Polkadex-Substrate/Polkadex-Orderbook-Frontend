@@ -18,6 +18,9 @@ export const NotificationsModal = ({
 }) => {
   const {
     notifications: allNotifications,
+    announcements,
+    announcementsLoading,
+    onReadAnnouncement,
     onReadAllNotifications,
     onClearNotifications,
     onReadNotification,
@@ -59,6 +62,38 @@ export const NotificationsModal = ({
         </Button.Icon>
       </Modal.Title>
       <Modal.Content className="flex flex-col flex-1 gap-6">
+        <div className="flex flex-col gap-3">
+          <Typography.Text appearance="primary" className="px-4">
+            Announcements
+          </Typography.Text>
+          <div className="flex flex-col gap-2">
+            {announcements?.map(
+              ({ id, message, date, active, description, href }) => {
+                return (
+                  <Card
+                    key={id}
+                    onClick={() => onReadNotification(id)}
+                    category="Announcements"
+                    title={message}
+                    date={new Date(date).toLocaleDateString()}
+                    active={active}
+                    href={href}
+                    onRead={() => onReadNotification(id)}
+                    onRemove={() => onRemoveNotification(id)}
+                    onRedirect={() => {
+                      onReadAnnouncement(id);
+                      href &&
+                        window.open(href, "_blank", "noopener, noreferrer");
+                    }}
+                  >
+                    {description}
+                  </Card>
+                );
+              }
+            )}
+          </div>
+        </div>
+        );
         {Object.keys(notifications)
           .sort()
           .map((category, index) => {

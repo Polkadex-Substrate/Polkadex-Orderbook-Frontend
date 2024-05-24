@@ -43,4 +43,9 @@ export const defaultConfig: DefaultConfig = {
   defaultTheaSourceChain: process.env.DEFAULT_THEA_SOURCE_CHAIN ?? "Polkadot",
   defaultTheaDestinationChain:
     process.env.DEFAULT_THEA_DESTINATION_CHAIN ?? "Polkadex",
+  contentfulSpaceId: process.env.CONTENTFUL_SPACE_ID ?? "",
+  contentfulAccessToken: process.env.CONTENTFUL_ACCESS_TOKEN ?? "",
+  contentfulPreviewToken: process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN ?? "",
+  contentfulEnvironment: process.env.CONTENTFUL_ENVIRONMENT ?? "master",
+  contentfulManagementToken: process.env.CONTENTFUL_MANAGEMENT_TOKEN ?? "",
 };
