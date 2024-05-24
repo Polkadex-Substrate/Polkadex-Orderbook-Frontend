@@ -5,7 +5,6 @@ import {
   PropsWithChildren,
   SetStateAction,
   createContext,
-  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -243,7 +242,6 @@ export const TheaProvider = ({
     isLoading: transferConfigLoading,
     isFetching: transferConfigFetching,
     isSuccess: transferConfigSuccess,
-    refetch: transferConfigRefetch,
   } = useTheaConfig({
     connector: sourceConnector,
     destinationAddress: destinationAccountSelected?.address,
@@ -251,10 +249,6 @@ export const TheaProvider = ({
     selectedAsset,
     destinationChain,
   });
-
-  const onRefetchTransferConfig = useCallback(async () => {
-    await transferConfigRefetch();
-  }, [transferConfigRefetch]);
 
   const selectedAssetBalance = useMemo(
     () =>
@@ -297,7 +291,6 @@ export const TheaProvider = ({
         transferConfig,
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
         transferConfigSuccess,
-        onRefetchTransferConfig,
 
         destinationPDEXBalance,
         isPolkadexChain,
@@ -342,7 +335,6 @@ type State = {
   transferConfig: TransferConfig | undefined;
   transferConfigLoading: boolean;
   transferConfigSuccess: boolean;
-  onRefetchTransferConfig: () => Promise<void>;
 
   destinationPDEXBalance: number;
   isPolkadexChain: boolean;
@@ -378,7 +370,6 @@ export const Context = createContext<State>({
   transferConfig: undefined,
   transferConfigLoading: false,
   transferConfigSuccess: false,
-  onRefetchTransferConfig: async () => {},
 
   destinationPDEXBalance: 0,
   isPolkadexChain: false,

@@ -30,8 +30,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
   return useMutation({
     mutationFn: async ({ amount }: { amount: number }) => {
       if (!transferConfig || !sourceAccount || !api) {
-        onHandleError?.("Bridge issue");
-        return;
+        throw new Error("Bridge issue");
       }
 
       if (
