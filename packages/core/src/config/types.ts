@@ -14,6 +14,7 @@ export type DefaultConfig = {
   msPricesUpdates: number;
   maintenanceMode: boolean;
   enableLmp: boolean;
+  enableBridge: boolean;
   availableRoutes: string[];
   underMaintenance: string[];
   mainUrl: string;
