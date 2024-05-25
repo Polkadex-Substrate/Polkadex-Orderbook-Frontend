@@ -58,7 +58,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
               destinationAccount?.address as string,
               usdtAsset
             )
-          )?.[0].amount || 0;
+          )?.at(0)?.amount || 0;
 
         if (usdtBalance < 0.7)
           throw new Error(
