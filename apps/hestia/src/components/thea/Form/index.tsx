@@ -369,7 +369,7 @@ export const Form = () => {
             </div>
           </div>
         </div>
-        {transferConfigLoading ? (
+        {transferConfigLoading || sourceBalancesLoading ? (
           <Button.Solid
             className="w-full py-5 flex items-center gap-1 opacity-60"
             size="md"
