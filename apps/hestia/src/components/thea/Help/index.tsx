@@ -13,7 +13,7 @@ export const Help = forwardRef<HTMLDivElement>((_, ref) => {
       className="flex items-start max-md:flex-col max-md:gap-4 max-w-[900px] flex-1 mx-auto w-full mt-20 max-lg:pb-4"
     >
       <Card
-        title="Cross-chain bridge transactions"
+        title="Transaction history"
         description="Explore your transactions."
         href="/history?tab=crossChain"
       >
