@@ -37,7 +37,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   } = useSettingsProvider();
   const lastUsedMarketUrl = getMarketUrl();
   const isRewardDisabled = !defaultConfig.enableLmp;
-  const isBridgeDisabled = !defaultConfig.enableBridge;
+  const isBridgeDisabled = !defaultConfig.isBridgeEnabled;
 
   const unreadNotifications = useMemo(() => {
     return allNotifications.filter((e) => e.active).length;

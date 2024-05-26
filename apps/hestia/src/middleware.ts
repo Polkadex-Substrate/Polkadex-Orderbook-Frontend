@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const {
     enableLmp: isRewardsActive,
-    enableBridge: isBridgeActive,
+    isBridgeEnabled,
     maintenanceMode,
   } = defaultConfig;
 
@@ -14,7 +14,7 @@ export function middleware(req: NextRequest) {
   if (!isRewardsActive && req.nextUrl.pathname.startsWith("/rewards")) {
     return NextResponse.redirect(new URL("/", req.url));
   }
-  if (!isBridgeActive && req.nextUrl.pathname.startsWith("/thea")) {
+  if (!isBridgeEnabled && req.nextUrl.pathname.startsWith("/thea")) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 }

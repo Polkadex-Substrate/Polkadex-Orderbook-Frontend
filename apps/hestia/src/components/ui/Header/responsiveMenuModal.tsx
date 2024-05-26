@@ -27,7 +27,7 @@ export const ResponsiveMenuModal = ({
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
   const isRewardDisabled = !defaultConfig.enableLmp;
-  const isBridgeDisabled = !defaultConfig.enableBridge;
+  const isBridgeDisabled = !defaultConfig.isBridgeEnabled;
   const lastUsedMarketUrl = getMarketUrl();
   const { width } = useWindowSize();
   return (

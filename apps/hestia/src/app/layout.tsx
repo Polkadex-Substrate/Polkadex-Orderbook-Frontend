@@ -12,7 +12,7 @@ const font = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Polkadex Orderbook || Decentralized exchange platform",
+  title: "Polkadex Orderbook || A fully decentralized exchange platform",
   description: "A fully decentralized exchange platform",
   keywords: [
     "trading",
