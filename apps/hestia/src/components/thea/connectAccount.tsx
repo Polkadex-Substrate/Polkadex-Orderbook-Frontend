@@ -116,7 +116,6 @@ const ContentCompontent = ({
           }}
           onClose={() => {
             setExtension(null);
-            onClose();
             onReset();
           }}
           onPermission={async () =>

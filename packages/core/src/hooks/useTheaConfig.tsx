@@ -22,8 +22,15 @@ export const useTheaConfig = ({
       !!sourceAddress &&
       !!destinationChain &&
       !!selectedAsset &&
-      !!destinationAddress,
-    [sourceAddress, destinationChain, selectedAsset, destinationAddress]
+      !!destinationAddress &&
+      !!connector,
+    [
+      connector,
+      sourceAddress,
+      destinationChain,
+      selectedAsset,
+      destinationAddress,
+    ]
   );
 
   return useQuery({
@@ -35,7 +42,7 @@ export const useTheaConfig = ({
     ),
     enabled,
     queryFn: async () => {
-      if (!destinationChain || !selectedAsset) return;
+      if (!destinationChain || !selectedAsset || !connector) return;
 
       const res = await connector?.getTransferConfig(
         destinationChain,
