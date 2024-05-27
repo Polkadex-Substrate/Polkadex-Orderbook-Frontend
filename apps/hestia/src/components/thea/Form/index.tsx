@@ -238,7 +238,7 @@ export const Form = () => {
               <Button.Icon
                 type="button"
                 variant="outline"
-                className="lg:mt-9 h-10 w-10 p-3 max-lg:self-center"
+                className="lg:mt-9 h-10 w-10 p-3 max-lg:self-center max-lg:rotate-90"
                 onClick={onSwitchChain}
               >
                 <RiArrowLeftRightLine className="w-full h-full" />
@@ -277,6 +277,7 @@ export const Form = () => {
                 <HoverInformation>
                   <HoverInformation.Trigger
                     loading={transferConfigLoading || sourceBalancesLoading}
+                    className="min-w-20"
                   >
                     <RiInformationFill className="w-3 h-3 text-actionInput" />
                     <Typography.Text size="xs" appearance="primary">
