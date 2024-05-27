@@ -347,7 +347,9 @@ export const Content = () => {
               installedExtensions={extensionsStatus}
               onConnectProvider={(e) => onSelectExtension?.(e)}
               onClose={() => props?.onChangeInteraction(false)}
-              onConnectCallback={() => props?.onPage("Authorization", true)}
+              onConnectCallback={() =>
+                props?.onPage("ConnectAuthorization", true)
+              }
             />
             <Authorization
               key="ConnectAuthorization"
