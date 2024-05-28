@@ -93,6 +93,10 @@ export const ConfirmTransaction = ({
     const fee = sourceFee?.amount ?? 0;
 
     if (balance <= fee + existential) return CrossChainError.SOURCE_FEE;
+    if (showAutoSwap && !swapPrice)
+      return CrossChainError.NOT_ENOUGH_LIQUIDITY(
+        selectedAsset?.ticker as string
+      );
 
     if (amount <= autoSwapAmount)
       return CrossChainError.AUTO_SWAP(
@@ -198,7 +202,9 @@ export const ConfirmTransaction = ({
                       <Skeleton loading={swapLoading} className="min-h-4 w-10">
                         <div className="flex items-center gap-1">
                           <Typography.Text>
-                            {swapPrice.toFixed(4)} {selectedAsset?.ticker}
+                            {swapPrice > 0
+                              ? `${swapPrice.toFixed(4)} ${selectedAsset?.ticker}`
+                              : "--------"}
                           </Typography.Text>
                           <Typography.Text appearance="primary">
                             ≈
@@ -247,7 +253,7 @@ export const ConfirmTransaction = ({
                     >
                       {destinationFeeAmount} {destinationFeeTicker}
                     </ResponsiveCard>
-                    {showAutoSwap && (
+                    {showAutoSwap && swapPrice > 0 && (
                       <ResponsiveCard label="Auto swap">
                         {swapPrice.toFixed(4)} {selectedAsset?.ticker}
                       </ResponsiveCard>

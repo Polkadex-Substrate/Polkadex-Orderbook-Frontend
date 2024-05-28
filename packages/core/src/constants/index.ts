@@ -79,6 +79,8 @@ export const ErrorMessages = (existential = "0", minAmount = "0") => ({
 
 export const CrossChainError = {
   SOURCE_FEE: "Insufficient balance to pay the transaction fee at source chain",
+  NOT_ENOUGH_LIQUIDITY: (ticker: string) =>
+    `Autoswap is required but not enough liquidity to convert some ${ticker} to PDEX token`,
   AUTO_SWAP: (swapAmount: string, ticker: string) =>
     `Please transfer more than ${swapAmount} ${ticker} since Autoswap is required`,
 };
