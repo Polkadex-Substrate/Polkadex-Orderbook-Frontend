@@ -16,6 +16,7 @@ import {
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
 
 type Extension = (typeof ExtensionsArray)[0] | null;
+
 export const ConnectAccount = ({
   open,
   onOpenChange,
