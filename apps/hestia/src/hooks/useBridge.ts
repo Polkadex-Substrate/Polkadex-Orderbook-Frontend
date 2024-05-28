@@ -1,5 +1,3 @@
-// TODO: Move messages
-
 import { useTheaProvider } from "@orderbook/core/providers";
 import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
 import { useMutation } from "@tanstack/react-query";
@@ -9,11 +7,6 @@ import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { NOTIFICATIONS } from "@orderbook/core/constants";
 import { Chain } from "@polkadex/thea";
 
-const withdrawMessage =
-  "After withdrawal initiation, expect tokens on the destination chain in a few minutes";
-const depositMessage =
-  "Deposit Success. Processed transactions take a few minutes to appear in History";
-
 export function useBridge({ onSuccess }: { onSuccess: () => void }) {
   const { api } = useNativeApi();
   const { onHandleAlert, onHandleError, onPushNotification } =
@@ -21,7 +14,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
   const {
     transferConfig,
     sourceAccount,
-    isPolkadexChain,
+    isSourcePolkadex,
     onRefetchSourceBalances,
     selectedAsset,
     destinationChain,
@@ -35,11 +28,14 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
         throw new Error("Bridge issue");
       }
 
-      // TODO: Need to consider Existensial Deposit here (polkadex-ts)
       if (
-        transferConfig.sourceFee.amount > transferConfig.sourceFeeBalance.amount
+        transferConfig.sourceFeeBalance.amount -
+          transferConfig.sourceFee.amount <=
+        transferConfig.sourceFeeExistential.amount
       ) {
-        throw new Error("Insufficient transaction fee balance on source chain");
+        throw new Error(
+          "Insufficient balance to pay the transaction fee at source chain"
+        );
       }
 
       // For DED and PINK withdrawal
@@ -77,8 +73,10 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
       );
 
       onSuccess();
-      onHandleAlert(isPolkadexChain ? withdrawMessage : depositMessage);
-      if (isPolkadexChain) await sleep(4000);
+      onHandleAlert(
+        "Transfer Success. Expect tokens on the destination chain in a few minutes"
+      );
+      if (isSourcePolkadex) await sleep(4000);
       await onRefetchSourceBalances?.();
       return amount;
     },

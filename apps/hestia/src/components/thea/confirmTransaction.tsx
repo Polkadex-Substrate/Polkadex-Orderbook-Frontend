@@ -50,14 +50,15 @@ export const ConfirmTransaction = ({
     transferConfigLoading,
     destinationPDEXBalance,
     selectedAsset,
-    isPolkadexChain,
+    isDestinationPolkadex,
     polkadexAssets,
   } = useTheaProvider();
-  const { destinationFee, sourceFee, sourceFeeBalance } = transferConfig ?? {};
+  const { destinationFee, sourceFee, sourceFeeBalance, sourceFeeExistential } =
+    transferConfig ?? {};
 
   const showAutoSwap = useMemo(
-    () => !isPolkadexChain && !destinationPDEXBalance,
-    [isPolkadexChain, destinationPDEXBalance]
+    () => isDestinationPolkadex && !destinationPDEXBalance,
+    [isDestinationPolkadex, destinationPDEXBalance]
   );
 
   const selectedAssetId = useMemo(
@@ -88,16 +89,22 @@ export const ConfirmTransaction = ({
   const error = useMemo(() => {
     const autoSwapAmount = showAutoSwap ? swapPrice : 0;
     const balance = sourceFeeBalance?.amount ?? 0;
+    const existential = sourceFeeExistential?.amount ?? 0;
+    const fee = sourceFee?.amount ?? 0;
 
-    if (!isPolkadexChain) return balance < (sourceFee?.amount ?? 0);
+    if (balance <= fee + existential)
+      return "Insufficient balance to pay the transaction fee at source chain";
 
-    return balance < (sourceFee?.amount ?? 0) + autoSwapAmount;
+    if (amount <= autoSwapAmount)
+      return `Please transfer more than ${autoSwapAmount.toFixed(4)} ${selectedAsset?.ticker} since Autoswap is required`;
   }, [
-    swapPrice,
-    sourceFee,
-    isPolkadexChain,
+    amount,
+    selectedAsset?.ticker,
     showAutoSwap,
+    sourceFee?.amount,
     sourceFeeBalance?.amount,
+    sourceFeeExistential?.amount,
+    swapPrice,
   ]);
 
   const disabled = useMemo(() => !!error || isLoading, [error, isLoading]);
@@ -111,21 +118,18 @@ export const ConfirmTransaction = ({
   ] = useMemo(() => {
     const destValue = destinationFee?.amount ?? 0;
     const sourceValue = sourceFee?.amount ?? 0;
-    const autoswapAmount = showAutoSwap ? swapPrice : 0;
     return [
       destValue ? `~ ${formatAmount(destValue)}` : "Ø",
       destValue ? destinationFee?.ticker : "",
       sourceValue ? `~ ${formatAmount(sourceValue)}` : "Ø",
       sourceValue ? sourceFee?.ticker : "",
-      formatAmount(sourceValue + destValue + autoswapAmount),
+      sourceValue ? `~ ${formatAmount(sourceValue)}` : "Ø",
     ];
   }, [
     destinationFee?.amount,
     destinationFee?.ticker,
     sourceFee?.amount,
     sourceFee?.ticker,
-    showAutoSwap,
-    swapPrice,
   ]);
 
   return (
@@ -192,8 +196,7 @@ export const ConfirmTransaction = ({
                       <Skeleton loading={swapLoading} className="min-h-4 w-10">
                         <div className="flex items-center gap-1">
                           <Typography.Text>
-                            {swapPrice.toFixed(4)}{" "}
-                            {transferConfig?.sourceFee.ticker}
+                            {swapPrice.toFixed(4)} {selectedAsset?.ticker}
                           </Typography.Text>
                           <Typography.Text appearance="primary">
                             ≈
@@ -244,16 +247,12 @@ export const ConfirmTransaction = ({
                     </ResponsiveCard>
                     {showAutoSwap && (
                       <ResponsiveCard label="Auto swap">
-                        {swapPrice.toFixed(4)} {sourceFeeTicker}
+                        {swapPrice.toFixed(4)} {selectedAsset?.ticker}
                       </ResponsiveCard>
                     )}
                   </HoverInformation.Content>
                 </HoverInformation>
-                {error && (
-                  <ErrorMessage className="p-3">
-                    Your balance is not enough to pay the fee.
-                  </ErrorMessage>
-                )}
+                {error && <ErrorMessage className="p-3">{error}</ErrorMessage>}
               </div>
               <div className="flex flex-col gap-3 px-3 pt-4">
                 <Link

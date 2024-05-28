@@ -137,9 +137,14 @@ export const TheaProvider = ({
   };
 
   /* Polkadex */
-  const isPolkadexChain = useMemo(
+  const isSourcePolkadex = useMemo(
     () => !!(sourceChain?.genesis === GENESIS[0]),
     [sourceChain?.genesis]
+  );
+
+  const isDestinationPolkadex = useMemo(
+    () => !!(destinationChain?.genesis === GENESIS[0]),
+    [destinationChain?.genesis]
   );
 
   const polkadexConnector = useMemo(
@@ -296,7 +301,8 @@ export const TheaProvider = ({
         transferConfigSuccess,
 
         destinationPDEXBalance,
-        isPolkadexChain,
+        isSourcePolkadex,
+        isDestinationPolkadex,
         polkadexAssets,
       }}
     >
@@ -340,7 +346,8 @@ type State = {
   transferConfigSuccess: boolean;
 
   destinationPDEXBalance: number;
-  isPolkadexChain: boolean;
+  isSourcePolkadex: boolean;
+  isDestinationPolkadex: boolean;
 };
 export const Context = createContext<State>({
   sourceConnector: null,
@@ -375,7 +382,8 @@ export const Context = createContext<State>({
   transferConfigSuccess: false,
 
   destinationPDEXBalance: 0,
-  isPolkadexChain: false,
+  isSourcePolkadex: false,
+  isDestinationPolkadex: false,
 });
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
