@@ -2,13 +2,12 @@ import { useTheaProvider } from "@orderbook/core/providers";
 import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
 import { useMutation } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { signAndSendExtrinsic, sleep } from "@orderbook/core/helpers";
-import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
+import { sleep } from "@orderbook/core/helpers";
 import { NOTIFICATIONS } from "@orderbook/core/constants";
 import { Chain } from "@polkadex/thea";
+import { signAndSubmitPromiseWrapper } from "@polkadex/blockchain-api";
 
 export function useBridge({ onSuccess }: { onSuccess: () => void }) {
-  const { api } = useNativeApi();
   const { onHandleAlert, onHandleError, onPushNotification } =
     useSettingsProvider();
   const {
@@ -24,7 +23,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
 
   return useMutation({
     mutationFn: async ({ amount }: { amount: number }) => {
-      if (!transferConfig || !sourceAccount || !api) {
+      if (!transferConfig || !sourceAccount) {
         throw new Error("Bridge issue");
       }
 
@@ -64,13 +63,12 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
 
       const ext = await transferConfig.transfer<SubmittableExtrinsic>(amount);
 
-      await signAndSendExtrinsic(
-        api,
-        ext,
-        { signer: sourceAccount.signer },
-        sourceAccount.address,
-        true
-      );
+      await signAndSubmitPromiseWrapper({
+        signer: sourceAccount.signer,
+        tx: ext,
+        address: sourceAccount.address,
+        criteria: "IS_FINALIZED",
+      });
 
       onSuccess();
       onHandleAlert(
