@@ -200,7 +200,11 @@ export const Form = () => {
                           key={e.genesis}
                           icon={e.logo}
                           value={e.name}
-                          onSelect={() => onSelectSourceChain(e)}
+                          onSelect={() => {
+                            onSelectSourceChain(e);
+                            if (e.type !== ChainType.Substrate)
+                              setOpenSourceModal(true);
+                          }}
                         />
                       );
                     })}
@@ -265,7 +269,7 @@ export const Form = () => {
                   </SelectNetwork>
                 </div>
                 <AccountCombobox
-                  account={destinationAccount} // TODO: Make undefined when chain type changes
+                  account={destinationAccount}
                   setAccount={(e) => e && setDestinationAccount(e)}
                   evm={destinationChain?.type !== ChainType.Substrate}
                 />

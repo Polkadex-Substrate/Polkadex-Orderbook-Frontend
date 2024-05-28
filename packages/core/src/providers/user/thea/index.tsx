@@ -17,6 +17,7 @@ import {
   AssetAmount,
   BaseChainAdapter,
   TransferConfig,
+  ChainType,
 } from "@polkadex/thea";
 import { defaultConfig } from "@orderbook/core/config";
 import { ExtensionAccount } from "@polkadex/react-providers";
@@ -67,8 +68,10 @@ export const TheaProvider = ({
   );
 
   const sourceAccountSelected = useMemo(
-    () => sourceAccount ?? selectedWallet,
-    [sourceAccount, selectedWallet]
+    () =>
+      sourceAccount ??
+      (sourceChain?.type === ChainType.Substrate ? selectedWallet : undefined),
+    [sourceAccount, selectedWallet, sourceChain?.type]
   );
 
   const supportedDestinationChains = useMemo(() => {
@@ -76,6 +79,7 @@ export const TheaProvider = ({
   }, [sourceConnector]);
 
   const onSelectSourceChain = (chain: Chain) => {
+    if (sourceChain?.type !== chain.type) setSourceAccount(undefined);
     const connector = getChainConnector(chain.genesis);
     const destChain = connector.getDestinationChains()[0];
     const selectedAsset = connector.getSupportedAssets(destChain)[0];
@@ -91,8 +95,12 @@ export const TheaProvider = ({
   );
 
   const destinationAccountSelected = useMemo(
-    () => destinationAccount ?? selectedWallet,
-    [destinationAccount, selectedWallet]
+    () =>
+      destinationAccount ??
+      (destinationChain?.type === ChainType.Substrate
+        ? selectedWallet
+        : undefined),
+    [destinationAccount, selectedWallet, destinationChain?.type]
   );
 
   const onSelectDestinationChain = (chain: Chain) => {
@@ -102,6 +110,7 @@ export const TheaProvider = ({
         .some((e) => e.genesis === chain.genesis)
     )
       return;
+    if (destinationChain?.type !== chain.type) setDestinationAccount(undefined);
     const selectedAsset = sourceConnector.getSupportedAssets(chain)[0];
     setDestinationChain(chain);
     setSelectedAsset(selectedAsset);
@@ -134,6 +143,12 @@ export const TheaProvider = ({
       supportedAssets.find((a) => a.ticker === selectedAsset?.ticker) ??
       supportedAssets[0];
     setSelectedAsset(asset);
+
+    // Swap wallets if chain type is different
+    if (source.type !== destination.type) {
+      setSourceAccount(undefined);
+      setDestinationAccount(undefined);
+    }
   };
 
   /* Polkadex */
