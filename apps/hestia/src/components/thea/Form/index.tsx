@@ -22,6 +22,7 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import classNames from "classnames";
 import { bridgeValidations } from "@orderbook/core/validations";
+import { ChainType } from "@polkadex/thea";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
@@ -175,6 +176,7 @@ export const Form = () => {
         open={openSourceModal}
         onOpenChange={setOpenSourceModal}
         setAccount={setSourceAccount}
+        evm={sourceChain?.type !== ChainType.Substrate}
       />
 
       <form
@@ -263,8 +265,9 @@ export const Form = () => {
                   </SelectNetwork>
                 </div>
                 <AccountCombobox
-                  account={destinationAccount}
+                  account={destinationAccount} // TODO: Make undefined when chain type changes
                   setAccount={(e) => e && setDestinationAccount(e)}
+                  evm={destinationChain?.type !== ChainType.Substrate}
                 />
               </div>
             </div>

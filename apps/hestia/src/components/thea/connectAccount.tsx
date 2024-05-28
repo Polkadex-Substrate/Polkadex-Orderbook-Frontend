@@ -20,10 +20,12 @@ export const ConnectAccount = ({
   open,
   onOpenChange,
   setAccount,
+  evm = false,
 }: {
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
   setAccount?: (e: ExtensionAccount) => void;
+  evm?: boolean;
 }) => {
   const [extension, setExtension] = useState<Extension>(null);
 
@@ -42,12 +44,14 @@ export const ConnectAccount = ({
           <TriggerCompontent
             onClose={handleClose}
             setExtension={setExtension}
+            evm={evm}
           />
           <ContentCompontent
             extension={extension}
             setAccount={setAccount}
             setExtension={setExtension}
             onClose={handleClose}
+            evm={evm}
           />
         </Interactable>
       </Modal.Content>
@@ -56,9 +60,11 @@ export const ConnectAccount = ({
 };
 
 const TriggerCompontent = ({
+  evm,
   onClose,
   setExtension,
 }: {
+  evm: boolean;
   onClose: () => void;
   setExtension: Dispatch<SetStateAction<Extension>>;
 }) => {
@@ -75,6 +81,7 @@ const TriggerCompontent = ({
         showChains={false}
         showTerms={false}
         showFooterClose
+        showEvmExtensions={evm}
       />
     </Interactable.Trigger>
   );
@@ -85,7 +92,9 @@ const ContentCompontent = ({
   setExtension,
   setAccount,
   extension,
+  evm,
 }: {
+  evm: boolean;
   onClose: () => void;
   setExtension: Dispatch<SetStateAction<Extension>>;
   extension: Extension;
@@ -100,9 +109,13 @@ const ContentCompontent = ({
   const walletsFiltered = useMemo(
     () =>
       !!extensionAccounts && !!sourceId
-        ? extensionAccounts.filter((e) => e.source === sourceId)
+        ? extensionAccounts.filter(
+            (e) =>
+              e.source === sourceId &&
+              (evm ? e.type === "ethereum" : e.type === "sr25519")
+          )
         : [],
-    [extensionAccounts, sourceId]
+    [extensionAccounts, sourceId, evm]
   );
   return (
     <Interactable.Content>
