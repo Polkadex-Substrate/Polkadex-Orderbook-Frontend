@@ -118,7 +118,7 @@ const ContentCompontent = ({
     [extensionAccounts, sourceId, evm]
   );
   return (
-    <Interactable.Content>
+    <Interactable.Content className="[&>div>div]:h-full">
       <Interactable.Card pageName="accounts">
         <ExtensionAccounts
           key="ConnectFundingWallets"
