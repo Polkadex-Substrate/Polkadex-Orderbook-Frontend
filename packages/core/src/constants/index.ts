@@ -77,6 +77,12 @@ export const ErrorMessages = (existential = "0", minAmount = "0") => ({
   EXISTENTIAL_DEPOSIT: `You need to keep some amount in source chain to cover the existential deposit`,
 });
 
+export const CrossChainError = {
+  SOURCE_FEE: "Insufficient balance to pay the transaction fee at source chain",
+  AUTO_SWAP: (swapAmount: string, ticker: string) =>
+    `Please transfer more than ${swapAmount} ${ticker} since Autoswap is required`,
+};
+
 export const MAX_DIGITS_AFTER_DECIMAL = 8;
 export const MIN_DIGITS_AFTER_DECIMAL = 2;
 export const ORDERBOOK_PRECISION = 8;

@@ -19,7 +19,7 @@ import {
 } from "@remixicon/react";
 import { Dispatch, SetStateAction, useMemo } from "react";
 import Link from "next/link";
-import { THEA_AUTOSWAP } from "@orderbook/core/index";
+import { CrossChainError, THEA_AUTOSWAP } from "@orderbook/core/index";
 import { useTheaProvider } from "@orderbook/core/providers";
 
 import { useBridge, usePool } from "@/hooks";
@@ -92,11 +92,13 @@ export const ConfirmTransaction = ({
     const existential = sourceFeeExistential?.amount ?? 0;
     const fee = sourceFee?.amount ?? 0;
 
-    if (balance <= fee + existential)
-      return "Insufficient balance to pay the transaction fee at source chain";
+    if (balance <= fee + existential) return CrossChainError.SOURCE_FEE;
 
     if (amount <= autoSwapAmount)
-      return `Please transfer more than ${autoSwapAmount.toFixed(4)} ${selectedAsset?.ticker} since Autoswap is required`;
+      return CrossChainError.AUTO_SWAP(
+        autoSwapAmount.toFixed(4),
+        selectedAsset?.ticker as string
+      );
   }, [
     amount,
     selectedAsset?.ticker,
@@ -216,7 +218,7 @@ export const ConfirmTransaction = ({
                 )}
                 <HoverInformation>
                   <HoverInformation.Trigger>
-                    <div className="w-full flex items-center justify-between gap-2 px-3 py-3">
+                    <div className="w-full flex items-center justify-between gap-2 px-3 py-3 cursor-pointer">
                       <div className="flex items-center gap-1">
                         <RiInformationFill className="w-3 h-3 text-actionInput" />
                         <Typography.Text appearance="primary">
@@ -227,7 +229,7 @@ export const ConfirmTransaction = ({
                         loading={
                           showAutoSwap ? swapLoading : transferConfigLoading
                         }
-                        className="min-h-4 w-10"
+                        className="min-h-4 w-20 flex-none"
                       >
                         <Typography.Text>
                           {estimatedFee} {sourceFeeTicker}
