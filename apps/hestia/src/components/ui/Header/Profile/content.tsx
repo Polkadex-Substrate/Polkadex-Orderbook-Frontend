@@ -92,7 +92,10 @@ export const Content = () => {
   );
 
   const walletsFiltered = useMemo(
-    () => extensionAccounts?.filter(({ source }) => source === sourceId),
+    () =>
+      extensionAccounts?.filter(
+        ({ source, type }) => source === sourceId && type === "sr25519"
+      ),
     [extensionAccounts, sourceId]
   );
 
