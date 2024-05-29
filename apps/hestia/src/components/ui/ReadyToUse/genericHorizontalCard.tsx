@@ -41,7 +41,7 @@ export const GenericHorizontalCard = ({
           <div className="flex items-center gap-2">
             <Icon
               name={icon}
-              className="text-primary group-hover:text-current transition-colors duration-300 w-5 h-5"
+              className="text-primary group-hover:text-current transition-colors duration-300 w-6 h-6"
             />
             <Typography.Text
               appearance="primary"
