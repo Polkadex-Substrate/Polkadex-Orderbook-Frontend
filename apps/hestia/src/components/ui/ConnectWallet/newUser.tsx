@@ -67,7 +67,7 @@ export const NewUser = ({
               onClick={onReadMore}
               className="flex items-center gap-2 text-primary-base"
             >
-              <Icon name="Wallet" className="w-5 h-5" />
+              <Icon name="Wallet" className="w-6 h-6" />
               <Typography.Text className="text-primary-base">
                 Read More
               </Typography.Text>
