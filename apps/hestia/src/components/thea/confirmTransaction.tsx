@@ -273,11 +273,10 @@ export const ConfirmTransaction = ({
                   </Typography.Text>
                   <RiExternalLinkLine className="w-3 h-3 text-secondary" />
                 </Link>
-                <div className="overflow-hidden relative">
+                <div className="overflow-hidden">
                   <div className=" max-h-24 overflow-auto pb-6">
                     <Terms />
                   </div>
-                  <div className="absolute bottom-0 left-0 w-full h-[45px] bg-gradient-to-t from-level-0 to-transparent" />
                 </div>
               </div>
             </Interaction.Content>
