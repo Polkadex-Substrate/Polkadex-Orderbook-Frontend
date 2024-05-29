@@ -85,8 +85,6 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
     onRemoveGoogleDrive,
     removeGoogleDriveLoading,
     browserAccountPresent,
-    walletLoading,
-    walletSuccess,
   } = useConnectWalletProvider();
   const { onToogleConnectExtension } = useSettingsProvider();
   const { allAccounts } = useProfile();
@@ -108,9 +106,12 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
   const onRedirect = useCallback(() => {
     if (!selectedWallet) return null;
 
-    return browserAccountPresent
-      ? onToogleConnectExtension(false)
-      : onNext(hasAccount ? "ExistingUser" : "NewUser");
+    if (browserAccountPresent || !hasAccount) {
+      onToogleConnectExtension(false);
+      return;
+    }
+
+    return onNext("ExistingUser");
   }, [
     hasAccount,
     onNext,
@@ -143,8 +144,8 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
       <Interactable.Card pageName="ConnectFundingWallets">
         <ExtensionAccounts
           extensionAccounts={walletsFiltered}
-          loading={false} // TEMP
-          success={!!mainProxiesSuccess && !!walletSuccess}
+          loading={!!mainProxiesLoading}
+          success={!!mainProxiesSuccess}
           onSelectExtensionAccount={async (e) => await onSelectWallet?.(e)}
           onTryAgain={() =>
             selectedExtension && onSelectExtension?.(selectedExtension)
