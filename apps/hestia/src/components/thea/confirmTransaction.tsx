@@ -19,7 +19,7 @@ import {
 } from "@remixicon/react";
 import { Dispatch, SetStateAction, useMemo } from "react";
 import Link from "next/link";
-import { THEA_AUTOSWAP } from "@orderbook/core/index";
+import { CrossChainError, THEA_AUTOSWAP } from "@orderbook/core/index";
 import { useTheaProvider } from "@orderbook/core/providers";
 
 import { useBridge, usePool } from "@/hooks";
@@ -50,14 +50,15 @@ export const ConfirmTransaction = ({
     transferConfigLoading,
     destinationPDEXBalance,
     selectedAsset,
-    isPolkadexChain,
+    isDestinationPolkadex,
     polkadexAssets,
   } = useTheaProvider();
-  const { destinationFee, sourceFee, sourceFeeBalance } = transferConfig ?? {};
+  const { destinationFee, sourceFee, sourceFeeBalance, sourceFeeExistential } =
+    transferConfig ?? {};
 
   const showAutoSwap = useMemo(
-    () => !isPolkadexChain && !destinationPDEXBalance,
-    [isPolkadexChain, destinationPDEXBalance]
+    () => isDestinationPolkadex && !destinationPDEXBalance,
+    [isDestinationPolkadex, destinationPDEXBalance]
   );
 
   const selectedAssetId = useMemo(
@@ -88,16 +89,28 @@ export const ConfirmTransaction = ({
   const error = useMemo(() => {
     const autoSwapAmount = showAutoSwap ? swapPrice : 0;
     const balance = sourceFeeBalance?.amount ?? 0;
+    const existential = sourceFeeExistential?.amount ?? 0;
+    const fee = sourceFee?.amount ?? 0;
 
-    if (!isPolkadexChain) return balance < (sourceFee?.amount ?? 0);
+    if (balance <= fee + existential) return CrossChainError.SOURCE_FEE;
+    if (showAutoSwap && !swapPrice)
+      return CrossChainError.NOT_ENOUGH_LIQUIDITY(
+        selectedAsset?.ticker as string
+      );
 
-    return balance < (sourceFee?.amount ?? 0) + autoSwapAmount;
+    if (amount <= autoSwapAmount)
+      return CrossChainError.AUTO_SWAP(
+        autoSwapAmount.toFixed(4),
+        selectedAsset?.ticker as string
+      );
   }, [
-    swapPrice,
-    sourceFee,
-    isPolkadexChain,
+    amount,
+    selectedAsset?.ticker,
     showAutoSwap,
+    sourceFee?.amount,
     sourceFeeBalance?.amount,
+    sourceFeeExistential?.amount,
+    swapPrice,
   ]);
 
   const disabled = useMemo(() => !!error || isLoading, [error, isLoading]);
@@ -111,21 +124,18 @@ export const ConfirmTransaction = ({
   ] = useMemo(() => {
     const destValue = destinationFee?.amount ?? 0;
     const sourceValue = sourceFee?.amount ?? 0;
-    const autoswapAmount = showAutoSwap ? swapPrice : 0;
     return [
       destValue ? `~ ${formatAmount(destValue)}` : "Ø",
       destValue ? destinationFee?.ticker : "",
       sourceValue ? `~ ${formatAmount(sourceValue)}` : "Ø",
       sourceValue ? sourceFee?.ticker : "",
-      formatAmount(sourceValue + destValue + autoswapAmount),
+      sourceValue ? `~ ${formatAmount(sourceValue)}` : "Ø",
     ];
   }, [
     destinationFee?.amount,
     destinationFee?.ticker,
     sourceFee?.amount,
     sourceFee?.ticker,
-    showAutoSwap,
-    swapPrice,
   ]);
 
   return (
@@ -192,8 +202,9 @@ export const ConfirmTransaction = ({
                       <Skeleton loading={swapLoading} className="min-h-4 w-10">
                         <div className="flex items-center gap-1">
                           <Typography.Text>
-                            {swapPrice.toFixed(4)}{" "}
-                            {transferConfig?.sourceFee.ticker}
+                            {swapPrice > 0
+                              ? `${swapPrice.toFixed(4)} ${selectedAsset?.ticker}`
+                              : "--------"}
                           </Typography.Text>
                           <Typography.Text appearance="primary">
                             ≈
@@ -213,7 +224,7 @@ export const ConfirmTransaction = ({
                 )}
                 <HoverInformation>
                   <HoverInformation.Trigger>
-                    <div className="w-full flex items-center justify-between gap-2 px-3 py-3">
+                    <div className="w-full flex items-center justify-between gap-2 px-3 py-3 cursor-pointer">
                       <div className="flex items-center gap-1">
                         <RiInformationFill className="w-3 h-3 text-actionInput" />
                         <Typography.Text appearance="primary">
@@ -224,7 +235,7 @@ export const ConfirmTransaction = ({
                         loading={
                           showAutoSwap ? swapLoading : transferConfigLoading
                         }
-                        className="min-h-4 w-10"
+                        className="min-h-4 w-20 flex-none"
                       >
                         <Typography.Text>
                           {estimatedFee} {sourceFeeTicker}
@@ -242,18 +253,14 @@ export const ConfirmTransaction = ({
                     >
                       {destinationFeeAmount} {destinationFeeTicker}
                     </ResponsiveCard>
-                    {showAutoSwap && (
+                    {showAutoSwap && swapPrice > 0 && (
                       <ResponsiveCard label="Auto swap">
-                        {swapPrice.toFixed(4)} {sourceFeeTicker}
+                        {swapPrice.toFixed(4)} {selectedAsset?.ticker}
                       </ResponsiveCard>
                     )}
                   </HoverInformation.Content>
                 </HoverInformation>
-                {error && (
-                  <ErrorMessage className="p-3">
-                    Your balance is not enough to pay the fee.
-                  </ErrorMessage>
-                )}
+                {error && <ErrorMessage className="p-3">{error}</ErrorMessage>}
               </div>
               <div className="flex flex-col gap-3 px-3 pt-4">
                 <Link
@@ -266,11 +273,10 @@ export const ConfirmTransaction = ({
                   </Typography.Text>
                   <RiExternalLinkLine className="w-3 h-3 text-secondary" />
                 </Link>
-                <div className="overflow-hidden relative">
+                <div className="overflow-hidden">
                   <div className=" max-h-24 overflow-auto pb-6">
                     <Terms />
                   </div>
-                  <div className="absolute bottom-0 left-0 w-full h-[45px] bg-gradient-to-t from-level-0 to-transparent" />
                 </div>
               </div>
             </Interaction.Content>

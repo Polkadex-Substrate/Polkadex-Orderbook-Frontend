@@ -1,27 +1,19 @@
-// TODO: Move messages
-
 import { useTheaProvider } from "@orderbook/core/providers";
 import { SubmittableExtrinsic } from "@polkadot/api/promise/types";
 import { useMutation } from "@tanstack/react-query";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
-import { signAndSendExtrinsic, sleep } from "@orderbook/core/helpers";
-import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
+import { sleep } from "@orderbook/core/helpers";
 import { NOTIFICATIONS } from "@orderbook/core/constants";
 import { Chain } from "@polkadex/thea";
-
-const withdrawMessage =
-  "After withdrawal initiation, expect tokens on the destination chain in a few minutes";
-const depositMessage =
-  "Deposit Success. Processed transactions take a few minutes to appear in History";
+import { signAndSubmitPromiseWrapper } from "@polkadex/blockchain-api";
 
 export function useBridge({ onSuccess }: { onSuccess: () => void }) {
-  const { api } = useNativeApi();
   const { onHandleAlert, onHandleError, onPushNotification } =
     useSettingsProvider();
   const {
     transferConfig,
     sourceAccount,
-    isPolkadexChain,
+    isSourcePolkadex,
     onRefetchSourceBalances,
     selectedAsset,
     destinationChain,
@@ -31,15 +23,18 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
 
   return useMutation({
     mutationFn: async ({ amount }: { amount: number }) => {
-      if (!transferConfig || !sourceAccount || !api) {
+      if (!transferConfig || !sourceAccount) {
         throw new Error("Bridge issue");
       }
 
-      // TODO: Need to consider Existensial Deposit here (polkadex-ts)
       if (
-        transferConfig.sourceFee.amount > transferConfig.sourceFeeBalance.amount
+        transferConfig.sourceFeeBalance.amount -
+          transferConfig.sourceFee.amount <=
+        transferConfig.sourceFeeExistential.amount
       ) {
-        throw new Error("Insufficient transaction fee balance on source chain");
+        throw new Error(
+          "Insufficient balance to pay the transaction fee at source chain"
+        );
       }
 
       // For DED and PINK withdrawal
@@ -68,17 +63,18 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
 
       const ext = await transferConfig.transfer<SubmittableExtrinsic>(amount);
 
-      await signAndSendExtrinsic(
-        api,
-        ext,
-        { signer: sourceAccount.signer },
-        sourceAccount.address,
-        true
-      );
+      await signAndSubmitPromiseWrapper({
+        signer: sourceAccount.signer,
+        tx: ext,
+        address: sourceAccount.address,
+        criteria: "IS_FINALIZED",
+      });
 
       onSuccess();
-      onHandleAlert(isPolkadexChain ? withdrawMessage : depositMessage);
-      if (isPolkadexChain) await sleep(4000);
+      onHandleAlert(
+        "Transfer Success. Expect tokens on the destination chain in a few minutes"
+      );
+      if (isSourcePolkadex) await sleep(4000);
       await onRefetchSourceBalances?.();
       return amount;
     },

@@ -98,7 +98,10 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
     useExtensionAccounts();
 
   const walletsFiltered = useMemo(
-    () => extensionAccounts?.filter(({ source }) => source === sourceId),
+    () =>
+      extensionAccounts?.filter(
+        ({ source, type }) => source === sourceId && type === "sr25519"
+      ),
     [extensionAccounts, sourceId]
   );
 

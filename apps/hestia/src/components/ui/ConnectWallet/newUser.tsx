@@ -36,14 +36,14 @@ export const NewUser = ({
                 {walletBalance >= MINIMUM_PDEX_REQUIRED ? (
                   <>
                     <Typography.Paragraph size="sm" appearance="primary">
-                      Get ready to dive into the world of decentralized trading
-                      with our cutting-edge Web3 platform. Getting started with
-                      Polkadex orderbook have been made very simple. You can now
-                      just transfer your funds to Orderbook and start trading.
+                      Get ready to level up your trading experience with the
+                      non-custodial, order book-based DEX for Polkadot and
+                      beyond. Enjoy limit & market orders, ZERO gas fees,
+                      trading bot integrations, and more!
                     </Typography.Paragraph>
                     <Typography.Paragraph size="sm" appearance="primary">
-                      Start your decentralized trading journey with Polkadex
-                      Orderbook today! Happy trading! 🌟
+                      Start your decentralized trading journey now with your
+                      first transfer! Happy trading! 🌟
                     </Typography.Paragraph>
                   </>
                 ) : (
@@ -67,7 +67,7 @@ export const NewUser = ({
               onClick={onReadMore}
               className="flex items-center gap-2 text-primary-base"
             >
-              <Icon name="Wallet" className="w-4 h-4" />
+              <Icon name="Wallet" className="w-6 h-6" />
               <Typography.Text className="text-primary-base">
                 Read More
               </Typography.Text>
@@ -88,7 +88,7 @@ export const NewUser = ({
             Continue
           </Interaction.Action>
         )}
-        <Interaction.Close onClick={onClose}>Skip</Interaction.Close>
+        <Interaction.Close onClick={onClose}>Not now</Interaction.Close>
       </Interaction.Footer>
     </Interaction>
   );

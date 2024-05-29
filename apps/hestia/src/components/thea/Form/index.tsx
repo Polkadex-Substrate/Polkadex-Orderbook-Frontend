@@ -22,6 +22,7 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import classNames from "classnames";
 import { bridgeValidations } from "@orderbook/core/validations";
+import { ChainType } from "@polkadex/thea";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
@@ -175,6 +176,7 @@ export const Form = () => {
         open={openSourceModal}
         onOpenChange={setOpenSourceModal}
         setAccount={setSourceAccount}
+        evm={sourceChain?.type !== ChainType.Substrate}
       />
 
       <form
@@ -198,7 +200,11 @@ export const Form = () => {
                           key={e.genesis}
                           icon={e.logo}
                           value={e.name}
-                          onSelect={() => onSelectSourceChain(e)}
+                          onSelect={() => {
+                            onSelectSourceChain(e);
+                            if (e.type !== ChainType.Substrate)
+                              setOpenSourceModal(true);
+                          }}
                         />
                       );
                     })}
@@ -238,7 +244,7 @@ export const Form = () => {
               <Button.Icon
                 type="button"
                 variant="outline"
-                className="lg:mt-9 h-10 w-10 p-3 max-lg:self-center"
+                className="lg:mt-9 h-10 w-10 p-3 max-lg:self-center max-lg:rotate-90"
                 onClick={onSwitchChain}
               >
                 <RiArrowLeftRightLine className="w-full h-full" />
@@ -265,6 +271,7 @@ export const Form = () => {
                 <AccountCombobox
                   account={destinationAccount}
                   setAccount={(e) => e && setDestinationAccount(e)}
+                  evm={destinationChain?.type !== ChainType.Substrate}
                 />
               </div>
             </div>
@@ -277,6 +284,7 @@ export const Form = () => {
                 <HoverInformation>
                   <HoverInformation.Trigger
                     loading={transferConfigLoading || sourceBalancesLoading}
+                    className="min-w-20"
                   >
                     <RiInformationFill className="w-3 h-3 text-actionInput" />
                     <Typography.Text size="xs" appearance="primary">
