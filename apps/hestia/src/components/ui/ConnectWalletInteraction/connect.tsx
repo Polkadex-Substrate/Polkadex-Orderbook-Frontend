@@ -12,6 +12,7 @@ import { useConnectWalletProvider } from "@orderbook/core/providers/user/connect
 import { TradeAccount } from "@orderbook/core/providers/types";
 import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { usePathname, useRouter } from "next/navigation";
 
 import { ConnectTradingAccount } from "../ConnectWallet/connectTradingAccount";
 import { ImportTradingAccount } from "../ConnectWallet/importTradingAccount";
@@ -57,6 +58,8 @@ const TriggerCompontent = ({ onClose }: { onClose: () => void }) => {
 };
 
 const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
+  const path = usePathname();
+  const router = useRouter();
   const {
     selectedExtension,
     selectedWallet,
@@ -107,6 +110,7 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
     if (!selectedWallet) return null;
 
     if (browserAccountPresent || !hasAccount) {
+      if (path === "/") router.push("/trading/PDEXUSDT");
       onToogleConnectExtension(false);
       return;
     }
@@ -118,6 +122,8 @@ const CardsCompontent = ({ onClose, onNext }: InteractableProps) => {
     onToogleConnectExtension,
     browserAccountPresent,
     selectedWallet,
+    path,
+    router,
   ]);
 
   const availableOnDevice = useMemo(
