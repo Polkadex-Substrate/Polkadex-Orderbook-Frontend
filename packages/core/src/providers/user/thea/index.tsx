@@ -188,6 +188,14 @@ export const TheaProvider = ({
     [polkadexDestinationBalances]
   );
 
+  const selectedAssetIdPolkadex = useMemo(
+    () =>
+      polkadexAssets?.find((e) =>
+        e.ticker.includes(selectedAsset?.ticker ?? "")
+      )?.id,
+    [polkadexAssets, selectedAsset?.ticker]
+  );
+
   /* Default Selection Logic  */
   const initialSource = useMemo(() => {
     if (chains) {
@@ -321,6 +329,7 @@ export const TheaProvider = ({
         isSourcePolkadex,
         isDestinationPolkadex,
         polkadexAssets,
+        selectedAssetIdPolkadex,
       }}
     >
       {children}
@@ -366,6 +375,7 @@ type State = {
   destinationPDEXBalance: number;
   isSourcePolkadex: boolean;
   isDestinationPolkadex: boolean;
+  selectedAssetIdPolkadex?: string;
 };
 export const Context = createContext<State>({
   sourceConnector: null,

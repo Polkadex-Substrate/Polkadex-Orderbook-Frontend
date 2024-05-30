@@ -54,7 +54,7 @@ export const ConfirmTransaction = ({
     destinationPDEXBalance,
     selectedAsset,
     isDestinationPolkadex,
-    polkadexAssets,
+    selectedAssetIdPolkadex,
   } = useTheaProvider();
   const { destinationFee, sourceFee, sourceFeeBalance, sourceFeeExistential } =
     transferConfig ?? {};
@@ -64,18 +64,10 @@ export const ConfirmTransaction = ({
     [isDestinationPolkadex, destinationPDEXBalance]
   );
 
-  const selectedAssetId = useMemo(
-    () =>
-      polkadexAssets?.find((e) =>
-        e.ticker.includes(selectedAsset?.ticker ?? "")
-      )?.id,
-    [polkadexAssets, selectedAsset?.ticker]
-  );
-
   const { swapPrice = 0, swapLoading } = usePool({
-    asset: selectedAssetId,
+    asset: selectedAssetIdPolkadex,
     amount: THEA_AUTOSWAP,
-    enabled: !destinationPDEXBalance,
+    enabled: showAutoSwap,
   });
 
   const shortSourceAddress = useMemo(
