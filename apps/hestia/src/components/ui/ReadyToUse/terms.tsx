@@ -1,12 +1,41 @@
 "use client";
 
-import { Typography } from "@polkadex/ux";
+import { Checkbox, Typography } from "@polkadex/ux";
+import Link from "next/link";
 import { PropsWithChildren } from "react";
 
-export const Terms = () => {
+type Props = {
+  checked: boolean;
+  setChecked: (e: boolean) => void;
+};
+
+export const Terms = ({ checked, setChecked }: Props) => {
   return (
-    <div className="flex flex-col gap-3 overflow-hidden">
-      {terms?.map((e, i) => (
+    <div>
+      <Checkbox.Solid
+        id="termsAndConditions"
+        checked={checked}
+        onCheckedChange={() => setChecked(!checked)}
+        className="w-7"
+      >
+        <Checkbox.Label
+          size="xs"
+          appearance="primary"
+          htmlFor="termsAndConditions"
+        >
+          By checking this box, I acknowledge that I have read and agree to be
+          bound by the{" "}
+          <Link
+            href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
+            target="_blank"
+            className="text-primary-hover"
+          >
+            Terms and Conditions.
+          </Link>
+        </Checkbox.Label>
+      </Checkbox.Solid>
+
+      {/* {terms?.map((e, i) => (
         <Page key={i} index={i + 1} title={e.title}>
           {e.items.map((e, ind) => (
             <Paragraph index={`${i + 1}.${ind + 1}`} key={ind}>
@@ -14,7 +43,7 @@ export const Terms = () => {
             </Paragraph>
           ))}
         </Page>
-      ))}
+      ))} */}
     </div>
   );
 };
