@@ -98,13 +98,7 @@ export const InsufficientBalance = ({
                             <HoverCard key={asset.id}>
                               <HoverCard.Trigger asChild>
                                 <Link
-                                  href={{
-                                    pathname: "/thea",
-                                    query: {
-                                      from: chainName,
-                                      to: "Polkadex",
-                                    },
-                                  }}
+                                  href={`https://thea.polkadex.trade/?chain=${encodeURIComponent(chainName)}`}
                                   target="_blank"
                                   className={classNames(
                                     !active &&

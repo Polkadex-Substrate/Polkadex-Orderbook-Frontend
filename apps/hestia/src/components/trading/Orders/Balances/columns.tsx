@@ -92,19 +92,15 @@ export const columns = [
         <ActionsCard
           hideButton
           withdrawLink={{
-            pathname: "/thea",
-            query: {
-              from: "Polkadex",
-              to: chainName,
-              asset: e.getValue().ticker,
+            pathname: "https://thea.polkadex.trade/withdraw",
+            query: chainName && {
+              chain: encodeURIComponent(chainName),
             },
           }}
           depositLink={{
-            pathname: "/thea",
-            query: {
-              from: chainName,
-              to: "Polkadex",
-              asset: e.getValue().ticker,
+            pathname: "https://thea.polkadex.trade/",
+            query: chainName && {
+              chain: encodeURIComponent(chainName),
             },
           }}
           tradeLink={`/trading/${e.getValue().ticker}`}

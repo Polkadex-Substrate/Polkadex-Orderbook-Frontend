@@ -41,11 +41,9 @@ export const ResponsiveTable = ({
         <Button.Solid appearance="secondary" asChild>
           <Link
             href={{
-              pathname: "/thea",
-              query: {
-                from: "Polkadex",
-                to: chainName,
-                asset: ticker,
+              pathname: "https://thea.polkadex.trade/withdraw",
+              query: chainName && {
+                chain: encodeURIComponent(chainName),
               },
             }}
           >
@@ -55,11 +53,9 @@ export const ResponsiveTable = ({
         <Button.Solid appearance="secondary" asChild>
           <Link
             href={{
-              pathname: "/thea",
-              query: {
-                from: chainName,
-                to: "Polkadex",
-                asset: ticker,
+              pathname: "https://thea.polkadex.trade/",
+              query: chainName && {
+                chain: encodeURIComponent(chainName),
               },
             }}
           >
