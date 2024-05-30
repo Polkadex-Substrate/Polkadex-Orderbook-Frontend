@@ -17,7 +17,11 @@ import {
   RiInformationFill,
 } from "@remixicon/react";
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
-import { CrossChainError, THEA_AUTOSWAP } from "@orderbook/core/index";
+import {
+  CrossChainError,
+  THEA_AUTOSWAP,
+  parseScientific,
+} from "@orderbook/core/index";
 import { useTheaProvider } from "@orderbook/core/providers";
 
 import { useBridge, usePool } from "@/hooks";
@@ -159,7 +163,7 @@ export const ConfirmTransaction = ({
               <div className="flex flex-col border-b border-primary">
                 <GenericHorizontalItem label="Amount">
                   <Typography.Text>
-                    {amount} {selectedAsset?.ticker}
+                    {parseScientific(amount.toString())} {selectedAsset?.ticker}
                   </Typography.Text>
                 </GenericHorizontalItem>
                 <GenericHorizontalItem
