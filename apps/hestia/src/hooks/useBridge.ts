@@ -19,6 +19,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
     destinationChain,
     destinationConnector,
     destinationAccount,
+    onRefetchTransferConfig,
   } = useTheaProvider();
 
   return useMutation({
@@ -76,6 +77,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
       );
       if (isSourcePolkadex) await sleep(4000);
       await onRefetchSourceBalances?.();
+      await onRefetchTransferConfig?.();
       return amount;
     },
     onError: (error: Error) => onHandleError?.(error.message),

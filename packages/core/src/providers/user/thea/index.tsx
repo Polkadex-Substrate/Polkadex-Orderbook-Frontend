@@ -265,6 +265,7 @@ export const TheaProvider = ({
     isLoading: transferConfigLoading,
     isFetching: transferConfigFetching,
     isSuccess: transferConfigSuccess,
+    refetch: refetchTransferConfig,
   } = useTheaConfig({
     connector: sourceConnector,
     destinationAddress: destinationAccountSelected?.address,
@@ -314,6 +315,7 @@ export const TheaProvider = ({
         transferConfig,
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
         transferConfigSuccess,
+        onRefetchTransferConfig: refetchTransferConfig,
 
         destinationPDEXBalance,
         isSourcePolkadex,
@@ -359,6 +361,7 @@ type State = {
   transferConfig: TransferConfig | undefined;
   transferConfigLoading: boolean;
   transferConfigSuccess: boolean;
+  onRefetchTransferConfig?: UseQueryResult["refetch"];
 
   destinationPDEXBalance: number;
   isSourcePolkadex: boolean;
