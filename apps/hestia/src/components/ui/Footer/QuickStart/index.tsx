@@ -89,7 +89,11 @@ export const QuickStart = ({
                 className="underline"
                 asChild
               >
-                <Link href="/thea" target="_blank" rel="noreferrer noopener">
+                <Link
+                  href="https://thea.polkadex.trade/"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
                   using THEA
                 </Link>
               </Typography.Text>

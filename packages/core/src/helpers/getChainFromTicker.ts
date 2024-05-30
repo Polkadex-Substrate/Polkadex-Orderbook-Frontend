@@ -2,28 +2,31 @@
 export const getChainFromTicker = (ticker: string): string => {
   // Should update it whenever any new asset is added to orderbook
   switch (ticker) {
-    case "USDC":
-    case "PINK":
-    case "DED":
     case "USDT":
-      return "AssetHub";
+      return "Asset Hub";
     case "ASTR":
-      return "Astar";
+      return "Astar Network";
     case "DOT":
       return "Polkadot";
     case "IBTC":
       return "Interlay";
     case "PHA":
-      return "Phala";
+      return "Phala Network";
     case "GLMR":
-      return "Moonbeam";
+      return "Moonbeam Network";
     case "PDEX":
       return "Polkadex";
+    case "DED":
+      return "Asset Hub";
     case "UNQ":
-      return "Unique";
+      return "Unique Network";
+    case "USDC":
+      return "Asset Hub";
+    case "PINK":
+      return "Asset Hub";
     case "vDOT":
     case "BNC":
-      return "Bifrost";
+      return "Bifrost Network";
     default:
       return "Unknown";
   }
