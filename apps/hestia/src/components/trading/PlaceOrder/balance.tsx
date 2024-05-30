@@ -29,13 +29,12 @@ export const Balance = ({
             <Typography.Text asChild size="sm">
               <Link
                 href={{
-                  pathname: "/thea",
-                  query: {
-                    from: "Polkadex",
-                    to: chainName,
-                    asset: baseTicker,
+                  pathname: "https://thea.polkadex.trade/withdraw",
+                  query: chainName && {
+                    chain: encodeURIComponent(chainName),
                   },
                 }}
+                target="_blank"
               >
                 Withdraw
               </Link>
@@ -45,13 +44,12 @@ export const Balance = ({
             <Typography.Text asChild size="sm">
               <Link
                 href={{
-                  pathname: "/thea",
-                  query: {
-                    from: chainName,
-                    to: "Polkadex",
-                    asset: baseTicker,
+                  pathname: "https://thea.polkadex.trade/",
+                  query: chainName && {
+                    chain: encodeURIComponent(chainName),
                   },
                 }}
+                target="_blank"
               >
                 Deposit
               </Link>
