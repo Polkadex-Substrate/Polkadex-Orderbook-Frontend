@@ -14,6 +14,8 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
     transferConfig,
     sourceAccount,
     isSourcePolkadex,
+    isDestinationPolkadex,
+    destinationPDEXBalance,
     onRefetchSourceBalances,
     selectedAsset,
     destinationChain,
@@ -28,6 +30,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
         throw new Error("Bridge issue");
       }
 
+      /* Checks for Source chain */
       if (
         transferConfig.sourceFeeBalance.amount -
           transferConfig.sourceFee.amount <=
@@ -36,6 +39,38 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
         throw new Error(
           "Insufficient balance to pay the transaction fee at source chain"
         );
+      }
+
+      /* Checks for Destination chain */
+      const isPolkadexAutoSwap =
+        isDestinationPolkadex && !destinationPDEXBalance;
+      if (
+        !isPolkadexAutoSwap && // Ensure there is no Autoswap
+        selectedAsset?.ticker !==
+          transferConfig.destinationNativeExistential.ticker // Ensure it's a non-native asset for destination chain
+      ) {
+        const destinationAsset =
+          destinationConnector
+            ?.getAllAssets()
+            .filter((a) => a.ticker === selectedAsset?.ticker) || [];
+
+        const destinationNativeBalance =
+          (
+            await destinationConnector?.getBalances(
+              destinationAccount?.address as string,
+              destinationAsset
+            )
+          )?.[0]?.amount || 0;
+
+        // Ensure that destination account have native balance more than existential amount
+        if (
+          destinationNativeBalance <=
+          transferConfig.destinationNativeExistential.amount
+        ) {
+          throw new Error(
+            "Insufficient native token balance at the destination chain"
+          );
+        }
       }
 
       // For DED and PINK withdrawal
@@ -58,7 +93,7 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
 
         if (usdtBalance < 0.7)
           throw new Error(
-            `Insufficient USDT balance to cover the existential deposit on Asset Hub`
+            `Insufficient USDT balance to cover the existential deposit on AssetHub`
           );
       }
 

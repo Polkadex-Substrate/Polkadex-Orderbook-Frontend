@@ -309,22 +309,13 @@ export const Form = () => {
                     {/* <HoverInformation.Arrow />  //TEMp */}
                   </HoverInformation.Trigger>
                   <HoverInformation.Content>
-                    <ResponsiveCard
-                      label="Source fee"
-                      loading={transferConfigLoading}
-                    >
+                    <ResponsiveCard label="Source fee" loading={loading}>
                       {sourceFeeAmount} {sourceFeeTicker}
                     </ResponsiveCard>
-                    <ResponsiveCard
-                      label="Destination fee"
-                      loading={transferConfigLoading}
-                    >
+                    <ResponsiveCard label="Destination fee" loading={loading}>
                       {destinationFeeAmount} {destinationFeeTicker}
                     </ResponsiveCard>
-                    <ResponsiveCard
-                      label="Available"
-                      loading={sourceBalancesLoading}
-                    >
+                    <ResponsiveCard label="Available" loading={loading}>
                       {balanceAmount} {selectedAsset?.ticker}
                     </ResponsiveCard>
                   </HoverInformation.Content>

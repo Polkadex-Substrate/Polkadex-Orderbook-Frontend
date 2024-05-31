@@ -3866,10 +3866,10 @@
     "@polkadex/types" "1.1.61"
     "@polkadex/utils" "1.1.46"
 
-"@polkadex/thea@^5.4.0":
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-5.4.0.tgz#5625a66943018aca18fbdcdfee2bd692f2c49c6e"
-  integrity sha512-PJM0L3n9OGI0wEtpkPWzN3/W6Qn0qmZXIkgA8yNDc0KwAPJ2pqj+d0mdsKO0mf/L0MtEuYiHM5sGbLaaYN3QDA==
+"@polkadex/thea@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-5.5.0.tgz#e506b22c1879b5d2f8c3c3e5a6e5db36d1b624ae"
+  integrity sha512-0rnzFqCGJbW+p+0IFEEG7Tybdpre0JZzsR/pO6sNZDn25+HsvtWerLmkS7CKcAO4QePo0XmFEmKSL2d+4/oYjA==
   dependencies:
     "@moonbeam-network/xcm-sdk" "^2.1.2"
     "@polkadex/numericals" "*"
@@ -3922,10 +3922,10 @@
     axios "^1.2.5"
     ethers "^6.0.5"
 
-"@polkadex/ux@^6.25.1":
-  version "6.25.1"
-  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.25.1.tgz#fa624960f5f7b68938141a06885656d9a13b0584"
-  integrity sha512-x2A1tcbKPTmNUo9HmbHupKVQh+oakShXvGDJSE8bljC5QjmYC7KWF+iSTmc7FoWCWoPPMJbwQVJUyvpDkrrVyg==
+"@polkadex/ux@^6.26.0":
+  version "6.26.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/ux/-/ux-6.26.0.tgz#08238dbd359403436d2dc77c6b954aad4c7f5626"
+  integrity sha512-DjuQHzmQWjpxuMi5hcgkThDr7VwMh4EgEl/BgnyXtADzYYi5FPGswSLZ1RQiOCbcVS8plIRCb3eHdcIu8thtcA==
   dependencies:
     "@floating-ui/react" "^0.26.4"
     "@headlessui/react" "^1.7.18"
@@ -13725,6 +13725,7 @@ workbox-window@6.6.1, workbox-window@^6.5.4:
     workbox-core "6.6.1"
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
