@@ -66,7 +66,7 @@ export const bridgeValidations = (
       .test(
         CrossChainError.NOT_ENOUGH_LIQUIDITY(assetTicker),
         CrossChainError.NOT_ENOUGH_LIQUIDITY(assetTicker),
-        () => (isDestinationPolkadex ? poolReserve !== 0 : false)
+        () => (isDestinationPolkadex ? poolReserve !== 0 : true)
       ),
   });
 };
