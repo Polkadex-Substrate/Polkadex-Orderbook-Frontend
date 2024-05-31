@@ -97,7 +97,6 @@ export const Form = () => {
       max?.amount,
       selectedAssetBalance,
       isDestinationPolkadex,
-      selectedAsset?.ticker || "",
       poolReserve?.reserve || 0
     ),
     onSubmit: () => setOpenFeeModal(true),

@@ -16,7 +16,6 @@ export const bridgeValidations = (
   maxAmount = 0,
   balance = 0,
   isDestinationPolkadex: boolean,
-  assetTicker: string,
   poolReserve: number
 ) => {
   const min = formatAmount(minAmount);
@@ -64,8 +63,8 @@ export const bridgeValidations = (
             : false
       )
       .test(
-        CrossChainError.NOT_ENOUGH_LIQUIDITY(assetTicker),
-        CrossChainError.NOT_ENOUGH_LIQUIDITY(assetTicker),
+        CrossChainError.NOT_ENOUGH_LIQUIDITY,
+        CrossChainError.NOT_ENOUGH_LIQUIDITY,
         () => (isDestinationPolkadex ? poolReserve !== 0 : true)
       ),
   });
