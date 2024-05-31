@@ -52,7 +52,10 @@ export function useBridge({ onSuccess }: { onSuccess: () => void }) {
         const destinationAsset =
           destinationConnector
             ?.getAllAssets()
-            .filter((a) => a.ticker === selectedAsset?.ticker) || [];
+            .filter(
+              (a) =>
+                a.ticker === transferConfig.destinationNativeExistential.ticker
+            ) || [];
 
         const destinationNativeBalance =
           (

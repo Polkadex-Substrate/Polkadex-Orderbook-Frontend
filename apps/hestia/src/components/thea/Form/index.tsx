@@ -336,7 +336,7 @@ export const Form = () => {
                         {...getFieldProps("amount")}
                         className="max-sm:focus:text-[16px] w-full pl-4 py-4"
                       >
-                        {sourceAccount && max?.amount && (
+                        {sourceAccount && max?.amount && !loading && (
                           <Input.Action
                             type="button"
                             onClick={(e) => {
