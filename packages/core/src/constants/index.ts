@@ -80,7 +80,7 @@ export const ErrorMessages = (existential = "0", minAmount = "0") => ({
 export const CrossChainError = {
   SOURCE_FEE: "Insufficient balance to pay the transaction fee at source chain",
   NOT_ENOUGH_LIQUIDITY:
-    "Not enough PDEX in the destination account. Transfer some PDEX first.",
+    "Not enough PDEX in the destination account. Please transfer 1+ PDEX first.",
   AUTO_SWAP: (swapAmount: string, ticker: string) =>
     `Please transfer more than ${swapAmount} ${ticker} since Autoswap is required`,
 };
