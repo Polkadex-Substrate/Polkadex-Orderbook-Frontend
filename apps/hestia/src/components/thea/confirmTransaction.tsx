@@ -12,14 +12,16 @@ import {
   HoverInformation,
 } from "@polkadex/ux";
 import {
-  RiExternalLinkLine,
   RiFileCopyLine,
   RiGasStationLine,
   RiInformationFill,
 } from "@remixicon/react";
-import { Dispatch, SetStateAction, useMemo } from "react";
-import Link from "next/link";
-import { CrossChainError, THEA_AUTOSWAP } from "@orderbook/core/index";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import {
+  CrossChainError,
+  THEA_AUTOSWAP,
+  parseScientific,
+} from "@orderbook/core/index";
 import { useTheaProvider } from "@orderbook/core/providers";
 
 import { useBridge, usePool } from "@/hooks";
@@ -43,6 +45,7 @@ export const ConfirmTransaction = ({
   amount,
   onSuccess,
 }: Props) => {
+  const [checked, setChecked] = useState(false);
   const {
     sourceAccount,
     destinationAccount,
@@ -51,7 +54,7 @@ export const ConfirmTransaction = ({
     destinationPDEXBalance,
     selectedAsset,
     isDestinationPolkadex,
-    polkadexAssets,
+    selectedAssetIdPolkadex,
   } = useTheaProvider();
   const { destinationFee, sourceFee, sourceFeeBalance, sourceFeeExistential } =
     transferConfig ?? {};
@@ -61,18 +64,10 @@ export const ConfirmTransaction = ({
     [isDestinationPolkadex, destinationPDEXBalance]
   );
 
-  const selectedAssetId = useMemo(
-    () =>
-      polkadexAssets?.find((e) =>
-        e.ticker.includes(selectedAsset?.ticker ?? "")
-      )?.id,
-    [polkadexAssets, selectedAsset?.ticker]
-  );
-
   const { swapPrice = 0, swapLoading } = usePool({
-    asset: selectedAssetId,
+    asset: selectedAssetIdPolkadex,
     amount: THEA_AUTOSWAP,
-    enabled: !destinationPDEXBalance,
+    enabled: showAutoSwap,
   });
 
   const shortSourceAddress = useMemo(
@@ -93,10 +88,7 @@ export const ConfirmTransaction = ({
     const fee = sourceFee?.amount ?? 0;
 
     if (balance <= fee + existential) return CrossChainError.SOURCE_FEE;
-    if (showAutoSwap && !swapPrice)
-      return CrossChainError.NOT_ENOUGH_LIQUIDITY(
-        selectedAsset?.ticker as string
-      );
+    if (showAutoSwap && !swapPrice) return CrossChainError.NOT_ENOUGH_LIQUIDITY;
 
     if (amount <= autoSwapAmount)
       return CrossChainError.AUTO_SWAP(
@@ -113,7 +105,10 @@ export const ConfirmTransaction = ({
     swapPrice,
   ]);
 
-  const disabled = useMemo(() => !!error || isLoading, [error, isLoading]);
+  const disabled = useMemo(
+    () => !!error || isLoading || !checked,
+    [error, isLoading, checked]
+  );
 
   const [
     destinationFeeAmount,
@@ -157,7 +152,7 @@ export const ConfirmTransaction = ({
               <div className="flex flex-col border-b border-primary">
                 <GenericHorizontalItem label="Amount">
                   <Typography.Text>
-                    {amount} {selectedAsset?.ticker}
+                    {parseScientific(amount.toString())} {selectedAsset?.ticker}
                   </Typography.Text>
                 </GenericHorizontalItem>
                 <GenericHorizontalItem
@@ -262,22 +257,8 @@ export const ConfirmTransaction = ({
                 </HoverInformation>
                 {error && <ErrorMessage className="p-3">{error}</ErrorMessage>}
               </div>
-              <div className="flex flex-col gap-3 px-3 pt-4">
-                <Link
-                  href="https://github.com/Polkadex-Substrate/Docs/blob/master/Polkadex_Terms_of_Use.pdf"
-                  className="flex items-center gap-1"
-                  target="_blank"
-                >
-                  <Typography.Text appearance="secondary" bold>
-                    Terms and conditions
-                  </Typography.Text>
-                  <RiExternalLinkLine className="w-3 h-3 text-secondary" />
-                </Link>
-                <div className="overflow-hidden">
-                  <div className=" max-h-24 overflow-auto pb-6">
-                    <Terms />
-                  </div>
-                </div>
+              <div className="px-3 pt-4">
+                <Terms checked={checked} setChecked={setChecked} />
               </div>
             </Interaction.Content>
             <Interaction.Footer>

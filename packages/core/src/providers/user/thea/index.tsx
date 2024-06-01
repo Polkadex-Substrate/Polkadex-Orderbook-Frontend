@@ -188,6 +188,14 @@ export const TheaProvider = ({
     [polkadexDestinationBalances]
   );
 
+  const selectedAssetIdPolkadex = useMemo(
+    () =>
+      polkadexAssets?.find((e) =>
+        e.ticker.includes(selectedAsset?.ticker ?? "")
+      )?.id,
+    [polkadexAssets, selectedAsset?.ticker]
+  );
+
   /* Default Selection Logic  */
   const initialSource = useMemo(() => {
     if (chains) {
@@ -265,6 +273,7 @@ export const TheaProvider = ({
     isLoading: transferConfigLoading,
     isFetching: transferConfigFetching,
     isSuccess: transferConfigSuccess,
+    refetch: refetchTransferConfig,
   } = useTheaConfig({
     connector: sourceConnector,
     destinationAddress: destinationAccountSelected?.address,
@@ -314,11 +323,13 @@ export const TheaProvider = ({
         transferConfig,
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
         transferConfigSuccess,
+        onRefetchTransferConfig: refetchTransferConfig,
 
         destinationPDEXBalance,
         isSourcePolkadex,
         isDestinationPolkadex,
         polkadexAssets,
+        selectedAssetIdPolkadex,
       }}
     >
       {children}
@@ -359,10 +370,12 @@ type State = {
   transferConfig: TransferConfig | undefined;
   transferConfigLoading: boolean;
   transferConfigSuccess: boolean;
+  onRefetchTransferConfig?: UseQueryResult["refetch"];
 
   destinationPDEXBalance: number;
   isSourcePolkadex: boolean;
   isDestinationPolkadex: boolean;
+  selectedAssetIdPolkadex?: string;
 };
 export const Context = createContext<State>({
   sourceConnector: null,

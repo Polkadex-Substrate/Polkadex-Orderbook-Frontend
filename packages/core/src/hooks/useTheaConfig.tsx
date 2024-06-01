@@ -52,5 +52,6 @@ export const useTheaConfig = ({
       );
       return res;
     },
+    refetchInterval: 12 * 1000,
   });
 };

@@ -60,9 +60,9 @@
   },
   "dependencies": {
     "@polkadex/local-wallets": "^2.2.0",
-    "@polkadex/polkadex-api": "^3.6.1",
+    "@polkadex/polkadex-api": "^3.6.2",
     "@polkadex/react-providers": "^2.2.1",
-    "@polkadex/thea": "^5.4.0",
+    "@polkadex/thea": "^5.5.0",
     "@polkadex/utils": "^0.2.1",
     "@polkadot-cloud/assets": "^0.3.0",
     "@polkadot/api": "^10.12.6",

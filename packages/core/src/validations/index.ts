@@ -5,6 +5,7 @@ import {
   parseScientific,
 } from "@orderbook/core/helpers";
 import {
+  CrossChainError,
   ESTIMATED_FEE,
   ErrorMessages,
   MAX_DIGITS_AFTER_DECIMAL,
@@ -13,7 +14,9 @@ import {
 export const bridgeValidations = (
   minAmount = 0,
   maxAmount = 0,
-  balance = 0
+  balance = 0,
+  isDestinationPolkadex: boolean,
+  poolReserve: number
 ) => {
   const min = formatAmount(minAmount);
 
@@ -58,6 +61,11 @@ export const bridgeValidations = (
           value
             ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
             : false
+      )
+      .test(
+        CrossChainError.NOT_ENOUGH_LIQUIDITY,
+        CrossChainError.NOT_ENOUGH_LIQUIDITY,
+        () => (isDestinationPolkadex ? poolReserve !== 0 : true)
       ),
   });
 };
