@@ -60,6 +60,7 @@ export const Form = () => {
     onSwitchChain: onSwitch,
     selectedAssetIdPolkadex,
     isDestinationPolkadex,
+    destinationPDEXBalance,
   } = useTheaProvider();
   const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
   const searchParams = useSearchParams();
@@ -95,6 +96,7 @@ export const Form = () => {
     validationSchema: bridgeValidations(
       min?.amount,
       max?.amount,
+      destinationPDEXBalance,
       selectedAssetBalance,
       isDestinationPolkadex,
       poolReserve?.reserve || 0

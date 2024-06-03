@@ -14,6 +14,7 @@ import {
 export const bridgeValidations = (
   minAmount = 0,
   maxAmount = 0,
+  destinationPDEXBalance = 0,
   balance = 0,
   isDestinationPolkadex: boolean,
   poolReserve: number
@@ -65,7 +66,10 @@ export const bridgeValidations = (
       .test(
         CrossChainError.NOT_ENOUGH_LIQUIDITY,
         CrossChainError.NOT_ENOUGH_LIQUIDITY,
-        () => (isDestinationPolkadex ? poolReserve !== 0 : true)
+        () =>
+          isDestinationPolkadex && destinationPDEXBalance <= 1
+            ? poolReserve !== 0
+            : true
       ),
   });
 };
