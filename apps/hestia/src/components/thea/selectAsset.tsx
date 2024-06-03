@@ -78,14 +78,16 @@ export const SelectAsset = ({
                             onOpenChange(false);
                           }}
                         >
-                          <TokenCard
-                            key={e.id}
-                            icon={e.ticker as TokenAppearance}
-                            ticker={e.ticker}
-                            tokenName={tokenName}
-                            balance={formatAmount(balance)}
-                            loading={sourceBalancesLoading}
-                          />
+                          <div className="flex-1 [&_span]:!normal-case">
+                            <TokenCard
+                              key={e.id}
+                              icon={e.ticker as TokenAppearance}
+                              ticker={e.ticker}
+                              tokenName={tokenName}
+                              balance={formatAmount(balance)}
+                              loading={sourceBalancesLoading}
+                            />
+                          </div>
                         </Searchable.Item>
                       );
                     })}

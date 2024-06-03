@@ -190,7 +190,8 @@ export const ConfirmTransaction = ({
                   <GenericHorizontalItem
                     label="Swap required"
                     tooltip={`In order to bridge your funds and sign transactions on Polkadex, you must have at least 1.5 PDEX in your destination wallet. Your current destination wallet balance is ${destinationPDEXBalance} PDEX.
-                  A small part of your transfer will be auto-swapped to PDEX to meet this requirement`}
+                  A small part of your transfer will be auto-swapped to PDEX to meet this requirement.`}
+                    defaultOpen
                   >
                     <div className="flex items-center gap-1">
                       <RiGasStationLine className="w-3.5 h-3.5 text-secondary" />

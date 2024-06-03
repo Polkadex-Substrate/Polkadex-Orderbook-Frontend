@@ -87,15 +87,19 @@ export const columns = [
       return (
         <ActionsCard
           withdrawLink={{
-            pathname: "https://thea.polkadex.trade/withdraw",
-            query: chainName && {
-              chain: encodeURIComponent(chainName),
+            pathname: "/thea",
+            query: {
+              from: "Polkadex",
+              to: chainName,
+              asset: e.getValue().ticker,
             },
           }}
           depositLink={{
-            pathname: "https://thea.polkadex.trade/",
-            query: chainName && {
-              chain: encodeURIComponent(chainName),
+            pathname: "/thea",
+            query: {
+              from: chainName,
+              to: "Polkadex",
+              asset: e.getValue().ticker,
             },
           }}
           tradeLink={`/trading/${e.getValue().ticker}`}
