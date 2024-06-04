@@ -3866,10 +3866,10 @@
     "@polkadex/types" "1.1.61"
     "@polkadex/utils" "1.1.46"
 
-"@polkadex/thea@^5.5.0":
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-5.5.0.tgz#e506b22c1879b5d2f8c3c3e5a6e5db36d1b624ae"
-  integrity sha512-0rnzFqCGJbW+p+0IFEEG7Tybdpre0JZzsR/pO6sNZDn25+HsvtWerLmkS7CKcAO4QePo0XmFEmKSL2d+4/oYjA==
+"@polkadex/thea@^5.5.1":
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-5.5.1.tgz#8a7313d999c3fa5db7614d52800a50af8a64c8b6"
+  integrity sha512-0aH1c/NYTp5dbhtViGGupf5TqPTLftrlB6wUgT2rUEiMd+UodThTAWgJyydzFIebpMMpL/30j4M1vrOa2DItmQ==
   dependencies:
     "@moonbeam-network/xcm-sdk" "^2.1.2"
     "@polkadex/numericals" "*"
@@ -13725,6 +13725,7 @@ workbox-window@6.6.1, workbox-window@^6.5.4:
     workbox-core "6.6.1"
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
