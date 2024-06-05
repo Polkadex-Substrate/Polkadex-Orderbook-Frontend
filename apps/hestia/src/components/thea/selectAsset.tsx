@@ -12,7 +12,6 @@ import { SetStateAction, Dispatch, useCallback, ComponentProps } from "react";
 import classNames from "classnames";
 import { twMerge } from "tailwind-merge";
 import { useTheaProvider } from "@orderbook/core/providers";
-import { getChainFromTicker } from "@orderbook/core/helpers";
 
 import { formatAmount } from "@/helpers";
 
@@ -31,6 +30,7 @@ export const SelectAsset = ({
     onSelectAsset,
     sourceBalances,
     sourceBalancesLoading,
+    sourceChain,
   } = useTheaProvider();
 
   return (
@@ -63,7 +63,6 @@ export const SelectAsset = ({
                     className="[&_[cmdk-group-heading]]:px-3"
                   >
                     {supportedAssets?.map((e, i) => {
-                      const tokenName = getChainFromTicker(e.ticker);
                       const balance =
                         sourceBalances?.find((x) => x.ticker.includes(e.ticker))
                           ?.amount ?? 0;
@@ -83,7 +82,7 @@ export const SelectAsset = ({
                               key={e.id}
                               icon={e.ticker as TokenAppearance}
                               ticker={e.ticker}
-                              tokenName={tokenName}
+                              tokenName={sourceChain?.name || ""}
                               balance={formatAmount(balance)}
                               loading={sourceBalancesLoading}
                             />

@@ -82,6 +82,20 @@ export const Form = () => {
     [poolsLoading, sourceBalancesLoading, transferConfigLoading]
   );
 
+  const minAmount = useMemo(() => {
+    const configMin = min?.amount || 0;
+    const destFee =
+      destinationFee?.ticker === selectedAsset?.ticker
+        ? destinationFee?.amount || 0
+        : 0;
+    return Math.max(configMin, destFee);
+  }, [
+    destinationFee?.amount,
+    destinationFee?.ticker,
+    min?.amount,
+    selectedAsset?.ticker,
+  ]);
+
   const {
     handleSubmit,
     errors,
@@ -94,7 +108,7 @@ export const Form = () => {
   } = useFormik({
     initialValues,
     validationSchema: bridgeValidations(
-      min?.amount,
+      minAmount,
       max?.amount,
       destinationPDEXBalance,
       selectedAssetBalance,
