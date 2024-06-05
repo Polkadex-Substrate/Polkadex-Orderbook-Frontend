@@ -3866,10 +3866,10 @@
     "@polkadex/types" "1.1.61"
     "@polkadex/utils" "1.1.46"
 
-"@polkadex/thea@^5.5.1":
-  version "5.5.1"
-  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-5.5.1.tgz#8a7313d999c3fa5db7614d52800a50af8a64c8b6"
-  integrity sha512-0aH1c/NYTp5dbhtViGGupf5TqPTLftrlB6wUgT2rUEiMd+UodThTAWgJyydzFIebpMMpL/30j4M1vrOa2DItmQ==
+"@polkadex/thea@^5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-5.6.0.tgz#76b678a7059822c9c5d6ac0cb7b16b097ab64887"
+  integrity sha512-CX5a2ERlF+kt5QS3DVccOJrQN9MgfcHpQ6KCl9UioPuePKiAmHY0Z17MIdIJ0b/PdF8fNy2gfkI9d/5zQsjbow==
   dependencies:
     "@moonbeam-network/xcm-sdk" "^2.1.2"
     "@polkadex/numericals" "*"
