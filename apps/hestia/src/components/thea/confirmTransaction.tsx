@@ -56,7 +56,6 @@ export const ConfirmTransaction = ({
     isDestinationPolkadex,
     selectedAssetIdPolkadex,
   } = useTheaProvider();
-
   const { destinationFee, sourceFee, sourceFeeBalance, sourceFeeExistential } =
     transferConfig ?? {};
 
