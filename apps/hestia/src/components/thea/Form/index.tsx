@@ -32,6 +32,7 @@ import { WalletCard } from "./walletCard";
 import { SelectNetwork } from "./selectNetwork";
 
 import { createQueryString, formatAmount } from "@/helpers";
+import { useQueryPools } from "@/hooks";
 const initialValues = {
   amount: "",
 };
@@ -57,16 +58,43 @@ export const Form = () => {
     supportedSourceChains,
     supportedDestinationChains,
     onSwitchChain: onSwitch,
+    selectedAssetIdPolkadex,
+    isDestinationPolkadex,
+    destinationPDEXBalance,
   } = useTheaProvider();
   const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
+  const { pools, poolsLoading } = useQueryPools();
+
+  const poolReserve = useMemo(() => {
+    return pools?.find((p) => p.id === selectedAssetIdPolkadex);
+  }, [pools, selectedAssetIdPolkadex]);
 
   const onSwitchChain = () => {
     onSwitch();
     resetForm();
   };
+
+  const loading = useMemo(
+    () => transferConfigLoading || sourceBalancesLoading || poolsLoading,
+    [poolsLoading, sourceBalancesLoading, transferConfigLoading]
+  );
+
+  const minAmount = useMemo(() => {
+    const configMin = min?.amount || 0;
+    const destFee =
+      destinationFee?.ticker === selectedAsset?.ticker
+        ? destinationFee?.amount || 0
+        : 0;
+    return Math.max(configMin, destFee);
+  }, [
+    destinationFee?.amount,
+    destinationFee?.ticker,
+    min?.amount,
+    selectedAsset?.ticker,
+  ]);
 
   const {
     handleSubmit,
@@ -80,9 +108,12 @@ export const Form = () => {
   } = useFormik({
     initialValues,
     validationSchema: bridgeValidations(
-      min?.amount,
+      minAmount,
       max?.amount,
-      selectedAssetBalance
+      destinationPDEXBalance,
+      selectedAssetBalance,
+      isDestinationPolkadex,
+      poolReserve?.reserve || 0
     ),
     onSubmit: () => setOpenFeeModal(true),
   });
@@ -283,7 +314,7 @@ export const Form = () => {
                 <Typography.Text appearance="primary">Amount</Typography.Text>
                 <HoverInformation>
                   <HoverInformation.Trigger
-                    loading={transferConfigLoading || sourceBalancesLoading}
+                    loading={loading}
                     className="min-w-20"
                   >
                     <RiInformationFill className="w-3 h-3 text-actionInput" />
@@ -293,22 +324,13 @@ export const Form = () => {
                     {/* <HoverInformation.Arrow />  //TEMp */}
                   </HoverInformation.Trigger>
                   <HoverInformation.Content>
-                    <ResponsiveCard
-                      label="Source fee"
-                      loading={transferConfigLoading}
-                    >
+                    <ResponsiveCard label="Source fee" loading={loading}>
                       {sourceFeeAmount} {sourceFeeTicker}
                     </ResponsiveCard>
-                    <ResponsiveCard
-                      label="Destination fee"
-                      loading={transferConfigLoading}
-                    >
+                    <ResponsiveCard label="Destination fee" loading={loading}>
                       {destinationFeeAmount} {destinationFeeTicker}
                     </ResponsiveCard>
-                    <ResponsiveCard
-                      label="Available"
-                      loading={sourceBalancesLoading}
-                    >
+                    <ResponsiveCard label="Available" loading={loading}>
                       {balanceAmount} {selectedAsset?.ticker}
                     </ResponsiveCard>
                   </HoverInformation.Content>
@@ -330,7 +352,7 @@ export const Form = () => {
                         {...getFieldProps("amount")}
                         className="max-sm:focus:text-[16px] w-full pl-4 py-4"
                       >
-                        {sourceAccount && max?.amount && (
+                        {sourceAccount && max?.amount && !loading && (
                           <Input.Action
                             type="button"
                             onClick={(e) => {
@@ -377,7 +399,7 @@ export const Form = () => {
             </div>
           </div>
         </div>
-        {transferConfigLoading || sourceBalancesLoading ? (
+        {loading ? (
           <Button.Solid
             className="w-full py-5 flex items-center gap-1 opacity-60"
             size="md"
