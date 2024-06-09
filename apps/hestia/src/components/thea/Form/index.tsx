@@ -61,6 +61,7 @@ export const Form = () => {
     selectedAssetIdPolkadex,
     isDestinationPolkadex,
     destinationPDEXBalance,
+    isDestinationPDEXBalanceLoading,
   } = useTheaProvider();
   const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
   const searchParams = useSearchParams();
@@ -77,10 +78,17 @@ export const Form = () => {
     resetForm();
   };
 
-  const loading = useMemo(
-    () => transferConfigLoading || sourceBalancesLoading || poolsLoading,
-    [poolsLoading, sourceBalancesLoading, transferConfigLoading]
-  );
+  const loading = useMemo(() => {
+    const isLoading = transferConfigLoading || sourceBalancesLoading;
+    if (!isDestinationPolkadex) return isLoading;
+    return isLoading || poolsLoading || isDestinationPDEXBalanceLoading;
+  }, [
+    poolsLoading,
+    sourceBalancesLoading,
+    transferConfigLoading,
+    isDestinationPDEXBalanceLoading,
+    isDestinationPolkadex,
+  ]);
 
   const minAmount = useMemo(() => {
     const configMin = min?.amount || 0;
@@ -124,7 +132,6 @@ export const Form = () => {
       !sourceChain ||
       !destinationAccount ||
       !destinationChain ||
-      transferConfigLoading ||
       !(isValid && dirty),
     [
       selectedAsset,
@@ -132,7 +139,6 @@ export const Form = () => {
       sourceChain,
       destinationAccount,
       destinationChain,
-      transferConfigLoading,
       dirty,
       isValid,
     ]

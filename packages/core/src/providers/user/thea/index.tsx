@@ -172,7 +172,10 @@ export const TheaProvider = ({
     [polkadexConnector]
   );
 
-  const { data: polkadexDestinationBalances = [] } = useTheaBalances({
+  const {
+    data: polkadexDestinationBalances = [],
+    isLoading: isPolkadexDestinationBalancesLoading,
+  } = useTheaBalances({
     connector: polkadexConnector,
     sourceAddress: destinationAccountSelected?.address,
     assets: polkadexAssets,
@@ -326,6 +329,7 @@ export const TheaProvider = ({
         onRefetchTransferConfig: refetchTransferConfig,
 
         destinationPDEXBalance,
+        isDestinationPDEXBalanceLoading: isPolkadexDestinationBalancesLoading,
         isSourcePolkadex,
         isDestinationPolkadex,
         polkadexAssets,
@@ -373,6 +377,7 @@ type State = {
   onRefetchTransferConfig?: UseQueryResult["refetch"];
 
   destinationPDEXBalance: number;
+  isDestinationPDEXBalanceLoading: boolean;
   isSourcePolkadex: boolean;
   isDestinationPolkadex: boolean;
   selectedAssetIdPolkadex?: string;
@@ -410,6 +415,7 @@ export const Context = createContext<State>({
   transferConfigSuccess: false,
 
   destinationPDEXBalance: 0,
+  isDestinationPDEXBalanceLoading: false,
   isSourcePolkadex: false,
   isDestinationPolkadex: false,
 });
