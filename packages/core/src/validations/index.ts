@@ -35,9 +35,14 @@ export const bridgeValidations = (
         (value) => /^\d+(\.\d+)?$/.test(value || "")
       )
       .test(
+        ErrorMessages().ZERO,
+        ErrorMessages().ZERO,
+        (value) => Number(value) > 0
+      )
+      .test(
         ErrorMessages("0", min).MIN,
         ErrorMessages("0", min).MIN,
-        (value) => Number(value) > minAmount
+        (value) => Number(value) >= minAmount
       )
       .test(
         ErrorMessages().CHECK_BALANCE,
