@@ -29,6 +29,7 @@ export const ConnectAccount = ({
   evm?: boolean;
 }) => {
   const [extension, setExtension] = useState<Extension>(null);
+
   const handleClose = () => onOpenChange(false);
 
   return (
