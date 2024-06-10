@@ -73,7 +73,8 @@ export const ErrorMessages = (existential = "0", minAmount = "0") => ({
   WHITESPACE_NOT_ALLOWED: "Whitespace not allowed",
   MUST_BE_A_NUMBER: "Must be a number",
   TOO_SMALL: "Too Small!",
-  MIN: `The amount must be greater than ${minAmount}`,
+  ZERO: "The amount must be greater than 0",
+  MIN: `The amount cannot be less than ${minAmount}`,
   EXISTENTIAL_DEPOSIT: `You need to keep some amount in source chain to cover the existential deposit`,
 });
 

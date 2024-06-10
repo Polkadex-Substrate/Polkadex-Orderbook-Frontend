@@ -90,7 +90,7 @@ export const ConfirmTransaction = ({
     if (balance <= fee + existential) return CrossChainError.SOURCE_FEE;
     if (showAutoSwap && !swapPrice) return CrossChainError.NOT_ENOUGH_LIQUIDITY;
 
-    if (amount <= autoSwapAmount)
+    if (showAutoSwap && amount <= autoSwapAmount)
       return CrossChainError.AUTO_SWAP(
         autoSwapAmount.toFixed(4),
         selectedAsset?.ticker as string
