@@ -1,4 +1,4 @@
-import { parseScientific, trimFloat } from "@polkadex/numericals";
+import { trimFloat } from "@orderbook/core/helpers";
 
 export class BalanceFormatter {
   static toHuman(
@@ -6,7 +6,7 @@ export class BalanceFormatter {
     decimal: number,
     locale?: string
   ): string {
-    let result = parseScientific(value.toString());
+    let result = Number(value).toFixed(decimal);
     // Trim the value (don't round off)
     result = trimFloat({ value: result, digitsAfterDecimal: 8 });
 
