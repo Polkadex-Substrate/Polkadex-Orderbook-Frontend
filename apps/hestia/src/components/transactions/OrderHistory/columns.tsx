@@ -153,9 +153,12 @@ export const columns = () => [
   columnHelper.accessor((row) => row, {
     id: "amount",
     cell: (e) => {
+      const { side, type, quantity, market } = e.getValue();
+      const isMarketBuy = type === "MARKET" && side === "Bid";
       return (
         <Typography.Text size="xs">
-          {e.getValue().quantity} {e.getValue().market.baseAsset.ticker}
+          {quantity}{" "}
+          {isMarketBuy ? market.quoteAsset.ticker : market.baseAsset.ticker}
         </Typography.Text>
       );
     },

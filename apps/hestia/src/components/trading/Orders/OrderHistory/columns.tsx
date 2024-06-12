@@ -104,11 +104,16 @@ export const columns = [
   }),
   orderHistoryColumnHelper.accessor((row) => row, {
     id: "amount",
-    cell: (e) => (
-      <Typography.Text size="xs">
-        {e.getValue().quantity} {e.getValue().market.baseAsset.ticker}
-      </Typography.Text>
-    ),
+    cell: (e) => {
+      const { side, type, quantity, market } = e.getValue();
+      const isMarketBuy = type === "MARKET" && side === "Bid";
+      return (
+        <Typography.Text size="xs">
+          {quantity}{" "}
+          {isMarketBuy ? market.quoteAsset.ticker : market.baseAsset.ticker}
+        </Typography.Text>
+      );
+    },
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Amount
