@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@orderbook/core/constants";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Document } from "@contentful/rich-text-types";
-import { th } from "date-fns/locale";
 
 import { client, getAnnouncements } from "../lib/contentfull/api";
 export const DEFAULTANNOUNCEMENTSNAME = "localannouncements";

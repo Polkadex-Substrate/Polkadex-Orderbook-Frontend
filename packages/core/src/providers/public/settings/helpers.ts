@@ -17,9 +17,15 @@ export const getNotifications = (): T.Notification[] => {
   let localNotifications: T.Notification[] =
     JSON.parse(localStorage.getItem(C.DEFAULTNOTIFICATIONNAME) as string) || [];
 
-  return (localNotifications = localNotifications
+  localNotifications = localNotifications
     .filter((e) => e.message && e.category && e.description)
-    ?.sort((a, b) => b.date - a.date));
+    ?.sort((a, b) => b.date - a.date);
+
+  const filteredAdditionalNotifications = additionalNotifications.filter(
+    (e) => !localNotifications.map((n) => n.id).includes(e.id)
+  );
+
+  return filteredAdditionalNotifications.concat(localNotifications);
 };
 export const setNotifications = (notifications: T.Notification[]) => {
   localStorage.setItem(

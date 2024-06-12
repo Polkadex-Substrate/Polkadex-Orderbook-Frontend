@@ -15,9 +15,9 @@ export type NotificationPayload = {
   href?: string;
 };
 
-export interface Notification<T = number> extends NotificationPayload {
+export interface Notification extends NotificationPayload {
   id: string;
-  date: T;
+  date: number;
   active: boolean;
 }
 export interface SettingState {

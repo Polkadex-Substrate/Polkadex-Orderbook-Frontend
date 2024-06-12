@@ -82,7 +82,7 @@ export const NotificationsModal = ({
       <Modal.Content className="flex flex-col flex-1 gap-6">
         <div className="flex flex-col gap-3">
           <Typography.Text appearance="primary" className="px-4">
-            Announcements
+            General
           </Typography.Text>
           <div className="flex flex-col gap-2">
             {announcementFormat?.map(({ id, message, date, custom, href }) => {
