@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
-import { useAnnouncements } from "@orderbook/core/hooks";
 
 import { Provider } from "./context";
 import { settingReducer, initialState } from "./reducer";
 import * as A from "./actions";
 import * as T from "./types";
-import { DEFAULTANNOUNCEMENTSNAME } from "./constants";
 
 export const SettingProvider: T.SettingComponent = ({
   defaultToast,
@@ -91,34 +89,11 @@ export const SettingProvider: T.SettingComponent = ({
     dispatch(A.getMarketCarousel());
   }, []);
 
-  const {
-    data: announcements,
-    isFetching: announcementsFetching,
-    isLoading: announcementsLoading,
-    isSuccess: announcementsSuccess,
-  } = useAnnouncements();
-
-  console.log("announcements", announcements);
-  const onReadAnnouncement = useCallback((id: string) => {
-    const prevObj: string[] =
-      JSON.parse(localStorage.getItem(DEFAULTANNOUNCEMENTSNAME) as string) ||
-      [];
-    const obj = [...prevObj];
-
-    prevObj?.forEach((item) => {
-      if (!item.includes(id)) obj.push(id);
-    });
-    localStorage.setItem(DEFAULTANNOUNCEMENTSNAME, JSON.stringify(obj));
-  }, []);
   return (
     <Provider
       value={{
         ...state,
         fundWallet,
-        announcements,
-        announcementsLoading,
-        announcementsSuccess: announcementsSuccess || announcementsFetching,
-        onReadAnnouncement,
         onToogleFundWallet,
         onToggleChartRebuild,
         onToggleMarketSelector,

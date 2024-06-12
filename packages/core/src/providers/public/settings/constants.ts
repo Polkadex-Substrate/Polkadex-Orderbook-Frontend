@@ -14,7 +14,6 @@ export const DEFAULTLANGUAGENAME = "language";
 export const DEFAULTCURRENCYNAME = "currency";
 export const DEFAULTTHEMENAME = "theme";
 export const DEFAULTNOTIFICATIONNAME = "localnotifications";
-export const DEFAULTANNOUNCEMENTSNAME = "localannouncements";
 export const DEFAULTMARKETCAROUSEL = "marketCarouselSelector";
 
 export const NOTIFICATION_DELETE_ALL =

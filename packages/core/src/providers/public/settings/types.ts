@@ -64,10 +64,6 @@ export type SettingContextProps = SettingState & {
   onToogleConnectExtension: (value?: boolean) => void;
   onToogleConnectTrading: (value?: boolean) => void;
   onChangeMarketCarousel: (value: MarketCarousel) => void;
-  announcements: Notification[];
-  announcementsLoading: boolean;
-  announcementsSuccess: boolean;
-  onReadAnnouncement: (id: string) => void;
 };
 
 export type SettingsProps = {
