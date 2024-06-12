@@ -3801,20 +3801,12 @@
     bignumber "^1.1.0"
     typescript latest
 
-"@polkadex/numericals@*":
+"@polkadex/numericals@*", "@polkadex/numericals@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@polkadex/numericals/-/numericals-0.4.0.tgz#7199e0e7cc2b77a523b1c581daf235ae31758086"
   integrity sha512-BBeh//6CCPQCqsaJTkt3hvAmgpjgs9+DKj4YyvUo8U5ZfxsjeRKqzGeaR/xRBj/8AfX3Jt7lUcKhEPABpBvJOw==
   dependencies:
     "@polkadot-cloud/utils" "^0.3.0"
-    bignumber "^1.1.0"
-    millify "^6.1.0"
-
-"@polkadex/numericals@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/numericals/-/numericals-0.3.0.tgz#6e61e38b4ac9c0c3d5b6319c10303f0947adad9f"
-  integrity sha512-1fg9nuOPDXPSkpoDzhhrglKeodVnqeiY1WFgAmmYqV8ynLQGfaqPcndBGiyniaWAtW4rlaZDDccShX2iR4lZQg==
-  dependencies:
     bignumber "^1.1.0"
     millify "^6.1.0"
 

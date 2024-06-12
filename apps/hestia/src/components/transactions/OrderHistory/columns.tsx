@@ -1,3 +1,4 @@
+import { parseScientific } from "@polkadex/numericals";
 import { Order } from "@orderbook/core/utils/orderbookService/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Copy, Tooltip, Typography, truncateString } from "@polkadex/ux";
@@ -157,7 +158,7 @@ export const columns = () => [
       const isMarketBuy = type === "MARKET" && side === "Bid";
       return (
         <Typography.Text size="xs">
-          {quantity}{" "}
+          {parseScientific((+quantity).toString())}{" "}
           {isMarketBuy ? market.quoteAsset.ticker : market.baseAsset.ticker}
         </Typography.Text>
       );
@@ -185,7 +186,8 @@ export const columns = () => [
       const width = `${roundedPercent}%`;
       return (
         <FilledCard width={width}>
-          {e.getValue().filledQuantity} {e.getValue().market.baseAsset.ticker}
+          {parseScientific((+e.getValue().filledQuantity).toString())}{" "}
+          {e.getValue().market.baseAsset.ticker}
         </FilledCard>
       );
     },
@@ -219,7 +221,7 @@ export const columns = () => [
           : e.getValue().market.quoteAsset.ticker;
       return (
         <Typography.Text size="xs">
-          {e.getValue().fee} {ticker}
+          {parseScientific(e.getValue().fee.toString())} {ticker}
         </Typography.Text>
       );
     },

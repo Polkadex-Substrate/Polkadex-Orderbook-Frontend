@@ -20,7 +20,7 @@
     "@orderbook/tsconfig": "*",
     "@polkadex/blockchain-api": "^1.1.61",
     "@polkadex/local-wallets": "^2.3.0",
-    "@polkadex/numericals": "^0.3.0",
+    "@polkadex/numericals": "^0.4.0",
     "@polkadex/polkadex-api": "^3.6.2",
     "@polkadex/subscan": "^1.1.61",
     "@polkadex/thea": "^5.8.1",
