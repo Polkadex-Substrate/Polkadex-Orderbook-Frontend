@@ -38,7 +38,11 @@ const actionKeys = ["token", "date"];
 const responsiveKeys = ["hash", "date"];
 
 const polkadexConnector = getChainConnector(GENESIS[0]);
-const polkadexAssets = polkadexConnector?.getAllAssets() || [];
+const polkadexAssets =
+  polkadexConnector
+    ?.getAllAssets()
+    .map((e) => (!e.id ? { ...e, id: "0" } : e)) || [];
+
 const { getAllChains } = new Thea();
 const chains = getAllChains();
 

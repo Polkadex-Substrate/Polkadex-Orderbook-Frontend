@@ -1,15 +1,8 @@
 import React, { Dispatch, SetStateAction } from "react";
-import {
-  Button,
-  Dropdown,
-  Modal,
-  Token,
-  Typography,
-  tokenAppearance,
-} from "@polkadex/ux";
-import { RiCloseLine, RiArrowDownSLine } from "@remixicon/react";
+import { Button, Modal, Typography } from "@polkadex/ux";
+import { RiCloseLine } from "@remixicon/react";
 import Link from "next/link";
-import { getChainFromTicker, useAssets } from "@orderbook/core/index";
+import { defaultConfig } from "@orderbook/core/config";
 
 import { FundHorizontalCard } from "../ReadyToUse/fundHorizontalCard";
 
@@ -20,8 +13,7 @@ export const FundWalletModal = ({
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { assets } = useAssets();
-
+  const { isBridgeEnabled } = defaultConfig;
   return (
     <Modal
       open={open}
@@ -59,86 +51,9 @@ export const FundWalletModal = ({
               icon="Bridge"
               title="Decentralized bridge"
               description="Bridge your crypto to Polkadex and vice versa."
-            >
-              <div className="flex justify-between gap-2 sm:items-center max-sm:flex-col">
-                <Dropdown>
-                  <Dropdown.Trigger className="flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1">
-                    Polkadot-based
-                    <RiArrowDownSLine className="w-3 h-3" />
-                  </Dropdown.Trigger>
-                  <Dropdown.Content>
-                    <Dropdown.Label className="[&>span]:text-sm">
-                      Token/Chain
-                    </Dropdown.Label>
-                    {assets?.map((asset) => {
-                      const chainName = getChainFromTicker(asset.ticker);
-                      return (
-                        !asset.isEvm && (
-                          <Dropdown.Item
-                            key={asset.id}
-                            onClick={() =>
-                              window.open(`/thea?from=${chainName}`, "_self")
-                            }
-                          >
-                            <div className="flex items-center justify-center gap-2">
-                              <Token
-                                name={asset.ticker}
-                                size="xs"
-                                className="rounded-full border border-primary max-sm:w-5 max-sm:h-5"
-                                appearance={
-                                  asset.ticker as keyof typeof tokenAppearance
-                                }
-                              />
-                              <Typography.Text size="sm">
-                                {asset.ticker} ({chainName})
-                              </Typography.Text>
-                            </div>
-                          </Dropdown.Item>
-                        )
-                      );
-                    })}
-                  </Dropdown.Content>
-                </Dropdown>
-                <Dropdown>
-                  <Dropdown.Trigger className="flex-1 flex justify-between items-center text-sm bg-level-2 rounded-md px-2 py-1">
-                    EVM-based
-                    <RiArrowDownSLine className="w-3 h-3" />
-                  </Dropdown.Trigger>
-                  <Dropdown.Content>
-                    <Dropdown.Label className="[&>span]:text-sm">
-                      Token/Chain
-                    </Dropdown.Label>
-                    {assets?.map((asset) => {
-                      const chainName = getChainFromTicker(asset.ticker);
-                      return (
-                        asset.isEvm && (
-                          <Dropdown.Item
-                            key={asset.id}
-                            onClick={() =>
-                              window.open(`/thea?from=${chainName}`, "_self")
-                            }
-                          >
-                            <div className="flex items-center justify-center gap-2">
-                              <Token
-                                name={asset.ticker}
-                                size="xs"
-                                className="rounded-full border border-primary max-sm:w-5 max-sm:h-5"
-                                appearance={
-                                  asset.ticker as keyof typeof tokenAppearance
-                                }
-                              />
-                              <Typography.Text size="sm">
-                                {asset.ticker} ({chainName})
-                              </Typography.Text>
-                            </div>
-                          </Dropdown.Item>
-                        )
-                      );
-                    })}
-                  </Dropdown.Content>
-                </Dropdown>
-              </div>
-            </FundHorizontalCard>
+              href={isBridgeEnabled ? "/thea" : "https://thea.polkadex.trade/"}
+              target="_blank"
+            />
           </div>
         </div>
         <div className="flex flex-col gap-3">
@@ -155,7 +70,7 @@ export const FundWalletModal = ({
               icon="TransferToTrading"
               title="Transfer to trading account"
               description="Move funds from your funding account to your trading account."
-              href="/transfer/USDT?type=deposit"
+              href="/transfer/PDEX?type=deposit"
               onClick={() => onOpenChange(false)}
             />
           </div>

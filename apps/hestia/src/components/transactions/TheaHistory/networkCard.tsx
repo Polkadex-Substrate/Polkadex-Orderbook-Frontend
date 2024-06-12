@@ -22,7 +22,7 @@ export const NetworkCard = ({
           <Chain size="2xs" name={name} className="max-sm:hidden" />
           <div className="flex items-center gap-1">
             <Typography.Text size="sm">{name}</Typography.Text>
-            <RiInformationFill className="w-2.5 h-2.5 text-actionInput max-sm:hidden" />
+            <RiInformationFill className="w-3 h-3 text-actionInput" />
           </div>
         </div>
       </HoverCard.Trigger>

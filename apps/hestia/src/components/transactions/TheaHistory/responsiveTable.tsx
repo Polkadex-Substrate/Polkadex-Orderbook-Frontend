@@ -40,7 +40,6 @@ export const ResponsiveTable = ({
 
   if (!data) return null;
 
-  console.log("asset?.ticker", asset?.ticker);
   return (
     <Drawer
       closeOnClickOutside

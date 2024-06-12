@@ -15,7 +15,9 @@ export const fetchOnChainBalance = async (
   if (isAssetPDEX(assetId)) {
     const res = await api.query.system.account(address);
     const balanceJson: BalanceJson = res.toJSON() as BalanceJson;
-    return new BigNumber(balanceJson?.data?.free || 0)
+    return new BigNumber(
+      balanceJson?.data?.free - balanceJson?.data?.frozen || 0
+    )
       .dividedBy(UNIT_BN)
       .toNumber();
   } else {

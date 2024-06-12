@@ -37,6 +37,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   } = useSettingsProvider();
   const lastUsedMarketUrl = getMarketUrl();
   const isRewardDisabled = !defaultConfig.enableLmp;
+  const isBridgeDisabled = !defaultConfig.isBridgeEnabled;
 
   const unreadNotifications = useMemo(() => {
     return allNotifications.filter((e) => e.active).length;
@@ -72,6 +73,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             </HeaderLink.Single>
             <HeaderLink.Single
               href={`/thea?from=${defaultTheaSourceChain}&to=${defaultTheaDestinationChain}`}
+              disabled={isBridgeDisabled}
             >
               Bridge
             </HeaderLink.Single>

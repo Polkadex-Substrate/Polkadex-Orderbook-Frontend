@@ -27,6 +27,7 @@ export const ResponsiveMenuModal = ({
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }) => {
   const isRewardDisabled = !defaultConfig.enableLmp;
+  const isBridgeDisabled = !defaultConfig.isBridgeEnabled;
   const lastUsedMarketUrl = getMarketUrl();
   const { width } = useWindowSize();
   return (
@@ -66,6 +67,14 @@ export const ResponsiveMenuModal = ({
                     className="text-lg"
                   >
                     Trade
+                  </HeaderLink.Single>
+                  <HeaderLink.Single
+                    size="lg"
+                    href="/thea"
+                    className="text-lg"
+                    disabled={isBridgeDisabled}
+                  >
+                    Bridge
                   </HeaderLink.Single>
                   <HeaderLink.Single
                     size="lg"

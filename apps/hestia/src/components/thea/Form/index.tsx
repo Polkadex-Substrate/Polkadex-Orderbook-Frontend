@@ -22,6 +22,7 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import classNames from "classnames";
 import { bridgeValidations } from "@orderbook/core/validations";
+import { ChainType } from "@polkadex/thea";
 
 import { SelectAsset } from "../selectAsset";
 import { ConnectAccount } from "../connectAccount";
@@ -31,6 +32,7 @@ import { WalletCard } from "./walletCard";
 import { SelectNetwork } from "./selectNetwork";
 
 import { createQueryString, formatAmount } from "@/helpers";
+import { useQueryPools } from "@/hooks";
 const initialValues = {
   amount: "",
 };
@@ -56,16 +58,51 @@ export const Form = () => {
     supportedSourceChains,
     supportedDestinationChains,
     onSwitchChain: onSwitch,
+    selectedAssetIdPolkadex,
+    isDestinationPolkadex,
+    destinationPDEXBalance,
+    isDestinationPDEXBalanceLoading,
   } = useTheaProvider();
   const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
+  const { pools, poolsLoading } = useQueryPools();
+
+  const poolReserve = useMemo(() => {
+    return pools?.find((p) => p.id === selectedAssetIdPolkadex);
+  }, [pools, selectedAssetIdPolkadex]);
 
   const onSwitchChain = () => {
     onSwitch();
     resetForm();
   };
+
+  const loading = useMemo(() => {
+    const isLoading = transferConfigLoading || sourceBalancesLoading;
+    if (!isDestinationPolkadex) return isLoading;
+    return isLoading || poolsLoading || isDestinationPDEXBalanceLoading;
+  }, [
+    poolsLoading,
+    sourceBalancesLoading,
+    transferConfigLoading,
+    isDestinationPDEXBalanceLoading,
+    isDestinationPolkadex,
+  ]);
+
+  const minAmount = useMemo(() => {
+    const configMin = min?.amount || 0;
+    const destFee =
+      destinationFee?.ticker === selectedAsset?.ticker
+        ? destinationFee?.amount || 0
+        : 0;
+    return Math.max(configMin, destFee);
+  }, [
+    destinationFee?.amount,
+    destinationFee?.ticker,
+    min?.amount,
+    selectedAsset?.ticker,
+  ]);
 
   const {
     handleSubmit,
@@ -79,9 +116,12 @@ export const Form = () => {
   } = useFormik({
     initialValues,
     validationSchema: bridgeValidations(
-      min?.amount,
+      minAmount,
       max?.amount,
-      selectedAssetBalance
+      destinationPDEXBalance,
+      selectedAssetBalance,
+      isDestinationPolkadex,
+      poolReserve?.reserve || 0
     ),
     onSubmit: () => setOpenFeeModal(true),
   });
@@ -92,7 +132,6 @@ export const Form = () => {
       !sourceChain ||
       !destinationAccount ||
       !destinationChain ||
-      transferConfigLoading ||
       !(isValid && dirty),
     [
       selectedAsset,
@@ -100,7 +139,6 @@ export const Form = () => {
       sourceChain,
       destinationAccount,
       destinationChain,
-      transferConfigLoading,
       dirty,
       isValid,
     ]
@@ -175,6 +213,7 @@ export const Form = () => {
         open={openSourceModal}
         onOpenChange={setOpenSourceModal}
         setAccount={setSourceAccount}
+        evm={sourceChain?.type !== ChainType.Substrate}
       />
 
       <form
@@ -198,7 +237,11 @@ export const Form = () => {
                           key={e.genesis}
                           icon={e.logo}
                           value={e.name}
-                          onSelect={() => onSelectSourceChain(e)}
+                          onSelect={() => {
+                            onSelectSourceChain(e);
+                            if (e.type !== ChainType.Substrate)
+                              setOpenSourceModal(true);
+                          }}
                         />
                       );
                     })}
@@ -238,7 +281,7 @@ export const Form = () => {
               <Button.Icon
                 type="button"
                 variant="outline"
-                className="lg:mt-9 h-10 w-10 p-3 max-lg:self-center"
+                className="lg:mt-9 h-10 w-10 p-3 max-lg:self-center max-lg:rotate-90"
                 onClick={onSwitchChain}
               >
                 <RiArrowLeftRightLine className="w-full h-full" />
@@ -265,6 +308,7 @@ export const Form = () => {
                 <AccountCombobox
                   account={destinationAccount}
                   setAccount={(e) => e && setDestinationAccount(e)}
+                  evm={destinationChain?.type !== ChainType.Substrate}
                 />
               </div>
             </div>
@@ -276,7 +320,8 @@ export const Form = () => {
                 <Typography.Text appearance="primary">Amount</Typography.Text>
                 <HoverInformation>
                   <HoverInformation.Trigger
-                    loading={transferConfigLoading || sourceBalancesLoading}
+                    loading={loading}
+                    className="min-w-20"
                   >
                     <RiInformationFill className="w-3 h-3 text-actionInput" />
                     <Typography.Text size="xs" appearance="primary">
@@ -285,22 +330,13 @@ export const Form = () => {
                     {/* <HoverInformation.Arrow />  //TEMp */}
                   </HoverInformation.Trigger>
                   <HoverInformation.Content>
-                    <ResponsiveCard
-                      label="Source fee"
-                      loading={transferConfigLoading}
-                    >
+                    <ResponsiveCard label="Source fee" loading={loading}>
                       {sourceFeeAmount} {sourceFeeTicker}
                     </ResponsiveCard>
-                    <ResponsiveCard
-                      label="Destination fee"
-                      loading={transferConfigLoading}
-                    >
+                    <ResponsiveCard label="Destination fee" loading={loading}>
                       {destinationFeeAmount} {destinationFeeTicker}
                     </ResponsiveCard>
-                    <ResponsiveCard
-                      label="Available"
-                      loading={sourceBalancesLoading}
-                    >
+                    <ResponsiveCard label="Available" loading={loading}>
                       {balanceAmount} {selectedAsset?.ticker}
                     </ResponsiveCard>
                   </HoverInformation.Content>
@@ -322,7 +358,7 @@ export const Form = () => {
                         {...getFieldProps("amount")}
                         className="max-sm:focus:text-[16px] w-full pl-4 py-4"
                       >
-                        {sourceAccount && max?.amount && (
+                        {sourceAccount && max?.amount && !loading && (
                           <Input.Action
                             type="button"
                             onClick={(e) => {
@@ -369,7 +405,7 @@ export const Form = () => {
             </div>
           </div>
         </div>
-        {transferConfigLoading ? (
+        {loading ? (
           <Button.Solid
             className="w-full py-5 flex items-center gap-1 opacity-60"
             size="md"

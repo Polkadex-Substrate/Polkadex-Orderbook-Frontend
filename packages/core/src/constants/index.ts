@@ -73,9 +73,18 @@ export const ErrorMessages = (existential = "0", minAmount = "0") => ({
   WHITESPACE_NOT_ALLOWED: "Whitespace not allowed",
   MUST_BE_A_NUMBER: "Must be a number",
   TOO_SMALL: "Too Small!",
-  MIN: `The amount must be greater than ${minAmount}`,
+  ZERO: "The amount must be greater than 0",
+  MIN: `The amount cannot be less than ${minAmount}`,
   EXISTENTIAL_DEPOSIT: `You need to keep some amount in source chain to cover the existential deposit`,
 });
+
+export const CrossChainError = {
+  SOURCE_FEE: "Insufficient balance to pay the transaction fee at source chain",
+  NOT_ENOUGH_LIQUIDITY:
+    "Not enough PDEX in the destination account. Please transfer 1+ PDEX first.",
+  AUTO_SWAP: (swapAmount: string, ticker: string) =>
+    `Please transfer more than ${swapAmount} ${ticker} since Autoswap is required`,
+};
 
 export const MAX_DIGITS_AFTER_DECIMAL = 8;
 export const MIN_DIGITS_AFTER_DECIMAL = 2;

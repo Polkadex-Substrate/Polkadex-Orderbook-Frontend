@@ -131,7 +131,7 @@ export const ExistingUser = ({
                   onClick={onReadMore}
                   className="flex items-center gap-2 text-primary-base"
                 >
-                  <Icon name="Wallet" className="w-4 h-4" />
+                  <Icon name="Wallet" className="w-6 h-6" />
                   <Typography.Text className="text-primary-base">
                     Read More
                   </Typography.Text>

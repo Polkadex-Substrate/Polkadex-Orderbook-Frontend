@@ -7,10 +7,12 @@ import { RiInformationFill } from "@remixicon/react";
 interface Props extends ComponentProps<"div"> {
   label: string;
   tooltip?: string;
+  defaultOpen?: boolean;
 }
 export const GenericHorizontalItem = ({
   label,
   tooltip,
+  defaultOpen,
   children,
   className,
   ...props
@@ -27,7 +29,7 @@ export const GenericHorizontalItem = ({
       {...props}
     >
       {tooltip ? (
-        <HoverCard>
+        <HoverCard defaultOpen={defaultOpen}>
           <HoverCard.Trigger>
             <div className="flex items-center gap-1">
               <RiInformationFill className="w-3 h-3 text-actionInput" />

@@ -5,7 +5,6 @@ import {
   PropsWithChildren,
   SetStateAction,
   createContext,
-  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -18,6 +17,7 @@ import {
   AssetAmount,
   BaseChainAdapter,
   TransferConfig,
+  ChainType,
 } from "@polkadex/thea";
 import { defaultConfig } from "@orderbook/core/config";
 import { ExtensionAccount } from "@polkadex/react-providers";
@@ -68,8 +68,10 @@ export const TheaProvider = ({
   );
 
   const sourceAccountSelected = useMemo(
-    () => sourceAccount ?? selectedWallet,
-    [sourceAccount, selectedWallet]
+    () =>
+      sourceAccount ??
+      (sourceChain?.type === ChainType.Substrate ? selectedWallet : undefined),
+    [sourceAccount, selectedWallet, sourceChain?.type]
   );
 
   const supportedDestinationChains = useMemo(() => {
@@ -77,6 +79,7 @@ export const TheaProvider = ({
   }, [sourceConnector]);
 
   const onSelectSourceChain = (chain: Chain) => {
+    if (sourceChain?.type !== chain.type) setSourceAccount(undefined);
     const connector = getChainConnector(chain.genesis);
     const destChain = connector.getDestinationChains()[0];
     const selectedAsset = connector.getSupportedAssets(destChain)[0];
@@ -92,8 +95,12 @@ export const TheaProvider = ({
   );
 
   const destinationAccountSelected = useMemo(
-    () => destinationAccount ?? selectedWallet,
-    [destinationAccount, selectedWallet]
+    () =>
+      destinationAccount ??
+      (destinationChain?.type === ChainType.Substrate
+        ? selectedWallet
+        : undefined),
+    [destinationAccount, selectedWallet, destinationChain?.type]
   );
 
   const onSelectDestinationChain = (chain: Chain) => {
@@ -103,6 +110,7 @@ export const TheaProvider = ({
         .some((e) => e.genesis === chain.genesis)
     )
       return;
+    if (destinationChain?.type !== chain.type) setDestinationAccount(undefined);
     const selectedAsset = sourceConnector.getSupportedAssets(chain)[0];
     setDestinationChain(chain);
     setSelectedAsset(selectedAsset);
@@ -130,14 +138,28 @@ export const TheaProvider = ({
     setSourceChain(source);
     setDestinationChain(destination);
     const connector = getChainConnector(source.genesis);
-    const asset = selectedAsset ?? connector.getSupportedAssets(destination)[0];
+    const supportedAssets = connector.getSupportedAssets(destination);
+    const asset =
+      supportedAssets.find((a) => a.ticker === selectedAsset?.ticker) ??
+      supportedAssets[0];
     setSelectedAsset(asset);
+
+    // Swap wallets if chain type is different
+    if (source.type !== destination.type) {
+      setSourceAccount(undefined);
+      setDestinationAccount(undefined);
+    }
   };
 
   /* Polkadex */
-  const isPolkadexChain = useMemo(
+  const isSourcePolkadex = useMemo(
     () => !!(sourceChain?.genesis === GENESIS[0]),
     [sourceChain?.genesis]
+  );
+
+  const isDestinationPolkadex = useMemo(
+    () => !!(destinationChain?.genesis === GENESIS[0]),
+    [destinationChain?.genesis]
   );
 
   const polkadexConnector = useMemo(
@@ -150,7 +172,10 @@ export const TheaProvider = ({
     [polkadexConnector]
   );
 
-  const { data: polkadexDestinationBalances = [] } = useTheaBalances({
+  const {
+    data: polkadexDestinationBalances = [],
+    isLoading: isPolkadexDestinationBalancesLoading,
+  } = useTheaBalances({
     connector: polkadexConnector,
     sourceAddress: destinationAccountSelected?.address,
     assets: polkadexAssets,
@@ -164,6 +189,14 @@ export const TheaProvider = ({
             ?.amount ?? 0 // Remove static data
         : 0,
     [polkadexDestinationBalances]
+  );
+
+  const selectedAssetIdPolkadex = useMemo(
+    () =>
+      polkadexAssets?.find((e) =>
+        e.ticker.includes(selectedAsset?.ticker ?? "")
+      )?.id,
+    [polkadexAssets, selectedAsset?.ticker]
   );
 
   /* Default Selection Logic  */
@@ -243,7 +276,7 @@ export const TheaProvider = ({
     isLoading: transferConfigLoading,
     isFetching: transferConfigFetching,
     isSuccess: transferConfigSuccess,
-    refetch: transferConfigRefetch,
+    refetch: refetchTransferConfig,
   } = useTheaConfig({
     connector: sourceConnector,
     destinationAddress: destinationAccountSelected?.address,
@@ -251,10 +284,6 @@ export const TheaProvider = ({
     selectedAsset,
     destinationChain,
   });
-
-  const onRefetchTransferConfig = useCallback(async () => {
-    await transferConfigRefetch();
-  }, [transferConfigRefetch]);
 
   const selectedAssetBalance = useMemo(
     () =>
@@ -297,11 +326,14 @@ export const TheaProvider = ({
         transferConfig,
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
         transferConfigSuccess,
-        onRefetchTransferConfig,
+        onRefetchTransferConfig: refetchTransferConfig,
 
         destinationPDEXBalance,
-        isPolkadexChain,
+        isDestinationPDEXBalanceLoading: isPolkadexDestinationBalancesLoading,
+        isSourcePolkadex,
+        isDestinationPolkadex,
         polkadexAssets,
+        selectedAssetIdPolkadex,
       }}
     >
       {children}
@@ -342,10 +374,13 @@ type State = {
   transferConfig: TransferConfig | undefined;
   transferConfigLoading: boolean;
   transferConfigSuccess: boolean;
-  onRefetchTransferConfig: () => Promise<void>;
+  onRefetchTransferConfig?: UseQueryResult["refetch"];
 
   destinationPDEXBalance: number;
-  isPolkadexChain: boolean;
+  isDestinationPDEXBalanceLoading: boolean;
+  isSourcePolkadex: boolean;
+  isDestinationPolkadex: boolean;
+  selectedAssetIdPolkadex?: string;
 };
 export const Context = createContext<State>({
   sourceConnector: null,
@@ -378,10 +413,11 @@ export const Context = createContext<State>({
   transferConfig: undefined,
   transferConfigLoading: false,
   transferConfigSuccess: false,
-  onRefetchTransferConfig: async () => {},
 
   destinationPDEXBalance: 0,
-  isPolkadexChain: false,
+  isDestinationPDEXBalanceLoading: false,
+  isSourcePolkadex: false,
+  isDestinationPolkadex: false,
 });
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {

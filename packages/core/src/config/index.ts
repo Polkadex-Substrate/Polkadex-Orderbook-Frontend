@@ -24,6 +24,7 @@ export const defaultConfig: DefaultConfig = {
   msPricesUpdates: 1000,
   maintenanceMode: process.env.MAINTENACE_MODE === "true",
   enableLmp: process.env.ENABLE_LMP === "true",
+  isBridgeEnabled: process.env.IS_BRIDGE_ENABLED !== "false",
   availableRoutes: ["/trading", "/balances", "/transfer"],
   underMaintenance: process.env.UNDER_MAINTENACE?.split(",") ?? [],
   mainUrl: process.env.MAIN_URL || "/trading",

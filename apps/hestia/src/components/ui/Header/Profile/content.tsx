@@ -92,7 +92,10 @@ export const Content = () => {
   );
 
   const walletsFiltered = useMemo(
-    () => extensionAccounts?.filter(({ source }) => source === sourceId),
+    () =>
+      extensionAccounts?.filter(
+        ({ source, type }) => source === sourceId && type === "sr25519"
+      ),
     [extensionAccounts, sourceId]
   );
 
@@ -347,7 +350,9 @@ export const Content = () => {
               installedExtensions={extensionsStatus}
               onConnectProvider={(e) => onSelectExtension?.(e)}
               onClose={() => props?.onChangeInteraction(false)}
-              onConnectCallback={() => props?.onPage("Authorization", true)}
+              onConnectCallback={() =>
+                props?.onPage("ConnectAuthorization", true)
+              }
             />
             <Authorization
               key="ConnectAuthorization"

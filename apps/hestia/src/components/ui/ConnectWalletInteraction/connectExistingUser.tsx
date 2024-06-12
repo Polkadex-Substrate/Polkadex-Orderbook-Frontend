@@ -214,7 +214,10 @@ const CardsComponent = ({ onClose, onNext }: InteractableProps) => {
       </Interactable.Card>
       <Interactable.Card pageName="RegisterFundingAccount">
         <RegisterFundingAccount
-          onCreateAccount={onRegisterTradeAccount}
+          onCreateAccount={async (e) => {
+            await onRegisterTradeAccount(e);
+            onClose();
+          }}
           fundWallet={selectedWallet}
           loading={registerStatus === "loading"}
           onClose={onReset}
