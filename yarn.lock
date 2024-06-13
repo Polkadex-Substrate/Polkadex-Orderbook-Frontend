@@ -3801,20 +3801,12 @@
     bignumber "^1.1.0"
     typescript latest
 
-"@polkadex/numericals@*":
+"@polkadex/numericals@*", "@polkadex/numericals@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@polkadex/numericals/-/numericals-0.4.0.tgz#7199e0e7cc2b77a523b1c581daf235ae31758086"
   integrity sha512-BBeh//6CCPQCqsaJTkt3hvAmgpjgs9+DKj4YyvUo8U5ZfxsjeRKqzGeaR/xRBj/8AfX3Jt7lUcKhEPABpBvJOw==
   dependencies:
     "@polkadot-cloud/utils" "^0.3.0"
-    bignumber "^1.1.0"
-    millify "^6.1.0"
-
-"@polkadex/numericals@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/numericals/-/numericals-0.3.0.tgz#6e61e38b4ac9c0c3d5b6319c10303f0947adad9f"
-  integrity sha512-1fg9nuOPDXPSkpoDzhhrglKeodVnqeiY1WFgAmmYqV8ynLQGfaqPcndBGiyniaWAtW4rlaZDDccShX2iR4lZQg==
-  dependencies:
     bignumber "^1.1.0"
     millify "^6.1.0"
 
@@ -3866,10 +3858,10 @@
     "@polkadex/types" "1.1.61"
     "@polkadex/utils" "1.1.46"
 
-"@polkadex/thea@^5.8.1":
-  version "5.8.1"
-  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-5.8.1.tgz#51bdfff87abfb6db9903c53236e99771343aea92"
-  integrity sha512-T+WKntStmdB8e5NX98Q16+AA+TgWHbfxIeNjyZ4zc04B8zXWYHfnHthatoWyCtEVV/mVl+UZOEXD/8k3tIIzWA==
+"@polkadex/thea@^5.9.0":
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-5.9.0.tgz#2da005f3738085682db409f5020edd58b9f5af13"
+  integrity sha512-mrW5JZuAR41558Cb73ijIWb9bTwYa3kDuJ5SoxyF8xMxnAdJMIRKw14Cio/mOcWfyRZKZheqkkGErHxCGMRYZg==
   dependencies:
     "@moonbeam-network/xcm-sdk" "^2.1.2"
     "@polkadex/numericals" "*"

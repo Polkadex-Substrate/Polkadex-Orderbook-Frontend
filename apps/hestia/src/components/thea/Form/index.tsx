@@ -79,10 +79,13 @@ export const Form = () => {
   };
 
   const loading = useMemo(() => {
+    if (!sourceAccount || !destinationAccount) return false;
     const isLoading = transferConfigLoading || sourceBalancesLoading;
     if (!isDestinationPolkadex) return isLoading;
     return isLoading || poolsLoading || isDestinationPDEXBalanceLoading;
   }, [
+    sourceAccount,
+    destinationAccount,
     poolsLoading,
     sourceBalancesLoading,
     transferConfigLoading,
@@ -320,16 +323,17 @@ export const Form = () => {
                 <Typography.Text appearance="primary">Amount</Typography.Text>
                 <HoverInformation>
                   <HoverInformation.Trigger
-                    loading={loading}
+                    loading={sourceBalancesLoading}
                     className="min-w-20"
                   >
                     <RiInformationFill className="w-3 h-3 text-actionInput" />
                     <Typography.Text size="xs" appearance="primary">
                       Available: {balanceAmount} {selectedAsset?.ticker}
                     </Typography.Text>
-                    {/* <HoverInformation.Arrow />  //TEMp */}
                   </HoverInformation.Trigger>
-                  <HoverInformation.Content>
+                  <HoverInformation.Content
+                    className={classNames(!loading && "hidden")}
+                  >
                     <ResponsiveCard label="Source fee" loading={loading}>
                       {sourceFeeAmount} {sourceFeeTicker}
                     </ResponsiveCard>

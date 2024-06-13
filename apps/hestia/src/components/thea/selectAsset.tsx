@@ -64,7 +64,7 @@ export const SelectAsset = ({
                   >
                     {supportedAssets?.map((e, i) => {
                       const balance =
-                        sourceBalances?.find((x) => x.ticker.includes(e.ticker))
+                        sourceBalances?.find((x) => x.ticker === e.ticker)
                           ?.amount ?? 0;
 
                       return (
