@@ -46,7 +46,7 @@ export function Template() {
             paddingBottom,
           }}
         >
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col min-h-[360px]">
             <Tabs className="flex flex-row flex-1" defaultValue="deposit">
               <div className="flex flex-col">
                 <Tabs.List className="flex flex-col items-start gap-0 py-4">

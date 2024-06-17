@@ -12,23 +12,27 @@ import {
 import { RiInformationFill } from "@remixicon/react";
 import classNames from "classnames";
 import { useMeasure } from "react-use";
+import { useState } from "react";
 
-import { SelectNetwork } from "../selectNetwork";
+import { SelectNetwork, fakeNetworks } from "../selectNetwork";
 import { SelectAsset } from "../selectAsset";
 
 export const Deposit = () => {
   const [ref, bounds] = useMeasure<HTMLDivElement>();
 
+  const [network, setNetwork] = useState(fakeNetworks[0]);
+  const isEVM = network.genesis === "0x006";
+
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-col gap-10 max-w-[500px]">
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-col gap-2">
-            <Typography.Text size="lg" bold>
-              Withdraw to
-            </Typography.Text>
-            <SelectNetwork />
-          </div>
+    <div className="flex flex-col max-w-[500px]">
+      <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
+          <Typography.Text size="lg" bold>
+            Deposit to
+          </Typography.Text>
+          <SelectNetwork network={network} setNetwork={(e) => setNetwork(e)} />
+        </div>
+        <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2">
             <Typography.Heading>Asset</Typography.Heading>
             <HoverInformation>
@@ -89,6 +93,9 @@ export const Deposit = () => {
               </Tooltip>
             </div>
           </div>
+        </div>
+
+        {isEVM && (
           <div className="flex flex-col gap-2">
             <Typography.Text size="lg" bold>
               Address
@@ -97,8 +104,9 @@ export const Deposit = () => {
               <AccountCombobox account={null} setAccount={(e) => {}} />
             </div>
           </div>
-          <Button.Light appearance="secondary">Withdraw</Button.Light>
-        </div>
+        )}
+
+        <Button.Light appearance="secondary">Withdraw</Button.Light>
       </div>
     </div>
   );

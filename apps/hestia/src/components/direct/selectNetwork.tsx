@@ -8,12 +8,17 @@ import {
   ScrollArea,
 } from "@polkadex/ux";
 import { RiArrowDownSLine } from "@remixicon/react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useMeasure } from "react-use";
 
-export const SelectNetwork = () => {
-  const [network, setNetwork] = useState(fakeNetworks[0]);
-
+type Network = (typeof fakeNetworks)[0];
+export const SelectNetwork = ({
+  network,
+  setNetwork,
+}: {
+  network: Network;
+  setNetwork: Dispatch<SetStateAction<Network>>;
+}) => {
   const [open, setOpen] = useState(false);
   const [ref, bounds] = useMeasure<HTMLButtonElement>();
   return (
@@ -78,7 +83,7 @@ export const SelectNetwork = () => {
   );
 };
 
-const fakeNetworks = [
+export const fakeNetworks = [
   {
     name: "Polkadot",
     logo: "Polkadot",
@@ -115,8 +120,8 @@ const fakeNetworks = [
     isTestnet: false,
   },
   {
-    name: "Moombeam",
-    logo: "Moombeam",
+    name: "Moonbeam",
+    logo: "Moonbeam",
     genesis: "0x006",
     type: "...",
     isTestnet: false,
