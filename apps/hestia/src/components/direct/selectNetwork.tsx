@@ -1,73 +1,145 @@
 "use client";
-import { Typography, Chain, Button, Dropdown } from "@polkadex/ux";
+import {
+  Typography,
+  Chain,
+  Button,
+  Popover,
+  Searchable,
+  ScrollArea,
+} from "@polkadex/ux";
 import { RiArrowDownSLine } from "@remixicon/react";
-import { PropsWithChildren, useState } from "react";
+import { useState } from "react";
 import { useMeasure } from "react-use";
 
-const SelectNetwork = ({
-  name = "",
-  icon = "",
-  children,
-}: PropsWithChildren<{
-  name?: string;
-  icon?: string;
-}>) => {
-  const [state, setState] = useState(false);
+export const SelectNetwork = () => {
+  const [network, setNetwork] = useState(fakeNetworks[0]);
+
+  const [open, setOpen] = useState(false);
   const [ref, bounds] = useMeasure<HTMLButtonElement>();
   return (
-    <Dropdown>
-      <Dropdown.Trigger asChild ref={ref}>
+    <Popover open={open} onOpenChange={setOpen}>
+      <Popover.Trigger ref={ref} superpositionTrigger className="w-full">
         <Button.Outline
           asChild
           type="button"
           appearance="quaternary"
           className="gap-1 px-2 py-7 justify-between w-full cursor-pointer"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setState(!state);
-          }}
         >
           <div>
             <div className="flex items-center gap-2">
-              <Chain name={icon} />
+              <Chain name={network.name} />
               <Typography.Text size="lg" bold>
-                {name ?? "Select"}
+                {network.name ?? "Select"}
               </Typography.Text>
             </div>
             <RiArrowDownSLine className="w-4 h-4" />
           </div>
         </Button.Outline>
-      </Dropdown.Trigger>
-      <Dropdown.Content
-        className="max-h-[250px] hover:overflow-auto overflow-hidden"
-        style={{ minWidth: bounds.width + 20 }}
-        sideOffset={0}
-      >
-        {children}
-      </Dropdown.Content>
-    </Dropdown>
+      </Popover.Trigger>
+      <Popover.Content style={{ minWidth: bounds.width }}>
+        <Searchable className="bg-level-0">
+          <Searchable.Input placeholder="Search network" />
+          <Searchable.List className="overflow-hidden">
+            <div className="flex gap-2">
+              <div className="flex flex-col flex-1">
+                <Searchable.Empty className="flex-1 flex items-center justify-center">
+                  No result found
+                </Searchable.Empty>
+                <ScrollArea className="max-h-[280px]">
+                  <Searchable.Group heading="Available chains">
+                    {fakeNetworks.map((e) => {
+                      return (
+                        <Searchable.Item
+                          key={e.name}
+                          value={e.name}
+                          className="mb-1 mr-1"
+                          onSelect={() => {
+                            setNetwork(e);
+                            setOpen(false);
+                          }}
+                        >
+                          <div className="flex items-center gap-2 rounded-md w-full">
+                            <Chain name={e.logo} size="sm" />
+                            <Typography.Text>{e.name}</Typography.Text>
+                          </div>
+                        </Searchable.Item>
+                      );
+                    })}
+                  </Searchable.Group>
+                  <ScrollArea.Bar orientation="vertical" />
+                </ScrollArea>
+              </div>
+            </div>
+          </Searchable.List>
+        </Searchable>
+      </Popover.Content>
+      <Popover.Overlay />
+    </Popover>
   );
 };
 
-export const Card = ({
-  icon,
-  value,
-  onSelect,
-}: {
-  icon: string;
-  value: string;
-  onSelect: () => void;
-}) => {
-  return (
-    <Dropdown.Item onSelect={onSelect}>
-      <div className="flex items-center gap-2 rounded-md w-full">
-        <Chain name={icon} size="sm" />
-        <Typography.Text>{value}</Typography.Text>
-      </div>
-    </Dropdown.Item>
-  );
-};
-
-SelectNetwork.Card = Card;
-export { SelectNetwork };
+const fakeNetworks = [
+  {
+    name: "Polkadot",
+    logo: "Polkadot",
+    genesis: "0x003",
+    type: "...",
+    isTestnet: false,
+  },
+  {
+    name: "Polkadex",
+    logo: "Polkadex",
+    genesis: "0x001",
+    type: "...",
+    isTestnet: false,
+  },
+  {
+    name: "AssetHub",
+    logo: "AssetHub",
+    genesis: "0x002",
+    type: "...",
+    isTestnet: false,
+  },
+  {
+    name: "Astar",
+    logo: "Astar",
+    genesis: "0x004",
+    type: "...",
+    isTestnet: false,
+  },
+  {
+    name: "Phala",
+    logo: "Phala",
+    genesis: "0x005",
+    type: "...",
+    isTestnet: false,
+  },
+  {
+    name: "Moombeam",
+    logo: "Moombeam",
+    genesis: "0x006",
+    type: "...",
+    isTestnet: false,
+  },
+  {
+    name: "Unique",
+    logo: "Unique",
+    genesis: "0x007",
+    type: "...",
+    isTestnet: false,
+  },
+  {
+    name: "Interlay",
+    logo: "Interlay",
+    genesis: "0x008",
+    type: "...",
+    isTestnet: false,
+  },
+  {
+    name: "Bifrost",
+    logo: "Bifrost",
+    genesis: "0x009",
+    type: "...",
+    isTestnet: false,
+  },
+];

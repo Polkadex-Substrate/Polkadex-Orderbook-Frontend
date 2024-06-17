@@ -1,18 +1,17 @@
 "use client";
 
-import { Button, GenericMessage, Tabs, Typography } from "@polkadex/ux";
+import { GenericMessage, Tabs } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { Fragment, useMemo, useState } from "react";
-import { RiRefreshLine } from "@remixicon/react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { useMeasure } from "react-use";
-import Link from "next/link";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
-import { Help } from "./Help";
+import { Help } from "./help";
 import { Deposit } from "./Deposit";
 import { History } from "./History";
+import { Faq } from "./faq";
 
 import { Footer, Header } from "@/components/ui";
 
@@ -52,13 +51,13 @@ export function Template() {
               <div className="flex flex-col">
                 <Tabs.List className="flex flex-col items-start gap-0 py-4">
                   <Tabs.Trigger
-                    className="px-10 py-2 w-full text-left"
+                    className="pl-4 pr-8 py-2 w-full text-left"
                     value="deposit"
                   >
                     Deposit
                   </Tabs.Trigger>
                   <Tabs.Trigger
-                    className="px-10 py-2 w-full text-left"
+                    className="pl-4 pr-8 py-2 w-full text-left"
                     value="withdraw"
                   >
                     Withdraw
@@ -71,20 +70,7 @@ export function Template() {
                 </Tabs.Content>
                 <Tabs.Content value="withdraw">Withdraw</Tabs.Content>
               </div>
-              <div className="flex flex-col gap-4 p-6">
-                <Typography.Heading type="h2">FAQ</Typography.Heading>
-                <div className="flex flex-col gap-2 max-w-[200px]">
-                  {fakeNews.map((e) => (
-                    <Link
-                      key={e.id}
-                      className="text-primary hover:text-primary-base transition-colors duration-300 text-sm"
-                      href={e.link}
-                    >
-                      {e.title}
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              <Faq />
             </Tabs>
             <Tabs
               value={activeTab}
@@ -92,25 +78,10 @@ export function Template() {
               className="border-t border-primary"
             >
               <div className="flex-1 flex flex-col">
-                <div className="flex items-center justify-between border-b border-primary px-4 w-full py-2">
-                  <Tabs.List>
-                    <Tabs.Trigger value="history">History</Tabs.Trigger>
-                  </Tabs.List>
-                  <Button.Light
-                    appearance="secondary"
-                    size="xs"
-                    className="gap-1"
-                    onClick={() => {}}
-                  >
-                    <RiRefreshLine className="w-4 h-4 text-primary" />
-                    {false && (
-                      <Typography.Text appearance="primary" size="xs">
-                        Refetching..
-                      </Typography.Text>
-                    )}
-                  </Button.Light>
-                </div>
-                {false ? (
+                <Tabs.List className="border-b border-primary px-4 w-full py-2">
+                  <Tabs.Trigger value="history">History</Tabs.Trigger>
+                </Tabs.List>
+                {extensionAccountPresent ? (
                   <Fragment>
                     <Tabs.Content value="history" className="flex flex-col">
                       <History searchTerm="" />
@@ -118,7 +89,7 @@ export function Template() {
                   </Fragment>
                 ) : (
                   <GenericMessage
-                    title="Connect a source wallet"
+                    title="Connect a wallet"
                     illustration="ConnectAccount"
                     className="bg-level-0 border-y border-y-primary"
                     imageProps={{
@@ -147,31 +118,3 @@ export function Template() {
     </Fragment>
   );
 }
-
-const fakeNews = [
-  {
-    id: 1,
-    title: "How to withdraw from Ethereum?",
-    link: "#",
-  },
-  {
-    id: 2,
-    title: "Why hasn't my withdraw arrived?",
-    link: "#",
-  },
-  {
-    id: 3,
-    title: "How to withdraw from Polkadot?",
-    link: "#",
-  },
-  {
-    id: 3,
-    title: "How to find my transaction ID?",
-    link: "#",
-  },
-  {
-    id: 4,
-    title: "How to withdraw from AssetHub?",
-    link: "#",
-  },
-];
