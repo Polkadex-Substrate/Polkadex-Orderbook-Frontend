@@ -15,23 +15,6 @@ import { Transaction } from "@/hooks";
 const columnHelper = createColumnHelper<Transaction>();
 
 export const columns = [
-  columnHelper.accessor((row) => row.timestamp, {
-    id: "date",
-    cell: (e) => {
-      const date = formatedDate(new Date(e.getValue()), false);
-      return (
-        <Typography.Text size="sm" className=" whitespace-nowrap">
-          {date}
-        </Typography.Text>
-      );
-    },
-    header: () => (
-      <Typography.Text size="xs" appearance="primary">
-        Date
-      </Typography.Text>
-    ),
-    footer: (e) => e.column.id,
-  }),
   columnHelper.accessor((row) => row, {
     id: "token",
     cell: (e) => {
@@ -103,6 +86,23 @@ export const columns = [
     header: () => (
       <Typography.Text size="xs" appearance="primary">
         Hash
+      </Typography.Text>
+    ),
+    footer: (e) => e.column.id,
+  }),
+  columnHelper.accessor((row) => row.timestamp, {
+    id: "date",
+    cell: (e) => {
+      const date = formatedDate(new Date(e.getValue()), false);
+      return (
+        <Typography.Text size="sm" className=" whitespace-nowrap">
+          {date}
+        </Typography.Text>
+      );
+    },
+    header: () => (
+      <Typography.Text size="xs" appearance="primary">
+        Date
       </Typography.Text>
     ),
     footer: (e) => e.column.id,

@@ -23,10 +23,13 @@ import {
 import classNames from "classnames";
 import { useWindowSize } from "usehooks-ts";
 import { useProfile } from "@orderbook/core/providers/user/profile";
+import { toUnit } from "@polkadex/numericals";
 
 import { columns } from "./columns";
 import { Filters } from "./filters";
 import { ResponsiveTable } from "./responsiveTable";
+
+import { Transaction } from "@/hooks";
 
 const actionKeys = ["token", "date"];
 const responsiveKeys = ["hash", "date"];
@@ -40,21 +43,23 @@ export const History = forwardRef<
   } = useProfile();
 
   const [responsiveState, setResponsiveState] = useState(false);
-  const [responsiveData, setResponsiveData] = useState<any | null>(null);
+  const [responsiveData, setResponsiveData] = useState<Transaction | null>(
+    null
+  );
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const { width } = useWindowSize();
 
-  const deposits: any = [];
-  const depositsLoading: any = false;
-  const depositsRefetching: any = false;
-  const onDepositsRefetch = () => {};
+  const deposits: any = fakeData;
+  const depositsLoading = false;
+  const depositsRefetching = false;
+  const onDepositsRefetch = useCallback(() => {}, []);
 
-  const withdrawals: any = [];
-  const withdrawalsLoading: any = false;
-  const withdrawalsRefetching: any = false;
-  const onWithdrawalsRefetch = () => {};
+  const withdrawals = useMemo(() => [], []);
+  const withdrawalsLoading = false;
+  const withdrawalsRefetching = false;
+  const onWithdrawalsRefetch = useCallback(() => {}, []);
 
   const onRefetch = useCallback(async () => {
     await onDepositsRefetch();
@@ -203,7 +208,9 @@ export const History = forwardRef<
                     </Table.Row>
                   ))}
                 </Table.Body>
-                <Table.Caption>Bridge history table</Table.Caption>
+                <Table.Caption>
+                  Deposits/Withdrawals history table
+                </Table.Caption>
               </Table>
             </div>
           </div>
@@ -223,3 +230,35 @@ export const History = forwardRef<
 });
 
 History.displayName = "History";
+
+const fakeData = [
+  {
+    timestamp: Number(new Date().getTime()),
+    amount: toUnit(10, 12),
+    asset: {
+      id: "2",
+      ticker: "PDEX",
+      logo: "PDEX",
+      name: "Polkadex",
+      decimal: 12,
+    },
+    from: {
+      name: "Polkadex",
+      logo: "Polkadex",
+      genesis: "0x001",
+      type: "...",
+      isTestnet: false,
+    },
+    id: 1,
+    to: {
+      name: "Polkadot",
+      logo: "Polkadot",
+      genesis: "0x003",
+      type: "...",
+      isTestnet: false,
+    },
+    status: "Completed",
+    hash: "0x00001",
+    isDeposit: true,
+  },
+];

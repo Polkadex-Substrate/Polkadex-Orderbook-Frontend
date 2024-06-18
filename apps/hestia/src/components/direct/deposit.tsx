@@ -9,13 +9,13 @@ import {
   Tooltip,
   AccountCombobox,
 } from "@polkadex/ux";
-import { RiInformationFill } from "@remixicon/react";
+import { RiCheckLine, RiInformationFill } from "@remixicon/react";
 import classNames from "classnames";
 import { useMeasure } from "react-use";
 import { useState } from "react";
 
-import { SelectNetwork, fakeNetworks } from "../selectNetwork";
-import { SelectAsset } from "../selectAsset";
+import { SelectNetwork, fakeNetworks } from "./selectNetwork";
+import { SelectAsset } from "./selectAsset";
 
 export const Deposit = () => {
   const [ref, bounds] = useMeasure<HTMLDivElement>();
@@ -24,17 +24,27 @@ export const Deposit = () => {
   const isEVM = network.genesis === "0x006";
 
   return (
-    <div className="flex flex-col max-w-[500px]">
-      <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-2">
-          <Typography.Text size="lg" bold>
+    <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
+      <div className="flex flex-col">
+        <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
+          <Typography.Heading size="lg" className="leading-none">
             Deposit to
-          </Typography.Text>
+          </Typography.Heading>
           <SelectNetwork network={network} setNetwork={(e) => setNetwork(e)} />
+          <div className="flex item-center justify-center bg-success-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
+            <RiCheckLine className="w-full h-full" />
+          </div>
         </div>
-        <div className="flex flex-col gap-2">
+        <div
+          className={classNames(
+            isEVM && "border-l-2 border-success-base",
+            "flex flex-col gap-2 pb-5 px-8 relative"
+          )}
+        >
           <div className="flex items-center justify-between gap-2">
-            <Typography.Heading>Asset</Typography.Heading>
+            <Typography.Heading size="lg" className="leading-none">
+              Asset
+            </Typography.Heading>
             <HoverInformation>
               <HoverInformation.Trigger className="min-w-20">
                 <RiInformationFill className="w-3 h-3 text-actionInput" />
@@ -93,20 +103,29 @@ export const Deposit = () => {
               </Tooltip>
             </div>
           </div>
+          <div className="flex item-center justify-center bg-success-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
+            <RiCheckLine className="w-full h-full" />
+          </div>
         </div>
 
         {isEVM && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 px-8 pb-5 relative">
             <Typography.Text size="lg" bold>
               Address
             </Typography.Text>
             <div className="border border-primary rounded-sm px-2 py-4">
-              <AccountCombobox account={null} setAccount={(e) => {}} />
+              <AccountCombobox account={null} setAccount={() => {}} />
+            </div>
+            <div className="flex item-center justify-center bg-success-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
+              <RiCheckLine className="w-full h-full" />
             </div>
           </div>
         )}
-
-        <Button.Light appearance="secondary">Withdraw</Button.Light>
+        <div className="px-8 w-full">
+          <Button.Light className="w-full" appearance="secondary">
+            Deposit
+          </Button.Light>
+        </div>
       </div>
     </div>
   );

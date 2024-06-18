@@ -9,7 +9,8 @@ import { useMeasure } from "react-use";
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
 import { Help } from "./help";
-import { Deposit } from "./Deposit";
+import { Deposit } from "./deposit";
+import { Withdraw } from "./withdraw";
 import { History } from "./History";
 import { Faq } from "./faq";
 
@@ -46,29 +47,34 @@ export function Template() {
             paddingBottom,
           }}
         >
-          <div className="flex-1 flex flex-col min-h-[360px]">
-            <Tabs className="flex flex-row flex-1" defaultValue="deposit">
+          <div className="flex-1 flex flex-col">
+            <Tabs
+              className="flex flex-row flex-1 md:min-h-[430px] max-md:flex-col md:flex-row"
+              defaultValue="deposit"
+            >
               <div className="flex flex-col">
-                <Tabs.List className="flex flex-col items-start gap-0 py-4">
+                <Tabs.List className="flex max-md:flex-row md:flex-col items-start gap-0 py-4">
                   <Tabs.Trigger
-                    className="pl-4 pr-8 py-2 w-full text-left"
+                    className="pl-4 md:pr-10 py-2 md:w-full text-left data-[state=active]:text-success-base data-[state=active]:hover:text-success-hover"
                     value="deposit"
                   >
                     Deposit
                   </Tabs.Trigger>
                   <Tabs.Trigger
-                    className="pl-4 pr-8 py-2 w-full text-left"
+                    className="pl-4 md:pr-10 py-2 md:w-full text-left"
                     value="withdraw"
                   >
                     Withdraw
                   </Tabs.Trigger>
                 </Tabs.List>
               </div>
-              <div className="flex flex-1 border-x border-primary p-8">
+              <div className="flex flex-1 border-x border-primary">
                 <Tabs.Content value="deposit">
                   <Deposit />
                 </Tabs.Content>
-                <Tabs.Content value="withdraw">Withdraw</Tabs.Content>
+                <Tabs.Content value="withdraw">
+                  <Withdraw />
+                </Tabs.Content>
               </div>
               <Faq />
             </Tabs>
@@ -82,11 +88,9 @@ export function Template() {
                   <Tabs.Trigger value="history">History</Tabs.Trigger>
                 </Tabs.List>
                 {extensionAccountPresent ? (
-                  <Fragment>
-                    <Tabs.Content value="history" className="flex flex-col">
-                      <History searchTerm="" />
-                    </Tabs.Content>
-                  </Fragment>
+                  <Tabs.Content value="history" className="flex flex-col">
+                    <History searchTerm="" />
+                  </Tabs.Content>
                 ) : (
                   <GenericMessage
                     title="Connect a wallet"

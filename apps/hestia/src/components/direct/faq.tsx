@@ -6,9 +6,9 @@ import React from "react";
 
 export const Faq = () => {
   return (
-    <div className="flex flex-col gap-4 p-6">
+    <div className="flex flex-col gap-4 max-md:p-4 md:p-6">
       <Typography.Heading type="h2">FAQ</Typography.Heading>
-      <div className="flex flex-col gap-2 max-w-[200px]">
+      <div className="flex flex-col gap-2 md:max-w-[200px]">
         {fakeNews.map((e) => (
           <Link
             key={e.id}

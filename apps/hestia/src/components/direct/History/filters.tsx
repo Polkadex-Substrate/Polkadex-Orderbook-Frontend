@@ -68,7 +68,7 @@ export const Filters = <TData,>({
             {table.getColumn("source") && (
               <FacetedFilter
                 column={table.getColumn("source")}
-                title="Source chain"
+                title="Chain"
                 values={availableChains}
               />
             )}
@@ -119,7 +119,7 @@ export const Filters = <TData,>({
               {table.getColumn("source") && (
                 <FacetedFilter
                   column={table.getColumn("source")}
-                  title="Source chain"
+                  title="Chain"
                   values={availableChains}
                 />
               )}
