@@ -5,6 +5,7 @@ import Link from "next/link";
 import React from "react";
 
 export const Faq = () => {
+  if (!fakeNews) return null;
   return (
     <div className="flex flex-col gap-4 max-md:p-4 md:p-6">
       <Typography.Heading type="h2">FAQ</Typography.Heading>
@@ -36,7 +37,7 @@ const fakeNews = [
     link: "#",
   },
   {
-    id: 3,
+    id: 0,
     title: "How to withdraw from Polkadot?",
     link: "#",
   },

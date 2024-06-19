@@ -38,7 +38,7 @@ export const columns = [
     sortingFn: (rowA, rowB) => {
       const numA = rowA.original.amount;
       const numB = rowB.original.amount;
-      return numA > numB ? 1 : -1;
+      return numA > numB ? 1 : numA < numB ? -1 : 0;
     },
   }),
   columnHelper.accessor((row) => row, {
