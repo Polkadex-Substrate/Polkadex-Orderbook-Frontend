@@ -9,7 +9,7 @@ import {
   ScrollArea,
   TokenCard,
 } from "@polkadex/ux";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { RiArrowDownSLine } from "@remixicon/react";
 
 export const SelectAsset = ({ width }: { width: number }) => {
@@ -20,22 +20,24 @@ export const SelectAsset = ({ width }: { width: number }) => {
     <Popover open={open} onOpenChange={setOpen}>
       <Popover.Trigger superpositionTrigger>
         <Button.Outline
+          asChild
           type="button"
           appearance="secondary"
           className="gap-1 px-2 justify-between h-full"
-          onClick={() => {}}
         >
-          <div className="flex items-center gap-2">
-            <Token
-              name={asset.ticker}
-              size="md"
-              appearance={asset.ticker}
-              className="rounded-full border border-primary"
-            />
+          <Fragment>
+            <div className="flex items-center gap-2">
+              <Token
+                name={asset.ticker}
+                size="md"
+                appearance={asset.ticker}
+                className="rounded-full border border-primary"
+              />
 
-            <Typography.Text size="md">{asset.ticker}</Typography.Text>
-          </div>
-          <RiArrowDownSLine className="w-4 h-4" />
+              <Typography.Text size="md">{asset.ticker}</Typography.Text>
+            </div>
+            <RiArrowDownSLine className="w-4 h-4" />
+          </Fragment>
         </Button.Outline>
       </Popover.Trigger>
       <Popover.Content style={{ minWidth: width }} side="bottom" align="start">
