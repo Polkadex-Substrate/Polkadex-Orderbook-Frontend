@@ -41,6 +41,9 @@ export const Export = ({ data, address }: { data: any[]; address: string }) => {
           date,
         };
       });
+    } catch (error) {
+      onHandleError("Failed to prepare export data: " + error.message);
+      return [];
     } finally {
       setLoading(false);
     }
