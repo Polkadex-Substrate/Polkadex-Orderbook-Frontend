@@ -28,7 +28,7 @@ export const Deposit = () => {
       <div className="flex flex-col">
         <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
           <Typography.Heading size="lg" className="leading-none">
-            Deposit to
+            Deposit from
           </Typography.Heading>
           <SelectNetwork network={network} setNetwork={(e) => setNetwork(e)} />
           <div className="flex item-center justify-center bg-success-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
