@@ -3858,10 +3858,10 @@
     "@polkadex/types" "1.1.61"
     "@polkadex/utils" "1.1.46"
 
-"@polkadex/thea@^5.9.0":
-  version "5.9.0"
-  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-5.9.0.tgz#2da005f3738085682db409f5020edd58b9f5af13"
-  integrity sha512-mrW5JZuAR41558Cb73ijIWb9bTwYa3kDuJ5SoxyF8xMxnAdJMIRKw14Cio/mOcWfyRZKZheqkkGErHxCGMRYZg==
+"@polkadex/thea@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@polkadex/thea/-/thea-6.0.0.tgz#2ecb07e07d9c7d46f756c99cc0456143609a3cbd"
+  integrity sha512-jT1wmCwqSTH3VPTRx68iCcXMPUwktrS4x2HGpzQQYWGOu1jOM8CPRWRA4xKGzWNsrygrCWYP2SoCWacnN6vZog==
   dependencies:
     "@moonbeam-network/xcm-sdk" "^2.1.2"
     "@polkadex/numericals" "*"
