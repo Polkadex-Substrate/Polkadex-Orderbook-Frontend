@@ -64,6 +64,26 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
     [selectedWallet]
   );
 
+  const destinationConnector = useMemo(
+    () => destinationChain && getChainConnector(destinationChain.genesis),
+    [destinationChain]
+  );
+
+  const destinationAssets = useMemo(
+    () => destinationConnector.getAllAssets(),
+    [destinationConnector]
+  );
+
+  const {
+    data: destinationBalances = [],
+    isLoading: destinationBalancesLoading,
+  } = useTheaBalances({
+    connector: destinationConnector,
+    sourceAddress: destinationAccountSelected?.address,
+    assets: destinationAssets,
+    chain: destinationChain.genesis,
+  });
+
   /* Asset */
   const supportedAssets = useMemo(
     () =>
@@ -136,6 +156,10 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
         sourceBalancesSuccess,
         onRefetchSourceBalances: sourceBalancesRefetch,
 
+        destinationAssets,
+        destinationBalances,
+        isDestinationBalanceLoading: destinationBalancesLoading,
+
         transferConfig,
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
         transferConfigSuccess,
@@ -169,6 +193,10 @@ type State = {
   transferConfigLoading: boolean;
   transferConfigSuccess: boolean;
   onRefetchTransferConfig?: UseQueryResult["refetch"];
+
+  destinationAssets: Asset[];
+  destinationBalances: AssetAmount[];
+  isDestinationBalanceLoading: boolean;
 };
 
 export const Context = createContext<State>({
@@ -191,6 +219,10 @@ export const Context = createContext<State>({
   transferConfig: undefined,
   transferConfigLoading: false,
   transferConfigSuccess: false,
+
+  destinationAssets: [],
+  destinationBalances: [],
+  isDestinationBalanceLoading: false,
 });
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
