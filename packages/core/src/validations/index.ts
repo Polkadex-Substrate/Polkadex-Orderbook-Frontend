@@ -80,6 +80,8 @@ export const bridgeValidations = (
 };
 
 export const directDepositValidations = (
+  sourceWalletPresent: boolean,
+  destinationWalletPresent: boolean,
   minAmount = 0,
   maxAmount = 0,
   destinationPDEXBalance = 0,
@@ -91,6 +93,16 @@ export const directDepositValidations = (
   return Yup.object().shape({
     amount: Yup.string()
       .required("Required")
+      .test(
+        CrossChainError.SOURCE_WALLET,
+        CrossChainError.SOURCE_WALLET,
+        () => sourceWalletPresent
+      )
+      .test(
+        ErrorMessages().CONNECT_WALLET,
+        ErrorMessages().CONNECT_WALLET,
+        () => destinationWalletPresent
+      )
       .test(
         ErrorMessages().WHITESPACE_NOT_ALLOWED,
         ErrorMessages().WHITESPACE_NOT_ALLOWED,

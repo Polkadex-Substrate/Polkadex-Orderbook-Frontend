@@ -22,7 +22,7 @@ import {
   THEA_AUTOSWAP,
   parseScientific,
 } from "@orderbook/core/index";
-import { useTheaProvider } from "@orderbook/core/providers";
+import { useDirectDepositProvider } from "@orderbook/core/providers/user/direct";
 
 import { useBridge, usePool } from "@/hooks";
 import {
@@ -53,19 +53,18 @@ export const ConfirmTransaction = ({
     transferConfigLoading,
     destinationPDEXBalance,
     selectedAsset,
-    isDestinationPolkadex,
-    selectedAssetIdPolkadex,
-  } = useTheaProvider();
+    selectedAssetIdDestination,
+  } = useDirectDepositProvider();
   const { destinationFee, sourceFee, sourceFeeBalance, sourceFeeExistential } =
     transferConfig ?? {};
 
   const showAutoSwap = useMemo(
-    () => isDestinationPolkadex && !destinationPDEXBalance,
-    [isDestinationPolkadex, destinationPDEXBalance]
+    () => !destinationPDEXBalance,
+    [destinationPDEXBalance]
   );
 
   const { swapPrice = 0, swapLoading } = usePool({
-    asset: selectedAssetIdPolkadex,
+    asset: selectedAssetIdDestination,
     amount: THEA_AUTOSWAP,
     enabled: showAutoSwap,
   });

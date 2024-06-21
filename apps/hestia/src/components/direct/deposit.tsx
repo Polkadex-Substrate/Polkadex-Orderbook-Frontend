@@ -92,6 +92,8 @@ export const Deposit = () => {
   } = useFormik({
     initialValues,
     validationSchema: directDepositValidations(
+      !!sourceAccount,
+      !!destinationAccount,
       minAmount,
       max?.amount,
       destinationPDEXBalance,
@@ -107,13 +109,14 @@ export const Deposit = () => {
   };
 
   const loading = useMemo(() => {
-    if (!sourceAccount) return false;
+    if (!sourceAccount || !destinationAccount) return false;
     const isLoading = transferConfigLoading || sourceBalancesLoading;
     return isLoading || poolsLoading || isDestinationBalanceLoading;
   }, [
     isDestinationBalanceLoading,
     poolsLoading,
     sourceAccount,
+    destinationAccount,
     sourceBalancesLoading,
     transferConfigLoading,
   ]);

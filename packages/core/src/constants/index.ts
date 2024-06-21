@@ -76,9 +76,12 @@ export const ErrorMessages = (existential = "0", minAmount = "0") => ({
   ZERO: "The amount must be greater than 0",
   MIN: `The amount cannot be less than ${minAmount}`,
   EXISTENTIAL_DEPOSIT: `You need to keep some amount in source chain to cover the existential deposit`,
+  CONNECT_WALLET: "Please connect your account to Orderbook",
 });
 
 export const CrossChainError = {
+  SOURCE_WALLET: "Please choose source account first",
+  DESTINATION_WALLET: "Please choose destination account",
   SOURCE_FEE: "Insufficient balance to pay the transaction fee at source chain",
   NOT_ENOUGH_LIQUIDITY:
     "Not enough PDEX in the destination account. Please transfer 1+ PDEX first.",
