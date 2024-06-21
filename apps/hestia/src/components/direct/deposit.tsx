@@ -174,27 +174,26 @@ export const Deposit = () => {
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
           <div className="flex flex-col">
-            {isEVM && (
-              <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
-                <Typography.Text size="lg" bold>
-                  From
-                </Typography.Text>
-                <div className="border border-primary rounded-sm px-2 py-4">
-                  <SelectWallet
-                    account={sourceAccount}
-                    setAccount={(e) => setSourceAccount(e)}
-                  />
-                </div>
-                <div
-                  className={classNames(
-                    "flex item-center justify-center bg-primary rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5",
-                    sourceAccount && "bg-success-base"
-                  )}
-                >
-                  {sourceAccount && <RiCheckLine className="w-full h-full" />}
-                </div>
+            <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
+              <Typography.Text size="lg" bold>
+                From
+              </Typography.Text>
+              <div className="border border-primary rounded-sm px-2 py-4">
+                <SelectWallet
+                  account={sourceAccount}
+                  setAccount={(e) => setSourceAccount(e)}
+                  evm={sourceChain?.type !== ChainType.Substrate}
+                />
               </div>
-            )}
+              <div
+                className={classNames(
+                  "flex item-center justify-center bg-primary rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5",
+                  sourceAccount && "bg-success-base"
+                )}
+              >
+                {sourceAccount && <RiCheckLine className="w-full h-full" />}
+              </div>
+            </div>
             <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
               <Typography.Heading size="lg" className="leading-none">
                 Network

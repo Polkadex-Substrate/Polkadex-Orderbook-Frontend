@@ -31,9 +31,11 @@ const initialValue = ExtensionsArray.find(({ id }) => id === "talisman");
 export const SelectWallet = ({
   account,
   setAccount,
+  evm,
 }: {
   account?: ExtensionAccount | null;
   setAccount: Dispatch<SetStateAction<ExtensionAccount>>;
+  evm: boolean;
 }) => {
   const [open, setOpen] = useState(false);
   const [selectedExtension, setSelectedExtension] = useState(initialValue);
@@ -55,9 +57,9 @@ export const SelectWallet = ({
         ({ source, address, type }) =>
           source === selectedExtension?.id &&
           address !== account?.address &&
-          type === "ethereum"
+          (evm ? type === "ethereum" : type === "sr25519")
       ),
-    [extensionAccounts, selectedExtension?.id, account?.address]
+    [extensionAccounts, selectedExtension?.id, account?.address, evm]
   );
 
   return (
@@ -94,7 +96,7 @@ export const SelectWallet = ({
                     Number(!!extensionsStatus[b.id]) -
                     Number(!!extensionsStatus[a.id])
                 )
-                  ?.filter((e) => EvmWallets.includes(e.id))
+                  ?.filter((e) => (evm ? EvmWallets.includes(e.id) : true))
                   ?.map((value) => {
                     return (
                       <ProviderCard
