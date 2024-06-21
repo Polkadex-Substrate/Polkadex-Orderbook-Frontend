@@ -6,4 +6,4 @@ export * from "./usePool";
 export * from "./useQueryPools";
 export * from "./useBridge";
 export * from "./useTheaTransactions";
-export * from "./useDirectDeposit";
+export * from "./useDeposit";

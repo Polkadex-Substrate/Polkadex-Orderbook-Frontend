@@ -7,7 +7,7 @@ import { Chain } from "@polkadex/thea";
 import { signAndSubmitPromiseWrapper } from "@polkadex/blockchain-api";
 import { useDirectDepositProvider } from "@orderbook/core/providers/user/direct";
 
-export function useDirectDeposit({ onSuccess }: { onSuccess: () => void }) {
+export function useDeposit({ onSuccess }: { onSuccess: () => void }) {
   const { onHandleAlert, onHandleError, onPushNotification } =
     useSettingsProvider();
   const {

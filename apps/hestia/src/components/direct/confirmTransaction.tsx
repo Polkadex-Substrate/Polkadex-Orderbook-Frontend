@@ -25,7 +25,7 @@ import {
 } from "@orderbook/core/index";
 import { useDirectDepositProvider } from "@orderbook/core/providers/user/direct";
 
-import { useDirectDeposit, usePool } from "@/hooks";
+import { useDeposit, usePool } from "@/hooks";
 import {
   ErrorMessage,
   GenericHorizontalItem,
@@ -79,7 +79,7 @@ export const ConfirmTransaction = ({
     () => truncateString(PALLET_ADDRESS, 3),
     []
   );
-  const { mutateAsync, isLoading } = useDirectDeposit({ onSuccess });
+  const { mutateAsync, isLoading } = useDeposit({ onSuccess });
 
   const error = useMemo(() => {
     const autoSwapAmount = showAutoSwap ? swapPrice : 0;
