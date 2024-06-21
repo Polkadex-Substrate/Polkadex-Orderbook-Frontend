@@ -147,4 +147,21 @@ export const NOTIFICATIONS = {
       href: "/history?tab=crossChain",
     };
   },
+  directDeposit: ({
+    sourceChain,
+    asset,
+    amount,
+  }: {
+    sourceChain: Chain;
+    asset: string;
+    amount: number;
+  }): NotificationPayload => {
+    return {
+      category: "General",
+      message: "Deposit successful 🎉",
+      description: `Your deposit of ${amount} ${asset} from ${sourceChain.name} network to Polkadex orderbook has been successfully processed. You will recieve asset in Orderbook in a few minutes. Happy trading 🎉`,
+      type: "Success",
+      href: "/direct?type=deposit",
+    };
+  },
 };

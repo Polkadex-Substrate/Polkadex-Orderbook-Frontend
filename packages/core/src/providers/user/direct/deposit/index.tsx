@@ -144,6 +144,7 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
     destinationAddress: destinationAccountSelected?.address,
     selectedAsset,
     destinationChain,
+    isDirectDeposit: true,
   });
 
   const selectedAssetBalance = useMemo(
