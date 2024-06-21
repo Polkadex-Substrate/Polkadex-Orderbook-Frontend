@@ -62,15 +62,6 @@ export const NOTIFICATIONS = {
       href: "/history?tab=orderHistory",
     };
   },
-  transferToTradingAccount: (tx: Transaction): NotificationPayload => {
-    return {
-      category: "General",
-      message: `${tx.amount} ${tx.asset.ticker} Transfer 🎉`,
-      description: `Your transfer of ${tx.amount} ${tx.asset.ticker} from your funding account to your trading account has been successfully processed.`,
-      type: "Success",
-      href: "/history",
-    };
-  },
   claimTransfer: (tx: Transaction): NotificationPayload => {
     return {
       category: "General",
@@ -161,7 +152,7 @@ export const NOTIFICATIONS = {
       message: "Deposit successful 🎉",
       description: `Your deposit of ${amount} ${asset} from ${sourceChain.name} network to Polkadex orderbook has been successfully processed. You will recieve asset in Orderbook in a few minutes. Happy trading 🎉`,
       type: "Success",
-      href: "/direct?type=deposit",
+      href: "/history",
     };
   },
 };

@@ -6,11 +6,17 @@ import { NOTIFICATIONS } from "@orderbook/core/constants";
 import { Chain } from "@polkadex/thea";
 import { signAndSubmitPromiseWrapper } from "@polkadex/blockchain-api";
 import { useDirectDepositProvider } from "@orderbook/core/providers/user/direct";
+import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
+import { useOrderbookService } from "@orderbook/core/providers/public/orderbookServiceProvider/useOrderbookService";
+import { useTransactionManager } from "@polkadex/react-providers";
+import { appsyncOrderbookService } from "@orderbook/core/utils/orderbookService";
+import { handleTransaction } from "@orderbook/core/helpers";
 
 export function useDeposit({ onSuccess }: { onSuccess: () => void }) {
-  const { onHandleAlert, onHandleError, onPushNotification } =
+  const { onHandleAlert, onHandleError, onPushNotification, onHandleInfo } =
     useSettingsProvider();
   const {
+    sourceChain,
     transferConfig,
     sourceAccount,
     destinationPDEXBalance,
@@ -18,13 +24,54 @@ export function useDeposit({ onSuccess }: { onSuccess: () => void }) {
     selectedAsset,
     destinationAccount,
     onRefetchTransferConfig,
+    isSourcePolkadex,
   } = useDirectDepositProvider();
+
+  const { api } = useNativeApi();
+  const { isReady } = useOrderbookService();
+  const { addToTxQueue } = useTransactionManager();
 
   return useMutation({
     mutationFn: async ({ amount }: { amount: number }) => {
-      if (!transferConfig || !sourceAccount || !destinationAccount) {
-        throw new Error("Bridge issue");
+      // When Source is Polkadex - Logic for transfer from funding to trading
+      if (isSourcePolkadex) {
+        if (!isReady) throw new Error("Orderbook service not initialized");
+
+        if (!api || !api?.isConnected)
+          throw new Error("You are not connected to blockchain");
+
+        if (!sourceAccount || sourceAccount?.address?.trim().length === 0)
+          throw new Error("Invalid account");
+
+        onHandleInfo?.("Processing Deposit...");
+
+        const asset = selectedAsset?.id
+          ? { asset: selectedAsset?.id || null }
+          : { polkadex: null };
+
+        const signedExtrinsic = await appsyncOrderbookService.operation.deposit(
+          {
+            api,
+            account: sourceAccount,
+            asset: asset as unknown as Record<string, string | null>,
+            amount,
+            tokenFeeId: "PDEX",
+          }
+        );
+        addToTxQueue(signedExtrinsic);
+        await handleTransaction(signedExtrinsic);
+        onSuccess();
+        onHandleAlert(
+          "Deposit Success. Expect tokens in the orderbook in a few minutes"
+        );
+        return amount;
       }
+
+      if (!transferConfig || !sourceAccount || !destinationAccount) {
+        throw new Error("Deposit issue");
+      }
+
+      onHandleInfo?.("Processing Deposit...");
 
       /* Checks for Source chain */
       if (
@@ -76,7 +123,7 @@ export function useDeposit({ onSuccess }: { onSuccess: () => void }) {
     onSuccess: (amount: number) =>
       onPushNotification(
         NOTIFICATIONS.directDeposit({
-          sourceChain: transferConfig?.sourceChain as Chain,
+          sourceChain: sourceChain as Chain,
           asset: selectedAsset?.ticker as string,
           amount,
         })
