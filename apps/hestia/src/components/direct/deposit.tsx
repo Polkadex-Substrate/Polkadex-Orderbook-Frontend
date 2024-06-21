@@ -216,7 +216,7 @@ export const Deposit = () => {
                 </Typography.Heading>
                 <HoverInformation>
                   <HoverInformation.Trigger
-                    loading={sourceBalancesLoading}
+                    loading={loading}
                     className="min-w-20"
                   >
                     <RiInformationFill className="w-3 h-3 text-actionInput" />
@@ -224,7 +224,9 @@ export const Deposit = () => {
                       Available: {balanceAmount} {selectedAsset?.ticker}
                     </Typography.Text>
                   </HoverInformation.Trigger>
-                  <HoverInformation.Content>
+                  <HoverInformation.Content
+                    className={classNames(sourceBalancesLoading && "hidden")}
+                  >
                     <ResponsiveCard label="Source fee" loading={loading}>
                       {sourceFeeAmount} {sourceFeeTicker}
                     </ResponsiveCard>
