@@ -14,6 +14,7 @@ import {
   PropsWithChildren,
   SetStateAction,
   createContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -38,12 +39,6 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
   const sourceConnector = useMemo(
     () => sourceChain && getChainConnector(sourceChain.genesis),
     [sourceChain]
-  );
-
-  const selectedSourceChain = useMemo(
-    () =>
-      sourceChain ?? (chains.find((c) => c.genesis === GENESIS[1]) as Chain),
-    [chains, sourceChain]
   );
 
   const sourceAccountSelected = useMemo(
@@ -144,14 +139,28 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
     [selectedAsset, sourceBalances]
   );
 
+  /* Default Selection Logic  */
+  const initialSource = useMemo(() => {
+    return chains.find((c) => c.genesis === GENESIS[1]);
+  }, [chains]);
+
+  useEffect(() => {
+    if (initialSource && !sourceChain) setSourceChain(initialSource);
+  }, [initialSource, sourceChain]);
+
+  useEffect(() => {
+    if (!selectedAsset && destinationChain && sourceChain && supportedAssets)
+      setSelectedAsset(supportedAssets[0]);
+  }, [selectedAsset, destinationChain, sourceChain, supportedAssets]);
+
   return (
     <Provider
       value={{
         chains,
 
-        sourceChain: selectedSourceChain,
+        sourceChain,
         onSelectSourceChain,
-        sourceAccount,
+        sourceAccount: sourceAccountSelected,
         setSourceAccount,
 
         supportedAssets,

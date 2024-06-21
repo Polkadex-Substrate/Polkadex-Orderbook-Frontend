@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   HoverInformation,
   ResponsiveCard,
@@ -18,12 +19,25 @@ import { SelectNetwork } from "./selectNetwork";
 import { SelectAsset } from "./selectAsset";
 import { SelectWallet } from "./selectWallet";
 
+import { formatAmount } from "@/helpers";
+
 export const Deposit = () => {
   const [ref, bounds] = useMeasure<HTMLDivElement>();
 
-  const { chains, sourceChain, onSelectSourceChain } =
-    useDirectDepositProvider();
+  const {
+    chains,
+    sourceChain,
+    onSelectSourceChain,
+    sourceBalancesLoading,
+    selectedAssetBalance,
+    selectedAsset,
+  } = useDirectDepositProvider();
   const isEVM = sourceChain?.type === ChainType.EvmSubstrate;
+
+  const balanceAmount = useMemo(
+    () => formatAmount(selectedAssetBalance),
+    [selectedAssetBalance]
+  );
 
   return (
     <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
@@ -58,10 +72,13 @@ export const Deposit = () => {
               Asset
             </Typography.Heading>
             <HoverInformation>
-              <HoverInformation.Trigger className="min-w-20">
+              <HoverInformation.Trigger
+                loading={sourceBalancesLoading}
+                className="min-w-20"
+              >
                 <RiInformationFill className="w-3 h-3 text-actionInput" />
                 <Typography.Text size="xs" appearance="primary">
-                  Available: 0
+                  Available: {balanceAmount} {selectedAsset?.ticker}
                 </Typography.Text>
               </HoverInformation.Trigger>
               <HoverInformation.Content>
