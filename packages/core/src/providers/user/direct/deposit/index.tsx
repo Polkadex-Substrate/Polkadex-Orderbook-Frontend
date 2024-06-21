@@ -40,6 +40,12 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
     [sourceChain]
   );
 
+  const selectedSourceChain = useMemo(
+    () =>
+      sourceChain ?? (chains.find((c) => c.genesis === GENESIS[1]) as Chain),
+    [chains, sourceChain]
+  );
+
   const sourceAccountSelected = useMemo(
     () =>
       sourceAccount ??
@@ -143,7 +149,7 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
       value={{
         chains,
 
-        sourceChain,
+        sourceChain: selectedSourceChain,
         onSelectSourceChain,
         sourceAccount,
         setSourceAccount,

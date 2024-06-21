@@ -11,17 +11,19 @@ import {
 import { RiCheckLine, RiInformationFill } from "@remixicon/react";
 import classNames from "classnames";
 import { useMeasure } from "react-use";
-import { useState } from "react";
+import { useDirectDepositProvider } from "@orderbook/core/providers/user/direct";
+import { Chain, ChainType } from "@polkadex/thea";
 
-import { SelectNetwork, fakeNetworks } from "./selectNetwork";
+import { SelectNetwork } from "./selectNetwork";
 import { SelectAsset } from "./selectAsset";
 import { SelectWallet } from "./selectWallet";
 
 export const Deposit = () => {
   const [ref, bounds] = useMeasure<HTMLDivElement>();
 
-  const [network, setNetwork] = useState(fakeNetworks[0]);
-  const isEVM = network.genesis === "0x006";
+  const { chains, sourceChain, onSelectSourceChain } =
+    useDirectDepositProvider();
+  const isEVM = sourceChain?.type === ChainType.EvmSubstrate;
 
   return (
     <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
@@ -41,7 +43,11 @@ export const Deposit = () => {
           <Typography.Heading size="lg" className="leading-none">
             Network
           </Typography.Heading>
-          <SelectNetwork network={network} setNetwork={(e) => setNetwork(e)} />
+          <SelectNetwork
+            allChains={chains}
+            sourceChain={sourceChain as Chain}
+            onSelectSourceChain={(e) => onSelectSourceChain(e)}
+          />
           <div className="flex item-center justify-center bg-success-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
             <RiCheckLine className="w-full h-full" />
           </div>
