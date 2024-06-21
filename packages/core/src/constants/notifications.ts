@@ -150,7 +150,7 @@ export const NOTIFICATIONS = {
     return {
       category: "General",
       message: "Deposit successful 🎉",
-      description: `Your deposit of ${amount} ${asset} from ${sourceChain.name} network to Polkadex orderbook has been successfully processed. You will recieve asset in Orderbook in a few minutes. Happy trading 🎉`,
+      description: `Your deposit of ${amount} ${asset} from ${sourceChain.name} network to Polkadex orderbook has been successfully processed. You will recieve asset in Orderbook in a few minutes. Happy trading !!`,
       type: "Success",
       href: "/history",
     };
