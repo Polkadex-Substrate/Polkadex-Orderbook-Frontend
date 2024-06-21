@@ -6,7 +6,7 @@ import {
   useExtensions,
 } from "@polkadex/react-providers";
 import { ExtensionsArray } from "@polkadot-cloud/assets/extensions";
-import { useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { RiCheckLine, RiWalletLine } from "@remixicon/react";
 import { useMeasure } from "react-use";
 import {
@@ -33,7 +33,7 @@ export const SelectWallet = ({
   setAccount,
 }: {
   account?: ExtensionAccount | null;
-  setAccount: (e?: ExtensionAccount | null) => void;
+  setAccount: Dispatch<SetStateAction<ExtensionAccount>>;
 }) => {
   const [open, setOpen] = useState(false);
   const [selectedExtension, setSelectedExtension] = useState(initialValue);
@@ -65,7 +65,7 @@ export const SelectWallet = ({
       <Popover.Trigger ref={ref} superpositionTrigger className="w-full">
         <div className="flex-1 flex items-center justify-between">
           <div className="flex items-center gap-2 flex-1">
-            <RiWalletLine className="w-3.5 h-3.5 text-actionInput" />
+            <RiWalletLine className="w-5 h-5 text-actionInput" />
             {account ? (
               <div className="flex items-center gap-1">
                 <Typography.Text>{shortName}</Typography.Text>

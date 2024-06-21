@@ -36,6 +36,7 @@ export const Deposit = () => {
     transferConfigLoading,
     transferConfig,
     sourceAccount,
+    setSourceAccount,
     isDestinationBalanceLoading,
   } = useDirectDepositProvider();
   const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
@@ -89,9 +90,19 @@ export const Deposit = () => {
               From
             </Typography.Text>
             <div className="border border-primary rounded-sm px-2 py-4">
-              <SelectWallet account={null} setAccount={() => {}} />
+              <SelectWallet
+                account={sourceAccount}
+                setAccount={(e) => setSourceAccount(e)}
+              />
             </div>
-            <div className="flex item-center justify-center bg-primary rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5"></div>
+            <div
+              className={classNames(
+                "flex item-center justify-center bg-primary rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5",
+                sourceAccount && "bg-success-base"
+              )}
+            >
+              {sourceAccount && <RiCheckLine className="w-full h-full" />}
+            </div>
           </div>
         )}
         <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
