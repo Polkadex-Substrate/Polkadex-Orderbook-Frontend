@@ -140,7 +140,7 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
     refetch: refetchTransferConfig,
   } = useTheaConfig({
     connector: sourceConnector,
-    sourceAddress: sourceAccount?.address,
+    sourceAddress: sourceAccountSelected?.address,
     destinationAddress: destinationAccountSelected?.address,
     selectedAsset,
     destinationChain,
