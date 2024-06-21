@@ -20,10 +20,12 @@ import { SelectAsset } from "./selectAsset";
 import { SelectWallet } from "./selectWallet";
 
 import { formatAmount } from "@/helpers";
+import { useQueryPools } from "@/hooks";
 
 export const Deposit = () => {
   const [ref, bounds] = useMeasure<HTMLDivElement>();
 
+  const { pools, poolsLoading } = useQueryPools();
   const {
     chains,
     sourceChain,
@@ -31,13 +33,52 @@ export const Deposit = () => {
     sourceBalancesLoading,
     selectedAssetBalance,
     selectedAsset,
+    transferConfigLoading,
+    transferConfig,
+    sourceAccount,
+    isDestinationBalanceLoading,
   } = useDirectDepositProvider();
+  const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
   const isEVM = sourceChain?.type === ChainType.EvmSubstrate;
 
   const balanceAmount = useMemo(
     () => formatAmount(selectedAssetBalance),
     [selectedAssetBalance]
   );
+
+  const loading = useMemo(() => {
+    if (!sourceAccount) return false;
+    const isLoading = transferConfigLoading || sourceBalancesLoading;
+    return isLoading || poolsLoading || isDestinationBalanceLoading;
+  }, [
+    isDestinationBalanceLoading,
+    poolsLoading,
+    sourceAccount,
+    sourceBalancesLoading,
+    transferConfigLoading,
+  ]);
+
+  const [
+    destinationFeeAmount,
+    destinationFeeTicker,
+    sourceFeeAmount,
+    sourceFeeTicker,
+  ] = useMemo(() => {
+    const destValue = destinationFee?.amount;
+    const sourceValue = sourceFee?.amount;
+
+    return [
+      destValue ? `~ ${formatAmount(destValue)}` : "Ø",
+      destValue ? destinationFee?.ticker : "",
+      sourceValue ? `~ ${formatAmount(sourceValue)}` : "Ø",
+      sourceValue ? sourceFee?.ticker : "",
+    ];
+  }, [
+    destinationFee?.amount,
+    destinationFee?.ticker,
+    sourceFee?.amount,
+    sourceFee?.ticker,
+  ]);
 
   return (
     <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
@@ -82,14 +123,14 @@ export const Deposit = () => {
                 </Typography.Text>
               </HoverInformation.Trigger>
               <HoverInformation.Content>
-                <ResponsiveCard label="Source fee" loading={false}>
-                  0
+                <ResponsiveCard label="Source fee" loading={loading}>
+                  {sourceFeeAmount} {sourceFeeTicker}
                 </ResponsiveCard>
-                <ResponsiveCard label="Destination fee" loading={false}>
-                  0
+                <ResponsiveCard label="Destination fee" loading={loading}>
+                  {destinationFeeAmount} {destinationFeeTicker}
                 </ResponsiveCard>
-                <ResponsiveCard label="Available" loading={false}>
-                  0
+                <ResponsiveCard label="Available" loading={loading}>
+                  {balanceAmount} {selectedAsset?.ticker}
                 </ResponsiveCard>
               </HoverInformation.Content>
             </HoverInformation>

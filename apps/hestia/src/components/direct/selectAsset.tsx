@@ -8,13 +8,24 @@ import {
   Searchable,
   ScrollArea,
   TokenCard,
+  TokenAppearance,
 } from "@polkadex/ux";
 import { Fragment, useState } from "react";
 import { RiArrowDownSLine } from "@remixicon/react";
+import { useTheaProvider } from "@orderbook/core/providers";
+
+import { formatAmount } from "@/helpers";
 
 export const SelectAsset = ({ width }: { width: number }) => {
   const [open, setOpen] = useState(false);
-  const [asset, setAsset] = useState(fakeAssets[0]);
+  const {
+    supportedAssets,
+    selectedAsset,
+    onSelectAsset,
+    sourceBalances,
+    sourceBalancesLoading,
+    sourceChain,
+  } = useTheaProvider();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -33,14 +44,19 @@ export const SelectAsset = ({ width }: { width: number }) => {
               onClick={() => setOpen(true)}
             >
               <div className="flex items-center gap-2 px-2">
-                <Token
-                  name={asset.ticker}
-                  size="md"
-                  appearance={asset.ticker}
-                  className="rounded-full border border-primary"
-                />
-
-                <Typography.Text size="md">{asset.ticker}</Typography.Text>
+                {selectedAsset ? (
+                  <Token
+                    name={selectedAsset.ticker}
+                    size="md"
+                    appearance={selectedAsset.ticker as TokenAppearance}
+                    className="rounded-full border border-primary"
+                  />
+                ) : (
+                  <div className="w-6 h-6 rounded-full bg-level-5" />
+                )}
+                <Typography.Text size="md">
+                  {selectedAsset ? selectedAsset.ticker : "Select token"}
+                </Typography.Text>
               </div>
               <RiArrowDownSLine className="w-4 h-4" />
             </Button.Outline>
@@ -58,24 +74,29 @@ export const SelectAsset = ({ width }: { width: number }) => {
                 </Searchable.Empty>
                 <ScrollArea className="max-h-[280px]">
                   <Searchable.Group heading="Available assets">
-                    {fakeAssets.map((e) => {
+                    {supportedAssets.map((e) => {
+                      const balance =
+                        sourceBalances?.find((x) => x.ticker === e.ticker)
+                          ?.amount ?? 0;
+
                       return (
                         <Searchable.Item
                           key={e.ticker}
                           value={e.ticker}
                           className="mb-1 mr-1"
                           onSelect={() => {
-                            setAsset(e);
+                            onSelectAsset(e);
                             setOpen(false);
                           }}
                         >
                           <div className="flex-1 [&_span]:!normal-case">
                             <TokenCard
                               key={e.id}
-                              icon={e.ticker}
+                              icon={e.ticker as TokenAppearance}
                               ticker={e.ticker}
-                              balance={0}
-                              tokenName={e.name}
+                              tokenName={sourceChain?.name || ""}
+                              balance={formatAmount(balance)}
+                              loading={sourceBalancesLoading}
                             />
                           </div>
                         </Searchable.Item>
@@ -93,27 +114,3 @@ export const SelectAsset = ({ width }: { width: number }) => {
     </Popover>
   );
 };
-
-const fakeAssets = [
-  {
-    id: "1",
-    ticker: "DOT",
-    logo: "DOT",
-    name: "Polkadot",
-    decimal: 12,
-  },
-  {
-    id: "2",
-    ticker: "PDEX",
-    logo: "PDEX",
-    name: "Polkadex",
-    decimal: 12,
-  },
-  {
-    id: "3",
-    ticker: "USDT",
-    logo: "USDT",
-    name: "Tether",
-    decimal: 12,
-  },
-];
