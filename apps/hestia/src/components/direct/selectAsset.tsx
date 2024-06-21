@@ -26,17 +26,24 @@ export const SelectAsset = ({ width }: { width: number }) => {
           className="gap-1 px-2 justify-between h-full"
         >
           <Fragment>
-            <div className="flex items-center gap-2">
-              <Token
-                name={asset.ticker}
-                size="md"
-                appearance={asset.ticker}
-                className="rounded-full border border-primary"
-              />
+            <Button.Outline
+              type="button"
+              appearance="secondary"
+              className="gap-1 px-2 justify-between h-full border-0 border-r"
+              onClick={() => setOpen(true)}
+            >
+              <div className="flex items-center gap-2 px-2">
+                <Token
+                  name={asset.ticker}
+                  size="md"
+                  appearance={asset.ticker}
+                  className="rounded-full border border-primary"
+                />
 
-              <Typography.Text size="md">{asset.ticker}</Typography.Text>
-            </div>
-            <RiArrowDownSLine className="w-4 h-4" />
+                <Typography.Text size="md">{asset.ticker}</Typography.Text>
+              </div>
+              <RiArrowDownSLine className="w-4 h-4" />
+            </Button.Outline>
           </Fragment>
         </Button.Outline>
       </Popover.Trigger>
