@@ -87,6 +87,22 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
     chain: destinationChain.genesis,
   });
 
+  const destinationPDEXBalance = useMemo(
+    () =>
+      destinationBalances
+        ? destinationBalances.find((e) => e.ticker === "PDEX")?.amount ?? 0 // Remove static data
+        : 0,
+    [destinationBalances]
+  );
+
+  const selectedAssetIdDestination = useMemo(
+    () =>
+      destinationAssets?.find((e) =>
+        e.ticker.includes(selectedAsset?.ticker ?? "")
+      )?.id,
+    [destinationAssets, selectedAsset?.ticker]
+  );
+
   /* Asset */
   const supportedAssets = useMemo(
     () =>
@@ -162,6 +178,8 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
         onSelectSourceChain,
         sourceAccount: sourceAccountSelected,
         setSourceAccount,
+        destinationAccount: destinationAccountSelected,
+        destinationChain,
 
         supportedAssets,
         selectedAsset,
@@ -176,6 +194,8 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
         destinationAssets,
         destinationBalances,
         isDestinationBalanceLoading: destinationBalancesLoading,
+        selectedAssetIdDestination,
+        destinationPDEXBalance,
 
         transferConfig,
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
@@ -196,6 +216,9 @@ type State = {
   sourceAccount?: ExtensionAccount;
   setSourceAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
 
+  destinationChain: Chain;
+  destinationAccount?: ExtensionAccount;
+
   supportedAssets: Asset[];
   selectedAsset: Asset | null;
   onSelectAsset: (asset: Asset) => void;
@@ -214,6 +237,8 @@ type State = {
   destinationAssets: Asset[];
   destinationBalances: AssetAmount[];
   isDestinationBalanceLoading: boolean;
+  selectedAssetIdDestination?: string;
+  destinationPDEXBalance: number;
 };
 
 export const Context = createContext<State>({
@@ -223,6 +248,8 @@ export const Context = createContext<State>({
   onSelectSourceChain: () => {},
   sourceAccount: undefined,
   setSourceAccount: () => {},
+
+  destinationChain: {} as Chain,
 
   supportedAssets: [],
   selectedAsset: null,
@@ -240,6 +267,7 @@ export const Context = createContext<State>({
   destinationAssets: [],
   destinationBalances: [],
   isDestinationBalanceLoading: false,
+  destinationPDEXBalance: 0,
 });
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
