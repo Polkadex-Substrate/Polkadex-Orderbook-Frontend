@@ -12,6 +12,8 @@ import {
 } from "@orderbook/core/constants";
 
 export const bridgeValidations = (
+  sourceWalletPresent: boolean,
+  destinationWalletPresent: boolean,
   minAmount = 0,
   maxAmount = 0,
   destinationPDEXBalance = 0,
@@ -24,6 +26,16 @@ export const bridgeValidations = (
   return Yup.object().shape({
     amount: Yup.string()
       .required("Required")
+      .test(
+        CrossChainError.SOURCE_WALLET,
+        CrossChainError.SOURCE_WALLET,
+        () => sourceWalletPresent
+      )
+      .test(
+        CrossChainError.DESTINATION_WALLET,
+        CrossChainError.DESTINATION_WALLET,
+        () => destinationWalletPresent
+      )
       .test(
         ErrorMessages().WHITESPACE_NOT_ALLOWED,
         ErrorMessages().WHITESPACE_NOT_ALLOWED,

@@ -119,6 +119,8 @@ export const Form = () => {
   } = useFormik({
     initialValues,
     validationSchema: bridgeValidations(
+      !!sourceAccount,
+      !!destinationAccount,
       minAmount,
       max?.amount,
       destinationPDEXBalance,
