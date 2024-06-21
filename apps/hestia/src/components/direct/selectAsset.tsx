@@ -12,7 +12,7 @@ import {
 } from "@polkadex/ux";
 import { Fragment, useState } from "react";
 import { RiArrowDownSLine } from "@remixicon/react";
-import { useTheaProvider } from "@orderbook/core/providers";
+import { useDirectDepositProvider } from "@orderbook/core/providers/user/direct";
 
 import { formatAmount } from "@/helpers";
 
@@ -25,7 +25,7 @@ export const SelectAsset = ({ width }: { width: number }) => {
     sourceBalances,
     sourceBalancesLoading,
     sourceChain,
-  } = useTheaProvider();
+  } = useDirectDepositProvider();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
