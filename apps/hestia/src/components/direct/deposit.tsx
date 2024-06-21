@@ -56,7 +56,6 @@ export const Deposit = () => {
     destinationPDEXBalance,
   } = useDirectDepositProvider();
   const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
-  const isEVM = sourceChain?.type === ChainType.EvmSubstrate;
 
   const poolReserve = useMemo(() => {
     return pools?.find((p) => p.id === selectedAssetIdDestination);
@@ -299,9 +298,6 @@ export const Deposit = () => {
                   Deposit
                 </Button.Solid>
               )}
-              {/* <Button.Light className="w-full" appearance="secondary">
-                Deposit
-              </Button.Light> */}
             </div>
           </div>
         </div>
