@@ -11,6 +11,7 @@ import {
   ResponsiveCard,
   HoverInformation,
 } from "@polkadex/ux";
+import classNames from "classnames";
 import {
   RiFileCopyLine,
   RiGasStationLine,
@@ -55,13 +56,14 @@ export const ConfirmTransaction = ({
     destinationPDEXBalance,
     selectedAsset,
     selectedAssetIdDestination,
+    isSourcePolkadex,
   } = useDirectDepositProvider();
   const { destinationFee, sourceFee, sourceFeeBalance, sourceFeeExistential } =
     transferConfig ?? {};
 
   const showAutoSwap = useMemo(
-    () => !destinationPDEXBalance,
-    [destinationPDEXBalance]
+    () => !isSourcePolkadex && !destinationPDEXBalance,
+    [isSourcePolkadex, destinationPDEXBalance]
   );
 
   const { swapPrice = 0, swapLoading } = usePool({
@@ -82,6 +84,7 @@ export const ConfirmTransaction = ({
   const { mutateAsync, isLoading } = useDeposit({ onSuccess });
 
   const error = useMemo(() => {
+    if (isSourcePolkadex) return undefined;
     const autoSwapAmount = showAutoSwap ? swapPrice : 0;
     const balance = sourceFeeBalance?.amount ?? 0;
     const existential = sourceFeeExistential?.amount ?? 0;
@@ -103,6 +106,7 @@ export const ConfirmTransaction = ({
     sourceFeeBalance?.amount,
     sourceFeeExistential?.amount,
     swapPrice,
+    isSourcePolkadex,
   ]);
 
   const disabled = useMemo(
@@ -219,7 +223,9 @@ export const ConfirmTransaction = ({
                   </GenericHorizontalItem>
                 )}
                 <HoverInformation>
-                  <HoverInformation.Trigger>
+                  <HoverInformation.Trigger
+                    className={classNames(isSourcePolkadex && "hidden")}
+                  >
                     <div className="w-full flex items-center justify-between gap-2 px-3 py-3 cursor-pointer">
                       <div className="flex items-center gap-1">
                         <RiInformationFill className="w-3 h-3 text-actionInput" />

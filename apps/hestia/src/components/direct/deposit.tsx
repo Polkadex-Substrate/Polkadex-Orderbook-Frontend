@@ -19,7 +19,15 @@ import classNames from "classnames";
 import { useMeasure } from "react-use";
 import { useDirectDepositProvider } from "@orderbook/core/providers/user/direct";
 import { Chain, ChainType } from "@polkadex/thea";
-import { directDepositValidations } from "@orderbook/core/validations";
+import {
+  depositValidations,
+  directDepositValidations,
+} from "@orderbook/core/validations";
+import {
+  ESTIMATED_FEE,
+  OTHER_ASSET_EXISTENTIAL,
+} from "@orderbook/core/constants";
+import { parseScientific, trimFloat } from "@polkadex/numericals";
 
 import { SelectNetwork } from "./selectNetwork";
 import { SelectAsset } from "./selectAsset";
@@ -54,6 +62,7 @@ export const Deposit = () => {
     isDestinationBalanceLoading,
     selectedAssetIdDestination,
     destinationPDEXBalance,
+    isSourcePolkadex,
   } = useDirectDepositProvider();
   const { destinationFee, sourceFee, max, min } = transferConfig ?? {};
 
@@ -66,7 +75,20 @@ export const Deposit = () => {
     [selectedAssetBalance]
   );
 
+  /* Special case => When source chain is Polkadex */
+  const isPolkadexToken = useMemo(
+    () => selectedAsset?.ticker === "PDEX",
+    [selectedAsset?.ticker]
+  );
+
+  const existentialBalance = useMemo(
+    () => (isPolkadexToken ? 1 : OTHER_ASSET_EXISTENTIAL),
+    [isPolkadexToken]
+  );
+  /*******/
+
   const minAmount = useMemo(() => {
+    if (isSourcePolkadex) return 0;
     const configMin = min?.amount || 0;
     const destFee =
       destinationFee?.ticker === selectedAsset?.ticker
@@ -74,10 +96,31 @@ export const Deposit = () => {
         : 0;
     return Math.max(configMin, destFee);
   }, [
+    isSourcePolkadex,
     destinationFee?.amount,
     destinationFee?.ticker,
     min?.amount,
     selectedAsset?.ticker,
+  ]);
+
+  const maxAmount = useMemo(() => {
+    if (isSourcePolkadex) {
+      if (selectedAssetBalance > existentialBalance) {
+        let balance = selectedAssetBalance - existentialBalance;
+        if (isPolkadexToken) balance = Math.max(balance - ESTIMATED_FEE, 0);
+        const trimmedBalance = +trimFloat({ value: balance });
+        const formattedBalance = parseScientific(trimmedBalance.toString());
+        return formattedBalance;
+      }
+      return "0";
+    }
+    return formatAmount(max?.amount ?? 0);
+  }, [
+    existentialBalance,
+    isPolkadexToken,
+    isSourcePolkadex,
+    max?.amount,
+    selectedAssetBalance,
   ]);
 
   const {
@@ -91,28 +134,33 @@ export const Deposit = () => {
     resetForm,
   } = useFormik({
     initialValues,
-    validationSchema: directDepositValidations(
-      !!sourceAccount,
-      !!destinationAccount,
-      minAmount,
-      max?.amount,
-      destinationPDEXBalance,
-      selectedAssetBalance,
-      poolReserve?.reserve || 0
-    ),
+    validationSchema: isSourcePolkadex
+      ? depositValidations(
+          selectedAssetBalance,
+          isPolkadexToken,
+          existentialBalance
+        )
+      : directDepositValidations(
+          !!sourceAccount,
+          !!destinationAccount,
+          minAmount,
+          +maxAmount,
+          destinationPDEXBalance,
+          selectedAssetBalance,
+          poolReserve?.reserve || 0
+        ),
     onSubmit: () => setConfirmTxModal(true),
   });
 
-  const onChangeMax = () => {
-    const formattedAmount = formatAmount(max?.amount ?? 0);
-    setFieldValue("amount", formattedAmount);
-  };
+  const onChangeMax = () => setFieldValue("amount", maxAmount);
 
   const loading = useMemo(() => {
     if (!sourceAccount || !destinationAccount) return false;
+    if (isSourcePolkadex) return sourceBalancesLoading;
     const isLoading = transferConfigLoading || sourceBalancesLoading;
     return isLoading || poolsLoading || isDestinationBalanceLoading;
   }, [
+    isSourcePolkadex,
     isDestinationBalanceLoading,
     poolsLoading,
     sourceAccount,
@@ -260,7 +308,7 @@ export const Deposit = () => {
                           {...getFieldProps("amount")}
                           className="max-sm:focus:text-[16px] w-full pl-4 py-4"
                         >
-                          {sourceAccount && max?.amount && !loading && (
+                          {sourceAccount && +maxAmount && !loading && (
                             <Input.Action
                               type="button"
                               onClick={(e) => {
