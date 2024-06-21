@@ -56,6 +56,11 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
     setSelectedAsset(selectedAsset);
   };
 
+  const isSourcePolkadex = useMemo(
+    () => !!(sourceChain?.genesis === GENESIS[0]),
+    [sourceChain?.genesis]
+  );
+
   /* Destination Chain (which would be Polkadex always) */
   const destinationChain = useMemo(
     () => chains.find((c) => c.genesis === GENESIS[0]) as Chain,
@@ -104,13 +109,16 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
   );
 
   /* Asset */
-  const supportedAssets = useMemo(
-    () =>
+  const supportedAssets = useMemo(() => {
+    if (isSourcePolkadex) {
+      return sourceConnector?.getAllAssets() || [];
+    }
+    return (
       (destinationChain &&
         sourceConnector?.getSupportedAssets(destinationChain)) ||
-      [],
-    [destinationChain, sourceConnector]
-  );
+      []
+    );
+  }, [destinationChain, isSourcePolkadex, sourceConnector]);
 
   const onSelectAsset = (asset: Asset) => {
     if (!supportedAssets.some((e) => e.ticker === asset.ticker)) return;
@@ -139,7 +147,7 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
     isSuccess: transferConfigSuccess,
     refetch: refetchTransferConfig,
   } = useTheaConfig({
-    connector: sourceConnector,
+    connector: isSourcePolkadex ? null : sourceConnector,
     sourceAddress: sourceAccountSelected?.address,
     destinationAddress: destinationAccountSelected?.address,
     selectedAsset,
@@ -177,6 +185,7 @@ export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
 
         sourceChain,
         onSelectSourceChain,
+        isSourcePolkadex,
         sourceAccount: sourceAccountSelected,
         setSourceAccount,
         destinationAccount: destinationAccountSelected,
@@ -214,6 +223,7 @@ type State = {
 
   sourceChain: Chain | null;
   onSelectSourceChain: (chain: Chain) => void;
+  isSourcePolkadex: boolean;
   sourceAccount?: ExtensionAccount;
   setSourceAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
 
@@ -247,6 +257,7 @@ export const Context = createContext<State>({
 
   sourceChain: null,
   onSelectSourceChain: () => {},
+  isSourcePolkadex: false,
   sourceAccount: undefined,
   setSourceAccount: () => {},
 

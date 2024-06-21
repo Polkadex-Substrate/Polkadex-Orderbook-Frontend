@@ -69,7 +69,7 @@ export const SelectWallet = ({
           <div className="flex items-center gap-2 flex-1">
             <RiWalletLine className="w-5 h-5 text-actionInput" />
             {account ? (
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 whitespace-nowrap">
                 <Typography.Text>{shortName}</Typography.Text>
                 <Typography.Text
                   appearance={account?.name ? "primary" : "base"}
