@@ -6,6 +6,7 @@ import { Fragment, useMemo, useState } from "react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { useMeasure } from "react-use";
 import { useSearchParams } from "next/navigation";
+import { RiArrowDownLine, RiArrowUpLine } from "@remixicon/react";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
@@ -57,15 +58,17 @@ export function Template() {
               <div className="flex flex-col">
                 <Tabs.List className="flex max-md:flex-row md:flex-col items-start gap-0 py-4">
                   <Tabs.Trigger
-                    className="pl-4 md:pr-10 py-2 md:w-full text-left data-[state=active]:text-success-base data-[state=active]:hover:text-success-hover"
+                    className="flex items-center gap-2 pl-4 md:pr-10 py-2 md:w-full text-left data-[state=active]:text-success-base data-[state=active]:hover:text-success-hover"
                     value="deposit"
                   >
+                    <RiArrowDownLine className="w-5 h-5" />
                     Deposit
                   </Tabs.Trigger>
                   <Tabs.Trigger
-                    className="pl-4 md:pr-10 py-2 md:w-full text-left"
+                    className="flex items-center gap-2 pl-4 md:pr-10 py-2 md:w-full text-left data-[state=active]:text-primary-base data-[state=active]:hover:text-primary-hover"
                     value="withdraw"
                   >
+                    <RiArrowUpLine className="w-5 h-5" />
                     Withdraw
                   </Tabs.Trigger>
                 </Tabs.List>
