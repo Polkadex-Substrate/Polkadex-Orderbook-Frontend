@@ -22,6 +22,8 @@ import { useTheaBalances, useTheaConfig } from "@orderbook/core/hooks";
 
 import { useConnectWalletProvider } from "../../connectWalletProvider";
 
+export { useDirectDepositProvider } from "./useDirectDeposit";
+
 export const DirectDepositProvider = ({ children }: PropsWithChildren) => {
   const { getAllChains } = useMemo(() => new Thea(), []);
   const [sourceChain, setSourceChain] = useState<Chain | null>(null);
