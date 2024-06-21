@@ -19,6 +19,7 @@ import {
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import {
   CrossChainError,
+  PALLET_ADDRESS,
   THEA_AUTOSWAP,
   parseScientific,
 } from "@orderbook/core/index";
@@ -75,8 +76,8 @@ export const ConfirmTransaction = ({
   );
 
   const shortDestinationAddress = useMemo(
-    () => truncateString(destinationAccount?.address ?? "", 4),
-    [destinationAccount?.address]
+    () => truncateString(PALLET_ADDRESS, 3),
+    []
   );
   const { mutateAsync, isLoading } = useBridge({ onSuccess });
 
@@ -180,7 +181,7 @@ export const ConfirmTransaction = ({
                     <div className="flex items-center gap-1">
                       <RiFileCopyLine className="w-3 h-3 text-secondary" />
                       <Typography.Text>
-                        {destinationAccount?.name} • {shortDestinationAddress}
+                        {"Polkadex Orderbook"} • {shortDestinationAddress}
                       </Typography.Text>
                     </div>
                   </Copy>
