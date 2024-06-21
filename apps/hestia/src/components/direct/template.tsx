@@ -5,6 +5,7 @@ import { useWindowSize } from "usehooks-ts";
 import { Fragment, useMemo, useState } from "react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { useMeasure } from "react-use";
+import { useSearchParams } from "next/navigation";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
@@ -19,6 +20,7 @@ import { Footer, Header } from "@/components/ui";
 export function Template() {
   const [activeTab, setActiveTab] = useState("history");
   const { width } = useWindowSize();
+  const params = useSearchParams();
 
   const [footerRef, footerBounds] = useMeasure<HTMLDivElement>();
   const [interactionRef, interactionBounds] = useMeasure<HTMLDivElement>();
@@ -50,7 +52,7 @@ export function Template() {
           <div className="flex-1 flex flex-col">
             <Tabs
               className="flex flex-row flex-1 md:min-h-[430px] max-md:flex-col md:flex-row"
-              defaultValue="deposit"
+              defaultValue={params.get("type") || "deposit"}
             >
               <div className="flex flex-col">
                 <Tabs.List className="flex max-md:flex-row md:flex-col items-start gap-0 py-4">
