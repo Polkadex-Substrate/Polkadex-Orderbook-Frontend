@@ -29,9 +29,10 @@ import {
 } from "@orderbook/core/constants";
 import { parseScientific, trimFloat } from "@polkadex/numericals";
 
-import { SelectNetwork } from "./selectNetwork";
-import { SelectAsset } from "./selectAsset";
-import { SelectWallet } from "./selectWallet";
+import { SelectNetwork } from "../selectNetwork";
+import { SelectAsset } from "../selectAsset";
+import { SelectWallet } from "../selectWallet";
+
 import { ConfirmTransaction } from "./confirmTransaction";
 
 import { formatAmount } from "@/helpers";
