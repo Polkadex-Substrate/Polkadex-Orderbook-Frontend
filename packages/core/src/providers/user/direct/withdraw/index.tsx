@@ -6,6 +6,7 @@ import {
   Chain,
   ChainType,
   Thea,
+  TransferConfig,
   getChainConnector,
 } from "@polkadex/thea";
 import {
@@ -13,11 +14,12 @@ import {
   PropsWithChildren,
   SetStateAction,
   createContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
 import { ExtensionAccount } from "@polkadex/react-providers";
-import { useTheaBalances } from "@orderbook/core/hooks";
+import { useTheaBalances, useTheaConfig } from "@orderbook/core/hooks";
 
 import { useConnectWalletProvider } from "../../connectWalletProvider";
 
@@ -102,6 +104,36 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
     [selectedAsset, sourceBalances]
   );
 
+  /* Fetch transfer config for selected asset & source chain */
+  const {
+    data: transferConfig,
+    isLoading: transferConfigLoading,
+    isFetching: transferConfigFetching,
+    isSuccess: transferConfigSuccess,
+    refetch: refetchTransferConfig,
+  } = useTheaConfig({
+    connector: sourceConnector,
+    sourceAddress: sourceAccountSelected?.address,
+    destinationAddress: destinationAccountSelected?.address,
+    selectedAsset,
+    destinationChain,
+  });
+
+  /* Default Selection Logic  */
+  const initialDestination = useMemo(() => {
+    return chains.find((c) => c.genesis === GENESIS[1]);
+  }, [chains]);
+
+  useEffect(() => {
+    if (initialDestination && !destinationChain)
+      setDestinationChain(initialDestination);
+  }, [destinationChain, initialDestination]);
+
+  useEffect(() => {
+    if (!selectedAsset && destinationChain && sourceChain && supportedAssets)
+      setSelectedAsset(supportedAssets[0]);
+  }, [selectedAsset, destinationChain, sourceChain, supportedAssets]);
+
   return (
     <Provider
       value={{
@@ -125,6 +157,11 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
         sourceBalancesLoading: sourceBalancesLoading && sourceBalancesFetching,
         sourceBalancesSuccess,
         onRefetchSourceBalances: sourceBalancesRefetch,
+
+        transferConfig,
+        transferConfigLoading: transferConfigLoading && transferConfigFetching,
+        transferConfigSuccess,
+        onRefetchTransferConfig: refetchTransferConfig,
       }}
     >
       {children}
@@ -153,6 +190,11 @@ type State = {
   sourceBalancesLoading: boolean;
   sourceBalancesSuccess: boolean;
   onRefetchSourceBalances?: UseQueryResult["refetch"];
+
+  transferConfig: TransferConfig | undefined;
+  transferConfigLoading: boolean;
+  transferConfigSuccess: boolean;
+  onRefetchTransferConfig?: UseQueryResult["refetch"];
 };
 
 const Context = createContext<State>({
@@ -175,6 +217,10 @@ const Context = createContext<State>({
   sourceBalances: [],
   sourceBalancesLoading: false,
   sourceBalancesSuccess: false,
+
+  transferConfig: undefined,
+  transferConfigLoading: false,
+  transferConfigSuccess: false,
 });
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
