@@ -1,6 +1,8 @@
+import { UseQueryResult } from "@tanstack/react-query";
 import { GENESIS } from "@orderbook/core/constants";
 import {
   Asset,
+  AssetAmount,
   Chain,
   ChainType,
   Thea,
@@ -15,6 +17,7 @@ import {
   useState,
 } from "react";
 import { ExtensionAccount } from "@polkadex/react-providers";
+import { useTheaBalances } from "@orderbook/core/hooks";
 
 import { useConnectWalletProvider } from "../../connectWalletProvider";
 
@@ -66,6 +69,39 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
     [destinationChain?.genesis]
   );
 
+  /* Asset */
+  const supportedAssets = useMemo(() => {
+    return sourceConnector?.getAllAssets() || [];
+  }, [sourceConnector]);
+
+  const onSelectAsset = (asset: Asset) => {
+    if (!supportedAssets.some((e) => e.ticker === asset.ticker)) return;
+    setSelectedAsset(asset);
+  };
+
+  /* Fetch balance for supported assets for source chain */
+  const {
+    data: sourceBalances = [],
+    isLoading: sourceBalancesLoading,
+    isFetching: sourceBalancesFetching,
+    isSuccess: sourceBalancesSuccess,
+    refetch: sourceBalancesRefetch,
+  } = useTheaBalances({
+    connector: sourceConnector,
+    sourceAddress: sourceAccountSelected?.address,
+    assets: supportedAssets,
+    chain: sourceChain?.genesis,
+  });
+
+  const selectedAssetBalance = useMemo(
+    () =>
+      selectedAsset && sourceBalances
+        ? sourceBalances.find((e) => e.ticker === selectedAsset?.ticker)
+            ?.amount ?? 0
+        : 0,
+    [selectedAsset, sourceBalances]
+  );
+
   return (
     <Provider
       value={{
@@ -79,6 +115,16 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
         isDestinationPolkadex,
         destinationAccount: destinationAccountSelected,
         setDestinationAccount,
+
+        supportedAssets,
+        selectedAsset,
+        onSelectAsset,
+        selectedAssetBalance,
+
+        sourceBalances,
+        sourceBalancesLoading: sourceBalancesLoading && sourceBalancesFetching,
+        sourceBalancesSuccess,
+        onRefetchSourceBalances: sourceBalancesRefetch,
       }}
     >
       {children}
@@ -97,6 +143,16 @@ type State = {
   isDestinationPolkadex: boolean;
   destinationAccount?: ExtensionAccount;
   setDestinationAccount: Dispatch<SetStateAction<ExtensionAccount | undefined>>;
+
+  supportedAssets: Asset[];
+  selectedAsset: Asset | null;
+  onSelectAsset: (asset: Asset) => void;
+  selectedAssetBalance: number;
+
+  sourceBalances: AssetAmount[];
+  sourceBalancesLoading: boolean;
+  sourceBalancesSuccess: boolean;
+  onRefetchSourceBalances?: UseQueryResult["refetch"];
 };
 
 const Context = createContext<State>({
@@ -110,6 +166,15 @@ const Context = createContext<State>({
   isDestinationPolkadex: false,
   destinationAccount: undefined,
   setDestinationAccount: () => {},
+
+  supportedAssets: [],
+  selectedAsset: null,
+  onSelectAsset: () => {},
+  selectedAssetBalance: 0,
+
+  sourceBalances: [],
+  sourceBalancesLoading: false,
+  sourceBalancesSuccess: false,
 });
 
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
