@@ -252,7 +252,7 @@ type State = {
   destinationPDEXBalance: number;
 };
 
-export const Context = createContext<State>({
+const Context = createContext<State>({
   chains: [],
 
   sourceChain: null,
@@ -285,3 +285,5 @@ export const Context = createContext<State>({
 const Provider = ({ value, children }: PropsWithChildren<{ value: State }>) => {
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
+
+export const DepositContext = Context;
