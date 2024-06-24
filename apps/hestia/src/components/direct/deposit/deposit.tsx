@@ -54,8 +54,11 @@ export const Deposit = () => {
     destinationChain,
     destinationAccount,
     sourceBalancesLoading,
+    sourceBalances,
     selectedAssetBalance,
+    supportedAssets,
     selectedAsset,
+    onSelectAsset,
     transferConfigLoading,
     transferConfig,
     sourceAccount,
@@ -251,8 +254,8 @@ export const Deposit = () => {
               </Typography.Heading>
               <SelectNetwork
                 allChains={chains}
-                sourceChain={sourceChain as Chain}
-                onSelectSourceChain={(e) => onSelectSourceChain(e)}
+                selectedChain={sourceChain as Chain}
+                onSelectChain={(e) => onSelectSourceChain(e)}
               />
               <div className="flex item-center justify-center bg-success-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
                 <RiCheckLine className="w-full h-full" />
@@ -293,7 +296,15 @@ export const Deposit = () => {
                   ref={ref}
                   className="flex item-center border border-primary rounded-sm"
                 >
-                  <SelectAsset width={bounds.width} />
+                  <SelectAsset
+                    width={bounds.width}
+                    sourceChain={sourceChain}
+                    supportedAssets={supportedAssets}
+                    selectedAsset={selectedAsset}
+                    onSelectAsset={onSelectAsset}
+                    sourceBalances={sourceBalances}
+                    sourceBalancesLoading={sourceBalancesLoading}
+                  />
                   <Tooltip open={!!errors.amount}>
                     <Tooltip.Trigger asChild>
                       <div

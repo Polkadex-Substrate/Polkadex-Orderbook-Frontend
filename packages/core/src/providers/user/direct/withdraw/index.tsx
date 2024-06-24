@@ -73,8 +73,15 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
 
   /* Asset */
   const supportedAssets = useMemo(() => {
-    return sourceConnector?.getAllAssets() || [];
-  }, [sourceConnector]);
+    if (isDestinationPolkadex) {
+      return sourceConnector?.getAllAssets() || [];
+    }
+    return (
+      (destinationChain &&
+        sourceConnector?.getSupportedAssets(destinationChain)) ||
+      []
+    );
+  }, [destinationChain, isDestinationPolkadex, sourceConnector]);
 
   const onSelectAsset = (asset: Asset) => {
     if (!supportedAssets.some((e) => e.ticker === asset.ticker)) return;

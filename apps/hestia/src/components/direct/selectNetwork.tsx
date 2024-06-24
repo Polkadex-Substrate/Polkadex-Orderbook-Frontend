@@ -14,12 +14,12 @@ import { useMeasure } from "react-use";
 
 export const SelectNetwork = ({
   allChains,
-  sourceChain,
-  onSelectSourceChain,
+  selectedChain,
+  onSelectChain,
 }: {
   allChains: ChainType[];
-  sourceChain: ChainType;
-  onSelectSourceChain: (chain: ChainType) => void;
+  selectedChain: ChainType;
+  onSelectChain: (chain: ChainType) => void;
 }) => {
   const [open, setOpen] = useState(false);
   const [ref, bounds] = useMeasure<HTMLButtonElement>();
@@ -34,9 +34,9 @@ export const SelectNetwork = ({
         >
           <div>
             <div className="flex items-center gap-2">
-              <Chain name={sourceChain.name} />
+              <Chain name={selectedChain.name} />
               <Typography.Text size="lg" bold>
-                {sourceChain.name ?? "Select"}
+                {selectedChain.name ?? "Select"}
               </Typography.Text>
             </div>
             <RiArrowDownSLine className="w-4 h-4" />
@@ -61,7 +61,7 @@ export const SelectNetwork = ({
                           value={e.name}
                           className="mb-1 mr-1"
                           onSelect={() => {
-                            onSelectSourceChain(e);
+                            onSelectChain(e);
                             setOpen(false);
                           }}
                         >

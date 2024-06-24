@@ -10,22 +10,30 @@ import {
   TokenCard,
   TokenAppearance,
 } from "@polkadex/ux";
+import { Asset, AssetAmount, Chain } from "@polkadex/thea";
 import { Fragment, useState } from "react";
 import { RiArrowDownSLine } from "@remixicon/react";
-import { useDirectDepositProvider } from "@orderbook/core/providers/user/direct";
 
 import { formatAmount } from "@/helpers";
 
-export const SelectAsset = ({ width }: { width: number }) => {
+export const SelectAsset = ({
+  width,
+  sourceChain,
+  supportedAssets,
+  selectedAsset,
+  onSelectAsset,
+  sourceBalances,
+  sourceBalancesLoading,
+}: {
+  width: number;
+  sourceChain: Chain | null;
+  supportedAssets: Asset[];
+  selectedAsset: Asset | null;
+  onSelectAsset: (asset: Asset) => void;
+  sourceBalances: AssetAmount[];
+  sourceBalancesLoading: boolean;
+}) => {
   const [open, setOpen] = useState(false);
-  const {
-    supportedAssets,
-    selectedAsset,
-    onSelectAsset,
-    sourceBalances,
-    sourceBalancesLoading,
-    sourceChain,
-  } = useDirectDepositProvider();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

@@ -80,7 +80,7 @@ export function Template() {
                   <Deposit />
                 </Tabs.Content>
                 <Tabs.Content value="withdraw">
-                  {/* <Withdraw /> */}
+                  <Withdraw />
                 </Tabs.Content>
               </div>
               <Faq />
