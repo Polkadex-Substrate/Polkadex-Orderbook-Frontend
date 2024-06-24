@@ -84,12 +84,16 @@ export const ConfirmTransaction = ({
     if (isDestinationPolkadex) return undefined;
     const autoSwapAmount = showAutoSwap ? swapPrice : 0;
 
-    if (showAutoSwap && !swapPrice) return CrossChainError.NOT_ENOUGH_LIQUIDITY;
+    if (showAutoSwap && !swapPrice)
+      return CrossChainError.NOT_ENOUGH_LIQUIDITY_WITHDRAW(
+        selectedAsset?.ticker as string
+      );
 
     if (showAutoSwap && amount <= autoSwapAmount)
       return CrossChainError.AUTO_SWAP(
         autoSwapAmount.toFixed(4),
-        selectedAsset?.ticker as string
+        selectedAsset?.ticker as string,
+        true
       );
   }, [
     amount,
@@ -180,10 +184,10 @@ export const ConfirmTransaction = ({
                     </div>
                   </Copy>
                 </GenericHorizontalItem>
-                {showAutoSwap && (
+                {showAutoSwap && swapPrice > 0 && (
                   <GenericHorizontalItem
                     label="Swap required"
-                    tooltip={`In order to withdraw your funds, you must have to transfer at least {----} ${selectedAsset?.ticker}. A small part of your transfer will be auto-swapped to PDEX to pay the fee.`}
+                    tooltip={`In order to withdraw your funds, you must have to transfer at least ${swapPrice.toFixed(4)} ${selectedAsset?.ticker}. A small part of your transfer will be auto-swapped to PDEX to pay the fee.`}
                     defaultOpen
                   >
                     <div className="flex items-center gap-1">

@@ -85,8 +85,10 @@ export const CrossChainError = {
   SOURCE_FEE: "Insufficient balance to pay the transaction fee at source chain",
   NOT_ENOUGH_LIQUIDITY:
     "Not enough PDEX in the destination account. Please transfer 1+ PDEX first.",
-  AUTO_SWAP: (swapAmount: string, ticker: string) =>
-    `Please transfer more than ${swapAmount} ${ticker} since Autoswap is required`,
+  NOT_ENOUGH_LIQUIDITY_WITHDRAW: (asset: string) =>
+    `Insufficient liquidity to convert ${asset} tokens to PDEX for fee payment.`,
+  AUTO_SWAP: (swapAmount: string, ticker: string, withdraw?: boolean) =>
+    `Please transfer more than ${swapAmount} ${ticker} since Autoswap is required ${withdraw ? "to pay the fee" : ""}`,
 };
 
 export const MAX_DIGITS_AFTER_DECIMAL = 8;
