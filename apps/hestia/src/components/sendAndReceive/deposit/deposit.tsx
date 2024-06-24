@@ -359,6 +359,7 @@ export const Deposit = () => {
                   className="w-full py-5"
                   size="md"
                   disabled={disabled}
+                  appearance="success"
                 >
                   Deposit
                 </Button.Solid>

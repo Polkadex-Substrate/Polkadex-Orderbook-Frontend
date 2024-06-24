@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   HoverInformation,
   ResponsiveCard,
@@ -18,6 +19,8 @@ import { SelectNetwork } from "../selectNetwork";
 import { SelectAsset } from "../selectAsset";
 import { SelectWallet } from "../selectWallet";
 
+import { formatAmount } from "@/helpers";
+
 export const Withdraw = () => {
   const [ref, bounds] = useMeasure<HTMLDivElement>();
 
@@ -26,6 +29,7 @@ export const Withdraw = () => {
     sourceChain,
     destinationChain,
     onSelectDestinationChain,
+    sourceAccount,
     destinationAccount,
     setDestinationAccount,
     supportedAssets,
@@ -33,12 +37,58 @@ export const Withdraw = () => {
     onSelectAsset,
     sourceBalances,
     sourceBalancesLoading,
+    selectedAssetBalance,
+    isDestinationPolkadex,
+    transferConfig,
+    transferConfigLoading,
   } = useDirectWithdrawProvider();
+
+  const { destinationFee, sourceFee } = transferConfig ?? {};
+
+  const balanceAmount = useMemo(
+    () => formatAmount(selectedAssetBalance),
+    [selectedAssetBalance]
+  );
+
+  const loading = useMemo(() => {
+    if (!sourceAccount || !destinationAccount) return false;
+    if (isDestinationPolkadex) return sourceBalancesLoading;
+    const isLoading = transferConfigLoading || sourceBalancesLoading;
+    return isLoading;
+  }, [
+    destinationAccount,
+    isDestinationPolkadex,
+    sourceAccount,
+    sourceBalancesLoading,
+    transferConfigLoading,
+  ]);
+
+  const [
+    destinationFeeAmount,
+    destinationFeeTicker,
+    sourceFeeAmount,
+    sourceFeeTicker,
+  ] = useMemo(() => {
+    const destValue = destinationFee?.amount;
+    const sourceValue = sourceFee?.amount;
+
+    return [
+      destValue ? `~ ${formatAmount(destValue)}` : "Ø",
+      destValue ? destinationFee?.ticker : "",
+      sourceValue ? `~ ${formatAmount(sourceValue)}` : "Ø",
+      sourceValue ? sourceFee?.ticker : "",
+    ];
+  }, [
+    destinationFee?.amount,
+    destinationFee?.ticker,
+    sourceFee?.amount,
+    sourceFee?.ticker,
+  ]);
 
   return (
     <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
       <div className="flex flex-col">
-        <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
+        <div className="flex flex-col gap-2 border-l-2 border-primary-base px-8 pb-5 relative">
           <Typography.Heading size="lg" className="leading-none">
             To Network
           </Typography.Heading>
@@ -47,12 +97,12 @@ export const Withdraw = () => {
             selectedChain={destinationChain as Chain}
             onSelectChain={(e) => onSelectDestinationChain(e)}
           />
-          <div className="flex item-center justify-center bg-success-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
+          <div className="flex item-center justify-center bg-primary-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
             <RiCheckLine className="w-full h-full" />
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
+        <div className="flex flex-col gap-2 border-l-2 border-primary-base px-8 pb-5 relative">
           <Typography.Text size="lg" bold>
             To Account
           </Typography.Text>
@@ -66,7 +116,7 @@ export const Withdraw = () => {
           <div
             className={classNames(
               "flex item-center justify-center bg-primary rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5",
-              destinationAccount && "bg-success-base"
+              destinationAccount && "bg-primary-base"
             )}
           >
             {destinationAccount && <RiCheckLine className="w-full h-full" />}
@@ -79,21 +129,23 @@ export const Withdraw = () => {
               Asset
             </Typography.Heading>
             <HoverInformation>
-              <HoverInformation.Trigger className="min-w-20">
+              <HoverInformation.Trigger loading={loading} className="min-w-20">
                 <RiInformationFill className="w-3 h-3 text-actionInput" />
                 <Typography.Text size="xs" appearance="primary">
-                  Available: 0
+                  Available: {balanceAmount} {selectedAsset?.ticker}
                 </Typography.Text>
               </HoverInformation.Trigger>
-              <HoverInformation.Content>
-                <ResponsiveCard label="Source fee" loading={false}>
-                  0
+              <HoverInformation.Content
+                className={classNames(loading && "hidden")}
+              >
+                <ResponsiveCard label="Source fee" loading={loading}>
+                  {sourceFeeAmount} {sourceFeeTicker}
                 </ResponsiveCard>
-                <ResponsiveCard label="Destination fee" loading={false}>
-                  0
+                <ResponsiveCard label="Destination fee" loading={loading}>
+                  {destinationFeeAmount} {destinationFeeTicker}
                 </ResponsiveCard>
-                <ResponsiveCard label="Available" loading={false}>
-                  0
+                <ResponsiveCard label="Available" loading={loading}>
+                  {balanceAmount} {selectedAsset?.ticker}
                 </ResponsiveCard>
               </HoverInformation.Content>
             </HoverInformation>
@@ -144,7 +196,7 @@ export const Withdraw = () => {
               </Tooltip>
             </div>
           </div>
-          <div className="flex item-center justify-center bg-success-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
+          <div className="flex item-center justify-center bg-primary-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
             <RiCheckLine className="w-full h-full" />
           </div>
         </div>
