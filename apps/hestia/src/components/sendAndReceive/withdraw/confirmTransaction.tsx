@@ -86,7 +86,7 @@ export const ConfirmTransaction = ({
 
     if (showAutoSwap && amount <= autoSwapAmount)
       return CrossChainError.AUTO_SWAP(
-        autoSwapAmount.toFixed(4),
+        String(autoSwapAmount),
         selectedAsset?.ticker as string,
         true
       );
@@ -182,7 +182,7 @@ export const ConfirmTransaction = ({
                 {showAutoSwap && swapPrice > 0 && (
                   <GenericHorizontalItem
                     label="Swap required"
-                    tooltip={`In order to withdraw your funds, you must have to transfer at least ${swapPrice.toFixed(4)} ${selectedAsset?.ticker}. A small part of your transfer will be auto-swapped to PDEX to pay the fee.`}
+                    tooltip={`In order to withdraw your funds, you must have to transfer at least ${swapPrice} ${selectedAsset?.ticker}. A small part of your transfer will be auto-swapped to PDEX to pay the fee.`}
                     defaultOpen
                   >
                     <div className="flex items-center gap-1">
@@ -191,7 +191,7 @@ export const ConfirmTransaction = ({
                         <div className="flex items-center gap-1">
                           <Typography.Text>
                             {swapPrice > 0
-                              ? `${swapPrice.toFixed(4)} ${selectedAsset?.ticker}`
+                              ? `${swapPrice} ${selectedAsset?.ticker}`
                               : "--------"}
                           </Typography.Text>
                           <Typography.Text appearance="primary">
@@ -245,7 +245,7 @@ export const ConfirmTransaction = ({
                     </ResponsiveCard>
                     {showAutoSwap && swapPrice > 0 && (
                       <ResponsiveCard label="Auto swap">
-                        {swapPrice.toFixed(4)} {selectedAsset?.ticker}
+                        {swapPrice} {selectedAsset?.ticker}
                       </ResponsiveCard>
                     )}
                   </HoverInformation.Content>

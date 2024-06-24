@@ -73,6 +73,11 @@ export const Withdraw = () => {
     enabled: showAutoSwap,
   });
 
+  const autoSwapAmount = useMemo(
+    () => formatAmount(+swapPrice.toFixed(6)),
+    [swapPrice]
+  );
+
   const balanceAmount = useMemo(
     () => formatAmount(selectedAssetBalance),
     [selectedAssetBalance]
@@ -108,13 +113,13 @@ export const Withdraw = () => {
       destinationFee?.ticker === selectedAsset?.ticker
         ? destinationFee?.amount || 0
         : 0;
-    return Math.max(destFee, swapPrice).toFixed(8);
+    return Math.max(destFee, +autoSwapAmount);
   }, [
     isDestinationPolkadex,
     selectedAsset?.ticker,
     destinationFee?.ticker,
     destinationFee?.amount,
-    swapPrice,
+    autoSwapAmount,
   ]);
 
   const {
@@ -137,7 +142,7 @@ export const Withdraw = () => {
           selectedAsset?.ticker || "",
           +minAmount,
           +balanceAmount,
-          swapPrice
+          +autoSwapAmount
         ),
     onSubmit: () => setConfirmTxModal(true),
   });
@@ -191,7 +196,7 @@ export const Withdraw = () => {
         }}
         showAutoSwap={showAutoSwap}
         swapLoading={swapLoading}
-        swapPrice={swapPrice}
+        swapPrice={+autoSwapAmount}
       />
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
