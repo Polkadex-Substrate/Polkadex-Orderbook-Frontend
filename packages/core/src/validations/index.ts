@@ -235,6 +235,85 @@ export const depositValidations = (
   });
 };
 
+export const directWithdrawValidations = (
+  sourceWalletPresent: boolean,
+  destinationWalletPresent: boolean,
+  isDestinationPolkadex: boolean,
+  selectedAsset: string,
+  minAmount = 0,
+  balance = 0,
+  swapPrice = 0
+) => {
+  const min = formatAmount(minAmount);
+
+  return Yup.object().shape({
+    amount: Yup.string()
+      .required("Required")
+      .test(
+        ErrorMessages().CONNECT_WALLET,
+        ErrorMessages().CONNECT_WALLET,
+        () => sourceWalletPresent
+      )
+      .test(
+        CrossChainError.DESTINATION_WALLET,
+        CrossChainError.DESTINATION_WALLET,
+        () => destinationWalletPresent
+      )
+      .test(
+        ErrorMessages().WHITESPACE_NOT_ALLOWED,
+        ErrorMessages().WHITESPACE_NOT_ALLOWED,
+        (value) => !/\s/.test(value || "")
+      )
+      .test(
+        ErrorMessages().MUST_BE_A_NUMBER,
+        ErrorMessages().MUST_BE_A_NUMBER,
+        (value) => /^\d+(\.\d+)?$/.test(value || "")
+      )
+      .test(
+        ErrorMessages().ZERO,
+        ErrorMessages().ZERO,
+        (value) => Number(value) > 0
+      )
+      .test(
+        ErrorMessages().TOO_SMALL,
+        ErrorMessages().TOO_SMALL,
+        (value) => Number(value) >= 0.000001
+      )
+      .test(
+        ErrorMessages("0", min).MIN,
+        ErrorMessages("0", min).MIN,
+        (value) => Number(value) >= minAmount
+      )
+      .test(
+        ErrorMessages().CHECK_BALANCE,
+        ErrorMessages().CHECK_BALANCE,
+        (value) => Number(value) <= Number(balance)
+      )
+      .test(
+        ErrorMessages().CHECK_VALID_AMOUNT,
+        ErrorMessages().CHECK_VALID_AMOUNT,
+        (value) =>
+          !(value?.toString().includes("e") || value?.toString().includes("o"))
+      )
+      .test(
+        ErrorMessages().MAX_DIGIT_AFTER_DECIMAL,
+        ErrorMessages().MAX_DIGIT_AFTER_DECIMAL,
+        (value) =>
+          value
+            ? getDigitsAfterDecimal(value) <= MAX_DIGITS_AFTER_DECIMAL
+            : false
+      )
+      .test(
+        CrossChainError.NOT_ENOUGH_LIQUIDITY_WITHDRAW(selectedAsset),
+        CrossChainError.NOT_ENOUGH_LIQUIDITY_WITHDRAW(selectedAsset),
+        () =>
+          isDestinationPolkadex || selectedAsset === "PDEX"
+            ? true
+            : swapPrice > 0
+      ),
+  });
+};
+
 export const withdrawValidations = (balance: string | number) => {
   return Yup.object().shape({
     amount: Yup.string()

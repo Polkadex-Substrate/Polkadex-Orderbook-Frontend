@@ -26,7 +26,7 @@ import {
 } from "@orderbook/core/index";
 import { useDirectWithdrawProvider } from "@orderbook/core/providers/user/sendAndReceive";
 
-import { useDeposit, usePool } from "@/hooks";
+import { useDeposit } from "@/hooks";
 import {
   ErrorMessage,
   GenericHorizontalItem,
@@ -39,6 +39,9 @@ interface Props {
   setOpenFeeModal: Dispatch<SetStateAction<boolean>>;
   amount: number;
   onSuccess: () => void;
+  showAutoSwap: boolean;
+  swapLoading: boolean;
+  swapPrice: number;
 }
 
 export const ConfirmTransaction = ({
@@ -46,6 +49,9 @@ export const ConfirmTransaction = ({
   setOpenFeeModal,
   amount,
   onSuccess,
+  showAutoSwap,
+  swapLoading,
+  swapPrice,
 }: Props) => {
   const [checked, setChecked] = useState(false);
   const {
@@ -57,17 +63,6 @@ export const ConfirmTransaction = ({
     isDestinationPolkadex,
   } = useDirectWithdrawProvider();
   const { destinationFee, sourceFee } = transferConfig ?? {};
-
-  const showAutoSwap = useMemo(
-    () => !isDestinationPolkadex,
-    [isDestinationPolkadex]
-  );
-
-  const { swapPrice = 0, swapLoading } = usePool({
-    asset: selectedAsset?.id,
-    amount: THEA_WITHDRAW_FEE,
-    enabled: showAutoSwap,
-  });
 
   const shortSourceAddress = useMemo(
     () => truncateString(PALLET_ADDRESS, 3),

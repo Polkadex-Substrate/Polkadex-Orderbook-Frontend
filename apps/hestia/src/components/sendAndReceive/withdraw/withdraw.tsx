@@ -19,7 +19,11 @@ import classNames from "classnames";
 import { useMeasure } from "react-use";
 import { useFormik } from "formik";
 import { useDirectWithdrawProvider } from "@orderbook/core/providers/user/sendAndReceive";
-import { withdrawValidations } from "@orderbook/core/validations";
+import {
+  directWithdrawValidations,
+  withdrawValidations,
+} from "@orderbook/core/validations";
+import { THEA_WITHDRAW_FEE } from "@orderbook/core/constants";
 
 import { SelectNetwork } from "../selectNetwork";
 import { SelectAsset } from "../selectAsset";
@@ -28,6 +32,7 @@ import { SelectWallet } from "../selectWallet";
 import { ConfirmTransaction } from "./confirmTransaction";
 
 import { formatAmount } from "@/helpers";
+import { usePool } from "@/hooks";
 
 const initialValues = {
   amount: "",
@@ -55,8 +60,18 @@ export const Withdraw = () => {
     transferConfig,
     transferConfigLoading,
   } = useDirectWithdrawProvider();
-
   const { destinationFee, sourceFee } = transferConfig ?? {};
+
+  const showAutoSwap = useMemo(
+    () => !isDestinationPolkadex && !!selectedAsset?.id,
+    [isDestinationPolkadex, selectedAsset?.id]
+  );
+
+  const { swapPrice = 0, swapLoading } = usePool({
+    asset: selectedAsset?.id,
+    amount: THEA_WITHDRAW_FEE,
+    enabled: showAutoSwap,
+  });
 
   const balanceAmount = useMemo(
     () => formatAmount(selectedAssetBalance),
@@ -85,6 +100,23 @@ export const Withdraw = () => {
     sourceFee?.ticker,
   ]);
 
+  const minAmount = useMemo(() => {
+    if (isDestinationPolkadex) return 0;
+    if (selectedAsset?.ticker === "PDEX") return THEA_WITHDRAW_FEE;
+
+    const destFee =
+      destinationFee?.ticker === selectedAsset?.ticker
+        ? destinationFee?.amount || 0
+        : 0;
+    return Math.max(destFee, swapPrice).toFixed(8);
+  }, [
+    isDestinationPolkadex,
+    selectedAsset?.ticker,
+    destinationFee?.ticker,
+    destinationFee?.amount,
+    swapPrice,
+  ]);
+
   const {
     handleSubmit,
     errors,
@@ -96,18 +128,17 @@ export const Withdraw = () => {
     resetForm,
   } = useFormik({
     initialValues,
-    // validationSchema: isDestinationPolkadex
-    //   ? withdrawValidations(selectedAssetBalance)
-    //   : directDepositValidations(
-    //       !!sourceAccount,
-    //       !!destinationAccount,
-    //       minAmount,
-    //       +maxAmount,
-    //       destinationPDEXBalance,
-    //       selectedAssetBalance,
-    //       poolReserve?.reserve || 0
-    //     ),
-    validationSchema: withdrawValidations(selectedAssetBalance),
+    validationSchema: isDestinationPolkadex
+      ? withdrawValidations(selectedAssetBalance)
+      : directWithdrawValidations(
+          !!sourceAccount,
+          !!destinationAccount,
+          isDestinationPolkadex,
+          selectedAsset?.ticker || "",
+          +minAmount,
+          +balanceAmount,
+          swapPrice
+        ),
     onSubmit: () => setConfirmTxModal(true),
   });
 
@@ -115,13 +146,16 @@ export const Withdraw = () => {
     if (!sourceAccount || !destinationAccount) return false;
     if (isDestinationPolkadex) return sourceBalancesLoading;
     const isLoading = transferConfigLoading || sourceBalancesLoading;
-    return isLoading;
+    if (!selectedAsset?.id) return isLoading;
+    return isLoading || swapLoading;
   }, [
     destinationAccount,
     isDestinationPolkadex,
     sourceAccount,
+    swapLoading,
     sourceBalancesLoading,
     transferConfigLoading,
+    selectedAsset?.id,
   ]);
 
   const disabled = useMemo(
@@ -155,6 +189,9 @@ export const Withdraw = () => {
           resetForm();
           setConfirmTxModal(false);
         }}
+        showAutoSwap={showAutoSwap}
+        swapLoading={swapLoading}
+        swapPrice={swapPrice}
       />
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
