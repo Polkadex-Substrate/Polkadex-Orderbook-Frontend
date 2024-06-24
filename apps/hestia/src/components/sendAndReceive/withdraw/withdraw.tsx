@@ -120,7 +120,7 @@ export const Withdraw = () => {
       destinationFee?.ticker === selectedAsset?.ticker
         ? destinationFee?.amount || 0
         : 0;
-    return Math.max(destFee, +autoSwapAmount);
+    return +autoSwapAmount + destFee;
   }, [
     isDestinationPolkadex,
     selectedAsset?.ticker,
@@ -212,6 +212,7 @@ export const Withdraw = () => {
         showAutoSwap={showAutoSwap}
         swapLoading={swapLoading}
         swapPrice={+autoSwapAmount}
+        minAmount={minAmount}
       />
       <Modal open={showPassword} onOpenChange={setShowPassword}>
         <Modal.Content>

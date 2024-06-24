@@ -42,6 +42,7 @@ interface Props {
   showAutoSwap: boolean;
   swapLoading: boolean;
   swapPrice: number;
+  minAmount: number;
 }
 
 export const ConfirmTransaction = ({
@@ -52,6 +53,7 @@ export const ConfirmTransaction = ({
   showAutoSwap,
   swapLoading,
   swapPrice,
+  minAmount,
 }: Props) => {
   const [checked, setChecked] = useState(false);
   const {
@@ -182,7 +184,7 @@ export const ConfirmTransaction = ({
                 {showAutoSwap && swapPrice > 0 && (
                   <GenericHorizontalItem
                     label="Swap required"
-                    tooltip={`In order to withdraw your funds, you must have to transfer at least ${swapPrice} ${selectedAsset?.ticker}. A small part of your transfer will be auto-swapped to PDEX to pay the fee.`}
+                    tooltip={`In order to withdraw your funds, you must have to transfer at least ${minAmount} ${selectedAsset?.ticker}. A small part of your transfer will be auto-swapped to PDEX to pay the fee.`}
                     defaultOpen
                   >
                     <div className="flex items-center gap-1">

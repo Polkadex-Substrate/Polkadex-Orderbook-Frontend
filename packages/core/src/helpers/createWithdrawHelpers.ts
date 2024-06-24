@@ -1,5 +1,8 @@
 import { ApiPromise } from "@polkadot/api";
 import { getNonce } from "@orderbook/core/helpers/getNonce";
+import { Chain, getDirectWithdrawalMultilocation } from "@polkadex/thea";
+
+import { GENESIS } from "../constants";
 
 type WithdrawPayload = {
   asset: string | "PDEX";
@@ -27,4 +30,78 @@ export const createWithdrawSigningPayload = (
     destination_network: null,
   };
   return data;
+};
+
+export const createDirectWithdrawSigningPayload = (
+  api: ApiPromise,
+  payload: WithdrawPayload,
+  isExtensionSigner: boolean,
+  destinationAccount: string,
+  destinationChain: Chain
+): [object, object] => {
+  const accountId = api.createType("AccountId32", destinationAccount);
+  const timestamp = getNonce();
+
+  const isDestinationPolkadex = destinationChain.genesis === GENESIS[0];
+
+  const destinationNetworkSign = getDirectWithdrawalMultilocation(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    accountId,
+    destinationChain,
+    "sign"
+  );
+
+  const destinationNetworkSend = getDirectWithdrawalMultilocation(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    accountId,
+    destinationChain,
+    "send"
+  );
+
+  if (isExtensionSigner) {
+    const res = {
+      asset_id: { asset: payload.asset },
+      amount: payload.amount,
+      timestamp,
+      destination_network: null,
+    };
+
+    return [
+      {
+        ...res,
+        destination_network: isDestinationPolkadex
+          ? null
+          : { Polkadot: [destinationNetworkSign, null] },
+      },
+      {
+        ...res,
+        destination_network: isDestinationPolkadex
+          ? null
+          : { Polkadot: [destinationNetworkSend, null] },
+      },
+    ];
+  }
+  const res = {
+    asset_id:
+      payload.asset === "PDEX" ? { polkadex: null } : { asset: payload.asset },
+    amount: payload.amount,
+    timestamp,
+    destination_network: null,
+  };
+  return [
+    {
+      ...res,
+      destination_network: isDestinationPolkadex
+        ? null
+        : { Polkadot: [destinationNetworkSign, null] },
+    },
+    {
+      ...res,
+      destination_network: isDestinationPolkadex
+        ? null
+        : { Polkadot: [destinationNetworkSend, null] },
+    },
+  ];
 };

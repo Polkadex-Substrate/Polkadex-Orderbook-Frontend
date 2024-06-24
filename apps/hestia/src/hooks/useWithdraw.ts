@@ -11,7 +11,7 @@ import { Codec } from "@polkadot/types/types";
 import { useUserAccounts } from "@polkadex/react-providers";
 import { appsyncOrderbookService } from "@orderbook/core/utils/orderbookService";
 import {
-  createWithdrawSigningPayload,
+  createDirectWithdrawSigningPayload,
   isValidAddress,
   signPayload,
   sleep,
@@ -46,7 +46,7 @@ export function useWithdraw({ onSuccess }: { onSuccess: () => void }) {
       if (!api || !api?.isConnected)
         throw new Error("You are not connected to blockchain");
 
-      if (!sourceAccount || !destinationAccount) {
+      if (!sourceAccount || !destinationAccount || !destinationChain) {
         throw new Error("Withdraw issue");
       }
 
@@ -115,14 +115,17 @@ export function useWithdraw({ onSuccess }: { onSuccess: () => void }) {
       const isSignedByExtension =
         tradeAddress?.trim().length === 0 || mainAddress === tradeAddress;
 
-      const signingPayload = createWithdrawSigningPayload(
-        {
-          asset,
-          amount,
-        },
-        api,
-        isSignedByExtension
-      );
+      const [signingPayload, sendingPayload] =
+        createDirectWithdrawSigningPayload(
+          api,
+          {
+            asset,
+            amount,
+          },
+          isSignedByExtension,
+          destinationAccount.address,
+          destinationChain
+        );
 
       let signature: { Sr25519: string };
 
@@ -156,7 +159,7 @@ export function useWithdraw({ onSuccess }: { onSuccess: () => void }) {
         payload: [
           mainAddress,
           proxy,
-          { ...signingPayload, asset_id: { asset } },
+          { ...sendingPayload, asset_id: { asset } },
           signature,
         ],
       });
