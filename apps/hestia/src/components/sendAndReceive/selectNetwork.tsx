@@ -18,7 +18,7 @@ export const SelectNetwork = ({
   onSelectChain,
 }: {
   allChains: ChainType[];
-  selectedChain: ChainType;
+  selectedChain: ChainType | null;
   onSelectChain: (chain: ChainType) => void;
 }) => {
   const [open, setOpen] = useState(false);
@@ -34,9 +34,9 @@ export const SelectNetwork = ({
         >
           <div>
             <div className="flex items-center gap-2">
-              <Chain name={selectedChain.name} />
+              <Chain name={selectedChain?.name || ""} />
               <Typography.Text size="lg" bold>
-                {selectedChain.name ?? "Select"}
+                {selectedChain?.name ?? "Select"}
               </Typography.Text>
             </div>
             <RiArrowDownSLine className="w-4 h-4" />
