@@ -50,14 +50,25 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
   const sourceAccountSelected = useMemo(() => selectedWallet, [selectedWallet]);
 
   /* Destination Chain */
-  const destinationAccountSelected = useMemo(
-    () =>
+  const isDestinationPolkadex = useMemo(
+    () => !!(destinationChain?.genesis === GENESIS[0]),
+    [destinationChain?.genesis]
+  );
+
+  const destinationAccountSelected = useMemo(() => {
+    if (isDestinationPolkadex) return selectedWallet;
+    return (
       destinationAccount ??
       (destinationChain?.type === ChainType.Substrate
         ? selectedWallet
-        : undefined),
-    [destinationAccount, selectedWallet, destinationChain?.type]
-  );
+        : undefined)
+    );
+  }, [
+    destinationAccount,
+    selectedWallet,
+    destinationChain?.type,
+    isDestinationPolkadex,
+  ]);
 
   const destinationConnector = useMemo(
     () => destinationChain && getChainConnector(destinationChain.genesis),
@@ -70,11 +81,6 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
     setDestinationChain(chain);
     setSelectedAsset(selectedAsset);
   };
-
-  const isDestinationPolkadex = useMemo(
-    () => !!(destinationChain?.genesis === GENESIS[0]),
-    [destinationChain?.genesis]
-  );
 
   /* Asset */
   const supportedAssets = useMemo(() => {

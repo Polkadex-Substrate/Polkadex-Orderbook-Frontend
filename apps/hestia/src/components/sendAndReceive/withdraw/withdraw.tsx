@@ -243,30 +243,33 @@ export const Withdraw = () => {
               </div>
             </div>
 
-            {!isDestinationPolkadex && (
-              <div className="flex flex-col gap-2 border-l-2 border-primary-base px-8 pb-5 relative">
-                <Typography.Text size="lg" bold>
-                  To Account
-                </Typography.Text>
-                <div className="border border-primary rounded-sm px-2 py-4">
-                  <SelectWallet
-                    account={destinationAccount}
-                    setAccount={(e) => setDestinationAccount(e)}
-                    evm={destinationChain?.type !== ChainType.Substrate}
-                  />
-                </div>
-                <div
-                  className={classNames(
-                    "flex item-center justify-center bg-primary rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5",
-                    destinationAccount && "bg-primary-base"
-                  )}
-                >
-                  {destinationAccount && (
-                    <RiCheckLine className="w-full h-full" />
-                  )}
-                </div>
+            <div className="flex flex-col gap-2 border-l-2 border-primary-base px-8 pb-5 relative">
+              <Typography.Text size="lg" bold>
+                To Account
+              </Typography.Text>
+              <div
+                className={classNames(
+                  "border border-primary rounded-sm px-2 py-4",
+                  isDestinationPolkadex && "pointer-events-none opacity-60"
+                )}
+              >
+                <SelectWallet
+                  account={destinationAccount}
+                  setAccount={(e) => setDestinationAccount(e)}
+                  evm={destinationChain?.type !== ChainType.Substrate}
+                />
               </div>
-            )}
+              <div
+                className={classNames(
+                  "flex item-center justify-center bg-primary rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5",
+                  destinationAccount && "bg-primary-base"
+                )}
+              >
+                {destinationAccount && (
+                  <RiCheckLine className="w-full h-full" />
+                )}
+              </div>
+            </div>
 
             <div className="flex flex-col gap-2 pb-5 px-8 relative">
               <div className="flex items-center justify-between gap-2">
