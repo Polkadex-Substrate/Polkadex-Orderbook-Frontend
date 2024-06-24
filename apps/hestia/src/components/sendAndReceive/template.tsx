@@ -55,7 +55,9 @@ export function Template() {
             <Tabs
               className="flex flex-row flex-1 md:min-h-[430px] max-md:flex-col md:flex-row"
               defaultValue={params.get("type") || "deposit"}
-              onValueChange={(e) => router.replace(`/direct?type=${e}`)}
+              onValueChange={(e) =>
+                router.replace(`/send-and-receive?type=${e}`)
+              }
             >
               <div className="flex flex-col">
                 <Tabs.List className="flex max-md:flex-row md:flex-col items-start gap-0 py-4">
