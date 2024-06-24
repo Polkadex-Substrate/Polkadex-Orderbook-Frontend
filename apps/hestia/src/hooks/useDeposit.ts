@@ -5,7 +5,7 @@ import { useSettingsProvider } from "@orderbook/core/providers/public/settings";
 import { NOTIFICATIONS } from "@orderbook/core/constants";
 import { Chain } from "@polkadex/thea";
 import { signAndSubmitPromiseWrapper } from "@polkadex/blockchain-api";
-import { useDirectDepositProvider } from "@orderbook/core/providers/user/direct";
+import { useDirectDepositProvider } from "@orderbook/core/providers/user/sendAndReceive";
 import { useNativeApi } from "@orderbook/core/providers/public/nativeApi";
 import { useOrderbookService } from "@orderbook/core/providers/public/orderbookServiceProvider/useOrderbookService";
 import { useTransactionManager } from "@polkadex/react-providers";

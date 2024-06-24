@@ -24,7 +24,7 @@ import {
   THEA_AUTOSWAP,
   parseScientific,
 } from "@orderbook/core/index";
-import { useDirectDepositProvider } from "@orderbook/core/providers/user/direct";
+import { useDirectDepositProvider } from "@orderbook/core/providers/user/sendAndReceive";
 
 import { useDeposit, usePool } from "@/hooks";
 import {

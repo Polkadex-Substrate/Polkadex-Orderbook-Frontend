@@ -17,7 +17,7 @@ import {
 } from "@remixicon/react";
 import classNames from "classnames";
 import { useMeasure } from "react-use";
-import { useDirectDepositProvider } from "@orderbook/core/providers/user/direct";
+import { useDirectDepositProvider } from "@orderbook/core/providers/user/sendAndReceive";
 import { Chain, ChainType } from "@polkadex/thea";
 import {
   depositValidations,

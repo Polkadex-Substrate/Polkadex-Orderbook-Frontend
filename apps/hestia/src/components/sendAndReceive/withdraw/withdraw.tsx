@@ -12,7 +12,7 @@ import { Chain, ChainType } from "@polkadex/thea";
 import { RiCheckLine, RiInformationFill } from "@remixicon/react";
 import classNames from "classnames";
 import { useMeasure } from "react-use";
-import { useDirectWithdrawProvider } from "@orderbook/core/providers/user/direct";
+import { useDirectWithdrawProvider } from "@orderbook/core/providers/user/sendAndReceive";
 
 import { SelectNetwork } from "../selectNetwork";
 import { SelectAsset } from "../selectAsset";
