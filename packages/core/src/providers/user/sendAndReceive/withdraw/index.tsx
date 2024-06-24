@@ -1,8 +1,8 @@
-import { UseQueryResult } from "@tanstack/react-query";
 import { GENESIS } from "@orderbook/core/constants";
 import {
   Asset,
   AssetAmount,
+  BaseChainAdapter,
   Chain,
   ChainType,
   Thea,
@@ -59,6 +59,11 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
     [destinationAccount, selectedWallet, destinationChain?.type]
   );
 
+  const destinationConnector = useMemo(
+    () => destinationChain && getChainConnector(destinationChain.genesis),
+    [destinationChain]
+  );
+
   const onSelectDestinationChain = (chain: Chain) => {
     if (destinationChain?.type !== chain.type) setDestinationAccount(undefined);
     const selectedAsset = sourceConnector.getSupportedAssets(chain)[0];
@@ -112,7 +117,6 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
     isLoading: transferConfigLoading,
     isFetching: transferConfigFetching,
     isSuccess: transferConfigSuccess,
-    refetch: refetchTransferConfig,
   } = useTheaConfig({
     connector: isDestinationPolkadex ? null : sourceConnector,
     sourceAddress: sourceAccountSelected?.address,
@@ -144,6 +148,7 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
         sourceChain,
         sourceAccount: sourceAccountSelected,
 
+        destinationConnector,
         destinationChain,
         onSelectDestinationChain,
         isDestinationPolkadex,
@@ -161,7 +166,6 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
         transferConfig,
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
         transferConfigSuccess,
-        onRefetchTransferConfig: refetchTransferConfig,
       }}
     >
       {children}
@@ -175,6 +179,7 @@ type State = {
   sourceChain: Chain | null;
   sourceAccount?: ExtensionAccount;
 
+  destinationConnector: BaseChainAdapter | null;
   destinationChain: Chain | null;
   onSelectDestinationChain: (chain: Chain) => void;
   isDestinationPolkadex: boolean;
@@ -192,7 +197,6 @@ type State = {
   transferConfig: TransferConfig | undefined;
   transferConfigLoading: boolean;
   transferConfigSuccess: boolean;
-  onRefetchTransferConfig?: UseQueryResult["refetch"];
 };
 
 const Context = createContext<State>({
@@ -201,6 +205,7 @@ const Context = createContext<State>({
   sourceChain: null,
   sourceAccount: undefined,
 
+  destinationConnector: null,
   destinationChain: null,
   onSelectDestinationChain: () => {},
   isDestinationPolkadex: false,

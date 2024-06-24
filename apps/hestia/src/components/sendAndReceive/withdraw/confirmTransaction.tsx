@@ -26,7 +26,7 @@ import {
 } from "@orderbook/core/index";
 import { useDirectWithdrawProvider } from "@orderbook/core/providers/user/sendAndReceive";
 
-import { useDeposit } from "@/hooks";
+import { useWithdraw } from "@/hooks";
 import {
   ErrorMessage,
   GenericHorizontalItem,
@@ -73,7 +73,7 @@ export const ConfirmTransaction = ({
     () => truncateString(destinationAccount?.address || "", 3),
     [destinationAccount?.address]
   );
-  const { mutateAsync, isLoading } = useDeposit({ onSuccess });
+  const { mutateAsync, isLoading } = useWithdraw({ onSuccess });
 
   const error = useMemo(() => {
     if (isDestinationPolkadex) return undefined;

@@ -155,4 +155,21 @@ export const NOTIFICATIONS = {
       href: "/history",
     };
   },
+  directWithdraw: ({
+    destinationChain,
+    asset,
+    amount,
+  }: {
+    destinationChain: Chain;
+    asset: string;
+    amount: number;
+  }): NotificationPayload => {
+    return {
+      category: "General",
+      message: "Withdraw successful 🎉",
+      description: `Your withdraw of ${amount} ${asset} from Polkadex orderbook to ${destinationChain.name} network has been successfully processed. You will recieve asset in destination chain in a few minutes.`,
+      type: "Success",
+      href: "/history",
+    };
+  },
 };
