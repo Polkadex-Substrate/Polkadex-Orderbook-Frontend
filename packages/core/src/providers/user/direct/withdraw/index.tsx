@@ -19,7 +19,7 @@ import {
   useState,
 } from "react";
 import { ExtensionAccount } from "@polkadex/react-providers";
-import { useTheaBalances, useTheaConfig } from "@orderbook/core/hooks";
+import { useFunds, useTheaConfig } from "@orderbook/core/hooks";
 
 import { useConnectWalletProvider } from "../../connectWalletProvider";
 
@@ -88,19 +88,14 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
     setSelectedAsset(asset);
   };
 
-  /* Fetch balance for supported assets for source chain */
-  const {
-    data: sourceBalances = [],
-    isLoading: sourceBalancesLoading,
-    isFetching: sourceBalancesFetching,
-    isSuccess: sourceBalancesSuccess,
-    refetch: sourceBalancesRefetch,
-  } = useTheaBalances({
-    connector: sourceConnector,
-    sourceAddress: sourceAccountSelected?.address,
-    assets: supportedAssets,
-    chain: sourceChain?.genesis,
-  });
+  /* Fetch trading account balances for supported assets for source chain */
+  const { balances: allBalances, loading: sourceBalancesLoading } = useFunds();
+  const sourceBalances = useMemo((): AssetAmount[] => {
+    return allBalances.map((b) => ({
+      amount: b.free,
+      ticker: b.asset.ticker,
+    }));
+  }, [allBalances]);
 
   const selectedAssetBalance = useMemo(
     () =>
@@ -119,7 +114,7 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
     isSuccess: transferConfigSuccess,
     refetch: refetchTransferConfig,
   } = useTheaConfig({
-    connector: sourceConnector,
+    connector: isDestinationPolkadex ? null : sourceConnector,
     sourceAddress: sourceAccountSelected?.address,
     destinationAddress: destinationAccountSelected?.address,
     selectedAsset,
@@ -161,9 +156,7 @@ export const DirectWithdrawProvider = ({ children }: PropsWithChildren) => {
         selectedAssetBalance,
 
         sourceBalances,
-        sourceBalancesLoading: sourceBalancesLoading && sourceBalancesFetching,
-        sourceBalancesSuccess,
-        onRefetchSourceBalances: sourceBalancesRefetch,
+        sourceBalancesLoading,
 
         transferConfig,
         transferConfigLoading: transferConfigLoading && transferConfigFetching,
@@ -195,8 +188,6 @@ type State = {
 
   sourceBalances: AssetAmount[];
   sourceBalancesLoading: boolean;
-  sourceBalancesSuccess: boolean;
-  onRefetchSourceBalances?: UseQueryResult["refetch"];
 
   transferConfig: TransferConfig | undefined;
   transferConfigLoading: boolean;
@@ -223,7 +214,6 @@ const Context = createContext<State>({
 
   sourceBalances: [],
   sourceBalancesLoading: false,
-  sourceBalancesSuccess: false,
 
   transferConfig: undefined,
   transferConfigLoading: false,
