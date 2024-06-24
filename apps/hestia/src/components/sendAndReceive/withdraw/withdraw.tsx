@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import {
   HoverInformation,
   ResponsiveCard,
@@ -8,6 +8,7 @@ import {
   Button,
   Input,
   Tooltip,
+  Modal,
 } from "@polkadex/ux";
 import { Chain, ChainType } from "@polkadex/thea";
 import {
@@ -24,6 +25,8 @@ import {
   withdrawValidations,
 } from "@orderbook/core/validations";
 import { THEA_WITHDRAW_FEE } from "@orderbook/core/constants";
+import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
+import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
 
 import { SelectNetwork } from "../selectNetwork";
 import { SelectAsset } from "../selectAsset";
@@ -33,15 +36,19 @@ import { ConfirmTransaction } from "./confirmTransaction";
 
 import { formatAmount } from "@/helpers";
 import { usePool } from "@/hooks";
+import { UnlockAccount } from "@/components/ui/ReadyToUse/unlockAccount";
 
 const initialValues = {
   amount: "",
 };
 
 export const Withdraw = () => {
+  const formRef = useRef<HTMLFormElement | null>(null);
   const [confirmTxModal, setConfirmTxModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [ref, bounds] = useMeasure<HTMLDivElement>();
 
+  const { selectedTradingAccount } = useConnectWalletProvider();
   const {
     chains,
     sourceChain,
@@ -144,7 +151,10 @@ export const Withdraw = () => {
           +balanceAmount,
           +autoSwapAmount
         ),
-    onSubmit: () => setConfirmTxModal(true),
+    onSubmit: () => {
+      if (selectedTradingAccount?.account?.isLocked) setShowPassword(true);
+      else setConfirmTxModal(true);
+    },
   });
 
   const loading = useMemo(() => {
@@ -184,12 +194,17 @@ export const Withdraw = () => {
 
   const onChangeMax = () => setFieldValue("amount", balanceAmount);
 
+  useEffect(() => {
+    if (selectedTradingAccount?.account)
+      tryUnlockTradeAccount(selectedTradingAccount.account);
+  }, [selectedTradingAccount?.account]);
+
   return (
     <Fragment>
       <ConfirmTransaction
         openFeeModal={confirmTxModal}
         setOpenFeeModal={setConfirmTxModal}
-        amount={Number(values.amount)}
+        amount={values.amount}
         onSuccess={() => {
           resetForm();
           setConfirmTxModal(false);
@@ -198,7 +213,20 @@ export const Withdraw = () => {
         swapLoading={swapLoading}
         swapPrice={+autoSwapAmount}
       />
-      <form onSubmit={handleSubmit}>
+      <Modal open={showPassword} onOpenChange={setShowPassword}>
+        <Modal.Content>
+          <UnlockAccount
+            onClose={() => setShowPassword(false)}
+            onAction={() => {
+              formRef?.current?.dispatchEvent(
+                new Event("submit", { cancelable: true, bubbles: true })
+              );
+            }}
+            tempBrowserAccount={selectedTradingAccount?.account}
+          />
+        </Modal.Content>
+      </Modal>
+      <form ref={formRef} onSubmit={handleSubmit}>
         <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
           <div className="flex flex-col">
             <div className="flex flex-col gap-2 border-l-2 border-primary-base px-8 pb-5 relative">

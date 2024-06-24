@@ -39,7 +39,7 @@ export function useWithdraw({ onSuccess }: { onSuccess: () => void }) {
   } = useProfile();
 
   return useMutation({
-    mutationFn: async ({ amount }: { amount: number }) => {
+    mutationFn: async ({ amount }: { amount: string | number }) => {
       // When Destination is Polkadex - Logic for transfer from trading to funding
       if (!isReady) throw new Error("Orderbook service not initialized");
 

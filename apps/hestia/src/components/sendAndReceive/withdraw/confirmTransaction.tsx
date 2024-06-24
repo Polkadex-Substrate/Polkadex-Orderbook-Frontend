@@ -37,7 +37,7 @@ import { formatAmount } from "@/helpers";
 interface Props {
   openFeeModal: boolean;
   setOpenFeeModal: Dispatch<SetStateAction<boolean>>;
-  amount: number;
+  amount: string;
   onSuccess: () => void;
   showAutoSwap: boolean;
   swapLoading: boolean;
@@ -84,7 +84,7 @@ export const ConfirmTransaction = ({
         selectedAsset?.ticker as string
       );
 
-    if (showAutoSwap && amount <= autoSwapAmount)
+    if (showAutoSwap && +amount <= autoSwapAmount)
       return CrossChainError.AUTO_SWAP(
         String(autoSwapAmount),
         selectedAsset?.ticker as string,
