@@ -1,6 +1,10 @@
 import { ApiPromise } from "@polkadot/api";
 import { getNonce } from "@orderbook/core/helpers/getNonce";
-import { Chain, getDirectWithdrawalMultilocation } from "@polkadex/thea";
+import {
+  Chain,
+  ChainType,
+  getDirectWithdrawalMultilocation,
+} from "@polkadex/thea";
 
 import { GENESIS } from "../constants";
 
@@ -39,7 +43,11 @@ export const createDirectWithdrawSigningPayload = (
   destinationAccount: string,
   destinationChain: Chain
 ): [object, object] => {
-  const accountId = api.createType("AccountId32", destinationAccount);
+  const accountId =
+    destinationChain.type === ChainType.Substrate
+      ? api.createType("AccountId32", destinationAccount)
+      : api.createType("AccountId20", destinationAccount);
+
   const timestamp = getNonce();
 
   const isDestinationPolkadex = destinationChain.genesis === GENESIS[0];

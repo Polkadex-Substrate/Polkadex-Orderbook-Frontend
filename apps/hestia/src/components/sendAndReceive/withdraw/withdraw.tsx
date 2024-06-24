@@ -114,12 +114,11 @@ export const Withdraw = () => {
 
   const minAmount = useMemo(() => {
     if (isDestinationPolkadex) return 0;
-    if (selectedAsset?.ticker === "PDEX") return THEA_WITHDRAW_FEE;
-
     const destFee =
       destinationFee?.ticker === selectedAsset?.ticker
         ? destinationFee?.amount || 0
         : 0;
+    if (selectedAsset?.ticker === "PDEX") return THEA_WITHDRAW_FEE + destFee;
     return +autoSwapAmount + destFee;
   }, [
     isDestinationPolkadex,
@@ -274,7 +273,7 @@ export const Withdraw = () => {
                 </Typography.Heading>
                 <HoverInformation>
                   <HoverInformation.Trigger
-                    loading={loading}
+                    loading={sourceBalancesLoading}
                     className="min-w-20"
                   >
                     <RiInformationFill className="w-3 h-3 text-actionInput" />
