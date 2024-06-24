@@ -21,10 +21,10 @@ import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import {
   CrossChainError,
   PALLET_ADDRESS,
-  THEA_AUTOSWAP,
+  THEA_WITHDRAW_FEE,
   parseScientific,
 } from "@orderbook/core/index";
-import { useDirectDepositProvider } from "@orderbook/core/providers/user/sendAndReceive";
+import { useDirectWithdrawProvider } from "@orderbook/core/providers/user/sendAndReceive";
 
 import { useDeposit, usePool } from "@/hooks";
 import {
@@ -53,44 +53,37 @@ export const ConfirmTransaction = ({
     destinationAccount,
     transferConfig,
     transferConfigLoading,
-    destinationPDEXBalance,
     selectedAsset,
-    selectedAssetIdDestination,
-    isSourcePolkadex,
-  } = useDirectDepositProvider();
-  const { destinationFee, sourceFee, sourceFeeBalance, sourceFeeExistential } =
-    transferConfig ?? {};
+    isDestinationPolkadex,
+  } = useDirectWithdrawProvider();
+  const { destinationFee, sourceFee } = transferConfig ?? {};
 
   const showAutoSwap = useMemo(
-    () => !isSourcePolkadex && !destinationPDEXBalance,
-    [isSourcePolkadex, destinationPDEXBalance]
+    () => !isDestinationPolkadex,
+    [isDestinationPolkadex]
   );
 
   const { swapPrice = 0, swapLoading } = usePool({
-    asset: selectedAssetIdDestination,
-    amount: THEA_AUTOSWAP,
+    asset: selectedAsset?.id,
+    amount: THEA_WITHDRAW_FEE,
     enabled: showAutoSwap,
   });
 
   const shortSourceAddress = useMemo(
-    () => truncateString(sourceAccount?.address ?? "", 4),
-    [sourceAccount?.address]
+    () => truncateString(PALLET_ADDRESS, 3),
+    []
   );
 
   const shortDestinationAddress = useMemo(
-    () => truncateString(PALLET_ADDRESS, 3),
-    []
+    () => truncateString(destinationAccount?.address || "", 3),
+    [destinationAccount?.address]
   );
   const { mutateAsync, isLoading } = useDeposit({ onSuccess });
 
   const error = useMemo(() => {
-    if (isSourcePolkadex) return undefined;
+    if (isDestinationPolkadex) return undefined;
     const autoSwapAmount = showAutoSwap ? swapPrice : 0;
-    const balance = sourceFeeBalance?.amount ?? 0;
-    const existential = sourceFeeExistential?.amount ?? 0;
-    const fee = sourceFee?.amount ?? 0;
 
-    if (balance <= fee + existential) return CrossChainError.SOURCE_FEE;
     if (showAutoSwap && !swapPrice) return CrossChainError.NOT_ENOUGH_LIQUIDITY;
 
     if (showAutoSwap && amount <= autoSwapAmount)
@@ -100,13 +93,10 @@ export const ConfirmTransaction = ({
       );
   }, [
     amount,
+    isDestinationPolkadex,
     selectedAsset?.ticker,
     showAutoSwap,
-    sourceFee?.amount,
-    sourceFeeBalance?.amount,
-    sourceFeeExistential?.amount,
     swapPrice,
-    isSourcePolkadex,
   ]);
 
   const disabled = useMemo(
@@ -171,7 +161,7 @@ export const ConfirmTransaction = ({
                       <div className="flex items-center gap-1">
                         <RiFileCopyLine className="w-3 h-3 text-secondary" />
                         <Typography.Text>
-                          {sourceAccount?.name} • {shortSourceAddress}
+                          {"Polkadex Orderbook"} • {shortSourceAddress}
                         </Typography.Text>
                       </div>
                     </Copy>
@@ -185,7 +175,7 @@ export const ConfirmTransaction = ({
                     <div className="flex items-center gap-1">
                       <RiFileCopyLine className="w-3 h-3 text-secondary" />
                       <Typography.Text>
-                        {"Polkadex Orderbook"} • {shortDestinationAddress}
+                        {destinationAccount?.name} • {shortDestinationAddress}
                       </Typography.Text>
                     </div>
                   </Copy>
@@ -193,8 +183,7 @@ export const ConfirmTransaction = ({
                 {showAutoSwap && (
                   <GenericHorizontalItem
                     label="Swap required"
-                    tooltip={`In order to deposit your funds and sign transactions on Polkadex, you must have at least 1.5 PDEX in your destination wallet. Your current destination wallet balance is ${destinationPDEXBalance} PDEX.
-                  A small part of your transfer will be auto-swapped to PDEX to meet this requirement.`}
+                    tooltip={`In order to withdraw your funds, you must have to transfer at least {----} ${selectedAsset?.ticker}. A small part of your transfer will be auto-swapped to PDEX to pay the fee.`}
                     defaultOpen
                   >
                     <div className="flex items-center gap-1">
@@ -214,7 +203,7 @@ export const ConfirmTransaction = ({
                             className="min-h-4 max-w-24"
                           >
                             <Typography.Text appearance="primary">
-                              1.5 PDEX
+                              {THEA_WITHDRAW_FEE} PDEX
                             </Typography.Text>
                           </Skeleton>
                         </div>
@@ -224,7 +213,7 @@ export const ConfirmTransaction = ({
                 )}
                 <HoverInformation>
                   <HoverInformation.Trigger
-                    className={classNames(isSourcePolkadex && "hidden")}
+                    className={classNames(isDestinationPolkadex && "hidden")}
                   >
                     <div className="w-full flex items-center justify-between gap-2 px-3 py-3 cursor-pointer">
                       <div className="flex items-center gap-1">

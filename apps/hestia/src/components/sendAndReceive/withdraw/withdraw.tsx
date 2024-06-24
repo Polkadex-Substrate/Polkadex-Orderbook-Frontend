@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import {
   HoverInformation,
   ResponsiveCard,
@@ -10,18 +10,31 @@ import {
   Tooltip,
 } from "@polkadex/ux";
 import { Chain, ChainType } from "@polkadex/thea";
-import { RiCheckLine, RiInformationFill } from "@remixicon/react";
+import {
+  RiCheckLine,
+  RiInformationFill,
+  RiLoader2Line,
+} from "@remixicon/react";
 import classNames from "classnames";
 import { useMeasure } from "react-use";
+import { useFormik } from "formik";
 import { useDirectWithdrawProvider } from "@orderbook/core/providers/user/sendAndReceive";
+import { withdrawValidations } from "@orderbook/core/validations";
 
 import { SelectNetwork } from "../selectNetwork";
 import { SelectAsset } from "../selectAsset";
 import { SelectWallet } from "../selectWallet";
 
+import { ConfirmTransaction } from "./confirmTransaction";
+
 import { formatAmount } from "@/helpers";
 
+const initialValues = {
+  amount: "",
+};
+
 export const Withdraw = () => {
+  const [confirmTxModal, setConfirmTxModal] = useState(false);
   const [ref, bounds] = useMeasure<HTMLDivElement>();
 
   const {
@@ -50,19 +63,6 @@ export const Withdraw = () => {
     [selectedAssetBalance]
   );
 
-  const loading = useMemo(() => {
-    if (!sourceAccount || !destinationAccount) return false;
-    if (isDestinationPolkadex) return sourceBalancesLoading;
-    const isLoading = transferConfigLoading || sourceBalancesLoading;
-    return isLoading;
-  }, [
-    destinationAccount,
-    isDestinationPolkadex,
-    sourceAccount,
-    sourceBalancesLoading,
-    transferConfigLoading,
-  ]);
-
   const [
     destinationFeeAmount,
     destinationFeeTicker,
@@ -85,127 +85,224 @@ export const Withdraw = () => {
     sourceFee?.ticker,
   ]);
 
+  const {
+    handleSubmit,
+    errors,
+    getFieldProps,
+    isValid,
+    dirty,
+    values,
+    setFieldValue,
+    resetForm,
+  } = useFormik({
+    initialValues,
+    // validationSchema: isDestinationPolkadex
+    //   ? withdrawValidations(selectedAssetBalance)
+    //   : directDepositValidations(
+    //       !!sourceAccount,
+    //       !!destinationAccount,
+    //       minAmount,
+    //       +maxAmount,
+    //       destinationPDEXBalance,
+    //       selectedAssetBalance,
+    //       poolReserve?.reserve || 0
+    //     ),
+    validationSchema: withdrawValidations(selectedAssetBalance),
+    onSubmit: () => setConfirmTxModal(true),
+  });
+
+  const loading = useMemo(() => {
+    if (!sourceAccount || !destinationAccount) return false;
+    if (isDestinationPolkadex) return sourceBalancesLoading;
+    const isLoading = transferConfigLoading || sourceBalancesLoading;
+    return isLoading;
+  }, [
+    destinationAccount,
+    isDestinationPolkadex,
+    sourceAccount,
+    sourceBalancesLoading,
+    transferConfigLoading,
+  ]);
+
+  const disabled = useMemo(
+    () =>
+      !selectedAsset ||
+      !sourceAccount ||
+      !sourceChain ||
+      !destinationAccount ||
+      !destinationChain ||
+      !(isValid && dirty),
+    [
+      selectedAsset,
+      sourceAccount,
+      sourceChain,
+      destinationAccount,
+      destinationChain,
+      dirty,
+      isValid,
+    ]
+  );
+
+  const onChangeMax = () => setFieldValue("amount", balanceAmount);
+
   return (
-    <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
-      <div className="flex flex-col">
-        <div className="flex flex-col gap-2 border-l-2 border-primary-base px-8 pb-5 relative">
-          <Typography.Heading size="lg" className="leading-none">
-            To Network
-          </Typography.Heading>
-          <SelectNetwork
-            allChains={chains}
-            selectedChain={destinationChain as Chain}
-            onSelectChain={(e) => onSelectDestinationChain(e)}
-          />
-          <div className="flex item-center justify-center bg-primary-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
-            <RiCheckLine className="w-full h-full" />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2 border-l-2 border-primary-base px-8 pb-5 relative">
-          <Typography.Text size="lg" bold>
-            To Account
-          </Typography.Text>
-          <div className="border border-primary rounded-sm px-2 py-4">
-            <SelectWallet
-              account={destinationAccount}
-              setAccount={(e) => setDestinationAccount(e)}
-              evm={destinationChain?.type !== ChainType.Substrate}
-            />
-          </div>
-          <div
-            className={classNames(
-              "flex item-center justify-center bg-primary rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5",
-              destinationAccount && "bg-primary-base"
-            )}
-          >
-            {destinationAccount && <RiCheckLine className="w-full h-full" />}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2 pb-5 px-8 relative">
-          <div className="flex items-center justify-between gap-2">
-            <Typography.Heading size="lg" className="leading-none">
-              Asset
-            </Typography.Heading>
-            <HoverInformation>
-              <HoverInformation.Trigger loading={loading} className="min-w-20">
-                <RiInformationFill className="w-3 h-3 text-actionInput" />
-                <Typography.Text size="xs" appearance="primary">
-                  Available: {balanceAmount} {selectedAsset?.ticker}
-                </Typography.Text>
-              </HoverInformation.Trigger>
-              <HoverInformation.Content
-                className={classNames(loading && "hidden")}
-              >
-                <ResponsiveCard label="Source fee" loading={loading}>
-                  {sourceFeeAmount} {sourceFeeTicker}
-                </ResponsiveCard>
-                <ResponsiveCard label="Destination fee" loading={loading}>
-                  {destinationFeeAmount} {destinationFeeTicker}
-                </ResponsiveCard>
-                <ResponsiveCard label="Available" loading={loading}>
-                  {balanceAmount} {selectedAsset?.ticker}
-                </ResponsiveCard>
-              </HoverInformation.Content>
-            </HoverInformation>
-          </div>
-          <div className="flex flex-col gap-2">
-            <div
-              ref={ref}
-              className="flex item-center border border-primary rounded-sm"
-            >
-              <SelectAsset
-                width={bounds.width}
-                sourceChain={sourceChain}
-                supportedAssets={supportedAssets}
-                selectedAsset={selectedAsset}
-                onSelectAsset={onSelectAsset}
-                sourceBalances={sourceBalances}
-                sourceBalancesLoading={sourceBalancesLoading}
+    <Fragment>
+      <ConfirmTransaction
+        openFeeModal={confirmTxModal}
+        setOpenFeeModal={setConfirmTxModal}
+        amount={Number(values.amount)}
+        onSuccess={() => {
+          resetForm();
+          setConfirmTxModal(false);
+        }}
+      />
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
+          <div className="flex flex-col">
+            <div className="flex flex-col gap-2 border-l-2 border-primary-base px-8 pb-5 relative">
+              <Typography.Heading size="lg" className="leading-none">
+                To Network
+              </Typography.Heading>
+              <SelectNetwork
+                allChains={chains}
+                selectedChain={destinationChain as Chain}
+                onSelectChain={(e) => onSelectDestinationChain(e)}
               />
-              <Tooltip open={false}>
-                <Tooltip.Trigger asChild>
-                  <div
-                    className={classNames(
-                      "w-full pr-4",
-                      false && "border-danger-base border"
-                    )}
+              <div className="flex item-center justify-center bg-primary-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
+                <RiCheckLine className="w-full h-full" />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 border-l-2 border-primary-base px-8 pb-5 relative">
+              <Typography.Text size="lg" bold>
+                To Account
+              </Typography.Text>
+              <div className="border border-primary rounded-sm px-2 py-4">
+                <SelectWallet
+                  account={destinationAccount}
+                  setAccount={(e) => setDestinationAccount(e)}
+                  evm={destinationChain?.type !== ChainType.Substrate}
+                />
+              </div>
+              <div
+                className={classNames(
+                  "flex item-center justify-center bg-primary rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5",
+                  destinationAccount && "bg-primary-base"
+                )}
+              >
+                {destinationAccount && (
+                  <RiCheckLine className="w-full h-full" />
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 pb-5 px-8 relative">
+              <div className="flex items-center justify-between gap-2">
+                <Typography.Heading size="lg" className="leading-none">
+                  Asset
+                </Typography.Heading>
+                <HoverInformation>
+                  <HoverInformation.Trigger
+                    loading={loading}
+                    className="min-w-20"
                   >
-                    <Input.Vertical
-                      type="text"
-                      autoComplete="off"
-                      placeholder="Enter an amount"
-                      // {...getFieldProps("amount")}
-                      className="max-sm:focus:text-[16px] w-full pl-4 py-4"
-                    >
-                      <Input.Action
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                        }}
+                    <RiInformationFill className="w-3 h-3 text-actionInput" />
+                    <Typography.Text size="xs" appearance="primary">
+                      Available: {balanceAmount} {selectedAsset?.ticker}
+                    </Typography.Text>
+                  </HoverInformation.Trigger>
+                  <HoverInformation.Content
+                    className={classNames(loading && "hidden")}
+                  >
+                    <ResponsiveCard label="Source fee" loading={loading}>
+                      {sourceFeeAmount} {sourceFeeTicker}
+                    </ResponsiveCard>
+                    <ResponsiveCard label="Destination fee" loading={loading}>
+                      {destinationFeeAmount} {destinationFeeTicker}
+                    </ResponsiveCard>
+                    <ResponsiveCard label="Available" loading={loading}>
+                      {balanceAmount} {selectedAsset?.ticker}
+                    </ResponsiveCard>
+                  </HoverInformation.Content>
+                </HoverInformation>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div
+                  ref={ref}
+                  className="flex item-center border border-primary rounded-sm"
+                >
+                  <SelectAsset
+                    width={bounds.width}
+                    sourceChain={sourceChain}
+                    supportedAssets={supportedAssets}
+                    selectedAsset={selectedAsset}
+                    onSelectAsset={onSelectAsset}
+                    sourceBalances={sourceBalances}
+                    sourceBalancesLoading={sourceBalancesLoading}
+                  />
+                  <Tooltip open={!!errors.amount}>
+                    <Tooltip.Trigger asChild>
+                      <div
+                        className={classNames(
+                          "w-full pr-4",
+                          errors.amount && "border-danger-base border"
+                        )}
                       >
-                        MAX
-                      </Input.Action>
-                    </Input.Vertical>
-                  </div>
-                </Tooltip.Trigger>
-                <Tooltip.Content className="bg-level-5 z-[2] p-1">
-                  Error message
-                </Tooltip.Content>
-              </Tooltip>
+                        <Input.Vertical
+                          type="text"
+                          autoComplete="off"
+                          placeholder="Enter an amount"
+                          {...getFieldProps("amount")}
+                          className="max-sm:focus:text-[16px] w-full pl-4 py-4"
+                        >
+                          {sourceAccount && +balanceAmount && !loading && (
+                            <Input.Action
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                onChangeMax();
+                              }}
+                            >
+                              MAX
+                            </Input.Action>
+                          )}
+                        </Input.Vertical>
+                      </div>
+                    </Tooltip.Trigger>
+                    <Tooltip.Content className="bg-level-5 z-[2] p-1">
+                      {errors.amount}
+                    </Tooltip.Content>
+                  </Tooltip>
+                </div>
+              </div>
+              <div className="flex item-center justify-center bg-primary-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
+                <RiCheckLine className="w-full h-full" />
+              </div>
+            </div>
+            <div className="px-8 w-full">
+              {loading ? (
+                <Button.Solid
+                  className="w-full py-5 flex items-center gap-1 opacity-60"
+                  size="md"
+                  disabled
+                >
+                  <RiLoader2Line className="w-5 h-5 animate-spin" />
+                  Connecting...
+                </Button.Solid>
+              ) : (
+                <Button.Solid
+                  className="w-full py-5"
+                  size="md"
+                  disabled={disabled}
+                  appearance="primary"
+                >
+                  Withdraw
+                </Button.Solid>
+              )}
             </div>
           </div>
-          <div className="flex item-center justify-center bg-primary-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
-            <RiCheckLine className="w-full h-full" />
-          </div>
         </div>
-        <div className="px-8 w-full">
-          <Button.Light className="w-full" appearance="secondary">
-            Withdraw
-          </Button.Light>
-        </div>
-      </div>
-    </div>
+      </form>
+    </Fragment>
   );
 };

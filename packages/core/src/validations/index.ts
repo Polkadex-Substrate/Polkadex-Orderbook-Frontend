@@ -235,7 +235,7 @@ export const depositValidations = (
   });
 };
 
-export const withdrawValidations = (balance: string) => {
+export const withdrawValidations = (balance: string | number) => {
   return Yup.object().shape({
     amount: Yup.string()
       .required("Required")
