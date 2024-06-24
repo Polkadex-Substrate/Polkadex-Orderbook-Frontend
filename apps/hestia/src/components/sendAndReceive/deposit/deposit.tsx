@@ -230,7 +230,7 @@ export const Deposit = () => {
           <div className="flex flex-col">
             <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
               <Typography.Text size="lg" bold>
-                From
+                From Account
               </Typography.Text>
               <div className="border border-primary rounded-sm px-2 py-4">
                 <SelectWallet
@@ -250,7 +250,7 @@ export const Deposit = () => {
             </div>
             <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
               <Typography.Heading size="lg" className="leading-none">
-                Network
+                From Network
               </Typography.Heading>
               <SelectNetwork
                 allChains={chains}
