@@ -9,6 +9,8 @@ import { Asset, Chain } from "@polkadex/thea";
 import { FacetedFilter } from "./facetedFilters";
 import { Export } from "./export";
 
+import { Transaction } from "@/hooks";
+
 export const filters = {
   status: ["Completed", "In Progress"],
 };
@@ -17,7 +19,7 @@ interface FiltersProps<TData> {
   table: Table<TData>;
   assets: Asset[];
   chains: Chain[];
-  data: any[];
+  data: Transaction[];
   refetchingLoading: boolean;
   onRefetch: () => Promise<void>;
   address: string;
@@ -95,6 +97,7 @@ export const Filters = <TData,>({
           appearance="secondary"
           size="sm"
           disabled={refetchingLoading}
+          className="gap-1"
         >
           <RiRefreshLine className="w-4 h-4 text-primary" />
           {refetchingLoading && (
