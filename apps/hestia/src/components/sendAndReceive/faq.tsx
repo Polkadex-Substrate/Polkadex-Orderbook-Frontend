@@ -7,7 +7,7 @@ export const Faq = () => {
   return (
     <div className="flex flex-col gap-4 max-md:pt-4 md:pt-6 px-4 max-h-[440px] overflow-scroll scrollbar-hide">
       <Typography.Heading type="h2">FAQ</Typography.Heading>
-      <div className="flex flex-col gap-2 w-[350px]">
+      <div className="flex flex-col gap-2 lg:w-[350px]">
         <Accordion
           type="multiple"
           defaultValue={["deposit"]}

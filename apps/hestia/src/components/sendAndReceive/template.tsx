@@ -7,6 +7,7 @@ import { useConnectWalletProvider } from "@orderbook/core/providers/user/connect
 import { useMeasure } from "react-use";
 import { useRouter, useSearchParams } from "next/navigation";
 import { RiArrowDownLine, RiArrowUpLine } from "@remixicon/react";
+import classNames from "classnames";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 import { ConnectAccountWrapper } from "../ui/ReadyToUse";
@@ -32,11 +33,12 @@ export function Template() {
     useConnectWalletProvider();
 
   const mobileView = useMemo(() => width <= 640, [width]);
+  const responsiveFaq = useMemo(() => width >= 1024, [width]);
 
   const paddingBottom = useMemo(
     () =>
       mobileView
-        ? `${interactionBounds.height}px`
+        ? `${interactionBounds.height + 30}px`
         : `${footerBounds.height + 4}px`,
     [interactionBounds.height, footerBounds.height, mobileView]
   );
@@ -88,7 +90,9 @@ export function Template() {
                   <Withdraw />
                 </Tabs.Content>
               </div>
-              <Faq />
+              <div className={classNames(!responsiveFaq && "hidden")}>
+                <Faq />
+              </div>
             </Tabs>
             <Tabs
               value={activeTab}
@@ -108,6 +112,9 @@ export function Template() {
                 )}
               </div>
             </Tabs>
+            <div className={classNames(responsiveFaq && "hidden")}>
+              <Faq />
+            </div>
             <Help />
           </div>
         </main>

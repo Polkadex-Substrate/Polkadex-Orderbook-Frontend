@@ -28,7 +28,6 @@ interface FiltersProps<TData> {
 export const Filters = <TData,>({
   table,
   assets,
-  chains,
   data,
   refetchingLoading,
   onRefetch,
@@ -42,11 +41,6 @@ export const Filters = <TData,>({
     const marketsSet = new Set(assets.map((v) => v.ticker));
     return Array.from(marketsSet);
   }, [assets]);
-
-  const availableChains = useMemo(() => {
-    const marketsSet = new Set(chains.map((v) => v.name));
-    return Array.from(marketsSet);
-  }, [chains]);
 
   return (
     <div className="flex items-center gap-5 justify-between px-4 py-1.5">
@@ -65,13 +59,6 @@ export const Filters = <TData,>({
                 column={table.getColumn("token")}
                 title="Asset"
                 values={availableAssets}
-              />
-            )}
-            {table.getColumn("source") && (
-              <FacetedFilter
-                column={table.getColumn("source")}
-                title="Chain"
-                values={availableChains}
               />
             )}
           </div>
@@ -117,13 +104,6 @@ export const Filters = <TData,>({
                   column={table.getColumn("token")}
                   title="Asset"
                   values={availableAssets}
-                />
-              )}
-              {table.getColumn("source") && (
-                <FacetedFilter
-                  column={table.getColumn("source")}
-                  title="Chain"
-                  values={availableChains}
                 />
               )}
             </Popover.Content>
