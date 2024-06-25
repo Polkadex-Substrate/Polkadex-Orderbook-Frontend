@@ -70,7 +70,7 @@ export const FundWalletModal = ({
               icon="TransferToTrading"
               title="Transfer to trading account"
               description="Move funds from your funding account to your trading account."
-              href="/transfer/PDEX?type=deposit"
+              href="/transfer/PDEX?type=transfer"
               onClick={() => onOpenChange(false)}
             />
           </div>

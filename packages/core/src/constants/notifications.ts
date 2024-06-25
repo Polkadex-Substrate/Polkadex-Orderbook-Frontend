@@ -96,9 +96,9 @@ export const NOTIFICATIONS = {
     return {
       category: "General",
       message: `New Trading Account Created 🎉`,
-      description: `Your new trading account have been successfully created. Transfer funds from your funding account to your trading account to start trading.`,
+      description: `Your new trading account have been successfully created. Deposit more funds from your funding account to Polkadex orderbook to start trading.`,
       type: "Success",
-      href: "/transfer/PDEX",
+      href: "/send-and-receive",
     };
   },
   removeTradingAccount: (): NotificationPayload => {
@@ -107,7 +107,7 @@ export const NOTIFICATIONS = {
       message: `Trading account removed`,
       description: `Your trading account have been successfully removed from the blockchain. Don't worry your funds are safe. You can create another trading account to start trading with them.`,
       type: "Success",
-      href: "/transfer/PDEX",
+      href: "/trading/PDEXUSDT",
     };
   },
   claimReward: ({ reward }: { reward: string }): NotificationPayload => {
