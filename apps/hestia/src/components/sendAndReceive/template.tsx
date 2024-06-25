@@ -38,7 +38,7 @@ export function Template() {
   const paddingBottom = useMemo(
     () =>
       mobileView
-        ? `${interactionBounds.height + 30}px`
+        ? `${interactionBounds.height + 20}px`
         : `${footerBounds.height + 4}px`,
     [interactionBounds.height, footerBounds.height, mobileView]
   );

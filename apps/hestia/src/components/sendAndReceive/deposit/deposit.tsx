@@ -28,6 +28,7 @@ import {
   OTHER_ASSET_EXISTENTIAL,
 } from "@orderbook/core/constants";
 import { parseScientific, trimFloat } from "@polkadex/numericals";
+import { useWindowSize } from "usehooks-ts";
 
 import { SelectNetwork } from "../selectNetwork";
 import { SelectAsset } from "../selectAsset";
@@ -43,8 +44,10 @@ const initialValues = {
 };
 
 export const Deposit = () => {
+  const { width } = useWindowSize();
   const [confirmTxModal, setConfirmTxModal] = useState(false);
   const [ref, bounds] = useMeasure<HTMLDivElement>();
+  const responsive = useMemo(() => width > 500, [width]);
 
   const { pools, poolsLoading } = useQueryPools();
   const {
@@ -226,9 +229,19 @@ export const Deposit = () => {
         }}
       />
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
+        <div
+          className={classNames(
+            "flex flex-col md:max-w-[500px] py-8 max-md:pl-6",
+            !responsive && "px-2"
+          )}
+        >
           <div className="flex flex-col">
-            <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
+            <div
+              className={classNames(
+                "flex flex-col gap-2 pb-5",
+                responsive && "relative border-l-2 border-success-base px-8 "
+              )}
+            >
               <Typography.Text size="lg" bold>
                 From Account
               </Typography.Text>
@@ -248,7 +261,12 @@ export const Deposit = () => {
                 {sourceAccount && <RiCheckLine className="w-full h-full" />}
               </div>
             </div>
-            <div className="flex flex-col gap-2 border-l-2 border-success-base px-8 pb-5 relative">
+            <div
+              className={classNames(
+                "flex flex-col gap-2 pb-5",
+                responsive && "relative border-l-2 border-success-base px-8 "
+              )}
+            >
               <Typography.Heading size="lg" className="leading-none">
                 From Network
               </Typography.Heading>
@@ -261,7 +279,12 @@ export const Deposit = () => {
                 <RiCheckLine className="w-full h-full" />
               </div>
             </div>
-            <div className="flex flex-col gap-2 pb-5 px-8 relative">
+            <div
+              className={classNames(
+                "flex flex-col gap-2 pb-5",
+                responsive && "px-8 relative"
+              )}
+            >
               <div className="flex items-center justify-between gap-2">
                 <Typography.Heading size="lg" className="leading-none">
                   Asset
@@ -340,11 +363,13 @@ export const Deposit = () => {
                   </Tooltip>
                 </div>
               </div>
-              <div className="flex item-center justify-center bg-success-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
-                <RiCheckLine className="w-full h-full" />
-              </div>
+              {responsive && (
+                <div className="flex item-center justify-center bg-success-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-[7px]">
+                  <RiCheckLine className="w-full h-full" />
+                </div>
+              )}
             </div>
-            <div className="px-8 w-full">
+            <div className={classNames("w-full", responsive && "px-8")}>
               {loading ? (
                 <Button.Solid
                   className="w-full py-5 flex items-center gap-1 opacity-60"

@@ -27,6 +27,7 @@ import {
 import { THEA_WITHDRAW_FEE } from "@orderbook/core/constants";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
 import { tryUnlockTradeAccount } from "@orderbook/core/helpers";
+import { useWindowSize } from "usehooks-ts";
 
 import { SelectNetwork } from "../selectNetwork";
 import { SelectAsset } from "../selectAsset";
@@ -43,10 +44,12 @@ const initialValues = {
 };
 
 export const Withdraw = () => {
+  const { width } = useWindowSize();
   const formRef = useRef<HTMLFormElement | null>(null);
   const [confirmTxModal, setConfirmTxModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [ref, bounds] = useMeasure<HTMLDivElement>();
+  const responsive = useMemo(() => width > 500, [width]);
 
   const { selectedTradingAccount } = useConnectWalletProvider();
   const {
@@ -227,9 +230,19 @@ export const Withdraw = () => {
         </Modal.Content>
       </Modal>
       <form ref={formRef} onSubmit={handleSubmit}>
-        <div className="flex flex-col md:max-w-[500px] py-8 max-md:pl-6">
+        <div
+          className={classNames(
+            "flex flex-col md:max-w-[500px] py-8 max-md:pl-6",
+            !responsive && "px-2"
+          )}
+        >
           <div className="flex flex-col">
-            <div className="flex flex-col gap-2 border-l-2 border-primary-base px-8 pb-5 relative">
+            <div
+              className={classNames(
+                "flex flex-col gap-2 pb-5",
+                responsive && "relative border-l-2 border-primary-base px-8 "
+              )}
+            >
               <Typography.Heading size="lg" className="leading-none">
                 To Network
               </Typography.Heading>
@@ -243,7 +256,12 @@ export const Withdraw = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 border-l-2 border-primary-base px-8 pb-5 relative">
+            <div
+              className={classNames(
+                "flex flex-col gap-2 pb-5",
+                responsive && "border-l-2 border-primary-base px-8 relative"
+              )}
+            >
               <Typography.Text size="lg" bold>
                 To Account
               </Typography.Text>
@@ -271,7 +289,12 @@ export const Withdraw = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 pb-5 px-8 relative">
+            <div
+              className={classNames(
+                "flex flex-col gap-2 pb-5",
+                responsive && "px-8 relative"
+              )}
+            >
               <div className="flex items-center justify-between gap-2">
                 <Typography.Heading size="lg" className="leading-none">
                   Asset
@@ -350,11 +373,11 @@ export const Withdraw = () => {
                   </Tooltip>
                 </div>
               </div>
-              <div className="flex item-center justify-center bg-primary-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
+              <div className="flex item-center justify-center bg-primary-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-[7px]">
                 <RiCheckLine className="w-full h-full" />
               </div>
             </div>
-            <div className="px-8 w-full">
+            <div className={classNames("w-full", responsive && "px-8")}>
               {loading ? (
                 <Button.Solid
                   className="w-full py-5 flex items-center gap-1 opacity-60"
