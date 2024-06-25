@@ -1,54 +1,54 @@
 "use client";
 
-import { Typography } from "@polkadex/ux";
-import Link from "next/link";
+import { Typography, Accordion } from "@polkadex/ux";
 import React from "react";
 
 export const Faq = () => {
-  if (!fakeNews) return null;
   return (
-    <div className="flex flex-col gap-4 max-md:p-4 md:p-6">
+    <div className="flex flex-col gap-4 max-md:py-4 md:py-6 px-4">
       <Typography.Heading type="h2">FAQ</Typography.Heading>
-      <div className="flex flex-col gap-2 md:max-w-[200px]">
-        {fakeNews.map((e) => (
-          <Link
-            key={e.id}
-            className="text-primary hover:text-primary-base transition-colors duration-300 text-sm"
-            href={e.link}
-            target="_blank"
+      <div className="flex flex-col gap-2 md:max-w-[450px]">
+        <Accordion
+          type="multiple"
+          defaultValue={["deposit"]}
+          className="flex flex-col gap-4"
+        >
+          <Accordion.Item
+            value="deposit"
+            className="border-b border-primary pb-3"
           >
-            {e.title}
-          </Link>
-        ))}
+            <Accordion.Trigger>
+              <Typography.Text appearance="primary">
+                What does Deposit means ?
+              </Typography.Text>
+              <Accordion.Icon />
+            </Accordion.Trigger>
+            <Accordion.Content className="mt-3">
+              <Typography.Paragraph className="leading-6" size="sm">
+                Deposit refers to the transfer of tokens from an external
+                network to the Polkadex orderbook.
+              </Typography.Paragraph>
+            </Accordion.Content>
+          </Accordion.Item>
+          <Accordion.Item
+            value="withdraw"
+            className="border-b border-primary pb-3"
+          >
+            <Accordion.Trigger>
+              <Typography.Text appearance="primary">
+                What does Withdraw means ?
+              </Typography.Text>
+              <Accordion.Icon />
+            </Accordion.Trigger>
+            <Accordion.Content className="mt-3">
+              <Typography.Paragraph className="leading-6" size="sm">
+                Withdraw refers to the transfer of tokens from Polkadex
+                orderbook to an external network.
+              </Typography.Paragraph>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
       </div>
     </div>
   );
 };
-
-const fakeNews = [
-  {
-    id: 1,
-    title: "How to withdraw from Ethereum?",
-    link: "#",
-  },
-  {
-    id: 2,
-    title: "Why hasn't my withdraw arrived?",
-    link: "#",
-  },
-  {
-    id: 0,
-    title: "How to withdraw from Polkadot?",
-    link: "#",
-  },
-  {
-    id: 3,
-    title: "How to find my transaction ID?",
-    link: "#",
-  },
-  {
-    id: 4,
-    title: "How to withdraw from AssetHub?",
-    link: "#",
-  },
-];

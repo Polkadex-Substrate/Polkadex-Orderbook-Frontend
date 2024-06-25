@@ -53,7 +53,7 @@ const baseAssets = getAllChains()
 export const History = forwardRef<
   HTMLDivElement,
   { maxHeight?: string; searchTerm: string }
->(({ maxHeight, searchTerm }, ref) => {
+>(({ searchTerm }, ref) => {
   const {
     selectedAddresses: { mainAddress },
   } = useProfile();
@@ -156,7 +156,7 @@ export const History = forwardRef<
             <div
               className="max-h-[400px] overflow-auto scrollbar-hide px-3"
               style={{
-                maxHeight,
+                maxHeight: "280px",
                 scrollbarGutter: "stable",
                 minHeight: "250px",
               }}

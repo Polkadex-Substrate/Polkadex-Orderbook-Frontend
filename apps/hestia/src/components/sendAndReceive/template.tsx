@@ -1,6 +1,6 @@
 "use client";
 
-import { GenericMessage, Tabs } from "@polkadex/ux";
+import { Tabs } from "@polkadex/ux";
 import { useWindowSize } from "usehooks-ts";
 import { Fragment, useMemo, useState } from "react";
 import { useConnectWalletProvider } from "@orderbook/core/providers/user/connectWalletProvider";
@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { RiArrowDownLine, RiArrowUpLine } from "@remixicon/react";
 
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
+import { ConnectAccountWrapper } from "../ui/ReadyToUse";
 
 import { Help } from "./help";
 import { Deposit } from "./deposit";
@@ -34,7 +35,9 @@ export function Template() {
 
   const paddingBottom = useMemo(
     () =>
-      mobileView ? `${interactionBounds.height}px` : `${footerBounds.height}px`,
+      mobileView
+        ? `${interactionBounds.height}px`
+        : `${footerBounds.height + 4}px`,
     [interactionBounds.height, footerBounds.height, mobileView]
   );
 
@@ -101,14 +104,7 @@ export function Template() {
                     <History searchTerm="" />
                   </Tabs.Content>
                 ) : (
-                  <GenericMessage
-                    title="Connect a wallet"
-                    illustration="ConnectAccount"
-                    className="bg-level-0 border-y border-y-primary"
-                    imageProps={{
-                      className: "w-22 self-center",
-                    }}
-                  />
+                  <ConnectAccountWrapper funding />
                 )}
               </div>
             </Tabs>
