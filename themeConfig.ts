@@ -72,6 +72,7 @@ export const themeConfig = {
           )`,
         grayscale: `linear-gradient(272.45deg, rgba(139, 161, 190, 0.1) -0.85%, rgba(139, 161, 190, 0) 81.69%);
           `,
+        auctionTexture: "url('/img/auctionBg.svg')",
       },
       colors: {
         ...commom,
