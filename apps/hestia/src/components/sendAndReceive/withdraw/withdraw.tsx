@@ -249,7 +249,10 @@ export const Withdraw = () => {
               <SelectNetwork
                 allChains={chains}
                 selectedChain={destinationChain as Chain}
-                onSelectChain={(e) => onSelectDestinationChain(e)}
+                onSelectChain={(e) => {
+                  onSelectDestinationChain(e);
+                  resetForm();
+                }}
               />
               <div className="flex item-center justify-center bg-primary-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
                 <RiCheckLine className="w-full h-full" />
@@ -273,7 +276,10 @@ export const Withdraw = () => {
               >
                 <SelectWallet
                   account={destinationAccount}
-                  setAccount={(e) => setDestinationAccount(e)}
+                  setAccount={(e) => {
+                    setDestinationAccount(e);
+                    resetForm();
+                  }}
                   evm={destinationChain?.type !== ChainType.Substrate}
                 />
               </div>
@@ -334,7 +340,10 @@ export const Withdraw = () => {
                     sourceChain={sourceChain}
                     supportedAssets={supportedAssets}
                     selectedAsset={selectedAsset}
-                    onSelectAsset={onSelectAsset}
+                    onSelectAsset={(e) => {
+                      onSelectAsset(e);
+                      resetForm();
+                    }}
                     sourceBalances={sourceBalances}
                     sourceBalancesLoading={sourceBalancesLoading}
                   />

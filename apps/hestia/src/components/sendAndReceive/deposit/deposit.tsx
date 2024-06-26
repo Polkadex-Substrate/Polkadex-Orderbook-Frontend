@@ -248,7 +248,10 @@ export const Deposit = () => {
               <div className="border border-primary rounded-sm px-2 py-4">
                 <SelectWallet
                   account={sourceAccount}
-                  setAccount={(e) => setSourceAccount(e)}
+                  setAccount={(e) => {
+                    setSourceAccount(e);
+                    resetForm();
+                  }}
                   evm={sourceChain?.type !== ChainType.Substrate}
                 />
               </div>
@@ -273,7 +276,10 @@ export const Deposit = () => {
               <SelectNetwork
                 allChains={chains}
                 selectedChain={sourceChain as Chain}
-                onSelectChain={(e) => onSelectSourceChain(e)}
+                onSelectChain={(e) => {
+                  onSelectSourceChain(e);
+                  resetForm();
+                }}
               />
               <div className="flex item-center justify-center bg-success-base rounded-full w-4 h-4 p-0.5 absolute top-0 -left-2.5">
                 <RiCheckLine className="w-full h-full" />
@@ -324,7 +330,10 @@ export const Deposit = () => {
                     sourceChain={sourceChain}
                     supportedAssets={supportedAssets}
                     selectedAsset={selectedAsset}
-                    onSelectAsset={onSelectAsset}
+                    onSelectAsset={(e) => {
+                      onSelectAsset(e);
+                      resetForm();
+                    }}
                     sourceBalances={sourceBalances}
                     sourceBalancesLoading={sourceBalancesLoading}
                   />
