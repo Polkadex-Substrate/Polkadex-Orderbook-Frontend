@@ -6,7 +6,7 @@ import { ParticipantCard } from "./participantCard";
 
 export const Participants = () => {
   return (
-    <div className="flex flex-col min-w-96">
+    <div className="flex flex-col sm:min-w-96 max-xl:w-full">
       <div className="flex items-center justify-between py-2 px-4 border-b border-primary">
         <Typography.Text appearance="primary" bold>
           Participants

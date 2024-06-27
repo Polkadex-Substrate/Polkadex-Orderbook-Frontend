@@ -3,14 +3,17 @@ import {
   HoverInformation,
   Input,
   ResponsiveCard,
+  Separator,
   Typography,
 } from "@polkadex/ux";
 import { RiInformationFill } from "@remixicon/react";
+import classNames from "classnames";
 
 export const Form = () => {
+  const active = false;
   return (
-    <div className="flex-1 2xl:px-32 px-20">
-      <div className="bg-level-0 border border-primary min-w-[400px] mx-auto -mt-20">
+    <div className="flex-1 2xl:px-32 max-md:p-8 lg:px-10 max-sm:p-4">
+      <div className="bg-level-0 border border-primary sm:min-w-[400px] mx-auto md:-mt-20">
         <div className="flex flex-col items-center gap-4 bg-level-1 p-6 border-b border-primary">
           <Typography.Text appearance="primary">
             Auction ends on June 21st, 3:00 PM UTC
@@ -42,15 +45,49 @@ export const Form = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-6 p-6">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
+          <div
+            className={classNames(
+              "flex flex-col gap-2 p-6",
+              active && "border-b border-primary "
+            )}
+          >
             <Typography.Heading size="2xl">Participate</Typography.Heading>
             <Typography.Paragraph size="sm" appearance="primary">
               The highest bidder wins the entire asset basket at expiry, and the
               winning PDEX bid is burned, reducing the token supply.
             </Typography.Paragraph>
           </div>
-          <div className="flex flex-col gap-2">
+          {active && (
+            <div className="flex flex-col gap-2 p-6">
+              <div className="flex items-center justify-between gap-2">
+                <Typography.Text
+                  appearance="primary"
+                  className="whitespace-nowrap"
+                >
+                  My current bid
+                </Typography.Text>
+                <Separator.Horizontal />
+                <Typography.Text bold className="whitespace-nowrap" size="md">
+                  10000 PDEX
+                </Typography.Text>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <Typography.Text
+                  appearance="primary"
+                  className="whitespace-nowrap"
+                >
+                  My bid position
+                </Typography.Text>
+                <Separator.Horizontal />
+                <Typography.Text bold className="whitespace-nowrap" size="md">
+                  #1
+                </Typography.Text>
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-2 px-6 pt-4">
             <div className="flex items-center justify-between gap-2">
               <Typography.Text appearance="primary">My bid</Typography.Text>
               <HoverInformation>
@@ -86,7 +123,9 @@ export const Form = () => {
               </Input.Vertical>
             </div>
           </div>
-          <Button.Solid appearance="tertiary">Place a bid</Button.Solid>
+          <Button.Solid appearance="tertiary" className="m-6">
+            Place a bid
+          </Button.Solid>
         </div>
       </div>
     </div>
