@@ -4,13 +4,13 @@ import { InformationCard } from "./informationCard";
 
 export const Information = () => {
   return (
-    <div className="flex flex-col sm:min-w-96">
+    <div className="flex flex-col sm:min-w-96 border-r border-primary">
       <div className="py-2 px-4 border-b border-primary">
         <Typography.Text appearance="primary" bold>
           Auction #120
         </Typography.Text>
       </div>
-      <div className="flex-1 flex flex-col p-4 gap-4">
+      <div className="flex-1 flex flex-col">
         {fakeData.map((item) => (
           <InformationCard
             key={item.ticker}

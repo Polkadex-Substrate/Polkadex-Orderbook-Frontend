@@ -10,6 +10,7 @@ import { useConnectWalletProvider } from "@orderbook/core/providers/user/connect
 import { ResponsiveProfile } from "../ui/Header/Profile/responsiveProfile";
 
 import { Overview } from "./Overview";
+import { History } from "./History";
 
 import { Footer, Header } from "@/components/ui";
 import { useSizeObserver } from "@/hooks";
@@ -73,7 +74,7 @@ export function Template() {
               <Overview />
             </Tabs.Content>
             <Tabs.Content value="history" className="flex-1 flex">
-              Auction History
+              <History />
             </Tabs.Content>
             <Tabs.Content value="about" className="flex-1 flex">
               How Auction Works

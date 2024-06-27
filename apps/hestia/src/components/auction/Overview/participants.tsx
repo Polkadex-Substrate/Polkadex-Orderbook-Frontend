@@ -16,7 +16,7 @@ export const Participants = () => {
           <RiExternalLinkLine className="text-primary w-3.5 h-3.5" />
         </Link>
       </div>
-      <div className="flex-1 flex flex-col p-4 gap-4">
+      <div className="flex-1 flex flex-col">
         {fakeData.map((item) => (
           <ParticipantCard
             key={item.address}

@@ -12,7 +12,7 @@ import classNames from "classnames";
 export const Form = () => {
   const active = false;
   return (
-    <div className="flex-1 2xl:px-32 max-md:p-8 lg:px-10 max-sm:p-4">
+    <div className="flex-1 2xl:px-32 max-md:p-8 lg:px-14 max-sm:p-4">
       <div className="bg-level-0 border border-primary sm:min-w-[400px] mx-auto md:-mt-20">
         <div className="flex flex-col items-center gap-4 bg-level-1 p-6 border-b border-primary">
           <Typography.Text appearance="primary">
