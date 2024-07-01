@@ -26,7 +26,7 @@ export const Table = () => {
                   <Typography.Text size="lg" bold>
                     Auction #120
                   </Typography.Text>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <Icon rounded size="xs">
                       <Avatar />
                     </Icon>

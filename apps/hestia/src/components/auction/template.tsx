@@ -65,7 +65,6 @@ export function Template() {
                 <Tabs.List className="py-2 whitespace-nowrap">
                   <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
                   <Tabs.Trigger value="history">Auction History</Tabs.Trigger>
-                  <Tabs.Trigger value="about">How Auction Works</Tabs.Trigger>
                 </Tabs.List>
                 <ScrollArea.Bar orientation="horizontal" />
               </ScrollArea>
@@ -75,9 +74,6 @@ export function Template() {
             </Tabs.Content>
             <Tabs.Content value="history" className="flex-1 flex">
               <History />
-            </Tabs.Content>
-            <Tabs.Content value="about" className="flex-1 flex">
-              How Auction Works
             </Tabs.Content>
           </div>
         </main>
