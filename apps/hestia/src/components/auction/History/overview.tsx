@@ -1,11 +1,13 @@
 import { Typography } from "@polkadex/ux";
 import { PropsWithChildren } from "react";
 
+import { Chart } from "@/components/ui/Icons/chart";
+
 export const Overview = () => {
   return (
     <div className="min-w-[450px] p-4 border-r border-primary">
-      <div className="pt-20 pb-5 border-b border-primary">
-        <div className="flex flex-col items-center gap-2">
+      <div className=" pt-28 pb-5 border-b border-primary relative">
+        <div className="flex flex-col items-center gap-2 relative z-[2]">
           <Typography.Text size="xs" appearance="primary">
             Total Amount Burnt
           </Typography.Text>
@@ -18,6 +20,7 @@ export const Overview = () => {
             </Typography.Text>
           </div>
         </div>
+        <Chart className="absolute w-full h-full top-0 left-0" />
       </div>
       <div className="flex flex-col gap-4 px-4 py-6">
         <Card label="Circulating supply">8,360,000 PDEX</Card>

@@ -3,7 +3,7 @@ import { Table } from "./table";
 
 export const History = () => {
   return (
-    <div className="flex flex-1">
+    <div className="flex flex-1 max-lg:flex-col">
       <Overview />
       <Table />
     </div>
